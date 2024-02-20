@@ -488,49 +488,48 @@ if ($show_judge_steward_fields) {
 		$account_display .= "</div>";
 		$account_display .= "</div>";
 
-		if ($_SESSION['prefsProEdition'] == 1) {
+		if ($_SESSION['prefsProEdition'] == 1) $participant_orgs_label = $label_industry_affiliations;
+		else $participant_orgs_label = $label_brewing_partners;
 
-			$account_display .= "<div class=\"row bcoem-account-info\">";
-			$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_industry_affiliations);
-			$account_display .= "<div class=\"".$display_right_cols."\">";
-			
-			if (!empty($_SESSION['brewerAssignment'])) {
+		$account_display .= "<div class=\"row bcoem-account-info\">";
+		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$participant_orgs_label);
+		$account_display .= "<div class=\"".$display_right_cols."\">";
+		
+		if (!empty($_SESSION['brewerAssignment'])) {
 
-				$affiliated_orgs = json_decode($_SESSION['brewerAssignment'],true);
-				$affiliations = array();
+			$affiliated_orgs = json_decode($_SESSION['brewerAssignment'],true);
+			$affiliations = array();
 
-				if (!empty($affiliated_orgs['affilliated'])) {
-				    foreach($affiliated_orgs['affilliated'] as $value) {
-				    	if (!empty($value)) {
-				    		$affiliations[] = $value;
-				    	}
-				    }
-				}
-				
-				if (!empty($affiliated_orgs['affilliatedOther'])) {
-				    foreach($affiliated_orgs['affilliatedOther'] as $value) {
-				        if (!empty($value)) {
-				    		$affiliations[] = $value;
-				    	}
-				    }
-				}
-
-				if (!empty($affiliations)) {
-					$affiliations = implode(", ",$affiliations);
-					$account_display .= $affiliations;
-				}
-
-				else {
-					$account_display .= $label_none;
-				}
-
+			if (!empty($affiliated_orgs['affilliated'])) {
+			    foreach($affiliated_orgs['affilliated'] as $value) {
+			    	if (!empty($value)) {
+			    		$affiliations[] = $value;
+			    	}
+			    }
 			}
 			
-			else $account_display .= $label_none;
-			$account_display .= "</div>";
-			$account_display .= "</div>";
+			if (!empty($affiliated_orgs['affilliatedOther'])) {
+			    foreach($affiliated_orgs['affilliatedOther'] as $value) {
+			        if (!empty($value)) {
+			    		$affiliations[] = $value;
+			    	}
+			    }
+			}
+
+			if (!empty($affiliations)) {
+				$affiliations = implode(", ",$affiliations);
+				$account_display .= $affiliations;
+			}
+
+			else {
+				$account_display .= $label_none;
+			}
 
 		}
+		
+		else $account_display .= $label_none;
+		$account_display .= "</div>";
+		$account_display .= "</div>";
 
 		$account_display .= "<div class=\"row bcoem-account-info\">";
 		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_judge_comps);

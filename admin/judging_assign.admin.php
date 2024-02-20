@@ -108,21 +108,20 @@ foreach ($table_styles as $table_style) {
 
   }
 
-  if ($_SESSION['prefsProEdition'] == 1) {
 
-    $query_ind_aff = sprintf("SELECT a.brewBrewerID, b.brewerBreweryName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerBreweryName IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing", $prefix."brewer", $row_style['brewStyleGroup'], $row_style['brewStyleNum']);
-    $ind_aff = mysqli_query($connection,$query_ind_aff) or die (mysqli_error($connection));
-    $row_ind_aff = mysqli_fetch_assoc($ind_aff);
-    $totalRows_ind_aff = mysqli_num_rows($ind_aff);
+  if ($_SESSION['prefsProEdition'] == 1) $query_ind_aff = sprintf("SELECT a.brewBrewerID, b.brewerBreweryName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerBreweryName IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing", $prefix."brewer", $row_style['brewStyleGroup'], $row_style['brewStyleNum']);
+  else $query_ind_aff = sprintf("SELECT a.brewBrewerID, b.brewerLastName, b.brewerFirstName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerLastName IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing", $prefix."brewer", $row_style['brewStyleGroup'], $row_style['brewStyleNum']);
+  $ind_aff = mysqli_query($connection,$query_ind_aff) or die (mysqli_error($connection));
+  $row_ind_aff = mysqli_fetch_assoc($ind_aff);
+  $totalRows_ind_aff = mysqli_num_rows($ind_aff);
 
-    if ($totalRows_ind_aff > 0) {
-      
-      do {
-        $industry_affliations[] = $row_ind_aff['brewerBreweryName'];
-      } while ($row_ind_aff = mysqli_fetch_assoc($ind_aff));
+  if ($totalRows_ind_aff > 0) {
     
-    }
-
+    do {
+      if ($_SESSION['prefsProEdition'] == 1) $industry_affliations[] = $row_ind_aff['brewerBreweryName'];
+      else $industry_affliations[] = $row_ind_aff['brewerFirstName']." ".$row_ind_aff['brewerLastName'];
+    } while ($row_ind_aff = mysqli_fetch_assoc($ind_aff));
+  
   }
     
 }
@@ -162,24 +161,21 @@ if ($totalRows_brewer > 0) {
       if ($cb_ct > 0) $co_brewer_flag = TRUE;
     }
 
-    if ($_SESSION['prefsProEdition'] == 1) {
+    if (!empty($judge_info[13])) {
 
-      if (!empty($judge_info[13])) {
-
-        $ind_aff_0 = json_decode($judge_info[13],true);
-        if (isset($ind_aff_0['affilliated'])) $ind_aff_1 = $ind_aff_0['affilliated'];
-        if (isset($ind_aff_0['affilliatedOther'])) $ind_aff_2 = $ind_aff_0['affilliatedOther'];
-        $ind_aff_3 = array_merge($ind_aff_1,$ind_aff_2);
-        $aff_ct = 0;
-        foreach ($industry_affliations as $ind_aff_4) {
-           if (in_array($ind_aff_4, $ind_aff_3)) $aff_ct +=1;
-        }
-
-        if ($aff_ct > 0) $ind_aff_flag = TRUE;
+      $ind_aff_0 = json_decode($judge_info[13],true);
+      if ((isset($ind_aff_0['affilliated'])) && (!empty($ind_aff_0['affilliated']))) $ind_aff_1 = $ind_aff_0['affilliated'];
+      if ((isset($ind_aff_0['affilliatedOther'])) && (!empty($ind_aff_0['affilliatedOther']))) $ind_aff_2 = $ind_aff_0['affilliatedOther'];
+      $ind_aff_3 = array_merge($ind_aff_1,$ind_aff_2);
+      $aff_ct = 0;
+      foreach ($industry_affliations as $ind_aff_4) {
+         if (in_array($ind_aff_4, $ind_aff_3)) $aff_ct +=1;
       }
 
+      if ($aff_ct > 0) $ind_aff_flag = TRUE;
+    
     }
-          
+              
   	$assign_row_color = "";
   	$flights_display = "";
   	$assign_flag = "";
@@ -216,6 +212,7 @@ if ($totalRows_brewer > 0) {
     $judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
     $row_judge_roles = mysqli_fetch_assoc($judge_roles);
 
+  
     if ($_SESSION['jPrefsQueued'] == "N") {
 
         if ($rank_number >= 2) {
@@ -269,15 +266,16 @@ if ($totalRows_brewer > 0) {
           }
 
           else {
-            $judge_alert = judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id']);
+            $judge_alert = judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id'],$ind_aff_flag);
             $judge_alert = explode("|",$judge_alert);
             $assign_row_color = $judge_alert[0];
             $assign_flag = "<div style=\"padding-bottom:15px;\">".$judge_alert[1]."</div>";
           }
 
+          
           $unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);       
           $flights_display .= $assign_flag;
-          $flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random_dropdown,$base_url);
+          $flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random_dropdown,$ind_aff_flag);
           $flights_display .= "</td>";
 
         }
@@ -322,7 +320,7 @@ if ($totalRows_brewer > 0) {
       }
 
       else {
-        $judge_alert = judge_alert($row_flights['flightRound'],$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id']);
+        $judge_alert = judge_alert($row_flights['flightRound'],$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id'],$ind_aff_flag);
         $judge_alert = explode("|",$judge_alert);
         $assign_row_color = $judge_alert[0];
         $assign_flag = "<div style=\"padding-bottom:15px;\">".$judge_alert[1]."</div>";
@@ -330,7 +328,7 @@ if ($totalRows_brewer > 0) {
 
       $unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$row_flights['flightRound'],$row_tables_edit['id']);       
       $flights_display .= $assign_flag;
-      $flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$row_flights['flightRound'],$location,$row_tables_edit['tableStyles'],$queued,$random,$base_url);
+      $flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$row_flights['flightRound'],$location,$row_tables_edit['tableStyles'],$queued,$random,$ind_aff_flag);
       $flights_display .= "</td>";
 
     } // end if ($_SESSION['jPrefsQueued'] == "Y") 
@@ -356,7 +354,7 @@ if ($totalRows_brewer > 0) {
       // Name Column
   		$output_datatables_body .= "<td>";
   		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>";
-      
+      //if ($ind_aff_flag) $output_datatables_body .= "<br>Affiliation Flag";
       if ($filter == "judges") {
         $output_datatables_body .= "<br><strong>Comps Judged:</strong> ";
         if (empty($judge_info[9])) $output_datatables_body .= "0";
@@ -364,6 +362,8 @@ if ($totalRows_brewer > 0) {
         if (!empty($head_judge_role_display)) $output_datatables_body .= $head_judge_role_display;
         if (!empty($judge_roles_display)) $output_datatables_body .= $judge_roles_display;
       }
+
+      $output_datatables_body .= "<ul class='list-unstyled'>";
 
       if ($ind_aff_flag) {
         
@@ -376,10 +376,13 @@ if ($totalRows_brewer > 0) {
             $judge_ind_aff = trim($judge_ind_aff,", ");
           }
 
-          $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Affiliation conflict.</strong></span> Judge reports an industry affiliation with the following organization(s) that have entries at this table: <span class=\"text-danger\">".$judge_ind_aff."</span>"; 
+          if ($_SESSION['prefsProEdition'] == 1) $output_datatables_body .= "<li><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Affiliation conflict.</strong></span> Judge reports an industry affiliation with the following organization(s) that have entries at this table: <span class=\"text-danger\">".$judge_ind_aff."</span></li>"; 
+          else $output_datatables_body .= "<li><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Brewing Team Conflict.</strong></span> Judge reports an affiliation with the following individuals or teams that have entries at this table: <span class=\"text-danger\">".$judge_ind_aff."</span></li>";
       }
 
-      if (($co_brewer_flag) && ($assign_row_color != "bg-info text-info")) $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict (name match).</strong> <small>Verify with full co-brewer names listed above.</small></span>"; 
+      if (($co_brewer_flag) && ($assign_row_color != "bg-info text-info")) $output_datatables_body .= "<li><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict (name match).</strong> <small>Verify with full co-brewer names listed above.</small></span></li>"; 
+
+      $output_datatables_body .= "</ul>";
       
       if (!empty($judge_info[10])) $output_datatables_body .= "<br><span class=\"text-danger\"><strong>Notes:</strong> ".$judge_info[10]."</strong>";
   		$output_datatables_body .= "</td>";
@@ -416,8 +419,6 @@ if ($totalRows_brewer > 0) {
               }
           });\n
           ";
-
-
 
           $output_datatables_body .= "<td>";
           $output_datatables_body .= "<div id=\"toggleRoles".$random."\">";
@@ -573,8 +574,22 @@ $(document).ready(function() {
   </div>
   <div class="row">
     <div class="col-md-12">
-      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php $cb_list = implode(", ", $cb_list); echo trim($cb_list,", "); } ?>
-      <?php if (!empty($industry_affliations)) { $industry_affliations = implode(", ", $industry_affliations); ?><strong>Organization(s) Associated with Entries at this Table:</strong> <?php echo trim($industry_affliations,", "); } ?>
+      <ul class="list-unstyled">
+      <?php 
+      
+      if (!empty($cb_list)) {
+        $cb_list = implode(", ", $cb_list);
+        echo "<li><strong>Co-Brewer Names Associated with Entries at this Table:</strong> ".trim($cb_list,", ");
+      }
+
+      if (!empty($industry_affliations)) {
+        $industry_affliations = implode(", ", array_unique($industry_affliations));
+        if ($_SESSION['prefsProEdition'] == 1) echo "<li><strong>Organization(s) Associated with Entries at this Table:</strong> ". trim($industry_affliations,", ");
+        else echo "<li><strong>Individuals and Teams with Entries at this Table:</strong> ". trim($industry_affliations,", ");
+      } 
+
+      ?>
+    </ul>
     </div>
   </div>
 </div>

@@ -12,37 +12,6 @@
 if (NHC) $base_url = "";
 else $base_url = $base_url;
 
-// ---------------------------- Globals ------------------------------------------------
-
-$php_version = phpversion();
-
-$ajax_url = $base_url."ajax/";
-
-$js_url = $base_url."js_includes/";
-if (HOSTED) $js_url = "https://brewingcompetitions.com/_bcoem_shared/js_includes/";
-
-$images_url = $base_url."images/";
-if (HOSTED) $images_url = "https://brewingcompetitions.com/_bcoem_shared/images/";
-
-$css_url = $base_url."css/";
-if (HOSTED) $css_url = "https://brewingcompetitions.com/_bcoem_shared/css/";
-
-$js_app_url = $js_url."app.min.js";
-$css_common_url = $css_url."common.min.css";
-
-if ((DEBUG) || (TESTING)) {
-   
-    $css_common_url = str_replace(".min", "", $css_common_url);
-    $theme = str_replace(".min", "", $theme);
-    
-    if (strpos($base_url, 'test.brewingcompetitions.com') !== false) {
-        $js_app_url = $base_url."js_source/app.js";
-    }
-    
-    $js_app_url .= "?t=".time();
-    
-}
-
 // ---------------------------- Preflight Checks ---------------------------------------
 require_once (LIB.'preflight.lib.php');
 
@@ -391,10 +360,39 @@ if ($setup_success) {
 	if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0);
 	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
 
-	//  ---------------------------- Load Theme ----------------------------
+	// ---------------------------- Globals ------------------------------------------------
+
+	$php_version = phpversion();
+
+	$ajax_url = $base_url."ajax/";
+
+	$js_url = $base_url."js_includes/";
+	if (HOSTED) $js_url = "https://brewingcompetitions.com/_bcoem_shared/js_includes/";
+
+	$images_url = $base_url."images/";
+	if (HOSTED) $images_url = "https://brewingcompetitions.com/_bcoem_shared/images/";
+
+	$css_url = $base_url."css/";
+	if (HOSTED) $css_url = "https://brewingcompetitions.com/_bcoem_shared/css/";
+
+	$js_app_url = $js_url."app.min.js";
+	$css_common_url = $css_url."common.min.css";
 
 	if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
 	else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
+
+	if ((DEBUG) || (TESTING)) {
+	   
+	    $css_common_url = str_replace(".min", "", $css_common_url);
+	    $theme = str_replace(".min", "", $theme);
+	    
+	    if (strpos($base_url, 'test.brewingcompetitions.com') !== false) {
+	        $js_app_url = $base_url."js_source/app.js";
+	    }
+	    
+	    $js_app_url .= "?t=".time();
+	    
+	}
 
 } // end if ($setup_success);
 ?>

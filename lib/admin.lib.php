@@ -1230,8 +1230,8 @@ function unassign($bid,$location,$round,$tid) {
 	
 	return $r;
 }
-
-function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$table_styles,$queued,$random) {
+         
+function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$table_styles,$queued,$random,$ind_aff_flag) {
 
 	/**
 	 * Function almalgamates the above functions to output the correct form elements
@@ -1248,7 +1248,10 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 	$unavailable = unavailable($bid,$location,$round,$tid);
 
 	$r = "";
-	if (entry_conflict($bid,$table_styles)) $disabled = "disabled"; else $disabled = "";
+	$disabled = "";
+	if (entry_conflict($bid,$table_styles)) $disabled = "disabled"; 
+	if ($ind_aff_flag) $disabled = "disabled"; 
+	
 	if ($filter == "stewards") $role = "S"; else $role = "J";
 
 	$r .= "<section>";
@@ -1469,7 +1472,7 @@ return $r;
 }
 */
 
-function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id) {
+function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id,$ind_aff_flag) {
 	
 	if (table_round($tid,$round)) {
 		
@@ -1480,8 +1483,13 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 		if ($unavailable) $r = "bg-purple text-purple|<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Paricipant is assigned to another table in this round.</span>";
 		
 		if ($entry_conflict) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.</span>";
+
+		if ($ind_aff_flag) {
+			if ($_SESSION['prefsProEdition'] == 1) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has a reported organization affiliation at this table.</span>";
+			else $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has a reported brewing partner or team affiliation at this table.</span>";
+		}
 		
-		if ((!$unavailable) && (!$entry_conflict)) $r = like_dislike($likes,$dislikes,$table_styles);
+		if ((!$unavailable) && (!$entry_conflict) && (!$ind_aff_flag)) $r = like_dislike($likes,$dislikes,$table_styles);
 
 	}
 	
@@ -1518,7 +1526,7 @@ function judge_info($uid) {
 		."^".$row_brewer_info['brewerJudgeCider'];
 	}
 
-	if ($_SESSION['prefsProEdition'] == 1) $r .= "^".$row_brewer_info['brewerAssignment'];
+	$r .= "^".$row_brewer_info['brewerAssignment'];
 
 	if ($_SESSION['jPrefsQueued'] == "N") {
 		

@@ -2037,6 +2037,7 @@ $label_rouse_yeast = "Rouse Yeast";
 $label_fast = "Fast";
 $label_slow = "Slow";
 $label_normal = "Normal";
+$label_brewing_partners = "Brewing Partners";
 $brew_text_042 = "Please provide the alcohol by volume up to the hundredth place.";
 $brew_text_043 = "Numbers only - decimals acceptable to the hundredth place (e.g., 5.2, 12.84, etc.).";
 $brew_text_044 = "Please provide finishing specific gravity to the thousandth place (e.g., 0.991, 1.000, 1.007, etc.).";
@@ -2045,6 +2046,8 @@ $brew_text_046 = "Please specify the two letter state/provice abbreviation of an
 $brew_text_047 = "How should your entry be poured for the judges?";
 $brew_text_048 = "Should any yeast be roused before pouring?";
 $brew_text_049 = "Provide further information regarding how your entry should be poured or other related items (e.g., possible gushing, etc.).";
+$brewer_text_053 = "Select the any brewing partners that your are affiliated with. This is to make sure there are not any conflicts of interest when assigning judges and stewards to evaluate entries."; 
+$brewer_text_054 = "<strong>If any person's name is <u>not</u> listed in the drop-down above, enter their FULL name here (e.g., John Doe, Wyatt Earp, Selina Kyle, etc.). Add any brewing team names here as well.</strong> Separate each team or person's name by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -686,7 +686,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <label for="brewPouringNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_pouring_notes; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
-            <input class="form-control" name="brewPouringNotes" id="brewPouringNotes" type="text" maxlength="255" value="<?php if ($action == "edit") echo $pouring_arr['pouring_notes']; ?>">
+            <input class="form-control" name="brewPouringNotes" id="brewPouringNotes" type="text" maxlength="255" value="<?php if (($action == "edit") && (isset($pouring_arr['pouring_notes']))) echo $pouring_arr['pouring_notes']; ?>">
             <div class="help-block with-errors"></div>
             <div class="help-block"><?php echo $brew_text_049; ?></div>
         </div>
