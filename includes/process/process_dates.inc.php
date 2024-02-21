@@ -8,6 +8,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	// Entry-Related
 	$contestEntryOpen = "";
 	$contestEntryDeadline = "";
+	$contestEntryEditDeadline = "";
 	$contestDropoffOpen = "";
 	$contestDropoffDeadline = "";
 	$contestShippingOpen = "";
@@ -16,6 +17,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if (isset($_POST['contestEntryOpen'])) $contestEntryOpen = strtotime(sterilize($_POST['contestEntryOpen']));
 	if (isset($_POST['contestEntryDeadline'])) $contestEntryDeadline = strtotime(sterilize($_POST['contestEntryDeadline']));
+	if (isset($_POST['contestEntryEditDeadline'])) $contestEntryEditDeadline = strtotime(sterilize($_POST['contestEntryEditDeadline']));
 	if (isset($_POST['contestDropoffOpen'])) $contestDropoffOpen = strtotime(sterilize($_POST['contestDropoffOpen']));
 	if (isset($_POST['contestDropoffDeadline'])) $contestDropoffDeadline = strtotime(sterilize($_POST['contestDropoffDeadline']));
 	if (isset($_POST['contestShippingOpen'])) $contestShippingOpen = strtotime(sterilize($_POST['contestShippingOpen']));
@@ -39,6 +41,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'contestRegistrationDeadline' => blank_to_null($contestRegistrationDeadline),
 		'contestEntryOpen' => blank_to_null($contestEntryOpen),
 		'contestEntryDeadline' => blank_to_null($contestEntryDeadline),
+		'contestEntryEditDeadline' => blank_to_null($contestEntryEditDeadline),
 		'contestJudgeOpen' => blank_to_null($contestJudgeOpen),
 		'contestJudgeDeadline' => blank_to_null($contestJudgeDeadline),
 		'contestAwardsLocDate' => blank_to_null($contestAwardsLocDate),

@@ -226,7 +226,10 @@ if ($section != "admin") {
 		}
 
 		// Drop-off Dates and Location
-		if ($_SESSION['prefsDropOff'] == 1) {
+		if (($_SESSION['prefsDropOff'] == 1) && (!empty($dropoff_closed_sidebar))) {
+
+			if (!empty($dropoff_open_sidebar)) $sidebar_text_004 = "&mdash;";
+
 			$header1_300 .= sprintf("<div class=\"hidden-print panel %s\">",$dropoff_panel_display);
 			$header1_300 .= "<div class=\"panel-heading\">";
 			$header1_300 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_drop_off);
@@ -249,7 +252,10 @@ if ($section != "admin") {
 		}
 
 		// Shipping Date and Location
-		if (($_SESSION['prefsShipping'] == 1) && (!empty($row_contest_dates['contestShippingOpen']))) {
+		if (($_SESSION['prefsShipping'] == 1) && (!empty($shipping_closed_sidebar)))  {
+
+			if (!empty($shipping_open_sidebar)) $sidebar_text_004 = "&mdash;";
+
 			$header1_500 .= "<div class=\"hidden-print panel ".$shipping_panel_display."\">";
 			$header1_500 .= "<div class=\"panel-heading\">";
 			$header1_500 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_shipping);

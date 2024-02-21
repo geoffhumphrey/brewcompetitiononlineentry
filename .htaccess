@@ -107,8 +107,7 @@ ErrorDocument 500     /500.php
 
 # Prevent viewing of .htaccess file
 <Files .htaccess>
-order allow,deny
-deny from all
+Require all denied
 </Files>
 
 # Prevent directory listings

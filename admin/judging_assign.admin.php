@@ -452,8 +452,8 @@ if ($totalRows_brewer > 0) {
   			$output_at_table_modal_body .= "<tr>\n";
   			$output_at_table_modal_body .= "<td class=\"small\">".$judge_info[1].", ".$judge_info[0]."</td>";
   			$output_at_table_modal_body .= "<td class=\"small\">".$modal_rank."</td>";
-  			if ($_SESSION['jPrefsQueued'] == "N") $output_at_table_modal_body .= "<td class=\"small\">".$judge_info[12]."</td>";
-  			if ($_SESSION['jPrefsQueued'] == "N") $output_at_table_modal_body .= "<td class=\"small\">".$judge_info[13]."</td>";
+  			if ($_SESSION['jPrefsQueued'] == "N") $output_at_table_modal_body .= "<td class=\"small\">".$judge_info[14]."</td>";
+  			if ($_SESSION['jPrefsQueued'] == "N") $output_at_table_modal_body .= "<td class=\"small\">".$judge_info[15]."</td>";
   			$output_at_table_modal_body .= "</tr>\n";
 
   		}

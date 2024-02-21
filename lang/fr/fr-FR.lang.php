@@ -871,14 +871,14 @@ $entry_info_text_032 = $label_cash;
 $entry_info_text_033 = $label_check.", à l'ordre de";
 $entry_info_text_034 = "Carte de crédit/débit et e-chèque, via PayPal";
 $entry_info_text_035 = "Les dates du jugement de la compétition doivent encore être déterminées. Veuillez revenir ultérieurement.";
-$entry_info_text_036 = "Les bouteilles de participation seront acceptées à notre lieu d'expédition à partir du";
+$entry_info_text_036 = "Les bouteilles de participation seront acceptées à notre lieu d'expédition";
 $entry_info_text_037 = "Expédiez les participations à :";
 $entry_info_text_038 = "Emballer soigneusement vos participations dans une boîte solide. Tapissez l'intérieur de votre carton avec un sac en plastique. Séparez et emballez chaque bouteille avec un matériau d'emballage adéquat. Veuillez ne pas surcharger !";
 $entry_info_text_039 = "Écrivez clairement : <em>Fragile. This Side Up.</em> sur le paquet. Utilisez uniquement du papier bulle comme matériau d'emballage.";
 $entry_info_text_040 = "Placez <em>chaque</em> étiquette de bouteille dans un petit sac zip-top avant de les attacher à leurs bouteilles respectives. De cette manière, l'organisateur pourra identifier spécifiquement quelle participation s'est cassée en cas de dommage pendant l'expédition.";
 $entry_info_text_041 = "Tous les efforts raisonnables seront déployés pour contacter les participants dont les bouteilles se sont cassées afin de prendre des dispositions pour l'envoi de bouteilles de remplacement.";
 $entry_info_text_042 = "Si vous résidez aux États-Unis, veuillez noter qu'il est <strong>illégal</strong> d'expédier vos participations via le United States Postal Service (USPS). Les entreprises de transport privées ont le droit de refuser votre envoi si elles sont informées que le colis contient du verre et/ou des boissons alcoolisées. Sachez que les participations envoyées à l'international sont souvent soumises par la douane à une réglementation appropriée. Ces participations peuvent être ouvertes et/ou renvoyées à l'expéditeur par les agents des douanes à leur discrétion. Il vous incombe uniquement de respecter toutes les lois et réglementations applicables.";
-$entry_info_text_043 = "Les bouteilles de participation seront acceptées dans nos lieux de dépôt à partir du";
+$entry_info_text_043 = "Les bouteilles de participation seront acceptées dans nos lieux de dépôt";
 $entry_info_text_044 = "Plan vers";
 $entry_info_text_045 = "Sélectionnez/Tapez pour les informations de participation requises";
 $entry_info_text_046 = "Si le nom d'un style est un hyperlien, il a des exigences spécifiques pour la participation. Sélectionnez ou tapez sur le nom pour afficher les exigences de la sous-catégorie.";
@@ -2041,6 +2041,34 @@ $label_non_judging = "Sessions Hors Jugement";
 $label_mhp_number = "Numéro de Membre du Programme Master Homebrewer";
 $brewer_text_053 = "Le Master Homebrewer Program est une organisation à but non lucratif créée pour promouvoir la maîtrise du brassage amateur.";
 $best_brewer_text_015 = "Les points pour chaque entrée classée sont calculés selon la formule suivante, basée sur celle utilisée par le Master Homebrewer Program pour le <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.7.0 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_abv = "Taux d'alcool par volume (ABV)";
+$label_sweetness_level = "Niveau de Sucrosité";
+$label_juice_source = "Source(s) de Jus";
+$label_select_all_apply = "Sélectionner Tout ce Qui S'applique";
+$label_pouring = "Versement";
+$label_pouring_notes = "Notes de Versement";
+$label_rouse_yeast = "Réveiller la Levure";
+$label_fast = "Rapide";
+$label_slow = "Lent";
+$label_normal = "Normal";
+$label_brewing_partners = "Partenaires de Brassage";
+$label_entry_edit_deadline = "Date Limite de Modification de l'Entrée";
+$brew_text_042 = "Veuillez fournir le taux d'alcool par volume jusqu'au centième.";
+$brew_text_043 = "Nombres uniquement - décimales acceptables jusqu'au centième (par exemple, 5,2, 12,84, etc.).";
+$brew_text_044 = "Veuillez fournir la gravité spécifique finale jusqu'au millième (par exemple, 0,991, 1,000, 1,007, etc.).";
+$brew_text_045 = "Veuillez indiquer la ou les sources de jus - sélectionnez tout ce qui s'applique.";
+$brew_text_046 = "Veuillez spécifier l'abréviation à deux lettres de l'état/province de toute autre(s) source(s) de jus (par exemple, VT, ME, CA, ON, etc.). Séparez chaque abréviation de lieu par une virgule (,) ou un point-virgule (;). Certains symboles ne sont pas autorisés, y compris les guillemets doubles (&quot;) et le pourcentage (&#37;).";
+$brew_text_047 = "Comment votre entrée doit-elle être versée pour les juges ?";
+$brew_text_048 = "Une levure doit-elle être réveillée avant le versement ?";
+$brew_text_049 = "Fournissez des informations supplémentaires sur la manière dont votre entrée doit être versée ou d'autres éléments connexes (par exemple, des éruptions possibles, etc.).";
+$brewer_text_053 = "Sélectionnez tous les partenaires de brassage avec lesquels vous êtes affilié. Ceci est pour s'assurer qu'il n'y a pas de conflits d'intérêts lors de l'attribution de juges et de aides pour évaluer les entrées."; 
+$brewer_text_054 = "<strong>Si le nom d'une personne ne figure pas dans le menu déroulant ci-dessus, saisissez son NOM COMPLET ici (par exemple, John Doe, Wyatt Earp, Selina Kyle, etc.). Ajoutez ici également tout nom d'équipe de brassage.</strong> Séparez chaque nom d'équipe ou de personne par une virgule (,) ou un point-virgule (;). Certains symboles ne sont pas autorisés, y compris les guillemets doubles (&quot;) et le pourcentage (&#37;).";
 
 /**
  * ----------------------------------------------------------------------------------

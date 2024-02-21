@@ -875,14 +875,14 @@ $entry_info_text_032 = $label_cash;
 $entry_info_text_033 = $label_check.", a nombre de";
 $entry_info_text_034 = "Tarjeta de crédito/débito y e-check, a través de PayPal";
 $entry_info_text_035 = "Las fechas de juzgamiento de la competencia aún están por determinarse. Por favor, vuelve más tarde.";
-$entry_info_text_036 = "Se aceptarán botellas de entrada en nuestra ubicación de envío desde el";
+$entry_info_text_036 = "Se aceptarán botellas de entrada en nuestra ubicación de envío";
 $entry_info_text_037 = "Enviar entradas a:";
 $entry_info_text_038 = "Empaqueta cuidadosamente tus entradas en una caja resistente. Forra el interior de tu cartón con una bolsa de basura de plástico. Separa y empaqueta cada botella con suficiente material de embalaje. ¡Por favor, no sobrecargues!";
 $entry_info_text_039 = "Escribe claramente: <em>Frágil. Este Lado Arriba.</em> en el paquete. Utiliza solo burbujas de aire como material de embalaje.";
 $entry_info_text_040 = "Incluye <em>cada</em> etiqueta de tu botella en una pequeña bolsa con cierre antes de adjuntarlas a sus respectivas botellas. De esta manera, el organizador podrá identificar específicamente cuál entrada se ha roto si hay daños durante el envío.";
 $entry_info_text_041 = "Se hará todo lo posible para contactar a los participantes cuyas botellas se hayan roto para hacer arreglos para enviar botellas de reemplazo.";
 $entry_info_text_042 = "Si vives en los Estados Unidos, ten en cuenta que es <strong>ilegal</strong> enviar tus entradas a través del Servicio Postal de los Estados Unidos (USPS). Las compañías de envío privadas tienen derecho a rechazar tu envío si se les informa que el paquete contiene vidrio y/o bebidas alcohólicas. Ten en cuenta que las entradas enviadas internacionalmente a menudo requieren documentación adecuada por parte de aduanas. Estas entradas pueden ser abiertas y/o devueltas al remitente por funcionarios de aduanas a su discreción. Es tu responsabilidad seguir todas las leyes y regulaciones aplicables.";
-$entry_info_text_043 = "Se aceptarán botellas de entrada en nuestros lugares de entrega desde el";
+$entry_info_text_043 = "Se aceptarán botellas de entrada en nuestros lugares de entrega";
 $entry_info_text_044 = "Mapa para";
 $entry_info_text_045 = "Haz clic/toca para obtener información de inscripción requerida";
 $entry_info_text_046 = "Si el nombre de un estilo está vinculado, tiene requisitos de entrada específicos. Haz clic o toca el nombre para ver los requisitos de la subcategoría.";
@@ -2041,6 +2041,35 @@ $label_non_judging = "Sesiones sin Evaluación";
 $label_mhp_number = "Número de miembro del Programa Master Homebrewer";
 $brewer_text_053 = "El Master Homebrewer Program es una organización sin ánimo de lucro creada para promover el dominio de la elaboración de cerveza entre aficionados.";
 $best_brewer_text_015 = "Los puntos de cada inscripción se calculan mediante la siguiente fórmula, basada en la utilizada por el Master Homebrewer Program del <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.7.0 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_abv = "Grado alcohólico por volumen (ABV)";
+$label_sweetness_level = "Nivel de Dulzura";
+$label_juice_source = "Fuente(s) de Jugo";
+$label_select_all_apply = "Seleccionar Todo lo que Corresponda";
+$label_pouring = "Vertido";
+$label_pouring_notes = "Notas de Vertido";
+$label_rouse_yeast = "Revolver Levadura";
+$label_fast = "Rápido";
+$label_slow = "Lento";
+$label_normal = "Normal";
+$label_brewing_partners = "Socios de Elaboración";
+$label_entry_edit_deadline = "Fecha límite de Edición de la Entrada";
+$brew_text_042 = "Por favor, proporciona el grado alcohólico por volumen hasta el centésimo lugar.";
+$brew_text_043 = "Sólo números - se aceptan decimales hasta el centésimo lugar (por ejemplo, 5.2, 12.84, etc.).";
+$brew_text_044 = "Por favor, proporciona la gravedad específica final hasta el milésimo lugar (por ejemplo, 0.991, 1.000, 1.007, etc.).";
+$brew_text_045 = "Por favor, proporciona la(s) fuente(s) de jugo - selecciona todas las que correspondan.";
+$brew_text_046 = "Por favor, especifica la abreviatura de dos letras del estado/provincia de cualquier otra(s) fuente(s) de jugo (por ejemplo, VT, ME, CA, ON, etc.). Separa la abreviatura de cada ubicación con coma (,) o punto y coma (;). Algunos símbolos no están permitidos, incluyendo comillas dobles (&quot;) y porcentaje (&#37;).";
+$brew_text_047 = "¿Cómo debería ser vertida tu entrada para los jueces?";
+$brew_text_048 = "¿Debería ser revuelta alguna levadura antes de verter?";
+$brew_text_049 = "Proporciona información adicional sobre cómo debería ser vertida tu entrada u otros elementos relacionados (por ejemplo, posibles erupciones, etc.).";
+$brewer_text_053 = "Selecciona cualquier socio de elaboración con el que estés afiliado. Esto es para asegurarse de que no haya conflictos de interés al asignar jueces y ayudantes para evaluar las entradas."; 
+$brewer_text_054 = "<strong>Si el nombre de alguna persona no está listado en el menú desplegable de arriba, ingresa su NOMBRE COMPLETO aquí (por ejemplo, John Doe, Wyatt Earp, Selina Kyle, etc.). Agrega aquí también cualquier nombre de equipo de elaboración.</strong> Separa cada nombre de equipo o persona con coma (,) o punto y coma (;). Algunos símbolos no están permitidos, incluyendo comillas dobles (&quot;) y porcentaje (&#37;).";
+
 
 /**
  * ----------------------------------------------------------------------------------

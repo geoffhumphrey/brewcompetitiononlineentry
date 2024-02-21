@@ -3702,6 +3702,8 @@ if (!$setup_running) $output_off_sched_update .= "</ul>";
  * ----------------------------------------------- 2.7.0 ---------------------------------------------
  * Leverage unused brewWinner and brewJudgingLocation DB columns to house ABV and Sweetness Level.
  * Update selected NW Cider Cup styles.
+ * Add brewPouring column to house pouring instructions for use during judging.
+ * A the contestEntryEditDeadline column to house the entry edit deadline date for participants.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3760,6 +3762,16 @@ if (!check_update("brewJuiceSource", $prefix."brewing")) {
 
 }
 
+$sql = sprintf("UPDATE `%s` SET brewStyleReqSpec='0' WHERE brewStyleVersion='NWCiderCup' AND (brewStyleGroup='C1' OR brewStyleGroup='C2');", $prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>NW Cider Cup styles updated.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup styles NOT updated.</li>";
+	$error_count += 1;
+}
+
 if (!check_update("brewPouring", $prefix."brewing")) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `brewPouring` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Houses pouring instructions.';", $prefix."brewing");
@@ -3774,14 +3786,18 @@ if (!check_update("brewPouring", $prefix."brewing")) {
 
 }
 
-$sql = sprintf("UPDATE `%s` SET brewStyleReqSpec='0' WHERE brewStyleVersion='NWCiderCup' AND (brewStyleGroup='C1' OR brewStyleGroup='C2');", $prefix."styles");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$sql);
-$result = mysqli_query($connection,$sql);
-if ($result) $output_off_sched_update .= "<li>NW Cider Cup styles updated.</li>";
-else {
-	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup styles NOT updated.</li>";
-	$error_count += 1;
+if (!check_update("contestEntryEditDeadline", $prefix."contest_info")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `contestEntryEditDeadline` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;", $prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Entry edit deadline column added to the competition info table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Entry edit deadline column NOT added to the competition info table.</li>";
+		$error_count += 1;
+	}
+
 }
 
 if (!$setup_running) $output_off_sched_update .= "</ul>";

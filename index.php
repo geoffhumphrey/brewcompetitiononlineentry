@@ -162,6 +162,13 @@ else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $css_common_url; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+
+    <script type="text/javascript">
+        var username_url = "<?php echo $ajax_url; ?>username.ajax.php";
+        var email_url="<?php echo $ajax_url; ?>valid_email.ajax.php";
+        var user_agent_msg = "<?php echo $alert_text_086; ?>";
+        var setup = 0;
+    </script>
     
     <!-- Open Graph Implementation -->
 <?php if (!empty($_SESSION['contestName'])) { ?>
@@ -397,7 +404,7 @@ echo $output_query_count;
 <!-- ./ Footer -->
 <?php 
 session_write_close(); 
-
+if ($logged_in) {
 $session_end_seconds = (time() + ($session_expire_after * 60));
 $session_end = date('Y-m-d H:i:s',$session_end_seconds);
 if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
@@ -439,29 +446,46 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
     </div>
   </div>
 </div>
-<!-- Session Timer Displays -->
+<!-- Session Timer Displays and Auto Logout -->
+<?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
+<script>
+var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
+var session_end_min = "<?php echo $session_expire_after; ?>";
+var session_end_seconds = "<?php echo $session_end_seconds; ?>";
+var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout";
+</script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
-<!-- Dynamic JS Vars -->
-<script type="text/javascript">
-    var username_url = "<?php echo $ajax_url; ?>username.ajax.php";
-    var email_url="<?php echo $ajax_url; ?>valid_email.ajax.php";
-    var user_agent_msg = "<?php echo $alert_text_086; ?>";
-    var setup = 0;
-    var edit_style = "<?php echo $action; ?>";
-    var user_level = "<?php if (isset($_SESSION['userLevel'])) { if ($bid != "default") echo $_SESSION['userLevel']; else echo "2"; } else echo "2"; ?>";
-    var style_set = "<?php echo $_SESSION['prefsStyleSet']; ?>";
-    var action = "<?php echo $action; ?>";
-    var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
-    var session_end_min = "<?php echo $session_expire_after; ?>";
-    var session_end_seconds = "<?php echo $session_end_seconds; ?>";
-    var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout";
-<?php if ($logged_in) { ?>
-    var logged_in = true;
-<?php } else { ?>
-    var logged_in = false;
+<script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
 <?php } ?>
-<?php if ($section == "brew") { ?>
+<?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
+<?php } // end if ($logged_in) ?>
+
+<script type="text/javascript">
+    var section = "<?php echo $section; ?>";
+    var action = "<?php echo $action; ?>";
+    var go = "<?php echo $go; ?>";
+    var edit_style = "<?php echo $action; ?>";
+    var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
+</script>
+
+<?php if (($section == "admin") && ($go == "styles") && ($action != "default")) { ?>
+<script>
+    var specialty_ipa_subs = <?php echo json_encode($specialty_ipa_subs); ?>;
+    var historical_subs = <?php echo json_encode($historical_subs); ?>;
+    if (edit_style == "edit") {
+        var req_special = "<?php echo $row_styles['brewStyleReqSpec']; ?>";
+        var style_type = "<?php echo $row_styles['brewStyleType']; ?>";
+    } else { 
+        var req_special = "0";
+        var style_type = "1";
+    }
+</script>
+<?php } ?>
+
+<?php if ($section == "brew") { ?>   
+<script type="text/javascript">
+    var style_set = "<?php echo $_SESSION['prefsStyleSet']; ?>";
     var req_special_ing_styles = <?php echo json_encode($req_special_ing_styles); ?>;
     var req_strength_styles = <?php echo json_encode($req_strength_styles); ?>;
     var req_sweetness_styles = <?php echo json_encode($req_sweetness_styles); ?>;
@@ -474,36 +498,30 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
     var req_special_ing_style_info = <?php echo json_encode($styles_entry_text, JSON_UNESCAPED_SLASHES); ?>;
     <?php if (($action == "edit") && (!empty($row_log['brewPossAllergens']))) { ?>
     var possible_allergens = "<?php echo $row_log['brewPossAllergens']; ?>";
+    <?php } else { ?>
+    possible_allergens = null;      
     <?php } ?>
-<?php } else { ?>
-    var req_special_ing_styles = "";
-    var req_strength_styles = "";
-    var req_sweetness_styles = "";
-    var req_carb_styles = "";
-    var cider_sweetness_custom_styles = "";
-    var mead_sweetness_custom_styles = "";
-    var optional_info_styles = "";
-    var edit_style = "";
-    var label_this_style = "";
-    var req_special_ing_style_info = "";
-    var possible_allergens = null;
-<?php } ?>
-<?php if ($section == "brewer") { ?>
-    var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
-    var brewer_judge = "N";
-    var brewer_steward = "N";
-    var brewer_staff = "N";
-    var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>"
-    if (action == "edit") {
-        var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
-        var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
-        var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
-        var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
-    }
-<?php } ?>
 </script>
-<!-- BCOE&M Custom JS -->
-<script src="<?php echo $js_app_url; ?>"></script>
+<?php } // end if ($section == "brew") ?>
+
+<?php if ($section == "brewer") { ?> 
+<script type='text/javascript'>
+var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
+var brewer_judge = "N";
+var brewer_steward = "N";
+var brewer_staff = "N";
+var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>"
+if (action == "edit") {
+    var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
+    var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
+    var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
+    var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
+}
+</script>
+<?php } ?>
+
 <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
+
+<script src="<?php echo $js_app_url; ?>"></script>
 </body>
 </html>

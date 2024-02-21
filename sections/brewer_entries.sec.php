@@ -35,7 +35,7 @@ $multiple_bottle_ids = FALSE;
 if ((($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6")) && $print_bottle_labels) $multiple_bottle_ids = TRUE;
 
 // Build Headers
-if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay); 
+if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i style=\"padding-right: 5px;\" class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay); 
 if ($show_scores) {
 	$link_results_export = $base_url."includes/output.inc.php?section=export-personal-results&amp;id=".$_SESSION['brewerID'];
 	$link_results_export_mhp = $base_url."includes/output.inc.php?section=export-personal-results&amp;filter=MHP&amp;id=".$_SESSION['brewerID'];
@@ -47,15 +47,30 @@ if ($show_scores) {
 	$pay_button .= "</ul>";
 	$pay_button .= "</div>";
 }
+
+$header1_1 .= "<hr>";
+
+if (!$show_scores) $header1_1 .= sprintf("<a class=\"anchor-offset\" name=\"entries\"></a><h2>%s</h2>",$label_entries);
+
 $header1_1 .= "<div class=\"row\">";
 $header1_1 .= "<div class=\"col col-xs-6 col-sm-9\">";
-$header1_1 .= sprintf("<a class=\"anchor-offset\" name=\"entries\"></a><h2>%s</h2>",$label_entries);
+
+if ($show_scores) {
+	$header1_1 .= sprintf("<a class=\"anchor-offset\" name=\"entries\"></a><h2>%s</h2>",$label_entries);
+}
+
+else {
+	$header1_1 .= "<ul class=\"list-unstyled\">";
+	if (!empty($_SESSION['jPrefsBottleNum'])) $header1_1 .= sprintf("<li><strong>%s:</strong> %s</li>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
+	$header1_1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entry_edit_deadline,$entry_edit_deadline_date);
+	$header1_1 .= "</ul>";
+}
+
 $header1_1 .= "</div>";
 $header1_1 .= "<div class=\"col col-xs-6 col-sm-3\">";
 $header1_1 .= "<div style=\"margin-top: 10px;\">".$pay_button."</div>";
 $header1_1 .= "</div>";
 $header1_1 .= "</div>";
-if ((!empty($_SESSION['jPrefsBottleNum'])) && (!$show_scores)) $header1_1 .= sprintf("<p>%s: %s</p>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
 
 // Build Warnings
 $warnings = "";
@@ -414,7 +429,7 @@ if ($totalRows_log > 0) {
 		if (($row_log['brewCategory'] < 10) && (preg_match("/^[[:digit:]]+$/",$row_log['brewCategory']))) $brewCategory = "0".$row_log['brewCategory'];
 		else $brewCategory = $row_log['brewCategory'];
 
-		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $row_contest_dates['contestDropoffDeadline']))) {
+		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $entry_edit_deadline))) {
 
 			$edit_link .= "<a href=\"".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id'];
 			if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory'];
@@ -462,7 +477,7 @@ if ($totalRows_log > 0) {
 		$delete_alt_title = sprintf("%s %s",$label_delete, $entry_name);
 		$delete_warning = sprintf("%s %s - %s.",$label_delete, $entry_name, strtolower($label_undone));
 		
-		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $row_contest_dates['contestDropoffDeadline']))) {
+		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $entry_edit_deadline))) {
 			$delete_link = sprintf("<a class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s.\"><span class=\"fa fa-lg fa-trash-o\"></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
 		}
 

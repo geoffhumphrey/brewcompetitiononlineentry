@@ -40,6 +40,9 @@ if ($action == "username") {
 }
 
 ?>
+<?php if ($action == "username") { ?>
+<script src="<?php echo $js_url; ?>registration_checks.min.js"></script>
+<?php } // end if ($action == "username") ?>
 <p class="lead"><?php echo $lead_msg; ?></p>
 <form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit"  action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $action; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;id=<?php if ($filter == "admin") echo $row_brewer['uid']; else echo $_SESSION['user_id']; ?>" method="POST" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">

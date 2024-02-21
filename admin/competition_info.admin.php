@@ -432,13 +432,13 @@ $(document).ready(function(){
     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Additional Club Names</label>
     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
         <input id="search-club-list-input" class="form-control" placeholder="Search the clubs database">
-        <span class="help-block">Search to check if a club is already in the database. <a role="button" id="clear-search-btn" class="btn btn-xs btn-default" disabled>Clear the Search Field</a></span>
+        <span class="help-block">Search to check if a club is already in the database. <a role="button" id="clear-search-btn" class="btn btn-xs btn-default hide-loader" disabled>Clear the Search Field</a></span>
     </div>
     <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
-        <a role="button" id="search-club-list-btn" class="btn btn-primary btn-block">Search</a>
+        <a role="button" id="search-club-list-btn" class="btn btn-primary btn-block hide-loader">Search</a>
     </div>
     <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
-        <a role="button" id="copy-to-club-list-btn" class="btn btn-default btn-block" disabled>Add</a>
+        <a role="button" id="copy-to-club-list-btn" class="btn btn-default btn-block hide-loader" disabled>Add</a>
     </div>
 </div>
 <div style="margin-top: -15px; margin-bottom: 10px;" id="search-club-list-results-div" class="form-group">
@@ -451,18 +451,19 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <input class="form-control" id="contestClubs" name="contestClubs" type="text" value="<?php if ($section != "step4") echo $additional_clubs; ?>" placeholder="" pattern="[^%\x22]+" disabled>
-        <span class="help-block"><p>Use the search/add function above to add any club names that cannot be found in the clubs database. <a class="btn btn-xs btn-default" role="button" id="clear-additional-clubs">Clear Entire List</a><a class="btn btn-xs btn-default" role="button" id="restore-additional-clubs">Restore List</a> <a class="btn btn-xs btn-default" role="button" id="clear-last-added">Clear Last Added</a></p><p id="club-separated">Note: each club is separated by a semi-colon (;) for system use.</p></span>
+        <span class="help-block"><p>Use the search/add function above to add any club names that cannot be found in the clubs database. <a class="btn btn-xs btn-default hide-loader" role="button" id="clear-additional-clubs">Clear Entire List</a><a class="btn btn-xs btn-default hide-loader" role="button" id="restore-additional-clubs">Restore List</a> <a class="btn btn-xs btn-default hide-loader" role="button" id="clear-last-added">Clear Last Added</a></p><p id="club-separated">Note: each club is separated by a semi-colon (;) for system use.</p></span>
     </div>
 </div><!-- ./Form Group -->
 <h3>Entry Window</h3>
+
 <div class="form-group">
     <label for="contestEntryOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
         <div class="input-group has-warning">
-        	<input class="form-control" id="contestEntryOpen" name="contestEntryOpen" type="text" value="<?php if ($section != "step4") echo
+        	<input class="form-control date-time-picker-system" id="contestEntryOpen" name="contestEntryOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" id="contestEntryOpen-addon2"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -472,9 +473,23 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
         <div class="input-group has-warning">
-        	<input class="form-control" id="contestEntryDeadline" name="contestEntryDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
+        	<input class="form-control date-time-picker-system" id="contestEntryDeadline" name="contestEntryDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" id="contestEntryDeadline-addon2"><span class="fa fa-star"></span></span>
+
+        </div>
+        <span id="helpBlock" class="help-block">This date is only for restriction of adding <strong>new</strong> entries. Existing entries will be able to be edited beyond this date &ndash; until the drop-off/shipping deadlines &ndash; unless a specific entry editing close date is provided below.</span>
+    </div>
+</div>
+
+<h3>Entry Editing</h3>
+<div class="form-group">
+    <label for="contestEntryEditDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">   
+        <div class="input-group">
+            <input class="form-control date-time-picker-system" id="contestEntryEditDeadline" name="contestEntryEditDeadline" type="text" size="20" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestEntryEditDeadline'])) && (!empty($row_contest_dates['contestEntryEditDeadline']))) echo
+    getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryEditDeadline'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+            <span id="helpBlock" class="help-block">If you wish to restrict editing of any exisiting entry's information by non-admin participants, provide a close date here. For example, this could allow competition staff to prepare for sorting prior to the entry drop-off/shipment closure dates.</span>
         </div>
     </div>
 </div>
@@ -483,8 +498,7 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestDropoffOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
-        	<input class="form-control" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffOpen']))) echo
+        	<input class="form-control date-time-picker-system" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffOpen']))) echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div>
@@ -492,8 +506,7 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestDropoffDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
-        	<input class="form-control" id="contestDropoffDeadline" name="contestDropoffDeadline" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffDeadline']))) echo
+        	<input class="form-control date-time-picker-system" id="contestDropoffDeadline" name="contestDropoffDeadline" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffDeadline']))) echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div>
@@ -502,7 +515,6 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestShippingName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	
         	<input class="form-control" id="contestShippingName" name="contestShippingName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingName']; ?>" placeholder="">
     </div>
 </div>
@@ -520,7 +532,7 @@ $(document).ready(function(){
     <label for="contestShippingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
-        	<input class="form-control" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingOpen']))) echo
+        	<input class="form-control date-time-picker-system" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingOpen']))) echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div>
@@ -528,8 +540,7 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestShippingDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
-        <input class="form-control" id="contestShippingDeadline" name="contestShippingDeadline" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingDeadline']))) echo
+        <input class="form-control date-time-picker-system" id="contestShippingDeadline" name="contestShippingDeadline" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingDeadline']))) echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" >
      <span id="helpBlock" class="help-block">This window only applies to the Shipping Location above.</span>
     </div>
@@ -541,7 +552,7 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
         <div class="input-group has-warning">
-        	<input class="form-control" id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" value="<?php if ($section != "step4") echo
+        	<input class="form-control date-time-picker-system" id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
         	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
         </div>
@@ -553,7 +564,7 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
         <div class="input-group has-warning">
-        	<input class="form-control" id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
+        	<input class="form-control date-time-picker-system" id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
         	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
         </div>
@@ -566,7 +577,7 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
         <div class="input-group has-warning">
-        	<input class="form-control" id="contestJudgeOpen" name="contestJudgeOpen" type="text" value="<?php if ($section != "step4") echo
+        	<input class="form-control date-time-picker-system" id="contestJudgeOpen" name="contestJudgeOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
         	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
         </div>
@@ -578,7 +589,7 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
         <div class="input-group has-warning">
-        	<input class="form-control" id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
+        	<input class="form-control date-time-picker-system" id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
         	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
         </div>

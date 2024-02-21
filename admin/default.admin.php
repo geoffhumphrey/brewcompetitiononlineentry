@@ -2365,7 +2365,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
             <p>Optionally, choose a date threshold. User accounts and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
             <p>Leave the field blank to purge all non-admin participants.</p>
             <div class="input-group">
-                <input class="form-control" id="purge-part-participants-value" name="dateThreshold" type="text" value="" placeholder="">
+                <input class="form-control date-time-picker-system" id="purge-part-participants-value" name="dateThreshold" type="text" value="" placeholder="">
             </div>
         </div>
         <div class="modal-footer">
@@ -2387,7 +2387,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
             <p>Optionally, choose a date threshold. Payments and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
             <p>Leave the field blank to purge all payment data.</p>
             <div class="input-group">
-                <input class="form-control" id="purge-pay-payments-value" name="dateThreshold" type="text" value="" placeholder="">
+                <input class="form-control date-time-picker-system" id="purge-pay-payments-value" name="dateThreshold" type="text" value="" placeholder="">
             </div>
         </div>
         <div class="modal-footer">
@@ -2409,7 +2409,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
             <p>Optionally, choose a date threshold. Entries and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
             <p>Leave the field blank to purge all entries.</p>
             <div class="input-group">
-                <input class="form-control" id="purge-ent-entries-value" name="dateThreshold" type="text" value="" placeholder="">
+                <input class="form-control date-time-picker-system" id="purge-ent-entries-value" name="dateThreshold" type="text" value="" placeholder="">
             </div>
         </div>
         <div class="modal-footer">

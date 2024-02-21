@@ -458,8 +458,8 @@ function checkStyleIdentifier() {
 	</div>
 </div>
 </form>
-<?php } ?>
-<?php if (($action == "default") && ($filter == "orphans") && ($bid == "default")) { ?>
+<?php } 
+if (($action == "default") && ($filter == "orphans") && ($bid == "default")) { ?>
 <h3>Styles Without a Valid Style Type</h3>
 <?php
 echo orphan_styles();

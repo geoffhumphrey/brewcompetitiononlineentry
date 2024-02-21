@@ -27,6 +27,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$contestRegistrationDeadline = "";
 		$contestEntryOpen = "";
 		$contestEntryDeadline = "";
+		$contestEntryEditDeadline = "";
 		$contestJudgeOpen = "";
 		$contestJudgeDeadline = "";
 		$contestRules = "";
@@ -65,6 +66,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (isset($_POST['contestRegistrationDeadline'])) $contestRegistrationDeadline = strtotime(filter_var($_POST['contestRegistrationDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
 		if (isset($_POST['contestEntryOpen'])) $contestEntryOpen = strtotime(filter_var($_POST['contestEntryOpen'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
 		if (isset($_POST['contestEntryDeadline'])) $contestEntryDeadline = strtotime(filter_var($_POST['contestEntryDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+		if (isset($_POST['contestEntryEditDeadline'])) $contestEntryEditDeadline = strtotime(filter_var($_POST['contestEntryEditDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
 		if (isset($_POST['contestJudgeOpen'])) $contestJudgeOpen = strtotime(filter_var($_POST['contestJudgeOpen'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
 		if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = strtotime(filter_var($_POST['contestJudgeDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
 		if (isset($_POST['competition_rules'])) $competition_rules = $purifier->purify($_POST['competition_rules']);
@@ -140,6 +142,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'contestRegistrationDeadline' => blank_to_null($contestRegistrationDeadline),
 			'contestEntryOpen' => blank_to_null($contestEntryOpen),
 			'contestEntryDeadline' => blank_to_null($contestEntryDeadline),
+			'contestEntryEditDeadline' => blank_to_null($contestEntryEditDeadline),
 			'contestJudgeOpen' => blank_to_null($contestJudgeOpen),
 			'contestJudgeDeadline' => blank_to_null($contestJudgeDeadline),
 			'contestRules' => blank_to_null($contestRules),
@@ -274,6 +277,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'contestRegistrationDeadline' => blank_to_null($contestRegistrationDeadline),
 				'contestEntryOpen' => blank_to_null($contestEntryOpen),
 				'contestEntryDeadline' => blank_to_null($contestEntryDeadline),
+				'contestEntryEditDeadline' => blank_to_null($contestEntryEditDeadline),
 				'contestJudgeOpen' => blank_to_null($contestJudgeOpen),
 				'contestJudgeDeadline' => blank_to_null($contestJudgeDeadline),
 				'contestRules' => blank_to_null($contestRules),
