@@ -7,10 +7,10 @@ $row_mead_cider_present = mysqli_fetch_assoc($mead_cider_present);
 $mead_cider_combined = FALSE;
 if ($row_mead_cider_present['styleTypeBOS'] == "Y") $mead_cider_combined = TRUE;
 
-
 $tbody = "";
 
 if ($action == "default") {
+	
 	do {
 
 		$display = TRUE;
@@ -21,6 +21,9 @@ if ($action == "default") {
 			$tbody .= "<td>";
 			$tbody .= $row_style_type['styleTypeName'];
 			if ($row_style_type['styleTypeOwn']  == "custom") $tbody .= " (Custom Style Type)";
+			$tbody .= "</td>";
+			$tbody .= "<td>";
+			if (!empty($row_style_type['styleTypeEntryLimit'])) $tbody .= $row_style_type['styleTypeEntryLimit'];
 			$tbody .= "</td>";
 			$tbody .= "<td>";
 			if ($row_style_type['styleTypeBOS'] == "Y") $tbody .= "<span class=\"fa fa-lg fa-check text-success\"></span>";
@@ -40,11 +43,10 @@ if ($action == "default") {
 
 
 	} while ($row_style_type = mysqli_fetch_assoc($style_type));
+
 }
 
-
 ?>
-
 
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Style Type"; elseif ($action == "edit") echo ": Edit the ".$row_style_type['styleTypeName']." Style Type";  else echo " Style Types";  ?></p>
 
@@ -95,6 +97,7 @@ if ($action == "default") {
 			"aoColumns": [
 				null,
 				null,
+				null
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 			]
@@ -105,6 +108,7 @@ if ($action == "default") {
 <thead>
 	<tr>
     	<th>Name</th>
+    	<th nowrap="nowrap">Entry Limit</th>
         <th nowrap="nowrap">BOS Enabled?</th>
         <th nowrap="nowrap">BOS Pull Method</th>
         <th>Actions</th>
@@ -118,20 +122,32 @@ if ($action == "default") {
 <?php if (($action == "add") || ($action == "edit")) { ?>
 <form data-toggle="validator" role="form" class="form-horizontal" name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $style_types_db_table; if ($action == "edit") echo "&id=".$id; ?>">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div class="form-group">
 	<label for="styleTypeName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
-			<!-- Input Here -->
 			<input class="form-control" id="styleTypeName" name="styleTypeName" type="text" value="<?php if ($action == "edit") echo $row_style_type['styleTypeName']; ?>" placeholder="" autofocus <?php if (($action == "edit") && ($row_style_type['styleTypeOwn'] == "bcoe")) echo "disabled"; ?> required>
 			<span class="input-group-addon" id="styleTypeName-addon2"><span class="fa fa-star"></span></span>
 		</div>
 		<div class="help-block with-errors"></div>
 	</div>
-</div><!-- ./Form Group -->
- <?php if (($action == "edit") && ($row_style_type['styleTypeOwn'] == "bcoe")) { ?>
- <input type="hidden" name="styleTypeName" value="<?php echo $row_style_type['styleTypeName']; ?>">
- <?php } ?>
+</div>
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestEntryFee2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    	<div class="input-group">
+        	
+        	<input class="form-control" id="styleTypeEntryLimit" name="styleTypeEntryLimit" type="number" min="0" value="<?php if ($action == "edit") echo $row_style_type['styleTypeEntryLimit']; ?>" placeholder="">
+        	<span class="input-group-addon" id="styleTypeEntryLimit-addon2"><span class="fa fa-hashtag"></span></span>
+        </div>
+        <span class="help-block">Limit for this style type only.</span>
+    </div>
+</div>
+
+<?php if (($action == "edit") && ($row_style_type['styleTypeOwn'] == "bcoe")) { ?>
+<input type="hidden" name="styleTypeName" value="<?php echo $row_style_type['styleTypeName']; ?>">
+<?php } ?>
+
 <div class="form-group"><!-- Form Group Radio INLINE -->
 	<label for="brewStyleReqSpec" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BOS for Style Type</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

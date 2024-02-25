@@ -35,8 +35,9 @@ $multiple_bottle_ids = FALSE;
 if ((($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6")) && $print_bottle_labels) $multiple_bottle_ids = TRUE;
 
 // Build Headers
-if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i style=\"padding-right: 5px;\" class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay); 
-if ($show_scores) {
+if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i style=\"padding-right: 5px;\" class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay);
+ 
+if (($totalRows_log > 0) && ($show_scores)) {
 	$link_results_export = $base_url."includes/output.inc.php?section=export-personal-results&amp;id=".$_SESSION['brewerID'];
 	$link_results_export_mhp = $base_url."includes/output.inc.php?section=export-personal-results&amp;filter=MHP&amp;id=".$_SESSION['brewerID'];
 	$pay_button .= "<div class=\"btn-group pull-right\">";

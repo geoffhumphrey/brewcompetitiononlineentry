@@ -44,27 +44,6 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     else $participant_orgs_label = $label_brewing_partners;
 
     ?>
-    <section id="participant-orgs">
-        <div class="form-group">
-            <label for="brewerAssignment" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label; ?></label>
-            <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">  
-            <select class="selectpicker" multiple name="brewerAssignment[]" id="brewerAssignment" data-live-search="true" data-size="40" data-width="auto" data-show-tick="true" data-header="<?php echo $participant_orgs_label." - ".$label_select_below; ?>" title="<?php echo $participant_orgs_label." - ".$label_select_below; ?>">
-                <?php echo $org_options; ?>
-            </select>
-            <span class="help-block"><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_051; else echo $brewer_text_053; ?></span>
-            </div>
-        </div>
-        <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
-        <div id="brewerAssignmentOther" class="form-group">
-            <label for="brewerAssignmentOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label." &ndash; ".$label_other; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%\x22]+">
-                <div class="help-block">
-                    <p><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_052; else echo $brewer_text_054; ?></p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <div id="brewerJudgeFields">
 
@@ -343,7 +322,27 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 </section><!-- ./ steward-preferences -->
 <?php } // end if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
 
-
+<section id="participant-orgs">
+    <div class="form-group">
+        <label for="brewerAssignment" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label; ?></label>
+        <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">  
+        <select class="selectpicker" multiple name="brewerAssignment[]" id="brewerAssignment" data-live-search="true" data-size="40" data-width="auto" data-show-tick="true" data-header="<?php echo $participant_orgs_label." - ".$label_select_below; ?>" title="<?php echo $participant_orgs_label." - ".$label_select_below; ?>">
+            <?php echo $org_options; ?>
+        </select>
+        <span class="help-block"><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_051; else echo $brewer_text_055; ?></span>
+        </div>
+    </div>
+    <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
+    <div id="brewerAssignmentOther" class="form-group">
+        <label for="brewerAssignmentOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label." &ndash; ".$label_other; ?></label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%\x22]+">
+            <div class="help-block">
+                <p><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_052; else echo $brewer_text_054; ?></p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section id="judge-steward-waiver">
     <div id="judge-waiver" class="form-group">

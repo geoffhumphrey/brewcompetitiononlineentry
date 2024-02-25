@@ -145,6 +145,18 @@ if (function_exists('random_bytes')) $_SESSION['token'] = bin2hex(random_bytes(3
 elseif (function_exists('mcrypt_create_iv')) $_SESSION['token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
 else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
 
+$style_types_translations = array(
+    1 => $label_beer,
+    2 => $label_cider,
+    3 => $label_mead,
+    4 => $label_mead_cider,
+    5 => $label_wine,
+    6 => $label_rice_wine,
+    7 => $label_spirits,
+    8 => $label_kombucha,
+    9 => $label_pulque
+);
+
 // ---------------------------------------------------------------------------------
 ?>
 <!DOCTYPE html>

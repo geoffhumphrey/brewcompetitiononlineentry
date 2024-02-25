@@ -2053,9 +2053,22 @@ $brew_text_046 = "Por favor, especifique a abreviação de dois caracteres do es
 $brew_text_047 = "Como sua entrada deve ser despejada para os juízes?";
 $brew_text_048 = "Algum fermento deve ser agitado antes do despejo?";
 $brew_text_049 = "Forneça mais informações sobre como sua entrada deve ser despejada ou outros itens relacionados (por exemplo, possível efervescência, etc.).";
-$brewer_text_053 = "Selecione todos os parceiros de produção com os quais você está afiliado. Isso é para garantir que não haja conflitos de interesse ao atribuir juízes e assistentes para avaliar as entradas."; 
+$brewer_text_055 = "Selecione todos os parceiros de produção com os quais você está afiliado. Isso é para garantir que não haja conflitos de interesse ao atribuir juízes e assistentes para avaliar as entradas."; 
 $brewer_text_054 = "<strong>Se o nome de uma pessoa não estiver listado no menu suspenso acima, insira o NOME COMPLETO aqui (por exemplo, João da Silva, Maria Oliveira, etc.). Adicione também nomes de equipes de produção aqui.</strong> Separe cada nome de equipe ou pessoa com vírgula (,) ou ponto e vírgula (;). Alguns símbolos não são permitidos, incluindo aspas duplas (&quot;) e porcentagem (&#37;).";
-
+$brew_text_050 = "Alguns estilos estão desativados pois o limite para seu tipo de estilo correspondente (por exemplo, cerveja, hidromel, cidra, etc.) foi atingido.";
+$entry_info_text_053 = "Limites de entradas por tipo de estilo:";
+$alert_text_055 = "Alguns limites de entradas alcançados!";
+$alert_text_056 = "Não serão aceitas mais entradas para";
+$label_limit = "Limite";
+$label_beer = "Cerveja";
+$label_mead = "Hidromel";
+$label_cider = "Sidra";
+$label_mead_cider = "Hidromel/Cidra";
+$label_wine = "Vinho";
+$label_rice_wine = "Vinho de Arroz";
+$label_spirits = "Destilados";
+$label_kombucha = "Kombucha";
+$label_pulque = "Pulque";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -2596,7 +2596,6 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
             if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {
                 
-                
                 if (!empty($date_arr)) {
                     $suggested_open_date = min($date_arr); // Get the start time of the first judging location chronologically
                     $suggested_close_date = (max($date_arr) + 28800); // Add eight hours to the start time at the final judging location
@@ -2635,6 +2634,46 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
             if ((!empty($row_limits['prefsEntryLimit'])) && ($totalRows_entry_count >= $row_limits['prefsEntryLimit'])) $comp_entry_limit = TRUE;
             if ((!empty($row_limits['prefsEntryLimitPaid'])) && ($total_paid >= $row_limits['prefsEntryLimitPaid'])) $comp_paid_entry_limit = TRUE;
         }
+
+        // Get styles types and their associated entry limits
+        // If a style type has an entry limit, get an entry count from the db for that style type
+        // If that style type's entry limit is equal to the count, disable the fields and flag
+        // If the flag is present, message the user
+        $style_type_limits = array();
+        $style_type_limits_display = array();
+        $style_type_limits_alert = array();
+
+        $query_style_type_entry_limits = sprintf("SELECT * FROM %s WHERE (styleTypeEntryLimit > 0) OR (styleTypeEntryLimit IS NOT NULL)",$prefix."style_types");
+        $style_type_entry_limits = mysqli_query($connection,$query_style_type_entry_limits) or die (mysqli_error($connection));
+        $row_style_type_entry_limits = mysqli_fetch_assoc($style_type_entry_limits);
+        $totalRows_style_type_entry_limits = mysqli_num_rows($style_type_entry_limits);
+
+        if ($totalRows_style_type_entry_limits > 0) {
+            
+            do {
+
+                $style_type_limits_display[$row_style_type_entry_limits['styleTypeName']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
+
+                $query_style_type_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleType='%s'",$prefix."brewing",$row_style_type_entry_limits['id']);
+                $style_type_entry_count = mysqli_query($connection,$query_style_type_entry_count) or die (mysqli_error($connection));
+                $row_style_type_entry_count = mysqli_fetch_assoc($style_type_entry_count);
+                
+                // If entry limit reached flag with a 1 (true)
+                // Otherwise flag with a 0 (false)
+                
+                if ($row_style_type_entry_count['count'] >= $row_style_type_entry_limits['styleTypeEntryLimit']) {
+                    $style_type_limits[$row_style_type_entry_limits['id']] = 1;
+                    if ($row_style_type_entry_limits['id'] <= 9) $style_type_limits_alert[$row_style_type_entry_limits['id']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
+                    else $style_type_limits_alert[$row_style_type_entry_limits['styleTypeName']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
+                }
+                
+                else $style_type_limits[$row_style_type_entry_limits['id']] = 0;
+            
+            } while ($row_style_type_entry_limits = mysqli_fetch_assoc($style_type_entry_limits));
+
+        }
+
+        if ((array_sum($style_type_limits) >= $totalRows_style_type_entry_limits)) $comp_entry_limit = TRUE;
 
         if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
         if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
@@ -2935,5 +2974,4 @@ else $drop_ship_deadline = $row_contest_dates['contestEntryDeadline'];
 if ((isset($row_contest_dates['contestEntryEditDeadline'])) && (!empty($row_contest_dates['contestEntryEditDeadline'])) && ($row_contest_dates['contestEntryEditDeadline'] < $drop_ship_deadline)) $entry_edit_deadline = $row_contest_dates['contestEntryEditDeadline'];
 else $entry_edit_deadline = $drop_ship_deadline;
 $entry_edit_deadline_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_edit_deadline, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
-
 ?>

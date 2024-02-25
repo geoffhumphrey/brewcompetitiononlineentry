@@ -123,6 +123,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewSweetnessLevel = "";
 		$brewJuiceSource = "";
 		$brewPouring = "";
+		$brewStyleType = "";
 
 		// Comments
 		if ((isset($_POST['brewComments'])) && (!empty($_POST['brewComments']))) {
@@ -447,7 +448,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewABV' => blank_to_null($brewABV),
 			'brewJuiceSource' => blank_to_null($brewJuiceSource),
 			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
-			'brewPouring' => blank_to_null($brewPouring)
+			'brewPouring' => blank_to_null($brewPouring),
+			'brewStyleType' => blank_to_null($row_style_name['brewStyleType'])
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -689,7 +691,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewABV' => blank_to_null($brewABV),
 			'brewJuiceSource' => blank_to_null($brewJuiceSource),
 			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
-			'brewPouring' => blank_to_null($brewPouring)
+			'brewPouring' => blank_to_null($brewPouring),
+			'brewStyleType' => blank_to_null($row_style_name['brewStyleType'])
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);

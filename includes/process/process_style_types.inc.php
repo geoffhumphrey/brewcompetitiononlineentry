@@ -39,7 +39,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'styleTypeName' => blank_to_null($styleTypeName),
 			'styleTypeOwn' => blank_to_null(sterilize($_POST['styleTypeOwn'])),
 			'styleTypeBOS' => blank_to_null(sterilize($_POST['styleTypeBOS'])),
-			'styleTypeBOSMethod' => blank_to_null(sterilize($_POST['styleTypeBOSMethod']))
+			'styleTypeBOSMethod' => blank_to_null(sterilize($_POST['styleTypeBOSMethod'])),
+			'styleTypeEntryLimit' => blank_to_null(sterilize($_POST['styleTypeEntryLimit']))
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -71,7 +72,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Deactivate Cider
-			$data = array('styleTypeBOS' => 'N');
+			$data = array(
+				'styleTypeBOS' => 'N',
+				'styleTypeEntryLimit' => NULL
+			);
 			$db_conn->where ('id', 2);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -80,7 +84,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Deactivate Mead
-			$data = array('styleTypeBOS' => 'N');
+			$data = array(
+				'styleTypeBOS' => 'N',
+				'styleTypeEntryLimit' => NULL
+			);
 			$db_conn->where ('id', 3);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -106,8 +113,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$update_table = $prefix."style_types";
 
-			// Activate Mead/Cider style type
-			$data = array('styleTypeBOS' => 'N');
+			// Deactivate Mead/Cider style type
+			$data = array(
+				'styleTypeBOS' => 'N',
+				'styleTypeEntryLimit' => NULL
+			);
 			$db_conn->where ('styleTypeName', 'Mead/Cider');
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -115,7 +125,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			// Deactivate Cider
+			// Activate Cider
 			$data = array('styleTypeBOS' => 'Y');
 			$db_conn->where ('id', 2);
 			$result = $db_conn->update ($update_table, $data);
@@ -124,7 +134,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			// Deactivate Mead
+			// Activate Mead
 			$data = array('styleTypeBOS' => 'Y');
 			$db_conn->where ('id', 3);
 			$result = $db_conn->update ($update_table, $data);
@@ -157,7 +167,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'styleTypeName' => blank_to_null($styleTypeName),
 				'styleTypeOwn' => blank_to_null(sterilize($_POST['styleTypeOwn'])),
 				'styleTypeBOS' => blank_to_null(sterilize($_POST['styleTypeBOS'])),
-				'styleTypeBOSMethod' => blank_to_null(sterilize($_POST['styleTypeBOSMethod']))
+				'styleTypeBOSMethod' => blank_to_null(sterilize($_POST['styleTypeBOSMethod'])),
+				'styleTypeEntryLimit' => blank_to_null(sterilize($_POST['styleTypeEntryLimit']))
 			);
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);

@@ -123,22 +123,25 @@ function bos_entry_info($eid,$table_id,$filter) {
 	$return .= $row_entries_1['brewCategorySort']."^";  	// 1
 	$return .= $row_entries_1['brewCategory']."^";  		// 2
 	$return .= $row_entries_1['brewSubCategory']."^";  		// 3
-	$return .= $row_brewer['brewerFirstName']."^";  	// 4
-	$return .= $row_brewer['brewerLastName']."^";  	// 5
+	$return .= $row_brewer['brewerFirstName']."^";  		// 4
+	$return .= $row_brewer['brewerLastName']."^";  			// 5
 	$return .= $row_entries_1['brewJudgingNumber']."^";   	// 6
-	$return .= $row_tables_1['id']."^";  					// 7
-	$return .= $row_tables_1['tableName']."^";   			// 8
-	$return .= $row_tables_1['tableNumber']."^";  			// 9
-	if (isset($row_bos_place_1['scorePlace'])) $return .= $row_bos_place_1['scorePlace']."^";  		// 10
+	if (isset($row_tables_1['id'])) $return .= $row_tables_1['id']."^";  						// 7
 	else $return .= " ^";
-	if (isset($row_bos_place_1['scoreEntry'])) $return .= $row_bos_place_1['scoreEntry']."^";  		// 11
+	if (isset($row_tables_1['tableName'])) $return .= $row_tables_1['tableName']."^";   		// 8
+	else $return .= " ^";
+	if (isset($row_tables_1['tableNumber'])) $return .= $row_tables_1['tableNumber']."^";  		// 9
+	else $return .= " ^";
+	if (isset($row_bos_place_1['scorePlace'])) $return .= $row_bos_place_1['scorePlace']."^";  	// 10
+	else $return .= " ^";
+	if (isset($row_bos_place_1['scoreEntry'])) $return .= $row_bos_place_1['scoreEntry']."^";  	// 11
 	else $return .= " ^";
 	$return .= $row_entries_1['brewName']."^";  			// 12
 	$return .= $row_entries_1['id']."^";   					// 13
 	if (isset($row_bos_place_1['id'])) $return .= $row_bos_place_1['id']."^";   				// 14
 	else $return .= "N^";
-	$return .= $row_entries_1['brewBrewerID']."^"; 				// 15
-	$return .= $row_brewer['brewerBreweryName']; //16
+	$return .= $row_entries_1['brewBrewerID']."^"; 			// 15
+	$return .= $row_brewer['brewerBreweryName']; 			//16
 
 	return $return;
 }

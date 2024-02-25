@@ -1992,8 +1992,24 @@ $brew_text_046 = "Prosím, uveďte dvoupísmennou zkratku státu/provincie jaké
 $brew_text_047 = "Jak by měla být vaše položka nalévána pro sudí?";
 $brew_text_048 = "Má být probuzena nějaká kvasinka před naléváním?";
 $brew_text_049 = "Poskytněte další informace o tom, jak by měla být vaše položka nalévána nebo jiné související položky (např. možné vybublávání, atd.).";
-$brewer_text_053 = "Vyberte všechny vařící partnery, se kterými jste spojeni. To je proto, aby nebyly žádné střety zájmů při přiřazování sudích a pomocníků k hodnocení položek."; 
+$brewer_text_055 = "Vyberte všechny vařící partnery, se kterými jste spojeni. To je proto, aby nebyly žádné střety zájmů při přiřazování sudích a pomocníků k hodnocení položek."; 
 $brewer_text_054 = "<strong>Pokud jméno některé osoby není uvedeno v rozbalovacím menu výše, zadejte jejich CELÉ jméno zde (např. John Doe, Wyatt Earp, Selina Kyle, atd.). Zadejte zde také jména jakýchkoli vařících týmů.</strong> Oddělte každé jméno týmu nebo osoby čárkou (,) nebo středníkem (;). Některé symboly nejsou povoleny, včetně uvozovek (&quot;) a procenta (&#37;).";
+
+$brew_text_050 = "Některé styly jsou zakázány, protože byl dosažen limit pro jejich odpovídající typ stylu (např. pivo, medovina, cider, atd.).";
+$entry_info_text_053 = "Limity příspěvků podle typu stylu:";
+$alert_text_055 = "Některé limity příspěvků dosaženy!";
+$alert_text_056 = "Pro";
+$label_limit = "Limit";
+$label_beer = "Pivo";
+$label_mead = "Medovina";
+$label_cider = "Cider";
+$label_mead_cider = "Medovina/Cider";
+$label_wine = "Víno";
+$label_rice_wine = "Rýžové víno";
+$label_spirits = "Destiláty";
+$label_kombucha = "Kombucha";
+$label_pulque = "Pulque";
+
 
 /**
  * ----------------------------------------------------------------------------------

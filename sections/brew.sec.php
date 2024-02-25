@@ -121,6 +121,86 @@ if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($_SESSION['use
 	$adminUserAddDisable = TRUE;
 }
 
+// Construct styles drop-down
+$styles_dropdown = "";
+$styles_dropdown_count = 0;
+$styles_disabled_count = 0;
+$style_types_warning = 0;
+
+do {
+
+	if (array_key_exists($row_styles['id'], $styles_selected)) {
+
+		$styles_dropdown_count++;
+
+		$style_value = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_system_separator'],999);
+		$style_value_edit = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_system_separator'],1);
+
+		if (($_SESSION['userLevel'] <= 1) && ($bid != "default")) $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$bid);
+		else $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
+
+		// Build selected/disabled variable
+		$selected_disabled = "";
+		$selected = "";
+		
+		if ($action == "edit") {
+			if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED";
+			if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit)) $selected_disabled = "DISABLED";
+			$styles_disabled_count++;
+		}
+		
+		if (($remaining_entries > 0) && (!$disable_fields) && ($subcat_limit)) $selected_disabled = "DISABLED";
+		elseif ($disable_fields) $selected_disabled = "DISABLED";
+		elseif (!empty($style_type_limits)) {
+			
+			if (($action == "add") && ($_SESSION['userLevel'] > 1) && (isset($style_type_limits[$row_styles['brewStyleType']])) && ($style_type_limits[$row_styles['brewStyleType']] == 1)) {
+				$selected_disabled = "DISABLED";
+				$style_types_warning++;
+				$styles_disabled_count++;
+			}
+			
+			if (($action == "edit") && ($_SESSION['userLevel'] > 1) && (isset($style_type_limits[$row_styles['brewStyleType']])) && ($style_type_limits[$row_styles['brewStyleType']] == 1)) {
+
+				if ($row_styles['brewStyleType'] != $row_log['brewStyleType']) {
+					$selected_disabled = "DISABLED";
+					$style_types_warning++;
+					$styles_disabled_count++;
+				}
+				
+			}
+		
+		}
+
+		if (($action == "edit") && ($view == $style_value_edit)) {
+			$selected = " SELECTED";
+			$selected_disabled = "";
+		}
+		
+		// Build selection variable
+		$selection = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0)." ".$row_styles['brewStyle'];
+
+		if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
+		if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
+		if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
+		if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
+		if (($selected_disabled == "DISABLED") && ($bid == "default")) $selection .= " ".$brew_text_002;
+		if (($selected_disabled == "DISABLED") && ($bid != "default")) $selection .= " ".$brew_text_003;
+
+		if (!empty($row_styles['brewStyleGroup'])) {
+			$styles_dropdown .= "<option value=\"".$style_value."\"";
+			$styles_dropdown .= $selected_disabled;
+			$styles_dropdown .= $selected;
+			$styles_dropdown .= ">";
+			$styles_dropdown .= $selection;
+			$styles_dropdown .= "</option>\n";
+		}
+
+	}
+
+} while ($row_styles = mysqli_fetch_assoc($styles));
+
+if (($style_types_warning >= $styles_dropdown_count) && ($_SESSION['userLevel'] > 1)) $add_entry_disable = TRUE;
+
 $add_edit_message = "";
 
 // Disable display of add/edit form elements
@@ -253,59 +333,6 @@ if ($add_or_edit) {
 
 	}
 
-// Construct styles drop-down
-$styles_dropdown = "";
-
-do {
-
-	if (array_key_exists($row_styles['id'], $styles_selected)) {
-
-		$style_value = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_system_separator'],999);
-		$style_value_edit = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_system_separator'],1);
-
-		if (($_SESSION['userLevel'] <= 1) && ($bid != "default")) $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$bid);
-		else $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-
-		// Build selected/disabled variable
-		$selected_disabled = "";
-		$selected = "";
-		
-		if ($action == "edit") {
-			if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED";
-			if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit)) $selected_disabled = "DISABLED";
-		}
-		
-		if (($remaining_entries > 0) && (!$disable_fields) && ($subcat_limit)) $selected_disabled = "DISABLED";
-		elseif ($disable_fields) $selected_disabled = "DISABLED";
-
-		if (($action == "edit") && ($view == $style_value_edit)) {
-			$selected = " SELECTED";
-			$selected_disabled = "";
-		}
-		
-		// Build selection variable
-		$selection = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0)." ".$row_styles['brewStyle'];
-
-		if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
-		if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
-		if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
-		if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
-		if (($selected_disabled == "DISABLED") && ($bid == "default")) $selection .= " ".$brew_text_002;
-		if (($selected_disabled == "DISABLED") && ($bid != "default")) $selection .= " ".$brew_text_003;
-
-		if (!empty($row_styles['brewStyleGroup'])) {
-			$styles_dropdown .= "<option value=\"".$style_value."\"";
-			$styles_dropdown .= $selected_disabled;
-			$styles_dropdown .= $selected;
-			$styles_dropdown .= ">";
-			$styles_dropdown .= $selection;
-			$styles_dropdown .= "</option>\n";
-		}
-
-	}
-
-} while ($row_styles = mysqli_fetch_assoc($styles));
-
 echo $add_edit_entry_modals;
 if (!isset($_SERVER['HTTP_REFERER'])) $relocate_referrer = "list";
 else $relocate_referrer = $_SERVER['HTTP_REFERER'];
@@ -397,8 +424,10 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         	<?php if (($action == "edit") && ($view == "00-A")) { ?>
 			<option><?php echo $header_text_107; ?></option>
             <option data-divider="true"></option>
-        	<?php } ?>
-            <?php echo $styles_dropdown; ?>
+        	<?php } 
+            if (($action == "add") && ($styles_disabled_count > 1)) echo "<option value='00-00'></option>";
+            echo $styles_dropdown; 
+        	?>
         </select>
         <div class="help-block with-errors"></div>
         <span id="helpBlock" class="help-block">
@@ -407,7 +436,11 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         	<div id="req-carbonation" style="margin:0; padding:0">&clubs; = <?php echo $brew_text_006; ?></div>
         	<div id="req-sweetness" style="margin:0; padding:0">&hearts; = <?php echo $brew_text_007; ?></div>
         </span>
+        <?php if (($style_types_warning > 0) && ($_SESSION['userLevel'] > 1)) { ?>
+        <div class="help-block text-danger"><?php echo $brew_text_050; ?></div>
+        <?php } ?>
         </div>
+        
     </div>
     <!-- Entry Requirements -->
 	<div id="specialInfo" class="form-group">

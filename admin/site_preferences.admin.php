@@ -1135,7 +1135,7 @@ $(document).ready(function(){
     </div>
 </div><!-- ./modal -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-    <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit (Paid/Unpaid)</label>
+    <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit &ndash; Paid/Unpaid</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
             <input class="form-control" id="prefsEntryLimit" name="prefsEntryLimit" type="text" value="<?php if (isset($row_limits['prefsEntryLimit'])) echo $row_limits['prefsEntryLimit']; ?>" placeholder="">
@@ -1144,7 +1144,7 @@ $(document).ready(function(){
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-    <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit (Paid)</label>
+    <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit &ndash; Paid</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
             <input class="form-control" id="prefsEntryLimitPaid" name="prefsEntryLimitPaid" type="text" value="<?php if (isset($row_limits['prefsEntryLimitPaid'])) echo $row_limits['prefsEntryLimitPaid']; ?>" placeholder="">
@@ -1160,7 +1160,6 @@ $(document).ready(function(){
         </span>
     </div>
 </div><!-- ./Form Group -->
-
 <!-- Modal -->
 <div class="modal fade" id="entryLimitPaidModal" tabindex="-1" role="dialog" aria-labelledby="entryLimitPaidModalLabel">
     <div class="modal-dialog" role="document">
@@ -1187,6 +1186,24 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
+
+<?php
+$st_count = 0;
+$st_arr = array();
+do {
+    $st_arr[] = $row_style_type['id'];
+    $st_count++;
+?>
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit &ndash; <?php echo $row_style_type['styleTypeName']; ?></label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control" id="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" name="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" type="number" min="0" value="<?php echo $row_style_type['styleTypeEntryLimit']; ?>" placeholder="">
+        <span id="helpBlock" class="help-block"><?php if ($st_count == $totalRows_style_type) echo "Individual style type entry limits above are only for those that have BOS enabled. <a href='".$base_url."index.php?section=admin&amp;go=style_types'>Manage your competition style types</a> to specify entry limits for others."; ?></span>
+    </div>
+</div><!-- ./Form Group -->
+<?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
+
+<input name="style_type_entry_limits" type="hidden" value="<?php echo implode(",", $st_arr); ?>">
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Participant</label>

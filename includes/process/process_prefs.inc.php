@@ -150,6 +150,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'prefsScoringCOA' => $prefsScoringCOA
 	);
 
+	// Check if style type entry limits were specified
+	if (!empty($_POST['style_type_entry_limits'])) {
+
+		$style_type_limits = explode(",",sterilize($_POST['style_type_entry_limits']));
+
+		foreach ($style_type_limits as $value) {
+			
+			$entry_limit = sterilize($_POST['styleTypeEntryLimit-'.$value]);
+		 	$sql = sprintf("UPDATE %s SET styleTypeEntryLimit='%s' WHERE id='%s';", $prefix."style_types", blank_to_null($entry_limit), $value);
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$sql);
+			$result = mysqli_query($connection,$sql);
+			if (!$result) $errors = TRUE;
+			
+		}
+
+	}
+
 	if ($action == "add") {
 
 		$result = $db_conn->insert ($update_table, $data);

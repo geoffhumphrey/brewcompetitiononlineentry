@@ -348,8 +348,7 @@ if ($msg != "default") {
     </div>
   <?php } ?>
 
-  <?php
-  if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
+  <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
     <!-- Entry limit reached -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -444,3 +443,27 @@ if ($msg != "default") {
         <p>Select the <?php echo $current_version_display; ?> Update Summary button below for details. Errors are in <span class="text-danger">red text</span>.</p>
     </div>
 <?php } ?>
+
+<?php if (($registration_open == 1) && (!$ua) && (($section == "default") || ($section == "list")) && ((!$comp_entry_limit) || (!$comp_paid_entry_limit)) && ($msg == "default")) {
+
+    $style_types_disabled = ""; 
+    
+    if (!empty($style_type_limits_alert)) {
+    
+        foreach ($style_type_limits_alert as $key => $value) {
+
+            if (array_key_exists($key, $style_types_translations)) $style_types_disabled .= strtolower($style_types_translations[$key])." (".strtolower($label_limit).": ".$value."), ";
+            else $style_types_disabled .= strtolower($key)." (".strtolower($label_limit).": ".$value."), ";
+
+        }
+
+        $style_types_disabled = rtrim($style_types_disabled,", ");
+
+?>
+<div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong><?php echo $alert_text_055; ?></strong> <?php echo $alert_text_056." ".$style_types_disabled; ?>.</p>
+</div>
+<?php } 
+} 
+?>

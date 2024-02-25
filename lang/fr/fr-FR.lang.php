@@ -2067,8 +2067,23 @@ $brew_text_046 = "Veuillez spécifier l'abréviation à deux lettres de l'état/
 $brew_text_047 = "Comment votre entrée doit-elle être versée pour les juges ?";
 $brew_text_048 = "Une levure doit-elle être réveillée avant le versement ?";
 $brew_text_049 = "Fournissez des informations supplémentaires sur la manière dont votre entrée doit être versée ou d'autres éléments connexes (par exemple, des éruptions possibles, etc.).";
-$brewer_text_053 = "Sélectionnez tous les partenaires de brassage avec lesquels vous êtes affilié. Ceci est pour s'assurer qu'il n'y a pas de conflits d'intérêts lors de l'attribution de juges et de aides pour évaluer les entrées."; 
+$brewer_text_055 = "Sélectionnez tous les partenaires de brassage avec lesquels vous êtes affilié. Ceci est pour s'assurer qu'il n'y a pas de conflits d'intérêts lors de l'attribution de juges et de aides pour évaluer les entrées."; 
 $brewer_text_054 = "<strong>Si le nom d'une personne ne figure pas dans le menu déroulant ci-dessus, saisissez son NOM COMPLET ici (par exemple, John Doe, Wyatt Earp, Selina Kyle, etc.). Ajoutez ici également tout nom d'équipe de brassage.</strong> Séparez chaque nom d'équipe ou de personne par une virgule (,) ou un point-virgule (;). Certains symboles ne sont pas autorisés, y compris les guillemets doubles (&quot;) et le pourcentage (&#37;).";
+
+$brew_text_050 = "Certains styles sont désactivés car la limite pour leur type de style correspondant (par exemple, bière, hydromel, cidre, etc.) a été atteinte.";
+$entry_info_text_053 = "Limites d'entrées par type de style :";
+$alert_text_055 = "Certaines limites d'entrées atteintes !";
+$alert_text_056 = "Aucune autre entrée ne sera acceptée pour";
+$label_limit = "Limite";
+$label_beer = "Bière";
+$label_mead = "Hydromel";
+$label_cider = "Cidre";
+$label_mead_cider = "Hydromel/Cidre";
+$label_wine = "Vin";
+$label_rice_wine = "Vin de Riz";
+$label_spirits = "Spiritueux";
+$label_kombucha = "Kombucha";
+$label_pulque = "Pulque";
 
 /**
  * ----------------------------------------------------------------------------------

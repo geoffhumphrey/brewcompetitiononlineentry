@@ -3114,58 +3114,65 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 		require(LANG.'language.lang.php');
 
 		do {
+			
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
 			$location = "";
 			if (isset($table_info[2])) $location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
 
-			if (!empty($row_table_assignments['assignRoles'])) {
-				$hj = "<span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
-				$lj = "<span class=\"text-purple\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
-				$mbos = "<span class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
-				$role_replace1 = array("HJ","LJ","MBOS",", ");
-				$role_replace2 = array($hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;");
-				$role = str_replace($role_replace1,$role_replace2,$row_table_assignments['assignRoles']);
-			}
+			if (!empty($location)) {
 
-			if ($method2 == 0) {
-				$output .= "\t\t<tr>\n";
-				$output .= "\t\t\t<td>".$location[2];
-				if (!empty($location[3]) && ($location[4] == "1")) $output .= "<br><em><small>".$location[3]."</small></em>";
-				$output .= "\t\t\t</td>";
-				$output .= "\t\t\t<td>";
-				$output .= getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "short", "date-time");
-				if (!empty($location[1])) $output .= " - ".getTimeZoneDateTime($time_zone, $location[1], $date_format,  $time_format, "short", "date-time");
-				$output .= "</td>\n";
-				$output .= "\t\t\t<td>";
-				$output .= sprintf("%s %s - %s",$label_table,$table_info[0],$table_info[1]);
-				if ($_SESSION['jPrefsQueued'] == "N") {
-					$output .= "<br>".$label_round." ".$row_table_assignments['assignFlight'].", ".$label_flight." ".$row_table_assignments['assignFlight'];
+				if (!empty($row_table_assignments['assignRoles'])) {
+					$hj = "<span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
+					$lj = "<span class=\"text-purple\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
+					$mbos = "<span class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
+					$role_replace1 = array("HJ","LJ","MBOS",", ");
+					$role_replace2 = array($hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;");
+					$role = str_replace($role_replace1,$role_replace2,$row_table_assignments['assignRoles']);
 				}
-				if (!empty($row_table_assignments['assignRoles'])) $output .= "<br>".$role;
-				$output .= "</td>\n";
-				$output .= "\t\t</tr>\n";
-			}
 
-			elseif ($method2 == 1) {
-				if ((isset($table_info[0])) && (isset($table_info[1])) && (isset($table_info[3]))) {
-					if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
-					if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
-				}
-			}
-
-			elseif ($method2 == 2) {
-				if (isset($table_info[3])) $output[] = $table_info[3];
-				else $output[] = "";
-			}
-
-			else {
-				if (!empty($location)) {
-					$output .= "\t\t\t<td>".$location[2]."</td>\n";
-					$output .= "\t\t\t<td>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
-					$output .= sprintf("\t\t\t<td>%s %s - %s</td>\n",$label_table,$table_info[0],$table_info[1]);
+				if ($method2 == 0) {
+					$output .= "\t\t<tr>\n";
+					$output .= "\t\t\t<td>".$location[2];
+					if (!empty($location[3]) && ($location[4] == "1")) $output .= "<br><em><small>".$location[3]."</small></em>";
+					$output .= "\t\t\t</td>";
+					$output .= "\t\t\t<td>";
+					$output .= getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "short", "date-time");
+					if (!empty($location[1])) $output .= " - ".getTimeZoneDateTime($time_zone, $location[1], $date_format,  $time_format, "short", "date-time");
+					$output .= "</td>\n";
+					$output .= "\t\t\t<td>";
+					$output .= sprintf("%s %s - %s",$label_table,$table_info[0],$table_info[1]);
+					if ($_SESSION['jPrefsQueued'] == "N") {
+						$output .= "<br>".$label_round." ".$row_table_assignments['assignFlight'].", ".$label_flight." ".$row_table_assignments['assignFlight'];
+					}
+					if (!empty($row_table_assignments['assignRoles'])) $output .= "<br>".$role;
+					$output .= "</td>\n";
 					$output .= "\t\t</tr>\n";
 				}
+
+				elseif ($method2 == 1) {
+					if ((isset($table_info[0])) && (isset($table_info[1])) && (isset($table_info[3]))) {
+						if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
+						if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
+					}
+				}
+
+				elseif ($method2 == 2) {
+					if (isset($table_info[3])) $output[] = $table_info[3];
+					else $output[] = "";
+				}
+
+				else {
+					if (!empty($location)) {
+						$output .= "\t\t\t<td>".$location[2]."</td>\n";
+						$output .= "\t\t\t<td>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
+						$output .= sprintf("\t\t\t<td>%s %s - %s</td>\n",$label_table,$table_info[0],$table_info[1]);
+						$output .= "\t\t</tr>\n";
+					}
+				}
+
 			}
+
+			
 
 		} while ($row_table_assignments = mysqli_fetch_assoc($table_assignments));
 

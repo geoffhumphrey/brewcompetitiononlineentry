@@ -19,7 +19,8 @@ $_SESSION['update_version'] = $current_version;
 $update_table = $prefix."bcoem_sys";
 $data = array(
 	'version_date' => NULL,
-	'data_check' => $db_conn->now()
+	'data_check' => $db_conn->now(),
+	'update_summary' => NULL
 );
 $db_conn->where ('id', 1);
 $db_conn->update ($update_table, $data);
@@ -57,7 +58,8 @@ $versions = array(
 	"2.5.0.0" => 21,
 	"2.6.0.0" => 22,
 	"2.6.1.0" => 23,
-	"2.6.2.0" => 24
+	"2.6.2.0" => 24,
+	"2.7.0.0" => 25
 );
 
 flush();
@@ -3700,10 +3702,11 @@ if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.7.0 ---------------------------------------------
- * Leverage unused brewWinner and brewJudgingLocation DB columns to house ABV and Sweetness Level.
+ * Leverage unused brewWinner and brewJudgingLocation columns to house ABV and Sweetness Level.
  * Update selected NW Cider Cup styles.
- * Add brewPouring column to house pouring instructions for use during judging.
- * A the contestEntryEditDeadline column to house the entry edit deadline date for participants.
+ * Add brewPouring column.
+ * Add the contestEntryEditDeadline column.
+ * Add the styleTypeEntryLimit column.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3762,16 +3765,6 @@ if (!check_update("brewJuiceSource", $prefix."brewing")) {
 
 }
 
-$sql = sprintf("UPDATE `%s` SET brewStyleReqSpec='0' WHERE brewStyleVersion='NWCiderCup' AND (brewStyleGroup='C1' OR brewStyleGroup='C2');", $prefix."styles");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$sql);
-$result = mysqli_query($connection,$sql);
-if ($result) $output_off_sched_update .= "<li>NW Cider Cup styles updated.</li>";
-else {
-	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup styles NOT updated.</li>";
-	$error_count += 1;
-}
-
 if (!check_update("brewPouring", $prefix."brewing")) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `brewPouring` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Houses pouring instructions.';", $prefix."brewing");
@@ -3782,6 +3775,50 @@ if (!check_update("brewPouring", $prefix."brewing")) {
 	else {
 		$output_off_sched_update .= "<li class=\"text-danger\">Pouring instructions column NOT added to the brewing table.</li>";
 		$error_count += 1;
+	}
+
+	// Provide baseline pouring instructions for all entries currently in the DB
+	$update_table = $prefix."brewing";
+	$data = array(
+		'brewPouring' => '{"pouring":"Normal","pouring_rouse":"No"}'
+	);
+	$result = $db_conn->update ($update_table, $data);
+
+}
+
+// {"pouring":"Normal","pouring_rouse":"No"}
+
+if (!check_update("brewStyleType", $prefix."brewing")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `brewStyleType` TINYINT(3) NULL DEFAULT NULL", $prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Style type column added to the brewing table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Style type column NOT added to the brewing table.</li>";
+		$error_count += 1;
+	}
+
+	// Loop through the brewing table and provide a value for the new brewStyleType column
+	$query_entry_style_types = sprintf("SELECT DISTINCT a.id, a.brewCategorySort, a.brewSubCategory, b.brewStyleGroup, b.brewStyleNum, b.brewStyleType FROM %s a, %s b WHERE a.brewCategorySort = b.brewStyleGroup AND a.brewSubCategory = b.brewStyleNum ORDER BY a.id ASC", $prefix."brewing", $prefix."styles");
+	$entry_style_types = mysqli_query($connection,$query_entry_style_types) or die (mysqli_error($connection));
+	$row_entry_style_types = mysqli_fetch_assoc($entry_style_types);
+	$totalRows_entry_style_types = mysqli_num_rows($entry_style_types);
+
+	if ($totalRows_entry_style_types > 0) {
+
+		do {
+
+			$update_table = $prefix."brewing";
+			$data = array(
+				'brewStyleType' => $row_entry_style_types['brewStyleType']
+			);
+			$db_conn->where ('id', $row_entry_style_types['id']);
+			$result = $db_conn->update ($update_table, $data);
+
+		} while($row_entry_style_types = mysqli_fetch_assoc($entry_style_types));
+
 	}
 
 }
@@ -3800,8 +3837,31 @@ if (!check_update("contestEntryEditDeadline", $prefix."contest_info")) {
 
 }
 
-if (!$setup_running) $output_off_sched_update .= "</ul>";
+if (!check_update("styleTypeEntryLimit", $prefix."style_types")) {
 
+	$sql = sprintf("ALTER TABLE `%s` ADD `styleTypeEntryLimit` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;", $prefix."style_types");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Entry limit column added to the style types table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Entry limit column NOT added to the style types table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+$sql = sprintf("UPDATE `%s` SET brewStyleReqSpec='0' WHERE brewStyleVersion='NWCiderCup' AND (brewStyleGroup='C1' OR brewStyleGroup='C2');", $prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>NW Cider Cup styles updated.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup styles NOT updated.</li>";
+	$error_count += 1;
+}
+
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- Future --------------------------------------------- 
@@ -4022,6 +4082,7 @@ else {
 }
 
 $output_errors = "";
+$db_version = $connection -> server_info;
 if ($error_count > 0) {
 	$output_errors .= "<section style=\"margin-top: 15px; margin-bottom: 15px;\" class=\"alert alert-danger\">";
 	$output_errors .= "<p><strong>Warning: Errors</strong></p>";

@@ -7,7 +7,7 @@
 
 if (table_exists($style_types_db_table)) {
 
-	if (($go == "default") || ($go == "style_types") || ($go == "styles") || ($go == "judging_scores")  || ($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "judging") || ($go == "staff")) {
+	if (($go == "default") || ($go == "style_types") || ($go == "styles") || ($go == "judging_scores")  || ($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "judging") || ($go == "staff") || ($go == "preferences")) {
 
 		if (SINGLE) {
 			$query_style_type = sprintf("SELECT * FROM $style_types_db_table WHERE comp_id='0' OR comp_id='%s'",$_SESSION['comp_id']);
@@ -20,6 +20,7 @@ if (table_exists($style_types_db_table)) {
 
 		else {
 			$query_style_type = "SELECT * FROM $style_types_db_table";
+			if ($go == "preferences") $query_style_type .= " WHERE styleTypeBOS='Y' ORDER BY id ASC";
 			if (($action == "edit") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 			if (($action == "enter") && ($filter != "default")) $query_style_type .= " WHERE id='$filter'";
 			if (($go != "styles") && ($id !="default")) $query_style_type .= " WHERE id='$id'";
@@ -30,7 +31,6 @@ if (table_exists($style_types_db_table)) {
 		$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 		$row_style_type = mysqli_fetch_assoc($style_type);
 		$totalRows_style_type = mysqli_num_rows($style_type);
-
 
 	}
 }

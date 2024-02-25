@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- UPDATED 2023-10-31 for Version 2.6.2
+-- UPDATED 2024-02-25 for Version 2.7.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -164,37 +164,40 @@ INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`,
 
 DROP TABLE IF EXISTS `baseline_brewing`;
 CREATE TABLE `baseline_brewing` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `brewName` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyle` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewCategory` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewCategorySort` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewSubCategory` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `brewName` varchar(250) DEFAULT NULL,
+  `brewStyle` varchar(250) DEFAULT NULL,
+  `brewCategory` varchar(4) DEFAULT NULL,
+  `brewCategorySort` varchar(4) DEFAULT NULL,
+  `brewSubCategory` varchar(4) DEFAULT NULL,
   `brewBottleDate` date DEFAULT NULL,
   `brewDate` date DEFAULT NULL,
-  `brewYield` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewInfo` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewMead1` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMead2` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMead3` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewComments` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewBrewerID` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'id from brewer table',
-  `brewBrewerFirstName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewBrewerLastName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewYield` varchar(10) DEFAULT NULL,
+  `brewInfo` mediumtext DEFAULT NULL,
+  `brewMead1` varchar(25) DEFAULT NULL,
+  `brewMead2` varchar(25) DEFAULT NULL,
+  `brewMead3` varchar(25) DEFAULT NULL,
+  `brewComments` mediumtext DEFAULT NULL,
+  `brewBrewerID` varchar(8) DEFAULT NULL COMMENT 'id from brewer table',
+  `brewBrewerFirstName` varchar(255) DEFAULT NULL,
+  `brewBrewerLastName` varchar(255) DEFAULT NULL,
   `brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
-  `brewWinner` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewWinnerCat` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewInfoOptional` text COLLATE utf8mb4_unicode_ci,
-  `brewAdminNotes` tinytext COLLATE utf8mb4_unicode_ci COMMENT 'Notes about the entry for Admin use',
-  `brewStaffNotes` tinytext COLLATE utf8mb4_unicode_ci COMMENT 'Notes about the entry for Staff use',
-  `brewPossAllergens` tinytext COLLATE utf8mb4_unicode_ci COMMENT 'Notes about the entry from entrant about possible allergens',
+  `brewABV` float DEFAULT NULL COMMENT 'Expressed as a decimal.',
+  `brewWinnerCat` varchar(3) DEFAULT NULL,
+  `brewInfoOptional` text DEFAULT NULL,
+  `brewAdminNotes` tinytext DEFAULT NULL COMMENT 'Notes about the entry for Admin use',
+  `brewStaffNotes` tinytext DEFAULT NULL COMMENT 'Notes about the entry for Staff use',
+  `brewPossAllergens` tinytext DEFAULT NULL COMMENT 'Notes about the entry from entrant about possible allergens',
   `brewReceived` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
-  `brewJudgingLocation` int(4) DEFAULT NULL,
-  `brewCoBrewer` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewJudgingNumber` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewSweetnessLevel` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Only for NW Cider Cup style set.',
+  `brewCoBrewer` varchar(255) DEFAULT NULL,
+  `brewJudgingNumber` varchar(10) DEFAULT NULL,
   `brewUpdated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated',
   `brewConfirmed` tinyint(1) DEFAULT NULL COMMENT '1=true - 2=false',
-  `brewBoxNum` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewBoxNum` varchar(10) DEFAULT NULL,
+  `brewJuiceSource` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Only for NW Cider Cup style set.',
+  `brewPouring` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Houses pouring instructions.',
+  `brewStyleType` tinyint(3) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -265,8 +268,9 @@ CREATE TABLE `baseline_contest_info` (
   `contestCircuit` mediumtext COLLATE utf8mb4_unicode_ci,
   `contestVolunteers` mediumtext COLLATE utf8mb4_unicode_ci,
   `contestCheckInPassword` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestRules` json DEFAULT NULL,
-  `contestClubs` json DEFAULT NULL,
+  `contestClubs` mediumtext DEFAULT NULL,
+  `contestRules` mediumtext DEFAULT NULL,
+  `contestEntryEditDeadline` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1374,6 +1378,7 @@ CREATE TABLE `baseline_style_types` (
   `styleTypeOwn` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `styleTypeBOS` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `styleTypeBOSMethod` int(11) DEFAULT NULL,
+  `styleTypeEntryLimit` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1381,16 +1386,16 @@ CREATE TABLE `baseline_style_types` (
 -- Dumping data for table `baseline_style_types`
 --
 
-INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES
-(1, 'Beer', 'bcoe', 'Y', 1),
-(2, 'Cider', 'bcoe', 'Y', 1),
-(3, 'Mead', 'bcoe', 'Y', 1),
-(4, 'Mead/Cider', 'bcoe', 'N', 1),
-(5, 'Wine', 'bcoe', 'N', 1),
-(6, 'Rice Wine', 'bcoe', 'N', 1),
-(7, 'Spirits', 'bcoe', 'N', 1),
-(8, 'Kombucha', 'bcoe', 'N', 1),
-(9, 'Pulque', 'bcoe', 'N', 1);
+INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`, `styleTypeEntryLimit`) VALUES
+(1, 'Beer', 'bcoe', 'Y', 1, NULL),
+(2, 'Cider', 'bcoe', 'Y', 1, NULL),
+(3, 'Mead', 'bcoe', 'Y', 1, NULL),
+(4, 'Mead/Cider', 'bcoe', 'N', 1, NULL),
+(5, 'Wine', 'bcoe', 'N', 1, NULL),
+(6, 'Rice Wine', 'bcoe', 'N', 1, NULL),
+(7, 'Spirits', 'bcoe', 'N', 1, NULL),
+(8, 'Kombucha', 'bcoe', 'N', 1, NULL),
+(9, 'Pulque', 'bcoe', 'N', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1419,6 +1424,6 @@ CREATE TABLE `baseline_users` (
 --
 
 INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`, `userToken`, `userTokenTime`, `userFailedLogins`, `userFailedLoginTime`) VALUES
-(1, 'user.baseline@brewingcompetitions.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', '$2a$08$gImDLllgw/nned4kVWDAD.394FXpXeoEip85oqEQ.fIy8s4U3lwx.', '2023-06-30 03:21:20', NULL, NULL, 0, NULL);
+(1, 'user.baseline@brewingcompetitions.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', '$2a$08$gImDLllgw/nned4kVWDAD.394FXpXeoEip85oqEQ.fIy8s4U3lwx.', '2024-01-01 00:00:01', NULL, NULL, 0, NULL);
 
 COMMIT;

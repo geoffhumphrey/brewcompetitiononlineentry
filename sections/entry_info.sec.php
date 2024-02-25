@@ -89,12 +89,22 @@ if ($show_entries) {
 		$page_info4 .= $anchor_top;
 
 		// Entry Limit
-		if (!empty($row_limits['prefsEntryLimit'])) {
+		if ((!empty($row_limits['prefsEntryLimit'])) || (!empty($style_type_limits_display))) {
 			$anchor_links[] = $label_entry_limit;
 			$anchor_name = str_replace(" ", "-", $label_entry_limit);
+			
 			$header1_5 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_limit);
-			$page_info5 .= sprintf("<p>%s %s %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
+			if (!empty($row_limits['prefsEntryLimit'])) $page_info5 .= sprintf("<p>%s %s %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
 			if (!empty($row_limits['prefsEntryLimitPaid'])) $page_info5 .= sprintf("<p>%s %s <strong>%s</strong> %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimitPaid'],strtolower($label_paid),$entry_info_text_020);
+			if (!empty($style_type_limits_display)) {
+				$page_info5 .= "<p>".$entry_info_text_053."</p>";
+				$page_info5 .= "<ul>";
+				foreach($style_type_limits_display as $key => $value) {
+					if (array_key_exists($key,$style_types_translations)) $page_info5 .= "<li>".ucfirst($style_types_translations[$key]).": ".$value."</li>";
+					else $page_info5 .= "<li>".ucfirst($key).": ".$value."</li>";
+				}
+				$page_info5 .= "</ul>";
+			}
 			$page_info5 .= $anchor_top;
 		}
 

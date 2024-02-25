@@ -705,8 +705,8 @@ $beerxml_text_012 = "entry added"; // lower-case and missing punctuation intenti
  */
 $brew_text_000 = "Select for specifics about style"; // missing punctuation intentional
 $brew_text_001 = "Judges will not know the name of your entry.";
-$brew_text_002 = "[disabled - style entry limit reached]"; // missing punctuation intentional
-$brew_text_003 = "[disabled - style entry limit reached for user]"; // missing punctuation intentional
+$brew_text_002 = "[disabled - style or style type entry limit reached]"; // missing punctuation intentional
+$brew_text_003 = "[disabled - entry limit reached]"; // missing punctuation intentional
 $brew_text_004 = "Specific type, special ingredients, classic style, strength (for beer styles), and/or color are required";
 $brew_text_005 = "Strength required"; // missing punctuation intentional
 $brew_text_006 = "Carbonation level required"; // missing punctuation intentional
@@ -2047,8 +2047,23 @@ $brew_text_046 = "Please specify the two letter state/provice abbreviation of an
 $brew_text_047 = "How should your entry be poured for the judges?";
 $brew_text_048 = "Should any yeast be roused before pouring?";
 $brew_text_049 = "Provide further information regarding how your entry should be poured or other related items (e.g., possible gushing, etc.).";
-$brewer_text_053 = "Select the any brewing partners that your are affiliated with. This is to make sure there are not any conflicts of interest when assigning judges and stewards to evaluate entries."; 
+$brewer_text_055 = "Select the any brewing partners that your are affiliated with. This is to make sure there are not any conflicts of interest when assigning judges and stewards to evaluate entries."; 
 $brewer_text_054 = "<strong>If any person's name is <u>not</u> listed in the drop-down above, enter their FULL name here (e.g., John Doe, Wyatt Earp, Selina Kyle, etc.). Add any brewing team names here as well.</strong> Separate each team or person's name by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
+
+$brew_text_050 = "Some styles are disabled since the limit for their corresponding style type (e.g., beer, mead, cider, etc.) has been reached.";
+$entry_info_text_053 = "Entry limits per style type:";
+$alert_text_055 = "Some entry limits reached!";
+$alert_text_056 = "No more entries will be accepted for";
+$label_limit = "Limit";
+$label_beer = "Beer";
+$label_mead = "Mead";
+$label_cider = "Cider";
+$label_mead_cider = "Mead/Cider";
+$label_wine = "Wine";
+$label_rice_wine = "Rice Wine";
+$label_spirits = "Spirits";
+$label_kombucha = "Kombucha";
+$label_pulque = "Pulque";
 
 /**
  * ----------------------------------------------------------------------------------
