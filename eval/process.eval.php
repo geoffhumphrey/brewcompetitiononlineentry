@@ -44,44 +44,44 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-	if (isset($_POST['evalJudgeInfo'])) $evalJudgeInfo = filter_var($_POST['evalJudgeInfo'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalScoresheet'])) $evalScoresheet = filter_var($_POST['evalScoresheet'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalAromaScore'])) $evalAromaScore = filter_var($_POST['evalAromaScore'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalAppearanceScore'])) $evalAppearanceScore = filter_var($_POST['evalAppearanceScore'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalFlavorScore'])) $evalFlavorScore = filter_var($_POST['evalFlavorScore'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalMouthfeelScore'])) $evalMouthfeelScore = filter_var($_POST['evalMouthfeelScore'],FILTER_SANITIZE_NUMBER_INT);
+	if (isset($_POST['evalJudgeInfo'])) $evalJudgeInfo = sterilize($_POST['evalJudgeInfo']);
+	if (isset($_POST['evalScoresheet'])) $evalScoresheet = sterilize($_POST['evalScoresheet']);
+	if (isset($_POST['evalAromaScore'])) $evalAromaScore = sterilize($_POST['evalAromaScore']);
+	if (isset($_POST['evalAppearanceScore'])) $evalAppearanceScore = sterilize($_POST['evalAppearanceScore']);
+	if (isset($_POST['evalFlavorScore'])) $evalFlavorScore = sterilize($_POST['evalFlavorScore']);
+	if (isset($_POST['evalMouthfeelScore'])) $evalMouthfeelScore = sterilize($_POST['evalMouthfeelScore']);
 	
 	// All scoresheets require an overall and consensus score
-	$evalOverallScore = filter_var($_POST['evalOverallScore'],FILTER_SANITIZE_NUMBER_INT);
-	$evalFinalScore = filter_var($_POST['evalFinalScore'],FILTER_SANITIZE_NUMBER_INT);
+	$evalOverallScore = sterilize($_POST['evalOverallScore']);
+	$evalFinalScore = sterilize($_POST['evalFinalScore']);
 	
-	if (isset($_POST['evalStyleAccuracy'])) $evalStyleAccuracy = filter_var($_POST['evalStyleAccuracy'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalTechMerit'])) $evalTechMerit = filter_var($_POST['evalTechMerit'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalDrinkability'])) $evalDrinkability = filter_var($_POST['evalDrinkability'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-	$evalTable = filter_var($_POST['evalTable'],FILTER_SANITIZE_NUMBER_INT);
+	if (isset($_POST['evalStyleAccuracy'])) $evalStyleAccuracy = sterilize($_POST['evalStyleAccuracy']);
+	if (isset($_POST['evalTechMerit'])) $evalTechMerit = sterilize($_POST['evalTechMerit']);
+	if (isset($_POST['evalDrinkability'])) $evalDrinkability = sterilize($_POST['evalDrinkability']);
+	$evalTable = sterilize($_POST['evalTable']);
 	
 
-	if ($action == "edit") $id = filter_var($id,FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['eid'])) $eid = filter_var($_POST['eid'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['uid'])) $uid = filter_var($_POST['uid'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['token'])) $token = filter_var($_POST['token'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-	if (isset($_POST['evalSpecialIngredients'])) $evalSpecialIngredients = $purifier->purify($_POST['evalSpecialIngredients']);
-	if (isset($_POST['evalOtherNotes'])) $evalOtherNotes = $purifier->purify($_POST['evalOtherNotes']);
-	if (isset($_POST['evalAromaComments'])) $evalAromaComments = $purifier->purify($_POST['evalAromaComments']);
-	if (isset($_POST['evalAppearanceComments'])) $evalAppearanceComments = $purifier->purify($_POST['evalAppearanceComments']);
-	if (isset($_POST['evalFlavorComments'])) $evalFlavorComments = $purifier->purify($_POST['evalFlavorComments']); 
-	if (isset($_POST['evalMouthfeelComments'])) $evalMouthfeelComments = $purifier->purify($_POST['evalMouthfeelComments']); 
-	if (isset($_POST['evalOverallComments'])) $evalOverallComments = $purifier->purify($_POST['evalOverallComments']);
-	if (isset($_POST['evalIntangibles'])) $evalIntangibles = $purifier->purify($_POST['evalIntangibles']);
-	if (isset($_POST['evalMiniBOS'])) $evalMiniBOS = filter_var($_POST['evalMiniBOS'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalBottle'])) $evalBottle = filter_var($_POST['evalBottle'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalBottleNotes'])) $evalBottleNotes = $purifier->purify($_POST['evalBottleNotes']); 
+	if ($action == "edit") $id = sterilize($id);
+	if (isset($_POST['eid'])) $eid = sterilize($_POST['eid']);
+	if (isset($_POST['uid'])) $uid = sterilize($_POST['uid']);
+	if (isset($_POST['token'])) $token = sterilize($_POST['token']);
+	if (isset($_POST['evalSpecialIngredients'])) $evalSpecialIngredients = $purifier->purify(sterilize($_POST['evalSpecialIngredients']));
+	if (isset($_POST['evalOtherNotes'])) $evalOtherNotes = $purifier->purify(sterilize($_POST['evalOtherNotes']));
+	if (isset($_POST['evalAromaComments'])) $evalAromaComments = $purifier->purify(sterilize($_POST['evalAromaComments']));
+	if (isset($_POST['evalAppearanceComments'])) $evalAppearanceComments = $purifier->purify(sterilize($_POST['evalAppearanceComments']));
+	if (isset($_POST['evalFlavorComments'])) $evalFlavorComments = $purifier->purify(sterilize($_POST['evalFlavorComments'])); 
+	if (isset($_POST['evalMouthfeelComments'])) $evalMouthfeelComments = $purifier->purify(sterilize($_POST['evalMouthfeelComments'])); 
+	if (isset($_POST['evalOverallComments'])) $evalOverallComments = $purifier->purify(sterilize($_POST['evalOverallComments']));
+	if (isset($_POST['evalIntangibles'])) $evalIntangibles = $purifier->purify(sterilize($_POST['evalIntangibles']));
+	if (isset($_POST['evalMiniBOS'])) $evalMiniBOS = sterilize($_POST['evalMiniBOS']);
+	if (isset($_POST['evalBottle'])) $evalBottle = sterilize($_POST['evalBottle']);
+	if (isset($_POST['evalBottleNotes'])) $evalBottleNotes = $purifier->purify(sterilize($_POST['evalBottleNotes'])); 
 	if ((isset($_POST['evalPosition_0'])) && (is_numeric($_POST['evalPosition_0']))) {
-		$evalPosition = $purifier->purify($_POST['evalPosition_0']);
-		if ((isset($_POST['evalPosition_1'])) && (is_numeric($_POST['evalPosition_1']))) $evalPosition .= ",".$purifier->purify($_POST['evalPosition_1']);
+		$evalPosition = $purifier->purify(sterilize($_POST['evalPosition_0']);
+		if ((isset($_POST['evalPosition_1'])) && (is_numeric($_POST['evalPosition_1']))) $evalPosition .= ",".$purifier->purify(sterilize($_POST['evalPosition_1']));
 	}
 
-	$evalStyle = filter_var($_POST['evalStyle'],FILTER_SANITIZE_NUMBER_INT);
+	$evalStyle = sterilize($_POST['evalStyle']);
 
 	$exceptions = array(
 		"evalSpecialIngredients",
@@ -122,15 +122,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			if (!empty($value)) {
 				
-				if (is_numeric($value)) $value = filter_var($value,FILTER_SANITIZE_NUMBER_INT);	
+				if (is_numeric($value)) $value = sterilize($value);	
 				
 				if (is_array($value)) {
 
 					$new_value = array();
 					
 					foreach ($value as $v) {
-						if (is_numeric($v)) $v = filter_var($value,FILTER_SANITIZE_NUMBER_INT);
-						else  $v = $purifier->purify($v);
+						if (is_numeric($v)) $v = sterilize($value);
+						else  $v = $purifier->purify(sterilize($v));
 						$new_value[] = $v;
 					}
 					
@@ -142,7 +142,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Build Aroma Insert
 			if ((strpos($key, "evalAroma") !== FALSE) && (!in_array($key, $exceptions))) {
-				$key = filter_var($key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$key = sterilize($key);
 				$evalAroma[$key] = $value;
 			}
 
@@ -150,7 +150,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// When processing NW, convert evalAppearanceColorChoice to evalAppearanceColor
 			// If evalAppearanceColorChoice is "Other", convert evalAppearanceColorOther to evalAppearanceColor
 			if ((strpos($key, "evalAppearance") !== FALSE) && (!in_array($key, $exceptions))) {
-				$key = filter_var($key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$key = sterilize($key);
 				if ($key == "evalAppearanceColorChoice") {
 					$key = "evalAppearanceColor";
 					if ($value == "999") $value = $_POST['evalAppearanceColorOther'];
@@ -161,13 +161,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Build Flavor Insert
 			if ((strpos($key, "evalFlavor") !== FALSE) && (!in_array($key, $exceptions))) {
-				$key = filter_var($key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$key = sterilize($key);
 				$evalFlavor[$key] = $value;
 			}
 
 			// Build Mouthfeel Insert
 			if ((strpos($key, "evalMouthfeel") !== FALSE) && (!in_array($key, $exceptions))) {
-				$key = filter_var($key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$key = sterilize($key);
 				$evalMouthfeel[$key] = $value;
 			}
 

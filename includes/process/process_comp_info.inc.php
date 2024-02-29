@@ -60,27 +60,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if (isset($_POST['contestName'])) $contestName = $purifier->purify($_POST['contestName']);
 		if (isset($_POST['contestHost'])) $contestHost = $purifier->purify($_POST['contestHost']);
-		if (isset($_POST['contestHostWebsite'])) $contestHostWebsite = check_http(filter_var($_POST['contestHostWebsite'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+		if (isset($_POST['contestHostWebsite'])) $contestHostWebsite = check_http(sterilize($_POST['contestHostWebsite']));
 		if (isset($_POST['contestHostLocation'])) $contestHostLocation = $purifier->purify($_POST['contestHostLocation']);
-		if (isset($_POST['contestRegistrationOpen'])) $contestRegistrationOpen = strtotime(filter_var($_POST['contestRegistrationOpen'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestRegistrationDeadline'])) $contestRegistrationDeadline = strtotime(filter_var($_POST['contestRegistrationDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestEntryOpen'])) $contestEntryOpen = strtotime(filter_var($_POST['contestEntryOpen'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestEntryDeadline'])) $contestEntryDeadline = strtotime(filter_var($_POST['contestEntryDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestEntryEditDeadline'])) $contestEntryEditDeadline = strtotime(filter_var($_POST['contestEntryEditDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestJudgeOpen'])) $contestJudgeOpen = strtotime(filter_var($_POST['contestJudgeOpen'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = strtotime(filter_var($_POST['contestJudgeDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+		if (isset($_POST['contestRegistrationOpen'])) $contestRegistrationOpen = strtotime(sterilize($_POST['contestRegistrationOpen']));
+		if (isset($_POST['contestRegistrationDeadline'])) $contestRegistrationDeadline = strtotime(sterilize($_POST['contestRegistrationDeadline']));
+		if (isset($_POST['contestEntryOpen'])) $contestEntryOpen = strtotime(sterilize($_POST['contestEntryOpen']));
+		if (isset($_POST['contestEntryDeadline'])) $contestEntryDeadline = strtotime(sterilize($_POST['contestEntryDeadline']));
+		if (isset($_POST['contestEntryEditDeadline'])) $contestEntryEditDeadline = strtotime(sterilize($_POST['contestEntryEditDeadline']));
+		if (isset($_POST['contestJudgeOpen'])) $contestJudgeOpen = strtotime(sterilize($_POST['contestJudgeOpen']));
+		if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = strtotime(sterilize($_POST['contestJudgeDeadline']));
 		if (isset($_POST['competition_rules'])) $competition_rules = $purifier->purify($_POST['competition_rules']);
 		if (isset($_POST['competition_packing_shipping'])) $competition_packing_shipping = $purifier->purify($_POST['competition_packing_shipping']);
 		if (isset($_POST['contestAwards'])) $contestAwards = $purifier->purify($_POST['contestAwards']);
 		if (isset($_POST['contestAwardsLocation'])) $contestAwardsLocation = $purifier->purify($_POST['contestAwardsLocation']);
 		if (isset($_POST['contestAwardsLocName'])) $contestAwardsLocName = $purifier->purify($_POST['contestAwardsLocName']);
-		if (isset($_POST['contestAwardsLocDate'])) $contestAwardsLocDate = strtotime(filter_var($_POST['contestAwardsLocDate'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestShippingOpen'])) $contestShippingOpen = strtotime(filter_var($_POST['contestShippingOpen'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestShippingDeadline'])) $contestShippingDeadline = strtotime(filter_var($_POST['contestShippingDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+		if (isset($_POST['contestAwardsLocDate'])) $contestAwardsLocDate = strtotime(sterilize($_POST['contestAwardsLocDate']));
+		if (isset($_POST['contestShippingOpen'])) $contestShippingOpen = strtotime(sterilize($_POST['contestShippingOpen']));
+		if (isset($_POST['contestShippingDeadline'])) $contestShippingDeadline = strtotime(sterilize($_POST['contestShippingDeadline']));
 		if (isset($_POST['contestShippingName'])) $contestShippingName = $purifier->purify($_POST['contestShippingName']);
 		if (isset($_POST['contestShippingAddress'])) $contestShippingAddress = $purifier->purify($_POST['contestShippingAddress']);
-		if (isset($_POST['contestDropoffOpen'])) $contestDropoffOpen = strtotime(filter_var($_POST['contestDropoffOpen'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-		if (isset($_POST['contestDropoffDeadline'])) $contestDropoffDeadline = strtotime(filter_var($_POST['contestDropoffDeadline'],FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+		if (isset($_POST['contestDropoffOpen'])) $contestDropoffOpen = strtotime(sterilize($_POST['contestDropoffOpen']));
+		if (isset($_POST['contestDropoffDeadline'])) $contestDropoffDeadline = strtotime(sterilize($_POST['contestDropoffDeadline']));
 		if (isset($_POST['contestBottles'])) $contestBottles = $purifier->purify($_POST['contestBottles']);
 		if (isset($_POST['contestBOSAward'])) $contestBOSAward = $purifier->purify($_POST['contestBOSAward']);
 		if (isset($_POST['contestCircuit'])) $contestCircuit = $purifier->purify($_POST['contestCircuit']);
@@ -88,15 +88,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (isset($_POST['contestLogo'])) $contestLogo = $purifier->purify($_POST['contestLogo']);
 		if (isset($_POST['contestEntryFeePassword'])) $contestEntryFeePassword = sterilize($_POST['contestEntryFeePassword']);
 		if (isset($_POST['contestCheckInPassword'])) $contestCheckInPassword = sterilize($_POST['contestCheckInPassword']);
-		if (isset($_POST['contestID'])) $contestID = filter_var($_POST['contestID'],FILTER_SANITIZE_NUMBER_INT);
+		if (isset($_POST['contestID'])) $contestID = sterilize($_POST['contestID']);
 		if ((empty($_POST['contestEntryFee2'])) || (empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "N";
 		if ((!empty($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "Y";
 
-		if ((isset($_POST['contestEntryFee'])) && (!empty($_POST['contestEntryFee']))) $contestEntryFee = filter_var($_POST['contestEntryFee'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if ((isset($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFee2']))) $contestEntryFee2 = filter_var($_POST['contestEntryFee2'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if ((isset($_POST['contestEntryFeeDiscountNum'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscountNum = filter_var($_POST['contestEntryFeeDiscountNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if ((isset($_POST['contestEntryFeePasswordNum'])) && (!empty($_POST['contestEntryFeePasswordNum']))) $contestEntryFeePasswordNum = filter_var($_POST['contestEntryFeePasswordNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if ((isset($_POST['contestEntryCap'])) && (!empty($_POST['contestEntryCap']))) $contestEntryCap = filter_var($_POST['contestEntryCap'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+		if ((isset($_POST['contestEntryFee'])) && (!empty($_POST['contestEntryFee']))) $contestEntryFee = sterilize($_POST['contestEntryFee']);
+		if ((isset($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFee2']))) $contestEntryFee2 = sterilize($_POST['contestEntryFee2']);
+		if ((isset($_POST['contestEntryFeeDiscountNum'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscountNum = sterilize($_POST['contestEntryFeeDiscountNum']);
+		if ((isset($_POST['contestEntryFeePasswordNum'])) && (!empty($_POST['contestEntryFeePasswordNum']))) $contestEntryFeePasswordNum = sterilize($_POST['contestEntryFeePasswordNum']);
+		if ((isset($_POST['contestEntryCap'])) && (!empty($_POST['contestEntryCap']))) $contestEntryCap = sterilize($_POST['contestEntryCap']);
 
 		if ((isset($_POST['contestClubs'])) && (!empty($_POST['contestClubs']))) {
 			$contestClubs = $purifier->purify($_POST['contestClubs']);

@@ -13,8 +13,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "update") {
 
 		foreach($_POST['id'] as $id) {
-			$sponsor_info = $purifier->purify($_POST['sponsorText'.$id]);
-			$sponsor_info = filter_var($sponsor_info,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$sponsor_info = $purifier->purify(sterilize($_POST['sponsorText'.$id]));
 			if ($_POST['sponsorEnable'.$id] == 1) $enable = 1; else $enable = 0;
 			if (isset($_POST['sponsorImage'.$id])) $image = $purifier->purify($_POST['sponsorImage'.$id]); else $image = "";
 			$updateSQL = sprintf("UPDATE %s SET sponsorEnable='%s', sponsorLevel='%s', sponsorImage='%s', sponsorText='%s' WHERE id='%s'",$sponsors_db_table,$enable,$_POST['sponsorLevel'.$id],$image,$sponsor_info,$id);
@@ -30,16 +29,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if (($action == "add") || ($action == "edit")) {
 
-		$sponsorURL = check_http($purifier->purify($_POST['sponsorURL']));
-		$sponsorName = capitalize($purifier->purify($_POST['sponsorName']));
-		$sponsorText = $purifier->purify($_POST['sponsorText']);
+		$sponsorURL = check_http($purifier->purify(sterilize($_POST['sponsorURL'])));
+		$sponsorName = capitalize($purifier->purify(sterilize($_POST['sponsorName'])));
+		$sponsorText = $purifier->purify(sterilize($_POST['sponsorText']));
 
 		$update_table = $prefix."sponsors";
 		$data = array(
-			'sponsorName' => blank_to_null(sterilize($sponsorName)),
-			'sponsorURL' => blank_to_null(sterilize($sponsorURL)),
+			'sponsorName' => blank_to_null($sponsorName),
+			'sponsorURL' => blank_to_null($sponsorURL),
 			'sponsorImage' => blank_to_null(sterilize($_POST['sponsorImage'])),
-			'sponsorText' => blank_to_null(sterilize($sponsorText)),
+			'sponsorText' => blank_to_null($sponsorText),
 			'sponsorLocation' => blank_to_null(sterilize($_POST['sponsorLocation'])),
 			'sponsorLevel' => blank_to_null(sterilize($_POST['sponsorLevel'])),
 			'sponsorEnable' => blank_to_null(sterilize($_POST['sponsorEnable']))

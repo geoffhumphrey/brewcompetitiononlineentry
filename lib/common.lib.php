@@ -4762,8 +4762,8 @@ function clean_up_text($text) {
 
 function prep_redirect_link($link) {
 	$pattern = array('\'', '"');
-	$link = filter_var($link,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$link = str_replace($pattern, "", $link);
+	$link = sterilize($link);
 	$link = stripslashes($link);
 	$link = html_entity_decode($link);
 	$link = htmlspecialchars_decode($link);

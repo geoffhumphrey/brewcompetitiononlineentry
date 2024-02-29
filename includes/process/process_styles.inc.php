@@ -29,14 +29,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	
 	if (isset($_POST['brewStyleEntry'])) {
 		$brewStyleEntry = trim($_POST['brewStyleEntry']);
-		$brewStyleEntry = $purifier->purify($brewStyleEntry);
-		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_SPECIAL_CHARS,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$brewStyleEntry = $purifier->purify(sterilize($brewStyleEntry));
 	}
 	
 	if (isset($_POST['brewStyleInfo'])) {
 		$brewStyleInfo = trim($_POST['brewStyleInfo']);
-		$brewStyleInfo = $purifier->purify($brewStyleInfo);
-		$brewStyleInfo = filter_var($brewStyleInfo,FILTER_SANITIZE_SPECIAL_CHARS,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$brewStyleInfo = $purifier->purify(sterilize($brewStyleInfo));
 	}
 	
 	if (isset($_POST['brewStyleLink'])) $brewStyleLink = sterilize($_POST['brewStyleLink']);

@@ -44,7 +44,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 	if ($action == "evaluation") {
 
 		if ($go == "evalPlace") {
-			$input = filter_var($_POST['evalPlace'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$input = sterilize($_POST['evalPlace']);
 			if (empty($input)) $data = array($go => NULL);
 			else {
 				if ($input == "0") $data = array($go => NULL);			
@@ -53,7 +53,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		}
 
 		if ($go == "evalMiniBOS") {
-			$input = filter_var($rid1,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$input = sterilize($rid1);
 			if (empty($input)) $data = array($go => 0);
 			else $data = array($go => $input);
 		}
@@ -76,29 +76,29 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		if ($rid1 != "default") $brewBrewerID = $rid1;
 
 		if ($go == "brewAdminNotes") {
-			$input = filter_var($_POST['brewAdminNotes'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$input = sterilize($_POST['brewAdminNotes']);
 		}
 
 		if ($go == "brewStaffNotes") {
-			$input = filter_var($_POST['brewStaffNotes'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$input = sterilize($_POST['brewStaffNotes']);
 		}
 
 		if ($go == "brewBoxNum") {
-			$input = filter_var($_POST['brewBoxNum'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$input = sterilize($_POST['brewBoxNum']);
 		}
 
 		if ($go == "brewJudgingNumber") {
 			$post = str_replace("^","-",$_POST['brewJudgingNumber']);
-			$input = filter_var($post,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$input = sterilize($post);
 			$input = strtolower($input);
 		}
 
 		if ($go == "brewPaid") {
-			$input = filter_var($_POST['brewPaid'],FILTER_SANITIZE_NUMBER_FLOAT);
+			$input = sterilize($_POST['brewPaid']);
 		}
 
 		if ($go == "brewReceived") {
-			$input = filter_var($_POST['brewReceived'],FILTER_SANITIZE_NUMBER_FLOAT);
+			$input = sterilize($_POST['brewReceived']);
 		}
 
 		$update_table = $prefix."brewing";
@@ -136,19 +136,19 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 	if ($action == "sponsors") {
 
 		if ($go == "sponsorEnable") {
-			$input = filter_var($_POST['sponsorEnable'],FILTER_SANITIZE_NUMBER_FLOAT);
+			$input = sterilize($_POST['sponsorEnable']);
 		}
 
 		if ($go == "sponsorLevel") {
-			$input = filter_var($_POST['sponsorLevel'],FILTER_SANITIZE_NUMBER_FLOAT);
+			$input = sterilize($_POST['sponsorLevel']);
 		}
 
 		if ($go == "sponsorText") {
-			$input = filter_var($_POST['sponsorText'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$input = sterilize($_POST['sponsorText']);
 		}
 
 		if ($go == "sponsorImage") {
-			$input = filter_var($_POST['sponsorImage'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$input = sterilize($_POST['sponsorImage']);
 		}
 
 		$update_table = $prefix."sponsors";
@@ -193,7 +193,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		if (is_numeric($post)) {
 
 			// For scores, all ajax input will be an integer - filter as such
-			$input = filter_var($post,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+			$input = sterilize($post);
 
 			// However, if that number is actually zero, make the value null instead for storage in DB
 			if ($input == 0) $input = NULL;
@@ -376,7 +376,7 @@ if ($action == "judging_assignments") {
 
 	if ($go == "assignRoles") {
 		
-		$input = filter_var($rid1,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$input = sterilize($rid1);
 		
 		if (empty($input)) {
 			$sql = sprintf("UPDATE `%s` SET %s=NULL WHERE assignTable='%s'", $prefix.$action, $go, $id);
