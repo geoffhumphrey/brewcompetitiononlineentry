@@ -95,7 +95,7 @@ $(document).ready(function() {
                     	<span class="input-group-addon" id="from_name-addon1"><span class="fa fa-user"></span></span>
                 		<!-- Input Here -->
                 		<input id="from-name" class="form-control no-spam" name="from_name" type="text" size="35" value="<?php if (($msg == "2") && (isset($_COOKIE['from_name']))) echo $_COOKIE['from_name']; ?>" autofocus required>
-                        <span class="input-group-addon" id="from_name-addon2"><span class="fa fa-star"></span></span>
+                        <span class="input-group-addon" id="from_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
                     </div>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -107,7 +107,7 @@ $(document).ready(function() {
                     	<span class="input-group-addon" id="from_email-addon3">@</span>
                 		<!-- Input Here -->
                 		<input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo $_COOKIE['from_email']; ?>" required>
-                        <span class="input-group-addon" id="from_email-addon2"><span class="fa fa-star"></span></span>
+                        <span class="input-group-addon" id="from_email-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
                     </div>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -119,7 +119,7 @@ $(document).ready(function() {
                     	<span class="input-group-addon" id="subject-addon5"><span class="fa fa-info-circle"></span></span>
                 		<!-- Input Here -->
                 		<input id="subject" class="form-control no-spam" name="subject" type="text" value="<?php if (($msg == "2") && (isset($_COOKIE['subject']))) echo $_COOKIE['subject']; ?>" required>
-                        <span class="input-group-addon" id="subject-addon2"><span class="fa fa-star"></span></span>
+                        <span class="input-group-addon" id="subject-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
                     </div>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -131,7 +131,7 @@ $(document).ready(function() {
                     	<span class="input-group-addon" id="message-addon7"><span class="fa fa-pencil"></span></span>
                 		<!-- Input Here -->
                 		<textarea id="message" class="form-control no-spam" name="message" rows="6" required><?php if (($msg == "2") && (isset($_COOKIE['message']))) echo $_COOKIE['message']; ?></textarea>
-                        <span class="input-group-addon" id="message-addon2"><span class="fa fa-star"></span></span>
+                        <span class="input-group-addon" id="message-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
                     </div>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -153,7 +153,9 @@ $(document).ready(function() {
                   	<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary" ><?php echo $label_send_message; ?> <span class="fa fa-send"></span> </button>
                 </div>
             </div><!-- Form Group -->
-
+            <div class="alert alert-warning" style="margin-top: 10px;" id="form-submit-button-disabled-msg-required">
+                <?php echo sprintf("<p><i class=\"fa fa-exclamation-triangle\"></i> <strong>%s</strong> %s</p>",$form_required_fields_00,$form_required_fields_01); ?>
+            </div>
         <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
         <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
         <?php } else { ?>

@@ -766,7 +766,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingLocName" name="judgingLocName" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>" placeholder="" autofocus required>
-			<span class="input-group-addon" id="judgingTime2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="judgingTime2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">Provide the name of the judging location.</span>
 	</div>
@@ -797,7 +797,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
-			<span class="input-group-addon"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">Provide an start date and time for the session.</span>
 	</div>
@@ -809,7 +809,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingDateEnd" name="judgingDateEnd" type="text" value="<?php if ($action == "edit") echo $judging_end_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>">
-			<span class="input-group-addon"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">For a distributed session, it is required that you provide an end date and time that will serve as a deadline for judges to submit their evaluations.</span>
 	</div>
@@ -821,7 +821,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>" placeholder="" required>
-			<span class="input-group-addon"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <span id="helpBlockLocation1" class="help-block">Provide the street address, city, and zip/postal code where the session will take place.</span>
         <span id="helpBlockLocation2" class="help-block">Inform judges how they will receive their entries to evaluate (e.g., a designated pick-up location with address, shipped directly, etc.). 255 character maximum.</span>
@@ -834,7 +834,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingRounds" name="judgingRounds" type="number" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingRounds']; ?>" placeholder="" required>
-        	<span class="input-group-addon"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span class="help-block">Provide the number of judging rounds anticipated for this session (see the <a class="hide-loader" href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> in their rules).</span>
 	</div>

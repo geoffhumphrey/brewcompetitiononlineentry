@@ -127,7 +127,7 @@ if ($action == "default") {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<input class="form-control" id="styleTypeName" name="styleTypeName" type="text" value="<?php if ($action == "edit") echo $row_style_type['styleTypeName']; ?>" placeholder="" autofocus <?php if (($action == "edit") && ($row_style_type['styleTypeOwn'] == "bcoe")) echo "disabled"; ?> required>
-			<span class="input-group-addon" id="styleTypeName-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="styleTypeName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<div class="help-block with-errors"></div>
 	</div>

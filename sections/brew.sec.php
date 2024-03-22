@@ -200,6 +200,7 @@ do {
 } while ($row_styles = mysqli_fetch_assoc($styles));
 
 if (($style_types_warning >= $styles_dropdown_count) && ($_SESSION['userLevel'] > 1)) $add_entry_disable = TRUE;
+if (($styles_disabled_count >= $styles_dropdown_count) && ($_SESSION['userLevel'] > 1)) $add_entry_disable = TRUE;
 
 $add_edit_message = "";
 
@@ -225,6 +226,18 @@ if (($add_entry_disable) && (!$edit_entry_disable) && ($action == "add"))  {
 	}
 
 	else $add_edit_message .= "<p class=\"lead\">".$alert_text_029."</p>";
+	$style_types_disabled = "";
+	if (!empty($style_type_limits_alert)) {
+	  foreach ($style_type_limits_alert as $key => $value) {
+	    if ($value > 0) {
+	    	if (array_key_exists($key, $style_types_translations)) $style_types_disabled .= strtolower($style_types_translations[$key]).", ";
+	      	else $style_types_disabled .= strtolower($key).", ";
+	    }
+	  }
+	  $style_types_disabled = rtrim($style_types_disabled,", ");
+	}
+
+	if (!empty($style_types_disabled)) $add_edit_message .= "<p>".$alert_text_094.": ".$style_types_disabled.".</p>";
 	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) $add_edit_message .= sprintf("<p>%s</p>",$alert_text_031);
 	if (($adminUser) && ($adminUserAddDisable)) $add_edit_message .= "<p>".$brew_text_029."</p>";
 
@@ -336,7 +349,6 @@ if ($add_or_edit) {
 echo $add_edit_entry_modals;
 if (!isset($_SERVER['HTTP_REFERER'])) $relocate_referrer = "list";
 else $relocate_referrer = $_SERVER['HTTP_REFERER'];
-// echo $brewPaid; echo $row_limits['prefsUserSubCatLimit'];
 ?>
 <form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$relocate_referrer);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
@@ -350,6 +362,12 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 <input type="hidden" name="brewJudgingNumber" value="<?php echo $row_log['brewJudgingNumber']; ?>">
 <input type="hidden" name="brewReceived" value="<?php if (empty($row_log['brewReceived'])) echo "0"; else echo $row_log['brewReceived']; ?>">
 <?php } ?>
+	<div class="form-group">
+		<label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 "></label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+			<p class="bcoem-form-info text-warning"><i class="fa fa-star"></i> <strong>= <?php echo $label_required_info; ?></strong></p>
+		</div>
+	</div>
 	<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 	<!-- Enter or Select Brewer Name -->
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -403,13 +421,13 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	
     ?>
 	<div id="entry-name" class="form-group"><!-- Form Group REQUIRED Text Input -->
-        <label for="brewName" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_entry_name; ?></label>
+        <label for="brewName" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_entry_name; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <input class="form-control" name="brewName" id="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $entry_name; ?>"
                 <?php echo $entry_disabled; ?> placeholder="<?php echo $entry_disabled_placeholder; ?>" data-error="<?php echo $brew_text_011; ?>" required autofocus>
-                <span class="input-group-addon" id="brewName-addon2"><span class="fa fa-star"></span></span>
+                <span class="input-group-addon" id="brewName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>
             <div class="help-block"><?php echo $brew_text_001; ?></div>
@@ -417,7 +435,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Choose Style -->
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
-        <label for="type" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $style_set." ".$label_style; ?></label>
+        <label for="type" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $style_set." ".$label_style; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="brewStyle" id="type" data-error="<?php echo $header_text_107; ?>" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
@@ -437,7 +455,24 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         	<div id="req-sweetness" style="margin:0; padding:0">&hearts; = <?php echo $brew_text_007; ?></div>
         </span>
         <?php if (($style_types_warning > 0) && ($_SESSION['userLevel'] > 1)) { ?>
-        <div class="help-block text-danger"><?php echo $brew_text_050; ?></div>
+        <div>
+    	<?php 
+        echo "<strong class=\"text-warning\">".$brew_text_050."</strong>"; 
+        if ($_SESSION['userLevel'] > 1) {
+        	$style_types_disabled = "";
+        	  if (!empty($style_type_limits_alert)) {
+        	      foreach ($style_type_limits_alert as $key => $value) {
+        	        if ($value > 0) {
+        	        	if (array_key_exists($key, $style_types_translations)) $style_types_disabled .= strtolower($style_types_translations[$key]).", ";
+        	          	else $style_types_disabled .= strtolower($key).", ";
+        	        }
+        	      }
+        	      $style_types_disabled = rtrim($style_types_disabled,", ");
+        	    }
+        	if (!empty($style_types_disabled)) echo " ".$alert_text_094.": ".$style_types_disabled.".";
+        }
+    	?>
+	    </div>
         <?php } ?>
         </div>
         
@@ -453,7 +488,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Enter Special Ingredients -->
 	<div id="special" class="form-group <?php if ($highlight_special) echo "has-error"; elseif (($action == "edit") && ($special_required)) echo "has-warning"; ?>"><!-- Form Group REQUIRED Text Input -->
-        <label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_required_info; ?></label>
+        <label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_required_info; ?></label>
         	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         		<textarea class="form-control" rows="8" name="brewInfo" id="brewInfo" data-error="<?php echo $brew_text_010; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>><?php echo $brewInfo; ?></textarea>
             <div class="help-block with-errors"><?php if ((strpos($styleSet,"BABDB") !== false) && ($view_explodies[0] < 28)) echo $brew_text_027; ?></div>
@@ -472,7 +507,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Lambic Carbonation -->
     <div id="carbLambic" class="form-group">
-    	<label for="carbLambic" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation; ?></label>
+    	<label for="carbLambic" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_carbonation; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
               	<input type="radio" name="carbLambic" id="carbLambic1" value="Low Carbonation" <?php if ($action == "edit") echo $lambicCarbLow; ?>> <?php echo $label_low; ?>
@@ -488,7 +523,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Lambic Sweetness -->
     <div id="sweetnessLambic" class="form-group">
-    	<label for="sweetnessLambic" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness; ?></label>
+    	<label for="sweetnessLambic" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_sweetness; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
               	<input type="radio" name="sweetnessLambic" id="sweetnessLambic1" value="Low/None Sweetness" <?php if ($action == "edit") echo $lambicSweetLow; ?>> <?php echo $label_low; ?>
@@ -504,7 +539,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Saison Strength -->
     <div id="strengthSaison" class="form-group">
-    	<label for="strengthSaison" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_strength; ?></label>
+    	<label for="strengthSaison" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_strength; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
               	<input type="radio" name="strengthSaison" id="strengthSaison1" value="Table Strength" <?php echo $saisonTable; ?>> <?php echo $label_table; ?>
@@ -520,7 +555,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- IPA Strength -->
     <div id="strengthIPA" class="form-group">
-    	<label for="strengthIPA" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_strength; ?></label>
+    	<label for="strengthIPA" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_strength; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
               	<input type="radio" name="strengthIPA" id="strengthIPA1" value="Session Strength" <?php if ($action == "edit") echo $IPASession; ?>> <?php echo $label_session; ?>
@@ -536,7 +571,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
  	<!-- Biere de Garde Color -->
     <div id="BDGColor" class="form-group">
-    	<label for="BDGColor" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_color; ?></label>
+    	<label for="BDGColor" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_color; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
               	<input type="radio" name="BDGColor" id="BDGColor1" value="Blonde Color" <?php if ($action == "edit") echo $BDGBlonde; ?>> <?php echo $label_blonde; ?>
@@ -552,7 +587,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Light or Dark Color -->
     <div id="darkLightColor" class="form-group">
-    	<label for="darkLightColor" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_color; ?></label>
+    	<label for="darkLightColor" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_color; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<label class="radio-inline">
               	<input type="radio" name="darkLightColor" id="darkLightColor1" value="Pale Color" <?php echo $darkLightPale; ?>> <?php echo $label_pale; ?>
@@ -565,7 +600,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- International Light Lager Regional Variation -->
 	<div id="regionalVariation" class="form-group">
-        <label for="brewCoBrewer" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_regional_variation; ?></label>
+        <label for="brewCoBrewer" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_regional_variation; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
             <input class="form-control" id="regionalVar" name="regionalVar" type="text" value="<?php if (($action == "edit") && ($view == "02-A") && ($_SESSION['prefsStyleSet'] == "BJCP2021") && (!empty($row_log['brewInfo']))) echo $row_log['brewInfo']; ?>" placeholder="<?php echo $brew_text_041; ?>" maxlength="100">
@@ -574,7 +609,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     <!-- Select Strength -->
     <div id="strength">
     	<div id="fg-strength" class="form-group">
-            <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label <?php if ($highlight_strength) echo "text-danger"; ?>"><?php echo $label_strength; ?></label>
+            <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_strength; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
                     <!-- Input Here -->
@@ -595,7 +630,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	<!-- Select Carbonation -->
     <div id="carbonation">
         <div id="fg-carbonation" class="form-group">
-            <label for="brewMead1" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation; ?></label>
+            <label for="brewMead1" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_carbonation; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
                     <!-- Input Here -->
@@ -616,7 +651,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
      <!-- Select Sweetness -->
      <div id="sweetness-mead">
     	<div id="fg-sweetness" class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>">	
-            <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness; ?></label>
+            <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_sweetness; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
                     <!-- Input Here -->
@@ -642,7 +677,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <div id="sweetness-cider">
     	<div id="fg-sweetness" class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>">
-            <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness; ?></label>
+            <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_sweetness; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
                     <!-- Input Here -->
@@ -666,20 +701,16 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             </div>
         </div>
     </div>
-
+    
     <!-- Pouring Instrucitons -->
-
     <?php
-
     if (($action == "edit") && (!empty($row_log['brewPouring']))) $pouring_arr = json_decode($row_log['brewPouring'],true);
     else $pouring_arr = array(
     	"pouring" => "",
     	"pouring_rouse" => "",
     	"pouring_notes" => ""
     );
-
     ?>
-
 	<div class="form-group">
 	    <label for="brewPouringInst" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_pouring; ?></label>
 	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -748,31 +779,6 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             <div class="help-block with-errors"><?php echo $brew_text_044; ?></div>
         </div>
     </div>
-
-    <!-- Cannot make checkbox group required without JS. Easier way is with a drop-down. -->
-    <!--
-    <label for="brewJuiceSource" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_juice_source; ?></label>
-    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-        <div class="input-group">
-		    <label class="checkbox-inline">
-		      <input name="brewJuiceSource[]" type="checkbox" id="brewJuiceSource-WA" value="WA"> Washington
-		    </label>
-		    <label class="checkbox-inline">
-		      <input name="brewJuiceSource[]" type="checkbox" id="brewJuiceSource-OR" value="OR"> Oregon
-		    </label>
-		    <label class="checkbox-inline">
-		      <input name="brewJuiceSource[]" type="checkbox" id="brewJuiceSource-ID" value="ID"> Idaho
-		    </label>
-		    <label class="checkbox-inline">
-		      <input name="brewJuiceSource[]" type="checkbox" id="brewJuiceSource-MT" value="MT"> Montana
-		    </label>
-		    <label class="checkbox-inline">
-		      <input name="brewJuiceSource[]" type="checkbox" id="brewJuiceSource-BC" value="BC"> British Columbia
-		    </label>
-		</div>
-		<div class="help-block with-errors"><?php echo $brew_text_045; ?></div>
-	</div>
-	-->
 
 	<!-- Apple Juice Source -->
 	<?php
@@ -944,6 +950,9 @@ if ($action == "edit") {
 		<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary <?php if ($disable_fields) echo "disabled"; ?>" ><?php echo $submit_text; ?> <span class="fa fa-<?php echo $submit_icon; ?>"></span></button>
 	</div>
 </div><!-- Form Group -->
+<div class="alert alert-warning" style="margin-top: 10px;" id="form-submit-button-disabled-msg-required">
+    <?php echo sprintf("<p><i class=\"fa fa-exclamation-triangle\"></i> <strong>%s</strong> %s</p>",$form_required_fields_00,$form_required_fields_01); ?>
+</div>
 </div>
 <?php if ($bid == "default") { ?><input type="hidden" name="brewPaid" value="<?php echo $brewPaid; ?>"><?php } ?>
 <input type="hidden" name="brewConfirmed" value="1">

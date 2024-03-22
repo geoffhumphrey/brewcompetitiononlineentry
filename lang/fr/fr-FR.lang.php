@@ -2072,8 +2072,8 @@ $brewer_text_054 = "<strong>Si le nom d'une personne ne figure pas dans le menu 
 
 $brew_text_050 = "Certains styles sont désactivés car la limite pour leur type de style correspondant (par exemple, bière, hydromel, cidre, etc.) a été atteinte.";
 $entry_info_text_053 = "Limites d'entrées par type de style :";
-$alert_text_055 = "Certaines limites d'entrées atteintes !";
-$alert_text_056 = "Aucune autre entrée ne sera acceptée pour";
+$alert_text_093 = "Certaines limites d'entrées atteintes !";
+$alert_text_094 = "Aucune autre entrée ne sera acceptée pour";
 $label_limit = "Limite";
 $label_beer = "Bière";
 $label_mead = "Hydromel";
@@ -2084,6 +2084,13 @@ $label_rice_wine = "Vin de Riz";
 $label_spirits = "Spiritueux";
 $label_kombucha = "Kombucha";
 $label_pulque = "Pulque";
+
+$form_required_fields_00 = "Tous les champs obligatoires n'ont pas été remplis ou sélectionnés.";
+$form_required_fields_01 = "Les champs obligatoires qui manquent de valeurs sont indiqués en <strong class=\"text-danger\">rouge</strong> ci-dessus. Veuillez remonter si nécessaire.";
+$form_required_fields_02 = "Ce champ est requis.";
+
+$entry_info_text_054 = "Entrées par type de style et limites associées:";
+
 
 /**
  * ----------------------------------------------------------------------------------

@@ -207,7 +207,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingLocName" name="judgingLocName" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>" placeholder="" autofocus required>
-			<span class="input-group-addon" id="judgingTime2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="judgingTime2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">Provide the name of the judging location.</span>
 	</div>
@@ -219,7 +219,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
-			<span class="input-group-addon"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">Provide an start date and time for the session.</span>
 	</div>
@@ -231,7 +231,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>" placeholder="" required>
-			<span class="input-group-addon"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <span id="helpBlockLocation1" class="help-block">Provide the street address, city, and zip/postal code where the session will take place.</span>
 	</div>

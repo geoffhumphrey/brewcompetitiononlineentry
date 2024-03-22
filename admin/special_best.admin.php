@@ -102,7 +102,7 @@
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="sbi_name" name="sbi_name" type="text" value="<?php if ($action == "edit") echo $row_sbi['sbi_name']; ?>" placeholder="Pro-Am with XXX Brewery, People's Choice, etc." data-error="The the custom category's name is required." autofocus required>
-			<span class="input-group-addon" id="sbi_name-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="sbi_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block with-errors"></span>
 	</div>

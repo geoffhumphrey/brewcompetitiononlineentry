@@ -2052,8 +2052,8 @@ $brewer_text_054 = "<strong>If any person's name is <u>not</u> listed in the dro
 
 $brew_text_050 = "Some styles are disabled since the limit for their corresponding style type (e.g., beer, mead, cider, etc.) has been reached.";
 $entry_info_text_053 = "Entry limits per style type:";
-$alert_text_055 = "Some entry limits reached!";
-$alert_text_056 = "No more entries will be accepted for";
+$alert_text_093 = "Some entry limits reached!";
+$alert_text_094 = "No more entries accepted for the following style types";
 $label_limit = "Limit";
 $label_beer = "Beer";
 $label_mead = "Mead";
@@ -2064,6 +2064,12 @@ $label_rice_wine = "Rice Wine";
 $label_spirits = "Spirits";
 $label_kombucha = "Kombucha";
 $label_pulque = "Pulque";
+
+$form_required_fields_00 = "Not all required fields have been filled out or selected.";
+$form_required_fields_01 = "Required fields that are missing values are indicated with a star <i class=\"fa fa-sm fa-star\"></i> and/or in <strong class=\"text-danger\">red</strong> above. Please scroll up as necessary.";
+$form_required_fields_02 = "This field is required.";
+
+$entry_info_text_054 = "Entries by style type and associated limits:";
 
 /**
  * ----------------------------------------------------------------------------------

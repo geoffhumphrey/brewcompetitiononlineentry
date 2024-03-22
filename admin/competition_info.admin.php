@@ -288,7 +288,7 @@ $(document).ready(function(){
             <span class="input-group-addon" id="contactFirstName-addon1"><span class="fa fa-user"></span></span>
             
             <input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php echo $row_brewer['brewerFirstName']; ?>" placeholder="" autofocus required>
-            <span class="input-group-addon" id="contactFirstName-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contactFirstName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -299,7 +299,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
             <span class="input-group-addon" id="contactLastName-addon1"><span class="fa fa-user"></span></span>
             <input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php echo $row_brewer['brewerLastName']; ?>" placeholder="" required>
-            <span class="input-group-addon" id="contactLastName-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contactLastName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -311,7 +311,7 @@ $(document).ready(function(){
             <span class="input-group-addon" id="contactEmail-addon1"><span class="fa fa-envelope"></span></span>
             
             <input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php echo $row_brewer['brewerEmail']; ?>" placeholder="" aria-describedby="helpBlock" required>
-            <span class="input-group-addon" id="contactEmail-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contactEmail-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span id="helpBlock" class="help-block">You will be able to enter more contact names after setup.</span>
     </div>
@@ -327,7 +327,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
             
             <input class="form-control" id="contestName" name="contestName" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestName']; ?>" placeholder="" autofocus required>
-            <span class="input-group-addon" id="contestName-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contestName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -374,7 +374,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
             
             <input class="form-control" id="contestHost" name="contestHost" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHost']; ?>" placeholder="" required>
-            <span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -463,7 +463,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestEntryOpen" name="contestEntryOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestEntryOpen-addon2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" id="contestEntryOpen-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -475,7 +475,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestEntryDeadline" name="contestEntryDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestEntryDeadline-addon2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" id="contestEntryDeadline-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 
         </div>
         <span id="helpBlock" class="help-block">This date is only for restriction of adding <strong>new</strong> entries. Existing entries will be able to be edited beyond this date &ndash; until the drop-off/shipping deadlines &ndash; unless a specific entry editing close date is provided below.</span>
@@ -554,7 +554,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -566,7 +566,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -579,7 +579,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestJudgeOpen" name="contestJudgeOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -591,7 +591,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+        	<span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div>
@@ -745,7 +745,7 @@ $(document).ready(function(){
         	<span class="input-group-addon" id="contestEntryFee-addon1"><?php echo $currency_symbol; ?></span>
             
             <input class="form-control" id="contestEntryFee" name="contestEntryFee" type="number" maxlength="5" step=".01" value="<?php if ($section != "step4") echo number_format($row_contest_info['contestEntryFee'],2); ?>" placeholder="" required>
-            <span class="input-group-addon" id="contestEntryFee-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contestEntryFee-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 
         </div>
         <span id="helpBlock" class="help-block">Fee for a single entry. Enter a zero (0) for a free entry fee.</span>

@@ -67,8 +67,22 @@ if (($entry_window_open == 1) && ($show_entries)) {
 		if ($row_limits['prefsEntryLimitPaid'] > 0) $page_info2 .= sprintf(" %s <strong>%s</strong> <em>%s</em> %s",$entry_info_text_019,$row_limits['prefsEntryLimitPaid'],strtolower($label_paid),$entry_info_text_020);
 		$page_info2 .= "</p>";
 
-	}
 
+		if (!empty($style_type_entry_count_display)) {
+			$page_info2 .= sprintf("<p>%s</p>",$entry_info_text_054);
+			$page_info2 .= "<ul>";
+			foreach ($style_type_entry_count_display as $key => $value) {
+				if (!empty($value[1])) {
+					$page_info2 .= "<li>";
+					$page_info2 .= sprintf("<strong>%s</strong> &ndash; %s %s %s", $key, $value[0], strtolower($label_of), $value[1]);
+					$page_info2 .= "</li>";
+				}
+			}
+			$page_info2 .= "</ul>";
+		}
+			
+
+	}
 
 	$page_info2 .= "<p>";
 	$page_info2 .= sprintf("%s, ",$reg_open_text_011);

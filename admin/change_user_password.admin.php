@@ -36,7 +36,7 @@
             <!-- Input Here -->
             <span class="input-group-addon" id="password1-addon1"><span class="fa fa-key"></span></span>
             <input class="form-control" name="password1" type="password" placeholder="Password" id="password1" required>
-            <span class="input-group-addon" id="password1-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="password1-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <div class="help-block with-errors"></div>
     </div>
@@ -55,7 +55,7 @@
             <!-- Input Here -->
             <span class="input-group-addon" id="password2-addon1"><span class="fa fa-key"></span></span>
             <input class="form-control" name="password" type="password" placeholder="Confirm" id="password2" data-match="#password1" data-match-error="The passwords do not match" required>
-            <span class="input-group-addon" id="password2-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="password2-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <div class="help-block with-errors"></div>
     </div>

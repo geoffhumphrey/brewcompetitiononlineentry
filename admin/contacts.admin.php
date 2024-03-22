@@ -77,7 +77,7 @@ if ($action == "edit") $form_url .= "&amp;id=".$id;
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php if ($action == "edit") echo $row_contact['contactFirstName']; ?>" placeholder="" data-error="The contact's first name is required" autofocus required>
-			<span class="input-group-addon" id="contactFirstName-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="contactFirstName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
 	</div>
@@ -88,7 +88,7 @@ if ($action == "edit") $form_url .= "&amp;id=".$id;
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php if ($action == "edit") echo $row_contact['contactLastName']; ?>" placeholder="" data-error="The contact's last name is required" required>
-			<span class="input-group-addon" id="contactLastName-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="contactLastName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
 	</div>
@@ -99,7 +99,7 @@ if ($action == "edit") $form_url .= "&amp;id=".$id;
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="contactPosition" name="contactPosition" type="text" value="<?php if ($action == "edit") echo $row_contact['contactPosition']; ?>" placeholder="" data-error="The contact's position is required" required>
-			<span class="input-group-addon" id="contactPosition-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="contactPosition-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
 	</div>
@@ -110,7 +110,7 @@ if ($action == "edit") $form_url .= "&amp;id=".$id;
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php if ($action == "edit") echo $row_contact['contactEmail']; ?>" placeholder="" data-error="The contact's email address is required or invalid" required>
-			<span class="input-group-addon" id="contactEmail-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="contactEmail-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
 		<span id="helpBlock" class="help-block">Email addresses are <strong>not</strong> displayed. Used only for contact purposes via the site&rsquo;s <a href="<?php echo $base_url; ?>index.php?section=contact">contact form</a>.</span>

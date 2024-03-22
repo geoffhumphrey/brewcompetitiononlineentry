@@ -124,14 +124,17 @@ if ($section != "admin") {
 
 		}
 
+		
+
 		if ((!$comp_entry_limit) && (!$comp_paid_entry_limit)) $page_info200 .= sprintf("%s %s %s %s.", $sidebar_text_009, $entry_open_sidebar, $sidebar_text_004, $entry_closed_sidebar);
+		
 		if (($comp_entry_limit) || ($comp_paid_entry_limit)) {
 			$page_info200 .= "<span class=\"text-danger\">";
 			if ($comp_entry_limit) $page_info200 .= $sidebar_text_011;
 			else $page_info200 .= $sidebar_text_010;
 			$page_info200 .= "</span>";
 		}
-		$page_info200 .= "";
+		
 		$page_info200 .= "</div>";
 		$page_info200 .= "</div>";
 

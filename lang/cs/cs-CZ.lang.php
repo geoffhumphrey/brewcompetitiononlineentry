@@ -1997,8 +1997,8 @@ $brewer_text_054 = "<strong>Pokud jméno některé osoby není uvedeno v rozbalo
 
 $brew_text_050 = "Některé styly jsou zakázány, protože byl dosažen limit pro jejich odpovídající typ stylu (např. pivo, medovina, cider, atd.).";
 $entry_info_text_053 = "Limity příspěvků podle typu stylu:";
-$alert_text_055 = "Některé limity příspěvků dosaženy!";
-$alert_text_056 = "Pro";
+$alert_text_093 = "Některé limity příspěvků dosaženy!";
+$alert_text_094 = "Pro";
 $label_limit = "Limit";
 $label_beer = "Pivo";
 $label_mead = "Medovina";
@@ -2010,6 +2010,11 @@ $label_spirits = "Destiláty";
 $label_kombucha = "Kombucha";
 $label_pulque = "Pulque";
 
+$form_required_fields_00 = "Nebyly vyplněny nebo vybrány všechny povinné pole.";
+$form_required_fields_01 = "Povinná pole, která nemají hodnoty, jsou výše označena jako <strong class=\"text-danger\">červená</strong>. Přejděte, prosím, nahoru podle potřeby.";
+$form_required_fields_02 = "Toto pole je povinné.";
+
+$entry_info_text_054 = "Záznamy podle typu stylu a souvisejících omezení:";
 
 /**
  * ----------------------------------------------------------------------------------

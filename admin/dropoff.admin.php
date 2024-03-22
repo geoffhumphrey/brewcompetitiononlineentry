@@ -47,7 +47,7 @@ if ($section != "step6") {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="dropLocationName" name="dropLocationName" type="text" value="<?php if ($action == "edit") echo $row_dropoff['dropLocationName']; ?>" data-error="The dropoff location's name is required" placeholder="" autofocus required>
-			<span class="input-group-addon" id="dropLocationName-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="dropLocationName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <span class="help-block with-errors"></span>
 	</div>
@@ -59,7 +59,7 @@ if ($section != "step6") {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="dropLocationPhone" name="dropLocationPhone" type="tel" value="<?php if ($action == "edit") echo $row_dropoff['dropLocationPhone']; ?>" data-error="The dropoff location's phone number is required" placeholder="" required>
-			<span class="input-group-addon" id="dropLocationPhone-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="dropLocationPhone-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <span class="help-block with-errors"></span>
 	</div>
@@ -71,7 +71,7 @@ if ($section != "step6") {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="dropLocation" name="dropLocation" type="text" value="<?php if ($action == "edit") echo $row_dropoff['dropLocation']; ?>" data-error="The dropoff location's address is required" placeholder="" required>
-			<span class="input-group-addon" id="dropLocation-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="dropLocation-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block with-errors">Provide the street address, city, and zip code.</span>
 	</div>

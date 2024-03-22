@@ -2,6 +2,7 @@
 // ---------------- DEBUG SESSION VARS --------------------
 // echo phpinfo();
 $table_body = "";
+$table_body = "<tr><td>Time Zone</td><td>".$timezone_prefs."</td></tr>";
 foreach ($_SESSION as $key => $value) {
 	if (is_array($value)) {
 		$table_body .=  "<tr><td>".$key."</td><td>".display_array_content($value,2)."</td></tr>";

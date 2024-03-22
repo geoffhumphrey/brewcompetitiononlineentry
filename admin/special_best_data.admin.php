@@ -122,7 +122,7 @@ if ($action == "add") {
 			<div class="input-group has-warning">
 				<!-- Input Here -->
 				<input class="form-control" id="sbd_judging_no<?php echo $i; ?>" name="sbd_judging_no<?php echo $i; ?>" type="text" size="10" maxlength="255" value="" placeholder="" <?php if ($i == 1) echo "autofocus"; ?>>
-				<span class="input-group-addon" id="sbd_judging_no<?php echo $i; ?>-2"><span class="fa fa-star"></span></span>
+				<span class="input-group-addon" id="sbd_judging_no<?php echo $i; ?>-2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -134,7 +134,7 @@ if ($action == "add") {
 			<div class="input-group has-warning">
 				<!-- Input Here -->
 				<input class="form-control" id="sbd_place<?php echo $i; ?>" name="sbd_place<?php echo $i; ?>" type="text" value="">
-				<span class="input-group-addon" id="sbd_place<?php echo $i; ?>-2"><span class="fa fa-star"></span></span>
+				<span class="input-group-addon" id="sbd_place<?php echo $i; ?>-2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -158,7 +158,7 @@ if ($action == "add") {
 			<div class="input-group has-warning">
 				<!-- Input Here -->
 				<input class="form-control" id="sbd_judging_no<?php if ($row_sbd) echo $row_sbd['id']; ?>" name="sbd_judging_no<?php if ($row_sbd) echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php if ($row_sbd)  echo readable_judging_number($info[3],$info[6]); ?>" placeholder="">
-				<span class="input-group-addon" id="sbd_judging_no<?php echo $row_sbd['id']; ?>-2"><span class="fa fa-star"></span></span>
+				<span class="input-group-addon" id="sbd_judging_no<?php echo $row_sbd['id']; ?>-2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -168,7 +168,7 @@ if ($action == "add") {
 			<div class="input-group has-warning">
 				<!-- Input Here -->
 				<input class="form-control" id="sbd_place<?php if ($row_sbd)  echo $row_sbd['id']; ?>" name="sbd_place<?php  echo $row_sbd['id']; ?>" type="text" value="<?php if ($row_sbd) echo $row_sbd['sbd_place']; ?>">
-				<span class="input-group-addon" id="sbd_place<?php if ($row_sbd)  echo $row_sbd['id']; ?>-2"><span class="fa fa-star"></span></span>
+				<span class="input-group-addon" id="sbd_place<?php if ($row_sbd)  echo $row_sbd['id']; ?>-2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -203,7 +203,7 @@ if ($action == "add") {
 			<div class="input-group has-warning">
 				<!-- Input Here -->
 				<input class="form-control" id="sbd_judging_no<?php echo $random; ?>" name="sbd_judging_no<?php echo $random; ?>" type="text" size="10" maxlength="255" value="" placeholder="">
-				<span class="input-group-addon" id="sbd_judging_no<?php echo $random; ?>-2"><span class="fa fa-star"></span></span>
+				<span class="input-group-addon" id="sbd_judging_no<?php echo $random; ?>-2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -213,7 +213,7 @@ if ($action == "add") {
 			<div class="input-group has-warning">
 				<!-- Input Here -->
 				<input class="form-control" id="sbd_place<?php echo $random; ?>" name="sbd_place<?php echo $random; ?>" type="text" value="">
-				<span class="input-group-addon" id="sbd_place<?php echo $random; ?>-2"><span class="fa fa-star"></span></span>
+				<span class="input-group-addon" id="sbd_place<?php echo $random; ?>-2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->

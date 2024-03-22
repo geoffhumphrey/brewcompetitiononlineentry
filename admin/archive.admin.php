@@ -74,7 +74,7 @@ foreach ($style_sets as $style_set) {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="<?php echo date('Y'); ?> or Q2<?php echo date('Y'); ?>, etc." pattern="^[a-zA-Z0-9]+$" autofocus required value="<?php if ($action == "edit") echo $row_archive['archiveSuffix']; ?>">
-			<span class="input-group-addon" id="mod_name-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="mod_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block with-errors"></span>
         <span id="helpBlock" class="help-block"><?php echo $archive_text_011; ?></span>

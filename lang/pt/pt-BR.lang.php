@@ -2057,8 +2057,8 @@ $brewer_text_055 = "Selecione todos os parceiros de produção com os quais voc�
 $brewer_text_054 = "<strong>Se o nome de uma pessoa não estiver listado no menu suspenso acima, insira o NOME COMPLETO aqui (por exemplo, João da Silva, Maria Oliveira, etc.). Adicione também nomes de equipes de produção aqui.</strong> Separe cada nome de equipe ou pessoa com vírgula (,) ou ponto e vírgula (;). Alguns símbolos não são permitidos, incluindo aspas duplas (&quot;) e porcentagem (&#37;).";
 $brew_text_050 = "Alguns estilos estão desativados pois o limite para seu tipo de estilo correspondente (por exemplo, cerveja, hidromel, cidra, etc.) foi atingido.";
 $entry_info_text_053 = "Limites de entradas por tipo de estilo:";
-$alert_text_055 = "Alguns limites de entradas alcançados!";
-$alert_text_056 = "Não serão aceitas mais entradas para";
+$alert_text_093 = "Alguns limites de entradas alcançados!";
+$alert_text_094 = "Não serão aceitas mais entradas para";
 $label_limit = "Limite";
 $label_beer = "Cerveja";
 $label_mead = "Hidromel";
@@ -2069,6 +2069,13 @@ $label_rice_wine = "Vinho de Arroz";
 $label_spirits = "Destilados";
 $label_kombucha = "Kombucha";
 $label_pulque = "Pulque";
+
+$form_required_fields_00 = "Não todos os campos obrigatórios foram preenchidos ou selecionados.";
+$form_required_fields_01 = "Os campos obrigatórios que faltam valores estão indicados em <strong class=\"text-danger\">vermelho</strong> acima. Por favor, role para cima conforme necessário.";
+$form_required_fields_02 = "Este campo é obrigatório.";
+
+$entry_info_text_054 = "Entradas por tipo de estilo e limites associados:";
+
 
 /**
  * ----------------------------------------------------------------------------------

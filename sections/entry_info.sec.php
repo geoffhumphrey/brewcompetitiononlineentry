@@ -100,8 +100,10 @@ if ($show_entries) {
 				$page_info5 .= "<p>".$entry_info_text_053."</p>";
 				$page_info5 .= "<ul>";
 				foreach($style_type_limits_display as $key => $value) {
-					if (array_key_exists($key,$style_types_translations)) $page_info5 .= "<li>".ucfirst($style_types_translations[$key]).": ".$value."</li>";
-					else $page_info5 .= "<li>".ucfirst($key).": ".$value."</li>";
+					if ($value > 0) {
+						if (array_key_exists($key,$style_types_translations)) $page_info5 .= "<li>".ucfirst($style_types_translations[$key])." &ndash; ".$value."</li>";
+						else $page_info5 .= "<li>".ucfirst($key)." &ndash; ".$value."</li>";
+					}
 				}
 				$page_info5 .= "</ul>";
 			}

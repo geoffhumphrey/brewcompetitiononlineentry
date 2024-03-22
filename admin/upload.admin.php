@@ -14,7 +14,7 @@
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="fallback">
     <input name="file" type="file" multiple />
-  </div>
+</div>
 </form>
 <?php } ?>
 <script type="text/javascript" language="javascript">

@@ -2502,7 +2502,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
         if ((check_setup($prefix."judging_locations",$database)) && (check_update("judgingDateEnd", $prefix."judging_locations"))) {
 
-            $query_judging_dates = sprintf("SELECT judgingDate,judgingDateEnd FROM %s",$judging_locations_db_table);
+            $query_judging_dates = sprintf("SELECT judgingDate,judgingDateEnd FROM %s WHERE judgingLocType < '2'",$judging_locations_db_table);
             $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
             $row_judging_dates = mysqli_fetch_assoc($judging_dates);
             $totalRows_judging_dates = mysqli_num_rows($judging_dates);
@@ -2630,11 +2630,6 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $comp_paid_entry_limit = FALSE;
         $comp_entry_limit = FALSE;
 
-        if (isset($totalRows_entry_count)) {
-            if ((!empty($row_limits['prefsEntryLimit'])) && ($totalRows_entry_count >= $row_limits['prefsEntryLimit'])) $comp_entry_limit = TRUE;
-            if ((!empty($row_limits['prefsEntryLimitPaid'])) && ($total_paid >= $row_limits['prefsEntryLimitPaid'])) $comp_paid_entry_limit = TRUE;
-        }
-
         // Get styles types and their associated entry limits
         // If a style type has an entry limit, get an entry count from the db for that style type
         // If that style type's entry limit is equal to the count, disable the fields and flag
@@ -2648,32 +2643,58 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $row_style_type_entry_limits = mysqli_fetch_assoc($style_type_entry_limits);
         $totalRows_style_type_entry_limits = mysqli_num_rows($style_type_entry_limits);
 
+        $style_type_entry_count_display = array();
+        $style_type_running_count = 0;
+        $style_type_limit_running_count = 0;
+
         if ($totalRows_style_type_entry_limits > 0) {
+
+            // Build style type count array
             
             do {
 
+                // Default entry limit flag is 0 (false)
+                $style_type_limits[$row_style_type_entry_limits['id']] = 0;
+
                 $style_type_limits_display[$row_style_type_entry_limits['styleTypeName']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
 
-                $query_style_type_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleType='%s'",$prefix."brewing",$row_style_type_entry_limits['id']);
+                if ($row_style_type_entry_limits['id'] == 4) $query_style_type_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleType='2' OR brewStyleType='3'",$prefix."brewing",$row_style_type_entry_limits['id']);
+                else $query_style_type_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleType='%s'",$prefix."brewing",$row_style_type_entry_limits['id']);
                 $style_type_entry_count = mysqli_query($connection,$query_style_type_entry_count) or die (mysqli_error($connection));
                 $row_style_type_entry_count = mysqli_fetch_assoc($style_type_entry_count);
+
+                $style_type_entry_count_display[$row_style_type_entry_limits['styleTypeName']] = array($row_style_type_entry_count['count'],$row_style_type_entry_limits['styleTypeEntryLimit']);
+
+                $style_type_running_count += $row_style_type_entry_count['count'];
                 
-                // If entry limit reached flag with a 1 (true)
-                // Otherwise flag with a 0 (false)
-                
-                if ($row_style_type_entry_count['count'] >= $row_style_type_entry_limits['styleTypeEntryLimit']) {
-                    $style_type_limits[$row_style_type_entry_limits['id']] = 1;
-                    if ($row_style_type_entry_limits['id'] <= 9) $style_type_limits_alert[$row_style_type_entry_limits['id']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
-                    else $style_type_limits_alert[$row_style_type_entry_limits['styleTypeName']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
+                // Check to see if style type has an entry limit AND if that value is numeric
+                // If so, perform various actions
+                if ((isset($row_style_type_entry_limits['styleTypeEntryLimit'])) && (is_numeric($row_style_type_entry_limits['styleTypeEntryLimit']))) {
+
+                    $style_type_limit_running_count += $row_style_type_entry_limits['styleTypeEntryLimit'];
+                    
+                    // If entry limit reached flag with a 1 (true)
+                    if ($row_style_type_entry_count['count'] >= $row_style_type_entry_limits['styleTypeEntryLimit']) {
+
+                        if ($row_style_type_entry_limits['id'] == 4) {
+                            $style_type_limits[2] = 1;
+                            $style_type_limits[3] = 1;
+                        }
+
+                        else $style_type_limits[$row_style_type_entry_limits['id']] = 1;
+                        
+                        if ($row_style_type_entry_limits['id'] <= 9) $style_type_limits_alert[$row_style_type_entry_limits['id']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
+                        else $style_type_limits_alert[$row_style_type_entry_limits['styleTypeName']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
+                    
+                    }
+
                 }
-                
-                else $style_type_limits[$row_style_type_entry_limits['id']] = 0;
             
             } while ($row_style_type_entry_limits = mysqli_fetch_assoc($style_type_entry_limits));
 
         }
 
-        if ((array_sum($style_type_limits) >= $totalRows_style_type_entry_limits)) $comp_entry_limit = TRUE;
+        if ($style_type_running_count >= $row_limits['prefsEntryLimit']) $comp_entry_limit = TRUE;
 
         if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
         if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
@@ -2681,6 +2702,11 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $remaining_entries = 0;
         if ((($section == "brew") || ($section == "list") || ($section == "pay")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
         else $remaining_entries = 1;
+
+        if (isset($totalRows_entry_count)) {
+            if ((!empty($row_limits['prefsEntryLimit'])) && ($totalRows_entry_count >= $row_limits['prefsEntryLimit'])) $comp_entry_limit = TRUE;
+            if ((!empty($row_limits['prefsEntryLimitPaid'])) && ($total_paid >= $row_limits['prefsEntryLimitPaid'])) $comp_paid_entry_limit = TRUE;
+        }
 
         if (open_limit($row_judge_count['count'],$row_judging_prefs['jPrefsCapJudges'],$judge_window_open)) $judge_limit = TRUE;
         else $judge_limit = FALSE;

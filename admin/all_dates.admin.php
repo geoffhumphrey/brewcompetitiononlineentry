@@ -41,7 +41,7 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
         <div class="input-group has-warning">
             <input class="form-control date-time-picker-system" id="contestEntryOpen" name="contestEntryOpen" type="text" value="<?php if ($section != "step4") echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-            <span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
 </div><!-- ./Form Group -->
@@ -53,7 +53,7 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
         <div class="input-group has-warning">
             <input class="form-control date-time-picker-system" id="contestEntryDeadline" name="contestEntryDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-            <span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span id="helpBlock" class="help-block">This date is only for restriction of adding <strong>new</strong> entries. Existing entries will be able to be edited beyond this date &ndash; until the drop-off/shipping deadlines &ndash; unless a specific entry editing close date is provided below.</span>
     </div>
@@ -114,7 +114,7 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
         <div class="input-group has-warning">
             <input class="form-control date-time-picker-system" id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" value="<?php if ($section != "step4") echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-            <span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span id="helpBlock" class="help-block with-errors">The date and time when general entrants are able to create an account.</span>
     </div>
@@ -128,7 +128,7 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
         <div class="input-group has-warning">
             <input class="form-control date-time-picker-system" id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-            <span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span>
+            <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span>
         </div>
         <span id="helpBlock" class="help-block with-errors">The deadline for general entrants to create an account.</span>
     </div>
@@ -141,7 +141,7 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
         <div class="input-group has-warning">
             <input class="form-control date-time-picker-system" id="contestJudgeOpen" name="contestJudgeOpen" type="text" value="<?php if ($section != "step4") echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-            <span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span id="helpBlock" class="help-block with-errors">The date and time when judges and stewards are able to create an account and indicate their session preferences.</span>
     </div>
@@ -154,7 +154,7 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
         <div class="input-group has-warning">
             <input class="form-control date-time-picker-system" id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-            <span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span id="helpBlock" class="help-block with-errors">The deadline for judges and stewards to create an account and indicate their session preferences.</span>
     </div>
@@ -241,7 +241,7 @@ $judging_session_js = "";
         <div class="input-group date has-warning">
             <!-- Input Here -->
             <input class="form-control date-time-picker-system" id="judgingDate-<?php echo $row_judging_locs['id']; ?>" name="judgingDate<?php echo $row_judging_locs['id']; ?>" type="text" value="<?php echo $judging_date; ?>" placeholder="" required>
-            <span class="input-group-addon"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span class="help-block">Provide a start date and time for the session.<br>Session type is set to <strong><?php echo $session_type; ?></strong>. To change the type or other information, <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_judging_locs['id']; ?>">edit the <?php echo $row_judging_locs['judgingLocName']; ?> session</a>.</span>
     </div>
@@ -253,7 +253,7 @@ $judging_session_js = "";
         <div class="input-group date has-warning">
             <!-- Input Here -->
             <input class="form-control date-time-picker-system" id="judgingDateEnd-<?php echo $row_judging_locs['id']; ?>" name="judgingDateEnd<?php echo $row_judging_locs['id']; ?>" type="text" value="<?php echo $judging_end_date; ?>" placeholder="">
-            <span class="input-group-addon"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span class="help-block">For a distributed session, it is required that you provide an end date and time that will serve as a deadline for judges to submit their evaluations.</span>
     </div>
@@ -287,7 +287,7 @@ if ($totalRows_judging > 0) {
         <div class="input-group date has-warning">
             <!-- Input Here -->
             <input class="form-control date-time-picker-system" id="judgingDate-<?php echo $row_judging['id']; ?>" name="judgingDate<?php echo $row_judging['id']; ?>" type="text" value="<?php echo $judging_date; ?>" placeholder="" required>
-            <span class="input-group-addon"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span class="help-block">Provide a start date and time for the session.</span>
     </div>

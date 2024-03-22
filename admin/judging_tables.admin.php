@@ -1308,7 +1308,7 @@ function update_table_total(element_id) {
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <input class="form-control" id="tableName" name="tableName" type="text" value="" data-error="A table name is required" placeholder="" autofocus required>
-                <span class="input-group-addon" id="tableName-addon2"><span class="fa fa-star"></span></span>
+                <span class="input-group-addon" id="tableName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
             </div>
             <span class="help-block with-errors"></span>
         </div>
@@ -1402,7 +1402,7 @@ function update_table_total(element_id) {
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <input class="form-control" id="tableName" name="tableName" type="text" value="<?php echo $row_tables_edit['tableName']; ?>" placeholder="" autofocus>
-                <span class="input-group-addon" id="tableName-addon2"><span class="fa fa-star"></span></span>
+                <span class="input-group-addon" id="tableName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
             </div>
         </div>
     </div><!-- ./Form Group -->

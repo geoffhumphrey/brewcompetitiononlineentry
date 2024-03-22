@@ -232,7 +232,7 @@ function checkStyleIdentifier() {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="brewStyle" name="brewStyle" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyle']; ?>" placeholder="" data-error="The custom style's name is required." autofocus required>
-			<span class="input-group-addon" id="brewStyle-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="brewStyle-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
 	</div>
@@ -243,7 +243,7 @@ function checkStyleIdentifier() {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="brewStyleGroup" name="brewStyleGroup" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup']; ?>" placeholder="" data-error="The custom style number or identifier is required." maxlength="3" required>
-			<span class="input-group-addon" id="brewStyle-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="brewStyle-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<div class="help-block">Provide the overall identifier for the style. Three (3) character limit.</div>
        	<div class="help-block with-errors"></div>
@@ -255,7 +255,7 @@ function checkStyleIdentifier() {
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="brewStyleNum" name="brewStyleNum" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleNum']; ?>" placeholder="" data-error="The custom style category's sub-style identifer is required." maxlength="2" required onBlur="checkStyleIdentifier()" onKeyup="checkStyleIdentifier()">
-			<span class="input-group-addon" id="brewStyle-addon2"><span class="fa fa-star"></span></span>
+			<span class="input-group-addon" id="brewStyle-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<div class="help-block">Provide a <strong>unique</strong> identifier for this style. Two (2) character limit.</div>
        	<div class="help-block with-errors"></div>

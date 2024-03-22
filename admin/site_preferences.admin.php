@@ -1017,11 +1017,11 @@ $(document).ready(function(){
     </div>
 </div><!-- ./modal -->
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<!--
+<div class="form-group">
     <label for="prefsHideRecipe" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Entry Recipe Section</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
-            <!-- Input Here -->
             <label class="radio-inline">
                 <input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0" checked> Yes
             </label>
@@ -1036,8 +1036,7 @@ $(document).ready(function(){
             </div>
         </span>
     </div>
-</div><!-- ./Form Group -->
-<!-- Modal -->
+</div>
 <div class="modal fade" id="hideRecipeModal" tabindex="-1" role="dialog" aria-labelledby="hideRecipeModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -1053,7 +1052,8 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
+-->
 <div id="prefsHideSpecific" class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsHideSpecific" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1220,7 +1220,7 @@ do {
 </div><!-- ./Form Group -->
 <?php if ($go == "preferences") { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsUserSubCatLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Sub-Style</label>
+    <label for="prefsUserSubCatLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Per Participant Sub-Style Entry Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     <!-- Input Here -->
     <select class="selectpicker" name="prefsUserSubCatLimit" id="prefsUserSubCatLimit" data-size="10">
@@ -1235,7 +1235,7 @@ do {
 <!-- Insert Collapsable -->
 <div id="subStyleExeptions">
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-        <label for="prefsUSCLExLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit For <em>Excepted</em> Sub-Styles</label>
+        <label for="prefsUSCLExLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Per Participant Entry Limit For <em>Excepted</em> Sub-Styles</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="prefsUSCLExLimit" id="prefsUSCLExLimit" data-size="10" data-width="auto">
@@ -1248,7 +1248,7 @@ do {
             <div class="btn-group" role="group" aria-label="exceptdSubstylesModal">
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#exceptdSubstylesModal">
-                   Entry Limit For Excepted Sub-Styles Info
+                   Per Participant Entry Limit For <em>Excepted</em> Sub-Styles Info
                 </button>
             </div>
             </div>
@@ -1256,11 +1256,11 @@ do {
         </div>
     </div><!-- ./Form Group -->
     <div class="form-group" id="subStyleExeptionsEdit">
-        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
+        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Per Participant Sub-Style Entry Limit</label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <?php if (strpos($section, "step") === FALSE) { ?>
                 <div class="btn-group" role="group">
-                    <button class="btn btn-xs btn-default" data-toggle="collapse" href="#sub-style-list" aria-expanded="false" aria-controls="sub-style-list">Expand/Collapse List</button>
+                    <button class="btn btn btn-default" data-toggle="collapse" href="#sub-style-list" aria-expanded="false" aria-controls="sub-style-list">Expand/Collapse the Sub-Style List</button>
                 </div>
                 <?php } ?>
             <div class="<?php if (strpos($section, "step") === FALSE) echo "collapse"; ?>" id="sub-style-list">

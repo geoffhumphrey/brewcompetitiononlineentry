@@ -300,6 +300,12 @@ if ($go != "admin") echo $info_msg;
 ?>
 <form id="submit-form" class="form-horizontal hide-loader-form-submit" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<div class="form-group">
+    <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12"></label>
+    <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <p class="bcoem-form-info text-warning"><i class="fa fa-star"></i> <strong>= <?php echo $label_required_info; ?></strong></p>
+    </div>
+</div>
 <?php 
 include (SECTIONS.'brewer_form_0.sec.php'); // Participant Info
 if (!$entrant_type_brewery) include (SECTIONS.'brewer_form_1.sec.php'); // Info for individuals only (not orgs)
@@ -335,6 +341,9 @@ if (($go != "entrant") && ($section != "step2")) include (SECTIONS.'brewer_form_
         <button id="form-submit-button" name="submit" type="submit" class="btn btn-primary" ><?php echo $submit_text; ?> </button>
     </div>
 </div><!-- Form Group -->
+<div class="alert alert-warning" style="margin-top: 10px;" id="form-submit-button-disabled-msg-required">
+    <?php echo sprintf("<p><i class=\"fa fa-exclamation-triangle\"></i> <strong>%s</strong> %s</p>",$form_required_fields_00,$form_required_fields_01); ?>
+</div>
 </form>
 <?php } // WAY up top... end if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))
 else echo "<p class='lead'>You can only edit your own profile.</p>";

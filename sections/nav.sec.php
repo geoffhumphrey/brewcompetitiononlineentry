@@ -319,7 +319,7 @@ $(document).ready(function(){
 								<span class="input-group-addon" id="login-addon1"><span class="fa fa-envelope"></span></span>
 								<!-- Input Here -->
 								<input id="loginUsername" class="form-control" name="loginUsername" type="email" required placeholder="<?php echo $label_email; ?>" data-error="<?php echo $login_text_018; ?>">
-								<span class="input-group-addon" id="login-addon2"><span class="fa fa-star"></span></span>
+								<span class="input-group-addon" id="login-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 							</div>
 							<span class="help-block with-errors"></span>
 						</div>
@@ -330,7 +330,7 @@ $(document).ready(function(){
 								<span class="input-group-addon" id="login-addon3"><span class="fa fa-key"></span></span>
 								<!-- Input Here -->
 								<input class="form-control" name="loginPassword" type="password" required placeholder="<?php echo $label_password; ?>" data-error="<?php echo $login_text_019; ?>">
-								<span class="input-group-addon" id="login-addon4"><span class="fa fa-star"></span></span>
+								<span class="input-group-addon" id="login-addon4" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 							</div>
 							<span class="help-block with-errors"></span>
 						</div>

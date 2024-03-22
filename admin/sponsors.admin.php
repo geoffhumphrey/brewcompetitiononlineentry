@@ -204,7 +204,7 @@ if ($action == "default") { ?>
         <div class="input-group has-warning">
             <!-- Input Here -->
             <input class="form-control" id="sponsorName" name="sponsorName" type="text" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorName']; ?>" placeholder="" data-error="The sponsor's name is required" autofocus required>
-            <span class="input-group-addon" id="sponsorName-addon2"><span class="fa fa-star"></span></span>
+            <span class="input-group-addon" id="sponsorName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <div class="help-block with-errors"></div>
     </div>

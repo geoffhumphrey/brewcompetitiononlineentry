@@ -2072,8 +2072,8 @@ $brewer_text_054 = "<strong>Si el nombre de alguna persona no está listado en e
 
 $brew_text_050 = "Algunos estilos están desactivados ya que se ha alcanzado el límite para su tipo de estilo correspondiente (por ejemplo, cerveza, hidromiel, sidra, etc.).";
 $entry_info_text_053 = "Límites de entradas por tipo de estilo:";
-$alert_text_055 = "¡Algunos límites de entradas alcanzados!";
-$alert_text_056 = "No se aceptarán más entradas para";
+$alert_text_093 = "¡Algunos límites de entradas alcanzados!";
+$alert_text_094 = "No se aceptarán más entradas para";
 $label_limit = "Límite";
 $label_beer = "Cerveza";
 $label_mead = "Hidromiel";
@@ -2085,6 +2085,11 @@ $label_spirits = "Licores";
 $label_kombucha = "Kombucha";
 $label_pulque = "Pulque";
 
+$form_required_fields_00 = "No se han completado o seleccionado todos los campos obligatorios.";
+$form_required_fields_01 = "Los campos obligatorios que faltan valores están indicados en <strong class=\"text-danger\">rojo</strong> arriba. Por favor, desplázate hacia arriba según sea necesario.";
+$form_required_fields_02 = "Este campo es obligatorio.";
+
+$entry_info_text_054 = "Entradas por tipo de estilo y límites asociados:";
 
 /**
  * ----------------------------------------------------------------------------------
