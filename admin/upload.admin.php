@@ -70,15 +70,25 @@ if (!is_dir_empty($upload_dir)) {
 	$filelist .= "<th>Actions</th>\n";
 	$filelist .= "</thead>\n";
 	$filelist .= "<tbody>\n";
+	
 	while ($file = readdir($handle)) {
+	   
 	   if(!is_dir($file) && !is_link($file)) {
+	   		
+	   		$image_url = $base_url."user_images/".$file;
+	   		$delete_url = $base_url."includes/process.inc.php?action=delete&amp;go=image&amp;filter=".urlencode($file)."&amp;view=".$action;
+			$file_date = date("l, F j, Y H:i", filemtime($upload_dir.$file));
+			
 			$filelist .= "<tr>\n";
-			$filelist .= "<td><a data-fancybox=\"gallery\" class=\"user_images hide-loader\" rel=\"group1\" href=\"".$base_url."user_images/$file\" title=\"".$file."\" >".$file."</a></td>\n";
-			$filelist .= "<td>".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
-			$filelist .= "<td><a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=image&amp;filter=".$file."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the image named ".$file." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
+			$filelist .= sprintf("<td><a data-fancybox=\"gallery\" class=\"user_images hide-loader\" rel=\"group1\" href=\"%s\" title=\"%s\" >%s</a></td>\n", $image_url, $file, $file);
+			$filelist .= sprintf("<td>%s</td>\n", $file_date);
+			$filelist .= sprintf("<td><a class=\"hide-loader\" href=\"%s\" data-confirm=\"Are you sure? This will remove the image named %s from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n", $delete_url, $file);
 			$filelist .= "</tr>\n";
+	   
 	   }
+	
 	}
+
 	$filelist .= "</tbody>\n";
 	$filelist .= "</table>\n";
 	echo $filelist;

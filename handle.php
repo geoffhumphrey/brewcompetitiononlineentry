@@ -1,6 +1,7 @@
 <?php
 require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
+require(LIB.'common.lib.php');
 
 // Force download of uploaded scoresheet PDF
 // Discourages random viewing of scoresheets by inputting direct URL
@@ -39,19 +40,6 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	$backlist = array('php', 'php3', 'php4', 'phtml', 'exe'); // Restrict file extensions
 	$valid_chars_regex = "A-Za-z0-9_-\s "; // Characters allowed in the file name (in a Regular Expression format)
 	
-	/* 
-	// Commenting out by request - GitHub Issue #623
-	// Change chmod permission if needed
-	chmod($target_path, 0755);
-	
-	// Redirect if chmod can't be changed via php
-	if (!chmod($target_path,0755)) {
-		$errorGoTo = "index.php?section=admin&go=upload&msg=755";
-		header(sprintf("Location: %s", $errorGoTo));
-		exit;
-	}
-	*/
-	
 	// Security check variables
 	if (HOSTED) $max_size = 4000000;
 	else $max_size = 5000000; // Limit size of upload to 5MB
@@ -64,33 +52,29 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		$file_type = $_FILES['file']['type'];
 		$file_ext = strtolower(substr($_FILES['file']['name'],strrpos($_FILES['file']['name'],".")));
 		
-		/*
-		echo $file_type."<br>";
-		echo $file_ext."<br>";
-		echo $_FILES['file']['name']."<br>";
-		echo $target_path;
-		*/
-		
 		// If file type is on the blacklist
 		$file_extension = explode('.', $_FILES['file']['name']);
 		if ((in_array(end($file_extension), $backlist)) || (!in_array($file_ext, $file_exts))) {
 			if ($action == "html") $errorGoTo = "index.php?section=admin&go=upload&action=html&msg=30";
 			else $errorGoTo = "index.php?section=admin&go=upload&msg=30";
-			header(sprintf("Location: %s", $errorGoTo));
-			exit;
+			$redirect = prep_redirect_link($errorGoTo);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+			header($redirect_go_to);
+			exit();
 		}
 		
-		// Do upload if all parameters met
+		// Upload if all parameters met
 		if (($_FILES['file']['size'] <= $max_size) && (in_array($file_type, $file_mimes)) && (in_array($file_ext, $file_exts)))  {
 
-			// Replace spaces in file with underscores
 			$renamed_file = str_replace(' ', '_', $_FILES['file']['name']);
-
-			// Trim out whitespace
 			$renamed_file = preg_replace('/\s+/', '', $renamed_file);
-
-			// Convert to lowercase
 			$renamed_file = strtolower($renamed_file);
+			$renamed_file = filter_var($renamed_file, FILTER_UNSAFE_RAW, FILTER_ENCODE_LOW | FILTER_ENCODE_HIGH);
+			$renamed_file = strip_tags($renamed_file);
+			$renamed_file = stripcslashes($renamed_file);
+        	$renamed_file = stripslashes($renamed_file);
+        	$renamed_file = scrub_filename($renamed_file);
+			$renamed_file = remove_accents($renamed_file);
 			
 			// Generate temp file
 			$temp_file = $_FILES['file']['tmp_name']; 
@@ -107,48 +91,39 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 			// Move the temp file to the target directory
 			move_uploaded_file($temp_file,$target_file);
 			
-			// Redirect if using single upload option
-			if ($action == "html") {
-				$updateGoTo = "index.php?section=admin&go=upload&action=html&msg=29";
-				header(sprintf("Location: %s", $updateGoTo));
-				exit;
-			}
-			
-			// Redirect if using multiple download option
-			if ($action == "html_docs") {
-				$updateGoTo = "index.php?section=admin&go=upload_scoresheets&action=html&msg=29";
-				header(sprintf("Location: %s", $updateGoTo));
-				exit;
-			}
+			if ($action == "html") $updateGoTo = "index.php?section=admin&go=upload&action=html&msg=29";
+			else $updateGoTo = "index.php?section=admin&go=upload_scoresheets&action=html&msg=29";
+			$redirect = prep_redirect_link($updateGoTo);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+			header($redirect_go_to);
+			exit();
+		
 		}
 		
 	}
 	
 	else {
-		// Redirect if using single upload option
-		if ($action == "html") {
-			$updateGoTo = "index.php?section=admin&go=upload&action=html&msg=3";
-			header(sprintf("Location: %s", $updateGoTo));
-			exit;
-		}
 		
-		if ($action == "html_docs") {
-			$updateGoTo = "index.php?section=admin&go=upload_scoresheets&action=html_docs&msg=3";
-			header(sprintf("Location: %s", $updateGoTo));
-			exit;
-		}
+		if ($action == "html") $updateGoTo = "index.php?section=admin&go=upload&action=html&msg=3";
+		else $updateGoTo = "index.php?section=admin&go=upload_scoresheets&action=html_docs&msg=3";
+		$redirect = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+		header($redirect_go_to);
+		exit();
+	
 	}
 	
 }
+
 // Redirect if script accessed directly and/or session parameters not met
 else {
-        session_unset();
-        session_destroy();
-        session_write_close();
-        $redirect = $base_url."403.php";
-        $redirect = prep_redirect_link($redirect);
-        $redirect_go_to = sprintf("Location: %s", $redirect);
-        header($redirect_go_to);
-        exit();
+    session_unset();
+    session_destroy();
+    session_write_close();
+    $redirect = $base_url."403.php";
+    $redirect = prep_redirect_link($redirect);
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
 }
 ?> 
