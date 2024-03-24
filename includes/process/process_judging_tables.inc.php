@@ -5,6 +5,11 @@
  *              Adds/moves/deletes corresponding entries to the judging_flights table
  */
 
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
@@ -64,7 +69,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		foreach (array_unique($a) as $value) {
 
 			if ($_SESSION['prefsStyleSet'] != "BA") {
-				$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
+				
+				/*
+				if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s';", $styles_db_table, $value, $prefix."styles", $value);
+				else 
+				*/
+				$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s';", $styles_db_table, $value);
 				$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 				$row_styles = mysqli_fetch_assoc($styles);
 			}
@@ -203,9 +213,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			foreach (array_unique($a) as $value) {
 
 				if ($_SESSION['prefsStyleSet'] != "BA") {
+					
+					/*
+					if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);
+					else 
+					*/
 					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
+				
 				}
 
 				if ($_SESSION['jPrefsTablePlanning'] == 1) $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
@@ -316,7 +332,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				if ($_SESSION['prefsStyleSet'] != "BA") {
 
-					$query_style = sprintf("SELECT id FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$_SESSION['prefsStyleSet'],$row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+					/*
+					if (HOSTED) $query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'], $row_entry['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'], $row_entry['brewSubCategory']);
+					else 
+					*/
+					$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
 					$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 					$row_style = mysqli_fetch_assoc($style);
 
@@ -326,14 +346,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				else $style_id = $row_entry['brewSubCategory'];
 
-				//echo $query_style."<br>";
-
 				$query_table_styles = "SELECT id,tableStyles FROM $judging_tables_db_table";
 				$tableStyles = mysqli_query($connection,$query_table_styles) or die (mysqli_error($connection));
 				$row_table_styles = mysqli_fetch_assoc($tableStyles);
-
-				//echo $row_style['id']."<br>";
-				//echo $query_table_styles."<br>";
 
 				do {
 					$style_array = explode(",",$row_table_styles['tableStyles']);

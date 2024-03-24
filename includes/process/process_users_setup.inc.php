@@ -19,7 +19,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
 	
 	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
-	$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING,FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW);
+	$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 	if (strstr($username,'@'))  {
 

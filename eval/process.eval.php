@@ -57,14 +57,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	
 	if (isset($_POST['evalStyleAccuracy'])) $evalStyleAccuracy = filter_var($_POST['evalStyleAccuracy'],FILTER_SANITIZE_NUMBER_INT);
 	if (isset($_POST['evalTechMerit'])) $evalTechMerit = filter_var($_POST['evalTechMerit'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['evalDrinkability'])) $evalDrinkability = filter_var($_POST['evalDrinkability'],FILTER_SANITIZE_STRING);
+	if (isset($_POST['evalDrinkability'])) $evalDrinkability = filter_var($_POST['evalDrinkability'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$evalTable = filter_var($_POST['evalTable'],FILTER_SANITIZE_NUMBER_INT);
 	
 
 	if ($action == "edit") $id = filter_var($id,FILTER_SANITIZE_NUMBER_INT);
 	if (isset($_POST['eid'])) $eid = filter_var($_POST['eid'],FILTER_SANITIZE_NUMBER_INT);
 	if (isset($_POST['uid'])) $uid = filter_var($_POST['uid'],FILTER_SANITIZE_NUMBER_INT);
-	if (isset($_POST['token'])) $token = filter_var($_POST['token'],FILTER_SANITIZE_STRING);
+	if (isset($_POST['token'])) $token = filter_var($_POST['token'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	if (isset($_POST['evalSpecialIngredients'])) $evalSpecialIngredients = $purifier->purify($_POST['evalSpecialIngredients']);
 	if (isset($_POST['evalOtherNotes'])) $evalOtherNotes = $purifier->purify($_POST['evalOtherNotes']);
 	if (isset($_POST['evalAromaComments'])) $evalAromaComments = $purifier->purify($_POST['evalAromaComments']);
@@ -142,7 +142,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Build Aroma Insert
 			if ((strpos($key, "evalAroma") !== FALSE) && (!in_array($key, $exceptions))) {
-				$key = filter_var($key,FILTER_SANITIZE_STRING);
+				$key = filter_var($key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$evalAroma[$key] = $value;
 			}
 
@@ -150,7 +150,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// When processing NW, convert evalAppearanceColorChoice to evalAppearanceColor
 			// If evalAppearanceColorChoice is "Other", convert evalAppearanceColorOther to evalAppearanceColor
 			if ((strpos($key, "evalAppearance") !== FALSE) && (!in_array($key, $exceptions))) {
-				$key = filter_var($key,FILTER_SANITIZE_STRING);
+				$key = filter_var($key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				if ($key == "evalAppearanceColorChoice") {
 					$key = "evalAppearanceColor";
 					if ($value == "999") $value = $_POST['evalAppearanceColorOther'];
@@ -161,13 +161,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Build Flavor Insert
 			if ((strpos($key, "evalFlavor") !== FALSE) && (!in_array($key, $exceptions))) {
-				$key = filter_var($key,FILTER_SANITIZE_STRING);
+				$key = filter_var($key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$evalFlavor[$key] = $value;
 			}
 
 			// Build Mouthfeel Insert
 			if ((strpos($key, "evalMouthfeel") !== FALSE) && (!in_array($key, $exceptions))) {
-				$key = filter_var($key,FILTER_SANITIZE_STRING);
+				$key = filter_var($key,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$evalMouthfeel[$key] = $value;
 			}
 

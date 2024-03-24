@@ -186,12 +186,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if (HOSTED) {
 
-				if (strpos($_SERVER['SERVER_NAME'],"brewcomp.com") !== false) $server = "brewcomp.com";
-				elseif (strpos($_SERVER['SERVER_NAME'],"brewcompetition.com") !== false) $server = "brewcompetition.com";
-				else $server = "brewcompetition.com";
+				$server = "brewingcompetitions.com";
 
-				// For hosted version: email prost@brewcompetition.com to alert when setup has been completed.
-				$to_email = "prost@brewcompetition.com";
+				$to_email = $default_to."@brewingcompetitions.com";
 				$to_email = mb_convert_encoding($to_email, "UTF-8");
 				$to_email_formatted = "BCOEM Admin <".$to_email.">";
 

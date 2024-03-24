@@ -33,7 +33,14 @@ foreach ($style_sets as $style_set) {
 
     // Generate exception list for each of the style sets in the 
     // array and show/hide the list as each are selected via jQuery.
-    $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$prefix."styles",$style_set['style_set_name']);
+    
+    /*
+    if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+    else
+    */
+    $styles_db_table = $prefix."styles";
+
+    $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
     if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyle ASC";
     else $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC";
     $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
@@ -71,10 +78,14 @@ foreach ($style_sets as $style_set) {
         }
     }
 
-    // Generate jQuery for hide/show
-    // Unused as of now, but keeping just in case
-    // if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == $style_set['style_set_name'])) $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");";
-    // else $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide(\"fast\");";
+    /**
+     * Generate jQuery for hide/show
+     * Unused as of now, but keeping just in case
+     */
+    /*
+    if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == $style_set['style_set_name'])) $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");";
+    else $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide(\"fast\");";
+    */
 
     $all_exceptions_js .= "\t\telse if ($(\"#prefsStyleSet\").val() == \"".$style_set['style_set_name']."\") {\n";
     $all_exceptions_js .= "\t\t\t$(\"#subStyleExeptionsEdit\").hide(\"fast\");\n"; // Hide default upon entry
@@ -105,24 +116,31 @@ if (($section == "admin") && ($go == "preferences")) {
     if (isset($row_prefs['prefsGoogleAccount'])) $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
     if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
 
+    $styles_selected = array();
+    $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
+
     if ($row_styles) {
 
         // Generate the default sub-style exception list (current settings)
         do {
 
-            $checked = "";
+            if (array_key_exists($row_styles['id'], $styles_selected)) {
 
-            if ($go == "preferences") {
-                $a = explode(",", $row_limits['prefsUSCLEx']);
-                $b = $row_styles['id'];
-                foreach ($a as $value) {
-                    if ($value == $b) $checked = "CHECKED";
+                $checked = "";
+
+                if ($go == "preferences") {
+                    $a = explode(",", $row_limits['prefsUSCLEx']);
+                    $b = $row_styles['id'];
+                    foreach ($a as $value) {
+                        if ($value == $b) $checked = "CHECKED";
+                    }
                 }
-            }
 
-            if ($row_styles['id'] != "") {
-                $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
-                $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
+                if ($row_styles['id'] != "") {
+                    $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+                    $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
+                }
+
             }
 
         } while ($row_styles = mysqli_fetch_assoc($styles));
@@ -141,7 +159,7 @@ if ($section == "admin") { ?>
 <?php } ?>
 <script type='text/javascript'>
 
-var entries_present = <?php if (isset($totalRows_log)) echo $totalRows_log; ?>;
+var entries_present = "<?php if (isset($totalRows_log)) echo $totalRows_log; ?>";
 var current_style_set = "<?php if (isset($_SESSION['prefsStyleSet'])) echo $_SESSION['prefsStyleSet']; ?>";
 
 $(document).ready(function(){
@@ -158,7 +176,7 @@ $(document).ready(function(){
     ?>
 
     <?php if (($row_prefs['prefsCAPTCHA'] == "1") || ($section == "step3")) { ?>
-     $("#reCAPTCHA-keys").show("fast");
+     $("#reCAPTCHA-keys").show();
     <?php } ?>
 
     $("input[name$='prefsCAPTCHA']").click(function() {
@@ -167,6 +185,22 @@ $(document).ready(function(){
         }
         else {
             $("#reCAPTCHA-keys").hide("fast");
+        }
+    });
+
+    <?php if ($row_prefs['prefsScoringCOA'] == "1") { ?>
+     $("#non-COA-scoring").hide();
+     $("#bos-in-calcs").hide();
+    <?php } ?>
+
+    $("input[name$='prefsScoringCOA']").click(function() {
+        if ($(this).val() == "0") {
+            $("#non-COA-scoring").show("fast");
+            $("#bos-in-calcs").show("fast");
+        }
+        else {
+            $("#non-COA-scoring").hide("fast");
+            $("#bos-in-calcs").hide("fast");
         }
     });
 
@@ -320,6 +354,7 @@ $(document).ready(function(){
 </div>
 <?php } ?>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 <h3>General</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
@@ -404,11 +439,11 @@ $(document).ready(function(){
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="prefsEvalModalLabel">Contact Form Info</h4>
+                <h4 class="modal-title" id="prefsEvalModalLabel">Electronic Scoresheets Info</h4>
             </div>
             <div class="modal-body">
                 <p>Enable or disable the Electronic Scoresheets function. If enabled, Admins have the option to accept judges' entry evaluations via fully electronic, web-based scoresheets built to emulate BJCP official and quasi-official paper-based forms.</p>
-                <p>If enabling Electronic Scoresheets and associated functions, Admins should also make sure to set up their installation to take full advantage of them by following the steps outlined in the <a href="https://brewcompetition.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&amp;M Electronic Scoresheets</a> help article. Admins or competition officials should also direct all judges who will be using Electronic Scoresheets to review the <a href="https://brewcompetition.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&amp;M Electronic Scoresheets</a> primer.</p>
+                <p>If enabling Electronic Scoresheets and associated functions, Admins should also make sure to set up their installation to take full advantage of them by following the steps outlined in the <a href="https://brewingcompetitions.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&amp;M Electronic Scoresheets</a> help article. Admins or competition officials should also direct all judges who will be using Electronic Scoresheets to review the <a href="https://brewingcompetitions.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&amp;M Electronic Scoresheets</a> primer.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -778,7 +813,7 @@ $(document).ready(function(){
         </div>
     </div><!-- ./Form Group -->
 </div>
-<div class="form-group"><!-- Form Group Radio  -->
+<div id="bos-in-calcs" class="form-group"><!-- Form Group Radio  -->
     <label for="prefsBestUseBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Include BOS in Calculations?</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
@@ -793,66 +828,112 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block">Indicate whether you wish to include any Best of Show (BOS) places in Best Brewer and Best Club calculations.</span>
     </div>
 </div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsFirstPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for First Place</label>
+<div class="form-group"><!-- Form Group Radio  -->
+    <label for="prefsBestUseBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Use Circuit of America Calculations?</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each first place that an entrant receives.</span>
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsScoringCOA" value="1" id="prefsScoringCOA_1" <?php if ($row_prefs['prefsScoringCOA'] == 1) echo "CHECKED"; ?>> Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsScoringCOA" value="0" id="prefsScoringCOA_0" <?php if (($section == "step3") || ($row_prefs['prefsScoringCOA'] == 0)) echo "CHECKED"; ?>> No
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Indicate whether you wish use the Master Homebrewer Program's <a href="https://www.masterhomebrewerprogram.com/circuit-of-america" target="_blank">Circuit of America</a> scoring methodolgy for all Best Brewer and Best Club calculations. <strong>Indicating "Yes" here will override all other calculation preferences.</strong>
+        </span>
+        <div class="btn-group" role="group" aria-label="prefsEvalModal">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsScoringCOAModal">
+                   Circuit of America Calculations Info
+                </button>
+            </div>
+        </div>        
     </div>
 </div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsSecondPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Second Place</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each second place that an entrant receives.</span>
+
+<!-- Modal -->
+<div class="modal fade" id="prefsScoringCOAModal" tabindex="-1" role="dialog" aria-labelledby="prefsScoringCOAModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="prefsScoringCOAModalLabel">Circuit of America Scoring Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Use the Master Homebrewer Program's Circuit of America scoring methodology to determine Best Brewer and Best Club results. The calculations look like this, depending upon your Winner Place Distribution Method:</p>
+                <p><img class="img-responsive" src="https://brewingcompetitions.com/00_images/CoA_Scoring_BCOEM.png" ></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsThirdPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Third Place</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each third place that an entrant receives.</span>
-    </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsFourthPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Fourth Place</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</span>
-    </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsHMPts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Honorable Mention</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</span>
-    </div>
-</div><!-- ./Form Group -->
+</div><!-- ./modal -->
+
+<section id="non-COA-scoring">
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsFirstPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for First Place</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each first place that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsSecondPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Second Place</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each second place that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsThirdPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Third Place</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each third place that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsFourthPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Fourth Place</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsHMPts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Honorable Mention</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+</section>
+
 <?php for ($i=1; $i<=6; $i++) { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="<?php echo 'prefsTieBreakRule'.$i;?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Tie Break Rule #<?php echo $i; ?></label>
@@ -868,6 +949,7 @@ $(document).ready(function(){
     </div>
 </div><!-- ./Form Group -->
 <?php } ?>
+
 <h3>Entries</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Set</label>
@@ -924,7 +1006,7 @@ $(document).ready(function(){
                 <p>The Barcode options are intended to be used with a USB barcode scanner and the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">barcode entry check-in function</a>.</p>
                 <p>The QR code options are intended to be used with a mobile device and <a class="hide-loader" href="<?php echo $base_url; ?>qr.php" target="_blank">QR code entry check-in function</a> (requires a QR code reading app).</p>
                 <div class="well">
-                <p>Both the QR code and barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewcompetition.com/barcode-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>. BCOE&amp;M utilizes the&nbsp;<strong><a class="hide-loader" href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a></strong> to generate all barcodes. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
+                <p>Both the QR code and barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewingcompetitions.com/barcode-labels" target="_blank"><strong>available for download at brewingcompetitions.com</strong></a>. BCOE&amp;M utilizes the&nbsp;<strong><a class="hide-loader" href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a></strong> to generate all barcodes. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
                 </div>
                 <p class="text-primary"><strong>As of version 2.5.0, due to the deprecation of all recipe-related fields for individual entries, options with entry recipe forms have been removed.</strong></p>
             </div>
@@ -1638,7 +1720,7 @@ $(document).ready(function(){
                     <p>Transaction details will be saved to your BCOE&amp;M database and will be available via your PayPal dashboard as well.</p>
                     <p class="text-primary"><strong>First, it is suggested that you have a dedicated PayPal account for your competition.</strong></p>
                     <p class="text-danger"><strong>Second, to implement PayPal IPN, your PayPal account must be a <u>business</u> account.</strong></p>
-                    <p><strong>Third, set up your PayPal account to process Instant Payment Notifications. Complete instructions are <a class="hide-loader" href="http://brewcompetition.com/paypal-ipn" target="_blank">available here</a>.</strong></p>
+                    <p><strong>Third, set up your PayPal account to process Instant Payment Notifications. Complete instructions are <a class="hide-loader" href="http://brewingcompetitions.com/paypal-ipn" target="_blank">available here</a>.</strong></p>
                     <p>Your notification URL is: <blockquote><strong><?php echo $base_url; ?>ppv.php</strong></blockquote></p>
                     <p>Your Auto Return URL is: <blockquote><strong><?php echo $base_url; ?>index.php?section=pay&amp;msg=10</strong></blockquote></p>
                 </div>

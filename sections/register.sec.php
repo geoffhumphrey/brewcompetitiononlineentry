@@ -1,7 +1,7 @@
 <script type="text/javascript">
 var action = "<?php echo $action; ?>";
 </script>
-<script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
+<script src="<?php echo $js_url; ?>registration_checks.min.js"></script>
 <?php
 $warning0 = "";
 $warning1 = "";
@@ -311,6 +311,7 @@ if ($go == "default") {  ?>
 <?php } else { // THIS ELSE ENDS at the end of the script ?>
 <!-- Begin the Form -->
 	<form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="register_form">
+	<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 	<!-- Hidden Form Elements -->
 	<!-- User Level is Always 2 -->
 	<input type="hidden" name="userLevel" value="2" />
@@ -693,6 +694,15 @@ if ($go == "default") {  ?>
             <div id="ahaProAmText" class="help-block"><?php echo $register_text_033; ?></div>
 		</div>
 	</div><!-- ./Form Group -->
+	<section id="mhp-number">
+	    <div class="form-group">
+	        <label for="brewerMHP" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_mhp_number; ?></label>
+	        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+	            <input class="form-control" name="brewerMHP" id="brewerMHP" type="text" pattern="\d*" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerMHP']))) echo $_COOKIE['brewerMHP']; ?>" placeholder="">
+	            <span class="help-block"><?php echo $brewer_text_053; ?></span>
+	        </div>
+	    </div>
+	</section>
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) ?>
     <?php } // END if ($view == "default") ?>
     <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward")))) { ?>

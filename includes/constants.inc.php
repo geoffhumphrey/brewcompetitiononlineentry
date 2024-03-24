@@ -12,10 +12,11 @@
  */
 
 $languages = array(
-    "en-US" => "US English",
+    "pt-BR" => "Brazilian Portuguese",
     "cs-CZ" => "Czech",
-    "pt-BR" => "Brazilian Portuguese"
-    //"es-ES" => "Spanish (Spain)"
+    "en-US" => "English (US)",
+    "fr-FR" => "French",
+    "es-419" => "Spanish (Latin America)"
 );
 
 /** -------------------------- Theme File names and  Display Name -------------------------------
@@ -2727,18 +2728,18 @@ $no_entry_form_array = array("0","1","2","E","C");
 if ($logged_in) $location_target = "_blank";
 else $location_target = "_self";
 
-// $encryption_key = base64_encode(openssl_random_pseudo_bytes(32));
-$encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
-
 if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BA")) $optional_info_styles = array();
 elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "AABC")) $optional_info_styles = array("12-01","14-08","17-03","18-04","18-05","19-05","19-07","16-01","19-01","19-02","19-03","19-04","19-06","20-02","20-03");
+elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "AABC2022")) $optional_info_styles = array("07-03","12-01","14-08","17-03","18-04","18-05","16-01","19-01","19-02","19-03","19-04","19-05","19-06","19-07","19-08","19-09","19-10","19-11","19-12","19-13","20-02","20-03","16-08");
 elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "NWCiderCup")) {
 $optional_info_styles = array("C4-A","C4-B","C5-A","C8-A","C8-B","C8-C","C9-A","C9-B","C9-C");
 }
+
 else {
     $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-A","C1-B","C1-C");
     if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) $optional_info_styles[] = "25-B";
 }
+
 $results_method = array("0" => "By Table/Medal Group", "1" => "By Style", "2" => "By Sub-Style");
 
 if (HOSTED) $_SESSION['prefsCAPTCHA'] = 1;
@@ -2761,5 +2762,133 @@ if (isset($_SESSION['prefsStyleSet'])) {
         $specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6","21-B7");
         $historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
     }
-} 
+}
+
+$db_version = $connection -> server_info;
+$db_maria = FALSE;
+if (strpos(strtolower($db_version), "mariadb") !== false) $db_maria = TRUE;
+
+if ((!isset($_SESSION['encryption_key'])) || (empty($_SESSION['encryption_key']))) $_SESSION['encryption_key'] = base64_encode(openssl_random_pseudo_bytes(32));
+// $encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
+
+/**
+ * Failsafe for selected styles.
+ * If the session variable is empty, check the DB table column.
+ * If the column is empty, regenerate.
+ * If the column has data, check if it JSON. If so, repopulate
+ * session variable. If not, regenerate.
+ */
+
+$regenerate_selected_styles = FALSE;
+
+if ((empty($_SESSION['prefsSelectedStyles'])) && (strpos($section, "step") === FALSE)) {
+
+    $query_selected_styles = sprintf("SELECT prefsSelectedStyles FROM %s WHERE id='1';",$prefix."preferences");
+    $selected_styles = mysqli_query($connection,$query_selected_styles) or die (mysqli_error($connection));
+    $row_selected_styles = mysqli_fetch_assoc($selected_styles);
+
+    if (empty($row_selected_styles['prefsSelectedStyles'])) $regenerate_selected_styles = TRUE;
+    else {
+        
+        $is_styles_json = json_decode($row_selected_styles['prefsSelectedStyles']);
+        if (json_last_error() === JSON_ERROR_NONE) $styles_json_data = TRUE;
+        else $styles_json_data = FALSE;
+
+        if ($styles_json_data) $_SESSION['prefsSelectedStyles'] = $row_selected_styles['prefsSelectedStyles'];
+        else $regenerate_selected_styles = TRUE;
+    
+    }
+
+    if ($regenerate_selected_styles) {
+
+        $update_selected_styles = array();
+        $prefsStyleSet = $_SESSION['prefsStyleSet'];
+
+        if (HOSTED) {
+            
+            $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM `bcoem_shared_styles` WHERE brewStyleVersion='%s'", $prefsStyleSet);
+            $styles_default = mysqli_query($connection,$query_styles_default);
+            $row_styles_default = mysqli_fetch_assoc($styles_default);
+
+            if ($row_styles_default) {
+
+                do {
+
+                    $update_selected_styles[$row_styles_default['id']] = array(
+                        'brewStyle' => $row_styles_default['brewStyle'],
+                        'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
+                        'brewStyleNum' => $row_styles_default['brewStyleNum'],
+                        'brewStyleVersion' => $row_styles_default['brewStyleVersion']
+                    );
+
+                } while($row_styles_default = mysqli_fetch_assoc($styles_default));
+
+                    
+            }
+            
+            $query_styles_custom = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleOwn='custom'", $prefix."styles");
+            $styles_custom = mysqli_query($connection,$query_styles_custom);
+            $row_styles_custom = mysqli_fetch_assoc($styles_custom);
+
+            if ($row_styles_custom) {
+
+                do {
+
+                    $update_selected_styles[$row_styles_custom['id']] = array(
+                        'brewStyle' => sterilize($row_styles_custom['brewStyle']),
+                        'brewStyleGroup' => sterilize($row_styles_custom['brewStyleGroup']),
+                        'brewStyleNum' => sterilize($row_styles_custom['brewStyleNum']),
+                        'brewStyleVersion' => sterilize($row_styles_custom['brewStyleVersion'])
+                    );
+
+                } while($row_styles_custom = mysqli_fetch_assoc($styles_custom));
+
+                
+            }
+        
+        } // end if (HOSTED)
+            
+        else {
+
+            $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleVersion='%s'", $prefix."styles", $prefsStyleSet);
+            $styles_default = mysqli_query($connection,$query_styles_default);
+            $row_styles_default = mysqli_fetch_assoc($styles_default);
+
+            if ($row_styles_default) {
+                do {
+                    $update_selected_styles[$row_styles_default['id']] = array(
+                        'brewStyle' => sterilize($row_styles_default['brewStyle']),
+                        'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
+                        'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
+                        'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion'])
+                    );
+                } while($row_styles_default = mysqli_fetch_assoc($styles_default));
+            }
+
+        } // end else
+
+        $update_selected_styles = json_encode($update_selected_styles);
+
+        $update_table = $prefix."preferences";
+        $data = array(
+            'prefsSelectedStyles' => $update_selected_styles
+        );
+        $db_conn->where ('id', 1);
+        $result = $db_conn->update ($update_table, $data);
+        if (!$result) {
+            $error_output[] = $db_conn->getLastError();
+            $errors = TRUE;
+        }
+
+        // Empty the prefs session variable
+        // Will trigger the session to reset the variables in common.db.php upon reload after redirect
+        unset($_SESSION['prefs'.$prefix_session]);
+
+    }
+
+}
+
+$default_to = "prost";
+$default_from = "noreply";
+
 ?>

@@ -86,7 +86,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	else {
 
 		if ($method == 2) { // print form link
-			$return .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?";
+			$return .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."includes/outpoutput.inc.php?section=entry-form&amp;action=print&amp;";
 			$return .= "id=".$id;
 			$return .= "&amp;bid=".$section;
 			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\">";
@@ -235,6 +235,12 @@ function purge_entries($type, $interval) {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	if ($type == "unconfirmed") {
 		
 		$query_check = sprintf("SELECT id FROM %s WHERE brewConfirmed='0'", $prefix."brewing");
@@ -266,7 +272,60 @@ function purge_entries($type, $interval) {
 
 	if ($type == "special") {
 		
-		$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing",$prefix."styles",$_SESSION['prefsStyleSet']);
+		/*
+		
+		if (HOSTED) {
+			
+			$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing", $styles_db_table, $_SESSION['prefsStyleSet']);
+
+			if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+			$row_check = mysqli_fetch_assoc($check);
+			$totalRows_check = mysqli_num_rows($check);
+
+			if ($totalRows_check == 0) $count += 1;
+
+			if ($totalRows_check > 0) {
+				
+				do {
+
+					$update_table = $prefix."brewing";
+					$db_conn->where ('id', $row_check['id']);
+					$result = $db_conn->delete ($update_table);
+					if ($result) $count += 1;
+
+				} while ($row_check = mysqli_fetch_assoc($check));
+
+			}
+
+			$query_check_custom = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing", $prefix."styles", $_SESSION['prefsStyleSet']);
+
+			if ($interval > 0) $query_check_custom .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+			$check_custom = mysqli_query($connection,$query_check_custom) or die (mysqli_error($connection));
+			$row_check_custom = mysqli_fetch_assoc($check_custom);
+			$totalRows_check_custom = mysqli_num_rows($check_custom);
+
+			if ($totalRows_check_custom == 0) $count += 1;
+
+			if ($totalRows_check_custom > 0) {
+				
+				do {
+
+					$update_table = $prefix."brewing";
+					$db_conn->where ('id', $row_check_custom['id']);
+					$result = $db_conn->delete ($update_table);
+					if ($result) $count += 1;
+
+				} while ($row_check_custom = mysqli_fetch_assoc($check_custom));
+
+			}
+
+		}
+
+		*/
+
+		$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing", $styles_db_table, $_SESSION['prefsStyleSet']);
+
 		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 		$row_check = mysqli_fetch_assoc($check);
@@ -1295,13 +1354,25 @@ function total_nopay_received($go, $id, $comp_id) {
 }
 
 function style_convert($number,$type,$base_url="",$archive="") {
+	
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
+
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
 	$styles_db_table = $prefix."styles";
+
 	$style_set = $_SESSION['prefsStyleSet'];
 
 	mysqli_select_db($connection,$database);
-	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number,$style_set);
+
+	/*
+	if (HOSTED) $query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $number, $style_set, $styles_db_table, $number, $style_set);
+	else 
+	*/
+	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $number, $style_set);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 
@@ -1347,6 +1418,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		break;
 
+		// Apparently unused. 2.6.2.
 		case "2":
 
 		if ($style_set == "BJCP2015") {
@@ -1445,6 +1517,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		break;
 
+		// Apparently unused. 2.6.2.
 		case "3":
 		$n = preg_replace('/[^0-9]+/', '', $number);
 
@@ -1490,6 +1563,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		break;
 
+		// Used only on My Account page for judges.
 		case "4":
 		$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
 		$replacement2 = array('<strong class="text-danger">Entry Instructions:</strong>','<strong class="text-info">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
@@ -1504,7 +1578,10 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		foreach ($a as $value) {
 
-			$styles_db_table = $prefix."styles";
+			/*
+			if (HOSTED) $query_style = sprintf("SELECT * FROM %s WHERE id='%s' UNION ALL SELECT * FROM %s WHERE id='%s'", $prefix."styles", $value, $styles_db_table, $value);	
+			else 
+			*/
 			$query_style = sprintf("SELECT * FROM %s WHERE id='%s'",$styles_db_table,$value);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
@@ -1586,11 +1663,13 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
 		break;
 
+		// Apparently unused. 2.6.2.
 		case "5":
 		$n = preg_replace('/[^0-9]+/', '', $number);
 		if ((($style_set == "BJCP2015") || (($style_set == "BJCP2021"))) && ($n >= 35)) $style_convert = TRUE;
 		break;
 
+		// Used primarily in export.output.php.
 		case "6":
 		$a = explode(",",$number);
 		require(CONFIG.'config.php');
@@ -1600,16 +1679,22 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$style_convert1 = array();
 
 		foreach ($a as $value) {
-			$styles_db_table = $prefix."styles";
-			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'",$styles_db_table,$value);
+
+			/*
+			if (HOSTED) $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);	
+			else 
+			*/
+			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'",$styles_db_table, $value);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
 			if ($row_style) $style_convert1[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
+		
 		}
 		
 		if (!empty($style_convert1)) $style_convert = rtrim(implode(", ",$style_convert1),", ");
 		break;
 
+		// Used primarily in entry_info.sec.php.
 		case "7":
 		
 		$a = explode(",",$number);
@@ -1618,7 +1703,10 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		
 		foreach ($a as $value) {
 			
-			$styles_db_table = $prefix."styles";
+			/*
+			if (HOSTED) $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);	
+			else 
+			*/
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s'",$styles_db_table,$value);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
@@ -1645,12 +1733,17 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		break;
 
 		// Get Style Name
+		// Primarily used in judging_flights.admin.php.
 		case "8":
 
 		$style_convert = "";
 		$style_name = "";
 
-		$query_style = sprintf("SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s'",$styles_db_table,$number);
+		/*
+		if (HOSTED) $query_style = sprintf("SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s' UNION ALL SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s'", $styles_db_table, $number, $prefix."styles", $number);	
+		else 
+		*/
+		$query_style = sprintf("SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s'",$styles_db_table, $number);
 		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 		$row_style = mysqli_fetch_assoc($style);
 
@@ -1662,10 +1755,17 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		break;
 
+		// Primarily used in pullsheets.output.php.
 		case "9":
 		$style_convert = "";
 		$style_name = "";
 		$number = explode("^",$number);
+		
+		/*
+		if (HOSTED) $query_style = sprintf("SELECT brewStyleNum, brewStyleGroup, brewStyle, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND 
+			brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleNum, brewStyleGroup, brewStyle, brewStyleVersion, brewStyleReqSpec, brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom');", $styles_db_table, $number[0], $number[1], $number[2], $prefix."styles", $number[0], $number[1], $number[2]);
+		else 
+		*/
 		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$number[2]);
 		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 		$row_style = mysqli_fetch_assoc($style);
@@ -1687,32 +1787,37 @@ function style_convert($number,$type,$base_url="",$archive="") {
 	return $style_convert;
 }
 
-function get_table_info($input,$method,$table_id,$dbTable,$param) {
+function get_table_info($input,$method,$table_id,$dbTable,$param,$base_url="") {
 
 	// Define Vars
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
 	mysqli_select_db($connection,$database);
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	if ($dbTable == "default") {
 		$judging_tables_db_table = $prefix."judging_tables";
 		$judging_locations_db_table = $prefix."judging_locations";
 		$judging_scores_db_table = $prefix."judging_scores";
 		$judging_scores_bos_db_table = $prefix."judging_scores_bos";
-		$styles_db_table = $prefix."styles";
 		$brewing_db_table = $prefix."brewing";
 		$styleSet = $_SESSION['prefsStyleSet'];
 	}
 
 	// Archives
 	else {
+		
 		$suffix_1 = ltrim(get_suffix($dbTable), "_");
 		$suffix = "_".$suffix_1;
 		$judging_tables_db_table = $prefix."judging_tables".$suffix;
 		$judging_locations_db_table = $prefix."judging_locations".$suffix;
 		$judging_scores_db_table = $prefix."judging_scores".$suffix;
 		$judging_scores_bos_db_table = $prefix."judging_scores_bos".$suffix;
-		$styles_db_table = $prefix."styles";
 		$archive_db_table = $prefix."archive";
 		$brewing_db_table = $prefix."brewing".$suffix;
 
@@ -1720,6 +1825,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		$archive_db = mysqli_query($connection,$query_archive_db) or die (mysqli_error($connection));
 		$row_archive_db = mysqli_fetch_assoc($archive_db);
 		$styleSet = $row_archive_db['archiveStyleSet'];
+	
 	}
 
 	// Get info about the table from the DB
@@ -1762,59 +1868,6 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		
 		return $return;
 	}
-
-	/*
-	// Check if any styles have not been assigned to a table
-	if ($method == "unassigned") {
-		$return = "";
-
-		$query_styles = "SELECT id,brewStyle FROM $styles_db_table";
-		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-		$row_styles = mysqli_fetch_assoc($styles);
-
-		do {
-			$a[] = $row_styles['id'];
-		} while ($row_styles = mysqli_fetch_assoc($styles));
-
-		sort($a);
-		//echo "<p>"; print_r($a); echo "</p>";
-		foreach ($a as $value) {
-			//echo $input."<br>";
-			$b = array(explode(",",$input));
-			//echo "<p>".print_r($b)."</p>";
-			//echo "<p>-".$value."-</p>";
-			if (in_array($value,$b)) {
-				//echo "Yes. The style ID is $value.<br>";
-				//$query_styles1 = "SELECT brewStyle FROM $styles_db_table WHERE id='$value'";
-				//$styles1 = mysqli_query($connection,$query_styles1) or die (mysqli_error($connection));
-				//$row_styles1 = mysqli_fetch_assoc($styles1);
-				//echo "<p>".$row_styles1['brewStyle']."</p>";
-			}
-			//else echo "No.<br>";
-		}
-	return $return;
-	}
-
-	// Check if style is assigned to a particular table
-	if ($method == "styles") {
-
-		$a = "";
-
-		do {
-			$a .= $row_table['tableStyles'].",";
-				$a = explode(",", $row_table['tableStyles']);
-				$b = $input;
-				foreach ($a as $value) {
-					if ($value == $input) return TRUE;
-				}
-		} while ($row_table = mysqli_fetch_assoc($table));
-		$a = explode(",", $row_table['tableStyles']);
-		//$b = rtrim($a,",");
-		//$c = explode(",",$b);
-		if (in_array($input,$a)) return TRUE;
-		else return FALSE;
-	}
-	*/
 
 	if ($method == "styles") {
 
@@ -1864,22 +1917,23 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		if (!empty($row_table['tableStyles'])) {
 
 			$a = explode(",", $row_table['tableStyles']);
+			$b = array();
 
 				foreach ($a as $value) {
-
-					require(CONFIG.'config.php');
-					mysqli_select_db($connection,$database);
-					$query_styles = sprintf("SELECT * FROM %s WHERE id='%s'", $styles_db_table, $value);
+					
+					/* 
+					if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);
+					else 
+					*/
+					$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
-					if ($_SESSION['prefsStyleSet']  == "BA") $c[] = $row_styles['brewStyle'].",&nbsp;";
-					elseif ($_SESSION['prefsStyleSet'] == "AABC") $c[] = ltrim($row_styles['brewStyleGroup'],"0").".".ltrim($row_styles['brewStyleNum'],"0").",&nbsp;";
-					else $c[] = ltrim($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'],"0").",&nbsp;";
+
+					$b[] = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0).",&nbsp;";
 
 				}
 
-			$d = array($c);
-			return $d;
+			return $b;
 
 		}
 
@@ -1897,8 +1951,10 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 
 			foreach ($a as $value) {
 
-				require(CONFIG.'config.php');
-				mysqli_select_db($connection,$database);
+				/*
+				if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);
+				else 
+				*/
 				$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 				$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 				$row_styles = mysqli_fetch_assoc($styles);
@@ -1949,6 +2005,10 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 
 				foreach ($a as $value) {
 
+					/*
+					if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);
+					else 
+					*/
 					$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
@@ -2000,6 +2060,10 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 
 		foreach ($a as $value) {
 
+			/*
+			if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);
+			else 
+			*/
 			$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 			$row_styles = mysqli_fetch_assoc($styles);
@@ -2007,7 +2071,6 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 			$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 			$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
 			$row_style_count = mysqli_fetch_assoc($style_count);
-
 
 			$c[] = $row_style_count['count'];
 
@@ -2060,7 +2123,7 @@ function style_type($type,$method,$source) {
 		$query_style_type = sprintf("SELECT styleTypeName FROM %s WHERE id='%s'", $prefix."style_types", $type);
 		$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 		$row_style_type = mysqli_fetch_assoc($style_type);
-		$type = $row_style_type['styleTypeName'];
+		if ($row_style_type) $type = $row_style_type['styleTypeName'];
 	}
 
 	if ($method == "3") {
@@ -2074,6 +2137,7 @@ function style_type($type,$method,$source) {
 	}
 	return $type;
 }
+
 /*
 function check_bos_loc($id) {
 	require(CONFIG.'config.php');
@@ -2085,7 +2149,6 @@ function check_bos_loc($id) {
 	return $bos_loc;
 }
 */
-
 
 function table_location($table_id,$date_format,$time_zone,$time_format,$method) {
 	require(CONFIG.'config.php');
@@ -2142,15 +2205,12 @@ function score_count($table_id,$method,$dbTable) {
 
 }
 
-function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebreaker) {
-	// Main points
-	$pts_first = $points_prefs[0]*$places[0]; // points for each first place position
-	$pts_second = $points_prefs[1]*$places[1]; // points for each secon place position
-	$pts_third = $points_prefs[2]*$places[2]; // points for each third place position
-	$pts_fourth = $points_prefs[3]*$places[3]; // points for each fourth place position
-	$pts_hm = $points_prefs[4]*$places[4]; // points for each honorable mention
-	// Tie breakers
+function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebreaker, $method="0") {
 
+	// Get number of entries for the user
+	$user_number_of_entries = total_paid_received("",$bid);
+
+	// Tie breakers
 	$pts_tb_num_places = 0;
 	$pts_tb_first_places = 0;
 	$pts_tb_num_entries = 0;
@@ -2160,56 +2220,98 @@ function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebre
 	$pts_tb_bos = 0;
 
 	$power = 0;
-
+	$points = 0;
 	$imax = count($tiebreaker) - 1;
 
-	$number_of_entries = total_paid_received("",$bid);
+	// Default Method
+	if ($method == 0) {
 
-	for ($i = 0; $i<= $imax; $i++) {
-		switch ($tiebreaker[$i]) {
-			// points for the number of 1st, 2nd, and 3rd places
-			case "TBTotalPlaces" :
-				$power  += 2;
-				$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power);
-				break;
-			// points for the number of 1st, 2nd, 3rd, 4th, HM places
-			case "TBTotalExtendedPlaces" :
-				$power  += 2;
-				$pts_tb_num_places = array_sum($places)/pow(10,$power);
-				break;
-			// points for number of first places
-			case "TBFirstPlaces" :
-				$power  += 2;
-				$pts_tb_first_places = $places[0]/pow(10,$power);
-				break;
-			// points for the number of competing entries (the smallest the better, of course)
-			case "TBNumEntries" :
-				$power  += 4;
-				if ($number_of_entries > 0) $pts_tb_num_entries = floor(100/$number_of_entries)/pow(10,$power);
-				else $pts_tb_num_entries = 0;
-				break;
-			// points for the minimum score
-			case "TBMinScore" :
-				$power  += 4;
-				$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power);
-				break;
-			// points for the maximum score
-			case "TBMaxScore" :
-				$power  += 4;
-				$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power);
-				break;
-			// points for the average score
-			case "TBAvgScore" :
-				$power  += 4;
-				if ($number_of_entries > 0) $pts_avg_score = floor(10*array_sum($entry_scores)/$number_of_entries)/pow(10,$power);
-				else $pts_avg_score = 0;
-				break;
+		// Main points
+		$pts_first = $points_prefs[0]*$places[0]; // points for each first place position
+		$pts_second = $points_prefs[1]*$places[1]; // points for each secon place position
+		$pts_third = $points_prefs[2]*$places[2]; // points for each third place position
+		$pts_fourth = $points_prefs[3]*$places[3]; // points for each fourth place position
+		$pts_hm = $points_prefs[4]*$places[4]; // points for each honorable mention
+
+		for ($i = 0; $i<= $imax; $i++) {
+			switch ($tiebreaker[$i]) {
+				// points for the number of 1st, 2nd, and 3rd places
+				case "TBTotalPlaces" :
+					$power  += 2;
+					$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power);
+					break;
+				// points for the number of 1st, 2nd, 3rd, 4th, HM places
+				case "TBTotalExtendedPlaces" :
+					$power  += 2;
+					$pts_tb_num_places = array_sum($places)/pow(10,$power);
+					break;
+				// points for number of first places
+				case "TBFirstPlaces" :
+					$power  += 2;
+					$pts_tb_first_places = $places[0]/pow(10,$power);
+					break;
+				// points for the number of competing entries (the smallest the better, of course)
+				case "TBNumEntries" :
+					$power  += 4;
+					if ($user_number_of_entries > 0) $pts_tb_num_entries = floor(100/$user_number_of_entries)/pow(10,$power);
+					else $pts_tb_num_entries = 0;
+					break;
+				// points for the minimum score
+				case "TBMinScore" :
+					$power  += 4;
+					$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power);
+					break;
+				// points for the maximum score
+				case "TBMaxScore" :
+					$power  += 4;
+					$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power);
+					break;
+				// points for the average score
+				case "TBAvgScore" :
+					$power  += 4;
+					if ($user_number_of_entries > 0) $pts_avg_score = floor(10*array_sum($entry_scores)/$user_number_of_entries)/pow(10,$power);
+					else $pts_avg_score = 0;
+					break;
+			}
+
+		}
+
+		$points = $pts_first + $pts_second + $pts_third + $pts_fourth + $pts_hm + $pts_tb_num_places + $pts_tb_first_places + $pts_tb_num_entries + $pts_tb_min_score + $pts_tb_max_score + $pts_tb_avg_score;
+	
+	}
+
+	// CoA Method
+	if ($method == 1) {
+
+		/**
+		 * The $points_prefs var has the Winner Place 
+		 * Distribution Method choice
+		 *  - For table winner place distribution (1), 
+		 *    this is the number of entries at the table
+		 *  - For category winner place distribution (2), 
+		 *    this is the number of entries in the overall category
+		 *  - For sub-category winner place distribution (3), 
+		 *    this is the number of entries in the sub-category
+		 * 
+		 * Also contains the number of total entries for the equation 
+		 * (table, category/style, sub-category/style).
+		 * 
+		 * Formula: (($tc_number_of_entries - $user_place) / $tc_number_of_entries) cubed.
+		 *  
+		 */
+		
+		foreach ($places as $key => $value) {
+
+			$tc_number_of_entries = $points_prefs[$key];
+			$points += pow((($tc_number_of_entries - $value) / $tc_number_of_entries),3);
+			//if ($points <= 0) $points = 0;
+		
 		}
 
 	}
 
-	$points = $pts_first + $pts_second + $pts_third + $pts_fourth + $pts_hm + $pts_tb_num_places + $pts_tb_first_places + $pts_tb_num_entries + $pts_tb_min_score + $pts_tb_max_score + $pts_tb_avg_score;
 	return $points;
+
 }
 
 function bjcp_rank($rank,$method) {
@@ -2519,61 +2621,79 @@ function minibos_check($id,$judging_scores_db_table) {
 }
 
 function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$method) {
+	
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
 
 	if ($method == 6) { // reserved for NHC admin advance
 		$r = "Administrative Advance";
 	}
 
 	if ($method < 6) {
-	$query_scores = sprintf("SELECT eid,scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
-	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-	$row_scores = mysqli_fetch_assoc($scores);
 
-	if (($row_scores) && ($row_scores['scorePlace'] >= "1")) {
+		$query_scores = sprintf("SELECT eid,scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
+		$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
+		$row_scores = mysqli_fetch_assoc($scores);
 
-		if ($method == "0") {  // Display by Table
+		if (($row_scores) && ($row_scores['scorePlace'] >= "1")) {
 
-		$query_table = sprintf("SELECT tableName FROM $judging_tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
-		$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
-		$row_table = mysqli_fetch_assoc($table);
-		$r = display_place($row_scores['scorePlace'],1).": ".$row_table['tableName'];
-		}
+			if ($method == "0") {  // Display by Table
 
-		if ($method == "1") {  // Display by Category
-			$query_entry = sprintf("SELECT brewCategorySort,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+			$query_table = sprintf("SELECT tableName FROM $judging_tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
+			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
+			$row_table = mysqli_fetch_assoc($table);
+			$r = display_place($row_scores['scorePlace'],1).": ".$row_table['tableName'];
+			}
+
+			if ($method == "1") {  // Display by Category
+				
+				$query_entry = sprintf("SELECT brewCategorySort,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+				$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
+				$row_entry = mysqli_fetch_assoc($entry);
+				
+				if ($_SESSION['prefsStyleSet'] != "BA") $r = display_place($row_scores['scorePlace'],1).": ".style_convert($row_entry['brewCategorySort'],1);
+				
+				else {
+
+						if (is_numeric($row_entry['brewSubCategory'])) {
+							$style = $_SESSION['styles']['data'][$row_entry['brewSubCategory'] - 1]['category']['name'];
+							if ($style == "Hybrid/mixed Beer") $style = "Hybrid/Mixed Beer";
+							elseif ($style == "European-germanic Lager") $style = "European-Germanic Lager";
+							else $style = ucwords($style);
+						}
+						
+						else $style = "Custom Style";
+
+					$r = display_place($row_scores['scorePlace'],1).": ".$style;
+				}
+			
+			}
+
+			if ($method == "2") {  // Display by Sub-Category
+
+			$query_entry = sprintf("SELECT brewCategorySort,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 			$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
 			$row_entry = mysqli_fetch_assoc($entry);
-			if ($_SESSION['prefsStyleSet'] != "BA") $r = display_place($row_scores['scorePlace'],1).": ".style_convert($row_entry['brewCategorySort'],1);
-			else {
 
-					if (is_numeric($row_entry['brewSubCategory'])) {
-						$style = $_SESSION['styles']['data'][$row_entry['brewSubCategory'] - 1]['category']['name'];
-						if ($style == "Hybrid/mixed Beer") $style = "Hybrid/Mixed Beer";
-						elseif ($style == "European-germanic Lager") $style = "European-Germanic Lager";
-						else $style = ucwords($style);
-					}
-					else $style = "Custom Style";
+			/*
+			if (HOSTED) $query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+			else 
+			*/
+			$query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'], $row_entry['brewSubCategory']);
+			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+			$row_style = mysqli_fetch_assoc($style);
 
-				$r = display_place($row_scores['scorePlace'],1).": ".$style;
+			$r = display_place($row_scores['scorePlace'],1).": ".$row_style['brewStyle']." (".$row_entry['brewCategory'].$row_entry['brewSubCategory'].")";
 			}
 		}
 
-		if ($method == "2") {  // Display by Sub-Category
-
-		$query_entry = sprintf("SELECT brewCategorySort,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
-		$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-		$row_entry = mysqli_fetch_assoc($entry);
-
-		$query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
-		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-		$row_style = mysqli_fetch_assoc($style);
-
-		$r = display_place($row_scores['scorePlace'],1).": ".$row_style['brewStyle']." (".$row_entry['brewCategory'].$row_entry['brewSubCategory'].")";
-		}
-	}
-	else $r = "";
+		else $r = "";
 	}
 	//$r = "<td class=\"dataList\">".$query_scores."<br>".$query_table."</td>";
 	return $r;
@@ -2662,12 +2782,23 @@ function check_special_ingredients($style,$style_version) {
 	mysqli_select_db($connection,$database);
 	$style_explodies = explode("-",$style);
 
-	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $style_version, $style_explodies[0], $style_explodies[1]);
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
+	/*
+	if (HOSTED) $query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $style_version, $style_explodies[0], $style_explodies[1], $prefix."styles", $style_version, $style_explodies[0], $style_explodies[1]);
+	else 
+	*/
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $style_version, $style_explodies[0], $style_explodies[1]);
 	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 
 	if ((!empty($row_brews)) && ($row_brews['brewStyleReqSpec'] == 1)) return TRUE;
 	else return FALSE;
+
 }
 
 function entries_no_special($user_id) {
@@ -3325,15 +3456,21 @@ function open_or_closed($now,$date1,$date2) {
 
 function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid) {
 
-	/*
-	$style = Style category and subcategory number
-	$pref_num = Subcategory limit number from preferences
-	$pref_exception_sub_num = The entry limit of EXCEPTED subcategories
-	$pref_exception_sub_array = Array of EXCEPTED subcategories
-	*/
+	/**
+	 * @param $style = Style category and subcategory number
+	 * @param $pref_num = Subcategory limit number from preferences
+	 * @param $pref_exception_sub_num = The entry limit of EXCEPTED subcategories
+	 * @param $pref_exception_sub_array = Array of EXCEPTED subcategories
+	 */
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
 
 	$limit_reached = FALSE;
 	$style_break = explode("-",$style);
@@ -3344,7 +3481,11 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	elseif ($style_break[0] <= 9) $style_num = sprintf('%02d',$style_break[0]);
 	else $style_num = $style_break[0];
 
-	$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles", $_SESSION['prefsStyleSet'], $style_num, $style_break[1]);
+	/*
+	if (HOSTED) $query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $style_num, $style_break[1], $prefix."styles", $_SESSION['prefsStyleSet'], $style_num, $style_break[1]);
+	else 
+	*/
+	$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table, $_SESSION['prefsStyleSet'], $style_num, $style_break[1]);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 
@@ -3379,6 +3520,7 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	return $limit_reached;
 }
 
+// Unused. 2.6.0.
 function highlight_required($msg,$method,$style_version) {
 
 	require(CONFIG.'config.php');
@@ -3532,6 +3674,12 @@ function styles_active($method,$archive="") {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	if ((empty($archive)) || ($archive == "default")) {
 		$style_set = $_SESSION['prefsStyleSet'];
 		$style_types_db = $prefix."style_types";
@@ -3559,19 +3707,31 @@ function styles_active($method,$archive="") {
 
 	if ($method == 0) { // Active Styles
 
-		// $query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup ASC",$prefix."styles",$style_set);
-
-		$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$prefix."styles",$style_set);
+		$a = array();
+		
+		/*
+		if (HOSTED) {
+			$query_styles = sprintf("SELECT DISTINCT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT DISTINCT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_set, $prefix."styles", $style_set);
+		}
+		*/
+		
+		$query_styles = sprintf("SELECT DISTINCT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_set);
 		if ((empty($archive)) || ($archive == "default")) $query_styles .= " AND brewStyleActive='Y'";
 		$query_styles .= " ORDER BY brewStyleGroup ASC";
 
 		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 		$row_styles = mysqli_fetch_assoc($styles);
 		$totalRows_styles = mysqli_num_rows($styles);
-		do { $a[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
+
+		if ($row_styles) {
+			do { 
+				$a[] = $row_styles['brewStyleGroup']; 
+			} while ($row_styles = mysqli_fetch_assoc($styles));
+		}
 
 		sort($a);
 		return $a;
+		
 	}
 
 	if ($method == 1) { // Style Types
@@ -3586,7 +3746,11 @@ function styles_active($method,$archive="") {
 
 	if ($method == 2) {
 		
-		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$prefix."styles",$style_set);
+		/*
+		if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_set, $prefix."styles", $style_set);
+		else 
+		*/
+		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_set);
 		if ((empty($archive)) || ($archive == "default")) $query_styles .= " AND brewStyleActive='Y'";
 		$query_styles .= " ORDER BY brewStyleGroup,brewStyleNum ASC";
 
@@ -3629,10 +3793,12 @@ function open_limit($total,$limit,$registration_open) {
 	else return FALSE;
 }
 
-// Simple encrypt and decrypt
-// Useful for URL passed strings that need to be obfuscated for *casual* users
-// Thanks to https://bhoover.com/using-php-openssl_encrypt-openssl_decrypt-encrypt-decrypt-data/
-// Thanks to http://markgoldsmith.me/blog/url-safe-php-encryption-and-decryption-script/
+/**
+ * Simple encrypt and decrypt
+ * Useful for URL passed strings that need to be obfuscated for *casual* users
+ * Thanks to https://bhoover.com/using-php-openssl_encrypt-openssl_decrypt-encrypt-decrypt-data/
+ * Thanks to http://markgoldsmith.me/blog/url-safe-php-encryption-and-decryption-script/
+ */
 
 function obfuscateURL($data,$key) {
 
@@ -3752,7 +3918,7 @@ function get_ba_style_info($id) {
 	return $return;
 }
 
-
+// Unused.
 function convert_to_ba() {
 
 	require(CONFIG.'config.php');
@@ -3821,8 +3987,7 @@ function convert_to_ba() {
 
 }
 
-//convert_to_ba();
-
+// Unused.
 function convert_to_pro() {
 
 	require(CONFIG.'config.php');
@@ -3947,17 +4112,18 @@ function remove_sensitive_data() {
 	$row_check_user = mysqli_fetch_assoc($check_user);
 
 	$user_array = "";
+	$user_name = $default_to."@brewingcompetitions.com";
 
 	do {
 			if ($row_check_user['userLevel'] > 1) {
 			$random = random_generator(7,2);
 			$updateSQL = sprintf("UPDATE %s
 						 SET
-						 user_name='prost@brewcompetition.com',
+						 user_name='%s',
 						 password='f52dde34d49c8d69ab7fa5ee9ca13c72',
 						 userQuestion='Randomly generated.',
 						 userQuestionAnswer='%s'
-						 WHERE id='%s'",  $prefix."users", $random, $row_check_user['id']);
+						 WHERE id='%s'",  $prefix."users", $user_name, $random, $row_check_user['id']);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			$user_array[] = $row_check_user['id'];
@@ -4008,10 +4174,10 @@ function remove_sensitive_data() {
 							 brewerZip='',
 							 brewerPhone1='303-555-1234',
 							 brewerPhone2='303-555-9876',
-							 brewerEmail='prost@brewcompetition.com',
+							 brewerEmail='%s',
 							 brewerJudgeID='A0000',
 							 brewerClubs='%s'
-							 WHERE id='%s'", $prefix."brewer", $first_name, $last_name, $club_name, $row_check_brewer['id']);
+							 WHERE id='%s'", $prefix."brewer", $first_name, $last_name, $user_name, $club_name, $row_check_brewer['id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					}
@@ -4192,7 +4358,11 @@ function is_html($string) {
 function style_number_const($style_category_number,$style_sub,$style_set_display_separator,$method) {
 	switch ($method) {
 		case 0:
-			if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] != "BA")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
+			if (isset($_SESSION['prefsStyleSet'])) {
+				if ($_SESSION['prefsStyleSet'] == "BA") return "";
+				elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
+				else return $style_category_number.$style_set_display_separator.$style_sub;
+			}
 			else return "";
 		break;
 
@@ -4585,9 +4755,11 @@ function clean_up_text($text) {
 
 function prep_redirect_link($link) {
 	$pattern = array('\'', '"');
-	$link = filter_var($link,FILTER_SANITIZE_STRING);
+	$link = filter_var($link,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$link = str_replace($pattern, "", $link);
 	$link = stripslashes($link);
+	$link = html_entity_decode($link);
+	$link = htmlspecialchars_decode($link);
 	return $link;
 }
 

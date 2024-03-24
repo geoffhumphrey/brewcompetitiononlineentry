@@ -427,7 +427,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$totalRows_user = mysqli_num_rows($user);
 
 		$brewerEmail = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
-		$uid = filter_var($_POST['uid'],FILTER_SANITIZE_STRING);
+		$uid = filter_var($_POST['uid'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		if ($totalRows_user == 0) {
 
@@ -470,6 +470,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'brewerJudgeNotes' => blank_to_null($brewerJudgeNotes),
 				'brewerJudgeWaiver' => blank_to_null($brewerJudgeWaiver),
 				'brewerAHA' => blank_to_null($brewerAHA),
+				'brewerMHP' => blank_to_null($brewerMHP),
 				'brewerProAm' => blank_to_null($brewerProAm),
 				'brewerDropOff' => blank_to_null($brewerDropOff),
 				'brewerBreweryName' => blank_to_null($brewerBreweryName),
@@ -528,7 +529,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ($action == "edit") {
 
 		$brewerEmail = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
-		$uid = filter_var($_POST['uid'],FILTER_SANITIZE_STRING);
+		$uid = filter_var($_POST['uid'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		// Check for and clear assignments in staff DB table and judge assignments table if entrant
 		// indicates they do not want to judge, steward, or staff
@@ -670,6 +671,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewerJudgeNotes' => blank_to_null($brewerJudgeNotes),
 			'brewerJudgeWaiver' => blank_to_null($brewerJudgeWaiver),
 			'brewerAHA' => blank_to_null($brewerAHA),
+			'brewerMHP' => blank_to_null($brewerMHP),
 			'brewerProAm' => blank_to_null($brewerProAm),
 			'brewerDropOff' => blank_to_null($brewerDropOff),
 			'brewerBreweryName' => blank_to_null($brewerBreweryName),
@@ -699,7 +701,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ((isset($_POST['userQuestionAnswer'])) && ($_POST['changeSecurity'] == "Y")) {
 			
 			$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
-			$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING);
+			$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 			/**
 			 * Hash the user's security question response.
@@ -775,7 +777,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 			
 			$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-			if ((strpos($url, 'brewcomp.com') !== false) || (strpos($url, 'brewcompetition.com') !== false)) $from_email = "noreply@brewcompetition.com";
+			if (strpos($url, 'brewingcompetitions.com') !== false) $from_email = $default_from."@brewingcompetitions.com";
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$contestName = $_SESSION['contestName'];

@@ -1,12 +1,4 @@
 <?php
-require('../paths.php');
-require(CONFIG.'bootstrap.php');
-require(CLASSES.'fpdf/pdf_label.php');
-require(CLASSES.'fpdf/FPDFPlus.php');
-include (DB.'output_labels.db.php');
-include (LIB.'output.lib.php');
-include (DB.'styles.db.php');
-include (INCLUDES.'scrubber.inc.php');
 setlocale(LC_ALL, "en_US.utf8");
 
 $filename = "";
@@ -42,7 +34,7 @@ if (isset($_SESSION['loginUsername'])) {
 	$mead = array();
 
 	do {
-
+			
 		// Special ingredients required
 		if ($row_styles['brewStyleReqSpec'] == 1) {
 			if ($ba) $special_ingredients[] = $row_styles['brewStyleNum'];
@@ -82,6 +74,10 @@ if (isset($_SESSION['loginUsername'])) {
 			else $pdf = new PDF_Label('5160');
 
 			if ($filter == "judges") {
+
+				$query_brewer = sprintf("SELECT * FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
+				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+				$row_brewer = mysqli_fetch_assoc($brewer);
 				
 				$filename = str_replace(" ", "_", $_SESSION['contestName']) . "_Virtual_Judge_Labels";
 				if ($psort == "3422") $filename .= "_Avery3422";
@@ -95,89 +91,93 @@ if (isset($_SESSION['loginUsername'])) {
 
 				// Get a list of virtual/distributed locations
 				$virtual_locations = virtual_locations();
+
+				if ($row_brewer) {
 				
-				do {
-					
-					$judge_info = judge_info($row_brewer['uid']);
-					$judge_info = explode("^", $judge_info);
-					$locations = explode(",", $judge_info[8]);
-					
-					// Is this judge virtual
-					$isVirtual = false;
-					foreach ($virtual_locations as $v_loc) {
+					do {
 						
-						if (in_array($v_loc['check'], $locations)) {
-							$isVirtual = true;
-							break;
+						$judge_info = judge_info($row_brewer['uid']);
+						$judge_info = explode("^", $judge_info);
+						$locations = explode(",", $judge_info[8]);
+						
+						// Is this judge virtual
+						$isVirtual = false;
+						foreach ($virtual_locations as $v_loc) {
+							
+							if (in_array($v_loc['check'], $locations)) {
+								$isVirtual = true;
+								break;
+							}
+
 						}
 
-					}
+						reset($virtual_locations);
+						
+						if ($isVirtual) {
 
-					reset($virtual_locations);
-					
-					if ($isVirtual) {
+							for ($i = 1; $i <= $sort; $i++) {
 
-						for ($i = 1; $i <= $sort; $i++) {
+								$brewer_info = brewer_info($row_brewer['uid']);
+								$brewer_info = explode("^", $brewer_info);
 
-							$brewer_info = brewer_info($row_brewer['uid']);
-							$brewer_info = explode("^", $brewer_info);
-
-							// Add name to the label
-							$pdf->SetFont('Arial', 'B', 14);
-							$judge_name = $judge_info[0] . ' ' . $judge_info[1];
-							$judge_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_name);
-							$pdf->Cell(66, 7, $judge_name, 0, 2, 'C');
-							
-							// Add location to the label
-							$pdf->SetFont('Arial', '', 10);
-							$judge_loc = $brewer_info[11] . ', ' . $brewer_info[12] ;
-							$judge_loc = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_loc);
-							$pdf->Cell(66, 6, $judge_loc, 0, 2, 'C');
-
-							// Add table flights to the label
-							$table_flights = array();
-							
-							foreach ($virtual_locations as $v_loc) {
+								// Add name to the label
+								$pdf->SetFont('Arial', 'B', 14);
+								$judge_name = $judge_info[0] . ' ' . $judge_info[1];
+								$judge_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_name);
+								$pdf->Cell(66, 7, $judge_name, 0, 2, 'C');
 								
-								if (in_array($v_loc['check'], $locations)) {
-									// Find which table this judge is assigned to for that location.
-									$assign = judge_assignment($brewer_info[7], $v_loc['id'] );
-									//$assign = explode("^", $flight);
-									$table_flights[] = $assign['tableNumber'];
+								// Add location to the label
+								$pdf->SetFont('Arial', '', 10);
+								$judge_loc = $brewer_info[11] . ', ' . $brewer_info[12] ;
+								$judge_loc = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_loc);
+								$pdf->Cell(66, 6, $judge_loc, 0, 2, 'C');
+
+								// Add table flights to the label
+								$table_flights = array();
+								
+								foreach ($virtual_locations as $v_loc) {
+									
+									if (in_array($v_loc['check'], $locations)) {
+										// Find which table this judge is assigned to for that location.
+										$assign = judge_assignment($brewer_info[7], $v_loc['id'] );
+										//$assign = explode("^", $flight);
+										$table_flights[] = $assign['tableNumber'];
+									}
+
 								}
 
-							}
+								// Display the assigned table number(s)
+								if (isset($table_flights[0])) {
 
-							// Display the assigned table number(s)
-							if (isset($table_flights[0])) {
-
-								if (sizeof($table_flights) > 1) $t_sring = "Tables";
-								else $t_string = "Table";
+									if (sizeof($table_flights) > 1) $t_sring = "Tables";
+									else $t_string = "Table";
+									
+									$pdf->SetFont('Arial', 'B', 12);
+									$judge_flight = $t_string.": ". join(', ', $table_flights);
+									$judge_flight = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_flight);
+									$pdf->Cell(66, 6, $judge_flight, 0, 2, 'C');
 								
-								$pdf->SetFont('Arial', 'B', 12);
-								$judge_flight = $t_string.": ". join(', ', $table_flights);
-								$judge_flight = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_flight);
-								$pdf->Cell(66, 6, $judge_flight, 0, 2, 'C');
-							
-							} 
+								} 
 
-							else {
+								else {
 
-								$pdf->SetFont('Arial', 'B', 12);
-								$judge_flight = "Table: ______";
-								$pdf->Cell(66, 6, $judge_flight, 0, 2, 'C');
+									$pdf->SetFont('Arial', 'B', 12);
+									$judge_flight = "Table: ______";
+									$pdf->Cell(66, 6, $judge_flight, 0, 2, 'C');
+
+								}
+
+								$pdf->Next_Label();
 
 							}
-
-							$pdf->Next_Label();
-
-						}
+							
+							reset($virtual_locations);
 						
-						reset($virtual_locations);
-					
-					}
+						}
 
-				} while ($row_brewer = mysqli_fetch_assoc($brewer));
+					} while ($row_brewer = mysqli_fetch_assoc($brewer));
+
+				}
 
 			} // end if ($filter == "judges")
 
@@ -333,13 +333,12 @@ if (isset($_SESSION['loginUsername'])) {
 					$judging_number = readable_judging_number($row_log['brewCategory'], $row_log['brewJudgingNumber']);
 					$entry_number = sprintf("%06s", $row_log['id']);
 					$style = $row_log['brewCategory'] . $row_log['brewSubCategory'];
-					$style_name = truncate($row_log['brewStyle'], 22);
+					$style_name = truncate($row_log['brewStyle'], 18);
 					$style_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$style_name);  
 					$brewer_name = truncate($row_log['brewBrewerFirstName']." ".$row_log['brewBrewerLastName'],30);
 					$brewer_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$brewer_name);  
 					
-					if ($tb == "default") $bottles = ['#1', '#2', '#3'];
-					if ($tb == "short") $bottles = ['#1', '#2', 'BOS'];
+					$bottles = ['#1', '#2', '#3/BOS'];
 
 					$pdf->SetFont('Arial', '', 9);
 					foreach ($bottles as $b) {
@@ -352,7 +351,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 					if ($tb == "default") {
 
-						$bottles = ['#4', '#5', 'BOS'];
+						$bottles = ['#1', '#2', '#3/BOS'];
 
 						// Print Entrant info
 						$pdf->SetFont('Arial', '', 9);
@@ -395,7 +394,7 @@ if (isset($_SESSION['loginUsername'])) {
 			
 			}
 
-			else {
+			else {		
 
 				$labels_by_table = FALSE;
 

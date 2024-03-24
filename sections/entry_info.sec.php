@@ -6,43 +6,6 @@
  *
  */
 
-/* ---------------- PUBLIC Pages Rebuild Info ---------------------
-
-Beginning with the 1.3.0 release, an effort was begun to separate the programming
-layer from the presentation layer for all scripts with this header.
-
-All Public pages have certain variables in common that build the page:
-
-	$warningX = any warnings
-
-	$primary_page_info = any information related to the page
-
-	$header1_X = an <h2> header on the page
-	$header2_X = an <h3> subheader on the page
-
-	$page_infoX = the bulk of the information on the page.
-	$help_page_link = link to the appropriate page on help.brewcompetition.com
-	$print_page_link = the "Print This Page" link
-	$competition_logo = display of the competition's logo
-
-	$labelX = the various labels in a table or on a form
-	$messageX = various messages to display
-
-	$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
-	$competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
-
-Declare all variables empty at the top of the script. Add on later...
-	$warning1 = "";
-	$primary_page_info = "";
-	$header1_1 = "";
-	$page_info1 = "";
-	$header1_2 = "";
-	$page_info2 = "";
-
-	etc., etc., etc.
-
- * ---------------- END Rebuild Info --------------------- */
-
 include (DB.'dropoff.db.php');
 include (DB.'judging_locations.db.php');
 include (DB.'styles.db.php');
@@ -262,65 +225,70 @@ $styles_columns = 3;   // number of columns
 $styles_hloopRow1 = 0; // first row flag
 
 	do {
-		if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
 
-		$page_info8 .= "<td width=\"33%\">";
+		if (array_key_exists($row_styles['id'], $styles_selected)) {
 
-		$style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+			if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
 
-		if (!empty($row_styles['brewStyleEntry'])) {
+			$page_info8 .= "<td width=\"33%\">";
 
-			$page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".$style_number." ".$row_styles['brewStyle']."</a>";
+			$style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
 
-			$style_info_modal_body = "";
+			if (!empty($row_styles['brewStyleEntry'])) {
 
-			$brewStyleInfo = str_replace("<p>","",$row_styles['brewStyleInfo']);
-			$brewStyleInfo = str_replace("</p>","",$brewStyleInfo);
+				$page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".$style_number." ".$row_styles['brewStyle']."</a>";
 
-			$brewStyleEntry = str_replace("<p>","",$row_styles['brewStyleEntry']);
-			$brewStyleEntry = str_replace("</p>","",$brewStyleEntry);
+				$style_info_modal_body = "";
 
-			if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
-			if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
+				$brewStyleInfo = str_replace("<p>","",$row_styles['brewStyleInfo']);
+				$brewStyleInfo = str_replace("</p>","",$brewStyleInfo);
 
-			$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".$row_styles['id']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
-			$style_info_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
-			$style_info_modals .= "\t\t<div class=\"modal-content\">\n";
-			$style_info_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
-			$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
-			$style_info_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\">Info for ".$row_styles['brewStyle']."</h4>\n";
-			$style_info_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
-			$style_info_modals .= "\t\t\t<div class=\"modal-body\">\n";
-			$style_info_modals .= "\t\t\t\t".$style_info_modal_body."\n";
-			$style_info_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
-			$style_info_modals .= "\t\t\t<div class=\"modal-footer\">\n";
-			$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
-			$style_info_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
-			$style_info_modals .= "\t\t</div><!-- ./modal-content -->\n";
-			$style_info_modals .= "\t</div><!-- ./modal-dialog -->\n";
-			$style_info_modals .= "</div><!-- ./modal -->\n";
+				$brewStyleEntry = str_replace("<p>","",$row_styles['brewStyleEntry']);
+				$brewStyleEntry = str_replace("</p>","",$brewStyleEntry);
 
-		}
+				if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
+				if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
 
-		else {
-			$page_info8 .= $style_number." ".$row_styles['brewStyle'];
-		}
+				$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".$row_styles['id']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
+				$style_info_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
+				$style_info_modals .= "\t\t<div class=\"modal-content\">\n";
+				$style_info_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
+				$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
+				$style_info_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\">Info for ".$row_styles['brewStyle']."</h4>\n";
+				$style_info_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
+				$style_info_modals .= "\t\t\t<div class=\"modal-body\">\n";
+				$style_info_modals .= "\t\t\t\t".$style_info_modal_body."\n";
+				$style_info_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
+				$style_info_modals .= "\t\t\t<div class=\"modal-footer\">\n";
+				$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
+				$style_info_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
+				$style_info_modals .= "\t\t</div><!-- ./modal-content -->\n";
+				$style_info_modals .= "\t</div><!-- ./modal-dialog -->\n";
+				$style_info_modals .= "</div><!-- ./modal -->\n";
 
-		if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
+			}
 
-		if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
+			else {
+				$page_info8 .= $style_number." ".$row_styles['brewStyle'];
+			}
 
-		if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-purple\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
+			if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
 
-		if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-teal\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
+			if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
 
-		if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-gold\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
+			if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-purple\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
 
-		$page_info8 .= "</td>";
-		$styles_endRow++;
+			if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-teal\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
 
-		if ($styles_endRow >= $styles_columns) {
-			$styles_endRow = 0;
+			if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-gold\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
+
+			$page_info8 .= "</td>";
+			$styles_endRow++;
+
+			if ($styles_endRow >= $styles_columns) {
+				$styles_endRow = 0;
+			}
+
 		}
 
 	} while ($row_styles = mysqli_fetch_assoc($styles));

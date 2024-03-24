@@ -38,18 +38,18 @@ $current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSIO
 $custom_parts = explode("|",$_POST['custom']);
 
 // Assign posted variables to local variables
-$data['payment_status'] = filter_var($_POST['payment_status'],FILTER_SANITIZE_STRING);
-$data['item_name'] = filter_var($_POST['item_name'],FILTER_SANITIZE_STRING);
-$data['item_number'] = filter_var($_POST['item_number'],FILTER_SANITIZE_STRING);
-$data['payment_status'] = filter_var($_POST['payment_status'],FILTER_SANITIZE_STRING);
-$data['payment_amount'] = filter_var($_POST['mc_gross'],FILTER_SANITIZE_STRING);
-$data['payment_currency'] = filter_var($_POST['mc_currency'],FILTER_SANITIZE_STRING);
-$data['txn_id'] = filter_var($_POST['txn_id'],FILTER_SANITIZE_STRING);
+$data['payment_status'] = filter_var($_POST['payment_status'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$data['item_name'] = filter_var($_POST['item_name'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$data['item_number'] = filter_var($_POST['item_number'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$data['payment_status'] = filter_var($_POST['payment_status'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$data['payment_amount'] = filter_var($_POST['mc_gross'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$data['payment_currency'] = filter_var($_POST['mc_currency'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$data['txn_id'] = filter_var($_POST['txn_id'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $data['receiver_email'] = filter_var($_POST['receiver_email'],FILTER_SANITIZE_EMAIL);
-$data['first_name'] = filter_var($_POST['first_name'],FILTER_SANITIZE_STRING);
-$data['last_name'] = filter_var($_POST['last_name'],FILTER_SANITIZE_STRING);
+$data['first_name'] = filter_var($_POST['first_name'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$data['last_name'] = filter_var($_POST['last_name'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $data['payer_email'] = filter_var($_POST['payer_email'],FILTER_SANITIZE_EMAIL);
-$data['custom'] = filter_var($_POST['custom'],FILTER_SANITIZE_STRING);
+$data['custom'] = filter_var($_POST['custom'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 $query_user_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerEmail FROM %s WHERE uid='%s'", $prefix."brewer",$custom_parts[0]);
 $user_info = mysqli_query($connection,$query_user_info) or die (mysqli_error($connection));

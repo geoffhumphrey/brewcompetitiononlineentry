@@ -95,7 +95,7 @@
 <?php } if (($totalRows_sbi == 0) && ($action == "default")) echo "<p>No custom categories were found in the database.</p>"; ?>
 <?php if (($action == "add") || ($action == "edit")) { ?>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
-
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 	<label for="sbi_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -134,7 +134,7 @@
 				<input type="radio"  name="sbi_display_places" value="1" id="sbi_display_places_1" <?php if (($row_sbi) && ($row_sbi['sbi_display_places'] == "1")) echo "CHECKED"; ?>> Yes
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="sbi_display_places" value="0" id="sbi_display_places_0" <?php if ((($row_sbi) && ($row_sbi['sbi_display_places'] == "0")) || ($action == "add")) echo "CHECKED"; ?> />No
+				<input type="radio" name="sbi_display_places" value="0" id="sbi_display_places_0" <?php if ((($row_sbi) && (($row_sbi['sbi_display_places'] == "0") || ($row_sbi['sbi_display_places'] == "")) || ($action == "add"))) echo "CHECKED"; ?> />No
 			</label>
 		</div>
 	</div>

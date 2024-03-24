@@ -5,7 +5,7 @@
  * Removed and replaced with function defined in paths.php file 
  * (this function needed to be defined early in processing).
  * 
- * @author Geoff Humphrey <prost@brewcompetition.com>
+ * @author Geoff Humphrey
  */
 
 $id = "default";

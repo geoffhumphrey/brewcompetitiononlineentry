@@ -132,6 +132,19 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
     if (strpos($row_system['update_summary'], 'Warning: Errors') !== false) $_SESSION['update_errors'] = 1;
 }
 
+/**
+ * Generate a CSRF token on every page load.
+ * This will be used to prevent cross-site request forgeries
+ * when processing form data.
+ * First check for php 7 compatible random_bytes.
+ * If not, use mcrypt_create_iv (deprecated in php 7.1 removed in 7.2)
+ * If that's not available, default to openssl_random_pseudo_bytes.
+ */
+
+if (function_exists('random_bytes')) $_SESSION['token'] = bin2hex(random_bytes(32));
+elseif (function_exists('mcrypt_create_iv')) $_SESSION['token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+
 // ---------------------------------------------------------------------------------
 ?>
 <!DOCTYPE html>
@@ -147,18 +160,18 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
     else include (INCLUDES.'load_local_libraries.inc.php');
 ?>
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
-    <link rel="stylesheet" type="text/css" href="<?php echo $base_url."css/common.min.css"; ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $css_url."common.min.css"; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 
     <script type="text/javascript">
-        var username_url = "<?php echo $base_url; ?>ajax/username.ajax.php";
-        var email_url="<?php echo $base_url; ?>ajax/valid_email.ajax.php";
+        var username_url = "<?php echo $ajax_url; ?>username.ajax.php";
+        var email_url="<?php echo $ajax_url; ?>valid_email.ajax.php";
         var user_agent_msg = "<?php echo $alert_text_086; ?>";
         var setup = 0;
     </script>
     
     <!-- Load BCOE&M Custom JS -->
-    <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    <script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
     
     <!-- Open Graph Implementation -->
 <?php if (!empty($_SESSION['contestName'])) { ?>
@@ -170,6 +183,8 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
     <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
 </head>
 <body>
+
+<a name="top"></a>
 
 <!-- LOADER -->
 <div id="loader-submit">
@@ -188,13 +203,14 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
 
 <!-- ALERTS -->
 <div class="<?php echo $container_main; ?> bcoem-warning-container">
+    
     <?php
     
     if ((!empty($_SESSION['error_output'])) || (!empty($error_output))) {
         
         echo "<div class=\"bcoem-admin-element\">";
         echo "<div class=\"alert alert-danger alert-dismissible hidden-print fade in\">";
-        echo "<p><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>MySQL Error(s)</strong></p>";
+        echo "<p><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Error(s)</strong></p>";
         echo "<p>The following errors were logged on the last MySQL server call:</p>";
         echo "<ul>";
         
@@ -213,11 +229,13 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
         echo "</ul>";
         echo "</div>";
         echo "</div>";
+        
     }
 
     include (SECTIONS.'alerts.sec.php'); 
 
     ?>
+
 </div><!-- ./container -->
 <!-- ./ALERTS -->
 
@@ -390,7 +408,7 @@ echo $output_query_count;
 <?php 
 session_write_close(); 
 if ($logged_in) {
-$session_end_seconds = (time() + $session_expire_after_seconds);
+$session_end_seconds = (time() + ($session_expire_after * 60));
 $session_end = date('Y-m-d H:i:s',$session_end_seconds);
 if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 ?>
@@ -408,7 +426,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_stay_here; ?></button>
         <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/logout.inc.php')"><?php echo $label_log_out; ?></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
       </div>
     </div>
   </div>
@@ -426,7 +444,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/logout.inc.php')"><?php echo $label_log_out; ?></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
       </div>
     </div>
   </div>
@@ -438,13 +456,13 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
 var session_end_min = "<?php echo $session_expire_after; ?>";
 var session_end_seconds = "<?php echo $session_end_seconds; ?>";
-var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
+var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout";
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/autologout.min.js"></script>
+<script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
 <?php } ?>
 <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
 <?php } // end if ($logged_in) ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/loader_target.min.js"></script>
+<script type="text/javascript" src="<?php echo $js_url; ?>loader_target.min.js"></script>
 </body>
 </html>

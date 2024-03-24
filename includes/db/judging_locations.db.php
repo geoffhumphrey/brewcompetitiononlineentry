@@ -28,7 +28,7 @@ else {
 		elseif (($go == "non-judging") && (($action == "add") || ($action == "edit"))) $query_judging .= sprintf(" WHERE id='%s'",$id);
 	}
 	
-	else $query_judging .= " WHERE judgingLocType < 2 ORDER BY judgingDate,judgingLocName ASC";
+	else $query_judging .= " ORDER BY judgingDate,judgingLocName ASC";
 	
 }
 

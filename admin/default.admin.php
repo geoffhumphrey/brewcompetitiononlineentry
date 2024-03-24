@@ -10,9 +10,13 @@ $server_environ_1 = "<ul>";
 $server_environ_3 = "<ul class=\"list-inline\">";
 $server_environ_3 .= "<li>Environment Info:</li>";
 $server_environ_2 = "<li>PHP Version &ndash; ".$php_version.";</li>";
-$server_environ_2 .= "<li>MySQL Version &ndash; ".$connection -> server_info."</li>";
-$server_environ_2 .= "</ul>";
 
+if (!empty($db_version)) {
+    if ($db_maria) $server_environ_2 .= "<li>MariaDB Version &ndash; ".$db_version."</li>";
+    else $server_environ_2 .= "<li>MySQL Version &ndash; ".$db_version."</li>";
+}
+
+$server_environ_2 .= "</ul>";
 $server_environ = $server_environ_0.$server_environ_1.$server_environ_2;
 $server_environ_sidebar = $server_environ_3.$server_environ_2;
 
@@ -46,20 +50,20 @@ if ($totalRows_judging > 0) {
     
     do {
 
-        $judge_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
-        $steward_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];                                     
+        $judge_assign_links[$row_judging['judgingLocName']] = $base_url."includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
+        $steward_assign_links[$row_judging['judgingLocName']] = $base_url."includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];                                     
         for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {
             
             $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
             $location_name = sprintf("%s - %s, Round %s", $row_judging['judgingLocName'], $location_date, $round);
 
-            $ps_loc_j_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $ps_loc_j_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round;
 
-            $ps_loc_j_mbos_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $ps_loc_j_mbos_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
 
-            $ps_loc_e_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $ps_loc_e_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=".$row_judging['id']."&amp;round=".$round;
 
-            $ps_loc_e_mbos_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $ps_loc_e_mbos_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
             
             $ps_loc_judging .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Judging Numbers)\">%s</a></li>", $ps_loc_j_link, $location_name, $location_name);
 
@@ -69,20 +73,20 @@ if ($totalRows_judging > 0) {
 
             $ps_loc_entry_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Entry Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_e_mbos_link, $location_name, $location_name);
 
-            $cards_loc_rnd_link = $base_url."output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $cards_loc_rnd_link = $base_url."includes/output.inc.php?section=table-cards&amp;go=judging_locations&amp;location=".$row_judging['id']."&amp;round=".$round;
 
             $cards_loc_rnd .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Table Cards for %s\">%s</a></li>", $cards_loc_rnd_link, $location_name, $location_name);
 
         }
 
-        $ji_link_entry = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];
+        $ji_link_entry = $base_url."includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];
         $ji_loc_entry .= "<li class=\"small\">";
         $ji_loc_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_link_entry);
         $ji_loc_entry .= $row_judging['judgingLocName'];
         $ji_loc_entry .= "</a>";
         $ji_loc_entry .= "</li>";
 
-        $ji_loc_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging['id'];
+        $ji_loc_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging['id'];
         $ji_loc_judging .= "<li class=\"small\">";
         $ji_loc_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_loc_judging_link);
         $ji_loc_judging .= $row_judging['judgingLocName'];
@@ -108,8 +112,8 @@ if ($totalRows_tables > 0) {
 
         if (($row_style_type) && ($row_style_type['styleTypeBOS'] == "Y")) {
 
-            $bos_pull_entry_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=".$row_style_type['id'];
-            $bos_pull_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=".$row_style_type['id']; 
+            $bos_pull_entry_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=".$row_style_type['id'];
+            $bos_pull_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=".$row_style_type['id']; 
 
             $bos_pull_st_entry .= "<li>";
             $bos_pull_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s</a>",$bos_pull_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
@@ -126,8 +130,8 @@ if ($totalRows_tables > 0) {
                 if ($i == 2) $pro_am_bos_method = "1st and 2nd Places";
                 if ($i == 3) $pro_am_bos_method = "1st, 2nd, and 3rd Places";
 
-                $bos_pull_pro_am_entry_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;view=entry&amp;id=".$row_style_type['id'];
-                $bos_pull_pro_am_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;id=".$row_style_type['id']; 
+                $bos_pull_pro_am_entry_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;view=entry&amp;id=".$row_style_type['id'];
+                $bos_pull_pro_am_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;id=".$row_style_type['id']; 
 
                 $bos_pull_pro_am_st_entry .= "<li>";
                 $bos_pull_pro_am_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_pull_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
@@ -138,8 +142,8 @@ if ($totalRows_tables > 0) {
                 $bos_pull_pro_am_st_judging .= "</li>";
 
 
-                $bos_cup_mat_pro_am_entry_link = $base_url."output/print.output.php?section=bos-mat&amp;action=pro-am&amp;sort=".$i."&amp;filter=entry&amp;view=".$row_style_type['id'];
-                $bos_cup_mat_pro_am_judging_link = $base_url."output/print.output.php?section=bos-mat&amp;action=pro-am&amp;sort=".$i."&amp;view=".$row_style_type['id'];
+                $bos_cup_mat_pro_am_entry_link = $base_url."includes/output.inc.php?section=bos-mat&amp;action=pro-am&amp;sort=".$i."&amp;filter=entry&amp;view=".$row_style_type['id'];
+                $bos_cup_mat_pro_am_judging_link = $base_url."includes/output.inc.php?section=bos-mat&amp;action=pro-am&amp;sort=".$i."&amp;view=".$row_style_type['id'];
 
                 $bos_cup_mat_pro_am_st_entry .= "<li>";
                 $bos_cup_mat_pro_am_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
@@ -152,8 +156,8 @@ if ($totalRows_tables > 0) {
             
             }
 
-            $bos_mat_entry = $base_url."output/print.output.php?section=bos-mat&amp;filter=entry&amp;view=".$row_style_type['id'];
-            $bos_mat_judging = $base_url."output/print.output.php?section=bos-mat&amp;view=".$row_style_type['id'];
+            $bos_mat_entry = $base_url."includes/output.inc.php?section=bos-mat&amp;filter=entry&amp;view=".$row_style_type['id'];
+            $bos_mat_judging = $base_url."includes/output.inc.php?section=bos-mat&amp;view=".$row_style_type['id'];
 
             $bos_cup_mat_st_entry .= "<li>";
             $bos_cup_mat_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Entry Numbers\">%s</a>",$bos_mat_entry,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
@@ -174,8 +178,8 @@ if ($totalRows_tables > 0) {
 
     do {
 
-        $mini_bos_mat_entry = $base_url."output/print.output.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry&amp;view=".$row_tables['id'];
-        $mini_bos_mat_judging = $base_url."output/print.output.php?section=bos-mat&amp;action=mini-bos&amp;view=".$row_tables['id'];
+        $mini_bos_mat_entry = $base_url."includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry&amp;view=".$row_tables['id'];
+        $mini_bos_mat_judging = $base_url."includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;view=".$row_tables['id'];
 
         $mini_bos_cup_mat_st_entry .= "<li>";
         $mini_bos_cup_mat_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s Mini-BOS Cup Mat Using Entry Numbers\">%s: %s</a>",$mini_bos_mat_entry,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
@@ -196,16 +200,16 @@ if ($totalRows_tables > 0) {
         padding-bottom: 8px;
     }
 </style>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
+<script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available in each category.</span></p>
 <div class="row bcoem-admin-element">
     <?php if ($hosted_setup) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="http://brewcompetition.com/customize-comp-info" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to customize your hosted BCOE&amp;M installation including defining registration dates, judging sessions, drop-off window and locations, shipping window and locations, sponsors, styles accepted, etc.">Customize Competition Info <span class="fa fa-info-circle"></span></a>
+        <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/customize-comp-info" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to customize your hosted BCOE&amp;M installation including defining registration dates, judging sessions, drop-off window and locations, shipping window and locations, sponsors, styles accepted, etc.">Customize Competition Info <span class="fa fa-info-circle"></span></a>
     </div>
     <?php } else { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="http://brewcompetition.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
+        <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
     </div>
     <?php } ?>
     <?php if (($judging_started) && ($_SESSION['userLevel'] == 0)) { ?>
@@ -278,13 +282,15 @@ if ($recently_updated) {
         $summary_button_errors = " (Errors Present)";
     }
 
-?>
+if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) { ?>
 <div class="row bcoem-admin-element">
     <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <button type="button" class="<?php echo $summary_button_style; ?>" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary<?php echo $summary_button_errors; ?> <span class="<?php echo $summary_button_icon; ?>"></span></button>
     </div>
 </div>
-<?php } ?>
+<?php } 
+}
+?>
 <div class="bcoem-admin-dashboard-accordion">
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -531,7 +537,7 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a class="hide-loader" href="http://brewcompetition.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels <span class="fa fa-sm fa-external-link"></span></a></li>
+                                        <li><a class="hide-loader" href="http://brewingcompetitions.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels <span class="fa fa-sm fa-external-link"></span></a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -559,12 +565,24 @@ if ($recently_updated) {
                                     <strong>Sorting Sheets</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                    <ul class="list-inline">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=sorting&amp;go=default&amp;filter=default&amp;view=entry">Entry Numbers</a></li>
+                                    <ul class="list-unstyled">
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-placards&amp;view=master-list">Sorting Placards</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=default&amp;filter=default&amp;view=entry">Entry Numbers</a></li>
                                         <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=sorting&amp;go=default&amp;filter=default">Judging Numbers</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=sorting&amp;go=cheat&amp;filter=default">Cheat Sheets</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=default&amp;filter=default">Judging Numbers</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=cheat&amp;filter=default">Cheat Sheets</a></li>
                                         <?php } ?>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Sorting Into Tables</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables&amp;view=master-list">Tables and Associated Styles Master List</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables">Tables and Associated Styles Placards</a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -585,7 +603,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
                                                     <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -596,7 +614,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
                                                     <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;filter=judges&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -616,7 +634,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
                                                     <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -627,7 +645,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
                                                     <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges&amp;psort=3422&amp;&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;filter=judges&amp;psort=3422&amp;&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -647,8 +665,8 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li><a target="_blank" data-toggle="tooltip" title="Quicksort labels with 6 labels per entry (1-5 plus BOS)" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167">Quicksort - 6 Labels per Entry</a> <a class="hide-loader" href="#" data-toggle="modal" data-target="#quicksortModal"><i class="fa fa-question-circle"></i></a></li>
-                                        <li><a target="_blank" data-toggle="tooltip" title="Quicksort labels with 3 labels per entry (1 and 2 plus BOS)" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167&amp;tb=short">Quicksort - 3 Labels per Entry</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="Quicksort labels with 6 labels per entry (1-5 plus BOS)" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167">Quicksort - 6 Labels per Entry</a> <a class="hide-loader" href="#" data-toggle="modal" data-target="#quicksortModal"><i class="fa fa-question-circle"></i></a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="Quicksort labels with 3 labels per entry (1 and 2 plus BOS)" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167&amp;tb=short">Quicksort - 3 Labels per Entry</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -658,8 +676,8 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
-                                        <li><a target="_blank" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
                                     </ul>
                                     <ul class="list-unstyled">
                                         <li>With Required Info - All Styles (Entry Numbers)
@@ -668,7 +686,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu1">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -679,7 +697,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu2">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -692,7 +710,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu3">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -703,7 +721,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu4">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -717,8 +735,8 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422">Entry Numbers</a></li>
-                                        <li><a target="_blank" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422">Entry Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
                                     </ul>
                                     <ul class="list-unstyled">
                                         <li>With Required Info - All Styles (Entry Numbers)
@@ -727,7 +745,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu1">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -738,7 +756,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu2">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -751,7 +769,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu3">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -762,7 +780,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu4">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -782,7 +800,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu5">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -793,7 +811,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu6">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -804,7 +822,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu7">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -815,7 +833,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu8">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -835,7 +853,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu9">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -846,7 +864,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu10">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -857,7 +875,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu11">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -868,7 +886,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu12">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -1064,8 +1082,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=staff&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Last Name</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=staff" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Non-Judging Session</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Last Name</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Non-Judging Session</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1075,8 +1093,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer">Notes to Organizer</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=admin" data-toggle="tooltip" data-placement="top" title="Notes attached to individual entries for Admin and Staff use.">Admin and Staff Notes</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer">Notes to Organizer</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=admin" data-toggle="tooltip" data-placement="top" title="Notes attached to individual entries for Admin and Staff use.">Admin and Staff Notes</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1087,7 +1105,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1098,8 +1116,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=dropoff" data-toggle="tooltip" data-placement="top" title="Print Entry Totals for Each Drop-Off Location and Shipping Location">Entry Totals</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=dropoff&amp;go=check" data-toggle="tooltip" data-placement="top" title="Print Entries By Drop-Off Location and Shipping Location">List of Entries</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff" data-toggle="tooltip" data-placement="top" title="Print Entry Totals for Each Drop-Off Location and Shipping Location">Entry Totals</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff&amp;go=check" data-toggle="tooltip" data-placement="top" title="Print Entries By Drop-Off Location and Shipping Location">List of Entries</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1111,23 +1129,23 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                 <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="additionalInfoMenu0">
-                                        <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"entry","output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"entry","includes/output.inc.php","thickbox"); ?>
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="additionalInfoMenu1">
-                                        <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"default","output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"default","includes/output.inc.php","thickbox"); ?>
                                     </ul>
                                 </div>
                             </div>
@@ -1138,13 +1156,13 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,$filter,"entry","output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,$filter,"entry","includes/output.inc.php","thickbox"); ?>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
@@ -1155,13 +1173,13 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"includes/output.inc.php","thickbox"); ?>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
@@ -1202,13 +1220,13 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Table Cards">All Tables</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Table Cards">All Tables</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Table... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="cardsMenu1">
-                                        <?php echo table_choose("table-cards","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("table-cards","judging_tables",$action,$filter,$view,"includes/output.inc.php","thickbox"); ?>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
@@ -1226,8 +1244,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1238,12 +1256,12 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Name">All Judges By Last Name</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Table">All Judges By Table</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Session">All Judges By Session</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Name">All Stewards Last Name</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Table">All Stewards By Table</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Session">All Stewards By Session</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Name">All Judges By Last Name</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Table">All Judges By Table</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Session">All Judges By Session</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Name">All Stewards Last Name</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Table">All Stewards By Table</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Session">All Stewards By Session</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="judgeAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judges for Session... <span class="caret"></span>
@@ -1280,8 +1298,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1298,7 +1316,7 @@ if ($recently_updated) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="reqLablesMenu1">
                                                 <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -1309,7 +1327,7 @@ if ($recently_updated) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="reqLablesMenu2">
                                                 <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -1321,7 +1339,7 @@ if ($recently_updated) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="reqLablesMenu3reqLablesMenu4">
                                                 <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -1332,7 +1350,7 @@ if ($recently_updated) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="reqLablesMenu4">
                                                 <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -1405,7 +1423,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1424,14 +1442,14 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Entry Numbers</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos","entry","output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos","entry","includes/output.inc.php","thickbox"); ?>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
@@ -1442,14 +1460,14 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=mini_bos" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Judging Numbers</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos",$view,"output/print.output.php","thickbox"); ?>
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos",$view,"includes/output.inc.php","thickbox"); ?>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
@@ -1467,10 +1485,10 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=blank&view=mini-bos" data-toggle="tooltip" data-placement="top" title="Print blank Mini-BOS Cup Mats">Blank</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=mini-bos" data-toggle="tooltip" data-placement="top" title="Print blank Mini-BOS Cup Mats">Blank</a></li>
                                 </ul>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with entry numbers only">All Tables - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with entry numbers only">All Tables - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
@@ -1480,7 +1498,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=mini-bos" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with judging numbers only">All Tables - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with judging numbers only">All Tables - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
@@ -1497,7 +1515,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
@@ -1507,7 +1525,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
@@ -1524,10 +1542,10 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=blank" data-toggle="tooltip" data-placement="top" title="Print blank BOS Cup Mats">Blank</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank" data-toggle="tooltip" data-placement="top" title="Print blank BOS Cup Mats">Blank</a></li>
                                 </ul>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
@@ -1537,7 +1555,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
@@ -1576,7 +1594,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=blank&view=pro-am" data-toggle="tooltip" data-placement="top" title="Print blank Pro-Am/Scale-Up Cup Mats">Blank</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=pro-am" data-toggle="tooltip" data-placement="top" title="Print blank Pro-Am/Scale-Up Cup Mats">Blank</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
@@ -1611,9 +1629,9 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1624,7 +1642,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1639,51 +1657,51 @@ if ($recently_updated) {
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All with Scores...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only with Scores...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All without Scores...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default">By Table Number</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default">By Table Number</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only without Scores...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners">By Table Number</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners">By Table Number</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                     </ul>
                                 </div>
                             <?php } else { ?>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
                             <?php } ?>
                                 <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1697,46 +1715,46 @@ if ($recently_updated) {
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All with Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only with Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All without Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;view=default">By Table Number</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default">By Table Number</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only without Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;view=winners">By Table Number</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners">By Table Number</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                 <?php } else { ?>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
                                 <?php } ?>
                             </div>
@@ -1748,12 +1766,12 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
                                     <?php if (empty($_SESSION['contestID'])) { ?>
                                     <li><a href="#"  data-toggle="modal" data-target="#BJCPCompIDModal">XML</a></li>
                                     <?php } else { ?>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -1766,8 +1784,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1778,7 +1796,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=5293" data-toggle="tooltip" data-placement="top" title="1 2/3 inch Round Avery 5293">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=5293" data-toggle="tooltip" data-placement="top" title="1 2/3 inch Round Avery 5293">Letter</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1790,13 +1808,13 @@ if ($recently_updated) {
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li>All Participants</li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                                 <ul class="list-inline">
                                     <li>All Participants with Entries
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1806,8 +1824,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=summary" data-toggle="tooltip" data-placement="top" title="Print participant summaries - each on a separate sheet of paper. Useful as a cover sheet for mailing entry scoresheets to participants.">All Participants with Entries</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all participants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=summary" data-toggle="tooltip" data-placement="top" title="Print participant summaries - each on a separate sheet of paper. Useful as a cover sheet for mailing entry scoresheets to participants.">All Participants with Entries</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all participants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1817,8 +1835,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=inventory&amp;go=scores" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - with scores">With Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=inventory" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - without scores">Without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory&amp;go=scores" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - with scores">With Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - without scores">Without Scores</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1842,12 +1860,12 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails">All Participants</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=avail_judges&amp;action=email">Available Judges</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=avail_stewards&amp;action=email">Available Stewards</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=staff&amp;action=email">Available and Assigned Staff</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails">All Participants</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=avail_judges&amp;action=email">Available Judges</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=avail_stewards&amp;action=email">Available Stewards</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=staff&amp;action=email">Available and Assigned Staff</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1857,10 +1875,10 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv">All Participants</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=winners">Winners: Limited Data</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-participants&amp;go=csv">All Participants</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=winners">Winners: Limited Data</a></li>
                                     <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -1872,15 +1890,15 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv">All Entries: Limited Data</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid&amp;view=all">Paid Entries</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid">Paid &amp; Received Entries</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid&amp;view=not_received">Paid Entries Not Received</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=nopay&amp;view=all">Non-Paid Entries</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=nopay">Non-Paid &amp; Received Entries</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=required&amp;tb=required">Entries with Required &amp; Optional Info</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv">All Entries: Limited Data</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid&amp;view=all">Paid Entries</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid">Paid &amp; Received Entries</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid&amp;view=not_received">Paid Entries Not Received</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=nopay&amp;view=all">Non-Paid Entries</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=nopay">Non-Paid &amp; Received Entries</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;action=required&amp;tb=required">Entries with Required &amp; Optional Info</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1891,9 +1909,9 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=html&amp;action=html">HTML</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=word">Word</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=html&amp;action=html">HTML</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=word&amp;action=word">Word</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -2086,7 +2104,7 @@ if ($recently_updated) {
                                 else {
                                    if (strpos($row_system['update_summary'], 'Warning: Errors') !== false) $update_errors_msg = " <span class=\"text-danger\"><i class=\"fa fa-exclamation-circle\"></i> Errors Present</span>"; 
                                 } 
-
+                                if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) {
                             ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -2096,7 +2114,7 @@ if ($recently_updated) {
                                     <a href="#" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary<?php echo $update_errors_msg; ?></a>
                                 </div>
                             </div>
-                            <?php } ?>
+                            <?php } } ?>
                             <?php if ($hosted_setup) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -2104,7 +2122,7 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li><a href="http://brewcompetition.com/customize-comp-info" target="_blank">Competition Information</a></li>
+                                        <li><a href="http://brewingcompetitions.com/customize-comp-info" target="_blank">Competition Information</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -2115,7 +2133,7 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li><a href="https://brewcompetition.com/release-notes" target="_blank">Release Notes, New Features, and Bug Fixes</a></li>
+                                        <li><a href="https://brewingcompetitions.com/release-notes" target="_blank">Release Notes, New Features, and Bug Fixes</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -2126,18 +2144,18 @@ if ($recently_updated) {
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <?php if (HOSTED) { ?>
-                                        <li><a href="https://brewcompetition.com/customize-competition-info" target="_blank">Customize Competition Information Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/customize-competition-info" target="_blank">Customize Competition Information Guide</a></li>
                                         <?php } ?>
-                                        <li><a href="https://brewcompetition.com/comp-org" target="_blank">Competition Organizer's Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/reset-comp" target="_blank">Reset Competition Information Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/paypal-ipn" target="_blank">Implement PayPal Instant Payment Notifications Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/upload-scoresheets" target="_blank">Upload Scanned Judges’ Scoresheets Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/barcode-check-in" target="_blank">Barcode or QR Code Entry Check-In Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/comp-org" target="_blank">Competition Organizer's Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/reset-comp" target="_blank">Reset Competition Information Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/paypal-ipn" target="_blank">Implement PayPal Instant Payment Notifications Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/upload-scoresheets" target="_blank">Upload Scanned Judges’ Scoresheets Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/barcode-check-in" target="_blank">Barcode or QR Code Entry Check-In Guide</a></li>
                                         <?php if ($_SESSION['prefsEval'] == 1) { ?>
-                                        <li><a href="https://brewcompetition.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&M Electronic Scoresheets Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&M Electronic Scoresheets Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/virtual-judging" target="_blank">Virtual Judging Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/virtual-judging/tips" target="_blank">Virtual Judging - Tips for Judges</a></li>
+                                        <li><a href="https://brewingcompetitions.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&M Electronic Scoresheets Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&M Electronic Scoresheets Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/virtual-judging" target="_blank">Virtual Judging Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/virtual-judging/tips" target="_blank">Virtual Judging - Tips for Judges</a></li>
                                         <?php } ?>
                                     </ul>
                                 </div>
@@ -2159,7 +2177,9 @@ if ($recently_updated) {
                                         <?php } ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-reports">Reports</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-data-exports">Data Exports</a></li>
+                                        <?php if ($_SESSION['userLevel'] == 0) { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-data-mgmt">Data Management</a></li>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -2179,15 +2199,13 @@ if ($recently_updated) {
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-materials">Print Judging Day Materials?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-judges">Assign Best of Show Judges?</a></li>
                                         <?php if ($_SESSION['userLevel'] == 0) { ?>
+                                        <?php if ($_SESSION['userAdminObfuscate'] == 0)  { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-results">Enter Scores and BOS Results?</a></li>
+                                        <?php } ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winning">Display Winning Entries?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-pro-am">Display Pro-Am Winner(s)?</a></li>
                                         <?php } ?>
                                         <li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/new/choose" target="_blank">Report an Issue?</a></li>
-                                        <!--
-                                        <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winner-rpt">Print a Winner Report</a></li>
-                                        <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bjcp-points">Report BJCP Judging Points</a></li>
-                                        -->
                                     </ul>
                                     <div class="alert alert-info">
                                         <?php echo $server_environ; ?>
@@ -2212,7 +2230,7 @@ if ($recently_updated) {
                 <h4 class="modal-title"><?php echo $current_version_display; ?> Update Summary</h4>
             </div>
             <div class="modal-body">
-                <p><a class="btn btn-success btn-block" href="https://brewcompetition.com/release-notes" target="_blank">Check Here for Release Notes, New Features, and Bug Fixes</a></p>
+                <p><a class="btn btn-success btn-block" href="https://brewingcompetitions.com/release-notes" target="_blank">Check Here for Release Notes, New Features, and Bug Fixes</a></p>
                 <p>Your installation was updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong> on <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_system['update_date'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time"); ?>. The following is a list of updates that were performed.</p>
                 <?php if (isset($_SESSION['update_summary'])) echo $_SESSION['update_summary']; else echo $row_system['update_summary']; ?>
             </div>
@@ -2627,7 +2645,7 @@ if ($recently_updated) {
             $('#loader-submit').stop();
 
             var serialize = $(this).serialize();
-            var new_url = "<?php echo $base_url; ?>output/labels.output.php?section=admin&go=entries&filter=default&view=special&psort=5160&tb=received&"+serialize;
+            var new_url = "<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&go=entries&filter=default&view=special&psort=5160&tb=received&"+serialize;
             
             $("#action-letter").val("").trigger("change");
             $("#sort-letter").val("").trigger("change");
@@ -2655,7 +2673,7 @@ if ($recently_updated) {
         if (($("#action-a4").val().length > 0) && ($("#sort-a4").val().length > 0) && ($("#location-a4").val().length > 0)) {
             $('#loader-submit').stop();
             var serialize = $(this).serialize();
-            var new_url = "<?php echo $base_url; ?>output/labels.output.php?section=admin&go=entries&filter=default&view=special&psort=3422&tb=received&"+serialize;
+            var new_url = "<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&go=entries&filter=default&view=special&psort=3422&tb=received&"+serialize;
 
             $("#action-a4").val("").trigger("change");
             $("#sort-a4").val("").trigger("change");

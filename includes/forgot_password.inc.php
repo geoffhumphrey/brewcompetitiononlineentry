@@ -1,94 +1,14 @@
 <?php
-/*
-Checked Single
-2016-06-06
-*/
 use PHPMailer\PHPMailer\PHPMailer;
 ob_start();
-include('../paths.php');
-require (CONFIG.'config.php');
-require (INCLUDES.'url_variables.inc.php');
+
 require (INCLUDES.'db_tables.inc.php');
-require (LANG.'language.lang.php');
-require (LIB.'common.lib.php');
-require (LIB.'update.lib.php'); 
-require (DB.'common.db.php');
 require (CLASSES.'phpass/PasswordHash.php');
+
 $hasher = new PasswordHash(8, false);
 mysqli_select_db($connection,$database);
+
 require (LIB.'email.lib.php');
-
-if (($action == "email") && ($id != "default")) {
-		
-	$query_forgot = sprintf("SELECT * FROM $users_db_table WHERE id = '%s'",$id);
-	$forgot = mysqli_query($connection,$query_forgot) or die (mysqli_error($connection));
-	$row_forgot = mysqli_fetch_assoc($forgot);
-	$totalRows_forgot = mysqli_num_rows($forgot);
-	
-	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid = '%s'",$id);
-	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-	$row_brewer = mysqli_fetch_assoc($brewer);
-	$totalRows_brewer = mysqli_num_rows($brewer);
-
-	$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
-	$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
-	
-	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-	
-	$contestName = ucwords($_SESSION['contestName']);
-	$from_name = html_entity_decode($contestName);
-	$from_name = mb_convert_encoding($contestName, "UTF-8");
-	
-	$to_name = $first_name." ".$last_name;
-	$to_name = html_entity_decode($to_name);
-	$to_name = mb_convert_encoding($to_name, "UTF-8");
-
-	$to_email = $row_forgot['user_name'];
-	$to_email = mb_convert_encoding($to_email, "UTF-8");
-	$to_email_formatted = $to_name." <".$to_email.">";
-
-	$subject = sprintf("%s: %s",$_SESSION['contestName'],$label_id_verification_request);
-	$subject = html_entity_decode($subject);
-	$subject = mb_convert_encoding($subject, "UTF-8");
-	
-	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-	$from_email = mb_convert_encoding($from_email, "UTF-8");
-	
-	$message = "<html>" . "\r\n";
-	$message .= "<body>" . "\r\n";
-	$message .= sprintf("<p>%s,</p>",$first_name);
-	$message .= sprintf("<p>%s %s %s</p>",$pwd_email_reset_text_000,$_SESSION['contestName'],$pwd_email_reset_text_001);
-	$message .= "<table cellpadding='0' border='0'>";
-	$message .= sprintf("<tr><td><strong>%s:</strong></td><td>%s</td>",$label_id_verification_question, $row_forgot['userQuestion']);
-	$message .= sprintf("<tr><td><strong>%s:</strong></td><td>%s</td>",$label_id_verification_answer, $row_forgot['userQuestionAnswer']);
-	$message .= "</table>";
-	$message .= sprintf("<p><em>*%s</em></p>",$pwd_email_reset_text_002);
-	$message .= sprintf("<p>%s %s</p>",ucwords($_SESSION['contestName']),$label_server);
-	$message .= sprintf("<p><small>%s</small></p>", $paypal_response_text_003);
-	if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
-	$message .= "</body>" . "\r\n";
-	$message .= "</html>";
-	
-	$headers  = "MIME-Version: 1.0"."\r\n";
-	$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-	$headers .= "From: ".$from_name." Server <".$from_email.">"."\r\n";
-
-	if ($mail_use_smtp) {
-		$mail = new PHPMailer(true);
-		$mail->CharSet = 'UTF-8';
-		$mail->Encoding = 'base64';
-		$mail->addAddress($to_email, $to_name);
-		$mail->setFrom($from_email, $from_name);
-		$mail->Subject = $subject;
-		$mail->Body = $message;
-		sendPHPMailerMessage($mail);
-	} else {
-		mail($to_email_formatted, $subject, $message, $headers);
-	}
-	
-	header(sprintf("Location: %s", $base_url."index.php?section=login&action=forgot&go=verify&msg=5&username=".$to_email));
-	exit();
-}
 
 if ($action == "forgot") {
 	

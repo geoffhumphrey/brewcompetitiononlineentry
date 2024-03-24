@@ -12,6 +12,17 @@ if ((!empty($score_entry_data[3])) || (!empty($score_entry_data[4]))) $score_pre
 elseif (is_array($user_submitted_eval)) $score_previous = TRUE;
 
 if (TESTING) {
+
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
+	/*
+	if (HOSTED) $query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$styles_db_table,$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
+	else 
+	*/
 	$query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
@@ -108,10 +119,35 @@ if ($score_previous) {
 	
 }
 
+// Mini BOS
+$mini_bos_count_flag = FALSE;
+$mini_bos_count = 0;
+$eval_count = 0;
+$mini_bos_alert_css = "";
+$mini_bos_alert_icon = "";
+$mini_bos_checked_yes = "";
+$mini_bos_checked_no = "";
+
 foreach ($eval_scores as $key => $value) {
+
 	if ($value['eid'] == $row_entries['id']) {
 		$score_previous_other = TRUE;
+		$eval_count++;
+		$mini_bos_count += $value['mini_bos'];
 	}
+	
+}
+
+if (($mini_bos_count > 0) && ($eval_count > $mini_bos_count)) $mini_bos_count_flag = TRUE;
+
+if ($mini_bos_count_flag) {
+	$mini_bos_alert_css = "text-danger";
+	$mini_bos_alert_icon = " <i class=\"fa fa-exclamation-triangle\"></i>";
+}
+
+if ($mini_bos_count == 0) $mini_bos_checked_no = "CHECKED";
+if ($mini_bos_count > 0) {
+	if ($eval_count == $mini_bos_count) $mini_bos_checked_yes = "CHECKED";
 }
 
 if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== false)) {
@@ -158,6 +194,32 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
         $actions .= "</div>";
 		$actions .= "</div>";
 		$actions .= "</div>";
+
+
+		// Mini-BOS
+		$actions .= "<div class=\"row\">";
+		$actions .= "<div class=\"col col-lg-6 col-md-7 col-sm-12 ".$mini_bos_alert_css."\">";
+		$actions .= $label_mini_bos;
+		$actions .= "</div>";
+		$actions .= "<div style=\"margin-bottom:5px;\" class=\"col col-lg-6 col-md-5 col-sm-12\">";
+		$actions .= "<div class=\"input-group\">";
+		$actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
+		$actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"1\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','1','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_yes.">Yes";
+		$actions .= "</label>";
+		$actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
+		$actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"0\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','0','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_no.">No";
+		$actions .= "</label>";
+		$actions .= "</div>";
+		$actions .= "<br><span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status\"></span> ";
+		$actions .= "<span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status-msg\"></span> ";
+       	$actions .= "</div>";
+		if ($mini_bos_count_flag) {
+			$actions .= "<div id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-hide\" style=\"margin-bottom:5px;\" class=\"col col-sm-12\">";
+			$actions .= "<span class=\"small ".$mini_bos_alert_css."\">".$mini_bos_alert_icon." Not all judges indicated this entry advanced to the mini-BOS round. Please verify and select Yes or No above.</span>";
+			$actions .= "</div>";
+		}
+		$actions .= "</div>";
+
 	}
 
 }
@@ -212,7 +274,7 @@ if (($add_disabled) && ($judging_open)) {
 
 elseif ($scored_by_user) {
 
-	$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;id=".$user_submitted_eval['id']."&amp;tb=1";
+	$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$user_submitted_eval['id']."&amp;tb=1";
 
 	if ($judging_open) {
 
@@ -245,12 +307,6 @@ elseif ($scored_by_user) {
 	if (!empty($user_submitted_eval['evalFinalScore'])) {
 		$actions .= "<div class=\"text-center\">";
 		$actions .= "<small>".$label_your_assigned_score.": ".$user_submitted_eval['evalFinalScore']."</small>";
-		$actions .= "</div>";
-	}
-	
-	if (!empty($user_submitted_eval['evalMiniBOS'])) {
-		$actions .= "<div class=\"text-center\">";
-		$actions .= "<small><i class=\"fa fa-check-square-o\"></i> ".$label_mini_bos."</small>";
 		$actions .= "</div>";
 	}
 	
@@ -325,9 +381,13 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 			if ($value['judge_id'] != $_SESSION['user_id']) {
 				$score_previous_id = $value['id'];
 				$score_previous = $value['judge_score'];
-				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;id=".$score_previous_id."&amp;tb=1";
+				$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$score_previous_id."&amp;tb=1";
 				$actions .= "<div style=\"margin-top: 5px;\">";
-				$actions .= "<a style=\"word-wrap:break-word;\" class=\"btn btn-block btn-sm btn-info hide-loader\" id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\">".$label_view_other_judge_eval." (".$label_score.": ".$score_previous.")";
+				$actions .= "<a style=\"word-wrap:break-word;\" class=\"btn btn-block btn-sm btn-info hide-loader\" id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\">";
+				$actions .= $label_view_other_judge_eval;
+				$actions .= " (";
+				$actions .= $label_score.": ".$score_previous;
+				$actions .= ")";
 				$actions .= "</a>";
 				$actions .= "</div>";
 			}	

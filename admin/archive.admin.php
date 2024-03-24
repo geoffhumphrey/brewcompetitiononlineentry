@@ -62,6 +62,7 @@ foreach ($style_sets as $style_set) {
     </div><!-- ./button group -->
 </div>
 <form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive&go=<?php echo $action; if ($action == "edit") echo "&filter=".$row_archive['archiveSuffix']."&id=".$id; ?>" method="post" name="form1">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <input type="hidden" name="action" value="add_form" />
 <div class="bcoem-admin-element hidden-print">
 <?php if ($action == "edit") echo "<p class=\"alert alert-warning\"><i class=\"fa fa-lg fa-exclamation-circle\"></i> ".$archive_text_017."</p>"; else echo "<p>".$archive_text_010."</p>"; ?>
@@ -346,7 +347,7 @@ foreach ($style_sets as $style_set) {
         echo yes_no($row_archive['archiveDisplayWinners'],$base_url,1);
         if (($row_archive['archiveDisplayWinners'] == "Y") && ($_SESSION['prefsProEdition'] == 0)) {
         ?>
-        &nbsp;<a target="_blank" data-toggle="tooltip" data-placement="top" title="Download a CSV of this archive's winner data." href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;tb=circuit&amp;sort=<?php echo $row_archive['archiveSuffix']; ?>" target="_blank"><span class="fa fa-lg fa-file-excel"></span></a>
+        &nbsp;<a target="_blank" data-toggle="tooltip" data-placement="top" title="Download a CSV of this archive's winner data." href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;tb=circuit&amp;sort=<?php echo $row_archive['archiveSuffix']; ?>" target="_blank"><span class="fa fa-lg fa-file-excel"></span></a>
         <?php } ?>
     </td>
     <td>

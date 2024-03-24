@@ -1,4 +1,10 @@
 <?php
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
 if (SINGLE) $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE comp_id='%s' AND brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing", $_SESSION['comp_id'], $cat_convert);
 	else $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'", $prefix."brewing", $cat_convert);
 

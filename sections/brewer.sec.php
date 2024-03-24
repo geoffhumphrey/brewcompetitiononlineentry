@@ -327,7 +327,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
 }
 
-if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) $pro_entrant = TRUE;
+if (($_SESSION['prefsProEdition'] == 1) && ((!$show_judge_steward_fields) || ($go == "admin"))) $pro_entrant = TRUE;
 
 // Build drop-off select element
 $dropoff_select = "";
@@ -370,9 +370,9 @@ if (action == "edit") {
     var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
 }
 </script>
-<script src="<?php echo $base_url; ?>js_includes/add_edit_user.min.js"></script>
+<script src="<?php echo $js_url; ?>add_edit_user.min.js"></script>
 <form id="submit-form" class="form-horizontal hide-loader-form-submit" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1">
-
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php 
 include (SECTIONS.'brewer_form_0.sec.php'); // Participant Info
 if (!$entrant_type_brewery) include (SECTIONS.'brewer_form_1.sec.php'); // Info for individuals only (not orgs)

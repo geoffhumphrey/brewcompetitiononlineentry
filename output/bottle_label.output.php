@@ -1,8 +1,4 @@
 <?php
-require('../paths.php');
-require(CONFIG.'bootstrap.php');
-require(LIB.'output.lib.php');
-
 // Set up vars
 $page_info0 = "";
 $page_info1 = "";
@@ -96,7 +92,7 @@ if (isset($_SESSION['loginUsername'])) {
             // Generate Barcode
             $barcode = sprintf("%06s",$row_log['id']);
 
-            $barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=20&code=BCGcode39";
+            $barcode_link = "https://admin.brewingcompetitions.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=20&code=BCGcode39";
 
             // Generate QR Code
             require_once (CLASSES.'qr_code/qrClass.php');
@@ -238,7 +234,7 @@ else {
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/templates.min.css">
+    <link rel="stylesheet" href="<?php echo $css_url."templates.min.css"; ?>">
     <style>
 
     body {

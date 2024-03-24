@@ -52,12 +52,12 @@ if ($nw_cider) {
 if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>eval/scoresheet_output.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>scoresheet_output.css">
 <!-- Header Row -->
 <div class="row">
     
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
-        <p><?php if (!$nw_cider) { ?><img style="max-width: 60px; min-width: 40px;" src="<?php echo $base_url."images/bjcp_logo.jpg"; ?>"><?php } ?></p>
+        <p><?php if (!$nw_cider) { ?><img style="max-width: 60px; min-width: 40px;" src="<?php echo $images_url."bjcp_logo.jpg"; ?>"><?php } ?></p>
     </div>
     
     <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -85,14 +85,13 @@ if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
             </div>
             <?php } ?>
         </div>
-
     </div>
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
-        <p class="pull-right"><img style="max-width: 50px; min-width: 35px;" src="<?php if ($nw_cider) echo "https://www.nwcider.com/wp-content/themes/nwcider/assets/images/nw-cider-logo-2x.png"; else echo $base_url."images/aha_logo.jpg"; ?>"></p>
+        <p class="pull-right"><img style="max-width: 50px; min-width: 35px;" src="<?php if ($nw_cider) echo "https://www.nwcider.com/wp-content/themes/nwcider/assets/images/nw-cider-logo-2x.png"; else echo $images_url."aha_logo.jpg"; ?>"></p>
     </div>
 </div><!-- ./row (header) -->
 <!-- Entry Info Row -->
-<div class="row" style="padding-top: 10px;">
+<div class="row" style="padding-top: 10px; padding-bottom: 15px;">
     <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <!-- judge name, ID, email -->
         <div class="row">
@@ -134,6 +133,12 @@ if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
             ?>
             </div>
         </div><!-- /row for judge rank -->
+        <?php } ?>
+        <?php if (!empty($row_judge['brewerMHP'])) { ?>
+        <div class="row">
+            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4"><strong>MHP#:</strong></div>
+            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8"><?php echo $row_judge['brewerMHP']; ?></div>
+        </div>
         <?php } ?>
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">

@@ -2,14 +2,14 @@
 /**
  * Module:      cs-CZ.lang.php
  * Description: This module houses all display text in the Czech language.
- * Updated:     January 17, 2023
+ * Updated:     November 6, 2023
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
  * 
  * ==============================
  * 
- * Use ISO 169-2 Standards for and WWW3C Language Tag Standards for naming 
+ * Use ISO 169-2 Standards and WWW3C Language Tag Standards for naming 
  * of language files. Use the ALPHA-2 letter code whenever possible.
  * 
  * ISO 169-2:
@@ -1781,7 +1781,7 @@ $evaluation_info_067 = "Uveďte prosím hodnocení.";
 $evaluation_info_068 = "Uveďte konsensuální skóre - minimálně 5, maximálně 50.";
 $evaluation_info_069 = "Nejméně dva degustátoři ze sady, do které byl váš vzorek zadán, dosáhli konsensu o vašem konečném skóre. Není to nutně průměr jednotlivých skóre.";
 $evaluation_info_070 = "Na základě degustačního listu BJCP";
-$evaluation_info_071 = "Od vašeho hodnocení uplynulo 15 minut. I když máte dostatek času, než vás systém automaticky odhlásí, toto je zdvořilostní varování, abyste se ujistili, že dokončíte své hodnocení včas a abyste udrželi tempo posuzování v přijatelné míře.";
+$evaluation_info_071 = "Uplynulo 15+ minut.";
 $evaluation_info_072 = "Ve výchozím nastavení je automatické odhlášení prodlouženo na 30 minut pro hodnocení vzorků.";
 
 $alert_text_090 = "Vaše relace vyprší za dvě minuty. Můžete zůstat na aktuální stránce, abyste mohli dokončit práci, než vyprší čas, obnovit tuto stránku a pokračovat v aktuální relaci (data formuláře se mohou ztratit) nebo se odhlásit.";
@@ -1947,6 +1947,27 @@ $brewer_text_051 = "Vyberte oborové organizace, s nimiž jste spojeni jako zam�
 $brewer_text_052 = "<strong>Pokud některá z oborových organizací není v rozbalovacím seznamu výše uvedena, uveďte ji zde.</strong> Oddělte název každé organizace čárkou (,) nebo středníkem (;). Některé symboly nejsou povoleny, včetně dvojitých uvozovek (&quot;) a procent (&#37;).";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.6.1 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$evaluation_info_104 = "Ne všichni porotci označili tuto práci jako postupující do kola Mini-BOS. Ověřte si to a vyberte Ano nebo Ne výše.";
+$evaluation_info_105 = "Následující položky mají od rozhodčích nesprávné označení Mini-BOS:";
+
+$label_non_judging = "Zasedání, která se netýkají soudců";
+
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.6.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_mhp_number = "Číslo člena programu Master Homebrewer";
+$brewer_text_053 = "Program Master Homebrewer je nezisková organizace založená za účelem podpory amatérského vaření piva.";
+$best_brewer_text_015 = "Body za každé umístění se vypočítávají podle následujícího vzorce, který vychází z vzorce používaného v programu Master Homebrewer pro <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------
@@ -1973,12 +1994,5 @@ if (strpos($section, "step") === FALSE) $alert_text_070 = $alert_text_070; else 
 if (strpos($section, "step") === FALSE) $label_character_limit = $label_character_limit; else $label_character_limit = "";
 if (strpos($section, "step") === FALSE) $header_text_031 = $header_text_031; else $header_text_031 = "";
 if (strpos($section, "step") === FALSE) $beerxml_text_007 = $beerxml_text_007; else $beerxml_text_007 = "";
-
-/**
- * ----------------------------------------------------------------------------------
- * Admin Pages - Admin pages will be included in a future release
- * ----------------------------------------------------------------------------------
- */
-// if ($section == "admin") include (LANG.'en_admin.lang.php');
 
 ?>

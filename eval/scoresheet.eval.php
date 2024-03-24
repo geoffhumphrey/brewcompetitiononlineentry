@@ -29,6 +29,12 @@ $other_judge_previous_consensus = array();
 $my_consensus_score = "";
 $evalPosition = "";
 
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
 /**
  * Default judge range is 7 points, a commonly accepted
  * range. 
@@ -169,7 +175,15 @@ if ($action == "add") {
   $row_entry_info = mysqli_fetch_assoc($entry_info);
   $totalRows_entry_info = mysqli_num_rows($entry_info);
 
-  if ($totalRows_entry_info > 0) $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
+  if ($totalRows_entry_info > 0) {
+    
+    /*
+    if (HOSTED) $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s' UNION ALL SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $styles_db_table, $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet'], $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
+    else
+    */
+    $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
+  }
+
 }
 
 /**
@@ -204,7 +218,13 @@ if ($action == "edit") {
     $row_entry_info = mysqli_fetch_assoc($entry_info);
     $totalRows_entry_info = mysqli_num_rows($entry_info);
     
-    if ($totalRows_entry_info > 0) $query_style = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."styles", $style);
+    if ($totalRows_entry_info > 0) {
+      /*
+      if (HOSTED) $query_style = sprintf("SELECT * FROM %s WHERE id='%s' UNION ALL SELECT * FROM %s WHERE id='%s'", $styles_db_table, $style, $prefix."styles", $style);
+      else 
+      */
+      $query_style = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."styles", $style);
+    }
 
   }
 
@@ -299,7 +319,7 @@ if ($entry_found) {
   // Build entry info display
   $entry_info_html .= "<div class=\"alert alert-teal\">";
   $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
-  $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_entry_number."</strong></div>";
+  $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_number."</strong></div>";
   $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$number."</div>";
   $entry_info_html .= "</div>";
 
@@ -410,8 +430,15 @@ if ($entry_found) {
 
   if (!empty($row_entry_info['brewStaffNotes'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
-    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_notes."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_notes." &ndash; ".$label_staff."</strong></div>";
     $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewStaffNotes']."</div>";
+    $entry_info_html .= "</div>";
+  }
+
+  if (!empty($row_entry_info['brewAdminNotes'])) {
+    $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_notes." &ndash; ".$label_admin_short."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewAdminNotes']."</div>";
     $entry_info_html .= "</div>";
   }
 
@@ -461,6 +488,7 @@ if ($entry_found) {
   // Sticky score
   $sticky_score_tally = "<div id=\"sticky-score\" class=\"pull-right\">";
   $sticky_score_tally .= "<div class=\"pull-right\" style=\"display:block; font-size: 1.5em; padding-right: 5px;  margin-bottom: 15px;\">";
+  $sticky_score_tally .= "<i style=\"padding: 5px 5px 0 0; font-size: .75em\"\" id=\"warning-indicator-icon\" class=\"fa fa-exclamation-triangle text-danger\"></i>";
   $sticky_score_tally .= "<a style=\"padding-top: 5px; font-size: .75em\"\" id=\"show-hide-status-btn\" data-toggle=\"collapse\" href=\"#scoring-guide-status\" aria-controls=\"scoring-guide-status\"><span id=\"toggle-icon\" class=\"fa fa-chevron-circle-up\"></span></a>";
   $sticky_score_tally .= "</div>";
   
@@ -474,9 +502,20 @@ if ($entry_found) {
   
   $sticky_score_tally .= "<section position: absolute; width: 100%; background-color: rgba(220,220,220,0.80);\" id=\"scoring-guide-status\" class=\"well sticky-glow collapse in\">";
   
+  // Elapsed time
   $sticky_score_tally .= "<p><span id=\"elapsed-time-p\"><i class=\"fa fa-clock\"></i> <strong>".$label_elapsed_time.": <span id=\"elapsed-time\"></span></strong></span><br><small id=\"session-end-eval-p\">".$label_auto_log_out." <span id=\"session-end-eval\"></span></small>";
   $sticky_score_tally .= "</p>";
+
+  // 15-minute courtesy warning.
+  $sticky_score_tally .= "<p id=\"courtesy-alert-warning-15\">";
+  $sticky_score_tally .= "<span id=\"courtesy-alert-warning-15-header\"><i class=\"fa fa-exclamation-circle\"></i> <strong>".$label_please_note."<span id=\"elapsed-time\"></strong></span>";
+  $sticky_score_tally .= "<br>";
+  $sticky_score_tally .= "<small>";
+  $sticky_score_tally .= $evaluation_info_071;
+  $sticky_score_tally .= "</small>";
+  $sticky_score_tally .= "</p>";
   
+  // Show score range and consensus statuses if scored previously
   if ($scored_previously) {
     $sticky_score_tally .= "<p style=\"padding-top: 10px;\">";
     $sticky_score_tally .= "<i id=\"scoring-guide-status-icon\" class=\"fa fa-chevron-circle-right\"></i> <span id=\"scoring-guide-status-msg\"><strong>".$label_score_range_status."</strong></span>";
@@ -543,6 +582,7 @@ if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104
 <!-- https://github.com/seiyria/bootstrap-slider -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" />
+
 <script>
 var judgeScores = <?php echo json_encode($judge_scores); ?>;
 var consensusScores = <?php echo json_encode($consensus_scores); ?>;
@@ -566,17 +606,23 @@ var score_range_ok = "<?php echo $label_score_range_ok; ?>";
 var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
 var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
 </script>
-<script src="<?php echo $base_url;?>js_includes/eval_checks.min.js"></script>
+<script src="<?php echo $js_url; ?>eval_checks.min.js"></script>
 <script>
 $(document).ready(function() {
-    <?php if ($action == "edit") { ?>
-    displayCalc(<?php echo $eval_score; ?>);
-    checkScoreRange(<?php echo $eval_score; ?>,judgeScores,score_range,0);
-    checkConsensus(consensusScores);
-    <?php }?>
-    $('#show-hide-status-btn').click(function(){
+  
+  $("#courtesy-alert-warning-15").hide();
+  $("#warning-indicator-icon").hide();
+  
+  <?php if ($action == "edit") { ?>
+  displayCalc(<?php echo $eval_score; ?>);
+  checkScoreRange(<?php echo $eval_score; ?>,judgeScores,score_range,0);
+  checkConsensus(consensusScores);
+  <?php }?>
+  
+  $('#show-hide-status-btn').click(function(){
       $('#toggle-icon').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
-    });
+  });
+
 });
 </script>
 <style type="text/css">
@@ -628,7 +674,8 @@ echo $entry_info_html;
 if ($entry_found) {
   echo $sticky_score_tally;
 ?>
-<form class="hide-loader-form-submit" id="form1" name="form1" role="form" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $process_type; ?>&action=<?php echo $action; ?>&view=<?php echo $view; ?>&dbTable=<?php echo $prefix."evaluation"; if ($action == "edit") echo "&id=".$id; ?>" method="post">
+<form class="hide-loader-form-submit" id="scoresheet-form" name="scoresheet-form" role="form" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $process_type; ?>&action=<?php echo $action; ?>&view=<?php echo $view; ?>&dbTable=<?php echo $prefix."evaluation"; if ($action == "edit") echo "&id=".$id; ?>" method="post">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <!-- Provide information about the judge -->
 <input type="hidden" name="evalJudgeInfo" value="<?php if ($action == "add") echo $judge_id; else echo $row_eval['evalJudgeInfo']; ?>">
 <!-- Type of scoresheet -->
@@ -864,9 +911,15 @@ if ($entry_found) {
   </div>
 </div>
 <?php } ?>
+<script src="<?php echo $js_url; ?>saveMyForm.jquery.min.js"></script>
 <script type="text/javascript">
 var style_type = <?php echo $row_style['brewStyleType']; ?>;
 var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
+
+$(function() {
+    $('#scoresheet-form').saveMyForm();
+});
+
 </script>
 <?php if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) { ?>
 <script type="text/javascript">

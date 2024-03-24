@@ -20,9 +20,6 @@ include (LANG.'language.lang.php');
 
 mysqli_select_db($connection,$database);
 
-if (NHC) $base_url = "../";
-else $base_url = $base_url;
-
 // Set timezone as Europe/London just in case
 $timezone_raw = "0";
 
@@ -71,12 +68,41 @@ $bool = date("I");
 if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0);
 else $timezone_offset = number_format($timezone_raw,0);
 
+$process_allowed = FALSE;
 if (isset($_SERVER['HTTP_REFERER'])) {
 	$referrer = parse_url($_SERVER['HTTP_REFERER']);
-	// echo $referrer['host']."<br>".$_SERVER['SERVER_NAME']; exit;
+	if ((($referrer['host'] == $_SERVER['SERVER_NAME']) && (isset($_SESSION['prefs'.$prefix_session]))) || ($setup_free_access)) $process_allowed = TRUE;
 }
 
 if ((isset($_SESSION['prefsSEF'])) && ($_SESSION['prefsSEF'] == "Y")) $sef = TRUE;
+
+/**
+ * Check for CSRF token.
+ * If tokens match, continue with process.
+ * If not, redirect to 403 (forbidden) error page.
+ */
+
+$request_method = strtoupper($_SERVER['REQUEST_METHOD']);
+$bypass_token = array("login","logout","forgot","reset","paypal");
+
+if (($request_method === "POST") && (!in_array($section,$bypass_token))) {
+
+	$token_hash = FALSE;
+	$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
+
+	if ((!$token) || (!$token_hash) || (!$process_allowed)) {
+		session_unset();
+		session_destroy();
+		session_write_close();
+		$redirect = $base_url."403.php";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+		header($redirect_go_to);
+		exit();
+	}
+
+}
 
 if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) {
 
@@ -109,19 +135,12 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	// --------------------------- // -------------------------------- //
 
-	if (NHC) {
-		$insertGoTo = "../";
-		$updateGoTo = "../";
-		$massUpdateGoTo = "../";
-	}
-
-	else {
-		$insertGoTo = "";
-		$updateGoTo = "";
-		$massUpdateGoTo = "";
-		$errorGoTo = "";
-	}
-
+	$insertGoTo = "";
+	$updateGoTo = "";
+	$massUpdateGoTo = "";
+	$errorGoTo = "";
+	$deleteGoTo = "";
+	
 	if (isset($_POST['relocate'])) {
 
 		if (strpos($_POST['relocate'],"?") === false) {
@@ -149,8 +168,22 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	// --------------------------- Various Actions ------------------------------- //
 
-	if ($action == "delete") include (PROCESS.'process_delete.inc.php');
+
+	// Log in, log out, forgot password
+	if ($action == "login") include (INCLUDES.'logincheck.inc.php');
+	elseif ($action == "logout") include (INCLUDES.'logout.inc.php');
+	elseif (($action == "forgot") || ($action == "reset")) include (INCLUDES.'forgot_password.inc.php');
+
+	// Delete
+	elseif ($action == "delete") include (PROCESS.'process_delete.inc.php');
+	
+	// Barcode check in
+	elseif ($action == "barcode_check_in") include (PROCESS.'process_barcode_check_in.inc.php');
+
+	// Updating judging flights
 	elseif ($action == "update_judging_flights") include (PROCESS.'process_judging_flight_check.inc.php');
+	
+	// Delete scoresheets in user_docs folder
 	elseif ($action == "delete_scoresheets") {
 
 		rdelete(USER_DOCS,"");
@@ -159,6 +192,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	}
 
+	// Clear session vars
 	elseif ($action == "clear_session") {
 
 		unset($_SESSION['session_set_'.$prefix_session]);
@@ -171,8 +205,10 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	}
 
+	// Data clean up
 	elseif (($action == "purge") || ($action == "cleanup")) include(INCLUDES.'data_cleanup.inc.php');
 
+	// Regenerate judging numbers
 	elseif ($action == "generate_judging_numbers") {
 
 		generate_judging_numbers($prefix."brewing",$sort);
@@ -183,6 +219,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	}
 
+	// Check for any entry fee discounts
 	elseif ($action == "check_discount") {
 
 		$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id='1'",$prefix."contest_info");
@@ -200,11 +237,13 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13");
 	}
 
+	// Convert entries to selected BJCP version
 	elseif ($action == "convert_bjcp") {
+
+		include (LIB.'convert.lib.php');
 
 		if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
 
-			include (LIB.'convert.lib.php');
 			include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
 
 			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2015","1");
@@ -215,7 +254,6 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
-			include (LIB.'convert.lib.php');
 			include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
 
 			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2021","1");
@@ -232,6 +270,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	}
 
+	// Archive data
 	elseif ($action == "archive") {
 
 		if (HOSTED) include (PROCESS.'process_archive_hosted.inc.php');
@@ -239,13 +278,16 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	}
 
+	/**
+	 * Publish results - resets pertinent dates to the current timestamp -
+	 * entry, acct registration, judge/steward registration, and judging deadlines.
+	 * Marks all relevant dates in the past to trigger the winner display.
+	 */ 
 	elseif ($action == "publish") {
 
 		$update = sprintf("UPDATE %s SET prefsDisplayWinners='%s', prefsWinnerDelay='%s' WHERE id='%s'",$prefix."preferences","Y",time(),"1");
 		mysqli_real_escape_string($connection,$update);
 		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
-
-		// Do some clean up just in case
 
 		if ($_SESSION['contestRegistrationDeadline'] > time()) {
 			$update = sprintf("UPDATE %s SET contestRegistrationDeadline='%s' WHERE id='%s'",$prefix."contest_info",time(),"1");
@@ -265,6 +307,37 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
 		}
 
+		if ($_SESSION['jPrefsJudgingClosed'] > time()) {
+			$update = sprintf("UPDATE %s SET jPrefsJudgingClosed='%s' WHERE id='%s'",$prefix."judging_preferences",time(),"1");
+			mysqli_real_escape_string($connection,$update);
+			$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+		}
+
+		$query_judging_locations = sprintf("SELECT id,judgingDate FROM %s",$prefix."judging_locations",time());
+		$judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
+		$row_judging_locations = mysqli_fetch_assoc($judging_locations);
+		$totalRows_judging_locations = mysqli_num_rows($judging_locations);
+
+		if ($totalRows_judging_locations > 0) {
+			
+			do {
+
+				if ($row_judging_locations['judgingDate'] > time()) {
+
+					$update = sprintf("UPDATE %s SET judgingDate='%s' WHERE id='%s'",$prefix."judging_locations",time(),$row_judging_locations['id']);
+					mysqli_real_escape_string($connection,$update);
+					$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+
+				}
+
+			} while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+		
+		}
+
+		$update = sprintf("UPDATE %s SET judgingDateEnd='%s' WHERE judgingLocType='1'",$prefix."judging_locations",time());
+		mysqli_real_escape_string($connection,$update);
+		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+
 		session_name($prefix_session);
 		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
@@ -273,9 +346,16 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	}
 
+	// Email functions
 	elseif (($action == "email") && ($dbTable == "default")) include (PROCESS.'process_email.inc.php');
+	
+	// Paypal IPN
 	elseif (($action == "paypal") && ($dbTable == "default")) include (PROCESS.'process_paypal.inc.php');
+	
+	// Updates to associated entry, acct registration, judge/steward registration, and judging dates
 	elseif (($action == "dates") && ($dbTable == "default")) include (PROCESS.'process_dates.inc.php');
+	
+	// Update to various DB Tables as called out in process URL
 	else {
 
 		if ($dbTable == $prefix."brewing") include (PROCESS.'process_brewing.inc.php');
@@ -286,7 +366,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		if ($dbTable == $prefix."sponsors") include (PROCESS.'process_sponsors.inc.php');
 		if ($dbTable == $prefix."judging_locations") include (PROCESS.'process_judging_locations.inc.php');
 		if ($dbTable == $prefix."drop_off") include (PROCESS.'process_drop_off.inc.php');
-		if ($dbTable == $prefix."styles") include (PROCESS.'process_styles.inc.php');
+		if (($dbTable == $prefix."styles") || ($dbTable == "bcoem_shared_styles")) include (PROCESS.'process_styles.inc.php');
 		if ($dbTable == $prefix."contacts") include (PROCESS.'process_contacts.inc.php');
 		if ($dbTable == $prefix."judging_preferences") include (PROCESS.'process_judging_preferences.inc.php');
 		if ($dbTable == $prefix."judging_tables") include (PROCESS.'process_judging_tables.inc.php');
@@ -304,6 +384,9 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	if (DEBUG) include (DEBUGGING.'query_count_end.debug.php');
 	session_write_close();
+
+	// Failsafe to convert &amp; to & and so on for use in header redirect.
+	$redirect_go_to = html_entity_decode($redirect_go_to);
 	header($redirect_go_to);
 
 }
@@ -312,5 +395,5 @@ else {
 	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
 }
 
-exit;
+exit();
 ?>

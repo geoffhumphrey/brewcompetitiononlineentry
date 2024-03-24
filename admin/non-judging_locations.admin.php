@@ -192,6 +192,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	if (!empty($form_submit_url)) echo $form_submit_url; 
 ?>
 
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#judgingDate').datetimepicker({

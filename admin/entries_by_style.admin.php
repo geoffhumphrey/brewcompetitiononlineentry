@@ -17,19 +17,17 @@ $style_other_count_logged[] = 0;
 include (DB.'styles.db.php');
 
 do {
-	$accepted_categories[] = $row_styles['brewStyleGroup'];
+	if (array_key_exists($row_styles['id'], $styles_selected)) {
+		$accepted_categories[] = $row_styles['brewStyleGroup'];
+	} 
 } while ($row_styles = mysqli_fetch_assoc($styles));
 
 sort($accepted_categories);
 $total_cat = array_unique($accepted_categories);
-// echo "<br>";
-// print_r($total_cat);
 
 if ($_SESSION['prefsStyleSet'] == "BA") {
 
 	include (INCLUDES.'ba_constants.inc.php');
-
-	//print_r($ba_all_categories);
 
 	foreach ($style_sets as $style_set_data) {
 		if ($style_set_data['style_set_name'] === "BA") {
@@ -57,21 +55,6 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 			
 		}
 	}
-
-	/*
-	foreach ($ba_all_categories as $cat) {
-
-		include (DB.'entries_by_style.db.php');
-
-		$html .= "<tr>";
-		$html .= "<td>".$ba_category_names[$cat]."</td>";
-		$html .= "<td>".$row_style_count_logged['count']."</td>";
-		$html .= "<td>".$row_style_count['count']."</td>";
-		$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
-		$html .= "</tr>";
-
-	}
-	*/
 
 }
 
@@ -123,8 +106,6 @@ foreach ($total_cat as $key) {
 		$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
 		$html .= "</tr>";
 	}
-
-	
 
 	// ------ DEBUG ------
 

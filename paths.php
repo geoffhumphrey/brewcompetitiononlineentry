@@ -49,7 +49,7 @@ define('AJAX',ROOT.'ajax'.DIRECTORY_SEPARATOR);
 define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
-define('EVALUATION', TRUE);
+define('EVALUATION', FALSE);
 
 /**
  * Enable to following to put your installation into
@@ -67,7 +67,7 @@ define('MAINT', FALSE);
  * in the root folder of your installation.
  * If set to FALSE, the local libraries must be in place
  * PRIOR to proceeding through the setup process.
- * @see http://www.brewcompetition.com/local-load
+ * @see http://www.brewingcompetitions.com/local-load
  * Default is TRUE.
  */
 
@@ -169,7 +169,7 @@ function sterilize($sterilize = NULL) {
             if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
             if (is_int($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
         }
-        else $sterilize = filter_var($sterilize,FILTER_SANITIZE_STRING);
+        else $sterilize = filter_var($sterilize,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $sterilize = strip_tags($sterilize);
         $sterilize = stripcslashes($sterilize);
         $sterilize = stripslashes($sterilize);
@@ -180,7 +180,7 @@ function sterilize($sterilize = NULL) {
 
 if (HOSTED) {
     $installation_id = md5(__FILE__);
-    $session_expire_after = 30;
+    $session_expire_after = 60;
 }
 
 /** 
@@ -235,8 +235,7 @@ $_SESSION['last_action'] = time();
 
 /**
  * RECAPTCHA Keys
- * One set is for hosted installations on brewcomp.com or
- * brewcompetition.com - the other is for outside use.
+ * One set is for hosted installations, the other is for outside use.
  * Per Google guidelines, all keys validate the domain from
  * which it was generated:
  * @see https://developers.google.com/recaptcha/docs/domain_validation

@@ -21,6 +21,7 @@
         <li>Be <strong>less than</strong> 10 MB in size.</li>
     </ul>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-default btn-file"><span>Choose PDF File</span><input type="file" name="file" /></span>
     <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
@@ -47,10 +48,11 @@
             </ul>
         </li>
         <li>Have a .pdf or .PDF extension.</li>
-        <li>Be <strong>less than</strong> 10 MB in size.</li>
+        <li>Be <strong>less than <?php if (HOSTED) echo "4"; else echo "5"; ?> MB</strong> in size.</li>
     </ul>
-<p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case. Files should be less than 10 MB.</p>
+<p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case.</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="fallback">
     <input name="file" type="file" multiple />
   </div>
@@ -133,11 +135,11 @@ if (!is_dir_empty(USER_DOCS)) {
 			$scoresheet_random_file = USER_TEMP.$random_file_name;
 			$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
 			$scoresheet_link = "";
-			$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
-			$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
-			$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
+			$scoresheet_link .= "<a target=\"_blank\" class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=scoresheet";
+			$scoresheet_link .= "&amp;scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$_SESSION['encryption_key']));
+			$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$_SESSION['encryption_key']))."&amp;download=true";
 			$scoresheet_link .= "\">".$scoresheet_file_name."</a>";
-			$scoresheet_file_size = number_format($file->getSize()/1000000,2);
+			$scoresheet_file_size = number_format($file->getSize()/1000000,4);
 
 			$filelist .= "<tr>\n";
 			$filelist .= "<td>".$scoresheet_link."</td>\n";

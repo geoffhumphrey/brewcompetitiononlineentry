@@ -17,6 +17,7 @@ $brewerJudgeMead = "";
 $brewerJudgeCider = "";
 $brewerJudgeRank = "";
 $brewerAHA = "";
+$brewerMHP = "";
 $brewerProAm = "";
 $brewerClubs = "";
 $brewerPhone1 = "";
@@ -50,6 +51,7 @@ if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = $_POST['brewerJudgeMead
 if (isset($_POST['brewerJudgeCider'])) $brewerJudgeCider = $_POST['brewerJudgeCider'];
 if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
 if (isset($_POST['brewerAHA'])) $brewerAHA = sterilize($_POST['brewerAHA']);
+if (isset($_POST['brewerMHP'])) $brewerMHP = sterilize($_POST['brewerMHP']);
 if (isset($_POST['brewerProAm'])) $brewerProAm = $_POST['brewerProAm'];
 if (isset($_POST['brewerClubs'])) {
     include (DB.'entries.db.php');

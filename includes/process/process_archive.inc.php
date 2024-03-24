@@ -461,7 +461,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$_SESSION['prefsTransFee'] = $row_prefs['prefsTransFee'];
 				$_SESSION['prefsSponsors'] = $row_prefs['prefsSponsors'];
 				$_SESSION['prefsSponsorLogos'] = $row_prefs['prefsSponsorLogos'];
-				$_SESSION['prefsSponsorLogoSize'] = $row_prefs['prefsSponsorLogoSize'];
+				$_SESSION['prefsSelectedStyles'] = $row_prefs['prefsSelectedStyles'];
 				$_SESSION['prefsCompLogoSize'] = $row_prefs['prefsCompLogoSize'];
 				$_SESSION['prefsDisplayWinners'] = $row_prefs['prefsDisplayWinners'];
 				$_SESSION['prefsWinnerDelay'] = $row_prefs['prefsWinnerDelay'];

@@ -1,9 +1,9 @@
 <script type="text/javascript">
-var username_url = "<?php echo $base_url; ?>ajax/username.ajax.php";
-var email_url="<?php echo $base_url; ?>ajax/valid_email.ajax.php";
+var username_url = "<?php echo $ajax_url; ?>username.ajax.php";
+var email_url="<?php echo $ajax_url; ?>valid_email.ajax.php";
 var setup = 1;
 </script>
-<script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
+<script src="<?php echo $js_url; ?>registration_checks.min.js"></script>
 <script type="text/javascript">
         $(document).ready(function () {
             "use strict";
@@ -41,6 +41,7 @@ foreach ($security_questions_display as $key => $value) {
 <p class="lead">This will be the Administrator's account with full access to <em>all</em> of the installation's features and functions.</p>
 <p class="lead"><small>The owner of this account will be able to add, edit, and delete any entry and participant, grant administration privileges to other users, define custom styles, define tables and flights, add scores, print reports, etc. This user will also be able to add, edit, and delete their own entries into the competition.</small></p>
 <form class="form-horizontal" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step1") echo "setup"; else echo $section; ?>&amp;action=add&amp;dbTable=<?php echo $users_db_table; ?>" method="POST" name="form1" id="form1">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <input name="userLevel" type="hidden" value="0" />
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email Address</label>

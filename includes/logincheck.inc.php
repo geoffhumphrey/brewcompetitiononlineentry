@@ -1,8 +1,5 @@
 <?php
 ob_start();
-require ('../paths.php');
-require (CONFIG.'config.php');
-require (LIB.'common.lib.php');
 require (CLASSES.'phpass/PasswordHash.php');
 
 $section = "default";

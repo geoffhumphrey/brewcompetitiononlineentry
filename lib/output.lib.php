@@ -22,24 +22,31 @@ function location_count($location_id) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
+	$location_count = 0;
+	$uid = array();
+
 	$query_dropoff = sprintf("SELECT uid FROM %s WHERE brewerDropOff='%s'",$prefix."brewer",$location_id);
 	$dropoff = mysqli_query($connection,$query_dropoff) or die (mysqli_error($connection));
 	$row_dropoff = mysqli_fetch_assoc($dropoff);
 	$totalRows_dropoff = mysqli_num_rows($dropoff);
 
-	do { $uid[] = $row_dropoff['uid']; } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+	if ($row_dropoff) {
+		
+		do { $uid[] = $row_dropoff['uid']; } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 
-	foreach ($uid as $brewBrewerID) {
+		foreach ($uid as $brewBrewerID) {
 
-		$query_dropoffs = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'",$prefix."brewing",$brewBrewerID);
-		$dropoffs = mysqli_query($connection,$query_dropoffs) or die (mysqli_error($connection));
-		$row_dropoffs = mysqli_fetch_assoc($dropoffs);
+			$query_dropoffs = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'",$prefix."brewing",$brewBrewerID);
+			$dropoffs = mysqli_query($connection,$query_dropoffs) or die (mysqli_error($connection));
+			$row_dropoffs = mysqli_fetch_assoc($dropoffs);
 
-		$location_count[] = $row_dropoffs['count'];
+			$location_count += $row_dropoffs['count'];
 
+		}
+	
 	}
 
-	return array_sum($location_count);
+	return $location_count;
 }
 
 function dropoff_location_info($location_id) {
@@ -140,7 +147,7 @@ function filename($input) {
 }
 
 // --------------------------------------------------------
-// The following applies to /output/entry.output.php
+// The following applies to entry.output.php
 // --------------------------------------------------------
 
 function pay_to_print($prefs_pay,$entry_paid) {
@@ -149,10 +156,8 @@ function pay_to_print($prefs_pay,$entry_paid) {
 	elseif ($prefs_pay == "N") return TRUE;
 }
 
-
-
 // --------------------------------------------------------
-// The following applies to /output/labels.php
+// The following applies to labels.output.php
 // --------------------------------------------------------
 
 function truncate($string, $your_desired_width, $append="") {

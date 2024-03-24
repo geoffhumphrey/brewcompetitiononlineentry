@@ -18,7 +18,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$sbi_name = "";
 	$sbi_description = "";
 
-	if (isset($_POST['sbi_name']) {
+	if (isset($_POST['sbi_name'])) {
 		$sbi_name = $purifier->purify($_POST['sbi_name']);
 		$sbi_name = sterilize($sbi_name);
 	}

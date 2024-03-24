@@ -14,6 +14,12 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	$eval_arr = array();
 	$evalPlace = array();
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	// First, query DB to see if any evaluations have been recorded
 	$query_eval = sprintf("SELECT * FROM %s",$prefix."evaluation");
 	$eval = mysqli_query($connection,$query_eval) or die (mysqli_error($connection));
@@ -80,7 +86,11 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			$row_evals = mysqli_fetch_assoc($evals);
 			$totalRows_evals = mysqli_num_rows($evals);
 
-			$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'",$prefix."styles",$row_evals['evalStyle']);
+			/*
+			if (HOSTED) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s' UNION ALL SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle'], $prefix."styles", $row_evals['evalStyle']);
+			else 
+			*/
+			$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'",$styles_db_table,$row_evals['evalStyle']);
 			$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 			$row_style_type = mysqli_fetch_assoc($style_type);
 
@@ -95,11 +105,16 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				// Loop through and compare each final score. 
 				do {
 
-					$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'",$prefix."styles",$row_evals['evalStyle']);
+					/*
+					if (HOSTED) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s' UNION ALL SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle'], $prefix."styles", $row_evals['evalStyle']);
+					else 
+					*/
+					$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle']);
 					$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 					$row_style_type = mysqli_fetch_assoc($style_type);
 
-					$evalStyleType[] = $row_style_type['brewStyleType'];
+					if ($row_style_type) $evalStyleType[] = $row_style_type['brewStyleType'];
+					else $evalStyleType[] = "";
 					$evalPlace[] = $row_evals['evalPlace'];
 				
 				} while($row_evals = mysqli_fetch_assoc($evals));
@@ -173,8 +188,12 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					// Loop through and compare each final score. 
 					do {
 
-						$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'",$prefix."styles",$row_evals['evalStyle']);
-						$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
+						/*
+						if (HOSTED) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s' UNION ALL SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle'], $prefix."styles", $row_evals['evalStyle']);
+						else
+						*/
+						$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle']);
+						$style_type = mysqli_query($connection,$query_style_type);
 						$row_style_type = mysqli_fetch_assoc($style_type);
 
 						$eval_scores[] = $row_evals['evalFinalScore'];
@@ -183,7 +202,8 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 						$evalTable[] = $row_evals['evalTable'];
 						$evalMiniBOS[] = $row_evals['evalMiniBOS'];
 						$evalPlace[] = $row_evals['evalPlace'];
-						$evalStyleType[] = $row_style_type['brewStyleType'];
+						if ($row_style_type) $evalStyleType[] = $row_style_type['brewStyleType'];
+						else $evalStyleType[] = "";
 						
 
 					} while ($row_evals = mysqli_fetch_assoc($evals));

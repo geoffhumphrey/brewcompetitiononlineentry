@@ -109,7 +109,7 @@
 }
 if (($action == "add") || ($action == "edit")) { ?>
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&id=<?php echo $id; ?>" name="form1">
-
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php
 if ($action == "add") {
 	for ($i=1; $i <= $row_sbi['sbi_places']; $i++) {

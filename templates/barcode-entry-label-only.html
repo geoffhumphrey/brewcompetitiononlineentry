@@ -19,25 +19,13 @@
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/templates.min.css">
-
+    <link rel="stylesheet" href="//brewingcompetitions.com/_bcoem_shared/css/templates.min.css">
 </head>
 <body>
 <a name="labels_top" id="labelsOtop"></a>
 <div id="printContainer">
-<!-- div for non-print header -->
-<div>
-[onshow;block=div;when [var.action]!='print']
-<table>
-  <tr>
-    <td><h3 class="text-danger">[onshow.bottle_labels_005]</h3></td>
-    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
-  </tr>
-</table>
-</div> <!-- end non-print header-->
 <a name="labels" id="labels"></a>
 <div class="container">
-  [onshow;block=div;when [var.action]='print']
   <p>[onshow.bottle_labels_003] <strong>[onshow.bottle_labels_001]</strong></p>
   <p>[onshow.bottle_labels_004]</p>
 </div>
@@ -317,17 +305,8 @@
     </table></td>
   </tr>
 </table>
-<div>
-[onshow_c;block=div;when [var.action]!='print']
-<table>
-  <tr>
-  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
-  </tr>
-</table>
-</div> <!-- end non-print header -->
 </div>
 <div>
-[onshow;block=div;when [var.action]=='print']
 <script type="text/javascript">
 function selfPrint(){
     self.focus();
