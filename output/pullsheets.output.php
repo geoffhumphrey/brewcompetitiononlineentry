@@ -1812,7 +1812,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."</li>";
 								if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."</li>";
-								if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewSweetnessLevel']))) $table_flight_tbody .= "<li><strong>".$label_sweetness_level.":</strong> ".$row_entries['brewSweetnessLevel']."</li>";
+								if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewSweetnessLevel']))) $table_flight_tbody .= "<li><strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel']."</li>";
 								if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_entries['brewMead3']."</li>";
 
 								if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</li>";

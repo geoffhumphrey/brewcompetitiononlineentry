@@ -1973,7 +1973,7 @@ $best_brewer_text_015 = "Body za každé umístění se vypočítávají podle n
  * ------------------------------------------------------------------------
  */
 $label_abv = "Obsah alkoholu podle objemu (ABV)";
-$label_sweetness_level = "Úroveň sladkosti";
+$label_final_gravity = "Konečná gravitace";
 $label_juice_source = "Zdroj šťávy(y)";
 $label_select_all_apply = "Vyberte Vše, co Platí";
 $label_pouring = "Nalévání";

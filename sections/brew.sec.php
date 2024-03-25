@@ -183,8 +183,7 @@ do {
 		if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
 		if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
 		if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
-		if (($selected_disabled == "DISABLED") && ($bid == "default")) $selection .= " ".$brew_text_002;
-		if (($selected_disabled == "DISABLED") && ($bid != "default")) $selection .= " ".$brew_text_003;
+		if ($selected_disabled == "DISABLED") $selection .= " ".$brew_text_003;
 
 		if (!empty($row_styles['brewStyleGroup'])) {
 			$styles_dropdown .= "<option value=\"".$style_value."\"";
@@ -207,13 +206,10 @@ $add_edit_message = "";
 // Disable display of add/edit form elements
 // Display messaging if adding and/or editing is disabled
 if (($add_entry_disable) && ($edit_entry_disable))  {
-
 	$add_or_edit = FALSE;
-
 	$add_edit_message .= "<p class=\"lead\">".$alert_text_083."</p>";
 	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) $add_edit_message .= sprintf("<p>%s</p>",$alert_text_031);
 	if (($adminUser) && ($adminUserAddDisable)) $add_edit_message .= "<p>".$brew_text_029."</p>";
-
 }
 
 if (($add_entry_disable) && (!$edit_entry_disable) && ($action == "add"))  {
@@ -687,9 +683,11 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
                     <label class="radio-inline">
                         <input type="radio" name="brewMead2-cider" value="Semi-Dry" id="brewMead2_1"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Semi-Dry")) echo "CHECKED";  ?>/> <?php echo $label_semi_dry; ?>
                     </label>
+                    <?php if ($_SESSION['prefsStyleSet'] != "NWCiderCup") { ?>
                     <label class="radio-inline">
                         <input type="radio" name="brewMead2-cider" value="Medium" id="brewMead2_2"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Medium")) echo "CHECKED";  ?>/> <?php echo $label_med; ?>
                     </label>
+                	<?php } ?>
                     <label class="radio-inline">
                         <input type="radio" name="brewMead2-cider" value="Semi-Sweet" id="brewMead2_3"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Semi-Sweet")) echo "CHECKED";  ?>/> <?php echo $label_semi_sweet; ?>
                     </label>
@@ -711,50 +709,50 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     	"pouring_notes" => ""
     );
     ?>
-	<div class="form-group">
-	    <label for="brewPouringInst" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_pouring; ?></label>
-	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-	        <div class="input-group" id="brewPouringInst">
-			    <label class="radio-inline">
-			      <input name="brewPouringInst" type="radio" id="brewPouringInst-Fast" value="<?php echo $label_fast; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_fast)) echo "CHECKED"; ?>> <?php echo $label_fast; ?>
-			    </label>
-			    <label class="radio-inline">
-			      <input name="brewPouringInst" type="radio" id="brewPouringInst-Normal" value="<?php echo $label_normal; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring'] == $label_normal)) echo "CHECKED"; ?>> <?php echo $label_normal; ?>
-			    </label>
-			    <label class="radio-inline">
-			      <input name="brewPouringInst" type="radio" id="brewPouringInst-Slow" value="<?php echo $label_slow; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_slow)) echo "CHECKED"; ?>> <?php echo $label_slow; ?>
-			    </label>
+    <div id="specify-pouring">
+		<div class="form-group">
+		    <label for="brewPouringInst" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_pouring; ?></label>
+		    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+		        <div class="input-group" id="brewPouringInst">
+				    <label class="radio-inline">
+				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Fast" value="<?php echo $label_fast; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_fast)) echo "CHECKED"; ?>> <?php echo $label_fast; ?>
+				    </label>
+				    <label class="radio-inline">
+				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Normal" value="<?php echo $label_normal; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring'] == $label_normal)) echo "CHECKED"; ?>> <?php echo $label_normal; ?>
+				    </label>
+				    <label class="radio-inline">
+				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Slow" value="<?php echo $label_slow; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_slow)) echo "CHECKED"; ?>> <?php echo $label_slow; ?>
+				    </label>
+				</div>
+				<div class="help-block with-errors"></div>
+				<div class="help-block with-errors"><?php echo $brew_text_047; ?></div>
 			</div>
-			<div class="help-block with-errors"></div>
-			<div class="help-block with-errors"><?php echo $brew_text_047; ?></div>
 		</div>
-	</div>
-
-	<div class="form-group">
-	    <label for="brewPouringRouse" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_rouse_yeast; ?></label>
-	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-	        <div class="input-group" id="brewPouringRouse">
-			    <label class="radio-inline">
-			      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-Yes" value="<?php echo $label_yes; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_yes)) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
-			    </label>
-			    <label class="radio-inline">
-			      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-No" value="<?php echo $label_no; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_no)) echo "CHECKED"; ?>> <?php echo $label_no; ?>
-			    </label>
+		<div class="form-group">
+		    <label for="brewPouringRouse" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_rouse_yeast; ?></label>
+		    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+		        <div class="input-group" id="brewPouringRouse">
+				    <label class="radio-inline">
+				      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-Yes" value="<?php echo $label_yes; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_yes)) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
+				    </label>
+				    <label class="radio-inline">
+				      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-No" value="<?php echo $label_no; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_no)) echo "CHECKED"; ?>> <?php echo $label_no; ?>
+				    </label>
+				</div>
+				<div class="help-block with-errors"></div>
+				<div class="help-block with-errors"><?php echo $brew_text_048; ?></div>
 			</div>
-			<div class="help-block with-errors"></div>
-			<div class="help-block with-errors"><?php echo $brew_text_048; ?></div>
 		</div>
+		<div class="form-group">
+	        <label for="brewPouringNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_pouring_notes; ?></label>
+	        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	        	<!-- Input Here -->
+	            <input class="form-control" name="brewPouringNotes" id="brewPouringNotes" type="text" maxlength="255" value="<?php if (($action == "edit") && (isset($pouring_arr['pouring_notes']))) echo $pouring_arr['pouring_notes']; ?>">
+	            <div class="help-block with-errors"></div>
+	            <div class="help-block"><?php echo $brew_text_049; ?></div>
+	        </div>
+	    </div>
 	</div>
-
-	<div class="form-group">
-        <label for="brewPouringNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_pouring_notes; ?></label>
-        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-        	<!-- Input Here -->
-            <input class="form-control" name="brewPouringNotes" id="brewPouringNotes" type="text" maxlength="255" value="<?php if (($action == "edit") && (isset($pouring_arr['pouring_notes']))) echo $pouring_arr['pouring_notes']; ?>">
-            <div class="help-block with-errors"></div>
-            <div class="help-block"><?php echo $brew_text_049; ?></div>
-        </div>
-    </div>
 
     <!-- ABV (Optional for all except NW Cider Cup) -->
 	<div class="form-group">
@@ -772,7 +770,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     <!-- The following two fields are only shown if the NW Cider Cup styles are being used. -->
     <!-- Sweetness Level -->
 	<div class="form-group">
-        <label for="brewSweetnessLevel" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness_level; ?></label>
+        <label for="brewSweetnessLevel" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_final_gravity; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
             <input class="form-control" name="brewSweetnessLevel" id="brewSweetnessLevel" type="number" min="0" step=".001" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewSweetnessLevel']; ?>" data-error="<?php echo $brew_text_044; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>

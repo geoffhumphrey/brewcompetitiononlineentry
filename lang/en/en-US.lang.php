@@ -1294,7 +1294,7 @@ $brew_text_034 = "tree nuts";
 $brew_text_035 = "peanuts";
 $brew_text_036 = "wheat";
 $brew_text_037 = "soybeans";
-$brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc.";
+$brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc. For non-beer styles, specify gluten as an allergen if a source fermentable may contain it (e.g., barley, wheat, or rye malt) or if a brewer's yeast was used.";
 $brew_text_039 = "Please specify any and all possible allergen(s)";
 $brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
 $brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
@@ -1438,7 +1438,7 @@ else $bottle_labels_004 = "4 labels are provided as a courtesy. Discard any extr
 $bottle_labels_005 = "If any items are missing, close this window and edit the entry. You may need to print multiple pages depending upon the number of bottles required.";
 $bottle_labels_006 = "Space reserved for competition staff use.";
 $bottle_labels_007 = "THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please DO NOT include a copy of it with your entry shipment.";
-$brew_text_040 = "There is no need to specify gluten as an allergen for any beer style; it is assumed that it will be present. Gluten-free beers should be entered into the Gluten-Free Beer category (BA) or the Alternative Grain Beer category (BJCP). Only specify gluten as an allergen in mead or cider styles if a source fermentable contains gluten (e.g., barley, wheat, or rye malt) or if a brewer's yeast was used.";
+$brew_text_040 = "There is no need to specify gluten as an allergen for any beer style; it is assumed that it will be present. Gluten-free beers should be entered into the Gluten-Free Beer category (BA) or the Alternative Grain Beer category (BJCP).";
 $brewer_text_041 = "Have you already been awarded a Pro-Am opportunity to compete in the upcoming Great American Beer Festival Pro-Am Competition?";
 $brewer_text_042 = "If you have already been awarded a Pro-Am, or have been on the brewing staff at any brewery, please indicate so here. This will help competition staff and Pro-Am brewery representatives (if applicable for this competition) to choose Pro-Am entries from brewers that have not secured one.";
 
@@ -2028,7 +2028,7 @@ $best_brewer_text_015 = "The points for each placing entry are calculated using 
  * ------------------------------------------------------------------------
  */
 $label_abv = "Alcohol By Volume (ABV)";
-$label_sweetness_level = "Sweetness Level";
+$label_final_gravity = "Final Gravity";
 $label_juice_source = "Juice Source(s)";
 $label_select_all_apply = "Select All That Apply";
 $label_pouring = "Pouring";

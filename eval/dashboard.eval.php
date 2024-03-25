@@ -461,7 +461,7 @@ if ($totalRows_table_assignments > 0) {
 
 						if (!empty($row_entries['brewSweetnessLevel'])) {
 							$additional_info++;
-							$sweetness_level_display .= "<strong>".$label_sweetness_level.":</strong> ".$row_entries['brewSweetnessLevel'];
+							$sweetness_level_display .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
 						}
 
 						if (!empty($row_entries['brewMead3'])) {

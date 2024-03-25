@@ -2048,7 +2048,7 @@ $best_brewer_text_015 = "Los puntos de cada inscripción se calculan mediante la
  * ------------------------------------------------------------------------
  */
 $label_abv = "Grado alcohólico por volumen (ABV)";
-$label_sweetness_level = "Nivel de Dulzura";
+$label_final_gravity = "Gravedad Final";
 $label_juice_source = "Fuente(s) de Jugo";
 $label_select_all_apply = "Seleccionar Todo lo que Corresponda";
 $label_pouring = "Vertido";

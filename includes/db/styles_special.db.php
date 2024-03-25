@@ -180,6 +180,7 @@ $req_special_ing_styles = array();
 $req_strength_styles = array();
 $req_sweetness_styles = array();
 $req_carb_styles = array();
+$req_pouring = array();
 
 $cider_sweetness_custom_styles = array();
 $mead_sweetness_custom_styles = array();
@@ -188,6 +189,7 @@ do {
 
 	$style_id = ltrim($row_required_optional['brewStyleGroup'],"0")."-".$row_required_optional['brewStyleNum'];
 
+	if ($row_required_optional['brewStyleType'] == 1) $req_pouring[] = $style_id;
 	if ($row_required_optional['brewStyleReqSpec'] == 1) $req_special_ing_styles[] = $style_id;
 	if ($row_required_optional['brewStyleStrength'] == 1) $req_strength_styles[] = $style_id;
 	if ($row_required_optional['brewStyleSweet'] == 1) $req_sweetness_styles[] = $style_id;

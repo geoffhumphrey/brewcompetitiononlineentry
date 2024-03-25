@@ -498,6 +498,7 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
 <?php if ($section == "brew") { ?>   
 <script type="text/javascript">
     var style_set = "<?php echo $_SESSION['prefsStyleSet']; ?>";
+    var req_pouring = <?php echo json_encode($req_pouring); ?>;
     var req_special_ing_styles = <?php echo json_encode($req_special_ing_styles); ?>;
     var req_strength_styles = <?php echo json_encode($req_strength_styles); ?>;
     var req_sweetness_styles = <?php echo json_encode($req_sweetness_styles); ?>;

@@ -1879,6 +1879,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=winners">Winners: Limited Data</a></li>
                                     <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit&amp;filter=mhp">Master Homebrewer Program: Member Results</a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -1903,6 +1904,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                         </div><!-- ./row -->
                         <?php } ?>
+                        <!--
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Promo Materials</strong>
@@ -1914,7 +1916,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
+                        -->
                     </div>
                 </div>
             </div>
