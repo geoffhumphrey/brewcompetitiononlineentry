@@ -1273,6 +1273,8 @@ if ($setup_free_access == TRUE) {
 			`data_check` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
 			`setup_last_step` int(3) DEFAULT NULL,
+			`update_summary` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`update_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
 			", $prefix."bcoem_sys");
