@@ -262,8 +262,11 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 		}
 		
-		session_name($prefix_session);
-		session_start();
+		if (session_status() === PHP_SESSION_NONE) {
+			session_name($prefix_session);
+			session_start();
+		}
+		
 		unset($_SESSION['prefs'.$prefix_session]);
 
 		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&msg=25");
@@ -338,8 +341,10 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		mysqli_real_escape_string($connection,$update);
 		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
 
-		session_name($prefix_session);
-		session_start();
+		if (session_status() === PHP_SESSION_NONE) {
+			session_name($prefix_session);
+			session_start();
+		}
 		unset($_SESSION['prefs'.$prefix_session]);
 
 		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=36");

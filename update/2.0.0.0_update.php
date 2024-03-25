@@ -1,5 +1,12 @@
 <?php
 
+if (!function_exists('check_update')) {
+	$redirect = "../../403.php";
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+	exit();
+}
+ 
 // -----------------------------------------------------------
 // Alter Tables
 // Version 2.0.0.0

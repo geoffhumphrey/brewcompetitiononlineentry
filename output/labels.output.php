@@ -1,4 +1,13 @@
 <?php
+
+// Redirect if directly accessed without authenticated session
+if (!isset($_SESSION['loginUsername'])) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 setlocale(LC_ALL, "en_US.utf8");
 
 $filename = "";

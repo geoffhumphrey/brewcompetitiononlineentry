@@ -1,4 +1,13 @@
 <?php
+
+// Redirect if directly accessed
+if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
+    $redirect = "../../index.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 // Build alerts
 $alert_text_004 = sprintf("<strong>%s</strong> %s",$alert_text_002,$alert_text_003);
 $alert_text_007 = sprintf("<strong>%s</strong> <a href=\"".$base_url."index.php?section=admin&amp;action=add&amp;go=dropoff\" class=\"alert-link\">%s</a>",$alert_text_005,$alert_text_006);
@@ -442,6 +451,13 @@ if ($msg != "default") {
         <p>Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>, but there were errors during the update process which may result in unexpected behaviors.</p>
         <p>Select the <?php echo $current_version_display; ?> Update Summary button below for details. Errors are in <span class="text-danger">red text</span>.</p>
     </div>
+<?php } ?>
+
+<?php if ((MAINT) && ($logged_in) && ($_SESSION['userLevel'] == 0)) { ?>
+  <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong>Your installation is in Maintenance Mode.</strong> As a Top-level Admin, you are able perform all administration functions as normal. All others who attempt to access the site will see the <a href="<?php echo $base_url; ?>maintenance.php">Maintenance page</a>.</p>
+  </div>
 <?php } ?>
 
 <?php if (($registration_open == 1) && (!$ua) && (($section == "default") || ($section == "list")) && ((!$comp_entry_limit) || (!$comp_paid_entry_limit)) && ($msg == "default")) {

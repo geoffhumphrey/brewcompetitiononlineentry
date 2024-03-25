@@ -5,8 +5,13 @@
  *              (e.g., for a Pro-Am, Best Entry Name, Stewards Choice, etc.)
  */
 
-//if (($action == "add") || ($action == "edit")) $query_sbd = "SELECT * FROM $special_best_data_db_table WHERE id='$id'";
-
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
 
 ?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add Entries to the ".$row_sbi['sbi_name']." Custom Style"; elseif ($action == "edit") echo ": Edit Entries in the ".$row_sbi['sbi_name']." Custom Style"; else echo " Custom Style Entries"; ?></p>

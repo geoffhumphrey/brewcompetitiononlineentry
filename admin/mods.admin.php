@@ -4,6 +4,14 @@
  * Description: Add, edit, and delete any custom modules that extend core functions.
  */
 
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 //require(DB.'mods.db.php');
 
 function mod_info($info,$method) {

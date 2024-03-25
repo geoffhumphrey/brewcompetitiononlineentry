@@ -6,6 +6,14 @@
  *
  */
 
+// Redirect if directly accessed
+if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
+    $redirect = "../../index.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $header1_1 = "";
 $header1_2 = "";
 $table_head1 = "";
@@ -520,19 +528,21 @@ if ($tb == "default") {
 	<div class="row">
 		<div class="col col-md-4 col-sm-12">
 			<div class="bcoem-admin-element">
-			<a class="btn btn-primary btn-block hide-loader" role="button" data-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View Scoring Methodology</a>
+					<a class="btn btn-primary btn-block hide-loader" role="button" data-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View Scoring Methodology</a>
 			</div>
 		</div>
 		<div class="col col-md-4 col-sm-12">
 			<div class="bcoem-admin-element">
-			<a class="btn btn-info btn-block" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences"; ?>">Edit Settings</a>
+					<a class="btn btn-success btn-block hide-loader" role="button" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;filter=default&amp;view=default" title="Best Brewer and/or Club Results Report">Print Results</a>
+			</div>
 		</div>
-		</div>
+		<?php if ($_SESSION['userLevel'] == 0) { ?>
 		<div class="col col-md-4 col-sm-12">
 			<div class="bcoem-admin-element">
-			<a class="btn btn-success btn-block hide-loader" role="button" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;filter=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print Results</a>
+					<a class="btn btn-info btn-block" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences"; ?>">Edit Settings</a>
+			</div>
 		</div>
-		</div>
+		<?php } ?>
 	</div><!-- ./row -->
 <div class="collapse" id="scoreMethodCollapse">
   <div class="well">

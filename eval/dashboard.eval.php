@@ -48,6 +48,14 @@
  *    - Add elapsed time display.  *** DONE ***
  */
 
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
+	$redirect = "../../403.php";
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+	exit();
+}
+
 $judging_open = FALSE;
 $queued = FALSE;
 $admin = FALSE;

@@ -1,4 +1,16 @@
-<?php if ($action == "html") { ?>
+<?php 
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
+if ($action == "html") { 
+
+?>
 <p class="lead">If you want to upload mutiple images at once, use the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload">enhanced image upload function</a>.</p>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html" ENCTYPE="multipart/form-data">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">

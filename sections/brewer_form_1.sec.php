@@ -1,5 +1,17 @@
+<?php 
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
+if ($_SESSION['prefsProEdition'] == 0) { 
+
+?>
 <!-- Not a Brewery; clubs, Pro-Am, AHA, Staff -->
-<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 <section id="participant-clubs">
     <div class="form-group">
         <label for="brewerClubs" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club; ?></label>

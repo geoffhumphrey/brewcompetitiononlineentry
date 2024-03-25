@@ -1,4 +1,12 @@
-<?php 
+<?php
+
+if (!function_exists('check_update')) {
+	$redirect = "../../403.php";
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+	exit();
+}
+
 $output .= "<h4>Version 1.1.5.0</h4>";
 
 if (!check_update("sponsorLevel", $prefix."sponsors")) {

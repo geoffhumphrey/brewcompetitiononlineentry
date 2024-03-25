@@ -1,4 +1,16 @@
-<?php if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($go != "entrant") && ($section != "step2"))) { ?>
+<?php 
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
+if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($go != "entrant") && ($section != "step2"))) { 
+
+?>
 <!-- Already assigned to a table, can't change preferences -->
 <input name="brewerJudge" type="hidden" value="<?php echo $row_brewer['brewerJudge']; ?>" />
 <input name="brewerJudgeLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeLocation']; ?>" />

@@ -1,4 +1,16 @@
-<?php include (DB.'contacts.db.php'); ?>
+<?php
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
+include (DB.'contacts.db.php'); 
+
+?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Contact"; elseif ($action == "edit") echo ": Edit a Contact"; else echo " Contacts"; ?></p>
 
 <!-- Button Element Container -->

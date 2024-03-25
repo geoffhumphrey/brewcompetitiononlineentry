@@ -2983,21 +2983,25 @@ if ((empty($_SESSION['prefsSelectedStyles'])) && (strpos($section, "step") === F
 $default_to = "prost";
 $default_from = "noreply";
 
-// Get drop-off and shipping deadlines, if any.
-$drop_ship_dates = array(
-    $row_contest_dates['contestDropoffDeadline'], 
-    $row_contest_dates['contestShippingDeadline']
-);
+$drop_ship_dates = array();
+if (isset($row_contest_dates)) {
+        // Get drop-off and shipping deadlines, if any.
+    $drop_ship_dates = array(
+        $row_contest_dates['contestDropoffDeadline'], 
+        $row_contest_dates['contestShippingDeadline']
+    );
+    // Determine the earliest of the two dates.
+    // If no drop-off and shipping deadlines specified, default to entry deadline date since it's required.
+    if (!empty($drop_ship_dates)) $drop_ship_deadline = min($drop_ship_dates);
+    else $drop_ship_deadline = $row_contest_dates['contestEntryDeadline'];
 
-// Determine the earliest of the two dates.
-// If no drop-off and shipping deadlines specified, default to entry deadline date since it's required.
-if (!empty($drop_ship_dates)) $drop_ship_deadline = min($drop_ship_dates);
-else $drop_ship_deadline = $row_contest_dates['contestEntryDeadline'];
+    // Specify the latest date users can edit their entries.
+    // If the contestEntryEditDeadline column has a value, and it's value is less than the drop_shop_deadline var value, default to it.
+    // Otherwise, use the drop_ship_deadline var value.
+    if ((isset($row_contest_dates['contestEntryEditDeadline'])) && (!empty($row_contest_dates['contestEntryEditDeadline'])) && ($row_contest_dates['contestEntryEditDeadline'] < $drop_ship_deadline)) $entry_edit_deadline = $row_contest_dates['contestEntryEditDeadline'];
+    else $entry_edit_deadline = $drop_ship_deadline;
+    $entry_edit_deadline_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_edit_deadline, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+}
 
-// Specify the latest date users can edit their entries.
-// If the contestEntryEditDeadline column has a value, and it's value is less than the drop_shop_deadline var value, default to it.
-// Otherwise, use the drop_ship_deadline var value.
-if ((isset($row_contest_dates['contestEntryEditDeadline'])) && (!empty($row_contest_dates['contestEntryEditDeadline'])) && ($row_contest_dates['contestEntryEditDeadline'] < $drop_ship_deadline)) $entry_edit_deadline = $row_contest_dates['contestEntryEditDeadline'];
-else $entry_edit_deadline = $drop_ship_deadline;
-$entry_edit_deadline_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_edit_deadline, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+
 ?>

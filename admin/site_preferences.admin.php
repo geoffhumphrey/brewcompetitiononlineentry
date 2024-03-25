@@ -1,4 +1,13 @@
 <?php
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $style_set_dropdown = "";
 $all_exceptions = "";
 $all_exceptions_js = "";
@@ -391,7 +400,7 @@ $(document).ready(function(){
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
+            <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
         <span id="helpBlock" class="help-block">Date and time when the system will display winners if Winner Display is enabled.</span>
         <div class="help-block with-errors"></div>
     </div>
@@ -1188,11 +1197,13 @@ $(document).ready(function(){
 </div><!-- ./modal -->
 
 <?php
-$st_count = 0;
-$st_arr = array();
-do {
-    $st_arr[] = $row_style_type['id'];
-    $st_count++;
+
+if (strpos($section, "step") === FALSE) {
+    $st_count = 0;
+    $st_arr = array();
+    do {
+        $st_arr[] = $row_style_type['id'];
+        $st_count++;
 ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit &ndash; <?php echo $row_style_type['styleTypeName']; ?></label>
@@ -1201,7 +1212,11 @@ do {
         <span id="helpBlock" class="help-block"><?php if ($st_count == $totalRows_style_type) echo "Individual style type entry limits above are only for those that have BOS enabled. <a href='".$base_url."index.php?section=admin&amp;go=style_types'>Manage your competition style types</a> to specify entry limits for others."; ?></span>
     </div>
 </div><!-- ./Form Group -->
-<?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
+<?php 
+    } while ($row_style_type = mysqli_fetch_assoc($style_type)); 
+}
+
+?>
 
 <input name="style_type_entry_limits" type="hidden" value="<?php echo implode(",", $st_arr); ?>">
 

@@ -18,7 +18,7 @@ if (isset($_GET['rid2'])) $rid2 = sterilize($_GET['rid2']);
 if (isset($_GET['rid3'])) $rid3 = sterilize($_GET['rid3']);
 if (isset($_GET['rid4'])) $rid4 = sterilize($_GET['rid4']);
 
-if (isset($_SESSION['session_set_'.$prefix_session])) {
+if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 	$do_query = FALSE;
 	$ok_edit_style = FALSE;

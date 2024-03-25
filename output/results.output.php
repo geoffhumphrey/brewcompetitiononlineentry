@@ -1,9 +1,9 @@
 <?php
-require(DB.'winners.db.php');
-require(DB.'output_results.db.php');
-require(DB.'score_count.db.php');
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+
+    require(DB.'winners.db.php');
+    require(DB.'output_results.db.php');
+    require(DB.'score_count.db.php');
 
     if (NHC) $base_url = "../";
     
@@ -39,6 +39,12 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 }
 
-else echo "<p>Please log in as an Admin to view this report.</p>";
+// Redirect if directly accessed without authenticated session
+else {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
 
 ?>

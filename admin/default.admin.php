@@ -5,6 +5,14 @@
  *
  */
 
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $server_environ_0 = "<p><strong>Reporting an issue?</strong> Here's your server environment information:</p>";
 $server_environ_1 = "<ul>";
 $server_environ_3 = "<ul class=\"list-inline\">";
@@ -201,13 +209,13 @@ if ($totalRows_tables > 0) {
     }
 </style>
 <script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
-<p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available in each category.</span></p>
+<p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available to you in each category.<?php if ($_SESSION['userLevel'] == 1) echo " Your user level features limited access to Administration functions."; ?></span></p>
 <div class="row bcoem-admin-element">
     <?php if ($hosted_setup) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/customize-comp-info" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to customize your hosted BCOE&amp;M installation including defining registration dates, judging sessions, drop-off window and locations, shipping window and locations, sponsors, styles accepted, etc.">Customize Competition Info <span class="fa fa-info-circle"></span></a>
     </div>
-    <?php } else { ?>
+    <?php } elseif ($_SESSION['userLevel'] == 0) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
     </div>
@@ -969,7 +977,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseScoring">Scoring<span class="fa fa-clipboard pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseScoring">Scoring<span class="fa fa-trophy pull-right"></span></a>
                         </h4>
                     </div>
 

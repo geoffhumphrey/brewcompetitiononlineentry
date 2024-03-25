@@ -7,6 +7,14 @@
  **************************************
  */
 
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $user_submitted_eval = user_submitted_eval($_SESSION['user_id'],$row_entries['id']);
 if ((!empty($score_entry_data[3])) || (!empty($score_entry_data[4]))) $score_previous = TRUE;
 elseif (is_array($user_submitted_eval)) $score_previous = TRUE;

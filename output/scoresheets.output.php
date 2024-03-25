@@ -66,6 +66,11 @@ if (isset($_SESSION['loginUsername'])) {
 
 }
 
-else echo "Not Allowed";
+else {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
 
 ?>

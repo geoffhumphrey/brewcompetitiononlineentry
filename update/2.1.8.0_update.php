@@ -1,5 +1,12 @@
 <?php
 
+if (!function_exists('check_update')) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+ 
 // -----------------------------------------------------------
 // Version 2.1.8.0
 // 2.1.6.0 was last version to have an update to DB

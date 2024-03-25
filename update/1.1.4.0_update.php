@@ -1,5 +1,11 @@
 <?php 
-$output .= "<h4>Version 1.1.4.0</h4>";
+
+if (!function_exists('check_update')) {
+	$redirect = "../../403.php";
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+	exit();
+}
 
 if (!check_update("contestRegistrationOpen", $prefix."contests_info")) {
 	

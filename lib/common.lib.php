@@ -3983,7 +3983,7 @@ function convert_to_ba() {
 	} while ($row_check = mysqli_fetch_assoc($check));
 
 	// Change preference
-	session_start();
+	if (session_status() === PHP_SESSION_NONE) session_start();
 	$_SESSION['prefsStyleSet'] = "BA";
 
 	$updateSQL = sprintf("UPDATE %s SET brewStyleActive='Y' WHERE brewStyleVersion='BA';",$prefix."brewing");

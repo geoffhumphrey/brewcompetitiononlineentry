@@ -1,3 +1,15 @@
+<?php
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
+?>
+
 <script>
   var ajax_url = "<?php echo $ajax_url; ?>";
   var base_url = "<?php echo $base_url; ?>";

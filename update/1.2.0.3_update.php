@@ -1,4 +1,12 @@
 <?php 
+
+if (!function_exists('check_update')) {
+	$redirect = "../../403.php";
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+	exit();
+}
+ 
 $output .= "<h4>Version 1.2.0.1, 1.2.0.2, and 1.2.0.3</h4>";
 
 if (!check_update("brewJudgingNumber", $prefix."brewing")) {

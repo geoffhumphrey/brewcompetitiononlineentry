@@ -5,6 +5,14 @@
  *              (e.g., for a Pro-Am, Best Entry Name, Stewards Choice, etc.)
  */
 
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 ?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Custom Category"; elseif ($action == "edit") echo ": Edit a Custom Category"; else echo " Custom Categories"; ?></p>
 <?php if ($action == "default") { ?>

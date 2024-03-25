@@ -6,6 +6,14 @@
  * 
  */
 
+// Redirect if directly accessed
+if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
+    $redirect = "../../index.php?section=volunteers";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 include (DB.'judging_locations.db.php');
 $primary_page_info_vol = "";
 $header_vol_1_1 = "";

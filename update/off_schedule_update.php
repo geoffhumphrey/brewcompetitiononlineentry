@@ -3169,48 +3169,52 @@ $query_comp_rules = sprintf("SELECT contestRules FROM `%s` WHERE id='1'",$prefix
 $comp_rules = mysqli_query($connection,$query_comp_rules);
 $row_comp_rules = mysqli_fetch_assoc($comp_rules);
 
-$is_rules_json = json_decode($row_comp_rules['contestRules']);
-if (json_last_error() === JSON_ERROR_NONE) $rules_json_data = TRUE;
-else $rules_json_data = FALSE;
+if ($row_comp_rules) {
 
-if (!$rules_json_data) {
+	$is_rules_json = json_decode($row_comp_rules['contestRules']);
+	if (json_last_error() === JSON_ERROR_NONE) $rules_json_data = TRUE;
+	else $rules_json_data = FALSE;
 
-	$sql = sprintf("ALTER TABLE `%s` ADD `contestJSON` MEDIUMTEXT NULL DEFAULT NULL;",$prefix."contest_info");
-	$db_conn->rawQuery($sql);
+	if (!$rules_json_data) {
 
-	$current_shipping  = sprintf("<p>%s</p>",$entry_info_text_038);
-	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_039);
-	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_040);
-	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_041);
+		$sql = sprintf("ALTER TABLE `%s` ADD `contestJSON` MEDIUMTEXT NULL DEFAULT NULL;",$prefix."contest_info");
+		$db_conn->rawQuery($sql);
 
-	$rules_json = array(
-		"competition_rules" => $row_comp_rules['contestRules'],
-		"competition_packing_shipping" => $current_shipping,
-	);
+		$current_shipping  = sprintf("<p>%s</p>",$entry_info_text_038);
+		$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_039);
+		$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_040);
+		$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_041);
 
-	$rules_json = json_encode($rules_json);
+		$rules_json = array(
+			"competition_rules" => $row_comp_rules['contestRules'],
+			"competition_packing_shipping" => $current_shipping,
+		);
 
-	// Update the data in contestRules to JSON
-	$update_table = $prefix."contest_info";
-	$data = array('contestJSON' => $rules_json);
-	$db_conn->where ('id', 1);
-	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Current contest rules and packing/shipping rules converted to accept JSON data for storage.</li>";
-	else {
-		$output_off_sched_update .= "<li>Error in converting and/or recording current contestRules to accept JSON data. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
-		$error_count += 1;
-	}
+		$rules_json = json_encode($rules_json);
 
-	$sql = sprintf("ALTER TABLE `%s` DROP `contestRules`;",$prefix."contest_info");
-	$db_conn->rawQuery($sql);
+		// Update the data in contestRules to JSON
+		$update_table = $prefix."contest_info";
+		$data = array('contestJSON' => $rules_json);
+		$db_conn->where ('id', 1);
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Current contest rules and packing/shipping rules converted to accept JSON data for storage.</li>";
+		else {
+			$output_off_sched_update .= "<li>Error in converting and/or recording current contestRules to accept JSON data. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+			$error_count += 1;
+		}
 
-	$sql = sprintf("ALTER TABLE `%s` CHANGE `contestJSON` `contestRules` MEDIUMTEXT NULL DEFAULT NULL;",$prefix."contest_info");
-	$db_conn->rawQuery($sql);
-	if ($db_conn->getLastErrno() === 0) {
-		$output_off_sched_update .= "<li>Changed contestRules row type to accept JSON data; this allows for storage and display of competition rules, packing/shipping rules, etc.</li>";
-	}
-	else {
-		$output_off_sched_update .= "<li class=\"text-danger\">The contestRules row type was NOT changed to accept JSON data. Data type should be changed manually to MEDIUMTEXT to effectively store and display competition rules, packing/shipping suggestions, etc.</li>";
-		$error_count += 1;
+		$sql = sprintf("ALTER TABLE `%s` DROP `contestRules`;",$prefix."contest_info");
+		$db_conn->rawQuery($sql);
+
+		$sql = sprintf("ALTER TABLE `%s` CHANGE `contestJSON` `contestRules` MEDIUMTEXT NULL DEFAULT NULL;",$prefix."contest_info");
+		$db_conn->rawQuery($sql);
+		if ($db_conn->getLastErrno() === 0) {
+			$output_off_sched_update .= "<li>Changed contestRules row type to accept JSON data; this allows for storage and display of competition rules, packing/shipping rules, etc.</li>";
+		}
+		else {
+			$output_off_sched_update .= "<li class=\"text-danger\">The contestRules row type was NOT changed to accept JSON data. Data type should be changed manually to MEDIUMTEXT to effectively store and display competition rules, packing/shipping suggestions, etc.</li>";
+			$error_count += 1;
+		}
+
 	}
 
 }

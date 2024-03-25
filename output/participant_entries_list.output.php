@@ -1,9 +1,15 @@
 <?php 
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $section = "participant_entry_list";
 include (DB.'brewer.db.php');
-//include (DB.'winners.db.php');
-//$total_entries_judged = get_entry_count('received');
-//if (NHC) $base_url = "../";
 include (LIB.'output.lib.php');
 
 $table_body = "";
@@ -39,10 +45,9 @@ do {
 		$table_body .= "</tr>";
 		
  	} // END entries section
-	
-	
 
 } while ($row_brewer = mysqli_fetch_assoc($brewer));
+
 ?>    
 <!-- Brewer's Entries -->
 <script type="text/javascript" language="javascript">

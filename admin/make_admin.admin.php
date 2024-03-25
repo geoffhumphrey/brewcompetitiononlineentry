@@ -1,4 +1,14 @@
-<?php include (DB.'admin_make_admin.db.php'); 
+<?php 
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
+include (DB.'admin_make_admin.db.php'); 
 
 if ($_SESSION['userLevel'] == 0) $edit_user_enable = 1;
 else $edit_user_enable = 0;

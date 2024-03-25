@@ -511,7 +511,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 } else {
 
-	$redirect = $base_url."index.php?msg=98";
+	$redirect = $base_url."403.php";
 	$redirect = prep_redirect_link($redirect);
 	$redirect_go_to = sprintf("Location: %s", $redirect);
 	header($redirect_go_to);

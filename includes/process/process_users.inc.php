@@ -77,8 +77,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$row_login = mysqli_fetch_assoc($login);
 					$totalRows_login = mysqli_num_rows($login);
 
-					session_name($prefix_session);
-					session_start();
+					if (session_status() === PHP_SESSION_NONE) {
+						session_name($prefix_session);
+						session_start();
+					}
 					
 					// Authenticate the user
 					if ($totalRows_login == 1)	{

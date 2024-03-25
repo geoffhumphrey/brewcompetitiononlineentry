@@ -14,19 +14,16 @@ $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dat
 $contest_name = $contest_info['contestName'];
 
 // Check access restrictions
-$restricted = FALSE;
-if (($_SESSION['user_id'] != $brewing_info['brewBrewerID']) && ($_SESSION['userLevel'] > 1)) $restricted = TRUE;
-
-if ($restricted) {
-	echo "<html><head><title>Error</title></head><body>";
-	echo "<p>You do not have sufficient access privileges to view this page.</p>";
-	echo "</body>";
+if ((!isset($_SESSION['loginUsername'])) || (($_SESSION['user_id'] != $brewing_info['brewBrewerID']) && ($_SESSION['userLevel'] > 1))) {
+	$redirect = "../../403.php";
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
 	exit();
 }
 
 if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && ($go != "recipe") && ($filter != "admin")) {
 	echo "<html><head><title>Error</title></head><body>";
-	echo "<p>You must pay for your entry to print its entry form (if applicable) and any bottle labels.</p>";
+	echo "<p>You must pay for your entry to print its bottle labels.</p>";
 	echo "</body>";
 	exit();
 }

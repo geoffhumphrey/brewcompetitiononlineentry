@@ -1,4 +1,12 @@
 <?php
+
+if (!function_exists('insertMulti')) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $data = array(
   array('brewStyleGroup' => '01','brewStyleNum' => '01','brewStyle' => 'Light Australian Lager [AABC]','brewStyleCategory' => 'Low Alcohol','brewStyleVersion' => 'AABC','brewStyleOG' => '1.028','brewStyleOGMax' => '1.035','brewStyleFG' => '1.004','brewStyleFGMax' => '1.008','brewStyleABV' => '2.8','brewStyleABVMax' => '3.5','brewStyleIBU' => '10','brewStyleIBUMax' => '15','brewStyleSRM' => '2','brewStyleSRMMax' => '4','brewStyleType' => '1','brewStyleInfo' => 'Light-coloured, clean tasting beer. Low flavour levels make off-flavours obvious','brewStyleLink' => 'http://www.aabc.org.au/docs/AABC2019StyleGuidelines.pdf','brewStyleLink' => 'http://www.aabc.org.au/docs/AABC2019StyleGuidelines.pdf','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, amber-color, top-fermented, british-isles, traditional-style, amber-ale-family, malty','brewStyleComEx' => 'Cascade Premium Light','brewStyleEntry' => NULL),
   array('brewStyleGroup' => '01','brewStyleNum' => '02','brewStyle' => 'Scottish Light [BJCP 14A]','brewStyleCategory' => 'Low Alcohol','brewStyleVersion' => 'AABC','brewStyleOG' => '1.03','brewStyleOGMax' => '1.035','brewStyleFG' => '1.01','brewStyleFGMax' => '1.013','brewStyleABV' => '2.5','brewStyleABVMax' => '3.2','brewStyleIBU' => '10','brewStyleIBUMax' => '20','brewStyleSRM' => '13','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A malt-focused, generally caramelly beer with perhaps a few esters and occasionally a butterscotch aftertaste. Hops only to balance and support the malt. The malt character can range from dry and grainy to rich, toasty, and caramelly, but is never roasty and especially never has a peat smoke character. ','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, amber-color, top-fermented, british-isles, traditional-style, amber-ale-family, malty','brewStyleComEx' => 'McEwans 60.','brewStyleEntry' => NULL),

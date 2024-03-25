@@ -3,6 +3,14 @@ require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
 require(LIB.'common.lib.php');
 
+// Redirect if directly accessed without authenticated session
+if ((session_status() == PHP_SESSION_NONE) || ((session_status() == PHP_SESSION_ACTIVE) && (!isset($_SESSION['loginUsername'])))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 // Force download of uploaded scoresheet PDF
 // Discourages random viewing of scoresheets by inputting direct URL
 if ((isset($_SESSION['loginUsername'])) && ($section == "pdf-download")) {

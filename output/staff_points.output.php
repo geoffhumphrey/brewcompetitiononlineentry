@@ -33,6 +33,14 @@ To figure out steward points, need to assess:
 
 */
 
+ // Redirect if directly accessed without authenticated session
+ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
+     $redirect = "../../403.php";
+     $redirect_go_to = sprintf("Location: %s", $redirect);
+     header($redirect_go_to);
+     exit();
+ }
+
 include (LIB.'output.lib.php');
 include (DB.'judging_locations.db.php');
 include (DB.'styles.db.php');

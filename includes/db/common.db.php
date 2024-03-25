@@ -15,7 +15,6 @@ $_SESSION['session_set_'.$prefix_session] = $prefix_session;
 
 // Check to see if the session_set variable is corrupted or hijacked. If so, destroy the session and reset.
 if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_set_'.$prefix_session] != $prefix_session)) || ((!isset($_SESSION['session_set_'.$prefix_session])) || (empty($_SESSION['session_set_'.$prefix_session])))) {
-
 	session_unset();
 	session_destroy();
 	session_write_close();
@@ -23,7 +22,6 @@ if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_
 	session_start();
 	session_regenerate_id(true);
 	$_SESSION['session_set_'.$prefix_session] = $prefix_session;
-
 }
 
 if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {

@@ -1,4 +1,12 @@
 <?php
+
+if (!function_exists('check_update')) {
+	$redirect = "../../403.php";
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+	exit();
+}
+ 
 // -----------------------------------------------------------
 // Update
 // Version 2.1.5.0

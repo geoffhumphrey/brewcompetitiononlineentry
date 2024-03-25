@@ -1,4 +1,12 @@
 <?php
+
+if (!function_exists('check_update')) {
+	$redirect = "../../403.php";
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+	exit();
+}
+ 
 $output .= "<h4>Version 1.3.1.0 and 1.3.2.0</h4>";
 $output .= "<ul>";
 

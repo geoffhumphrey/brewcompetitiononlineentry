@@ -1,6 +1,13 @@
-<!-- Checklist Evaluation Form -->
-
 <?php 
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $checklist_factors = array($label_none,$label_low,$label_med,$label_high); 
 
 $cl_ar_desc_malt = array($label_grainy,$label_caramel,$label_bready,$label_rich,$label_dark_fruit,$label_toasty,$label_roasty,$label_burnt);
@@ -21,7 +28,7 @@ $cl_fl_desc_bal = array($label_malty,$label_hoppy,$label_even);
 $cl_mf_desc_flaws = array($label_flat,$label_gushed,$label_hot,$label_harsh,$label_slick);
 $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$label_biting);
 ?>
-
+<!-- Checklist Evaluation Form -->
 <input type="hidden" name="evalFormType" value="2">
 <!-- Aroma Checklist -->
 <h3 class="section-heading"><?php echo $label_aroma; ?></h3>

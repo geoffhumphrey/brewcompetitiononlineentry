@@ -1,9 +1,4 @@
 <?php
-/*
-Checked Single
-2016-06-06
-*/
-
 $count_results = 0;
 $date_threshold = "";
 
@@ -661,4 +656,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	} // END if ($action == "confirmed")
 
 } // end if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))
+
+else {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
 ?>

@@ -3,6 +3,26 @@ ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
 error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
+    
+    $authorized = FALSE;
+
+    // Do not redirect if its the HTML or PDF download of results
+    // Available publicly on the results page
+    if ($section == "export-results") {
+        if ((($go == "judging_scores_bos") || ($go == "judging_scores")) && (($view == "html") || ($view == "pdf"))) $authorized = TRUE;
+    }
+
+    if (!$authorized) {
+        $redirect = "../../403.php";
+        $redirect_go_to = sprintf("Location: %s", $redirect);
+        header($redirect_go_to);
+        exit();
+    }
+
+}
+
 /**
  * Module: export.output.php
  * Revision History:
@@ -377,6 +397,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $results = array();
 
                 // Results data headers
+                $results[] = array("Email to masterhomebrewerprogram@gmail.com");
+                $results[] = array("Remove these first three rows before sending to MHP or applying any sort functions.");
+                $results[] = array("");
                 $results[] = array("MHP#","Last Name","First Name","Category", "Category Name", "Required Info", "Official Score", "Highest Score", "Place");
 
                 if ($totalRows_mhp_brewers > 0) {

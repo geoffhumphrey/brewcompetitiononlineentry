@@ -24,6 +24,13 @@
  * $smtp_port = 465;
  */
 
+if ((session_status() == PHP_SESSION_NONE) || (!function_exists('sterilize'))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 // Do not change the following. 
 // Enable this module in /paths.php by setting the ENABLE MAILER variable to TRUE.
 if (ENABLE_MAILER) $mail_use_smtp = TRUE;

@@ -26,6 +26,14 @@ $nav_container = "navbar-default";
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 
+    <script type="text/javascript">
+        var section = "<?php echo $section; ?>";
+        var action = "<?php echo $action; ?>";
+        var go = "<?php echo $go; ?>";
+        var edit_style = "<?php echo $action; ?>";
+        var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
+    </script>
+
     <!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $js_app_url; ?>"></script>
 
@@ -50,7 +58,7 @@ $nav_container = "navbar-default";
             <div class="page-header">
         		<h1>403 Error</h1>
         	</div>
-        	<p class="lead">Unfortunately, you do not have permission for this request.</p>
+        	<p class="lead">Unfortunately, you do not have permission for this request or sufficient credentials to access the requested function directly.</p>
             <p class="lead"><small>Additionally, your session may have been terminated. If so, you'll need to log in again. Please use the main navigation above to get where you want to go.</small></p>
             <p>Cheers!</p>
             <p class="small">&ndash; The <?php echo $_SESSION['contestName']; ?> Site Server</p>

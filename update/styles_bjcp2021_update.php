@@ -1,5 +1,12 @@
 <?php 
 
+if (!function_exists('insertMulti')) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $data = array(
   array('brewStyleGroup' => '01','brewStyleNum' => 'A','brewStyle' => 'American Light Lager','brewStyleCategory' => 'Standard American Beer','brewStyleVersion' => 'BJCP2021','brewStyleOG' => '1.028','brewStyleOGMax' => '1.04','brewStyleFG' => '0.998','brewStyleFGMax' => '1.008','brewStyleABV' => '2.8','brewStyleABVMax' => '4.2','brewStyleIBU' => '8','brewStyleIBUMax' => '12','brewStyleSRM' => '2','brewStyleSRMMax' => '3','brewStyleType' => '1','brewStyleInfo' => 'A highly carbonated, very light-bodied, nearly flavorless lager designed to be consumed very cold. Very refreshing and thirst-quenching.','brewStyleLink' => NULL,'brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, pale-color, bottom-fermented, lagered, north-america, traditional-style, pale-lager-family, balanced','brewStyleComEx' => 'Bud Light, Coors Light, Grain Belt Premium Light American Lager, Michelob Light, Miller Lite, Old Milwaukee Light','brewStyleEntry' => NULL),
   array('brewStyleGroup' => '01','brewStyleNum' => 'B','brewStyle' => 'American Lager','brewStyleCategory' => 'Standard American Beer','brewStyleVersion' => 'BJCP2021','brewStyleOG' => '1.04','brewStyleOGMax' => '1.05','brewStyleFG' => '1.004','brewStyleFGMax' => '1.01','brewStyleABV' => '4.5','brewStyleABVMax' => '5.3','brewStyleIBU' => '8','brewStyleIBUMax' => '18','brewStyleSRM' => '2','brewStyleSRMMax' => '3.5','brewStyleType' => '1','brewStyleInfo' => 'A very pale, highly-carbonated, light-bodied, well-attenuated lager with a very neutral flavor profile and low bitterness. Served very cold, it can be a very refreshing and thirst-quenching drink.','brewStyleLink' => NULL,'brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented, lagered, north-america, traditional-style, pale-lager-family, balanced','brewStyleComEx' => 'Pabst Blue Ribbon, Miller High Life, Budweiser, Grain Belt Premium Lager, Coors Original, Special Export','brewStyleEntry' => NULL),

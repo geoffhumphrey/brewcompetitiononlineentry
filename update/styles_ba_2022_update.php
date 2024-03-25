@@ -1,4 +1,12 @@
 <?php
+
+if (!function_exists('check_new_style')) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $update_table = $prefix."styles";
 
 /**
