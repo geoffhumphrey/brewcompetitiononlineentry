@@ -50,7 +50,14 @@ if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (
         <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <p class="navbar-text col-md-12 col-sm-12 col-xs-12"><i class="fa fa-lg fa-wrench"></i> <i class="fa fa-lg fa-cog"></i></p>
+                    <p class="navbar-text"><i class="fa fa-lg fa-wrench"></i> <i class="fa fa-lg fa-cog"></i></p>
+                </div>
+                <div class="navbar-right">
+                <?php if ($logged_in) { ?>
+                    <p class="navbar-text"><a href="<?php echo $base_url; ?>index.php?section=admin"><?php echo $label_admin_dashboard; ?></a></p>
+                <?php } else { ?>
+                    <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#loginModal"><?php echo $label_log_in; ?></button></p>
+                <?php } ?>
                 </div>
             </div>
         </div>
@@ -83,5 +90,50 @@ if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (
     	</nav>
     </footer>
 	<!-- ./ Footer -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="loginModalLabel"><?php echo $label_log_in; ?></h4>
+                    <p><?php echo $maintenance_text_002; ?></p>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" data-toggle="validator" role="form" action="<?php echo $base_url; ?>includes/process.inc.php?section=login&action=login" method="POST" name="form1" id="form1">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group has-warning">
+                                    <span class="input-group-addon" id="login-addon1"><span class="fa fa-envelope"></span></span>
+                                    <!-- Input Here -->
+                                    <input id="loginUsername" class="form-control" name="loginUsername" type="email" required placeholder="<?php echo $label_email; ?>" data-error="<?php echo $login_text_018; ?>">
+                                    <span class="input-group-addon" id="login-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
+                                </div>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                        </div><!-- Form Group -->
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group has-warning">
+                                    <span class="input-group-addon" id="login-addon3"><span class="fa fa-key"></span></span>
+                                    <!-- Input Here -->
+                                    <input class="form-control" name="loginPassword" type="password" required placeholder="<?php echo $label_password; ?>" data-error="<?php echo $login_text_019; ?>">
+                                    <span class="input-group-addon" id="login-addon4" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
+                                </div>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <!-- Input Here -->
+                                <button name="submit" type="submit" class="btn btn-primary btn-block" ><?php echo $label_log_in; ?> <span class="fa fa-sign-in" aria-hidden="true"></span> </button>
+                            </div>
+                        </div><!-- Form Group -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

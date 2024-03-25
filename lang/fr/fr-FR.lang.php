@@ -2091,6 +2091,8 @@ $form_required_fields_02 = "Ce champ est requis.";
 
 $entry_info_text_054 = "Entrées par type de style et limites associées:";
 
+$maintenance_text_002 = "Seuls les administrateurs de haut niveau peuvent se connecter lorsque le site est en mode maintenance.";
+
 
 /**
  * ----------------------------------------------------------------------------------

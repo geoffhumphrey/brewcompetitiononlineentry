@@ -2071,6 +2071,8 @@ $form_required_fields_02 = "This field is required.";
 
 $entry_info_text_054 = "Entries by style type and associated limits:";
 
+$maintenance_text_002 = "Only Top-Level Admins can log in when the site is in Maintenance Mode.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

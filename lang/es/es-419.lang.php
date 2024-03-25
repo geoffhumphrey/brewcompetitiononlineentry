@@ -2091,6 +2091,8 @@ $form_required_fields_02 = "Este campo es obligatorio.";
 
 $entry_info_text_054 = "Entradas por tipo de estilo y límites asociados:";
 
+$maintenance_text_002 = "Sólo los administradores de nivel superior pueden iniciar sesión cuando el sitio está en modo de mantenimiento.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

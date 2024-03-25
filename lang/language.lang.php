@@ -10,6 +10,14 @@
  *   -- Be sure to also update function in common.lib.php.
  */
 
+// Redirect if directly accessed without authenticated session
+if ((session_status() == PHP_SESSION_NONE) || ((isset($_SESSION['loginUsername'])) && (!function_exists('sterilize')))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 // Default to US English language if prefs not defined.
 $prefsLanguage = "en-US";
 $prefsLanguageFolder = "en";
@@ -19,6 +27,12 @@ if ((isset($_SESSION['prefsLanguageFolder'])) && (!empty($_SESSION['prefsLanguag
 
 // Set the language to US English for all admin functions.
 if (((isset($section)) && ($section == "admin")) || ((isset($section)) && ($section == "evaluation") && ($view == "admin"))) {
+  $prefsLanguage = "en-US";
+  $prefsLanguageFolder = "en";
+}
+
+// Set language for setup to be US English.
+if ((isset($section)) && (strpos($section, "step") === TRUE)) {
   $prefsLanguage = "en-US";
   $prefsLanguageFolder = "en";
 }

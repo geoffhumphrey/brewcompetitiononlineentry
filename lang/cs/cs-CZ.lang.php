@@ -2016,6 +2016,8 @@ $form_required_fields_02 = "Toto pole je povinné.";
 
 $entry_info_text_054 = "Záznamy podle typu stylu a souvisejících omezení:";
 
+$maintenance_text_002 = "Když je web v režimu údržby, mohou se přihlásit pouze správci nejvyšší úrovně.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

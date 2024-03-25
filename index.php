@@ -14,7 +14,6 @@ require_once (DB.'mods.db.php');
 $account_pages = array("list","pay","brewer","user","brew","pay","evaluation");
 
 if ((!$logged_in) && (in_array($section,$account_pages))) {
-
     $redirect = $base_url."index.php?section=login&msg=99";
     $redirect = prep_redirect_link($redirect);
     $redirect_go_to = sprintf("Location: %s", $redirect);
@@ -23,11 +22,15 @@ if ((!$logged_in) && (in_array($section,$account_pages))) {
 }
 
 if (MAINT) {
-    $redirect = $base_url."maintenance.php";
-    $redirect = prep_redirect_link($redirect);
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
+
+    if ((!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] > 0))) {
+        $redirect = $base_url."maintenance.php";
+        $redirect = prep_redirect_link($redirect);
+        $redirect_go_to = sprintf("Location: %s", $redirect);
+        header($redirect_go_to);
+        exit();
+    }
+
 }
 
 // ---------------------------------------------------------------------------------
