@@ -102,13 +102,13 @@ $output_organizer = "";
 $output_judges = "";
 $output_stewards = "";
 $output_staff = "";
-$organ_bjcp_id = "999999999999";
+$organ_bjcp_id = "";
 
 if ($view == "default") {
 
 	if ($totalRows_organizer > 0) {
 		
-		$organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
+		if ((isset($row_org['brewerJudgeID'])) && (!empty($row_org['brewerJudgeID']))) $organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
 
 		$org_name = ucwords(strtolower($row_org['brewerLastName'])).", ".ucwords(strtolower($row_org['brewerFirstName']));
 
@@ -135,32 +135,37 @@ if ($view == "default") {
         foreach ($j as $uid) {
 
         	$judge_info = explode("^",brewer_info($uid));
-            $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
+        	$judge_bjcp_id = "";
 			$judge_points = judge_points($uid,$judge_max_points);
 
 			if ($judge_points > 0) {
 				
 				if (!empty($judge_info['1'])) {
-					
+
 					$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
 					$bos_judge = bos_points($uid);
-		
+					if (!empty($judge_info['4'])) $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
+
 					$output_judges .= "<tr>";
 					$output_judges .= "<td>".$judge_name."</td>";
+					
 					$output_judges .= "<td>";
-					if (validate_bjcp_id($judge_info['4'])) $output_judges .= $judge_bjcp_id;
+					if ((!empty($judge_bjcp_id)) && (validate_bjcp_id($judge_bjcp_id))) $output_judges .= $judge_bjcp_id;
 					$output_judges .= "</td>";
+					
 					$output_judges .= "<td>";
-					if ($judge_bjcp_id == $organ_bjcp_id) $output_judges .= "0.0 (".$label_organizer.")";
+					if ((!empty($judge_bjcp_id) && ($judge_bjcp_id == $organ_bjcp_id))) $output_judges .= "0.0 (".$label_organizer.")";
 					else {
 						if ($bos_judge) $output_judges .= number_format(($judge_points+$bos_judge_points),1);
 						else $output_judges .=  $judge_points;
 					}
 					$output_judges .= "</td>";
+
 					$output_judges .= "<td>";
 					if ($bos_judge) $output_judges .= "<span class=\"fa fa-lg fa-check\"></span>";
 					else $output_judges .= "&nbsp;";
 					$output_judges .= "</td>";
+
 					$output_judges .= "</tr>";
 
 				}
@@ -171,6 +176,7 @@ if ($view == "default") {
 
 	} // endif ($totalRows_judges > 0)
 
+	
 	foreach (array_unique($bos_judge_no_assignment) as $uid) {
 
 		if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
@@ -180,19 +186,23 @@ if ($view == "default") {
 			// "BOS Judge Points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
 
 			$judge_info = explode("^",brewer_info($uid));
-			$judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
-			
+			$judge_bjcp_id = "";
+            
 			if ((!empty($uid)) && (!in_array($uid,$j)) && (!empty($judge_info['1']))) {
+
+				if (!empty($judge_info['4'])) $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 				
 				$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
+				if (!empty($judge_info['4'])) $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 
 				$output_judges .= "<tr>";
 				$output_judges .= "<td>".$judge_name."</td>";
+
 				$output_judges .= "<td>";
-				if (validate_bjcp_id($judge_info['4'])) $output_judges .= $judge_bjcp_id;
+				if ((!empty($judge_bjcp_id)) && (validate_bjcp_id($judge_bjcp_id))) $output_judges .= $judge_bjcp_id;
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
-				if ($judge_bjcp_id == $organ_bjcp_id) $output_judges .= "0.0 (".$label_organizer.")"; 
+				if ((!empty($judge_bjcp_id) && ($judge_bjcp_id == $organ_bjcp_id))) $output_judges .= "0.0 (".$label_organizer.")";
 				else $output_judges .= "1.0";
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
@@ -201,11 +211,14 @@ if ($view == "default") {
 				$output_judges .= "</tr>";
 
 			}
+			
 
 		}	
 	
 	}
 
+	
+	
 	if ($totalRows_stewards > 0) {
         
         $s = array();
@@ -217,19 +230,20 @@ if ($view == "default") {
 		foreach (array_unique($s) as $uid) {
 			
 			$steward_points = steward_points($uid);
+			$steward_bjcp_id = "";
 			
 			if ($steward_points > 0) {
 				$steward_info = explode("^",brewer_info($uid));
-				$steward_bjcp_id = strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
+				if (!empty($steward_info['4'])) $steward_bjcp_id = strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
 				if (!empty($steward_info['1'])) {
 					$steward_name = ucwords(strtolower($steward_info['1'])).", ".ucwords(strtolower($steward_info['0']));
 					$output_stewards .= "<tr>";
 					$output_stewards .= "<td>".$steward_name."</td>";
 					$output_stewards .= "<td>";
-					if (validate_bjcp_id($steward_info['4'])) $output_stewards .= $steward_bjcp_id;
-					else $output_staff .= "&nbsp;";
+					if (!empty($steward_bjcp_id)) $output_stewards .= $steward_bjcp_id;
+					else $output_stewards .= "&nbsp;";
 					$output_stewards .= "</td>";
-					if ($steward_bjcp_id == $organ_bjcp_id) $output_judges .= "<td>0.0 (".$label_organizer.")</td>";
+					if ((!empty($steward_bjcp_id) && ($steward_bjcp_id == $organ_bjcp_id))) $output_stewards .= "<td>0.0 (".$label_organizer.")</td>";
 					else $output_stewards .= "<td>".$steward_points."</td>";
 					$output_stewards .= "</tr>";
 				}
@@ -251,21 +265,22 @@ if ($view == "default") {
 		foreach (array_unique($st) as $uid) {
 				
 			$staff_info = explode("^",brewer_info($uid));
-			$staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
-
-			if ((!empty($staff_info['1'])) && ($staff_bjcp_id != $organ_bjcp_id)) {
+			
+			if (!empty($staff_info['1'])) {
+				
 				$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
+				$staff_bjcp_id = "";
+				if (!empty($staff_info['4'])) $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
 
 				if ($st_running_total <= $staff_max_points) {
 
 					$output_staff .= "<tr>";
 					$output_staff .= "<td>".$staff_name."</td>";
 					$output_staff .= "<td>";
-					if (validate_bjcp_id($staff_info['4'])) $output_staff .= $staff_bjcp_id;
-
+					if ((!empty($staff_bjcp_id)) && (validate_bjcp_id($staff_bjcp_id))) $output_staff .= $staff_bjcp_id;
 					$output_staff .= "</td>";
 					$output_staff .= "<td>";
-					if ($staff_bjcp_id == $organ_bjcp_id) $output_staff .= "0.0 (".$label_organizer.")";
+					if ((!empty($staff_bjcp_id)) && ($staff_bjcp_id == $organ_bjcp_id)) $output_staff .= "0.0 (".$label_organizer.")";
 					else {
 						if (($st_running_total <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
 						else $output_staff .= $organ_max_points;
@@ -280,6 +295,7 @@ if ($view == "default") {
 			}
 
 		}
+
 	} // end if ($totalRows_staff > 0)
 
 ?>

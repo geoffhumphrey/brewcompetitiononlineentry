@@ -2504,13 +2504,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             if (!empty($judge_bjcp_id)) $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $judge_bjcp_id)));
                             $judges_table->easyCell($string);
 
-                            if ($judge_bjcp_id == $organ_bjcp_id) $string = sprintf("0.0 (%s)",$label_organizer);
+                            if ((!empty($judge_bjcp_id)) && ($judge_bjcp_id == $organ_bjcp_id)) $string = sprintf("0.0 (%s)",$label_organizer);
                             else {
                                 if ($bos_judge) {
-                                    $string = $judge_points + $bos_judge_points;
+                                    $string = number_format($judge_points + $bos_judge_points, 1);
                                     $string .= " (BOS)";
                                 }
-                                else $string = $judge_points;
+                                else $string = number_format($judge_points, 1);
                             }
                             $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
                             $judges_table->easyCell($string);
@@ -2539,13 +2539,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                 if (!empty($judge_bjcp_id)) $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $judge_bjcp_id)));
                                 $judges_table->easyCell($string);
 
-                                if ($judge_bjcp_id == $organ_bjcp_id) $string = sprintf("0.0 (%s)",$label_organizer);
+                                if ((!empty($judge_bjcp_id)) && ($judge_bjcp_id == $organ_bjcp_id)) $string = sprintf("0.0 (%s)",$label_organizer);
                                 else {
                                     if ($bos_judge) {
-                                        $string = $judge_points + $bos_judge_points;
+                                        $string = number_format($judge_points + $bos_judge_points, 1);
                                         $string .= " (BOS)";
                                     }
-                                    else $string = $judge_points;
+                                    else $string = number_format($judge_points, 1);
                                 }
                                 $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
                                 $judges_table->easyCell($string);
@@ -2679,8 +2679,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 
                 } // end if ($totalRows_staff > 0)
 
-                //$pdf->Output();
-                $pdf->Output($filename,'D');
+                $pdf->Output();
+                //$pdf->Output($filename,'D');
             
             } // end if ($view == "pdf")
 
