@@ -2412,7 +2412,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $title_table->easyCell($string);
                 $title_table->printRow();
 
-                $string = sprintf("%s: %s",$label_entries,$total_entries);
+                $string = sprintf("%s: %s",$label_entries,$total_entries_received);
                 $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
                 $title_table->easyCell($string);
                 $title_table->printRow();
@@ -2523,7 +2523,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     foreach (array_unique($bos_judge_no_assignment) as $uid) {
 
-                        if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
+                        if (($total_entries_received >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
 
                             $judge_info = explode("^",brewer_info($uid));
                             $judge_bjcp_id = "";
@@ -2554,7 +2554,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                             } // end if (!empty($uid))
 
-                        } // end if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3)))
+                        } // end if (($total_entries_received >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3)))
 
                     } // end foreach
 
@@ -2742,7 +2742,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $output .= "\t\t<CompID>".$_SESSION['contestID']."</CompID>\n";
                     $output .= "\t\t<CompName>".html_entity_decode($_SESSION['contestName'])."</CompName>\n";
                     $output .= "\t\t<CompDate>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], max($dates), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
-                    $output .= "\t\t<CompEntries>".$total_entries."</CompEntries>\n";
+                    $output .= "\t\t<CompEntries>".$total_entries_received."</CompEntries>\n";
                     $output .= "\t\t<CompDays>".$total_days."</CompDays>\n";
                     $output .= "\t\t<CompSessions>".total_sessions()."</CompSessions>\n";
                     $output .= "\t\t<CompFlights>".total_flights()."</CompFlights>\n";
@@ -2790,7 +2790,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     // Loner BOS Judges (no assignment to any table)
                     foreach (array_unique($bos_judge_no_assignment) as $uid) {
-                        if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
+                        if (($total_entries_received >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
                             $judge_info = explode("^",brewer_info($uid));
                             if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4'])) && (!in_array($uid,$st))) {
                                 $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));

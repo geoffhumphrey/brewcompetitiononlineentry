@@ -249,7 +249,7 @@ function total_sessions() {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_sessions = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."judging_locations");
+	$query_sessions = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE judgingLocType < 2", $prefix."judging_locations");
 	$sessions = mysqli_query($connection,$query_sessions) or die (mysqli_error($connection));
 	$row_sessions = mysqli_fetch_assoc($sessions);
 
@@ -388,21 +388,34 @@ function judge_points($user_id,$judge_max_points) {
 	do {
 
 		if ($row_judging['judgingLocType'] < 2) {
+			
 			// Get date and determine 24 hour window where it falls based upon the time zone
 			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
 			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
 			$possible_judging_days[] = $timestamp_curr_day_midnight;
 
-			$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $user_id, $row_judging['id']);
+			/**
+			 * Edited the query below to only take into account Round 1 of the assignment. 
+			 * Tables can only be assigned to a single session.
+			 * Tables/flights can only be assigned to a single round. 
+			 * There will always be a round 1 for all tables/flights.
+			 * Reference Issue #1483 on GitHub.
+			 * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1483
+			 */
+
+			$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J' AND assignRound <= '1'", $prefix."judging_assignments", $user_id, $row_judging['id']);
 	    $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 	    $row_assignments = mysqli_fetch_assoc($assignments);
 
 	    if ($row_assignments['count'] > 0) {
+				
 				$days_judged[] = array (
 					"day_midnight" => $timestamp_curr_day_midnight,
 					"points" => $row_assignments['count'] * 0.5,
 				);
+
 			}
+
 		}
 
 	} while ($row_judging = mysqli_fetch_assoc($judging));
@@ -471,8 +484,17 @@ function steward_points($user_id) {
 			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
 			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
 			$possible_judging_days[] = $timestamp_curr_day_midnight;
+
+			/**
+			 * Edited the query below to only take into account Round 1 of the assignment. 
+			 * Tables can only be assigned to a single session.
+			 * Tables/flights can only be assigned to a single round. 
+			 * There will always be a round 1 for all tables/flights.
+			 * Reference Issue #1483 on GitHub.
+			 * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1483
+			 */
 		
-			$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='S';", $prefix."judging_assignments", $user_id, $row_judging['id']);
+			$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='S' AND assignRound <= '1';", $prefix."judging_assignments", $user_id, $row_judging['id']);
 	    $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 	    $row_assignments = mysqli_fetch_assoc($assignments);
 
@@ -481,6 +503,7 @@ function steward_points($user_id) {
 	    if ($row_assignments['count'] > 0) {
 				$days_stewarded[] = $timestamp_curr_day_midnight;
 			}
+		
 		}
 
 	} while ($row_judging = mysqli_fetch_assoc($judging));

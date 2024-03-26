@@ -289,7 +289,7 @@ if ($view == "default") {
     <p class="lead"><?php echo sprintf("%s %s.",$output_text_022,"http://www.bjcp.org/rules.php"); ?></p>
     <ul class="list-unstyled">
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_comp_id,$_SESSION['contestID']); ?></li>
-        <li><?php echo sprintf("<strong>%s:</strong> %s",$label_entries,$total_entries); ?></li>
+        <li><?php echo sprintf("<strong>%s:</strong> %s",$label_entries,$total_entries_received); ?></li>
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_days,total_days()); ?></li>
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_sessions,total_sessions()); ?></li>
         <li><?php echo sprintf("<strong>%s:</strong> %s (%s)",$label_flights,total_flights(),$output_text_023); ?></li>

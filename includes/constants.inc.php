@@ -2627,6 +2627,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $totalRows_entry_count = total_paid_received("",0);
         $total_entries = $totalRows_entry_count;
         $total_paid = get_entry_count("paid");
+        $total_entries_received = get_entry_count("received");
         $comp_paid_entry_limit = FALSE;
         $comp_entry_limit = FALSE;
 

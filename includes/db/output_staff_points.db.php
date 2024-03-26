@@ -1,8 +1,8 @@
 <?php
 // Get maximum point values based upon number of entries
-$organ_max_points = number_format(total_points($total_entries,"Organizer"), 1);
-$staff_max_points = number_format(total_points($total_entries,"Staff"), 1);
-$judge_max_points = number_format(total_points($total_entries,"Judge"), 1);
+$organ_max_points = number_format(total_points($total_entries_received,"Organizer"), 1);
+$staff_max_points = number_format(total_points($total_entries_received,"Staff"), 1);
+$judge_max_points = number_format(total_points($total_entries_received,"Judge"), 1);
 
 // Divide total staff point pool by amount of staff, round down
 $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff='1'", $prefix."staff");
