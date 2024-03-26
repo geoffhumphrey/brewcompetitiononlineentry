@@ -46,15 +46,27 @@ if ((($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6"
 if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i style=\"padding-right: 5px;\" class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay);
  
 if (($totalRows_log > 0) && ($show_scores)) {
+
 	$link_results_export = $base_url."includes/output.inc.php?section=export-personal-results&amp;id=".$_SESSION['brewerID'];
-	$link_results_export_mhp = $base_url."includes/output.inc.php?section=export-personal-results&amp;filter=MHP&amp;id=".$_SESSION['brewerID'];
-	$pay_button .= "<div class=\"btn-group pull-right\">";
-	$pay_button .= sprintf("<button type=\"button\" class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-lg fa-file-excel\" style=\"margin-right: 8px;\"></i>%s<span class=\"caret\" style=\"margin-left: 8px;\"></span></button>",$label_results_export_personal);
-	$pay_button .= "<ul class=\"dropdown-menu\">";
-	$pay_button .= sprintf("<li class=\"small\"><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s</a></li>",$link_results_export,$label_general);
-	$pay_button .= sprintf("<li class=\"small\"><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">Master Homebrewer Program</a></li>",$link_results_export_mhp);
-	$pay_button .= "</ul>";
-	$pay_button .= "</div>";
+
+	if (empty($_SESSION['brewerMHP'])) {
+
+		// Single link without MHP option.
+		$pay_button .= sprintf("<a href=\"%s\" class=\"btn btn-success hide-loader\" target=\"_blank\"><i class=\"fa fa-lg fa-file-csv\" style=\"margin-right: 8px;\"></i>%s</a>",$link_results_export, $label_results_export_personal);
+
+	} else {
+
+		// $link_results_export_mhp = $base_url."includes/output.inc.php?section=export-personal-results&amp;filter=MHP&amp;id=".$_SESSION['brewerID'];
+		$pay_button .= "<div class=\"btn-group pull-right\">";
+		$pay_button .= sprintf("<button type=\"button\" class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-lg fa-file-excel\" style=\"margin-right: 8px;\"></i>%s<span class=\"caret\" style=\"margin-left: 8px;\"></span></button>",$label_results_export_personal);
+		$pay_button .= "<ul class=\"dropdown-menu\">";
+		$pay_button .= sprintf("<li class=\"small\"><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s</a></li>",$link_results_export,$label_general);
+		$pay_button .= "<li class=\"small disabled\"><a class=\"hide-loader\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"The MHP personal results download has been disabled by request from the MHP board. Results will now be submitted by the competition organizers on behalf of all MHP members who entered this competition. This option will be removed in a subsequent release.\">Master Homebrewer Program</a></li>";
+		$pay_button .= "</ul>";
+		$pay_button .= "</div>";
+
+	}
+
 }
 
 $header1_1 .= "<hr>";

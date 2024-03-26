@@ -65,6 +65,7 @@ if (($entry_window_open == 1) && ($show_entries)) {
 	$header1_2 .= sprintf("<h2>%s <span class='text-success'>%s</a></h2>",$reg_open_text_010,$reg_open_text_001);
 
 	if ($_SESSION['prefsProEdition'] == 0)  {
+		
 		$page_info2 .= "<p>";
 		$page_info2 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_entries, strtolower($label_entries), $sidebar_text_025, $current_time, $current_date_display);
 		if ($row_limits['prefsEntryLimit'] > 0) $page_info2 .= sprintf(" %s <strong>%s</strong> %s",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
@@ -81,8 +82,14 @@ if (($entry_window_open == 1) && ($show_entries)) {
 			$page_info2 .= "<ul>";
 			foreach ($style_type_entry_count_display as $key => $value) {
 				if (!empty($value[1])) {
+					$warning_icon = "";
+					$text_warning_color = "";
+					if ($value[0] >= ($value[1] - ($value[0] * .10))) {
+						$warning_icon = " <span class=\"text-danger\"><i class=\"fa fa-fw fa-exclamation-circle fa-sm\"></i></span>";
+						$text_warning_color = "text-danger";
+					}
 					$page_info2 .= "<li>";
-					$page_info2 .= sprintf("<strong>%s</strong> &ndash; %s %s %s", $key, $value[0], strtolower($label_of), $value[1]);
+					$page_info2 .= sprintf("<strong>%s</strong> &ndash; <span class='%s'>%s</span> %s %s %s", $key, $text_warning_color, $value[0], strtolower($label_of), $value[1], $warning_icon);
 					$page_info2 .= "</li>";
 				}
 			}

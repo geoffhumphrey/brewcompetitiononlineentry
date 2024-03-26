@@ -2069,7 +2069,7 @@ $form_required_fields_00 = "Not all required fields have been filled out or sele
 $form_required_fields_01 = "Required fields that are missing values are indicated with a star <i class=\"fa fa-sm fa-star\"></i> and/or in <strong class=\"text-danger\">red</strong> above. Please scroll up as necessary.";
 $form_required_fields_02 = "This field is required.";
 
-$entry_info_text_054 = "Entries by style type and associated limits:";
+$entry_info_text_054 = "Current entry count by style type and associated limits:";
 
 $maintenance_text_002 = "Only Top-Level Admins can log in when the site is in Maintenance Mode.";
 

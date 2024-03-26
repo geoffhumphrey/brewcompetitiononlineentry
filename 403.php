@@ -59,7 +59,7 @@ $nav_container = "navbar-default";
         		<h1>403 Error</h1>
         	</div>
         	<p class="lead">Unfortunately, you do not have permission for this request or sufficient credentials to access the requested function directly.</p>
-            <p class="lead"><small>Additionally, your session may have been terminated. If so, you'll need to log in again. Please use the main navigation above to get where you want to go.</small></p>
+            <p class="lead"><small>Additionally, your session may have been timed out on the server. If so, you'll need to try to <a href="<?php echo $base_url; ?>index.php?section=login">log in</a> again. Please use the main navigation above to get where you want to go.</small></p>
             <p>Cheers!</p>
             <p class="small">&ndash; The <?php echo $_SESSION['contestName']; ?> Site Server</p>
             </div><!-- ./left column -->
