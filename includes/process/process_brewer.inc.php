@@ -448,7 +448,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'brewerLastName' => blank_to_null($last_name),
 				'brewerAddress' => blank_to_null($address),
 				'brewerCity' => blank_to_null($city),
-				'brewerState' => blank_to_null($state),
+				'brewerState' => blank_to_null($state_province),
 				'brewerZip' => blank_to_null(sterilize($_POST['brewerZip'])),
 				'brewerCountry' => blank_to_null($_POST['brewerCountry']),
 				'brewerPhone1' => blank_to_null($brewerPhone1),
@@ -649,7 +649,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewerLastName' => blank_to_null($last_name),
 			'brewerAddress' => blank_to_null($address),
 			'brewerCity' => blank_to_null($city),
-			'brewerState' => blank_to_null($state),
+			'brewerState' => blank_to_null($state_province),
 			'brewerZip' => sterilize($_POST['brewerZip']),
 			'brewerCountry' => blank_to_null($_POST['brewerCountry']),
 			'brewerPhone1' => blank_to_null($brewerPhone1),
@@ -678,6 +678,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB),
 			'brewerAssignment' => blank_to_null($brewerAssignment)
 		);
+
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {

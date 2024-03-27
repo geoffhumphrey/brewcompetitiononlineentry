@@ -415,14 +415,14 @@ else {
 $address = sterilize($purifier->purify($_POST['brewerAddress']));
 $city = sterilize($purifier->purify($_POST['brewerCity']));
 
-if ((isset($_POST['brewerStateUS'])) && (!empty($_POST['brewerStateUS']))) $state = $_POST['brewerStateUS'];
-elseif ((isset($_POST['brewerStateCA'])) && (!empty($_POST['brewerStateCA']))) $state = $_POST['brewerStateCA'];
-elseif ((isset($_POST['brewerStateAUS'])) && (!empty($_POST['brewerStateAUS']))) $state = $_POST['brewerStateAUS'];
-elseif ((isset($_POST['brewerStateNon'])) && (!empty($_POST['brewerStateNon']))) $state = $purifier->purify($_POST['brewerStateNon']);
-else $state = "";
+if ((isset($_POST['brewerStateUS'])) && (!empty($_POST['brewerStateUS']))) $state_province = $_POST['brewerStateUS'];
+elseif ((isset($_POST['brewerStateCA'])) && (!empty($_POST['brewerStateCA']))) $state_province = $_POST['brewerStateCA'];
+elseif ((isset($_POST['brewerStateAUS'])) && (!empty($_POST['brewerStateAUS']))) $state_province = $_POST['brewerStateAUS'];
+elseif ((isset($_POST['brewerStateNon'])) && (!empty($_POST['brewerStateNon']))) $state_province = $purifier->purify($_POST['brewerStateNon']);
+else $state_province = "";
 
-if (strlen($state) <= 2) $state = strtoupper($state);
-$state = sterilize($state);
+if (strlen($state_province) <= 2) $state_province = strtoupper($state_province);
+$state_province = sterilize($state_province);
 
 // Set all locations as YES for quick adds
 if ($view == "quick") {

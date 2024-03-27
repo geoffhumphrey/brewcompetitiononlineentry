@@ -1109,9 +1109,9 @@ if ($totalRows_names > 0) {
 		$last_name = sterilize($last_name);  
 		$address = standardize_name($purifier->purify(sterilize($row_names['brewerAddress'])));
 		$city = standardize_name($purifier->purify(sterilize($row_names['brewerCity'])));
-		$state = $purifier->purify(sterilize($row_names['brewerState']));
-		if (strlen($state) > 2) $state = standardize_name($state);
-		else $state = strtoupper($state);
+		$state_province = $purifier->purify(sterilize($row_names['brewerState']));
+		if (strlen($state_province) > 2) $state_province = standardize_name($state_province);
+		else $state_province = strtoupper($state_province);
 		$brewerEmail = filter_var($row_names['brewerEmail'],FILTER_SANITIZE_EMAIL);
 		
 		if (!empty($row_names['brewerJudgeID'])) {
@@ -1132,7 +1132,7 @@ if ($totalRows_names > 0) {
 			'brewerLastName' => $last_name,
 			'brewerAddress' => $address,
 			'brewerCity' => $city,
-			'brewerState' => $state,
+			'brewerState' => $state_province,
 			'brewerClubs' => $brewerClubs,
 			'brewerEmail' => $brewerEmail,
 			'brewerJudgeID' => $brewerJudgeID,

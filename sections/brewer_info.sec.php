@@ -186,7 +186,7 @@ $name .= $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName'];
 $email .= $_SESSION['user_name'];
 if (!empty($_SESSION['brewerAddress'])) $address = $_SESSION['brewerAddress']; else $address = $label_none_entered;
 if (!empty($_SESSION['brewerCity'])) $city = $_SESSION['brewerCity']; else $city = $label_none_entered;
-if (!empty($_SESSION['brewerState'])) $state = $_SESSION['brewerState']; else $state = $label_none_entered;
+if (!empty($_SESSION['brewerState'])) $state_province = $_SESSION['brewerState']; else $state_province = $label_none_entered;
 if (!empty($_SESSION['brewerZip'])) $zip = $_SESSION['brewerZip']; else $zip = $label_none_entered;
 if (!empty($_SESSION['brewerCountry'])) $country = $_SESSION['brewerCountry']; else $country = $label_none_entered;
 if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
@@ -362,7 +362,7 @@ $account_display .= "</div>";
 
 $account_display .= "<div class=\"row bcoem-account-info\">";
 $account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_organization.$label_state_province);
-$account_display .= "<div class=\"".$display_right_cols."\">".$state."</div>";
+$account_display .= "<div class=\"".$display_right_cols."\">".$state_province."</div>";
 $account_display .= "</div>";
 
 $account_display .= "<div class=\"row bcoem-account-info\">";

@@ -32,7 +32,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	setcookie("brewerLastName", $last_name, 0, "/");
 	setcookie("brewerAddress", $address, 0, "/");
 	setcookie("brewerCity", $city, 0, "/");
-	setcookie("brewerState", sterilize($state), 0, "/");
+	setcookie("brewerState", sterilize($state_province), 0, "/");
 	setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
 	setcookie("brewerCountry", sterilize($_POST['brewerCountry']), 0, "/");
 	setcookie("brewerPhone1", $brewerPhone1, 0, "/");
@@ -151,7 +151,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'brewerLastName' => blank_to_null($last_name),
 					'brewerAddress' => blank_to_null($address),
 					'brewerCity' => blank_to_null($city),
-					'brewerState' => blank_to_null($state),
+					'brewerState' => blank_to_null($state_province),
 					'brewerZip' => blank_to_null($purifier->purify($_POST['brewerZip'])),
 					'brewerCountry' => blank_to_null($purifier->purify($_POST['brewerCountry'])),
 					'brewerPhone1' => blank_to_null($brewerPhone1),
@@ -190,7 +190,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				echo $last_name."<br>";
 				echo $address."<br>";
 				echo $city."<br>";
-				echo $state."<br>";
+				echo $state_province."<br>";
 				echo $purifier->purify($_POST['brewerZip'])."<br>";
 				echo $purifier->purify($_POST['brewerCountry'])."<br>";
 				echo $brewerPhone1."<br>";
