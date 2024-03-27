@@ -2,8 +2,15 @@
 /**
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
- * Last Modified: December 3, 2022
+ * Last Modified: March 26, 2024
  */
+
+if ((session_status() == PHP_SESSION_NONE) || (!function_exists('sterilize'))) {
+    $redirect = "../../index.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
 
 /**
  * ******************************************************************************
@@ -70,7 +77,7 @@ mysqli_set_charset($connection,'utf8mb4');
 mysqli_query($connection, "SET NAMES 'utf8mb4';");
 mysqli_query($connection, "SET CHARACTER SET 'utf8mb4';");
 mysqli_query($connection, "SET COLLATION_CONNECTION = 'utf8mb4_unicode_ci';");
-mysqli_query($connection, "SET sql_mode = '';"); 
+mysqli_query($connection, "SET sql_mode = '';");
 
 /**
  * Do not change the following line.

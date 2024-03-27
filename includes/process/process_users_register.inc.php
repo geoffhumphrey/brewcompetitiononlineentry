@@ -20,16 +20,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	require(PROCESS.'process_brewer_info.inc.php');
 
-	$username = strtolower($_POST['user_name']);
-	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
-
+	$username = strtolower(filter_var($username,FILTER_SANITIZE_EMAIL));
+	$username2 = strtolower(filter_var($username2,FILTER_SANITIZE_EMAIL));
 	$userQuestionAnswer = $purifier->purify(sterilize($_POST['userQuestionAnswer']));
-	
 	$hasher_question = new PasswordHash(8, false);
 	$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
-
-	$username2 = strtolower($_POST['user_name2']);
-	$username2 = filter_var($username2,FILTER_SANITIZE_EMAIL);
 
 	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
 	setcookie("userQuestionAnswer", $userQuestionAnswer, 0, "/");
@@ -37,9 +32,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	setcookie("brewerLastName", $last_name, 0, "/");
 	setcookie("brewerAddress", $address, 0, "/");
 	setcookie("brewerCity", $city, 0, "/");
-	setcookie("brewerState", sterilize($_POST['brewerState']), 0, "/");
+	setcookie("brewerState", sterilize($state), 0, "/");
 	setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
-	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+	setcookie("brewerCountry", sterilize($_POST['brewerCountry']), 0, "/");
 	setcookie("brewerPhone1", $brewerPhone1, 0, "/");
 	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 	setcookie("brewerClubs", $brewerClubs, 0, "/");
@@ -115,7 +110,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$redirect = prep_redirect_link($redirect);
 				$redirect_go_to = sprintf("Location: %s", $redirect);
 
-				} else {
+			} else {
 
 				// Add the user's creds to the "users" table			
 				$hasher = new PasswordHash(8, false);
@@ -137,6 +132,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'userCreated' =>  $db_conn->now(),
 					'userAdminObfuscate' => $userAdminObfuscate
 				);
+				//print_r($data);
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -180,8 +176,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB),
 					'brewerAssignment' => blank_to_null($brewerAssignment)
 				);
-
-				print_r($data);
 
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
@@ -455,7 +449,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				} // end if ($filter == "admin")
 
-			} // end if ($totalRows_userCheck > 0)
+			} // end if ($totalRows_userCheck > 0) else
 
 		} // if (strstr($username,'@'))
 
