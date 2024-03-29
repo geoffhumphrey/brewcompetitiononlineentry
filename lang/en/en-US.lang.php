@@ -344,7 +344,7 @@ $label_entry_fees = "Entry Fees";
 $label_entry_limit = "Entry Limit";
 $label_entry_info = "Entry Info";
 $label_entry_per_entrant = "Per Entrant Limits";
-$label_categories_accepted = "Styles Accepted";
+$label_categories_accepted = "Categories Accepted";
 $label_judging_categories = "Judging Categories";
 $label_entry_acceptance_rules = "Entry Acceptance Rules";
 $label_shipping_info = "Shipping Info";
@@ -2029,7 +2029,7 @@ $best_brewer_text_015 = "The points for each placing entry are calculated using 
  */
 $label_abv = "Alcohol By Volume (ABV)";
 $label_final_gravity = "Final Gravity";
-$label_juice_source = "Juice Source(s)";
+$label_juice_source = "Fruit or Juice Source";
 $label_select_all_apply = "Select All That Apply";
 $label_pouring = "Pouring";
 $label_pouring_notes = "Pouring Notes";
@@ -2043,7 +2043,7 @@ $brew_text_042 = "Please provide the alcohol by volume up to the hundredth place
 $brew_text_043 = "Numbers only - decimals acceptable to the hundredth place (e.g., 5.2, 12.84, etc.).";
 $brew_text_044 = "Please provide finishing specific gravity to the thousandth place (e.g., 0.991, 1.000, 1.007, etc.).";
 $brew_text_045 = "Please provide juice source(s) - select all that apply.";
-$brew_text_046 = "Please specify the two letter state/provice abbreviation of any other juice source(s) (e.g., VT, ME, CA, ON, etc.). Separate each location's abbreviation by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
+$brew_text_046 = "Please specify the origin of all fruit additions in this cider. Fruit additions are all fruit/juice added to the beverage that is not the apple or pear base.<p>Separate each location's abbreviation by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
 $brew_text_047 = "How should your entry be poured for the judges?";
 $brew_text_048 = "Should any yeast be roused before pouring?";
 $brew_text_049 = "Provide further information regarding how your entry should be poured or other related items (e.g., possible gushing, etc.).";
@@ -2072,6 +2072,9 @@ $form_required_fields_02 = "This field is required.";
 $entry_info_text_054 = "Current entry count by style type and associated limits:";
 
 $maintenance_text_002 = "Only Top-Level Admins can log in when the site is in Maintenance Mode.";
+
+$brew_text_054 = "Where does the apple/pear fruit or juice come from? Please select all that apply for the base beverage.";
+
 
 /**
  * ----------------------------------------------------------------------------------

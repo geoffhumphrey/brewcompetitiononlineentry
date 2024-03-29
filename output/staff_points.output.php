@@ -103,6 +103,7 @@ $output_judges = "";
 $output_stewards = "";
 $output_staff = "";
 $organ_bjcp_id = "";
+$organ_uid = "";
 
 if ($view == "default") {
 
@@ -110,6 +111,7 @@ if ($view == "default") {
 		
 		if ((isset($row_org['brewerJudgeID'])) && (!empty($row_org['brewerJudgeID']))) $organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
 
+		$organ_uid = $row_org['uid'];
 		$org_name = ucwords(strtolower($row_org['brewerLastName'])).", ".ucwords(strtolower($row_org['brewerFirstName']));
 
 		$output_organizer .= "<tr>";
@@ -154,7 +156,7 @@ if ($view == "default") {
 					$output_judges .= "</td>";
 					
 					$output_judges .= "<td>";
-					if ((!empty($judge_bjcp_id) && ($judge_bjcp_id == $organ_bjcp_id))) $output_judges .= "0.0 (".$label_organizer.")";
+					if ($uid == $organ_uid) $output_judges .= "0.0 (".$label_organizer.")";
 					else {
 						if ($bos_judge) $output_judges .= number_format(($judge_points+$bos_judge_points),1);
 						else $output_judges .=  $judge_points;
@@ -202,7 +204,7 @@ if ($view == "default") {
 				if ((!empty($judge_bjcp_id)) && (validate_bjcp_id($judge_bjcp_id))) $output_judges .= $judge_bjcp_id;
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
-				if ((!empty($judge_bjcp_id) && ($judge_bjcp_id == $organ_bjcp_id))) $output_judges .= "0.0 (".$label_organizer.")";
+				if ($uid == $organ_uid) $output_judges .= "0.0 (".$label_organizer.")";
 				else $output_judges .= "1.0";
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
@@ -243,7 +245,7 @@ if ($view == "default") {
 					if (!empty($steward_bjcp_id)) $output_stewards .= $steward_bjcp_id;
 					else $output_stewards .= "&nbsp;";
 					$output_stewards .= "</td>";
-					if ((!empty($steward_bjcp_id) && ($steward_bjcp_id == $organ_bjcp_id))) $output_stewards .= "<td>0.0 (".$label_organizer.")</td>";
+					if ($uid == $organ_uid) $output_stewards .= "<td>0.0 (".$label_organizer.")</td>";
 					else $output_stewards .= "<td>".$steward_points."</td>";
 					$output_stewards .= "</tr>";
 				}
@@ -280,7 +282,7 @@ if ($view == "default") {
 					if ((!empty($staff_bjcp_id)) && (validate_bjcp_id($staff_bjcp_id))) $output_staff .= $staff_bjcp_id;
 					$output_staff .= "</td>";
 					$output_staff .= "<td>";
-					if ((!empty($staff_bjcp_id)) && ($staff_bjcp_id == $organ_bjcp_id)) $output_staff .= "0.0 (".$label_organizer.")";
+					if ($uid == $organ_uid) $output_staff .= "0.0 (".$label_organizer.")";
 					else {
 						if (($st_running_total <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
 						else $output_staff .= $organ_max_points;

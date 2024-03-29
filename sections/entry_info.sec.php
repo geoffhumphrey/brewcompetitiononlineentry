@@ -231,10 +231,14 @@ else $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_046);
 
 $style_set = $_SESSION['style_set_short_name'];
 
+if ($_SESSION['prefsStyleSet'] == "NWCiderCup") $label_judging_styles = $label_categories_accepted;
 $anchor_links[] = $label_judging_styles;
 $anchor_name = str_replace(" ", "-", $label_judging_styles);
 
-if ($entry_window_open < 2) $header1_8 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_styles_accepted);
+if ($entry_window_open < 2) {
+	$header1_8 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_styles_accepted);
+	if ($_SESSION['prefsStyleSet'] == "NWCiderCup") $header1_8 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_categories_accepted);
+}
 else $header1_8 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_judging_styles);
 
 $page_info8 .= "<table class=\"table table-striped table-bordered table-responsive\">";

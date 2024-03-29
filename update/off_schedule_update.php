@@ -3845,17 +3845,218 @@ if (!check_update("styleTypeEntryLimit", $prefix."style_types")) {
 
 }
 
+$nw_cider_update_errors = 0;
+$nw_cider_update_output = "";
+
+$update_table = $prefix."styles";
+
+$data = array('brewStyleEntry' => NULL);
+$db_conn->where ('brewStyleGroup', 'C1');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C1 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => NULL);
+$db_conn->where ('brewStyleGroup', 'C1');
+$db_conn->where ('brewStyleNum', 'B');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C1 B was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => NULL);
+$db_conn->where ('brewStyleGroup', 'C2');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C2 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => NULL);
+$db_conn->where ('brewStyleGroup', 'C2');
+$db_conn->where ('brewStyleNum', 'B');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C2 B was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify apples used.</p>');
+$db_conn->where ('brewStyleGroup', 'C3');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C3 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify apples used.</p>');
+$db_conn->where ('brewStyleGroup', 'C3');
+$db_conn->where ('brewStyleNum', 'B');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C1 B was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MAY</u></strong> specify pears used.</p>');
+$db_conn->where ('brewStyleGroup', 'C4');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C4 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MAY</u></strong> specify pears used.</p>');
+$db_conn->where ('brewStyleGroup', 'C4');
+$db_conn->where ('brewStyleNum', 'B');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C4 B was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong>  specify wood used, including the type of wine, beer or spirits barrel, if applicable.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples and process used.</p>');
+$db_conn->where ('brewStyleGroup', 'C5');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C5 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong>  specify apple or pear variety used.</p>');
+$db_conn->where ('brewStyleGroup', 'C6');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C6 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit.</p>');
+$db_conn->where ('brewStyleGroup', 'C7');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C7 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit. FG > 1.007 (> 1.8 Brix).</p>');
+$db_conn->where ('brewStyleGroup', 'C7');
+$db_conn->where ('brewStyleNum', 'B');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C7 B was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit. FG < 1.007 (< 1.8 Brix).</p>');
+$db_conn->where ('brewStyleGroup', 'C7');
+$db_conn->where ('brewStyleNum', 'C');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C7 C was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify hop variety or varieties.</p><p>Entrants MAY specify apples or pears used.</p>');
+$db_conn->where ('brewStyleGroup', 'C8');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C8 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify herbs and and/or spices used.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p>');
+$db_conn->where ('brewStyleGroup', 'C8');
+$db_conn->where ('brewStyleNum', 'B');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C8 B was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify spices and/or herbs used.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p>');
+$db_conn->where ('brewStyleGroup', 'C8');
+$db_conn->where ('brewStyleNum', 'C');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C8 C was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify the process used.</p><p>Entrants MAY specify apples or pears used.</p>');
+$db_conn->where ('brewStyleGroup', 'C9');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C9 A was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify process used (i.e., alcohol removed or ciderkin production).</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p><p>ABV range: 0.5% - 4.5%.</p>');
+$db_conn->where ('brewStyleGroup', 'C9');
+$db_conn->where ('brewStyleNum', 'B');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C9 B was NOT updated.</li>";
+}
+
+$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify processes and ingredients that make the cider not suitable for any other category.</p><p>Entrants <strong><u>MUST</u></strong> specify commercial yeast cultures or wild yeast processes (i.e., wild ferment, brettanomyces, or lactobacillus). <p>Entrants <strong><u>MUST</u></strong> note additions such as added sweeteners (i.e., honey or molasses).</p><p>Entrants MAY specify apples or pears used.</p>');
+$db_conn->where ('brewStyleGroup', 'C9');
+$db_conn->where ('brewStyleNum', 'C');
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$result = $db_conn->update ($update_table, $data);
+if (!$result) {
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li>NW Cider Cup Style C9 C was NOT updated.</li>";
+}
+
 $sql = sprintf("UPDATE `%s` SET brewStyleReqSpec='0' WHERE brewStyleVersion='NWCiderCup' AND (brewStyleGroup='C1' OR brewStyleGroup='C2');", $prefix."styles");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output_off_sched_update .= "<li>NW Cider Cup styles updated.</li>";
+if ($result) $output_off_sched_update .= "<li>NW Cider Cup C1 and C2 styles updated to remove additional info input requirement.</li>";
 else {
-	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup styles NOT updated.</li>";
+	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup C1 and C2 styles styles NOT updated to remove additional info input requirement.</li>";
+	$error_count += 1;
+}
+
+if ($nw_cider_update_errors > 0) {
+	$output_off_sched_update .= $nw_cider_update_output;
 	$error_count += 1;
 }
 
 if (!$setup_running) $output_off_sched_update .= "</ul>";
+
 
 /**
  * ----------------------------------------------- Future --------------------------------------------- 

@@ -765,7 +765,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 
     <!-- ABV (Optional for all except NW Cider Cup) -->
 	<div class="form-group">
-        <label for="brewABV" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_abv; ?></label>
+        <label for="brewABV" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "text-warning"; ?>"><?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "<i class=\"fa fa-sm fa-star\"></i> "; echo $label_abv; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
             <input class="form-control" name="brewABV" id="brewABV" type="number" min="0" step=".01" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewABV']; ?>" data-error="<?php echo $brew_text_042; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>
@@ -777,16 +777,6 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { ?>
 
     <!-- The following two fields are only shown if the NW Cider Cup styles are being used. -->
-    <!-- Sweetness Level -->
-	<div class="form-group">
-        <label for="brewSweetnessLevel" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_final_gravity; ?></label>
-        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-        	<!-- Input Here -->
-            <input class="form-control" name="brewSweetnessLevel" id="brewSweetnessLevel" type="number" min="0" step=".001" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewSweetnessLevel']; ?>" data-error="<?php echo $brew_text_044; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>
-            <div class="help-block with-errors"><?php echo $brew_text_044; ?></div>
-        </div>
-    </div>
-
 	<!-- Apple Juice Source -->
 	<?php
 
@@ -795,7 +785,10 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 		"ID" => "Idaho (ID)",
 		"MT" => "Montana (MT)",
 		"OR" => "Oregon (OR)",
-		"WA" => "Washington (WA)"
+		"WA" => "Washington (WA)",
+		"Other" => "Others States/Provinces in US/Canada",
+		"Outsite" => "Outside of US/Canada",
+		"Unknown" => "I Don't Know"
 	);
 
 	$juice_select_dropdown = "";
@@ -825,12 +818,13 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 
 	?>
 	<div class="form-group">
-        <label for="brewJuiceSource" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_juice_source; ?></label>
+        <label for="brewJuiceSource" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_juice_source; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 	        <!-- Input Here -->
 	        <select class="selectpicker" multiple name="brewJuiceSource[]" id="brewJuiceSource" data-error="<?php echo $brew_text_045; ?>" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo ucwords(str_replace(".","",$brew_text_045)); ?>" title="<?php echo ucwords(str_replace(".","",$brew_text_045)); ?>" required>
 				<?php echo $juice_select_dropdown; ?>
 	        </select>
+	        <div class="help-block"><?php echo $brew_text_054; ?></div>
 	        <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -839,6 +833,16 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
             <input class="form-control" name="brewJuiceSourceOther" id="other-juice-source" type="text" value="<?php echo rtrim($juice_source_other,", "); ?>" placeholder="" pattern="[^%\x22]+">
             <div class="help-block"><?php echo $brew_text_046; ?></div>
+        </div>
+    </div>
+
+    <!-- Sweetness Level -->
+	<div class="form-group">
+        <label for="brewSweetnessLevel" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_final_gravity; ?></label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<!-- Input Here -->
+            <input class="form-control" name="brewSweetnessLevel" id="brewSweetnessLevel" type="number" min="0" step=".001" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewSweetnessLevel']; ?>" data-error="<?php echo $brew_text_044; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; ?>>
+            <div class="help-block with-errors"><?php echo $brew_text_044; ?></div>
         </div>
     </div>
 
