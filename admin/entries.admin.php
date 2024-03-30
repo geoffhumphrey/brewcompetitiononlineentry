@@ -223,7 +223,9 @@ if ($totalRows_log > 0) {
 		
 		}
 
-		if (!empty($row_log['brewPouring'])) {
+		if (!empty($row_log['brewPackaging'])) $required_info .= "<li><strong>".$label_packaging.":</strong> ".$packaging_display[$row_log['brewPackaging']]."</li>";
+
+		if ((!empty($row_log['brewPouring'])) && ((!empty($row_log['brewStyleType'])) && ($row_log['brewStyleType'] == 1))) {
 			$pouring_arr = json_decode($row_log['brewPouring'],true);
 			$required_info .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
 			if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $required_info .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
@@ -514,6 +516,16 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= "\n\t<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_md; ?>\">";
 		$tbody_rows .= $entry_name;
+		if (!empty($required_info)) {
+			$tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle <?php echo $hidden_sm; ?>\"></span></a> ";
+			$tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
+			
+			$tbody_rows .= "<div class=\"collapse small alert alert-info\" style=\"margin-top:5px;margin-bottom:5px;\" id=\"collapseEntryInfo".$row_log['id']."\">";
+			$tbody_rows .= "<ul class='list-unstyled'>";
+		    $tbody_rows .= $required_info;
+		    $tbody_rows .= "</ul>";
+		    $tbody_rows .= "</div>";
+		}
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td>";
 
@@ -527,19 +539,11 @@ if ($totalRows_log > 0) {
 			$entry_unconfirmed_display .= "<span class=\"text-danger small\"><strong>Unconfirmed entry.</strong> <a href=\"".$unconfirmed_entry_link."\">Edit</a> or contact the participant to confirm.";
 		}
 
-		if (!empty($required_info)) $tbody_rows .= "<a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle <?php echo $hidden_sm; ?>\"></span></a> ";
+		
 
 		$tbody_rows .= $entry_style_display;
 
-		if (!empty($required_info)) { 
-			$tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
 		
-			$tbody_rows .= "<div class=\"collapse small alert alert-info\" style=\"margin-top:5px;margin-bottom:5px;\" id=\"collapseEntryInfo".$row_log['id']."\">";
-			$tbody_rows .= "<ul class='list-unstyled'>";
-	    	$tbody_rows .= $required_info;
-	    	$tbody_rows .= "</ul>";
-	    	$tbody_rows .= "</div>";
-	    }
 
 	    $tbody_rows .= $entry_unconfirmed_display;
 		$tbody_rows .= $entry_allergens_display;

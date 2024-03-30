@@ -476,7 +476,7 @@ if ($entry_found) {
     $entry_info_html .= "</div>";
   }
 
-  if (!empty($row_entry_info['brewPouring'])) {
+  if ((!empty($row_entry_info['brewPouring'])) && ((!empty($row_entry_info['brewStyleType'])) && ($row_entry_info['brewStyleType'] == 1))) {
     
     $pouring_arr = json_decode($row_entry_info['brewPouring'],true);
 

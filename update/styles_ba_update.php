@@ -1,12 +1,4 @@
 <?php
-
-if (!function_exists('insertMulti')) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-
 $data = array(
   array('brewStyleGroup' => '06','brewStyleNum' => '001','brewStyle' => 'Classic Australian-Style Pale Ale','brewStyleCategory' => 'Other Origin Ales','brewStyleVersion' => 'BA','brewStyleOG' => '1.040','brewStyleOGMax' => '1.052','brewStyleFG' => '1.004','brewStyleFGMax' => '1.010','brewStyleABV' => '4.0','brewStyleABVMax' => '6.0','brewStyleIBU' => '15','brewStyleIBUMax' => '35','brewStyleSRM' => '3','brewStyleSRMMax' => '10','brewStyleType' => '1','brewStyleInfo' => 'Perceivable fruity-estery aroma and flavor should be present, and are defining character of this beer style, balanced by low to medium hop aroma. Overall flavor impression is mild. Clean yeasty, bready character may be evident. Yeast in suspension if present may impact overall perception of bitterness. Diacetyl if present should be very low. DMS should not be present.','brewStyleLink' => 'https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/','brewStyleLink' => 'https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/','brewStyleActive' => 'N','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => '2018','brewStyleComEx' => NULL,'brewStyleEntry' => NULL),
   array('brewStyleGroup' => '03','brewStyleNum' => '002','brewStyle' => 'Juicy or Hazy Pale Ale','brewStyleCategory' => 'North American Origin Ales','brewStyleVersion' => 'BA','brewStyleOG' => '1.044','brewStyleOGMax' => '1.050','brewStyleFG' => '1.008','brewStyleFGMax' => '1.014','brewStyleABV' => '4.4','brewStyleABVMax' => '5.4','brewStyleIBU' => '30','brewStyleIBUMax' => '50','brewStyleSRM' => '4','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => NULL,'brewStyleLink' => 'https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines','brewStyleLink' => 'https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines','brewStyleActive' => 'N','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => '2018','brewStyleComEx' => NULL,'brewStyleEntry' => NULL),

@@ -2074,6 +2074,10 @@ $entry_info_text_054 = "Current entry count by style type and associated limits:
 $maintenance_text_002 = "Only Top-Level Admins can log in when the site is in Maintenance Mode.";
 
 $brew_text_054 = "Where does the apple/pear fruit or juice come from? Please select all that apply for the base beverage.";
+$label_packaging = "Packaging";
+$label_bottle = "Bottle";
+$label_other_size = "Other Size";
+$label_can = "Can";
 
 
 /**

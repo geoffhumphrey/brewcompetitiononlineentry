@@ -433,8 +433,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewJuiceSource' => blank_to_null($brewJuiceSource),
 			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
 			'brewPouring' => blank_to_null($brewPouring),
-			'brewStyleType' => blank_to_null($row_style_name['brewStyleType'])
+			'brewStyleType' => blank_to_null($row_style_name['brewStyleType']),
+			'brewPackaging' => blank_to_null(sterilize($_POST['brewPackaging']))
 		);
+
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -676,7 +678,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewJuiceSource' => blank_to_null($brewJuiceSource),
 			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
 			'brewPouring' => blank_to_null($brewPouring),
-			'brewStyleType' => blank_to_null($row_style_name['brewStyleType'])
+			'brewStyleType' => blank_to_null($row_style_name['brewStyleType']),
+			'brewPackaging' => blank_to_null(sterilize($_POST['brewPackaging']))
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);

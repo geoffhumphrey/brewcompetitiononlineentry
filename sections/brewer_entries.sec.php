@@ -198,8 +198,7 @@ if ($totalRows_log > 0) {
 			$required_info .= "<li><strong>".$label_juice_source."</strong>: ".$juice_src_disp."</li>";
 		
 		}
-
-		if (!empty($row_log['brewPouring'])) {
+		if ((!empty($row_log['brewPouring'])) && ((!empty($row_log['brewStyleType'])) && ($row_log['brewStyleType'] == 1))) {
 			$pouring_arr = json_decode($row_log['brewPouring'],true);
 			$required_info .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
 			if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $required_info .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
@@ -209,6 +208,8 @@ if ($totalRows_log > 0) {
 		if (!empty($row_log['brewPossAllergens'])) {
 			$allergen_info .= $label_possible_allergens.": ".$row_log['brewPossAllergens'];
 		}
+
+		if (!empty($row_log['brewPackaging'])) $required_info .= "<li><strong>".$label_packaging.":</strong> ".$packaging_display[$row_log['brewPackaging']]."</li>";
 
 		$entry_number = sprintf("%06s",$row_log['id']);
 		$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
@@ -357,14 +358,16 @@ if ($totalRows_log > 0) {
 
 		$entry_output .= $label_entry_number.": ".$entry_number."<br>";
 
-		if ($show_scores) {
-			$entry_output .= $label_judging_number.": ".$judging_number."<br>";
-		}
+		if ($show_scores)  $entry_output .= $label_judging_number.": ".$judging_number."<br>";
 
 		if (!empty($st_disp_list)) $entry_output .= $st_disp_list.": ";
 		$entry_output .= $row_log['brewStyle'];
 
-		if (!$show_scores) {
+		if ($show_scores) {
+			if (minibos_check($row_log['id'],$judging_scores_db_table)) $entry_output .= "<br>".$label_mini_bos." <i class=\"fa fa-sm fa-fw fa-check text-success\"></i>";
+		}
+
+		else {
 			if ($row_log['brewConfirmed'] == 0) $entry_output .= "<br><span class=\"text-danger\">".$label_confirmed." <i class=\"fa fa-sm fa-fw fa-times\"></i></span>";
 			else $entry_output .= "<br><span class=\"text-success\">".$label_confirmed." <i class=\"fa fa-fw fa-check\"></i></span>";
 			if ($row_log['brewPaid'] == 0) $entry_output .= "<br><span class=\"text-danger\">".$label_paid." <i class=\"fa fa-sm fa-fw fa-times\"></i></span>";

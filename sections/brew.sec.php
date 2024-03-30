@@ -776,7 +776,64 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 
     <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { ?>
 
-    <!-- The following two fields are only shown if the NW Cider Cup styles are being used. -->
+    <!-- The following fields are only shown if the NW Cider Cup styles are being used. -->
+
+    <div class="form-group">
+        <label for="brewPaid" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> Packaging</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<div class="input-group">
+                <!-- Input Here -->
+                <label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="750" id="brewPackaging_0" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "750")) echo "CHECKED"; ?> required />750 ml <?php echo $label_bottle; ?>
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="500" id="brewPackaging_1" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "500")) echo "CHECKED"; ?> />
+                    500 ml <?php echo $label_bottle; ?>
+        		</label>
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="375" id="brewPackaging_2" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "375")) echo "CHECKED"; ?> />
+                    375 ml <?php echo $label_bottle; ?>
+        		</label>
+        	</div>
+        	<div class="input-group">
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="22" id="brewPackaging_3" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "22")) echo "CHECKED"; ?> />
+                    22 ounce <?php echo $label_bottle; ?>
+        		</label>
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="12" id="brewPackaging_4" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "12")) echo "CHECKED"; ?> />
+                    12 ounce <?php echo $label_bottle; ?>
+        		</label>
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="Other-Bottle" id="brewPackaging_5" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "Other-Bottle")) echo "CHECKED"; ?> />
+                    <?php echo $label_bottle." - ".$label_other_size; ?>
+        		</label>
+        	</div>
+        	<div class="input-group">
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="19.2" id="brewPackaging_6" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "19.2")) echo "CHECKED"; ?> />
+                    19.2 ounce <?php echo $label_can; ?>
+        		</label>
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="16" id="brewPackaging_7" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "16")) echo "CHECKED"; ?> />
+                    16 ounce <?php echo $label_can; ?>
+        		</label>
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="12" id="brewPackaging_8" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "12")) echo "CHECKED"; ?> />
+                    12 ounce <?php echo $label_can; ?>
+        		</label>
+        	</div>
+        	<div class="input-group">
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="Other-Can" id="brewPackaging_9" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "Other-Can")) echo "CHECKED"; ?> />
+                    <?php echo $label_can." - ".$label_other_size; ?>
+        		</label>
+            </div>
+        </div>
+    </div>
+
+
+
 	<!-- Apple Juice Source -->
 	<?php
 

@@ -2093,6 +2093,11 @@ $entry_info_text_054 = "Entrées par type de style et limites associées:";
 
 $maintenance_text_002 = "Seuls les administrateurs de haut niveau peuvent se connecter lorsque le site est en mode maintenance.";
 
+$brew_text_054 = "D'où vient le fruit ou le jus de pomme/poire ? Veuillez sélectionner toutes les options qui s'appliquent à la boisson de base.";
+$label_packaging = "Emballage";
+$label_bottle = "Bouteille";
+$label_other_size = "Autre Taille";
+$label_can = "Canette";
 
 /**
  * ----------------------------------------------------------------------------------

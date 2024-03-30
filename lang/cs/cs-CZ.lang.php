@@ -2018,6 +2018,12 @@ $entry_info_text_054 = "Záznamy podle typu stylu a souvisejících omezení:";
 
 $maintenance_text_002 = "Když je web v režimu údržby, mohou se přihlásit pouze správci nejvyšší úrovně.";
 
+$brew_text_054 = "Odkud pochází ovoce nebo džus z jablka/hrušky? Prosím, vyberte všechny možnosti, které odpovídají základní nápoji.";
+$label_packaging = "Obal";
+$label_bottle = "Láhev";
+$label_other_size = "Jiná Velikost";
+$label_can = "Konvice";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

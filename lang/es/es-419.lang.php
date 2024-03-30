@@ -2093,6 +2093,12 @@ $entry_info_text_054 = "Entradas por tipo de estilo y límites asociados:";
 
 $maintenance_text_002 = "Sólo los administradores de nivel superior pueden iniciar sesión cuando el sitio está en modo de mantenimiento.";
 
+$brew_text_054 = "¿De dónde proviene la fruta o jugo de manzana/pera? Por favor, seleccione todas las opciones que correspondan para la bebida base.";
+$label_packaging = "Embalaje";
+$label_bottle = "Botella";
+$label_other_size = "Otro Tamaño";
+$label_can = "Lata";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

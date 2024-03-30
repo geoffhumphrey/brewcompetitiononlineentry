@@ -158,37 +158,34 @@ if ($filter == "staff") {
     </thead>
     <tbody>
     <?php do {
-
     	$judge_info = "";
     	$table_info = "";
     	$location_info = "";
     	$judge_rank = "";
-
 		$judge_info = explode("^",brewer_info($row_assignments['bid']));
 		$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable,"default"));
 		$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable,"default"));
-		$judge_rank = explode(",",$judge_info['3']);
+		$judge_rank = explode(",",$judge_info[3]);
 	    $cert_add = "";
 	    if ($judge_info[16] != "&nbsp;") $cert_add .= ", ".$judge_info[16];
 	    if (in_array("Master Cicerone", $judge_rank)) $cert_add .= ", Master Cicerone";
 	    if (in_array("Advanced Cicerone", $judge_rank)) $cert_add .= ", Advanced Cicerone";
 	    if (in_array("Certified Cicerone", $judge_rank)) $cert_add .= ", Certified Cicerone";
 	    if (in_array("Professional Brewer", $judge_rank)) $cert_add .= ", Professional Brewer";
-    	// $judge_rank = str_replace(",",", ",$judge_info['3']);
 		$role = "";
 		if (!empty($row_assignments['assignRoles'])) $role .= str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
 	?>
     <tr>
-    	<td nowrap><?php echo sprintf("<strong>%s, %s</strong><br><small>%s</small>", $judge_info['1'], $judge_info['0'], $judge_info['6']); ?></td>
+    	<td nowrap><?php echo sprintf("<strong>%s, %s</strong><br><small>%s</small>", $judge_info[1], $judge_info[0], $judge_info[6]); ?></td>
     	<?php if ($filter == "J") { ?>
         <td nowrap><?php if (!empty($role)) echo $role; ?></td>
 		<?php } ?>
         <?php if ($filter == "J") { ?>
-        	<td><?php echo $judge_rank[0].$cert_add; ?></td>
+        	<td><?php if (isset($judge_rank[0])) echo $judge_rank[0]; echo $cert_add; ?></td>
         <?php } ?>
         <td><?php echo table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></td>
-        <td><?php echo $table_info['0']; ?></td>
-        <td><?php echo $table_info['1']; ?></td>
+        <td><?php if (isset($table_info[0])) echo $table_info[0]; ?></td>
+        <td><?php if (isset($table_info[1])) echo $table_info[1]; ?></td>
         <td><?php echo $row_assignments['assignRound']; ?></td>
         <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
         <td><?php echo $row_assignments['assignFlight']; ?></td>

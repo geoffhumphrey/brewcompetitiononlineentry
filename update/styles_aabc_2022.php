@@ -1,13 +1,4 @@
 <?php
-
-if (!function_exists('insertMulti')) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-
-
 $data = array(
   array('brewStyleGroup' => '01','brewStyleNum' => '04','brewStyle' => 'American Light Lager [BJCP 1A]','brewStyleCategory' => 'Low Alcohol (≤ 4% Abv)','brewStyleVersion' => 'AABC2022','brewStyleOG' => '1.028','brewStyleOGMax' => '1.04','brewStyleFG' => '0.998','brewStyleFGMax' => '1.008','brewStyleABV' => '2.8','brewStyleABVMax' => '4.2','brewStyleIBU' => '8','brewStyleIBUMax' => '12','brewStyleSRM' => '2','brewStyleSRMMax' => '3','brewStyleType' => '1','brewStyleInfo' => 'A highly carbonated, very light-bodied, nearly flavorless lager designed to be consumed very cold. Very refreshing and thirst-quenching.','brewStyleLink' => NULL,'brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, pale-color, bottom-fermented, lagered, north-america, traditional-style, pale-lager-family, balanced','brewStyleComEx' => 'Bud Light, Coors Light, Grain Belt Premium Light American Lager, Michelob Light, Miller Lite, Old Milwaukee Light','brewStyleEntry' => NULL),
   array('brewStyleGroup' => '01','brewStyleNum' => '07','brewStyle' => 'German Leichtbier [BJCP 5A]','brewStyleCategory' => 'Low Alcohol (≤ 4% Abv)','brewStyleVersion' => 'AABC2022','brewStyleOG' => '1.026','brewStyleOGMax' => '1.034','brewStyleFG' => '1.006','brewStyleFGMax' => '1.01','brewStyleABV' => '2.4','brewStyleABVMax' => '3.6','brewStyleIBU' => '15','brewStyleIBUMax' => '28','brewStyleSRM' => '1.5','brewStyleSRMMax' => '4','brewStyleType' => '1','brewStyleInfo' => 'A pale, highly-attenuated, light-bodied German lager with lower alcohol and calories than standard-strength beers. Moderately bitter with noticeable malt and hop flavors, the beer is still interesting to drink.','brewStyleLink' => NULL,'brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, bitter, hoppy','brewStyleComEx' => 'Autenrieder Schlossbräu Leicht, Greif Bräu Leicht, Hohenthanner Tannen Hell Leicht, Müllerbrau Heimer Leicht, Schönramer Surtaler Schankbier, Waldhaus Sommer Bier','brewStyleEntry' => NULL),

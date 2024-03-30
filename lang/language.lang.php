@@ -10,14 +10,6 @@
  *   -- Be sure to also update function in common.lib.php.
  */
 
-// Redirect if directly accessed without authenticated session
-if ((session_status() == PHP_SESSION_NONE) || ((isset($_SESSION['loginUsername'])) && (!function_exists('sterilize')))) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-
 // Default to US English language if prefs not defined.
 $prefsLanguage = "en-US";
 $prefsLanguageFolder = "en";

@@ -3207,7 +3207,13 @@ if ($row_comp_rules) {
 
 		$sql = sprintf("ALTER TABLE `%s` CHANGE `contestJSON` `contestRules` MEDIUMTEXT NULL DEFAULT NULL;",$prefix."contest_info");
 		$db_conn->rawQuery($sql);
-		if ($db_conn->getLastErrno() === 0) {
+
+		$query_updated_comp_rules = sprintf("SELECT contestRules FROM `%s` WHERE id='1'",$prefix."contest_info");
+		$updated_comp_rules = mysqli_query($connection,$query_updated_comp_rules);
+		$row_updated_comp_rules = mysqli_fetch_assoc($updated_comp_rules);
+
+		$is_rules_json = json_decode($row_updated_comp_rules['contestRules']);
+		if (json_last_error() === JSON_ERROR_NONE) {
 			$output_off_sched_update .= "<li>Changed contestRules row type to accept JSON data; this allows for storage and display of competition rules, packing/shipping rules, etc.</li>";
 		}
 		else {
@@ -3232,7 +3238,7 @@ if (!check_update("contestClubs", $prefix."contest_info")) {
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
 	
-	if ($result) $output_off_sched_update .= "<li>The contestClubs column was added to the competition information table.</li>";
+	if (check_update("contestClubs", $prefix."contest_info")) $output_off_sched_update .= "<li>The contestClubs column was added to the competition information table.</li>";
 	else {
 		$output_off_sched_update .= "<li class=\"text-danger\">The contestClubs column was NOT added to the competition information table.</li>";
 		$error_count += 1;
@@ -3430,7 +3436,7 @@ if (!check_update("userAdminObfuscate", $prefix."users")) {
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
 	
-	if ($result) {
+	if (check_update("userAdminObfuscate", $prefix."users")) {
 		$output_off_sched_update .= "<li>The userAdminObfuscate column was added to the users table.</li>";
 
 		$update_table = $prefix."users";
@@ -3544,16 +3550,16 @@ if (check_update("prefsSelectedStyles", $prefix."preferences")) {
 
 if (!check_update("prefsSelectedStyles", $prefix."preferences")) {
 	
-	$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsSponsorLogoSize` `prefsSelectedStyles` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Changed in 2.6.2 to house active styles. JSON data.';",$prefix."preferences");
-	$db_conn->rawQuery($sql);
-	
-	if ($db_conn->getLastErrno() === 0) {
-		$output_off_sched_update .= "<li>The unused prefsSponsorLogoSize column was renamed to prefsSelectedStyles and set to MEDIUMTEXT.</li>";
+	if (check_update("prefsSponsorLogoSize",$prefix."preferences")) {
+		$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsSponsorLogoSize` `prefsSelectedStyles` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Changed in 2.6.2 to house active styles. Will contain JSON data.';",$prefix."preferences");
+		$db_conn->rawQuery($sql);
+		$output_off_sched_update .= "<li>The unused prefsSponsorLogoSize column in the preferences table was renamed to prefsSelectedStyles and set to MEDIUMTEXT.</li>";
 	}
 
 	else {
-		$output_off_sched_update .= "<li class=\"text-danger\">The unused prefsSponsorLogoSize column was NOT renamed to prefsSelectedStyles.</li>";
-		$error_count += 1;
+		$sql = sprintf("ALTER TABLE `%s` ADD `prefsSelectedStyles` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Changed in 2.6.2 to house active styles. Will contain JSON data.';",$prefix."preferences");
+		$db_conn->rawQuery($sql);
+		$output_off_sched_update .= "<li>The prefsSelectedStyles column was added to the preferences table.</li>";
 	}
 
 	$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleActive='Y' ORDER BY id ASC", $prefix."styles");
@@ -3754,6 +3760,20 @@ if (!check_update("brewJuiceSource", $prefix."brewing")) {
 	if ($result) $output_off_sched_update .= "<li>Juice Source column added to the brewing table.</li>";
 	else {
 		$output_off_sched_update .= "<li class=\"text-danger\">Juice Source column NOT added to the brewing table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+if (!check_update("brewPackaging", $prefix."brewing")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `brewPackaging` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Allow entrants to specify packaging size.';", $prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Packaging column added to the brewing table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Packaging column NOT added to the brewing table.</li>";
 		$error_count += 1;
 	}
 

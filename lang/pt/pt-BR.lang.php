@@ -2078,6 +2078,11 @@ $entry_info_text_054 = "Entradas por tipo de estilo e limites associados:";
 
 $maintenance_text_002 = "Somente os administradores de nível superior podem fazer login quando o site está no modo de manutenção.";
 
+$brew_text_054 = "De onde vem a fruta ou suco de maçã/pera? Por favor, selecione todas as opções que se aplicam à bebida base.";
+$label_packaging = "Embalagem";
+$label_bottle = "Garrafa";
+$label_other_size = "Outro Tamanho";
+$label_can = "Lata";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -168,6 +168,8 @@ function score_style_data($value) {
 	require(LANG.'language.lang.php');
 	mysqli_select_db($connection,$database);
 
+	$return = "";
+
 	/*
 	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
 	else
@@ -182,12 +184,14 @@ function score_style_data($value) {
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 
-	$return =
-	$row_styles['brewStyleGroup']."^". //0
-	$row_styles['brewStyleNum']."^". //1
-	$row_styles['brewStyle']."^". //2
-	$row_styles['brewStyleType']; //3
-
+	if ($row_styles) {
+		$return =
+		$row_styles['brewStyleGroup']."^". //0
+		$row_styles['brewStyleNum']."^". //1
+		$row_styles['brewStyle']."^". //2
+		$row_styles['brewStyleType']; //3
+	}
+	
 	return $return;
 
 }
@@ -287,8 +291,8 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 
 		if ($totalRows_tables > 0) {
 			do {
-				if ($filter == "mini_bos") $table_choose .= '<li class="small"><a data-fancybox data-type=\"iframe\" class="modal-window-link hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' (Mini-BOS)</a></li>';
-				else $table_choose .= '<li class="small"><a data-fancybox data-type=\"iframe\" class="modal-window-link hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
+				if ($filter == "mini_bos") $table_choose .= '<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' (Mini-BOS)</a></li>';
+				else $table_choose .= '<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
 			} while ($row_tables = mysqli_fetch_assoc($tables));
 		}
 
@@ -682,7 +686,7 @@ function admin_help($go,$header_output,$action,$filter) {
 		break;
 	}
 
-	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a data-fancybox data-type=\"iframe\" class="modal-window-link hide-loader" href="http://brewingcompetitions.com/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
+	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="http://brewingcompetitions.com/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
 	return $return;
 }
 
