@@ -222,11 +222,11 @@ if ($totalRows_tables > 0) {
     <?php } ?>
     <?php if (($judging_started) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() < $_SESSION['prefsWinnerDelay']))) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-primary btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-bullhorn"></span></a>
+        <a class="btn btn-info btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-bullhorn"></span></a>
     </div>
     <?php } elseif (($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']))) { ?>
         <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-default btn-block hide-loader" href="#" data-toggle="modal" data-target="#post-comp" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Post-Competition Tasks" data-content="There are a few things that organizers should do after publishing results. Here's a list.">Post-Competition Tasks <span class="fa fa-clipboard-list"></span></a>
+        <a class="btn btn-info btn-block hide-loader" href="#" data-toggle="modal" data-target="#post-comp" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Post-Competition Tasks" data-content="There are a few things that organizers should do after publishing results. Here's a list.">Post-Competition Tasks <span class="fa fa-clipboard-list"></span></a>
     </div>
     <div class="modal fade" id="post-comp" tabindex="-1" role="dialog" aria-labelledby="post-compLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -238,7 +238,7 @@ if ($totalRows_tables > 0) {
                 </div>
                 <div class="modal-body">
                     
-                    <p><strong>If this competition is BJCP Sanctioned</strong>, send or complete the BJCP Organizer's Report within 21 days of the conclusion of judging.</p>
+                    <p><strong>If this competition is BJCP sanctioned</strong>, send or complete the BJCP Organizer's Report within 21 days of the conclusion of judging.</p>
                         <ul>
                             <li>Download the <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">BJCP XML Points Report</a> to send to the email address specified in your BJCP competition registration email. You can generate the report by expanding the Reports header on the Administration Dashboard and selecting the BJCP Points > XML link.</li>
                             <li>Or, go to the BJCP's <a href="https://www.bjcp.org/competitions/reporting/" target="_blank">Reporting Portal</a> to submit your competition report.</li>
@@ -259,7 +259,7 @@ if ($totalRows_tables > 0) {
         if ($_SESSION['prefsWinnerMethod'] == "0") { 
     ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-primary btn-block" href="#" data-toggle="modal" data-target="#presentationLaunch"><?php echo $label_launch_pres; ?> <span class="fa fa-award"></span></a>
+        <a class="btn btn-info btn-block" href="#" data-toggle="modal" data-target="#presentationLaunch"><?php echo $label_launch_pres; ?> <span class="fa fa-award"></span></a>
     </div>
     <div class="modal fade" id="presentationLaunch" tabindex="-1" role="dialog" aria-labelledby="presentationLaunchLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -284,7 +284,7 @@ if ($totalRows_tables > 0) {
     </div>
     <?php } else { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-primary btn-block" href="<?php echo $base_url; ?>awards.php" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Awards Presentation" data-html="true" data-content="<p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p><p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>"><?php echo $label_launch_pres; ?> <span class="fa fa-award"></span></a>
+        <a class="btn btn-info btn-block" href="<?php echo $base_url; ?>awards.php" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Awards Presentation" data-html="true" data-content="<p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p><p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>"><?php echo $label_launch_pres; ?> <i class="fa fa-award"></i></span></a>
     </div>
     <?php } ?>
     <?php } if ($show_best) { ?>
@@ -310,7 +310,7 @@ if ($totalRows_tables > 0) {
 
 if ($recently_updated) { 
     
-    $summary_button_style = "btn btn-warning btn-block";
+    $summary_button_style = "btn btn-primary btn-block";
     $summary_button_icon = "fa fa-code";
     $summary_button_errors = "";
     if (strpos($row_system['update_summary'], 'Warning: Errors') !== false)  {

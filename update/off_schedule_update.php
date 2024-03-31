@@ -2269,9 +2269,13 @@ $tables_array = array(
 	$prefix."users"
 );
 
+$archive_suffixes = array();
+
 if ($totalRows_archive > 0) {
 
 	do {
+
+		$archive_suffixes[] = $row_archive['archiveSuffix'];
 
 		foreach ($tables_array as $table) {
 
@@ -3800,8 +3804,6 @@ if (!check_update("brewPouring", $prefix."brewing")) {
 
 }
 
-// {"pouring":"Normal","pouring_rouse":"No"}
-
 if (!check_update("brewStyleType", $prefix."brewing")) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `brewStyleType` TINYINT(3) NULL DEFAULT NULL", $prefix."brewing");
@@ -3861,6 +3863,54 @@ if (!check_update("styleTypeEntryLimit", $prefix."style_types")) {
 	else {
 		$output_off_sched_update .= "<li class=\"text-danger\">Entry limit column NOT added to the style types table.</li>";
 		$error_count += 1;
+	}
+
+}
+
+// Add the new columns to their corresponding archive table
+foreach ($archive_suffixes as $suffix) {
+
+	if (!check_update("brewABV", $prefix."brewing_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `brewABV` FLOAT NULL DEFAULT NULL COMMENT 'Expressed as a decimal.';", $prefix."brewing_".$suffix);
+		$db_conn->rawQuery($sql);
+	}
+
+	if (!check_update("brewSweetnessLevel", $prefix."brewing_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `brewSweetnessLevel` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Only for NW Cider Cup style set.';", $prefix."brewing_".$suffix);
+		$db_conn->rawQuery($sql);
+	}
+
+	if (!check_update("brewJuiceSource", $prefix."brewing_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `brewJuiceSource` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Only for NW Cider Cup style set.';", $prefix."brewing_".$suffix);
+		$db_conn->rawQuery($sql);
+	}
+
+	if (!check_update("brewPackaging", $prefix."brewing_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `brewPackaging` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Allow entrants to specify packaging size.';", $prefix."brewing_".$suffix);
+		$db_conn->rawQuery($sql);
+	}
+
+	if (!check_update("brewPouring", $prefix."brewing_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `brewPouring` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Houses pouring instructions.';", $prefix."brewing_".$suffix);
+		$db_conn->rawQuery($sql);
+
+		// Provide baseline pouring instructions for all entries currently in the DB
+		$update_table = $prefix."brewing_".$suffix;
+		$data = array(
+			'brewPouring' => '{"pouring":"Normal","pouring_rouse":"No"}'
+		);
+		$result = $db_conn->update ($update_table, $data);
+
+	}
+
+	if (!check_update("brewStyleType", $prefix."brewing_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `brewStyleType` TINYINT(3) NULL DEFAULT NULL", $prefix."brewing_".$suffix);
+		$db_conn->rawQuery($sql);
+	}
+
+	if (!check_update("styleTypeEntryLimit", $prefix."style_types_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `styleTypeEntryLimit` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;", $prefix."style_types");
+		$db_conn->rawQuery($sql);
 	}
 
 }
@@ -4060,10 +4110,13 @@ if (!$result) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C9 C was NOT updated.</li>";
 }
 
-$sql = sprintf("UPDATE `%s` SET brewStyleReqSpec='0' WHERE brewStyleVersion='NWCiderCup' AND (brewStyleGroup='C1' OR brewStyleGroup='C2');", $prefix."styles");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$sql);
-$result = mysqli_query($connection,$sql);
+$data = array(
+	'brewStyleReqSpec' => 0
+);
+$db_conn->where ('brewStyleVersion', 'NWCiderCup');
+$db_conn->where ('brewStyleGroup', 'C1');
+$db_conn->orWhere ('brewStyleGroup', 'C2');
+$result = $db_conn->update ($update_table, $data);
 if ($result) $output_off_sched_update .= "<li>NW Cider Cup C1 and C2 styles updated to remove additional info input requirement.</li>";
 else {
 	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup C1 and C2 styles styles NOT updated to remove additional info input requirement.</li>";
@@ -4076,7 +4129,6 @@ if ($nw_cider_update_errors > 0) {
 }
 
 if (!$setup_running) $output_off_sched_update .= "</ul>";
-
 
 /**
  * ----------------------------------------------- Future --------------------------------------------- 
