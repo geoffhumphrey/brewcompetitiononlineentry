@@ -411,7 +411,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $results = array();
 
                 // Results data headers
-                $results[] = array("Email to masterhomebrewerprogram@gmail.com");
+                $results[] = array("Email to mhpsecretary@gmail.com.");
                 $results[] = array("Remove these first three rows before sending to MHP or applying any sort functions.");
                 $results[] = array("");
                 $results[] = array("MHP#","Last Name","First Name","Category", "Category Name", "Required Info", "Official Score", "Highest Score", "Place");
@@ -3298,7 +3298,7 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
 
         if ($filter == "MHP") {
             $results[] = array("Expand columns or wrap text. Also input your gender in that column if you wish.");
-            $results[] = array("Remove these last two lines and email to masterhomebrewerprogram@gmail.com");
+            $results[] = array("Remove these last two lines and email to mhpsecretary@gmail.com.");
         }
         
         // Name and associated info header

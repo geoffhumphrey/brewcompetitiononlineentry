@@ -220,12 +220,41 @@ if ($totalRows_tables > 0) {
         <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
     </div>
     <?php } ?>
-    <?php if (($judging_started) && ($_SESSION['userLevel'] == 0)) { ?>
+    <?php if (($judging_started) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() < $_SESSION['prefsWinnerDelay']))) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <a class="btn btn-primary btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-bullhorn"></span></a>
     </div>
-    <?php } ?>
-    <?php 
+    <?php } elseif (($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']))) { ?>
+        <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <a class="btn btn-default btn-block hide-loader" href="#" data-toggle="modal" data-target="#post-comp" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Post-Competition Tasks" data-content="There are a few things that organizers should do after publishing results. Here's a list.">Post-Competition Tasks <span class="fa fa-clipboard-list"></span></a>
+    </div>
+    <div class="modal fade" id="post-comp" tabindex="-1" role="dialog" aria-labelledby="post-compLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">Post-Competition Tasks</h3>
+                    <p>Below is a list of common tasks that organizers typically complete after publishing competition results.</p>
+                </div>
+                <div class="modal-body">
+                    
+                    <p><strong>If this competition is BJCP Sanctioned</strong>, send or complete the BJCP Organizer's Report within 21 days of the conclusion of judging.</p>
+                        <ul>
+                            <li>Download the <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">BJCP XML Points Report</a> to send to the email address specified in your BJCP competition registration email. You can generate the report by expanding the Reports header on the Administration Dashboard and selecting the BJCP Points > XML link.</li>
+                            <li>Or, go to the BJCP's <a href="https://www.bjcp.org/competitions/reporting/" target="_blank">Reporting Portal</a> to submit your competition report.</li>
+                        </ul>
+                    <p><strong>If this competition has entrants that are members of the Master Homebrewer Program</strong>, download the <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit&amp;filter=mhp">MHP Member Results report</a> and send to the MHP Secretary at <a href="mailto:mhpsecretary@gmail.com">mhpsecretary@gmail.com</a>. You can find this report under the Data Exports header on the Administration Dashboard.</p>
+                    <p><strong>If this competition is part of a regional circuit</strong>, download the <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a> report. You can find this report under the Data Exports header on the Administration Dashboard.</p>
+                    <p><strong>If this competition is mailing physical scoresheets or awards to entrants</strong>, generate the appropriate Award/Medal Labels, Address Labels, and Participant Summaries by expanding the Reports header on the Administration Dashboard in the After Judging section.</p> 
+                    <p><strong>Send thank you emails to judges, stewards, and staff.</strong> You can export email addresses by expanding the Data Exports header and selecting the appropriate exports in the Email Addresses and Associated Contact Data (CSV) list.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php }
     if (($judging_started) && ($_SESSION['userLevel'] == 0)) { 
         if ($_SESSION['prefsWinnerMethod'] == "0") { 
     ?>
@@ -237,7 +266,7 @@ if ($totalRows_tables > 0) {
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><?php echo $label_launch_pres; ?></h4>
+                    <h3 class="modal-title"><?php echo $label_launch_pres; ?></h3>
                 </div>
                 <div class="modal-body">
                     <p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p>
@@ -2238,7 +2267,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php echo $current_version_display; ?> Update Summary</h4>
+                <h3 class="modal-title"><?php echo $current_version_display; ?> Update Summary</h3>
             </div>
             <div class="modal-body">
                 <p><a class="btn btn-success btn-block" href="https://brewingcompetitions.com/release-notes" target="_blank">Check Here for Release Notes, New Features, and Bug Fixes</a></p>
