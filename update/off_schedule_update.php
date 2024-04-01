@@ -3853,6 +3853,20 @@ if (!check_update("contestEntryEditDeadline", $prefix."contest_info")) {
 
 }
 
+if (!check_update("contestWinnerLink", $prefix."contest_info")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `contestWinnerLink` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;", $prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Winner link column added to the competition info table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Winner link column NOT added to the competition info table.</li>";
+		$error_count += 1;
+	}
+
+}
+
 if (!check_update("styleTypeEntryLimit", $prefix."style_types")) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `styleTypeEntryLimit` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;", $prefix."style_types");

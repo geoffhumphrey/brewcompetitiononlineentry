@@ -234,10 +234,18 @@ if ($msg != "default") {
   <?php } ?>
 <?php } // end if ($section == "admin") ?>
 
-
 <?php if ($logged_in) { ?>
 
   <?php if ($section == "admin") { ?>
+
+    <?php if (($go == "default") && ($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']) && (time() < ($_SESSION['prefsWinnerDelay'] + 604800)))) { ?>
+
+      <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p><span class="fa fa-lg fa-info-circle"></span> <strong>Results are published &ndash; congratulations!</strong> Now is the time to make sure you complete any applicable post-competition tasks like submitting your BJCP Organizer Report, downloading circuit data, or downloading and sending member results to the Master Homebrewer Program. BCOE&amp;M can help &ndash; simply select <a class="hide-loader alert-link" href="#" data-toggle="modal" data-target="#post-comp">this Post-Competition Tasks link</a> or the button below for a list of actions commonly completed after a competition concludes.</p>
+      </div>
+
+    <?php } ?>
 
     <?php if (($go == "entries") || ($go == "judging_scores") || ($go == "judging_scores_bos")) { ?>
     <style type="text/css">
@@ -256,7 +264,7 @@ if ($msg != "default") {
     </section>
     <?php } ?>
 
-  <?php } ?>
+  <?php } // end if ($section == "admin") ?>
 
   <?php if ($section == "brew") { ?>
 

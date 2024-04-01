@@ -381,7 +381,6 @@ $(document).ready(function(){
     <label for="contestHost" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group has-warning">
-            
             <input class="form-control" id="contestHost" name="contestHost" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHost']; ?>" placeholder="" required>
             <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
@@ -391,7 +390,6 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestHostLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host Location</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <input class="form-control" id="contestHostLocation" name="contestHostLocation" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHostLocation']; ?>" placeholder="">
     </div>
 </div>
@@ -399,8 +397,15 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestHostWebsite" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host Website Address</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <input class="form-control" id="contestHostWebsite" name="contestHostWebsite" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHostWebsite']; ?>" placeholder="http://www.yoursite.com">
+    </div>
+</div>
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestWinnerLink" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Link to Past Winners</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control" id="contestWinnerLink" name="contestWinnerLink" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestWinnerLink']; ?>" placeholder="http://www.yoursite.com">
+    <span id="helpBlock" class="help-block">Website or URL of a previous winner list for this competition. <?php if (!HOSTED) echo " This will be listed in addition to any previous winners list from archived data associated with this installation."; ?></span>
     </div>
 </div>
 
@@ -408,10 +413,9 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="contestLogo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    
     <select class="selectpicker" name="contestLogo" id="contestLogo"  data-live-search="true" data-size="10" data-width="auto">
         <option value=""></option>
-       <?php $directory = (USER_IMAGES); echo directory_contents_dropdown($directory,$row_contest_info['contestLogo']); ?>
+       <?php echo directory_contents_dropdown(USER_IMAGES,$row_contest_info['contestLogo']); ?>
     </select>
     <span id="helpBlock" class="help-block">Choose the image file. If the file is not on the list, use the &ldquo;Upload Logo Image&rdquo; button below.</span>
     <a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Logo Image</a>

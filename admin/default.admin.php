@@ -226,7 +226,7 @@ if ($totalRows_tables > 0) {
     </div>
     <?php } elseif (($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']))) { ?>
         <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="#" data-toggle="modal" data-target="#post-comp" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Post-Competition Tasks" data-content="There are a few things that organizers should do after publishing results. Here's a list.">Post-Competition Tasks <span class="fa fa-clipboard-list"></span></a>
+        <a class="btn btn-info btn-block hide-loader" href="#" data-toggle="modal" data-target="#post-comp">Post-Competition Tasks <span class="fa fa-clipboard-list"></span></a>
     </div>
     <div class="modal fade" id="post-comp" tabindex="-1" role="dialog" aria-labelledby="post-compLabel">
         <div class="modal-dialog modal-lg" role="document">

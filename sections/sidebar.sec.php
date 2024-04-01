@@ -370,11 +370,11 @@ if ($section != "admin") {
 		$page_info700 .= "</div>";
 	}
 
-	if (!HOSTED) {
+	$archive_sidebar_content = "";
+	$archive_sidebar = FALSE;
+	$archive_sidebar_count = 0;
 
-		$archive_sidebar = FALSE;
-		$archive_sidebar_count = 0;
-		$archive_sidebar_content = "";
+	if (!HOSTED) {
 
 		if ($totalRows_archive > 0) {
 
@@ -385,9 +385,9 @@ if ($section != "admin") {
 					if (table_exists($table_archive)) {
 				   		if (get_archive_count($table_archive) > 0) {
 				   			$archive_link = build_public_url("past-winners",$row_archive['archiveSuffix'],"default","default",$sef,$base_url);
-				   			$archive_sidebar_count += 1;
-							if ($go == $row_archive['archiveSuffix']) $archive_sidebar_content .= "<li><i class=\"fa fa-trophy text-gold\"></i> <strong>".$row_archive['archiveSuffix']."</strong></li>";
-							else $archive_sidebar_content .= "<li><i class=\"fa fa-trophy text-silver\"></i> <a href=\"".$archive_link."\">".$row_archive['archiveSuffix']."</a></li>";
+				   			$archive_sidebar_count++;
+							if ($go == $row_archive['archiveSuffix']) $archive_sidebar_content .= "<li><i class=\"fa fa-fw fa-trophy text-gold\"></i> <strong>".$row_archive['archiveSuffix']."</strong></li>";
+							else $archive_sidebar_content .= "<li><i class=\"fa fa-fw fa-trophy text-silver\"></i> <a href=\"".$archive_link."\">".$row_archive['archiveSuffix']."</a></li>";
 						}
 					}
 				}	
@@ -397,20 +397,24 @@ if ($section != "admin") {
 		}
 
 		if ($archive_sidebar_count > 0) $archive_sidebar = TRUE;
-
-		if ($archive_sidebar) {
-			$header1_600 .= "<div class=\"hidden-print panel panel-info\">";
-			$header1_600 .= "<div class=\"panel-heading\">";
-			$header1_600 .= sprintf("<h4 class=\"panel-title\">%s</h4>",$label_past_winners);
-			$header1_600 .= "</div>";
-			$page_info600 .= "<div class=\"panel-body\">";
-			$page_info600 .= "<ul class=\"list-unstyled\">";
-			$page_info600 .= $archive_sidebar_content;
-			$page_info600 .= "</ul>";
-			$page_info600 .= "</div>";
-			$page_info600 .= "</div>";
-		}
 		
+	}
+
+	if ((isset($_SESSION['contestWinnerLink'])) && (!empty($_SESSION['contestWinnerLink']))) $archive_sidebar = TRUE;
+
+	if ($archive_sidebar) {
+		if ($archive_sidebar_count == 0) $archive_sidebar_content .= sprintf("<li><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s <i class=\"fa fa-fw fa-external-link-alt\"></i></a></li>",$_SESSION['contestWinnerLink'],$label_view);
+		else $archive_sidebar_content .= sprintf("<li><i class=\"fa fa-fw fa-external-link-alt text-silver\"></i> <a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s</a></li>",$_SESSION['contestWinnerLink'],$label_more_info);
+		$header1_600 .= "<div class=\"hidden-print panel panel-info\">";
+		$header1_600 .= "<div class=\"panel-heading\">";
+		$header1_600 .= sprintf("<h4 class=\"panel-title\">%s</h4>",$label_past_winners);
+		$header1_600 .= "</div>";
+		$page_info600 .= "<div class=\"panel-body\">";
+		$page_info600 .= "<ul class=\"list-unstyled\">";
+		$page_info600 .= $archive_sidebar_content;
+		$page_info600 .= "</ul>";
+		$page_info600 .= "</div>";
+		$page_info600 .= "</div>";
 	}
 
 	// --------------------------------------------------------------

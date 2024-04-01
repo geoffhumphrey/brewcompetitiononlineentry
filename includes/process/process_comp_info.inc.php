@@ -57,6 +57,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$competition_rules = "";
 		$competition_packing_shipping = "";
 		$contestClubs = "";
+		$contestWinnerLink = "";
 
 		if (isset($_POST['contestName'])) $contestName = $purifier->purify($_POST['contestName']);
 		if (isset($_POST['contestHost'])) $contestHost = $purifier->purify($_POST['contestHost']);
@@ -113,6 +114,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		);
 
 		$contestRules = json_encode($contestRules);
+
+		if (isset($_POST['contestWinnerLink'])) $contestWinnerLink = check_http(sterilize($_POST['contestWinnerLink']));
 		
 	} // end if ($go == "default")
 
@@ -171,7 +174,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum),
 			'contestCheckInPassword' => blank_to_null($hash),
 			'contestID' => blank_to_null($contestID),
-			'contestClubs' => blank_to_null($contestClubs)
+			'contestClubs' => blank_to_null($contestClubs),
+			'contestWinnerLink' => blank_to_null($contestWinnerLink)
 		);
 
 		$result = $db_conn->insert ($update_table, $data);
@@ -306,7 +310,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum),
 				'contestCheckInPassword' => blank_to_null($hash),
 				'contestID' => blank_to_null($contestID),
-				'contestClubs' => blank_to_null($contestClubs)
+				'contestClubs' => blank_to_null($contestClubs),
+				'contestWinnerLink' => blank_to_null($contestWinnerLink)
 			);
 
 			$db_conn->where ('id', 1);
