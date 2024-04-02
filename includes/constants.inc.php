@@ -3004,5 +3004,4 @@ if (isset($row_contest_dates)) {
     $entry_edit_deadline_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_edit_deadline, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 }
 
-
 ?>

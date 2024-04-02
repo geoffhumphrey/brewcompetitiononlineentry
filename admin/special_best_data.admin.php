@@ -117,7 +117,9 @@ if (($action == "add") || ($action == "edit")) { ?>
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php
 if ($action == "add") {
-	for ($i=1; $i <= $row_sbi['sbi_places']; $i++) {
+	if (empty($row_sbi['sbi_places'])) $sbi_places = 1; 
+	else $sbi_places = $row_sbi['sbi_places'];
+	for ($i=1; $i <= $sbi_places; $i++) {
 ?>
 	<input type="hidden" name="id[]" value="<?php echo $i; ?>" />
     <input type="hidden" name="sid<?php echo $i; ?>" value="<?php echo $id; ?>">

@@ -176,7 +176,6 @@ do {
 
 	if ((!empty($row_log['brewAdminNotes'])) || (!empty($row_log['brewStaffNotes']))) {
 
-
 	$entry_number = sprintf("%06s",$row_log['id']);
 	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 	$table_info = get_flight_info($row_log['id']);

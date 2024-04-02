@@ -112,7 +112,20 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 			<input class="form-control" id="sbi_name" name="sbi_name" type="text" value="<?php if ($action == "edit") echo $row_sbi['sbi_name']; ?>" placeholder="Pro-Am with XXX Brewery, People's Choice, etc." data-error="The the custom category's name is required." autofocus required>
 			<span class="input-group-addon" id="sbi_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
-		<span class="help-block with-errors"></span>
+		<div class="help-block with-errors"></div>
+	</div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="sbi_places" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Places</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="sbi_places" name="sbi_places" type="number" min="1" step="1" value="<?php if ($action == "add") echo "1"; if ($action == "edit") echo $row_sbi['sbi_places']; ?>" placeholder="" required>
+			<span class="input-group-addon" id="sbi_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
+		</div>
+		<div id="helpBlock" class="help-block">The number of places available for the category.</div>
+		<div class="help-block with-errors"></div>
 	</div>
 </div><!-- ./Form Group -->
 
@@ -122,15 +135,6 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 		<!-- Input Here -->
 		<textarea class="form-control" name="sbi_description" rows="6"><?php if ($action == "edit") echo $row_sbi['sbi_description']; ?></textarea>
 	 </div>
-</div><!-- ./Form Group -->
-
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="sbi_places" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Places</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<!-- Input Here -->
-		<input class="form-control" id="sbi_places" name="sbi_places" type="text" value="<?php if ($action == "edit") echo $row_sbi['sbi_places']; ?>" placeholder="">
-		<span id="helpBlock" class="help-block">The number of places available for the category.</span>
-	</div>
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
@@ -145,6 +149,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 				<input type="radio" name="sbi_display_places" value="0" id="sbi_display_places_0" <?php if ((($row_sbi) && (($row_sbi['sbi_display_places'] == "0") || ($row_sbi['sbi_display_places'] == "")) || ($action == "add"))) echo "CHECKED"; ?> />No
 			</label>
 		</div>
+		<div class="help-block with-errors"></div>
 	</div>
 </div><!-- ./Form Group -->
 
@@ -157,7 +162,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 		<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_sbi['sbi_rank'] == $i)) echo " SELECTED"; ?>><?php echo $i; ?></option>
 		<?php } ?>
 	</select>
-	<span id="helpBlock" class="help-block">Determines this category's rank in the display order. The lower the number, the higher priority.</span>
+	<div id="helpBlock" class="help-block">Determines this category's rank in the display order. The lower the number, the higher priority.</div>
 	</div>
 </div><!-- ./Form Group -->
 

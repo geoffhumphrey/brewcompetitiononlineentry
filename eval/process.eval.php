@@ -77,7 +77,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if (isset($_POST['evalBottle'])) $evalBottle = sterilize($_POST['evalBottle']);
 	if (isset($_POST['evalBottleNotes'])) $evalBottleNotes = $purifier->purify(sterilize($_POST['evalBottleNotes'])); 
 	if ((isset($_POST['evalPosition_0'])) && (is_numeric($_POST['evalPosition_0']))) {
-		$evalPosition = $purifier->purify(sterilize($_POST['evalPosition_0']);
+		$evalPosition = $purifier->purify(sterilize($_POST['evalPosition_0']));
 		if ((isset($_POST['evalPosition_1'])) && (is_numeric($_POST['evalPosition_1']))) $evalPosition .= ",".$purifier->purify(sterilize($_POST['evalPosition_1']));
 	}
 
