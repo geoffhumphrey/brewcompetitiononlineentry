@@ -281,7 +281,7 @@ if (($_SESSION['prefsProEdition'] == 1) && ((!$show_judge_steward_fields) || ($g
 
 // Build drop-off select element
 $dropoff_select = "";
-if ($section != "step2") {
+if (($section != "step2") && ($row_brewer) && ($row_dropoff)) {
     do {
         if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) $selected = "SELECTED";
         else $selected = "";

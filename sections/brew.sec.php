@@ -440,7 +440,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Choose Style -->
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
-        <label for="type" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $style_set." ".$label_style; ?></label>
+        <label for="type" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo $style_set." ".$label_category; else echo $style_set." ".$label_style; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="brewStyle" id="type" data-error="<?php echo $header_text_107; ?>" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
@@ -774,7 +774,58 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         </div>
     </div>
 
-    <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { ?>
+    <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { 
+
+    	$juice_select_options = array(
+    		"BC" => "British Columbia (BC)",
+    		"ID" => "Idaho (ID)",
+    		"MT" => "Montana (MT)",
+    		"OR" => "Oregon (OR)",
+    		"WA" => "Washington (WA)",
+    		"Other" => "Others States/Provinces in US/Canada",
+    		"Outside of US/Canada" => "Outside of US/Canada",
+    		"Unknown" => "I Don't Know"
+    	);
+
+    	$juice_select_dropdown = "";
+    	$juice_select_dropdown_other = "";
+    	$juice_source_arr = array();
+
+    	if (($action == "edit") && (!empty($row_log['brewJuiceSource']))) {
+    		$juice_src_arr = json_decode($row_log['brewJuiceSource'],true);
+    	}
+
+    	$juice_options = FALSE;
+    	$juice_options_other = FALSE;
+    	if ((isset($juice_src_arr['juice_src'])) && (is_array($juice_src_arr['juice_src']))) $juice_options = TRUE;
+    	if ((isset($juice_src_arr['juice_src_other'])) && (is_array($juice_src_arr['juice_src_other']))) $juice_options_other = TRUE;
+
+    	foreach ($juice_select_options as $key => $value) {
+
+    		$juice_select_dropdown .= "<option value=\"".$key."\"";
+    		if ($juice_options) {
+    	        if (in_array($key,$juice_src_arr['juice_src'])) $juice_select_dropdown .= " SELECTED";
+    	    }
+    		$juice_select_dropdown .= ">".$value."</option>";
+
+    		$juice_select_dropdown_other .= "<option value=\"".$key."\"";
+    		if ($juice_options_other) {
+    	        if (in_array($key,$juice_src_arr['juice_src_other'])) $juice_select_dropdown_other .= " SELECTED";
+    	    }
+    		$juice_select_dropdown_other .= ">".$value."</option>";
+
+    	}
+
+    	/*
+    	$juice_source_other = "";
+    	if ((isset($juice_src_arr['juice_src_other'])) && (is_array($juice_src_arr['juice_src_other']))) {
+    		foreach ($juice_src_arr['juice_src_other'] as $value) {
+    			$juice_source_other .= $value.", ";
+    		}
+    	}
+    	*/
+
+    ?>
 
     <!-- The following fields are only shown if the NW Cider Cup styles are being used. -->
 
@@ -789,20 +840,6 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
                 <label class="radio-inline">
                     <input type="radio" name="brewPackaging" value="500" id="brewPackaging_1" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "500")) echo "CHECKED"; ?> />
                     500 ml <?php echo $label_bottle; ?>
-        		</label>
-        		<label class="radio-inline">
-                    <input type="radio" name="brewPackaging" value="375" id="brewPackaging_2" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "375")) echo "CHECKED"; ?> />
-                    375 ml <?php echo $label_bottle; ?>
-        		</label>
-        	</div>
-        	<div class="input-group">
-        		<label class="radio-inline">
-                    <input type="radio" name="brewPackaging" value="22" id="brewPackaging_3" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "22")) echo "CHECKED"; ?> />
-                    22 ounce <?php echo $label_bottle; ?>
-        		</label>
-        		<label class="radio-inline">
-                    <input type="radio" name="brewPackaging" value="12" id="brewPackaging_4" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "12")) echo "CHECKED"; ?> />
-                    12 ounce <?php echo $label_bottle; ?>
         		</label>
         		<label class="radio-inline">
                     <input type="radio" name="brewPackaging" value="Other-Bottle" id="brewPackaging_5" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "Other-Bottle")) echo "CHECKED"; ?> />
@@ -822,73 +859,47 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
                     <input type="radio" name="brewPackaging" value="12" id="brewPackaging_8" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "12")) echo "CHECKED"; ?> />
                     12 ounce <?php echo $label_can; ?>
         		</label>
-        	</div>
-        	<div class="input-group">
         		<label class="radio-inline">
                     <input type="radio" name="brewPackaging" value="Other-Can" id="brewPackaging_9" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "Other-Can")) echo "CHECKED"; ?> />
                     <?php echo $label_can." - ".$label_other_size; ?>
         		</label>
+        	</div>
+        	<!--
+        	<div class="input-group">
+				<label class="radio-inline">
+		            <input type="radio" name="brewPackaging" value="12" id="brewPackaging_4" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "12")) echo "CHECKED"; ?> />
+		            12 ounce <?php echo $label_bottle; ?>
+				</label>
+				<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="22" id="brewPackaging_3" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "22")) echo "CHECKED"; ?> />
+                    22 ounce <?php echo $label_bottle; ?>
+        		</label>
+        		<label class="radio-inline">
+                    <input type="radio" name="brewPackaging" value="375" id="brewPackaging_2" <?php if (($action == "edit") && ($row_log['brewPackaging'] == "375")) echo "CHECKED"; ?> />
+                    375 ml <?php echo $label_bottle; ?>
+        		</label>
             </div>
+            -->
         </div>
     </div>
-
-
-
-	<!-- Apple Juice Source -->
-	<?php
-
-	$juice_select_options = array(
-		"BC" => "British Columbia (BC)",
-		"ID" => "Idaho (ID)",
-		"MT" => "Montana (MT)",
-		"OR" => "Oregon (OR)",
-		"WA" => "Washington (WA)",
-		"Other" => "Others States/Provinces in US/Canada",
-		"Outsite" => "Outside of US/Canada",
-		"Unknown" => "I Don't Know"
-	);
-
-	$juice_select_dropdown = "";
-	$juice_source_arr = array();
-
-	if (($action == "edit") && (!empty($row_log['brewJuiceSource']))) $juice_src_arr = json_decode($row_log['brewJuiceSource'],true);
-
-	$juice_options = FALSE;
-	if ((isset($juice_src_arr['juice_src'])) && (is_array($juice_src_arr['juice_src']))) $juice_options = TRUE;
-
-	foreach ($juice_select_options as $key => $value) {
-
-		$juice_select_dropdown .= "<option value=\"".$key."\"";
-		if ($juice_options) {
-	        if (in_array($key,$juice_src_arr['juice_src'])) $juice_select_dropdown .= " SELECTED";
-	    }
-		$juice_select_dropdown .= ">".$value."</option>";
-
-	}
-
-	$juice_source_other = "";
-	if ((isset($juice_src_arr['juice_src_other'])) && (is_array($juice_src_arr['juice_src_other']))) {
-		foreach ($juice_src_arr['juice_src_other'] as $value) {
-			$juice_source_other .= $value.", ";
-		}
-	}
-
-	?>
 	<div class="form-group">
         <label for="brewJuiceSource" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_juice_source; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 	        <!-- Input Here -->
-	        <select class="selectpicker" multiple name="brewJuiceSource[]" id="brewJuiceSource" data-error="<?php echo $brew_text_045; ?>" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo ucwords(str_replace(".","",$brew_text_045)); ?>" title="<?php echo ucwords(str_replace(".","",$brew_text_045)); ?>" required>
+	        <select class="selectpicker" multiple name="brewJuiceSource[]" id="brewJuiceSource" data-error="<?php echo $brew_text_045; ?>" data-live-search="false" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo ucwords(str_replace(".","",$brew_text_045)); ?>" title="<?php echo ucwords(str_replace(".","",$brew_text_045)); ?>" required>
 				<?php echo $juice_select_dropdown; ?>
 	        </select>
 	        <div class="help-block"><?php echo $brew_text_054; ?></div>
 	        <div class="help-block with-errors"></div>
         </div>
     </div>
+
     <div id="brewJuiceSourceOther" class="form-group">
-        <label for="other-juice-source" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_juice_source." &ndash; ".$label_other; ?></label>
+        <label for="other-juice-source" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_fruit_add_source; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-            <input class="form-control" name="brewJuiceSourceOther" id="other-juice-source" type="text" value="<?php echo rtrim($juice_source_other,", "); ?>" placeholder="" pattern="[^%\x22]+">
+            <select class="selectpicker" multiple name="brewJuiceSourceOther[]" id="brewJuiceSourceOther" data-error="<?php echo $brew_text_045; ?>" data-live-search="false" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo ucwords(str_replace(".","",$brew_text_045)); ?>" title="<?php echo ucwords(str_replace(".","",$brew_text_045)); ?>">
+    			<?php echo $juice_select_dropdown_other; ?>
+    		</select>
             <div class="help-block"><?php echo $brew_text_046; ?></div>
         </div>
     </div>
@@ -933,7 +944,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	                <input type="radio" name="possible-allergens" value="0" id="possAllergens_1" <?php if (($action == "edit") && (empty($row_log['brewPossAllergens']))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />No
 	    		</label>
 	        </div>
-	        <span id="helpBlockAllergens" class="help-block"><?php echo sprintf("<strong>%s</strong> %s",$brew_text_038,$brew_text_040);  ?></span>
+	        <span id="helpBlockAllergens" class="help-block"><?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") $brew_text_040 = ""; echo sprintf("<strong>%s</strong> %s",$brew_text_038,$brew_text_040);  ?></span>
 	    </div>
 	</div>
 	<div class="form-group" id="possible-allergens"><!-- Form Group NOT REQUIRED Select -->

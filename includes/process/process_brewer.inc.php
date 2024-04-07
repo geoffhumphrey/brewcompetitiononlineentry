@@ -474,7 +474,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'brewerProAm' => blank_to_null($brewerProAm),
 				'brewerDropOff' => blank_to_null($brewerDropOff),
 				'brewerBreweryName' => blank_to_null($brewerBreweryName),
-				'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB),
+				'brewerBreweryInfo' => blank_to_null($brewerBreweryInfo),
 				'brewerAssignment' => blank_to_null($brewerAssignment)
 			);
 
@@ -675,7 +675,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewerProAm' => blank_to_null($brewerProAm),
 			'brewerDropOff' => blank_to_null($brewerDropOff),
 			'brewerBreweryName' => blank_to_null($brewerBreweryName),
-			'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB),
+			'brewerBreweryInfo' => blank_to_null($brewerBreweryInfo),
 			'brewerAssignment' => blank_to_null($brewerAssignment)
 		);
 

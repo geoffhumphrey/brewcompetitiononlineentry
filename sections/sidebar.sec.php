@@ -374,6 +374,8 @@ if ($section != "admin") {
 	$archive_sidebar = FALSE;
 	$archive_sidebar_count = 0;
 
+	if ((isset($_SESSION['contestWinnerLink'])) && (!empty($_SESSION['contestWinnerLink']))) $archive_sidebar = TRUE;
+
 	if (!HOSTED) {
 
 		if ($totalRows_archive > 0) {
@@ -400,11 +402,13 @@ if ($section != "admin") {
 		
 	}
 
-	if ((isset($_SESSION['contestWinnerLink'])) && (!empty($_SESSION['contestWinnerLink']))) $archive_sidebar = TRUE;
-
 	if ($archive_sidebar) {
-		if ($archive_sidebar_count == 0) $archive_sidebar_content .= sprintf("<li><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s <i class=\"fa fa-fw fa-external-link-alt\"></i></a></li>",$_SESSION['contestWinnerLink'],$label_view);
-		else $archive_sidebar_content .= sprintf("<li><i class=\"fa fa-fw fa-external-link-alt text-silver\"></i> <a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s</a></li>",$_SESSION['contestWinnerLink'],$label_more_info);
+
+		if ((isset($_SESSION['contestWinnerLink'])) && (!empty($_SESSION['contestWinnerLink']))) {
+			if ($archive_sidebar_count == 0) $archive_sidebar_content .= sprintf("<li><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s <i class=\"fa fa-fw fa-external-link-alt\"></i></a></li>",$_SESSION['contestWinnerLink'],$label_view);
+			else $archive_sidebar_content .= sprintf("<li><i class=\"fa fa-fw fa-external-link-alt text-silver\"></i> <a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s</a></li>",$_SESSION['contestWinnerLink'],$label_more_info);
+		}
+		
 		$header1_600 .= "<div class=\"hidden-print panel panel-info\">";
 		$header1_600 .= "<div class=\"panel-heading\">";
 		$header1_600 .= sprintf("<h4 class=\"panel-title\">%s</h4>",$label_past_winners);

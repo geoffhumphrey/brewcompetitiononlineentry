@@ -205,6 +205,7 @@ if ($totalRows_log > 0) {
 		  
 			$juice_src_arr = json_decode($row_log['brewJuiceSource'],true);
 			$juice_src_disp = "";
+			$juice_src_disp_other = "";
 
 			if (is_array($juice_src_arr['juice_src'])) {
 				$juice_src_disp .= implode(", ",$juice_src_arr['juice_src']);
@@ -212,14 +213,17 @@ if ($totalRows_log > 0) {
 			}
 
 			if ((isset($juice_src_arr['juice_src_other'])) && (is_array($juice_src_arr['juice_src_other']))) {
-				$juice_src_disp .= implode(", ",$juice_src_arr['juice_src_other']);
-				$juice_src_disp .= ", ";
+				$juice_src_disp_other .= implode(", ",$juice_src_arr['juice_src_other']);
+				$juice_src_disp_other .= ", ";
 			}
 
 			$juice_src_disp = rtrim($juice_src_disp,",");
 			$juice_src_disp = rtrim($juice_src_disp,", ");
+			$juice_src_disp_other = rtrim($juice_src_disp_other,",");
+			$juice_src_disp_other = rtrim($juice_src_disp_other,", ");
 
 			$required_info .= "<li><strong>".$label_juice_source."</strong>: ".$juice_src_disp."</li>";
+			$required_info .= "<li><strong>".$label_fruit_add_source."</strong>: ".$juice_src_disp_other."</li>";
 		
 		}
 

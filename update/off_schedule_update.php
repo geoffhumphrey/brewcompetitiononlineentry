@@ -3881,6 +3881,50 @@ if (!check_update("styleTypeEntryLimit", $prefix."style_types")) {
 
 }
 
+if (check_update("brewerBreweryTTB", $prefix."brewer")) {
+
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `brewerBreweryTTB` `brewerBreweryInfo` TEXT NULL DEFAULT NULL COMMENT 'Store various info about the organization.';", $prefix."brewer");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Organization info column added to the brewer table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Organization info column NOT added to the brewer table.</li>";
+		$error_count += 1;
+	}
+
+	$query_ttb = sprintf("SELECT id,brewerBreweryInfo FROM %s WHERE brewerBreweryInfo IS NOT NULL", $prefix."brewer");
+	$ttb = mysqli_query($connection,$query_ttb) or die (mysqli_error($connection));
+	$row_ttb = mysqli_fetch_assoc($ttb);
+	$totalRows_ttb = mysqli_num_rows($ttb);
+
+	if ($totalRows_ttb > 0) {
+
+		do {
+
+			$is_json = FALSE;
+			$decoded = json_decode($row_ttb['brewerBreweryInfo']);
+			if (json_last_error() === JSON_ERROR_NONE) $is_json = TRUE;
+			
+			if (!$is_json) {
+				$brewerBreweryInfo = array();
+				$brewerBreweryInfo['TTB'] = $row_ttb['brewerBreweryInfo'];
+				$brewerBreweryInfo = json_encode($brewerBreweryInfo);
+
+				$update_table = $prefix."brewer";
+				$data = array(
+					'brewerBreweryInfo' => $brewerBreweryInfo
+				);
+				$db_conn->where ('id', $row_ttb['id']);
+				$result = $db_conn->update ($update_table, $data);
+			}
+
+		} while($row_ttb = mysqli_fetch_assoc($ttb));
+
+	}
+
+}
+
 // Add the new columns to their corresponding archive table
 foreach ($archive_suffixes as $suffix) {
 

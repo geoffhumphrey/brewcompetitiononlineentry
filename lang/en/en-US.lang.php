@@ -2029,7 +2029,7 @@ $best_brewer_text_015 = "The points for each placing entry are calculated using 
  */
 $label_abv = "Alcohol By Volume (ABV)";
 $label_final_gravity = "Final Gravity";
-$label_juice_source = "Fruit or Juice Source";
+$label_juice_source = "Fruit or Juice Source(s)";
 $label_select_all_apply = "Select All That Apply";
 $label_pouring = "Pouring";
 $label_pouring_notes = "Pouring Notes";
@@ -2042,7 +2042,7 @@ $label_entry_edit_deadline = "Entry Edit Deadline";
 $brew_text_042 = "Please provide the alcohol by volume up to the hundredth place.";
 $brew_text_043 = "Numbers only - decimals acceptable to the hundredth place (e.g., 5.2, 12.84, etc.).";
 $brew_text_044 = "Please provide finishing specific gravity to the thousandth place (e.g., 0.991, 1.000, 1.007, etc.).";
-$brew_text_045 = "Please provide juice source(s) - select all that apply.";
+$brew_text_045 = "Please provide applicable source(s).";
 $brew_text_046 = "Please specify the origin of all fruit additions in this cider. Fruit additions are all fruit/juice added to the beverage that is not the apple or pear base.<p>Separate each location's abbreviation by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
 $brew_text_047 = "How should your entry be poured for the judges?";
 $brew_text_048 = "Should any yeast be roused before pouring?";
@@ -2078,7 +2078,11 @@ $label_packaging = "Packaging";
 $label_bottle = "Bottle";
 $label_other_size = "Other Size";
 $label_can = "Can";
-
+$label_fruit_add_source = "Fruit Addition Source(s)";
+$label_yearly_volume = "Yearly Volume";
+$label_gallons = "Gallons";
+$label_barrels = "Barrels";
+$label_hectoliters = "Hectoliters";
 
 /**
  * ----------------------------------------------------------------------------------

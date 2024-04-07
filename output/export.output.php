@@ -109,14 +109,6 @@ if ($view == "html") $table_width = "100%";
 
 $BOM = "\xEF\xBB\xBF"; // UTF-8 byte order mark (BOM)
 
-function convert_to_entities($input) {
-    $output = preg_replace_callback("/(&#[0-9]+;)/", function($m) { 
-        return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES"); 
-    }, $input);
-    $output = html_entity_decode($output);
-    return $output;
-}
-
 if (!function_exists('fputcsv')) {
     
     function fputcsv(&$handle, $fields = array(), $delimiter = ',', $enclosure = '"') {
@@ -246,6 +238,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 if ($_SESSION['prefsProEdition'] == 1) {
                     $headers[] = $label_organization;
                     $headers[] = $label_ttb;
+                    $headers[] = $label_yearly_volume;
                 }
                 $headers[] = $label_email;
                 $headers[] = $label_address;
@@ -315,6 +308,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     $brewerLastName,
                                     convert_to_entities($brewer_info[15]),
                                     convert_to_entities($brewer_info[17]),
+                                    convert_to_entities($brewer_info[18]),
                                     convert_to_entities($brewer_info[6]),
                                     convert_to_entities($brewer_info[10]),
                                     convert_to_entities($brewer_info[11]),
@@ -342,9 +336,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             }
 
                             foreach ($row_sql as $key => $value) {
+ 
+                                if (($key == "brewPouring") || ($key == "brewJuiceSource")) {
 
-                                $is_rules_json = json_decode($value);
-                                if (json_last_error() === JSON_ERROR_NONE) {
                                     $json_array = json_decode($value,true);
                                     $string = "";
                                     foreach ($json_array as $k => $v) {
@@ -355,12 +349,12 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     }
 
                                     $output = rtrim($string, "; ");
+
                                 }
 
                                 else {
                                     $output = convert_to_entities($value);
                                 }
-
                                 
                                 $fields1[] = $output;
                             
@@ -550,21 +544,21 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 if (($go == "csv") && ($action == "hccp") && ($filter != "winners") && ($tb != "winners")) {
 
-                    if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_entry_number,$label_category,$label_style,$label_name,$label_entry_number,$label_judging_number,$label_name,$label_required_info,$label_sweetness,$label_carbonation,$label_strength);
+                    if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_yearly_volume,$label_entry_number,$label_category,$label_style,$label_name,$label_entry_number,$label_judging_number,$label_name,$label_required_info,$label_sweetness,$label_carbonation,$label_strength);
 
                     else $a[] = array($label_first_name,$label_last_name,$label_entry_number,$label_category,$label_style,$label_name,$label_entry_number,$label_judging_number,$label_name,$label_required_info,$label_sweetness,$label_carbonation,$label_strength);
                 }
 
-                if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners") && (($tb == "default") || ($tb == "paid") || ($tb == "nopay")  || ($tb == "brewer_contact_info"))) {
+                if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners") && (($tb == "default") || ($tb == "paid") || ($tb == "nopay") || ($tb == "brewer_contact_info"))) {
 
-                    if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_name,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
+                    if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_yearly_volume,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_name,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
 
                     else $a[] = array($label_first_name,$label_last_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_club,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_style,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
                 }
 
                 if (($go == "csv") && ($action == "default") && ($filter == "default") && ($tb == "winners")) {
 
-                    if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_table,$label_name,$label_category,$label_style,$label_name,$label_place,$label_last_name,$label_first_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer);
+                    if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_table,$label_name,$label_category,$label_style,$label_name,$label_place,$label_last_name,$label_first_name,$label_organization,$label_ttb,$label_yearly_volume,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name);
 
                     else $a[] = array($label_table,$label_name,$label_category,$label_subcategory,$label_style,$label_place,$label_last_name,$label_first_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer);
                 }
@@ -677,6 +671,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         $brewer_club = "";
 
                         if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
+
+                        
                         if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = convert_to_entities($row_sql['brewBrewerFirstName']);
                         if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = convert_to_entities($row_sql['brewBrewerLastName']);
                         if (isset($row_sql['brewName'])) $brewName = convert_to_entities($row_sql['brewName']);
@@ -684,6 +680,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $brewInfo = str_replace("^"," | ",$row_sql['brewInfo']);
                             $brewInfo = convert_to_entities($brewInfo);
                         }
+
                         if (isset($row_sql['brewComments'])) $brewSpecifics = convert_to_entities($row_sql['brewComments']);
                         if (isset($row_sql['brewInfoOptional'])) $brewInfoOptional = convert_to_entities($row_sql['brewInfoOptional']);
                         if (isset($row_sql['brewJudgingNumber'])) $judgingNo = sprintf("%06s",$row_sql['brewJudgingNumber']);
@@ -691,6 +688,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         if ((isset($brewer_info[8])) && ($brewer_info[8] != "&nbsp;")) {
                             $brewer_club = convert_to_entities($brewer_info[8]);
                         }
+
                         if (($action == "default") && (($tb == "winners") || ($tb == "circuit")) && ($winner_method >= 0)) {
                             include (DB.'output_entries_export_winner.db.php');
                         }
@@ -703,6 +701,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                 $brewerLastName,
                                 convert_to_entities($brewer_info[15]),
                                 convert_to_entities($brewer_info[17]),
+                                convert_to_entities($brewer_info[18]),
                                 convert_to_entities($row_sql['brewCategory']),
                                 convert_to_entities($row_sql['brewSubCategory']),
                                 convert_to_entities($row_sql['brewStyle']),
@@ -757,6 +756,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     $brewerLastName,
                                     convert_to_entities($brewer_info[15]),
                                     convert_to_entities($brewer_info[17]),
+                                    convert_to_entities($brewer_info[18]),
                                     convert_to_entities($brewer_info[6]),
                                     convert_to_entities($brewer_info[10]),
                                     convert_to_entities($brewer_info[11]),
@@ -782,6 +782,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     $scorePlace,
                                     $bos_place
                                 );
+
 
                                 else $a[] = array(
                                     $brewerFirstName,
@@ -812,6 +813,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     $scorePlace,
                                     $bos_place
                                 );
+
                             }
 
                         }
@@ -834,6 +836,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         }
 
                     } while ($row_sql = mysqli_fetch_assoc($sql));
+
 
                     if ($tb == "circuit") {
 
@@ -872,6 +875,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     }
 
                 }
+                
 
                 header("Content-Type: text/csv; charset=utf-8");
                 header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -888,6 +892,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 }
 
                 fclose($fp);
+
+
+                exit();
 
             }
 
@@ -949,7 +956,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             elseif ($filter == "staff") $a [] = array($label_first_name,$label_last_name,$label_email,$label_avail,$label_assignment,$label_entries);
 
             else {
-                if ($_SESSION['prefsProEdition'] == 1) $a [] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_club,$label_entries);
+                if ($_SESSION['prefsProEdition'] == 1) $a [] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_yearly_volume,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_club,$label_entries);
                 else $a [] = array($label_first_name,$label_last_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_club,$label_entries);
             }
 
@@ -1037,21 +1044,34 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     }
 
                     else {
-                        if ($_SESSION['prefsProEdition'] == 1) $a [] = array(
-                            $brewerFirstName,
-                            $brewerLastName,
-                            convert_to_entities($row_sql['brewerBreweryName']),
-                            convert_to_entities($row_sql['brewerBreweryTTB']),
-                            $brewerEmail,
-                            $brewerAddress,
-                            $brewerCity,
-                            convert_to_entities($row_sql['brewerState']),
-                            convert_to_entities($row_sql['brewerZip']),
-                            convert_to_entities($row_sql['brewerCountry']),
-                            $phone,
-                            convert_to_entities($row_sql['brewerClubs']),
-                            judge_entries($row_sql['uid'],0)
-                        );
+                        if ($_SESSION['prefsProEdition'] == 1) {
+
+                            $brewerBreweryTTB = "";
+                            $brewerBreweryProd = "";
+
+                            if (!empty($row_sql['brewerBreweryInfo'])) {
+                                $ttb = json_decode($row_sql['brewerBreweryInfo'],true);
+                                if (!empty($ttb['TTB'])) $brewerBreweryTTB = convert_to_entities($ttb['TTB']);
+                                if (!empty($ttb['Production'])) $brewerBreweryProd = convert_to_entities($ttb['Production']);
+                            }
+
+                            $a [] = array(
+                                $brewerFirstName,
+                                $brewerLastName,
+                                convert_to_entities($row_sql['brewerBreweryName']),
+                                $brewerBreweryTTB,
+                                $brewerBreweryProd,
+                                $brewerEmail,
+                                $brewerAddress,
+                                $brewerCity,
+                                convert_to_entities($row_sql['brewerState']),
+                                convert_to_entities($row_sql['brewerZip']),
+                                convert_to_entities($row_sql['brewerCountry']),
+                                $phone,
+                                convert_to_entities($row_sql['brewerClubs']),
+                                judge_entries($row_sql['uid'],0)
+                            );
+                        }
                         
                         else $a [] = array(
                             $brewerFirstName,
@@ -1118,7 +1138,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             else $loc = "";
             $date = date("m-d-Y");
 
-            if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
+            if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_yearly_volume,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
             
             else $a[] = array($label_first_name,$label_last_name,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
 
@@ -1156,26 +1176,40 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); 
                 else $phone = $row_sql['brewerPhone1'];
 
-                if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
-                    $brewerFirstName,
-                    $brewerLastName,
-                    convert_to_entities($row_sql['brewerBreweryName']),
-                    convert_to_entities($row_sql['brewerBreweryTTB']),
-                    $brewerAddress,
-                    $brewerCity,
-                    $brewerState,
-                    $brewerZip,
-                    $brewerCountry,
-                    convert_to_entities($phone),
-                    convert_to_entities($row_sql['brewerEmail']),
-                    $brewerClubs,
-                    judge_entries($row_sql['uid'],0),
-                    $assignment,
-                    $row_sql['brewerJudgeID'],
-                    str_replace(",",", ",$row_sql['brewerJudgeRank']),
-                    style_convert($row_sql['brewerJudgeLikes'],'6',$base_url),
-                    style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url)
-                );
+                if ($_SESSION['prefsProEdition'] == 1) {
+
+                    $brewerBreweryTTB = "";
+                    $brewerBreweryProd = "";
+
+                    if (!empty($row_sql['brewerBreweryInfo'])) {
+                        $ttb = json_decode($row_sql['brewerBreweryInfo'],true);
+                        if (!empty($ttb['TTB'])) $brewerBreweryTTB = convert_to_entities($ttb['TTB']);
+                        if (!empty($ttb['Production'])) $brewerBreweryProd = convert_to_entities($ttb['Production']);
+                    }
+
+                    $a[] = array(
+                        $brewerFirstName,
+                        $brewerLastName,
+                        convert_to_entities($row_sql['brewerBreweryName']),
+                        $brewerBreweryTTB,
+                        $brewerBreweryProd,
+                        $brewerAddress,
+                        $brewerCity,
+                        $brewerState,
+                        $brewerZip,
+                        $brewerCountry,
+                        convert_to_entities($phone),
+                        convert_to_entities($row_sql['brewerEmail']),
+                        $brewerClubs,
+                        judge_entries($row_sql['uid'],0),
+                        $assignment,
+                        $row_sql['brewerJudgeID'],
+                        str_replace(",",", ",$row_sql['brewerJudgeRank']),
+                        style_convert($row_sql['brewerJudgeLikes'],'6',$base_url),
+                        style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url)
+                    );
+
+                }
 
                 else $a[] = array(
                     $brewerFirstName,

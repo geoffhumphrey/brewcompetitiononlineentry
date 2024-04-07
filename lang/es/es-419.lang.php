@@ -2098,6 +2098,11 @@ $label_packaging = "Embalaje";
 $label_bottle = "Botella";
 $label_other_size = "Otro Tamaño";
 $label_can = "Lata";
+$label_fruit_add_source = "Fuente(s) de Adición de Fruta";
+$label_yearly_volume = "Volumen Anual";
+$label_gallons = "Galones";
+$label_barrels = "Barriles";
+$label_hectoliters = "Hectolitros";
 
 /**
  * ----------------------------------------------------------------------------------

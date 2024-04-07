@@ -490,7 +490,7 @@ if ($totalRows_table_assignments > 0) {
 								$abv_display .= "<strong>".$label_abv.":</strong> ".$row_entries['brewABV'];
 							}
 
-							if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewJuiceSource']))) {
+							if (($admin) && ($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewJuiceSource']))) {
 
 								$additional_info++;
 

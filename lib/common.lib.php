@@ -824,7 +824,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_array($brewer, MYSQLI_BOTH);
 
-			if ($totalRows_entries > 0) {
+			if (($totalRows_entries > 0) && ($row_brewer)) {
 				if (($row_brewer['brewerDiscount'] == "Y") && ($special_discount_number != "")) {
 					if ($entry_discount == "Y") {
 						$a = $entry_discount_number * $special_discount_number;
@@ -1012,7 +1012,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_array($brewer);
 
-			if ($totalRows_entries > 0) {
+			if (($totalRows_entries > 0) && ($row_brewer)) {
 
 				if (($row_brewer['brewerDiscount'] == "Y") && ($special_discount_number != "")) {
 					if ($entry_discount == "Y") {
@@ -1045,7 +1045,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			} // end if ($row_brewer['brewerDiscount'] == "Y")
 
 
-				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
+			if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
 				if ($entry_discount == "Y") {
 						// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
@@ -2441,6 +2441,10 @@ function brewer_info($uid,$filter="default") {
 		$row_brewer_info = mysqli_fetch_assoc($brewer_info);
 	}
 
+	$tbb = array();
+
+	if (($_SESSION['prefsProEdition'] == 1) && (!empty($row_brewer_info['brewerBreweryInfo']))) $ttb = json_decode($row_brewer_info['brewerBreweryInfo'],true);
+
 	$r = "";
 	$r .= $row_brewer_info['brewerFirstName']."^"; 		// 0
 	$r .= $row_brewer_info['brewerLastName']."^"; 		// 1
@@ -2463,7 +2467,8 @@ function brewer_info($uid,$filter="default") {
 	$r .= $row_brewer_info['brewerCountry']."^";		// 14
 	if ($_SESSION['prefsProEdition'] == 1) $r .= $row_brewer_info['brewerBreweryName']."^"; else $r .= "&nbsp;^"; // 15
 	if ($row_brewer_info['brewerJudgeMead'] == "Y") $r .= "Certified Mead Judge"; else $r .= "&nbsp;^"; // 16
-	if ($_SESSION['prefsProEdition'] == 1) $r .= $row_brewer_info['brewerBreweryTTB']."^"; else $r .= "&nbsp;^";// 17
+	if (($_SESSION['prefsProEdition'] == 1) && (isset($ttb['TTB'])) && (!empty($ttb['TTB']))) $r .= $ttb['TTB']."^"; else $r .= "&nbsp;^";// 17
+	if (($_SESSION['prefsProEdition'] == 1) && (isset($ttb['Production'])) && (!empty($ttb['Production']))) $r .= $ttb['Production']."^"; else $r .= "&nbsp;^";// 17
 	return $r;
 }
 

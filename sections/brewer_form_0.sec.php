@@ -26,32 +26,104 @@ if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($
 <?php if ($section == "step2") { ?>
 <!-- ONLY for Setup -->
 <input type="hidden" name="brewerBreweryName" value="">
-<?php } ?>
+<?php } 
 
-<?php if ($pro_entrant) { ?>
+if ($pro_entrant) { 
+
+    $brewerBreweryInfo = "";
+    $brewerBreweryTTB = "";
+    $brewerBreweryProd = "";
+
+    if (($action == "edit") && (!empty($row_brewer['brewerBreweryInfo']))) {
+        $brewerBreweryInfo = json_decode($row_brewer['brewerBreweryInfo'],true);
+        if ((isset($brewerBreweryInfo['TTB'])) && (!empty($brewerBreweryInfo['TTB']))) $brewerBreweryTTB = $brewerBreweryInfo['TTB'];
+        if ((isset($brewerBreweryInfo['Production'])) && (!empty($brewerBreweryInfo['Production']))) $brewerBreweryProd = $brewerBreweryInfo['Production'];
+    }
+
+?>
 <!-- PRO Edition Only: Entering on behalf of a brewery/org -->
 <section id="pro-entrant">
-    <div class="form-group"><!-- Form Group REQUIRED Text Input -->
+    <div class="form-group">
         <label for="brewerBreweryName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_organization." ".$label_name; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerBreweryName-addon1"><span class="fa fa-beer"></span></span>
-                <!-- Input Here -->
                 <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" data-error="<?php echo $brewer_text_032; ?>" required autofocus>
             </div>
             <div class="help-block"><?php echo $register_text_045; ?></div>
             <div class="help-block with-errors"></div>
         </div>
-    </div><!-- ./Form Group -->
-    <div class="form-group"><!-- Form Group Text Input -->
+    </div>
+    <div class="form-group">
         <label for="brewerBreweryTTB" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_ttb; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <!-- Input Here -->
-            <input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerBreweryTTB']; ?>" placeholder="">
+            <input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if ($action == "edit") echo $brewerBreweryTTB; ?>" placeholder="">
         </div>
-    </div><!-- ./Form Group -->
+    </div>
+    <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { ?>
+    <div class="form-group">
+        <label for="brewerBreweryProd" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_yearly_volume; ?></label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="brewerBreweryProd" value="1 - 10,000" id="brewerBreweryProd_5" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "1 - 10,000") !== false)) echo "CHECKED"; if (($action == "add") || (empty($brewerBreweryInfo))) echo "CHECKED"; ?> />1 - 10,000 <?php echo $label_gallons; ?>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="brewerBreweryProd" value="10,001 - 250,000" id="brewerBreweryProd_6" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "10,001 - 250,000") !== false)) echo "CHECKED"; ?> />10,001 - 250,000 <?php echo $label_gallons; ?>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="brewerBreweryProd" value="250,001+" id="brewerBreweryProd_7" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "250,001+") !== false)) echo "CHECKED"; ?> />250,001+ <?php echo $label_gallons; ?>
+                </label>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="brewerBreweryProdMeas" value="<?php echo $label_gallons; ?>">
+    <?php } else { ?>
+    <div class="form-group">
+        <label id="brewery-prod-label" for="brewerBreweryProd" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><i id="brewery-prod-label-icon" class="fa fa-fw fa-sm fa-star"></i> <?php echo $label_organization." ".$label_yearly_volume; ?></label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="brewerBreweryProd" value="1 - 5,000" id="brewerBreweryProd_0" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "1 - 5,000") !== false)) echo "CHECKED"; ?> />1 - 5,000
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="brewerBreweryProd" value="5,001 - 15,000" id="brewerBreweryProd_1" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "5,001 - 15,000") !== false)) echo "CHECKED"; ?> />5,001 - 15,000
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="brewerBreweryProd" value="15,001 - 60,000" id="brewerBreweryProd_2" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "15,001 - 60,000") !== false)) echo "CHECKED"; ?> />15,001 - 60,000
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="brewerBreweryProd" value="60,001 - 599,999" id="brewerBreweryProd_3" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "60,001 - 599,999") !== false)) echo "CHECKED"; ?> />60,001 - 599,999
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="brewerBreweryProd" value="6,000,000+" id="brewerBreweryProd_4" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "6,000,000+") !== false)) echo "CHECKED"; ?> />6,000,000+
+                </label>
+            </div>
+            <div id="brewerBreweryProdMeas" class="input-group">
+                <label class="radio-inline">
+                    <input type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_barrels; ?>" id="brewerBreweryProdMeas_0" <?php if (($action == "edit") && (strpos($brewerBreweryProd, $label_barrels) !== false)) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> /><?php echo $label_barrels; ?>
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_hectoliters; ?>" id="brewerBreweryProdMeas_1" <?php if (($action == "edit") && (strpos($brewerBreweryProd, $label_hectoliters) !== false)) echo "CHECKED"; ?> /><?php echo $label_hectoliters; ?>
+                </label>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
 </section>
-<?php } // end if ($pro_entrant) { ?>
+<?php } // end if ($pro_entrant) ?>
 
 <!-- Participant Information -->
 <section id="participant-info">
@@ -72,7 +144,6 @@ if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerLastName-addon1"><span class="fa fa-user"></span></span>
-                
                 <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="" data-error="<?php echo $brewer_text_025; ?>" required>
             </div>
             <div class="help-block"><?php if ($_SESSION['prefsProEdition'] == 0) echo $brewer_text_000; ?></div>
@@ -220,7 +291,7 @@ if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
         <label for="brewerDropOff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_drop_off; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
+            <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="false" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
             <?php if (!empty($dropoff_select)) { ?>
                 <optgroup label="<?php echo $label_drop_offs; ?>">
                     <?php echo $dropoff_select; ?>

@@ -450,12 +450,25 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
 </script>
 <?php } // end if ($section == "brew") ?>
 
-<?php if ($section == "brewer") { ?> 
+<?php if ($section == "brewer") {
+
+    $brewery_ttb = "false";
+    $brewery_prod = "false";
+
+    if (isset($row_brewer['brewerBreweryInfo'])) { 
+        $brewery_info = json_decode($row_brewer['brewerBreweryInfo'],true); 
+        if (isset($brewery_info['TTB'])) $brewery_ttb = "true";
+        if (isset($brewery_info['Production'])) $brewery_prod = "true";
+    }
+
+?> 
 <script type='text/javascript'>
 var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
 var brewer_judge = "N";
 var brewer_steward = "N";
 var brewer_staff = "N";
+var brewer_brewery_ttb = <?php echo $brewery_ttb; ?>;
+var brewer_brewery_prod = <?php echo $brewery_prod; ?>;
 var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>"
 if (action == "edit") {
     var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";

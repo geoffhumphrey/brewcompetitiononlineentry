@@ -2023,6 +2023,12 @@ $label_packaging = "Obal";
 $label_bottle = "Láhev";
 $label_other_size = "Jiná Velikost";
 $label_can = "Konvice";
+$label_fruit_add_source = "Zdroj(e) Přídavku Ovoce";
+
+$label_yearly_volume = "Roční Objem";
+$label_gallons = "Galony";
+$label_barrels = "Sudy";
+$label_hectoliters = "Hektolitry";
 
 /**
  * ----------------------------------------------------------------------------------

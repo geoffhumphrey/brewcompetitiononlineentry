@@ -194,33 +194,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		else $juice_src = array();
 
 		if ((isset($_POST['brewJuiceSourceOther'])) && (!empty($_POST['brewJuiceSourceOther']))) {
-
-		    $juice_src_other_arr = str_replace(", ",",",$_POST['brewJuiceSourceOther']);
-		    $juice_src_other_arr = str_replace(",",",",$_POST['brewJuiceSourceOther']);
-		    $juice_src_other_arr = str_replace("; ",",",$_POST['brewJuiceSourceOther']);
-		    $juice_src_other_arr = str_replace(";",",",$_POST['brewJuiceSourceOther']);
-		    $juice_src_other_arr = explode(",",$juice_src_other_arr);
-		    
-		    $juice_src_other = array();
-
-		    foreach ($juice_src_other_arr as $value) {  
-		        $value = $purifier->purify(sterilize($value));
-		        $juice_src_other[] = strtoupper($value);
-		    }
-
-		    if (!empty($juice_src_other)) $juice_src_other_arr = array("juice_src_other" => $juice_src_other);
-
+		    $juice_src_other = array("juice_src_other" => $_POST['brewJuiceSourceOther']);
 		}
 
-		else $juice_src_other_arr = array();
+		else $juice_src_other = array();
 
-		if ((empty($juice_src)) && (empty($juice_src_other_arr))) {
+		if ((empty($juice_src)) && (empty($juice_src_other))) {
 		    $brewJuiceSource = NULL;
 		}
 
 		else {
 		    $brewJuiceSource = array();
-		    $brewJuiceSource = array_merge($juice_src,$juice_src_other_arr);
+		    $brewJuiceSource = array_merge($juice_src,$juice_src_other);
 		    $brewJuiceSource = json_encode($brewJuiceSource);
 		}
 

@@ -25,6 +25,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		// Check to see if email address is already in the system. If so, redirect.
 		$username = strtolower($_POST['user_name']);
 		$username = filter_var($username,FILTER_SANITIZE_EMAIL);
+		$username2 = strtolower($_POST['user_name2']);
+		$username2 = filter_var($username2,FILTER_SANITIZE_EMAIL);
 
 		if (strstr($username,'@')) {
 

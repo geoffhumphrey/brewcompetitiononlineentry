@@ -2695,10 +2695,10 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
         }
 
-        if ($style_type_running_count >= $row_limits['prefsEntryLimit']) $comp_entry_limit = TRUE;
+        if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit'])) && ($style_type_running_count >= $row_limits['prefsEntryLimit'])) $comp_entry_limit = TRUE;
 
-        if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
-        if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
+        if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit']))) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
+        if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
 
         $remaining_entries = 0;
         if ((($section == "brew") || ($section == "list") || ($section == "pay")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);

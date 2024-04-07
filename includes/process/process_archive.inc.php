@@ -325,7 +325,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'brewerProAm' => '0',
 				'brewerDropOff' => '999',
 				'brewerBreweryName' => blank_to_null($brewerBreweryName),
-				'brewerBreweryTTB' => NULL
+				'brewerBreweryInfo' => NULL
 			);
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {

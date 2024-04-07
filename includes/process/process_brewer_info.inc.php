@@ -25,7 +25,10 @@ $brewerPhone2 = "";
 $brewerJudgeWaiver = "Y";
 $brewerDropOff = 0;
 $brewerBreweryName = "";
+$brewerBreweryInfo = array();
 $brewerBreweryTTB = "";
+$brewerBreweryProd = "";
+$brewerBreweryProdMeas = "";
 $brewerJudge = "N";
 $brewerSteward = "N";
 $brewerStaff = "";
@@ -80,7 +83,11 @@ if (isset($_POST['brewerBreweryName'])) {
 if (isset($_POST['brewerBreweryTTB'])) {
     $brewerBreweryTTB = $purifier->purify($_POST['brewerBreweryTTB']);
     $brewerBreweryTTB = strtoupper($brewerBreweryTTB);
-    $brewerBreweryTTB = sterilize($brewerBreweryTTB);
+    $brewerBreweryInfo['TTB'] = sterilize($brewerBreweryTTB);
+}
+
+if (isset($_POST['brewerBreweryProd'])) {
+    $brewerBreweryInfo['Production'] = sterilize($_POST['brewerBreweryProd'])." ".sterilize($_POST['brewerBreweryProdMeas']);
 }
 
 if (isset($_POST['brewerJudge'])) $brewerJudge = $_POST['brewerJudge'];
@@ -136,6 +143,8 @@ else {
     $brewerAssignment = json_encode($brewerAssignment);
 }
 
+if (empty($brewerBreweryInfo)) $brewerBreweryInfo = "";
+else $brewerBreweryInfo = json_encode($brewerBreweryInfo);
 
 // print_r($brewerAssignment); exit();
 
