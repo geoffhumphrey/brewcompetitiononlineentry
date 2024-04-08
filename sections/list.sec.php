@@ -6,6 +6,7 @@
  *
  */
 
+/*
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
     $redirect = "../../403.php";
@@ -13,7 +14,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
     header($redirect_go_to);
     exit();
 }
-
+*/
 $user_remaining_entries = 0;
 if (!empty($row_limits['prefsUserEntryLimit'])) $user_remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
 else $user_remaining_entries = 1;

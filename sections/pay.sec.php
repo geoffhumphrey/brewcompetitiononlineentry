@@ -6,6 +6,7 @@
  *
  */
 
+/*
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
     $redirect = "../../403.php";
@@ -13,6 +14,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
     header($redirect_go_to);
     exit();
 }
+*/
 
 if (TESTING) {
 	if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $paypal_env = $base_url."includes/process.inc.php?section=paypal&action=paypal";

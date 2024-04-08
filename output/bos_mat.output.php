@@ -5,13 +5,15 @@
  *
  */
 
+/*
 // Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
+if ((session_status() == PHP_SESSION_NONE) || ((isset($_SESSION['loginUsername'])) && (!function_exists('sterilize')))) {
     $redirect = "../../403.php";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
     exit();
 }
+*/
 
 $go = "output";
 require(DB.'admin_common.db.php');

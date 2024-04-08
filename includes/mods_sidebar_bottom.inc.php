@@ -1,5 +1,5 @@
 <?php
-
+/*
 // Redirect if directly accessed without authenticated session
 if ((session_status() == PHP_SESSION_NONE) || ((isset($_SESSION['loginUsername'])) && (!function_exists('sterilize')))) {
     $redirect = "../../403.php";
@@ -7,6 +7,7 @@ if ((session_status() == PHP_SESSION_NONE) || ((isset($_SESSION['loginUsername']
     header($redirect_go_to);
     exit();
 }
+*/
 
 if ($totalRows_mods > 0) {
 	if ($go != "mods") {

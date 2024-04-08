@@ -1,5 +1,5 @@
 <?php 
-
+/*
 // Redirect if directly accessed without authenticated session
 if ((session_status() == PHP_SESSION_NONE) || ((isset($_SESSION['loginUsername'])) && (!function_exists('sterilize')))) {
     $redirect = "../../403.php";
@@ -7,6 +7,7 @@ if ((session_status() == PHP_SESSION_NONE) || ((isset($_SESSION['loginUsername']
     header($redirect_go_to);
     exit();
 }
+*/
 
 if (isset($_SESSION['loginUsername'])) $user_level_mods = $_SESSION['userLevel']; 
 else $user_level_mods = "2";
