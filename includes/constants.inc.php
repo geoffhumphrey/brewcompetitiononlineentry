@@ -2481,6 +2481,7 @@ asort($club_array);
 $sidebar_date_format = "short";
 $suggested_open_date = time();
 $suggested_close_date = time() + 604800;
+$judging_past = 0;
 
 if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 

@@ -21,7 +21,8 @@ switch($section) {
 
 	case "default":
 	case "past-winners":
-		$header_output = $_SESSION['contestName'];
+		if (isset($_SESSION['contestName'])) $header_output = $_SESSION['contestName'];
+		else $header_output = "";
 
 		if (($filter != "default") && ($section == "past-winners")) $header_output .= ": ".$label_past_winners." &ndash; ".$filter;
 
