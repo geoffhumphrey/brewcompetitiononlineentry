@@ -6,6 +6,7 @@
  *              winner display after all judging dates have passed.
  */
 
+/*
 // Redirect if directly accessed
 if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
     $redirect = "../../index.php";
@@ -13,6 +14,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
     header($redirect_go_to);
     exit();
 }
+*/
 
 include (DB.'judging_locations.db.php');
 include (DB.'dropoff.db.php');
@@ -51,6 +53,7 @@ if ($section != "admin") {
 
 		// Conditional display of panel colors based upon open/closed dates
 		if (($registration_open == 0) && ($judge_window_open == 0)) $reg_panel_display = "panel-danger";
+		elseif (($registration_open == 1) && ($judge_window_open != 1)) $reg_panel_display = "panel-success";
 		elseif (($registration_open != 1) && ($judge_window_open == 1)) $reg_panel_display = "panel-success";
 		elseif (($registration_open == 1) && ($judge_window_open == 1)) $reg_panel_display = "panel-success";
 		elseif (($registration_open == 2) && ($judge_window_open == 2)) $reg_panel_display = "panel-danger";

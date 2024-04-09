@@ -6,6 +6,7 @@
  *
  */
 
+/*
 // Redirect if directly accessed
 if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
     $redirect = "../../index.php";
@@ -13,6 +14,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
     header($redirect_go_to);
     exit();
 }
+*/
 
 include_once (DB.'judging_locations.db.php');
 include_once (DB.'entries.db.php');

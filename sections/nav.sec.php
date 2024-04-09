@@ -5,6 +5,7 @@
  *
  */
 
+/*
 // Redirect if directly accessed
 if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
     $redirect = "../../index.php";
@@ -12,6 +13,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
     header($redirect_go_to);
     exit();
 }
+*/
 
 $add_entry_link_show = FALSE;
 $show_entries = TRUE;
