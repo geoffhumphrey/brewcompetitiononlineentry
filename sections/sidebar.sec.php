@@ -93,18 +93,14 @@ if ($section != "admin") {
 		$header1_100 .= "</h4>";
 		$header1_100 .= "</div>";
 		$page_info100 .= "<div class=\"panel-body\">";
-
-		if ($nav_register_entrant_show) {
-			if (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && ($steward_limit)) $page_info100 .= sprintf("<p>%s</p>",$sidebar_text_003);
-			else $page_info100 .= sprintf("<p>%s %s %s %s.</p>", $sidebar_text_005, $reg_open_sidebar, $sidebar_text_004, $reg_closed_sidebar);
-		}
-
-		if ($judge_window_open == 1) {
-			if ((!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<p>%s %s %s %s.</p>", $sidebar_text_000, $judge_open_sidebar, $sidebar_text_004, $judge_closed_sidebar);
-			elseif (($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> %s %s %s.</p>", build_public_url("register","steward","default","default",$sef,$base_url), $sidebar_text_001, $sidebar_text_004, $judge_open_sidebar, $judge_closed_sidebar);
-			elseif ((!$judge_limit) && ($steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> %s %s %s.</p>", build_public_url("register","judge","default","default",$sef,$base_url), $sidebar_text_002, $sidebar_text_004, $judge_open_sidebar, $judge_closed_sidebar);
-		}
-
+		
+		if (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && ($steward_limit)) $page_info100 .= sprintf("<p>%s</p>",$sidebar_text_003);
+		else $page_info100 .= sprintf("<p>%s %s %s %s.</p>", $sidebar_text_005, $reg_open_sidebar, $sidebar_text_004, $reg_closed_sidebar);
+		
+		if ((!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<p>%s %s %s %s.</p>", $sidebar_text_000, $judge_open_sidebar, $sidebar_text_004, $judge_closed_sidebar);
+		elseif (($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> %s %s %s.</p>", build_public_url("register","steward","default","default",$sef,$base_url), $sidebar_text_001, $sidebar_text_004, $judge_open_sidebar, $judge_closed_sidebar);
+		elseif ((!$judge_limit) && ($steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> %s %s %s.</p>", build_public_url("register","judge","default","default",$sef,$base_url), $sidebar_text_002, $sidebar_text_004, $judge_open_sidebar, $judge_closed_sidebar);
+		
 		$page_info100 .= "</div>";
 		$page_info100 .= "</div>";
 
