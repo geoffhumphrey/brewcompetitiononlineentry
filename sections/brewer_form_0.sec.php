@@ -30,7 +30,7 @@ if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($
 <input type="hidden" name="brewerBreweryName" value="">
 <?php } 
 
-if ($pro_entrant) { 
+if (($pro_entrant) && (!$show_judge_steward_fields)) { 
 
     $brewerBreweryInfo = "";
     $brewerBreweryTTB = "";
