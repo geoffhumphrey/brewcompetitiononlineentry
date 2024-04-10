@@ -3898,6 +3898,8 @@ if (check_update("brewerBreweryTTB", $prefix."brewer")) {
 	$row_ttb = mysqli_fetch_assoc($ttb);
 	$totalRows_ttb = mysqli_num_rows($ttb);
 
+	$update_table = $prefix."brewer";
+
 	if ($totalRows_ttb > 0) {
 
 		do {
@@ -3911,7 +3913,6 @@ if (check_update("brewerBreweryTTB", $prefix."brewer")) {
 				$brewerBreweryInfo['TTB'] = $row_ttb['brewerBreweryInfo'];
 				$brewerBreweryInfo = json_encode($brewerBreweryInfo);
 
-				$update_table = $prefix."brewer";
 				$data = array(
 					'brewerBreweryInfo' => $brewerBreweryInfo
 				);
@@ -3938,6 +3939,8 @@ foreach ($archive_suffixes as $suffix) {
 		$row_ttb = mysqli_fetch_assoc($ttb);
 		$totalRows_ttb = mysqli_num_rows($ttb);
 
+		$update_table = $prefix."brewer_".$suffix;
+
 		if ($totalRows_ttb > 0) {
 
 			do {
@@ -3950,8 +3953,7 @@ foreach ($archive_suffixes as $suffix) {
 					$brewerBreweryInfo = array();
 					$brewerBreweryInfo['TTB'] = $row_ttb['brewerBreweryInfo'];
 					$brewerBreweryInfo = json_encode($brewerBreweryInfo);
-
-					$update_table = $prefix."brewer";
+					
 					$data = array(
 						'brewerBreweryInfo' => $brewerBreweryInfo
 					);
