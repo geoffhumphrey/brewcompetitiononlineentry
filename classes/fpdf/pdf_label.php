@@ -265,21 +265,21 @@ class PDF_Label extends FPDF {
             'height'=>45,
             'font-size'=>9
         ),
+        
         // Labels for custom quick sort
-        '5167' 		=> array(
+        '5167' => array(
 			'paper-size'=>'letter',		
 			'metric'=>'mm',	
             'marginLeft'=>5.4, 		
-			'marginTop'=>7.1, 		
+			'marginTop'=>5.2, 		
 			'NX'=>4, 	
 			'NY'=>20, 	
 			'SpaceX'=>7.14, 		
 			'SpaceY'=>0, 	
 			'width'=>44.45, 		
 			'height'=>12.7,		
-			'font-size'=>9),
-
-
+			'font-size'=>9
+        ),
     );
 
     // Constructor
