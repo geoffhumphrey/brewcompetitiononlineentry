@@ -148,9 +148,11 @@ if ($row_scored_entries['count'] > 0) {
 						$winners_table_body_1 .= "<td width=\"25%\">";
 						if ($_SESSION['prefsStyleSet'] == "BA") $winners_table_body_1 .= $row_scores['brewStyle'];
 						else $winners_table_body_1 .= $style.": ".$row_scores['brewStyle'];
+
 						if ((!empty($row_scores['brewInfo'])) && ($section != "results")) {
-							$winners_table_body_1 .= " <a href=\"#".$row_scores['id']."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a></td>";
+							$winners_table_body_1 .= " <a href=\"#".$row_scores['id']."\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a>";
 						}
+
 						$winners_table_body_1 .= "</td>";
 
 						if ($_SESSION['prefsProEdition'] == 0) {
