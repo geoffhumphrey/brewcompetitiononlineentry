@@ -44,7 +44,6 @@ if ($section == "past_winners") {
 	}
 
 	if ($go != "default") {
-		//include (SECTIONS.'bos.sec.php');
 
 		$special_best_info_db_table = $prefix."special_best_info_".$go;
 		$special_best_data_db_table = $prefix."special_best_data_".$go;
@@ -72,5 +71,6 @@ if ($section == "past_winners") {
 		if ($winner_display_method == 2) include (SECTIONS.'winners_subcategory.sec.php');
 		
 	}
+
 }
 ?>

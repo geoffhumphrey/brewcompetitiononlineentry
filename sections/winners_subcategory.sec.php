@@ -129,7 +129,7 @@ if ($row_scored_entries['count'] > 0) {
 				$table_body1 .= "<td width=\"25%\">";
 				$table_body1 .= $style.": ".$style_long;
 
-				if ((!empty($row_scores['brewInfo'])) && ($section != "results")) {
+				if ((!empty($row_scores['brewInfo'])) && ($section != "results") && ($section != "past-winners")) {
 					$table_body1 .= " <a href=\"#".$row_scores['id']."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a>";
 				}
 				
