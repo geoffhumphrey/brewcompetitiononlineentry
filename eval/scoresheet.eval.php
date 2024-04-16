@@ -654,16 +654,25 @@ var score_range_ok = "<?php echo $label_score_range_ok; ?>";
 var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
 var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
 </script>
-
-<?php if ($action == "edit") { ?>
+<script src="<?php echo $js_url; ?>eval_checks.min.js"></script>
 <script>
 $(document).ready(function() {
+  
+  $("#courtesy-alert-warning-15").hide();
+  $("#warning-indicator-icon").hide();
+  
+  <?php if ($action == "edit") { ?>
   displayCalc(<?php echo $eval_score; ?>);
   checkScoreRange(<?php echo $eval_score; ?>,judgeScores,score_range,0);
   checkConsensus(consensusScores);
+  <?php }?>
+  
+  $('#show-hide-status-btn').click(function(){
+      $('#toggle-icon').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+  });
+
 });
 </script>
-<?php }?>
 
 <style type="text/css">
 
