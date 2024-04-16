@@ -48,7 +48,6 @@ $nav_container = "navbar-default";
     <!-- ALERTS -->
     <div class="container bcoem-warning-container">
     	<div style="margin-top:30px;" class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> <strong>Invalid request.</strong> Don't worry, we still want you around!</div>
-
     </div><!-- ./container -->
     <!-- ./ALERTS -->
 
@@ -61,7 +60,8 @@ $nav_container = "navbar-default";
         	</div>
         	<p class="lead">Unfortunately, there was a problem.</p>
             <p class="lead"><small>Please use the main navigation above to get where you want to go.</small></p>
-            <p>Cheers!<br>&ndash; The <?php echo $_SESSION['contestName']; ?> Site Server</p>
+            <p>Cheers!</p>
+            <p class="small">&ndash; The <?php echo $_SESSION['contestName']; ?> Site Server</p>
             </div><!-- ./left column -->
             <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
             	<?php include (SECTIONS.'sidebar.sec.php'); ?>
@@ -70,12 +70,6 @@ $nav_container = "navbar-default";
     	<!-- ./Public Pages -->
     </div><!-- ./container -->
     <!-- ./Public Pages -->
-
-    <!-- Mods Bottom -->
-    <div class="container">
-
-    </div>
-    <!-- ./Mods Bottom -->
 
     <!-- Footer -->
     <footer class="footer hidden-xs hidden-sm hidden-md">
