@@ -4227,6 +4227,23 @@ if ($nw_cider_update_errors > 0) {
 
 if (!$setup_running) $output_off_sched_update .= "</ul>";
 
+
+/**
+ * ----------------------------------------------- 3.0.0 ---------------------------------------------
+ * Change brewerAHA column to VARCHAR to accomodate alpha-numeric input.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$sql = sprintf("ALTER TABLE `%s` CHANGE `brewerAHA` `brewerAHA` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."brewer");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>The brewerAHA column was converted to VARCHAR in the brewer table to allow for alpha-numeric input.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">The brewerAHA column was NOT converted to VARCHAR in the brewer table.</li>";
+	$error_count += 1;
+}
+
 /**
  * ----------------------------------------------- Future --------------------------------------------- 
  * Remove AABC 2021 Guidelines

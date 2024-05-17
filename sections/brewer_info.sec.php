@@ -202,10 +202,9 @@ if (!empty($_SESSION['brewerPhone2'])) {
 }
 if (!empty($_SESSION['brewerClubs'])) $club = $_SESSION['brewerClubs']; else $club = $label_none_entered;
 $discount .= $label_yes. " (".$currency_symbol.$_SESSION['contestEntryFeePasswordNum']." ".$brewer_info_004.")";
-if (!empty($_SESSION['brewerAHA'])) {
-	if ($_SESSION['brewerAHA'] < "999999994") $aha_number .= sprintf("%09s",$_SESSION['brewerAHA']);
-	elseif ($_SESSION['brewerAHA'] >= "999999994") $aha_number .= "Pending";
-} else $aha_number .= $label_none_entered;
+
+if (!empty($_SESSION['brewerAHA'])) $aha_number .= $_SESSION['brewerAHA'];
+else $aha_number .= $label_none_entered;
 
 if (!empty($_SESSION['brewerMHP'])) $mhp_number = $_SESSION['brewerMHP'];
 else $mhp_number = $label_none_entered;
