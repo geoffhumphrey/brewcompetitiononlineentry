@@ -1801,6 +1801,7 @@ $club_array = array(
     "Peak to Peak Hoppers",
     "Pecos Valley Brewers",
     "Pendleton Ale and Lager Enthusiasts (PALE)",
+    "Peninsula Fermentation Society",
     "Peoples Ale And Lager Society",
     "Petoskey Homebrew Club",
     "Phantom Homebrew",
