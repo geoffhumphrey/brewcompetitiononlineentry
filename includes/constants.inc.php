@@ -1788,6 +1788,7 @@ $club_array = array(
     "Palm Beach Draughtsmen",
     "Palmetto State Brewers",
     "Palo Brew Crew",
+    "Panomaju",
     "Parker Hop-Aholics",
     "Parkside Homebrew Club",
     "PartTimeBrewers",
