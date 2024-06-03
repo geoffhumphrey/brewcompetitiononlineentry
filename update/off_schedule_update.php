@@ -19,7 +19,7 @@ $_SESSION['update_version'] = $current_version;
 $update_table = $prefix."bcoem_sys";
 $data = array(
 	'version_date' => NULL,
-	'data_check' => $db_conn->now(),
+	'data_check' => date('Y-m-d H:i:s', time()),
 	'update_summary' => NULL
 );
 $db_conn->where ('id', 1);
@@ -4450,7 +4450,7 @@ $update_table = $prefix."bcoem_sys";
 $data = array(
 	'version' => $current_version,
 	'version_date' => $current_version_date_display,
-	'data_check' => $db_conn->now(),
+	'data_check' => date('Y-m-d H:i:s', time()),
 	'update_date' => time()
 );
 $db_conn->where ('id', 1);

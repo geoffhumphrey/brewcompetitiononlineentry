@@ -3000,7 +3000,7 @@ function data_integrity_check() {
 	}
 
 	$update_table = $prefix."bcoem_sys";
-	$data = array('data_check' => $db_conn->now());
+	$data = array('data_check' => date('Y-m-d H:i:s', time()));
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) $errors += 1;

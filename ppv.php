@@ -141,7 +141,7 @@ if ($verified) {
 			$update_table = $prefix."brewing";
 			$data_paid = array(
 				'brewPaid' => 1,
-				'brewUpdated' => $db_conn->now()
+				'brewUpdated' => date('Y-m-d H:i:s', time())
 			);
 			$db_conn->where ('id', $value);
 			$result = $db_conn->update ($update_table, $data_paid);

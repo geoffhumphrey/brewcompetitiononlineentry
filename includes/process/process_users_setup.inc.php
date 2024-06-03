@@ -39,7 +39,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'password' => $hash,
 			'userQuestion' => sterilize($_POST['userQuestion']),
 			'userQuestionAnswer' => $hash_question,
-			'userCreated' =>  $db_conn->now(),
+			'userCreated' =>  date('Y-m-d H:i:s', time()),
 			'userAdminObfuscate' => $userAdminObfuscate
 		);
 

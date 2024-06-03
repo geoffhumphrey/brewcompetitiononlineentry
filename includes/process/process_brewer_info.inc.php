@@ -105,7 +105,17 @@ if (isset($_POST['brewerJudgeNotes'])) {
 }
 
 if ((isset($_POST['brewerAssignment'])) && (!empty($_POST['brewerAssignment']))) {
-    $affilliated = array("affilliated" => $_POST['brewerAssignment']);
+
+    $aff = $_POST['brewerAssignment'];
+    $affiliated_cleaned = array();
+    foreach ($aff as $value) {
+        $value = $purifier->purify($value);
+        $value = sterilize($value);
+        $affiliated_cleaned[] = $value;
+    }
+
+    $affilliated = array("affilliated" => $affiliated_cleaned);
+
 }
 
 else $affilliated = array();

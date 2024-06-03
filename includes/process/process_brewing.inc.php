@@ -131,6 +131,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Co Brewer
 		if ((isset($_POST['brewCoBrewer'])) && (!empty($_POST['brewCoBrewer']))) {
 
+			$brewCoBrewer = $purifier->purify(sterilize($_POST['brewCoBrewer']));
+
 			if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs))) {
 		    	
 		    	$parsed_name = $name_parser->parse_name($brewCoBrewer);
@@ -148,8 +150,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			    $brewCoBrewer = $first_name." ".$last_name;
 
 			}
-
-			$brewCoBrewer = $purifier->purify(sterilize($brewCoBrewer));
 
 		}
 		
@@ -411,7 +411,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewReceived' => blank_to_null($brewReceived),
 			'brewCoBrewer' => blank_to_null($brewCoBrewer),
 			'brewJudgingNumber' => blank_to_null($brewJudgingNumber),
-			'brewUpdated' => $db_conn->now(),
+			'brewUpdated' => date('Y-m-d H:i:s', time()),
 			'brewConfirmed' => blank_to_null(sterilize($_POST['brewConfirmed'])),
 			'brewBoxNum' => blank_to_null($brewBoxNum),
 			'brewABV' => blank_to_null($brewABV),
@@ -656,7 +656,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewReceived' => $brewReceived,
 			'brewCoBrewer' => $brewCoBrewer,
 			'brewJudgingNumber' => $brewJudgingNumber,
-			'brewUpdated' => $db_conn->now(),
+			'brewUpdated' => date('Y-m-d H:i:s', time()),
 			'brewConfirmed' => sterilize($_POST['brewConfirmed']),
 			'brewBoxNum' => $brewBoxNum,
 			'brewABV' => blank_to_null($brewABV),

@@ -282,7 +282,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'userLevel' => $userLevel, 
 				'userQuestion' => $userQuestion, 
 				'userQuestionAnswer' => $userQuestionAnswer, 
-				'userCreated' => $db_conn->now()
+				'userCreated' => date('Y-m-d H:i:s', time())
 			);
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {

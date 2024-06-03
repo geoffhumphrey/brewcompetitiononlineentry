@@ -1291,7 +1291,7 @@ if ($setup_free_access == TRUE) {
 			'id' => 1,
 			'version' => '2.1.10.0',
 			'version_date' => $current_version_date_display,
-			'data_check' => $db_conn->now(),
+			'data_check' => date('Y-m-d H:i:s', time()),
 			'setup' => 0,
 			'setup_last_step' => 0
 		);

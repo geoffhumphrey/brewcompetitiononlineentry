@@ -741,7 +741,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$update_table = $prefix."users";
-		$data = array('userCreated' => $db_conn->now());
+		$data = array('userCreated' => date('Y-m-d H:i:s', time()));
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {

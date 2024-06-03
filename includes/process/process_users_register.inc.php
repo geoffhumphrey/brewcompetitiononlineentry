@@ -129,7 +129,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'password' => $hash,
 					'userQuestion' => sterilize($_POST['userQuestion']),
 					'userQuestionAnswer' => $hash_question,
-					'userCreated' =>  $db_conn->now(),
+					'userCreated' =>  date('Y-m-d H:i:s', time()),
 					'userAdminObfuscate' => $userAdminObfuscate
 				);
 				//print_r($data);
