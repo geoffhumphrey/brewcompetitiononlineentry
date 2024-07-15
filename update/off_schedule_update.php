@@ -4006,7 +4006,7 @@ foreach ($archive_suffixes as $suffix) {
 	}
 
 	if (!check_update("styleTypeEntryLimit", $prefix."style_types_".$suffix)) {
-		$sql = sprintf("ALTER TABLE `%s` ADD `styleTypeEntryLimit` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;", $prefix."style_types");
+		$sql = sprintf("ALTER TABLE `%s` ADD `styleTypeEntryLimit` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;", $prefix."style_types_".$suffix);
 		$db_conn->rawQuery($sql);
 	}
 
@@ -4216,8 +4216,8 @@ $db_conn->orWhere ('brewStyleGroup', 'C2');
 $result = $db_conn->update ($update_table, $data);
 if ($result) $output_off_sched_update .= "<li>NW Cider Cup C1 and C2 styles updated to remove additional info input requirement.</li>";
 else {
-	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup C1 and C2 styles styles NOT updated to remove additional info input requirement.</li>";
-	$error_count += 1;
+	$nw_cider_update_errors++;
+	$nw_cider_update_output .= "<li class=\"text-danger\">NW Cider Cup C1 and C2 styles styles NOT updated to remove additional info input requirement.</li>";
 }
 
 if ($nw_cider_update_errors > 0) {
@@ -4229,10 +4229,24 @@ if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 
 /**
- * ----------------------------------------------- 3.0.0 ---------------------------------------------
+ * ----------------------------------------------- 2.7.1 ---------------------------------------------
  * Change brewerAHA column to VARCHAR to accomodate alpha-numeric input.
+ * Update BJCP 2021 Styles C2B, C2E, and C2F to require special ingredient input.
  * ---------------------------------------------------------------------------------------------------
  */
+
+if ((!$setup_running) && (!$update_running)) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.7.1.0 Updates</strong>";
+	$output_off_sched_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$output_off_sched_update .= "<h4>Version 2.7.1</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $sql = sprintf("ALTER TABLE `%s` CHANGE `brewerAHA` `brewerAHA` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."brewer");
 mysqli_select_db($connection,$database);
@@ -4243,6 +4257,44 @@ else {
 	$output_off_sched_update .= "<li class=\"text-danger\">The brewerAHA column was NOT converted to VARCHAR in the brewer table.</li>";
 	$error_count += 1;
 }
+
+$update_table = $prefix."styles";
+$data = array('brewStyleReqSpec' => '1');
+$db_conn->where ('brewStyleGroup', 'C2');
+$db_conn->where ('brewStyleNum', 'B');
+$db_conn->where ('brewStyleVersion', 'BJCP2021');
+$result = $db_conn->update ($update_table, $data);
+if ($result) $output_off_sched_update .= "<li>BJCP 2021 Style C2B updated.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">BJCP 2021 Style C2B NOT updated. The brewStyleReqSpec column value could not be changed to 1.</li>";
+	$error_count += 1;
+}
+
+$update_table = $prefix."styles";
+$data = array('brewStyleReqSpec' => '1');
+$db_conn->where ('brewStyleGroup', 'C2');
+$db_conn->where ('brewStyleNum', 'E');
+$db_conn->where ('brewStyleVersion', 'BJCP2021');
+$result = $db_conn->update ($update_table, $data);
+if ($result) $output_off_sched_update .= "<li>BJCP 2021 Style C2E updated.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">BJCP 2021 Style C2E NOT updated. The brewStyleReqSpec column value could not be changed to 1.</li>";
+	$error_count += 1;
+}
+
+$update_table = $prefix."styles";
+$data = array('brewStyleReqSpec' => '1');
+$db_conn->where ('brewStyleGroup', 'C2');
+$db_conn->where ('brewStyleNum', 'F');
+$db_conn->where ('brewStyleVersion', 'BJCP2021');
+$result = $db_conn->update ($update_table, $data);
+if ($result) $output_off_sched_update .= "<li>BJCP 2021 Style C2F updated.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">BJCP 2021 Style C2F NOT updated. The brewStyleReqSpec column value could not be changed to 1.</li>";
+	$error_count += 1;
+}
+
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- Future --------------------------------------------- 
