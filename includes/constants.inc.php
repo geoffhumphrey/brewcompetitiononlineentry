@@ -2470,7 +2470,8 @@ $club_array = array(
     "Master Homebrewer Program",
     "Cider, Homebrew, And Mead Production Specialists (CHAMPS)",
     "Ottawa's Homebrew Society",
-    "Garner Ale Society"
+    "Garner Ale Society",
+    "256 Brewers"
 );
 
 $club_array_json = json_encode($club_array);
@@ -2642,7 +2643,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $style_type_limits_display = array();
         $style_type_limits_alert = array();
 
-        $query_style_type_entry_limits = sprintf("SELECT * FROM %s WHERE (styleTypeEntryLimit > 0) OR (styleTypeEntryLimit IS NOT NULL)",$prefix."style_types");
+        $query_style_type_entry_limits = sprintf("SELECT * FROM %s WHERE styleTypeEntryLimit > 0",$prefix."style_types");
         $style_type_entry_limits = mysqli_query($connection,$query_style_type_entry_limits) or die (mysqli_error($connection));
         $row_style_type_entry_limits = mysqli_fetch_assoc($style_type_entry_limits);
         $totalRows_style_type_entry_limits = mysqli_num_rows($style_type_entry_limits);
