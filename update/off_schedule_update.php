@@ -3997,7 +3997,6 @@ foreach ($archive_suffixes as $suffix) {
 			'brewPouring' => '{"pouring":"Normal","pouring_rouse":"No"}'
 		);
 		$result = $db_conn->update ($update_table, $data);
-
 	}
 
 	if (!check_update("brewStyleType", $prefix."brewing_".$suffix)) {
@@ -4261,12 +4260,36 @@ else {
 $update_table = $prefix."styles";
 $data = array('brewStyleReqSpec' => '1');
 $db_conn->where ('brewStyleGroup', 'C2');
+$db_conn->where ('brewStyleNum', 'A');
+$db_conn->where ('brewStyleVersion', 'BJCP2021');
+$result = $db_conn->update ($update_table, $data);
+if ($result) $output_off_sched_update .= "<li>BJCP 2021 Style C2A updated.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">BJCP 2021 Style C2A NOT updated. The brewStyleReqSpec column value could not be changed to 1.</li>";
+	$error_count += 1;
+}
+
+$update_table = $prefix."styles";
+$data = array('brewStyleReqSpec' => '1');
+$db_conn->where ('brewStyleGroup', 'C2');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'BJCP2021');
 $result = $db_conn->update ($update_table, $data);
 if ($result) $output_off_sched_update .= "<li>BJCP 2021 Style C2B updated.</li>";
 else {
 	$output_off_sched_update .= "<li class=\"text-danger\">BJCP 2021 Style C2B NOT updated. The brewStyleReqSpec column value could not be changed to 1.</li>";
+	$error_count += 1;
+}
+
+$update_table = $prefix."styles";
+$data = array('brewStyleReqSpec' => '1');
+$db_conn->where ('brewStyleGroup', 'C2');
+$db_conn->where ('brewStyleNum', 'D');
+$db_conn->where ('brewStyleVersion', 'BJCP2021');
+$result = $db_conn->update ($update_table, $data);
+if ($result) $output_off_sched_update .= "<li>BJCP 2021 Style C2D updated.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">BJCP 2021 Style C2D NOT updated. The brewStyleReqSpec column value could not be changed to 1.</li>";
 	$error_count += 1;
 }
 
