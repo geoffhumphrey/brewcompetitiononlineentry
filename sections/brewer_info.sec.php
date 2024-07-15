@@ -159,6 +159,7 @@ $header1_1 .= sprintf("<h2>%s</h2>",$label_account_info);
 // Build primary page info (thank you message)
 $primary_page_info .= sprintf("<p class=\"lead\">%s %s, %s. <small class=\"text-muted\">%s %s.</small></p>",$brewer_info_000,$_SESSION['contestName'],$_SESSION['brewerFirstName'],$brewer_info_001,getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($_SESSION['userCreated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt"));
 
+/*
 if (($totalRows_log > 0) && ($show_entries)) {
 	$primary_page_info .= "<p class=\"lead hidden-print\"><small>";
 	$primary_page_info .= sprintf("%s",$brewer_info_002);
@@ -170,16 +171,34 @@ if (($totalRows_log > 0) && ($show_entries)) {
 	}
 	$primary_page_info .= "</small></p>";
 }
+*/
 
 if ($_SESSION['prefsEval'] == 1) include (EVALS.'my_account.eval.php');
 
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
-$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-user\"></span> %s</a>",$edit_user_info_link,$label_edit_account);
-if (!NHC) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"".$edit_user_email_link."\"><span class=\"fa fa-envelope\"></span> %s</a>",$label_change_email);
-$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-key\"></span> %s</a>",$edit_user_password_link,$label_change_password);
+$user_edit_links .= sprintf("<a class=\"btn btn-info\" href=\"%s\"><span class=\"fa fa-user\"></span> %s</a>",$edit_user_info_link,$label_edit_account);
+if (!NHC) $user_edit_links .= sprintf("<a class=\"btn btn-info\" href=\"".$edit_user_email_link."\"><span class=\"fa fa-envelope\"></span> %s</a>",$label_change_email);
+$user_edit_links .= sprintf("<a class=\"btn btn-info\" href=\"%s\"><span class=\"fa fa-key\"></span> %s</a>",$edit_user_password_link,$label_change_password);
 $user_edit_links .= "</div><!-- ./button group --> ";
+
+
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddEntries\">";
-if (($show_entries) && ($add_entry_link_show)) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);
+if (($show_entries) && ($add_entry_link_show)) $user_edit_links .= sprintf("<a class=\"btn btn-primary\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);
+
+if (($totalRows_log > 0) && ($show_entries)) {
+	
+	if (!$disable_pay) {
+		if (!$comp_paid_entry_limit) $user_edit_links .= "<a class=\"btn btn-primary\" href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\"><i class=\"fa fa-fw fa-money\"></i> ".$label_pay."</a>";
+		/*
+		else {
+			if ($_SESSION['contestEntryFee'] > 0) $primary_page_info .= sprintf(".</small></p><p class=\"lead hidden-print\"><small><span class=\"text-danger\"><strong>%s:</strong> %s</span> <a href=\"%s\">%s</a>",ucfirst(strtolower($label_please_note)),$pay_text_034,$link_contacts,$pay_text_001);
+		}
+		*/ 
+	}
+
+	$user_edit_links .= "<a class=\"btn btn-primary\" href=\"#entries\"><i class=\"fa fa-fw fa-list\"></i> ".$label_entries."</a>";
+
+}
 $user_edit_links .= "</div><!-- ./button group -->";
 
 

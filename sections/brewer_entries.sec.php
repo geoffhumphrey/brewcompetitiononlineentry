@@ -42,32 +42,26 @@ $print_bottle_labels = FALSE;
 if (($dropoff_window_open == 1) || ($shipping_window_open == 1) || ($entry_window_open == 1)) $print_bottle_labels = TRUE;
 
 $multiple_bottle_ids = FALSE;
-if ((($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6")) && $print_bottle_labels) $multiple_bottle_ids = TRUE;
+if (($_SESSION['prefsEntryForm'] >= "5") && ($print_bottle_labels)) $multiple_bottle_ids = TRUE;
 
-// Build Headers
-if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i style=\"padding-right: 5px;\" class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay);
- 
+if (!$show_scores) {
+
+	$add_entry_link = "";
+	$add_entry_link .= $base_url;
+	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
+	else $add_entry_link .= "index.php?section=brew&amp;action=add";
+
+	$pay_button .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddPayEntries\">";
+	if (($show_entries) && ($add_entry_link_show)) $pay_button .= sprintf("<a class=\"btn btn-primary\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);
+	if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-primary pull-right\" href=\"%s\"><i style=\"padding-right: 5px;\" class=\"fa fa-fw fa-money\"></i> %s</a>",$link_pay, $label_pay);
+	$pay_button .= "</div>";
+
+}
+
 if (($totalRows_log > 0) && ($show_scores)) {
 
 	$link_results_export = $base_url."includes/output.inc.php?section=export-personal-results&amp;id=".$_SESSION['brewerID'];
-
-	if (empty($_SESSION['brewerMHP'])) {
-
-		// Single link without MHP option.
-		$pay_button .= sprintf("<a href=\"%s\" class=\"btn btn-success hide-loader\" target=\"_blank\"><i class=\"fa fa-lg fa-file-csv\" style=\"margin-right: 8px;\"></i>%s</a>",$link_results_export, $label_results_export_personal);
-
-	} else {
-
-		// $link_results_export_mhp = $base_url."includes/output.inc.php?section=export-personal-results&amp;filter=MHP&amp;id=".$_SESSION['brewerID'];
-		$pay_button .= "<div class=\"btn-group pull-right\">";
-		$pay_button .= sprintf("<button type=\"button\" class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-lg fa-file-excel\" style=\"margin-right: 8px;\"></i>%s<span class=\"caret\" style=\"margin-left: 8px;\"></span></button>",$label_results_export_personal);
-		$pay_button .= "<ul class=\"dropdown-menu\">";
-		$pay_button .= sprintf("<li class=\"small\"><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s</a></li>",$link_results_export,$label_general);
-		$pay_button .= "<li class=\"small disabled\"><a class=\"hide-loader\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"The MHP personal results download has been disabled by request from the MHP board. Results will now be submitted by the competition organizers on behalf of all MHP members who entered this competition. This option will be removed in a subsequent release.\">Master Homebrewer Program</a></li>";
-		$pay_button .= "</ul>";
-		$pay_button .= "</div>";
-
-	}
+	$pay_button .= sprintf("<a href=\"%s\" class=\"btn btn-success hide-loader\" target=\"_blank\"><i class=\"fa fa-lg fa-file-csv\" style=\"margin-right: 8px;\"></i>%s</a>",$link_results_export, $label_results_export_personal);
 
 }
 
@@ -76,7 +70,7 @@ $header1_1 .= "<hr>";
 if (!$show_scores) $header1_1 .= sprintf("<a class=\"anchor-offset\" name=\"entries\"></a><h2>%s</h2>",$label_entries);
 
 $header1_1 .= "<div class=\"row\">";
-$header1_1 .= "<div class=\"col col-xs-6 col-sm-9\">";
+$header1_1 .= "<div class=\"col col-xs-5 col-sm-6\">";
 
 if ($show_scores) {
 	$header1_1 .= sprintf("<a class=\"anchor-offset\" name=\"entries\"></a><h2>%s</h2>",$label_entries);
@@ -90,8 +84,8 @@ else {
 }
 
 $header1_1 .= "</div>";
-$header1_1 .= "<div class=\"col col-xs-6 col-sm-3\">";
-$header1_1 .= "<div style=\"margin-top: 10px;\">".$pay_button."</div>";
+$header1_1 .= "<div class=\"col col-xs-7 col-sm-6\">";
+$header1_1 .= "<div class=\"pull-right\" style=\"margin-top: 10px;\">".$pay_button."</div>";
 $header1_1 .= "</div>";
 $header1_1 .= "</div>";
 
@@ -613,7 +607,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 </table>
 <?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
 <div style="margin-top: 20px;">
-<input type="submit" id="btn" class="btn btn-primary pull-right hidden-print" value="<?php echo $brewer_entries_text_024; ?>" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="<?php echo $brewer_entries_text_022; ?>" data-content="<?php echo $brewer_entries_text_023; ?>">
+<input type="submit" id="btn" class="btn btn-primary pull-right hidden-print" value="<?php echo $brewer_entries_text_022; ?>" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="<?php echo $brewer_entries_text_022; ?>" data-content="<?php echo $brewer_entries_text_023; ?>">
 </div>
 <?php } ?>
 </form>

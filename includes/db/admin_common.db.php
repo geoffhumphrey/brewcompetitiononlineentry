@@ -7,7 +7,7 @@
 
 if (table_exists($style_types_db_table)) {
 
-	if (($go == "default") || ($go == "style_types") || ($go == "styles") || ($go == "judging_scores")  || ($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "judging") || ($go == "staff") || ($go == "preferences")) {
+	if (($go == "default") || ($go == "style_types") || ($go == "styles") || ($go == "judging_scores")  || ($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "judging") || ($go == "staff") || ($go == "preferences") || ($go == "csv")) {
 
 		if (SINGLE) {
 			$query_style_type = sprintf("SELECT * FROM $style_types_db_table WHERE comp_id='0' OR comp_id='%s'",$_SESSION['comp_id']);

@@ -5,13 +5,6 @@
  * Last Modified: March 26, 2024
  */
 
-if ((session_status() == PHP_SESSION_NONE) || (!function_exists('sterilize'))) {
-    $redirect = "../../index.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-
 /**
  * ******************************************************************************
  * Set up MySQL connection variables

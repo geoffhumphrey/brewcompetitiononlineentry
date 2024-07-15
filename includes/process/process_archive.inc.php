@@ -30,13 +30,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($eval_db_exist) $tables_array[] = $prefix."evaluation";
 
 	if ($go == "add") {
-		
+
 		$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE archiveSuffix = '%s';", $archive_db_table, $suffix);
 		$suffix_check = mysqli_query($connection,$query_suffix_check) or die (mysqli_error($connection));
 		$row_suffix_check = mysqli_fetch_assoc($suffix_check);
 
 		if ($row_suffix_check['count'] > 0) {
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
+			$redirect = $base_url."index.php?section=admin&go=archive&msg=6";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+			header($redirect_go_to);
+			exit();
 		}
 		
 		/**

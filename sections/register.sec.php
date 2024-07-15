@@ -12,6 +12,9 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 ?>
 <script type="text/javascript">
 var action = "<?php echo $action; ?>";
+<?php if (($section == "admin") && ($go == "judge")) { ?>
+
+<?php } ?>
 </script>
 <script src="<?php echo $js_url; ?>registration_checks.min.js<?php if (((DEBUG) || (TESTING)) && (strpos($base_url, 'test.brewingcompetitions.com') !== false)) echo "?t=".time(); ?>"></script>
 <?php
@@ -23,6 +26,7 @@ $header1_1 = "";
 $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
+
 
 if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
     $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
@@ -1023,7 +1027,7 @@ if ($go == "default") {  ?>
         </div>
     </div><!-- ./Form Group -->
     <?php } // END if (((!$judge_hidden) || (!$steward_hidden)) && ($section != "admin")) ?>
-    <?php if ($_SESSION['prefsCAPTCHA'] == "1") { ?>
+    <?php if (($_SESSION['prefsCAPTCHA'] == "1") && ($section != "admin")) { ?>
     <!-- CAPTCHA -->
 	<div class="form-group">
 		<label for="recaptcha" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> CAPTCHA</label>

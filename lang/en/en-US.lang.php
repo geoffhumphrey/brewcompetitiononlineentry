@@ -1451,10 +1451,10 @@ $label_submitting = "Submitting";
 $label_additional_info = "Entries with Additional Info";
 $label_working = "Working";
 $output_text_030 = "Please stand by.";
-$brewer_entries_text_021 = "Check the entries to print their bottle labels. Select the top checkbox to check or uncheck all the boxes in the column.";
-$brewer_entries_text_022 = "Print All Bottle/Can Labels for the Entries Checked Above";
-$brewer_entries_text_023 = "The bottle labels will open in a new tab or window.";
-$brewer_entries_text_024 = "Print Selected Bottle/Can Labels";
+$brewer_entries_text_021 = "Check the entries to print their bottle/can labels. Select the top checkbox to check or uncheck all the boxes in the column.";
+$brewer_entries_text_022 = "Print Labels for All Entries Checked Above";
+$brewer_entries_text_023 = "The labels will open in a new tab or window.";
+$brewer_entries_text_024 = "Print Selected Entry Labels";
 
 /**
  * ------------------------------------------------------------------------
@@ -2043,7 +2043,7 @@ $brew_text_042 = "Please provide the alcohol by volume up to the hundredth place
 $brew_text_043 = "Numbers only - decimals acceptable to the hundredth place (e.g., 5.2, 12.84, etc.).";
 $brew_text_044 = "Please provide finishing specific gravity to the thousandth place (e.g., 0.991, 1.000, 1.007, etc.).";
 $brew_text_045 = "Please provide applicable source(s).";
-$brew_text_046 = "Please specify the origin of all fruit additions in this cider. Fruit additions are all fruit/juice added to the beverage that is not the apple or pear base.<p>Separate each location's abbreviation by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
+$brew_text_046 = "Please specify the origin of all fruit additions in this cider. Fruit additions are all fruit/juice added to the beverage that is not the apple or pear base.";
 $brew_text_047 = "How should your entry be poured for the judges?";
 $brew_text_048 = "Should any yeast be roused before pouring?";
 $brew_text_049 = "Provide further information regarding how your entry should be poured or other related items (e.g., possible gushing, etc.).";

@@ -186,7 +186,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewSweetnessLevel = number_format($brewSweetnessLevel,3);
 		}
 
-		// Juice Sorce - From multi-select
+		// Juice Source - From multi-select
 		if ((isset($_POST['brewJuiceSource'])) && (!empty($_POST['brewJuiceSource']))) {
 		    $juice_src = array("juice_src" => $_POST['brewJuiceSource']);
 		}

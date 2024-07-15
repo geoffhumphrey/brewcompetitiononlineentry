@@ -11,7 +11,7 @@ $rid1 = "default";
 $rid2 = "default";
 
 $status = 0;
-$message = "";
+$message = "Awaiting input.";
 
 if (isset($_GET['rid1'])) $rid1 = sterilize($_GET['rid1']);
 if (isset($_GET['rid2'])) $rid2 = sterilize($_GET['rid2']);
@@ -36,7 +36,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 		if ($under_fifty_flag) {
 			$status = 1;
-			$message = "<span class=\"text-warning\"><i class=\"fa fa-exclamation-circle\"></i> All custom style category numbers must be at least 50. 1-49 are reserved for system use.</span>";
+			$message = "<span class=\"text-primary\">All custom style category numbers must be at least 50 &ndash; 1-49 are reserved for system use. <i class=\"fa fa-info-circle\"></i></span>";
 		}
 
 		else {
@@ -49,14 +49,14 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				
 				if ($db_conn->count > 0) {
 					$status = 2;
-					$message = "<span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> Style and sub-style combination already in use.</span>";
+					$message = "<span class=\"text-danger\">Style and sub-style combination already in use. <i class=\"fa fa-exclamation-triangle\"></i></span>";
 				}
 				
 				else {
 					
 					if ((!empty($group)) && (!empty($sub))) {
 						$status = 3; 
-						$message = "<span class=\"text-success\"><i class=\"fa fa-check-circle\"></i> Style and sub-style combination is available.</span>";
+						$message = "<span class=\"text-success\">Style and sub-style combination is available. <i class=\"fa fa-check-circle\"></i></span>";
 					}
 
 				}
@@ -68,7 +68,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		}
 
 	} else {
-		$message = "<span class=\"text-warning\"><i class=\"fa fa-exclamation-triangle\"></i> An identifier is needed in both fields.</span>";
+		$message = "<span class=\"text-warning\">An identifier is needed in both fields. <i class=\"fa fa-exclamation-triangle\"></i></span>";
 	}
 
 } 

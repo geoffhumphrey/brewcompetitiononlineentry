@@ -3093,8 +3093,7 @@ function table_exists($table_name) {
 	else return FALSE;
 }
 
-function judge_assignment($uid, $loc_id)
-{
+function judge_assignment($uid, $loc_id) {
 	// Get judge table assignments by locations
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);

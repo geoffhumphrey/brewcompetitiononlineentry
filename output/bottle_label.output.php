@@ -62,7 +62,9 @@ if (isset($_SESSION['loginUsername'])) {
 
     // Flag if rendering an anonymous label (no name/address/phone)
     $anon = FALSE;
-    if ($_SESSION['prefsEntryForm'] == "6") $anon = TRUE;
+    $barcode_qr = FALSE;
+    if (($_SESSION['prefsEntryForm'] == "6") || ($_SESSION['prefsEntryForm'] == "8")) $anon = TRUE;
+    if (($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6")) $barcode_qr = TRUE;
 
     // Set up vars
     if (isset($_SESSION['jPrefsBottleNum'])) $bottle_label_count = $_SESSION['jPrefsBottleNum'];
@@ -75,14 +77,23 @@ if (isset($_SESSION['loginUsername'])) {
     $bottle_label_colCountTotal = $totalRows_log * $bottle_label_count;
 
     if ($anon) {
-      $bottle_label_colCountLimit = 12; // number of labels per page
+      $bottle_label_colCountLimit = 12;
       $bottle_label_height = 200;
       $page_info0 = sprintf("%s <strong>%s</strong>", $bottle_labels_002, strtoupper($bottle_labels_001));
     }
 
     else {
-      $bottle_label_colCountLimit = 9; // number of labels per page
-      $bottle_label_height = 290;
+      
+      if ($barcode_qr) {
+        $bottle_label_colCountLimit = 9;
+        $bottle_label_height = 290;
+      }
+      
+      else {
+        $bottle_label_colCountLimit = 12;
+        $bottle_label_height = 200;
+      }
+     
       $page_info0 = sprintf("%s <strong>%s</strong>", $bottle_labels_003, strtoupper($bottle_labels_001));
     }
 
@@ -98,20 +109,24 @@ if (isset($_SESSION['loginUsername'])) {
 
         for ($i=1; $i<=$bottle_label_count; $i++) {
 
-            // Generate Barcode
-            $barcode = sprintf("%06s",$row_log['id']);
+          $barcode = sprintf("%06s",$row_log['id']);
 
-            $barcode_link = "https://admin.brewingcompetitions.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=20&code=BCGcode39";
+            if ($barcode_qr) {
+              
+              // Generate Barcode
+              $barcode_link = "https://admin.brewingcompetitions.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=20&code=BCGcode39";
 
-            // Generate QR Code
-            require_once (CLASSES.'qr_code/qrClass.php');
-            $qr = new qRClas();
+              // Generate QR Code
+              require_once (CLASSES.'qr_code/qrClass.php');
+              $qr = new qRClas();
 
-            $qrcode_url = $base_url."qr.php?id=".$row_log['id'];
-            $qrcode_url = urlencode($qrcode_url);
+              $qrcode_url = $base_url."qr.php?id=".$row_log['id'];
+              $qrcode_url = urlencode($qrcode_url);
 
-            $qr->qRCreate($qrcode_url,"75x75","UTF-8");
-            $qrcode_link = $qr->url;
+              $qr->qRCreate($qrcode_url,"75x75","UTF-8");
+              $qrcode_link = $qr->url;
+            }
+            
 
             $entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
             $entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
@@ -121,7 +136,7 @@ if (isset($_SESSION['loginUsername'])) {
             // Layout Column div
             $page_info1 .= "<div class=\"col-xs-".$bottle_label_columns_bs." label-border\">";
             $page_info1 .= "<div class=\"label-inner\">";
-            $page_info1 .= "<p class=\"text-center\"><strong>".$_SESSION['contestName']."</strong></p>";
+            $page_info1 .= "<p class=\"text-center label-title\"><strong>".$_SESSION['contestName']."</strong></p>";
 
             $page_info1 .= "<p><strong>".$label_entry_number.":</strong> ".$barcode."</br>";
             if (!$anon) $page_info1 .= "<strong>".$label_entry_name.":</strong> ".truncate($entry_name,45,"&hellip;")."<br>";
@@ -156,8 +171,7 @@ if (isset($_SESSION['loginUsername'])) {
             $page_info1 .= "</p>";
 
             if (!$anon) {
-              $page_info1 .= "<small>";
-              $page_info1 .= "<p>";
+              $page_info1 .= "<p class=\"label-entrant\">";
               if ($_SESSION['prefsProEdition'] == 1) {
                 $page_info1 .= $row_brewer['brewerBreweryName']."<br>";
                 $page_info1 .= $label_contact.": ".$brewerFirstName." ".$brewerLastName."<br>";
@@ -167,18 +181,16 @@ if (isset($_SESSION['loginUsername'])) {
               $page_info1 .= $brewerEmail."<br>";
               $page_info1 .= $phone;
               $page_info1 .= "</p>";
-              $page_info1 .= "</small>";
             }
 
-            $page_info1 .= "<div align=\"center\">";
-            $page_info1 .= "<img src=\"".$barcode_link."\"> ";
-            if ($anon) {
-              $page_info1 .= "</div>";
+            if ($barcode_qr) {
               $page_info1 .= "<div align=\"center\">";
+              $page_info1 .= "<img src=\"".$barcode_link."\"> ";       
+              $page_info1 .= "&nbsp;&nbsp;<img src=\"".$qrcode_link."\">";
+              $page_info1 .= "</div>";
             }
-            $page_info1 .= "&nbsp;&nbsp;<img src=\"".$qrcode_link."\">";
-            $page_info1 .= "</div>";
-            if (!$anon) $page_info1 .= "<div align=\"center\" class=\"box\">".$bottle_labels_006."</div>";
+            
+            if ((!$anon) && ($barcode_qr)) $page_info1 .= "<div align=\"center\" class=\"box\">".$bottle_labels_006."</div>";
 
             $page_info1 .= "</div>";
             $page_info1 .= "</div>";
@@ -246,9 +258,35 @@ else {
     <link rel="stylesheet" href="<?php echo $css_url."templates.min.css"; ?>">
     <style>
 
+  <?php if ($barcode_qr) { ?>
+    
     body {
       font-size: .95em;
     }
+
+    .label-title {
+      font-size: 1.15em;
+    }
+
+    .label-entrant {
+      font-size: .95em;
+    }
+    
+  <?php } else { ?>
+
+    body {
+      font-size: 1.05em;
+    }
+
+    .label-title {
+      font-size: 1.25em;
+    }
+
+    .label-entrant {
+      font-size: 1em;
+    }
+
+  <?php } ?>
 
     .label-border {
       border: 1px solid #000;

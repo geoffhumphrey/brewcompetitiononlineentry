@@ -210,6 +210,12 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 	if ($section == "export-entries") {
 
+        include(DB.'admin_common.db.php');
+        $style_type_array = array();
+        do {
+            $style_type_array[$row_style_type['id']] = $row_style_type['styleTypeName'];
+        } while($row_style_type = mysqli_fetch_assoc($style_type));
+
         $a = array();
 
         if ($admin_role) {
@@ -264,6 +270,15 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     elseif ($header_name == "Mead3") $headers[] = $label_strength;
                     elseif ($header_name == "Comments") $headers[] = $label_brewer_specifics;
                     elseif ($header_name == "Updated") $headers[] = $label_updated;
+                    elseif ($header_name == "SweetnessLevel") $headers[] = $label_final_gravity;
+                    elseif ($header_name == "JuiceSource") {
+                        $headers[] = "Juice Source";
+                        $headers[] = "Juice Source Other";
+                    }
+                    elseif ($header_name == "Pouring") {
+                        $headers[] = "Pouring Inst";
+                        $headers[] = "Rouse Yeast";
+                    }
                     else $headers[] = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), ' $0', $header_name);
                  }
 
@@ -340,36 +355,70 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             }
 
                             foreach ($row_sql as $key => $value) {
- 
-                                if (($key == "brewPouring") || ($key == "brewJuiceSource")) {
+
+                                if ($key == "brewPouring") {
 
                                     $json_array = json_decode($value,true);
-                                    $string = "";
-                                    
-                                    foreach ($json_array as $k => $v) {
-                                        
-                                        if ($key == "brewJuiceSource") {
-                                            $o = implode(", ",$v);
-                                            $o = convert_to_entities($o);
+
+                                    if (empty($json_array)) {
+                                        $fields1[] = "";
+                                        $fields1[] = "";
+                                    }
+
+                                    else {
+
+                                        if (array_key_exists('pouring', $json_array)) {
+                                            $fields1[] = convert_to_entities($json_array['pouring']);
                                         }
+
+                                        else $fields1[] = "";
                                         
-                                        else $o = convert_to_entities($v);
-                                        
-                                        $k = str_replace('_', ' ', $k);
-                                        $string .= ucwords($k).": ";
-                                        $string .= $o."; ";
+                                        if (array_key_exists('pouring_rouse', $json_array)) {
+                                            $fields1[] = convert_to_entities($json_array['pouring_rouse']);
+                                        }
+
+                                        else $fields1[] = "";
                                         
                                     }
 
-                                    $output = rtrim($string, "; ");
 
+                                }
+
+                                elseif ($key == "brewJuiceSource") {
+
+                                    $json_array = json_decode($value,true);
+
+                                    if (empty($json_array)) {
+                                        $fields1[] = "";
+                                        $fields1[] = "";
+                                    }
+
+                                    else {
+
+                                        if (array_key_exists('juice_src', $json_array)) {
+                                            $fields1[] = convert_to_entities(implode(", ",$json_array['juice_src']));
+                                        }
+
+                                        else $fields1[] = "";
+                                        
+                                        if (array_key_exists('juice_src_other', $json_array)) {
+                                            $fields1[] = convert_to_entities(implode(", ",$json_array['juice_src_other']));
+                                        }
+
+                                        else $fields1[] = "";
+                                        
+                                    }
+    
+                                }
+
+                                elseif ($key == "brewStyleType") {
+                                    if ($_SESSION['prefsStyleSet'] == "NWCiderCup") $fields1[] = "Cider";
+                                    else $fields1[] = convert_to_entities($style_type_array[$value]);
                                 }
 
                                 else {
-                                    $output = convert_to_entities($value);
+                                    $fields1[] = convert_to_entities($value);
                                 }
-                                
-                                $fields1[] = $output;
                             
                             }
                             

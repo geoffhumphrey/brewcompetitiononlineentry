@@ -4231,6 +4231,7 @@ if (!$setup_running) $output_off_sched_update .= "</ul>";
  * ----------------------------------------------- 2.7.1 ---------------------------------------------
  * Change brewerAHA column to VARCHAR to accomodate alpha-numeric input.
  * Update BJCP 2021 Styles C2B, C2E, and C2F to require special ingredient input.
+ * Get current entry form preference and change to analagous multi-label option.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -4315,6 +4316,25 @@ if ($result) $output_off_sched_update .= "<li>BJCP 2021 Style C2F updated.</li>"
 else {
 	$output_off_sched_update .= "<li class=\"text-danger\">BJCP 2021 Style C2F NOT updated. The brewStyleReqSpec column value could not be changed to 1.</li>";
 	$error_count += 1;
+}
+
+$entry_forms_allowed = array("5","6","7","8");
+
+if (!in_array($_SESSION['prefsEntryForm'],$entry_forms_allowed)) {
+
+	if ($_SESSION['prefsEntryForm'] == "0") $data = array('prefsEntryForm' => "8");
+	elseif (($_SESSION['prefsEntryForm'] == "2") || ($_SESSION['prefsEntryForm'] == "C")) $data = array('prefsEntryForm' => "5");
+	elseif (($_SESSION['prefsEntryForm'] == "1") || ($_SESSION['prefsEntryForm'] == "E")) $data = array('prefsEntryForm' => "7");
+	else $data = array('prefsEntryForm' => "5");
+
+	$update_table = $prefix."preferences";
+	$db_conn->where ('id', 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Printed Entry Bottle/Can Label updated in the preferences table.</li>";
+	else {
+		$output_off_sched_update .= "<li>Printed Entry Bottle/Can Label NOT updated in the preferences table. Go to site preferences and select an entry form for users to attach to bottles/cans.</li>";
+		$error_count += 1;
+	}
+
 }
 
 if (!$setup_running) $output_off_sched_update .= "</ul>";

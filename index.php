@@ -391,8 +391,9 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
     </div>
   </div>
 </div>
-<!-- Session Timer Displays and Auto Logout -->
+
 <?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
+<!-- Session Timer Displays and Auto Logout -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
 <script>
 var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
@@ -403,7 +404,35 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
 <script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
 <?php } ?>
+
 <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
+
+<?php 
+
+    $brewery_ttb = "false";
+    $brewery_prod = "false";
+
+    if (isset($row_brewer['brewerBreweryInfo'])) { 
+        $brewery_info = json_decode($row_brewer['brewerBreweryInfo'],true); 
+        if (isset($brewery_info['TTB'])) $brewery_ttb = "true";
+        if (isset($brewery_info['Production'])) $brewery_prod = "true";
+    }
+
+?>
+
+<script type="text/javascript">
+<?php if ($section == "brewer") { ?>
+    var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
+<?php } ?>
+    var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
+    var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
+    var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
+    var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
+    var brewer_brewery_ttb = <?php echo $brewery_ttb; ?>;
+    var brewer_brewery_prod = <?php echo $brewery_prod; ?>;
+    var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>";
+</script>
+
 <?php } // end if ($logged_in) ?>
 
 <script type="text/javascript">
@@ -449,32 +478,6 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
     <?php } ?>
 </script>
 <?php } // end if ($section == "brew") ?>
-
-<?php if ($section == "brewer") {
-
-    $brewery_ttb = "false";
-    $brewery_prod = "false";
-
-    if (isset($row_brewer['brewerBreweryInfo'])) { 
-        $brewery_info = json_decode($row_brewer['brewerBreweryInfo'],true); 
-        if (isset($brewery_info['TTB'])) $brewery_ttb = "true";
-        if (isset($brewery_info['Production'])) $brewery_prod = "true";
-    }
-
-?> 
-<script type='text/javascript'>
-var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
-var brewer_brewery_ttb = <?php echo $brewery_ttb; ?>;
-var brewer_brewery_prod = <?php echo $brewery_prod; ?>;
-var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>"
-
-var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
-var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
-var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
-var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
-
-</script>
-<?php } ?>
 
 <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
 
