@@ -15,6 +15,19 @@ unset($_SESSION['update_version']);
 $_SESSION['update_previous_version'] = $row_pv['version'];
 $_SESSION['update_version'] = $current_version;
 
+if (!check_update("update_summary", $prefix."bcoem_sys")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `update_summary` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."bcoem_sys");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if (!$result) {
+		echo "There was an error. The update_summary column in the ".$prefix."bcoem_sys table could not be added. Please add it manually as MEDIUMTEXT.";
+		exit();
+	}
+
+}
+
 // Clear the version_date and data_check to not throw error.
 $update_table = $prefix."bcoem_sys";
 $data = array(
@@ -59,7 +72,8 @@ $versions = array(
 	"2.6.0.0" => 22,
 	"2.6.1.0" => 23,
 	"2.6.2.0" => 24,
-	"2.7.0.0" => 25
+	"2.7.0.0" => 25,
+	"2.7.1.0" => 26
 );
 
 flush();
@@ -2676,7 +2690,7 @@ if (HOSTED) {
 }
 
 // Make sure evaluation table is present in the DB
-if (!check_setup($prefix."evaluation",$database)) require_once (EVALS.'install_eval_db.eval.php');
+require_once (EVALS.'install_eval_db.eval.php');
 
 $output_off_sched_update .= "<li>Added evaluation DB table - for use with Electronic Scoresheets.</li>";
 
@@ -2782,9 +2796,9 @@ if ($total_not_encrypted > 0) $output_off_sched_update .= "<li>".$total_not_encr
 $output_off_sched_update .= "<li>Recipe-related data collection is now deprecated. Removed entry recipe fields from UI.</li>";
 $deprecated_entry_forms = array("B","N","M","U","3","4");
 
-if ((isset($_SESSION['prefsEntryForm'])) && (in_array($_SESSION['prefsEntryForm'],$deprecated_entry_forms))) {
+if ((isset($row_current_prefs['prefsEntryForm'])) && (in_array($row_current_prefs['prefsEntryForm'],$deprecated_entry_forms))) {
 
-	if (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U")) $entry_form = 1;
+	if (($row_current_prefs['prefsEntryForm'] == "B") || ($row_current_prefs['prefsEntryForm'] == "M") || ($row_current_prefs['prefsEntryForm'] == "U")) $entry_form = 1;
 	else $entry_form = 2;
 
 	$update_table = $prefix."preferences";
@@ -4320,11 +4334,11 @@ else {
 
 $entry_forms_allowed = array("5","6","7","8");
 
-if (!in_array($_SESSION['prefsEntryForm'],$entry_forms_allowed)) {
+if (!in_array($row_current_prefs['prefsEntryForm'],$entry_forms_allowed)) {
 
-	if ($_SESSION['prefsEntryForm'] == "0") $data = array('prefsEntryForm' => "8");
-	elseif (($_SESSION['prefsEntryForm'] == "2") || ($_SESSION['prefsEntryForm'] == "C")) $data = array('prefsEntryForm' => "5");
-	elseif (($_SESSION['prefsEntryForm'] == "1") || ($_SESSION['prefsEntryForm'] == "E")) $data = array('prefsEntryForm' => "7");
+	if ($row_current_prefs['prefsEntryForm'] == "0") $data = array('prefsEntryForm' => "8");
+	elseif (($row_current_prefs['prefsEntryForm'] == "2") || ($row_current_prefs['prefsEntryForm'] == "C")) $data = array('prefsEntryForm' => "5");
+	elseif (($row_current_prefs['prefsEntryForm'] == "1") || ($row_current_prefs['prefsEntryForm'] == "E")) $data = array('prefsEntryForm' => "7");
 	else $data = array('prefsEntryForm' => "5");
 
 	$update_table = $prefix."preferences";

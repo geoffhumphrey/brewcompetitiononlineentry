@@ -328,7 +328,7 @@ if ($setup_success) {
 
 		}
 
-		if ($row_contest_info_check['id'] != "1") {
+		if (($row_contest_info_check) && ($row_contest_info_check['id'] != "1")) {
 
 			$update_table = $prefix."contest_info";
 			$data = array('id' => 1);
