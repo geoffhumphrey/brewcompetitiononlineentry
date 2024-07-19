@@ -291,13 +291,13 @@ $(document).ready(function(){
 
     });
 
-    <?php if ($row_prefs['prefsShowBestBrewer'] == 0) { ?>
+    <?php if (($section == "step3") || ($row_prefs['prefsShowBestBrewer'] == 0)) { ?>
         $("input[name='prefsBestBrewerTitle']").prop("required", false);
     <?php } else { ?>
         $("input[name='prefsBestBrewerTitle']").prop("required", true);
     <?php } ?>
 
-    <?php if ($row_prefs['prefsShowBestClub'] == 0) { ?>
+    <?php if (($section == "step3") || ($row_prefs['prefsShowBestClub'] == 0)) { ?>
         $("input[name='prefsBestClubTitle']").prop("required", false);
     <?php } else { ?>
         $("input[name='prefsBestClubTitle']").prop("required", true);
@@ -1201,10 +1201,9 @@ $(document).ready(function(){
 </div><!-- ./modal -->
 
 <?php
-
+$st_arr = array();
 if (strpos($section, "step") === FALSE) {
     $st_count = 0;
-    $st_arr = array();
     do {
         $st_arr[] = $row_style_type['id'];
         $st_count++;
@@ -1222,7 +1221,7 @@ if (strpos($section, "step") === FALSE) {
 
 ?>
 
-<input name="style_type_entry_limits" type="hidden" value="<?php echo implode(",", $st_arr); ?>">
+<input name="style_type_entry_limits" type="hidden" value="<?php if (!empty($st_arr)) echo implode(",", $st_arr); ?>">
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Participant</label>

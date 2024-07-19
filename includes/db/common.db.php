@@ -355,7 +355,7 @@ if ((check_update("flightPlanning", $prefix."judging_flights")) && ((!isset($_SE
 
 }
 
-if ($section != "update") {
+if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section != "update")) {
 	// Some limits and dates may need to be changed by admin and propagated instantly to all users
 	// These will be called on every page load instead of being stored in a session variable
 	$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer, prefsShowBestClub FROM %s WHERE id='1'", $prefix."preferences");

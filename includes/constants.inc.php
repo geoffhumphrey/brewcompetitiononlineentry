@@ -2485,6 +2485,8 @@ $sidebar_date_format = "short";
 $suggested_open_date = time();
 $suggested_close_date = time() + 604800;
 $judging_past = 0;
+$comp_paid_entry_limit = FALSE;
+$comp_entry_limit = FALSE;
 
 if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
@@ -2632,8 +2634,6 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $total_entries = $totalRows_entry_count;
         $total_paid = get_entry_count("paid");
         $total_entries_received = get_entry_count("received");
-        $comp_paid_entry_limit = FALSE;
-        $comp_entry_limit = FALSE;
 
         // Get styles types and their associated entry limits
         // If a style type has an entry limit, get an entry count from the db for that style type
@@ -2756,28 +2756,28 @@ $show_presentation = FALSE;
 // User constants
 if (isset($_SESSION['loginUsername']))  {
 
-	$logged_in = TRUE;
-	$logged_in_name = $_SESSION['loginUsername'];
+    $logged_in = TRUE;
+    $logged_in_name = $_SESSION['loginUsername'];
 
     if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
         if ($_SESSION['userLevel'] <= "1") {
-    		if ($section == "admin") $link_admin = "#";
-    		else $link_admin = "";
-    		$admin_user = TRUE;
-    	}
+            if ($section == "admin") $link_admin = "#";
+            else $link_admin = "";
+            $admin_user = TRUE;
+        }
 
-		// Get Entry Fees
-	   $total_entry_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $_SESSION['user_id'], $filter, $_SESSION['comp_id']);
+        // Get Entry Fees
+       $total_entry_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $_SESSION['user_id'], $filter, $_SESSION['comp_id']);
        if ($bid == "default") $user_id_paid = $_SESSION['user_id'];
        else $user_id_paid = $bid;
-	   $total_paid_entry_fees = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $user_id_paid, $filter, $_SESSION['comp_id']);
-	   $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
+       $total_paid_entry_fees = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $user_id_paid, $filter, $_SESSION['comp_id']);
+       $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 
-		// Disable pay?
-		if (($registration_open == 2) && ($shipping_window_open == 2) && ($dropoff_window_open == 2) && ($entry_window_open == 2) && ($pay_window_open == 2)) $disable_pay = TRUE;
+        // Disable pay?
+        if (($registration_open == 2) && ($shipping_window_open == 2) && ($dropoff_window_open == 2) && ($entry_window_open == 2) && ($pay_window_open == 2)) $disable_pay = TRUE;
 
-	}
+    }
 
 }
 
@@ -2878,7 +2878,7 @@ if ((!isset($_SESSION['encryption_key'])) || (empty($_SESSION['encryption_key'])
 
 $regenerate_selected_styles = FALSE;
 
-if ((empty($_SESSION['prefsSelectedStyles'])) && (strpos($section, "step") === FALSE)) {
+if ((check_update("prefsSelectedStyles", $prefix."preferences")) && ((empty($_SESSION['prefsSelectedStyles'])) && (strpos($section, "step") === FALSE))) {
 
     $query_selected_styles = sprintf("SELECT prefsSelectedStyles FROM %s WHERE id='1';",$prefix."preferences");
     $selected_styles = mysqli_query($connection,$query_selected_styles) or die (mysqli_error($connection));
