@@ -123,6 +123,9 @@ if ($totalRows_log > 0) {
 		$entry_allergens = FALSE;
 		if ((isset($row_log['brewPossAllergens'])) && (!empty($row_log['brewPossAllergens']))) $entry_allergens = TRUE;
 
+		$co_brewer = FALSE;
+		if ((isset($row_log['brewCoBrewer'])) && (!empty($row_log['brewCoBrewer']))) $co_brewer = TRUE;
+
 		$entry_number = sprintf("%06s",$row_log['id']);
 		$entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
 		$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
@@ -305,6 +308,11 @@ if ($totalRows_log > 0) {
 				$entry_brewer_display .= ", ".$row_log['brewerCountry'];
 				$entry_brewer_display .= "<br>";
 				$entry_brewer_display .= $row_log['brewerPhone1'];
+			}
+
+			if ($co_brewer) {
+				$entry_brewer_display .= "<br>Co-Brewer: ";
+				$entry_brewer_display .= $row_log['brewCoBrewer'];
 			}
 			
 			$entry_brewer_display .= "</small>";
