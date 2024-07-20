@@ -1332,14 +1332,14 @@ if ($setup_free_access == TRUE) {
 
 		/**
 		 * -------------------------------------------------
-		 * Make sure all off-schedule updates have also
-		 * been instantiated.
+		 * Make sure all updates have also for 2.1.8.0 
+		 * foward have been instantiated.
 		 * -------------------------------------------------
 		 */
 
-		$output .= "<h3>Other Installation Items</h3>";
+		$output .= "<h3>Installation Items</h3>";
 		$output .= "<ul>";
-		include(UPDATE.'off_schedule_update.php');
+		include(UPDATE.'run_update.php');
 		$output .= "</ul>";
 
 	}

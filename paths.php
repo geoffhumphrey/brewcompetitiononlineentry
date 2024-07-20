@@ -49,7 +49,7 @@ define('AJAX',ROOT.'ajax'.DIRECTORY_SEPARATOR);
 define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
-define('EVALUATION', FALSE);
+define('EVALUATION', TRUE);
 
 /**
  * Enable to following to put your installation into
@@ -101,7 +101,7 @@ define('DEBUG_SESSION_VARS', FALSE);
  * Enable the following when receiving mySQL "column does
  * not exist" errors and the like.
  * This will trigger DB structure updates contained in the
- * off_schedule_update.php file.
+ * run_update.php file.
  * ONLY enbable for a single refresh of the index.php
  * page for performance issues.
  * Default is FALSE.
@@ -256,7 +256,10 @@ else {
     $private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
 }
 
-/** Uncomment to display paths */
+/** 
+ * Uncomment to display paths. 
+ */
+
 /*
 echo ROOT."<br>";
 echo ADMIN."<br>";
