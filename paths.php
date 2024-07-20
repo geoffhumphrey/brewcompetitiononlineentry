@@ -252,8 +252,8 @@ if (HOSTED) {
 }
 
 else {
-    $public_captcha_key = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
-    $private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
+    $public_captcha_key = "";
+    $private_captcha_key = "";
 }
 
 /** 
