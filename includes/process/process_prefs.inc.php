@@ -63,7 +63,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$prefsBestClubTitle = sterilize($prefsBestClubTitle);
 	}
 
-	if ($_POST['prefsStyleSet'] != $_SESSION['prefsStyleSet']) $style_set_change = TRUE;
+	if (($section != "setup") && ($_POST['prefsStyleSet'] != $_SESSION['prefsStyleSet'])) $style_set_change = TRUE;
 		
 	$update_table = $prefix."preferences";
 
