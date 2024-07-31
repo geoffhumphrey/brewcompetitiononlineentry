@@ -294,6 +294,8 @@ if (!empty($current_active)) {
 
 }
 
+$output .= "<ul>";
+
 // Update all custom styles
 $update_table = $prefix."styles";
 $data = array('brewStyleVersion' => 'BJCP2021');
@@ -307,6 +309,8 @@ $data = array('prefsStyleSet' => 'BJCP2021');
 $db_conn->where ('id', 1);
 if ($db_conn->update ($update_table, $data)) $output .= "<li>Preferences set to BJCP 2021.</li>";
 else $output .= "<li>Preferences NOT set to BJCP 2021. Error: ".$db_conn->getLastError()."</li>";
+
+$output .= "</ul>";
 
 unset($_SESSION['prefs'.$prefix_session]);
 ?>

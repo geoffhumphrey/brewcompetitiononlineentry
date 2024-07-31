@@ -11,11 +11,6 @@ if ((TESTING) || (DEBUG)) {
 
 if (DEBUG) include (DEBUGGING.'query_count_begin.debug.php');
 
-// Perform version check if NOT going into setup
-if (strpos($section, 'step') === FALSE)  {
-    version_check($version,$current_version,$current_version_date_display);
-}
-
 /**
  * Generate a CSRF token on every page load.
  * This will be used to prevent cross-site request forgeries

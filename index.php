@@ -477,9 +477,16 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
     possible_allergens = null;      
     <?php } ?>
 </script>
-<?php } // end if ($section == "brew") ?>
+<?php } // end if ($section == "brew") 
 
-<?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
+if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); 
+
+// Perform version check if NOT going into setup
+if (strpos($section, 'step') === FALSE)  {
+    version_check($version,$current_version,$current_version_date_display);
+}
+
+?>
 
 <script src="<?php echo $js_app_url; ?>"></script>
 </body>

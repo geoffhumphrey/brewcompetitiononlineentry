@@ -9,6 +9,17 @@ require_once (LIB.'update.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');
 require_once (LIB.'help.lib.php');
 
+ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
+ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
+error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
+
+$ajax_url = $base_url."ajax/";
+$js_url = $base_url."js_includes/";
+$images_url = $base_url."images/";
+$css_url = $base_url."css/";
+$js_app_url = $js_url."app.min.js";
+$css_common_url = $css_url."common.min.css";
+
 // Check if bcoem_sys is there. If not, change.
 if (table_exists($prefix."system")) {
 	$query_sys = sprintf("RENAME TABLE `%s` TO `%s`",$prefix."system",$prefix."bcoem_sys");

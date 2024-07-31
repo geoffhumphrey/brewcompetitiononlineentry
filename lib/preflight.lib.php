@@ -120,19 +120,27 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 	if (FORCE_UPDATE) $force_update = TRUE;
 
-	if (!$setup_success) {
-		header ($setup_relocate);
-		exit();
+	if ($setup_success) {
+		
+		if ($update_required) {
+			header ($setup_relocate);
+			exit();
+		}
+
+		if (!$force_update) $no_updates_needed = TRUE;
+
 	}
 
 	else {
-		if (!$force_update) $no_updates_needed = TRUE;
+
+		header ($setup_relocate);
+		exit();
+		
 	}
 
 } // end if (!isset($_SESSION['currentVersion']))
 
 else $setup_success = TRUE;
-
 
 if ((!$system_name_change) && (check_setup($prefix."system",$database))) {
 	$query_sys = sprintf("RENAME TABLE `%s` TO `%s`",$prefix."system",$prefix."bcoem_sys");
