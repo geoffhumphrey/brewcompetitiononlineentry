@@ -39,6 +39,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$prefsUSCLEx = "";
 	$prefsBestBrewerTitle = "";
 	$prefsBestClubTitle = "";
+	$prefsUserEntryLimitDates = "";
 
 	if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1']))) $prefsGoogleAccount = $_POST['prefsGoogleAccount0']."|".$_POST['prefsGoogleAccount1'];
 
@@ -76,6 +77,47 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$prefsScoringCOA = sterilize($_POST['prefsScoringCOA']);
 
 	if ($prefsScoringCOA == 1) $prefsBestUseBOS = 0;
+
+	$incremental_limits = array();
+
+	if ((!empty($_POST['user-entry-limit-number-1'])) && (!empty($_POST['user-entry-limit-expire-days-1']))) {
+
+		$incremental_limits[1] = array(
+			'limit-number' => sterilize($_POST['user-entry-limit-number-1']),
+			'limit-days' => sterilize($_POST['user-entry-limit-expire-days-1'])
+		);
+
+		if (!empty($_POST['user-entry-limit-number-2'])) {
+			$incremental_limits[2] = array(
+				'limit-number' => sterilize($_POST['user-entry-limit-number-2']),
+				'limit-days' => sterilize($_POST['user-entry-limit-expire-days-2'])
+			);
+		}
+
+		if (!empty($_POST['user-entry-limit-number-3'])) {
+			$incremental_limits[3] = array(
+				'limit-number' => sterilize($_POST['user-entry-limit-number-3']),
+				'limit-days' => sterilize($_POST['user-entry-limit-expire-days-3'])
+			);
+		}
+
+		if (!empty($_POST['user-entry-limit-number-4'])) {
+			$incremental_limits[4] = array(
+				'limit-number' => sterilize($_POST['user-entry-limit-number-4']),
+				'limit-days' => sterilize($_POST['user-entry-limit-expire-days-4'])
+			);
+		}
+
+		/*
+		$incremental_limits[sterilize($_POST['user-entry-limit-number-1'])] = sterilize($_POST['user-entry-limit-expire-days-1']);
+		if (!empty($_POST['user-entry-limit-number-2'])) $incremental_limits[sterilize($_POST['user-entry-limit-number-2'])] = sterilize($_POST['user-entry-limit-expire-days-2']);
+		if (!empty($_POST['user-entry-limit-number-3'])) $incremental_limits[sterilize($_POST['user-entry-limit-number-3'])] = sterilize($_POST['user-entry-limit-expire-days-3']);
+		if (!empty($_POST['user-entry-limit-number-4'])) $incremental_limits[sterilize($_POST['user-entry-limit-number-4'])] = sterilize($_POST['user-entry-limit-expire-days-4']);
+		*/
+
+	}
+
+	if (!empty($incremental_limits)) $prefsUserEntryLimitDates = json_encode($incremental_limits);
 
 	$data = array(
 		'prefsTemp' => sterilize($_POST['prefsTemp']),
@@ -147,7 +189,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'prefsShipping' => sterilize($_POST['prefsShipping']),
 		'prefsBestUseBOS' => $prefsBestUseBOS,
 		'prefsEval' => sterilize($_POST['prefsEval']),
-		'prefsScoringCOA' => $prefsScoringCOA
+		'prefsScoringCOA' => $prefsScoringCOA,
+		'prefsUserEntryLimitDates' => blank_to_null($prefsUserEntryLimitDates)
 	);
 
 	// Check if style type entry limits were specified

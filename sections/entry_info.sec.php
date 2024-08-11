@@ -118,14 +118,61 @@ if ($show_entries) {
 			$page_info5 .= $anchor_top;
 		}
 
-		if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserSubCatLimit'])) || (!empty($row_limits['prefsUSCLExLimit']))) {
+		if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserSubCatLimit'])) || (!empty($row_limits['prefsUSCLExLimit'])) || ($incremental)) {
+			
 			$anchor_links[] = $label_entry_per_entrant;
 			$anchor_name = str_replace(" ", "-", $label_entry_per_entrant);
 			$header1_16 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_per_entrant);
 
-			if (!empty($row_limits['prefsUserEntryLimit'])) {
-				if ($row_limits['prefsUserEntryLimit'] == 1) $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_022);
-				else $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_023);
+			if ($incremental) {
+
+				$page_info16 .= "<table class='table table-bordered'>";
+				$page_info16 .= "<thead>";
+				$page_info16 .= sprintf("<tr><th>%s</th><th>%s</th></tr>",$label_limit,ucwords($sidebar_text_027));
+				$page_info16 .= "</thead>";
+				$page_info16 .= "<tbody>";
+				if (time() < $limit_date_1) $page_info16 .= "<tr class='bg-info text-primary'>";
+				else  $page_info16 .= "<tr>";
+				$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[1]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
+				$page_info16 .= "</tr>";
+				if (!empty($limit_date_2)) {
+					if ((time() > $limit_date_1) && (time() < $limit_date_2)) $page_info16 .= "<tr class='bg-info text-primary'>";
+					else  $page_info16 .= "<tr>";
+					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[2]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_2, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
+					$page_info16 .= "</tr>";
+				}
+				if (!empty($limit_date_3)) {
+					if ((time() > $limit_date_2) && (time() < $limit_date_3)) $page_info16 .= "<tr class='bg-info text-primary'>";
+					else  $page_info16 .= "<tr>";
+					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[3]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_3, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
+					$page_info16 .= "</tr>";
+				}
+				if (!empty($limit_date_4)) {
+					if ((time() > $limit_date_3) && (time() < $limit_date_4)) $page_info16 .= "<tr class='bg-info text-primary'>";
+					else  $page_info16 .= "<tr>";
+					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[4]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_4, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
+					$page_info16 .= "</tr>";
+				}
+				if (!empty($real_overall_user_entry_limit)) {
+					if (time() > $limit_date_4) $page_info16 .= "<tr class='bg-info text-primary'>";
+					else  $page_info16 .= "<tr>";
+					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$real_overall_user_entry_limit, $label_entries, $entry_closed);
+					$page_info16 .= "</tr>";
+				}
+				$page_info16 .= "</tbody>";
+				$page_info16 .= "</table>";
+
+			}
+
+			else {
+
+				if (!empty($row_limits['prefsUserEntryLimit'])) {
+
+					if ($row_limits['prefsUserEntryLimit'] == 1) $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_022);
+					else $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_023);
+
+				}
+
 			}
 
 			if (!empty($row_limits['prefsUserSubCatLimit'])) {
@@ -167,7 +214,7 @@ if ($show_entries) {
 			if ($_SESSION['prefsCash'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_032);
 			if ($_SESSION['prefsCheck'] == "Y") $page_info6 .= sprintf("<li>%s <em>%s</em></li>",$entry_info_text_033,$_SESSION['prefsCheckPayee']);
 			if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_034);
-			//if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>";
+			if (($_SESSION['prefsCash'] == "N") && ($_SESSION['prefsCheck'] == "N") && ($_SESSION['prefsPaypal'] == "N")) $page_info6 .= "<li>".$entry_info_text_055."</li>";
 			$page_info6 .= "</ul>";
 			$page_info6 .= $anchor_top;
 

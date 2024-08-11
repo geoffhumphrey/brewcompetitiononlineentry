@@ -356,11 +356,57 @@ if ((check_update("flightPlanning", $prefix."judging_flights")) && ((!isset($_SE
 }
 
 if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section != "update")) {
+	
 	// Some limits and dates may need to be changed by admin and propagated instantly to all users
 	// These will be called on every page load instead of being stored in a session variable
-	$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer, prefsShowBestClub FROM %s WHERE id='1'", $prefix."preferences");
+	$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer, prefsShowBestClub, prefsUserEntryLimitDates FROM %s WHERE id='1'", $prefix."preferences");
 	$limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
 	$row_limits = mysqli_fetch_assoc($limits);
+
+	$incremental = FALSE;
+
+	$real_overall_user_entry_limit = "";
+	if (!empty($row_limits['prefsUserEntryLimit'])) $real_overall_user_entry_limit = $row_limits['prefsUserEntryLimit'];
+
+	if (!empty($row_limits['prefsUserEntryLimitDates'])) {
+
+		$incremental = TRUE;	    
+	    $incremental_limits = json_decode($row_limits['prefsUserEntryLimitDates'],true);
+
+	    $limit_date_1 = "";
+	    $limit_date_2 = "";
+	    $limit_date_3 = "";
+	    $limit_date_4 = "";
+
+	    $current_limit = 0;
+
+	    if ((isset($incremental_limits[1]['limit-number'])) && (isset($incremental_limits[1]['limit-days']))) {
+	    	$limit_date_1 = $_SESSION['contestEntryOpen'] + ($incremental_limits[1]['limit-days'] * 86400);
+	    	if (time() <= $limit_date_1) $current_limit = 1;	
+	    }
+
+	    if ((isset($incremental_limits[2]['limit-number'])) && (isset($incremental_limits[2]['limit-days']))) {
+	    	$limit_date_2 = $_SESSION['contestEntryOpen'] + ($incremental_limits[2]['limit-days'] * 86400);
+	    	if ((time() > $limit_date_1) && (time() <= $limit_date_2)) $current_limit = 2;    	
+	    }
+
+	    if ((isset($incremental_limits[3]['limit-number'])) && (isset($incremental_limits[3]['limit-days']))) {
+	    	$limit_date_3 = $_SESSION['contestEntryOpen'] + ($incremental_limits[3]['limit-days'] * 86400);
+	    	if ((time() > $limit_date_2) && (time() <= $limit_date_3)) $current_limit = 3;	    	
+	    }
+
+	    if ((isset($incremental_limits[4]['limit-number'])) && (isset($incremental_limits[4]['limit-days']))) {
+	    	$limit_date_4 = $_SESSION['contestEntryOpen'] + ($incremental_limits[4]['limit-days'] * 86400);
+	    	if ((time() > $limit_date_3) && (time() <= $limit_date_4)) $current_limit = 4;	
+	    }
+
+	    if ($current_limit == 0) $row_limits['prefsUserEntryLimit'] = $real_overall_user_entry_limit;
+	    elseif ($current_limit == 1) $row_limits['prefsUserEntryLimit'] = $incremental_limits[1]['limit-number']; 
+	    elseif ($current_limit == 2) $row_limits['prefsUserEntryLimit'] = $incremental_limits[2]['limit-number'];
+	    elseif ($current_limit == 3) $row_limits['prefsUserEntryLimit'] = $incremental_limits[3]['limit-number']; 
+	    elseif ($current_limit == 4) $row_limits['prefsUserEntryLimit'] = $incremental_limits[4]['limit-number'];
+
+	}
 
 	$query_judge_limits = sprintf("SELECT jprefsCapJudges,jprefsCapStewards FROM %s WHERE id='1'", $prefix."judging_preferences");
 	$judge_limits = mysqli_query($connection,$query_judge_limits) or die (mysqli_error($connection));
@@ -369,6 +415,7 @@ if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section !=
 	$query_contest_dates = sprintf("SELECT contestCheckInPassword, contestRegistrationOpen, contestRegistrationDeadline, contestJudgeOpen, contestJudgeDeadline, contestEntryOpen, contestEntryDeadline, contestShippingOpen, contestShippingDeadline, contestDropoffOpen, contestDropoffDeadline, contestEntryEditDeadline FROM %s WHERE id=1", $prefix."contest_info");
 	$contest_dates = mysqli_query($connection,$query_contest_dates) or die (mysqli_error($connection));
 	$row_contest_dates = mysqli_fetch_assoc($contest_dates);
+
 }
 
 // Only used for initial setup of installation

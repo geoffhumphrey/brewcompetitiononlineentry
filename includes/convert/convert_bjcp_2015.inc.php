@@ -138,8 +138,8 @@ if ($totalRows_judge_likes > 0) {
             'brewerJudgeDislikes' => $dislikes_new
         );
         $db_conn->where ('id', $row_judge_likes['id']);
-        if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Judge likes updated to BJCP 2015 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName']."</li>";
-        else $output_off_sched_update .= "<li>Judge likes NOT updated to BJCP 2015 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName'].". Error: ".$db_conn->getLastError()."</li>";
+        if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>Judge likes updated to BJCP 2015 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName']."</li>";
+        else $output_run_update .= "<li>Judge likes NOT updated to BJCP 2015 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName'].". Error: ".$db_conn->getLastError()."</li>";
 
     } while($row_judge_likes = mysqli_fetch_assoc($judge_likes));
 
@@ -179,8 +179,8 @@ if ($totalRows_tables > 0) {
             $update_table = $prefix."judging_tables";
             $data = array('tableStyles' => $table_styles_new);
             $db_conn->where ('id', $row_tables['id']);
-            if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Table styles updated to BJCP 2015 for ".$row_tables['tableName']."</li>";
-            else $output_off_sched_update .= "<li>Judge likes NOT updated to BJCP 2015  for ".$row_tables['tableName'].". Error: ".$db_conn->getLastError()."</li>";
+            if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>Table styles updated to BJCP 2015 for ".$row_tables['tableName']."</li>";
+            else $output_run_update .= "<li>Judge likes NOT updated to BJCP 2015  for ".$row_tables['tableName'].". Error: ".$db_conn->getLastError()."</li>";
 
         }
 

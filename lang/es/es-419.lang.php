@@ -2105,6 +2105,14 @@ $label_barrels = "Barriles";
 $label_hectoliters = "Hectolitros";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.7.1 Additions
+ * ------------------------------------------------------------------------
+ */
+$sidebar_text_027 = "vigente hasta";
+$entry_info_text_055 = "No se especifican métodos de pago en el sistema en este momento. Consulte las reglas del concurso o contacte al organizador.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

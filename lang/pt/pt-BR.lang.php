@@ -2091,6 +2091,15 @@ $label_barrels = "Barris";
 $label_hectoliters = "Hectolitros";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.7.1 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$sidebar_text_027 = "em vigor até";
+$entry_info_text_055 = "Nenhum método de pagamento está especificado no sistema neste momento. Verifique as regras da competição ou entre em contato com o organizador.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

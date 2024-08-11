@@ -2085,6 +2085,14 @@ $label_barrels = "Barrels";
 $label_hectoliters = "Hectoliters";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.7.1 Additions
+ * ------------------------------------------------------------------------
+ */
+$sidebar_text_027 = "enforced until";
+$entry_info_text_055 = "No payment methods are specified in the system at this time. Check the competition rules or contact the organizer.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

@@ -181,26 +181,20 @@ if (!NHC) $user_edit_links .= sprintf("<a class=\"btn btn-info\" href=\"".$edit_
 $user_edit_links .= sprintf("<a class=\"btn btn-info\" href=\"%s\"><span class=\"fa fa-key\"></span> %s</a>",$edit_user_password_link,$label_change_password);
 $user_edit_links .= "</div><!-- ./button group --> ";
 
-
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddEntries\">";
 if (($show_entries) && ($add_entry_link_show)) $user_edit_links .= sprintf("<a class=\"btn btn-primary\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);
 
 if (($totalRows_log > 0) && ($show_entries)) {
 	
 	if (!$disable_pay) {
-		if (!$comp_paid_entry_limit) $user_edit_links .= "<a class=\"btn btn-primary\" href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\"><i class=\"fa fa-fw fa-money\"></i> ".$label_pay."</a>";
-		/*
-		else {
-			if ($_SESSION['contestEntryFee'] > 0) $primary_page_info .= sprintf(".</small></p><p class=\"lead hidden-print\"><small><span class=\"text-danger\"><strong>%s:</strong> %s</span> <a href=\"%s\">%s</a>",ucfirst(strtolower($label_please_note)),$pay_text_034,$link_contacts,$pay_text_001);
-		}
-		*/ 
+		if (!$comp_paid_entry_limit) $user_edit_links .= "<a class=\"btn btn-primary\" href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\"><i class=\"fa fa-fw fa-money\"></i> ".$label_pay."</a>"; 
 	}
 
 	$user_edit_links .= "<a class=\"btn btn-primary\" href=\"#entries\"><i class=\"fa fa-fw fa-list\"></i> ".$label_entries."</a>";
 
 }
-$user_edit_links .= "</div><!-- ./button group -->";
 
+$user_edit_links .= "</div><!-- ./button group -->";
 
 // Build User Info
 $name .= $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName'];

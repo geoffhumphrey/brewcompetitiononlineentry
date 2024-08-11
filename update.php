@@ -280,7 +280,7 @@ if (file_exists($filename)) {
 
 						if (session_status() == PHP_SESSION_NONE) {
 							$_SESSION['update_complete'] = 1;
-							if (isset($output_off_sched_update)) $_SESSION['update_summary'] = $output_errors.$output_off_sched_update;
+							if (isset($output_run_update)) $_SESSION['update_summary'] = $output_errors.$output_run_update;
 							if ((isset($error_output)) && ($error_count == 1)) $_SESSION['update_errors'] = 1;
 							else $_SESSION['update_errors'] = 0;
 						}

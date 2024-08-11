@@ -14,9 +14,9 @@ $data = array(
 );
 $db_conn->where ('brewStyleVersion', 'BA');
 $db_conn->where ('brewStyleGroup', '07');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>BA European Origin Lagers styles updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>BA European Origin Lagers styles updated.</li>";
 else {
-	$output_off_sched_update .= "<li>BA European Origin Lagers styles NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>BA European Origin Lagers styles NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -41,9 +41,9 @@ $data = array(
 $db_conn->where ('brewStyleVersion', 'BA');
 $db_conn->where ('brewStyleGroup', '07');
 $db_conn->where ('brewStyleNum', '90');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>European-Style Dark Lager style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>European-Style Dark Lager style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>European-Style Dark Lager style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>European-Style Dark Lager style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -65,9 +65,9 @@ $data = array(
 $db_conn->where ('brewStyleVersion', 'BA');
 $db_conn->where ('brewStyleGroup', '08');
 $db_conn->where ('brewStyleNum', '178');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA American-Style India Pale Lager style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA American-Style India Pale Lager style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA American-Style India Pale Lager style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA American-Style India Pale Lager style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -102,9 +102,9 @@ if (!check_new_style("03","184","West Coast-Style India Pale Ale")) {
 		'brewStyleComEx' => NULL,
 		'brewStyleEntry' => NULL
 	);
-	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>2023 BA style West Coast-Style India Pale Ale added.</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_run_update .= "<li>2023 BA style West Coast-Style India Pale Ale added.</li>";
 	else {
-		$output_off_sched_update .= "<li>2023 BA style West Coast-Style India Pale Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_run_update .= "<li>2023 BA style West Coast-Style India Pale Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count += 1;
 	}
 
@@ -141,9 +141,9 @@ if (!check_new_style("11","185","Dessert Stout or Pastry Stout")) {
 		'brewStyleComEx' => NULL,
 		'brewStyleEntry' => NULL
 	);
-	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>2023 BA style Dessert Stout or Pastry Stout added.</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_run_update .= "<li>2023 BA style Dessert Stout or Pastry Stout added.</li>";
 	else {
-		$output_off_sched_update .= "<li>2023 BA style Dessert Stout or Pastry Stout NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_run_update .= "<li>2023 BA style Dessert Stout or Pastry Stout NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count += 1;
 	}
 

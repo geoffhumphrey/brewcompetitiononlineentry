@@ -2106,6 +2106,15 @@ $label_barrels = "Fûts";
 $label_hectoliters = "Hectolitres";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.7.1 Additions
+ * ------------------------------------------------------------------------
+ */
+$sidebar_text_027 = "en vigueur jusqu'à";
+$entry_info_text_055 = "Aucun mode de paiement n'est spécifié dans le système pour le moment. Vérifiez les règles du concours ou contactez l'organisateur.";
+
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS 
  * ----------------------------------------------------------------------------------

@@ -131,8 +131,6 @@ if ($section != "admin") {
 
 		}
 
-		
-
 		if ((!$comp_entry_limit) && (!$comp_paid_entry_limit)) $page_info200 .= sprintf("%s %s %s %s.", $sidebar_text_009, $entry_open_sidebar, $sidebar_text_004, $entry_closed_sidebar);
 		
 		if (($comp_entry_limit) || ($comp_paid_entry_limit)) {
@@ -147,12 +145,13 @@ if ($section != "admin") {
 
 		// Customized display for users looking at their account summary
 		if (($logged_in) && (($section == "list") || ($section == "pay"))) {
+			
 			$total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 
 			// Online Registration Dates
 			$header1_100 .= "<div class=\"hidden-print panel panel-info\">";
 			$header1_100 .= "<div class=\"panel-heading\">";
-			$header1_100 .= sprintf("<h4 class=\"panel-title\">%s<span class=\"fa fa-lg fa-info-circle text-primary pull-right\"></span></h4>",$label_account_summary);
+			$header1_100 .= sprintf("<h4 class=\"panel-title\">%s</span></h4>",$label_account_summary);
 			$header1_100 .= "</div>";
 			$page_info100 .= "<div class=\"panel-body\">";
 			$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
@@ -191,6 +190,7 @@ if ($section != "admin") {
 					else $page_info100 .= sprintf("<span class=\"pull-right\">%s%s</span>",$currency_symbol,number_format($total_to_pay,2));
 					$page_info100 .= "</div>";
 				}
+
 				if (($totalRows_log - $totalRows_log_confirmed) > 0) {
 					$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 					$page_info100 .= sprintf("<small><em class=\"text-muted\">* %s</em></small>",$sidebar_text_014);
@@ -199,25 +199,59 @@ if ($section != "admin") {
 
 			}
 
-			if (!empty($row_limits['prefsUserEntryLimit']) && (!$comp_entry_limit) && (!$comp_paid_entry_limit) && (!$disable_pay)) {
+			if (((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserEntryLimitDates']))) && (!$comp_entry_limit) && (!$comp_paid_entry_limit) && (!$disable_pay)) {
 
 				$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+				
 				if ($remaining_entries > 0) {
+					
 					$page_info100 .= sprintf("%s <strong class=\"text-success\">%s",$sidebar_text_017,$remaining_entries);
 					if ($remaining_entries == 1) $page_info100 .= sprintf(" %s ",strtolower($label_entry));
 					else $page_info100 .= sprintf(" %s ",strtolower($label_entries));
 					$page_info100 .= sprintf("%s %s",$sidebar_text_018,$row_limits['prefsUserEntryLimit']);
 					if ($row_limits['prefsUserEntryLimit'] > 1) $page_info100 .= sprintf(" %s ",strtolower($label_entries));
 					else $page_info100 .= sprintf(" %s ",strtolower($label_entry));
-					$page_info100 .= sprintf("%s</strong> %s.",$sidebar_text_019,$sidebar_text_021);
+					$page_info100 .= sprintf("%s</strong>",$sidebar_text_019);
+					
+					if ($incremental) {
+						// $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
+						$limits_link = build_public_url("entry","default","default","default",$sef,$base_url);
+						$limits_link .= "#per-entrant-limits";
+
+						if (time() < $limit_date_1) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+						elseif ((!empty($limit_date_2)) && ((time() > $limit_date_1) && (time() < $limit_date_2))) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_2, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+						elseif ((!empty($limit_date_3)) && ((time() > $limit_date_2) && (time() < $limit_date_3))) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_3, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+						elseif ((!empty($limit_date_4)) && ((time() > $limit_date_3) && (time() < $limit_date_4))) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_4, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+						else $page_info100 .= ".";
+					}
+
+					else $page_info100 .= sprintf(" %s.",$sidebar_text_021);
 				}
-				if ($totalRows_log >= $row_limits['prefsUserEntryLimit'])  {
+
+				if ($totalRows_log >= $row_limits['prefsUserEntryLimit']) {
 					$page_info100 .= sprintf("%s <strong class=\"text-danger\">%s",$sidebar_text_020,$row_limits['prefsUserEntryLimit']);
 					if ($row_limits['prefsUserEntryLimit'] > 1) $page_info100 .= sprintf(" %s ",strtolower($label_entries));
 					else $page_info100 .= sprintf(" %s ",strtolower($label_entry));
-					$page_info100 .= sprintf("%s</strong> %s.",$sidebar_text_019,$sidebar_text_021);
+					$page_info100 .= sprintf("%s</strong>",$sidebar_text_019);
+
+					if ($incremental) {
+						// $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
+						$limits_link = build_public_url("entry","default","default","default",$sef,$base_url);
+						$limits_link .= "#per-entrant-limits";
+
+						if (time() < $limit_date_1) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+						elseif ((!empty($limit_date_2)) && ((time() > $limit_date_1) && (time() < $limit_date_2))) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_2, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+						elseif ((!empty($limit_date_3)) && ((time() > $limit_date_2) && (time() < $limit_date_3))) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_3, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+						elseif ((!empty($limit_date_4)) && ((time() > $limit_date_3) && (time() < $limit_date_4))) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_4, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+						else $page_info100 .= ".";
+					}
+
+					else $page_info100 .= ".";
+
 				}
+
 				$page_info100 .= "</div>";
+			
 			}
 
 			if ($discount) {

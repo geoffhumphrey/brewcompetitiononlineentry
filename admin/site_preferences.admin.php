@@ -155,6 +155,13 @@ if (($section == "admin") && ($go == "preferences")) {
         } while ($row_styles = mysqli_fetch_assoc($styles));
 
     }
+
+    $incremental = FALSE;
+
+    if (!empty($row_limits['prefsUserEntryLimitDates'])) {
+        $incremental = TRUE;
+        $incremental_limits = json_decode($row_limits['prefsUserEntryLimitDates'],true);
+    }
     
 }
 
@@ -178,6 +185,174 @@ $(document).ready(function(){
     $("#helpBlock-payPalIPN1").hide();
     $("#paypal-payment").hide();
     $("#checks-payment").hide();
+    $("#user-entry-limit-increment-2").hide();
+    $("#user-entry-limit-increment-3").hide();
+    $("#user-entry-limit-increment-4").hide();
+
+    <?php if (isset($incremental_limits[2]['limit-number'])) { ?>
+    $("#user-entry-limit-increment-2").show();
+    $("#user-entry-limit-increment-3").show();
+    <?php } ?>
+
+    <?php if (isset($incremental_limits[3]['limit-number'])) { ?>
+    $("#user-entry-limit-increment-3").show();
+    $("#user-entry-limit-increment-4").show();
+    <?php } ?>
+
+    <?php if (isset($incremental_limits[4]['limit-number'])) { ?>
+    $("#user-entry-limit-increment-4").show();
+    <?php } ?>
+
+    $("#user-entry-limit-number-1").change(function() {
+        
+        if ($("#user-entry-limit-number-1").val() == ""){
+            
+            $("#user-entry-limit-increment-2").hide("fast");
+            $("#user-entry-limit-increment-3").hide("fast");
+            $("#user-entry-limit-increment-4").hide("fast");
+            $("input[name='user-entry-limit-number-1']").prop("required", false);
+            $("#user-entry-limit-number-2").selectpicker('val', '-1');;
+            $("#user-entry-limit-number-3").selectpicker('val', '-1');
+            $("#user-entry-limit-number-4").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-1").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-2").selectpicker('val', '-1');;
+            $("#user-entry-limit-expire-days-3").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-4").selectpicker('val', '-1');
+
+        }
+
+        else {
+            $("input[name='user-entry-limit-number-1']").prop("required", true);
+            $("input[name='user-entry-limit-expire-days-1']").prop("required", true);
+        }
+
+    }); 
+
+    $("#user-entry-limit-expire-days-1").change(function() {
+        
+        if ($("#user-entry-limit-expire-days-1").val() == "") {      
+            $("#user-entry-limit-increment-2").hide("fast");
+            $("#user-entry-limit-increment-3").hide("fast");
+            $("#user-entry-limit-increment-4").hide("fast");
+            $("input[name='user-entry-limit-number-1']").prop("required", false);
+            $("#user-entry-limit-number-2").selectpicker('val', '-1');;
+            $("#user-entry-limit-number-3").selectpicker('val', '-1');
+            $("#user-entry-limit-number-4").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-1").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-2").selectpicker('val', '-1');;
+            $("#user-entry-limit-expire-days-3").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-4").selectpicker('val', '-1');
+        }
+
+        else {
+            $("input[name='user-entry-limit-number-1']").prop("required", true);
+            $("input[name='user-entry-limit-expire-days-1']").prop("required", true);
+            $("#user-entry-limit-increment-2").show("fast");  
+        }
+
+    });
+
+    $("#user-entry-limit-number-2").change(function() {
+        
+        if ($("#user-entry-limit-number-2").val() == "") {            
+            $("#user-entry-limit-increment-3").hide("fast");
+            $("#user-entry-limit-increment-4").hide("fast");
+            $("input[name='user-entry-limit-number-2']").prop("required", false);
+            $("#user-entry-limit-number-3").selectpicker('val', '-1');
+            $("#user-entry-limit-number-4").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-2").selectpicker('val', '-1');;
+            $("#user-entry-limit-expire-days-3").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-4").selectpicker('val', '-1');
+        }
+
+        else {
+            $("input[name='user-entry-limit-number-2']").prop("required", true);
+            $("input[name='user-entry-limit-expire-days-2']").prop("required", true);
+        }
+
+    });
+
+    $("#user-entry-limit-expire-days-2").change(function() {
+        
+        if ($("#user-entry-limit-expire-days-2").val() == "") {    
+            $("#user-entry-limit-increment-3").hide("fast");
+            $("#user-entry-limit-increment-4").hide("fast");
+            $("input[name='user-entry-limit-number-2']").prop("required", false);
+            $("#user-entry-limit-number-3").selectpicker('val', '-1');
+            $("#user-entry-limit-number-4").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-2").selectpicker('val', '-1');;
+            $("#user-entry-limit-expire-days-3").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-4").selectpicker('val', '-1');
+        }
+
+        else {
+            $("input[name='user-entry-limit-number-2']").prop("required", true);
+            $("input[name='user-entry-limit-expire-days-2']").prop("required", true);
+            $("#user-entry-limit-increment-3").show("fast");  
+        }
+
+    });
+
+    $("#user-entry-limit-number-3").change(function() {
+        
+        if ($("#user-entry-limit-number-3").val() == "") {
+            $("#user-entry-limit-increment-4").hide("fast");  
+            $("input[name='user-entry-limit-number-3']").prop("required", false);
+            $("#user-entry-limit-number-4").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-3").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-4").selectpicker('val', '-1');
+        }
+        
+        else {
+            $("input[name='user-entry-limit-number-3']").prop("required", true);
+            $("input[name='user-entry-limit-expire-days-3']").prop("required", true);
+        }
+
+    });
+
+    $("#user-entry-limit-expire-days-3").change(function() {
+        
+        if ($("#user-entry-limit-expire-days-3").val() == "") {   
+            $("#user-entry-limit-increment-4").hide("fast");  
+            $("input[name='user-entry-limit-number-3']").prop("required", false);
+            $("#user-entry-limit-number-4").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-3").selectpicker('val', '-1');
+            $("#user-entry-limit-expire-days-4").selectpicker('val', '-1');
+        }
+        
+        else {
+            $("input[name='user-entry-limit-number-3']").prop("required", true);
+            $("input[name='user-entry-limit-expire-days-3']").prop("required", true);
+            $("#user-entry-limit-increment-4").show("fast");  
+        }
+
+    });
+
+    $("#user-entry-limit-number-4").change(function() {
+        
+        if ($("#user-entry-limit-number-4").val() == "") {
+            $("input[name='user-entry-limit-number-4']").prop("required", false);
+            $("#user-entry-limit-expire-days-4").selectpicker('val', '-1');
+        }
+        
+        else {
+            $("input[name='user-entry-limit-number-4']").prop("required", true);
+            $("input[name='user-entry-limit-expire-days-4']").prop("required", true);
+        }
+    });
+
+    $("#user-entry-limit-expire-days-4").change(function() {
+        
+        if ($("#user-entry-limit-expire-days-4").val() == ""){
+            $("input[name='user-entry-limit-number-4']").prop("required", false);
+            $("#user-entry-limit-expire-days-4").selectpicker('val', '-1');
+        }
+        
+        else {
+            $("input[name='user-entry-limit-number-4']").prop("required", true);
+            $("input[name='user-entry-limit-expire-days-4']").prop("required", true);
+        }
+    });
 
     <?php 
     echo $all_hide_js; 
@@ -321,6 +496,8 @@ $(document).ready(function(){
         }
     });
 
+
+
 }); // end $(document).ready(function(){
 </script>
 <?php if ($section != "step3") { ?>
@@ -366,11 +543,10 @@ $(document).ready(function(){
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 <h3>General</h3>
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsProEdition" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Type</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsProEdition" value="0" id="prefsProEdition_0"  <?php if (($section != "step3") && ($row_prefs['prefsProEdition'] == "0")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Amateur
             </label>
@@ -380,12 +556,11 @@ $(document).ready(function(){
         </div>
         <span id="helpBlock" class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+</div>
+<div class="form-group">
     <label for="prefsDisplayWinners" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if (($section != "step3") && ($row_prefs['prefsDisplayWinners'] == "Y")) echo "CHECKED"; ?> /> Enable
             </label>
@@ -395,21 +570,20 @@ $(document).ready(function(){
         </div>
         <span id="helpBlock" class="help-block">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</span>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+</div>
+<div class="form-group">
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+        
             <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
         <span id="helpBlock" class="help-block">Date and time when the system will display winners if Winner Display is enabled.</span>
         <div class="help-block with-errors"></div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio STACKED -->
+</div>
+<div class="form-group">
     <label for="prefsWinnerMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Place Distribution Method</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <?php foreach ($results_method as $key => $value) { ?>
             <label class="radio-inline">
                 <input type="radio" name="prefsWinnerMethod" value="<?php echo $key; ?>" id="prefsWinnerMethod_<?php echo $key; ?>" <?php if (($section == "step3") && ($key == "0")) echo "CHECKED"; elseif ($row_prefs['prefsWinnerMethod'] == $key) echo "CHECKED"; ?>> <?php echo $value; ?>
@@ -418,12 +592,11 @@ $(document).ready(function(){
         </div>
         <span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+</div>
+<div class="form-group">
     <label for="prefsEval" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Electronic Scoresheets</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsEval" value="1" id="prefsEval_1"  <?php if ($row_prefs['prefsEval'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
@@ -441,7 +614,7 @@ $(document).ready(function(){
         </div>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="prefsEvalModal" tabindex="-1" role="dialog" aria-labelledby="prefsEvalModalLabel">
     <div class="modal-dialog" role="document">
@@ -460,11 +633,10 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group Radio STACKED -->
+<div class="form-group">
     <label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Unique Identifier</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsDisplaySpecial" value="J" id="prefsDisplaySpecial_0" <?php if (($section == "step3") || ($row_prefs['prefsDisplaySpecial'] == "J")) echo "CHECKED"; ?>> 6-Character Judging Number
             </label>
@@ -481,7 +653,7 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="scoresheetModal" tabindex="-1" role="dialog" aria-labelledby="scoresheetModalLabel">
     <div class="modal-dialog" role="document">
@@ -510,11 +682,10 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsContact" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($row_prefs['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
@@ -544,7 +715,7 @@ $(document).ready(function(){
         <?php } ?>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
     <div class="modal-dialog" role="document">
@@ -566,11 +737,10 @@ $(document).ready(function(){
 <?php if (HOSTED) { ?>
 <input type="hidden" name="prefsEmailCC" value="0">
 <?php } else { ?>
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsEmailCC" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form CC</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsEmailCC" value="0" id="prefsEmailCC_0" <?php if ((empty($row_prefs['prefsEmailCC'])) || ($row_prefs['prefsEmailCC'] == "0")) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Enable
             </label>
@@ -582,13 +752,12 @@ $(document).ready(function(){
         <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email. Since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam emails unrelated to the competition.</p>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <?php } ?>
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsEmailRegConfirm" value="1" id="prefsEmailRegConfirm_1"  <?php if ($row_prefs['prefsEmailRegConfirm'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
           </label>
@@ -618,7 +787,7 @@ $(document).ready(function(){
         <?php } ?>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="regEmailFormModalLabel" tabindex="-1" role="dialog" aria-labelledby="regEmailFormModalLabel">
     <div class="modal-dialog" role="document">
@@ -638,10 +807,10 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group">
     <label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Theme</label>
     <div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
-    <!-- Input Here -->
+    
     <select class="selectpicker" name="prefsTheme" id="prefsTheme" data-width="auto">
         <?php 
         $themes = "";
@@ -654,13 +823,12 @@ $(document).ready(function(){
         ?>
     </select>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <?php if (!HOSTED) { ?>
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsSEF" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Search Engine Friendly URLs</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($row_prefs['prefsSEF'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
@@ -675,7 +843,7 @@ $(document).ready(function(){
             </button>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="SEFModal" tabindex="-1" role="dialog" aria-labelledby="SEFModalLabel">
     <div class="modal-dialog" role="document">
@@ -694,11 +862,10 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsUseMods" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Custom Modules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($row_prefs['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Enable
             </label>
@@ -708,7 +875,7 @@ $(document).ready(function(){
         </div>
         <span id="helpBlock" class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <div class="form-group">
     <label for="prefsCAPTCHA" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Enable reCAPTCHA</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -744,11 +911,10 @@ $(document).ready(function(){
 <input type="hidden" name="prefsSEF" value="N" />
 <input type="hidden" name="prefsUseMods" value="N" />
 <?php } ?>
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsDropOff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop-off Location Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsDropOff" value="1" id="prefsDropOff_0"  <?php if (($section != "step3") && ($row_prefs['prefsDropOff'] == "1")) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
@@ -758,13 +924,12 @@ $(document).ready(function(){
         </div>
         <span id="helpBlock" class="help-block">Disable if your competition does not have drop-off locations.</span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsShipping" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Shipping Location Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsShipping" value="1" id="prefsShipping_0"  <?php if (($section != "step3") && ($row_prefs['prefsShipping'] == "1")) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
@@ -774,35 +939,32 @@ $(document).ready(function(){
         </div>
         <span id="helpBlock" class="help-block">Disable if your competition does not have an entry shipping location.</span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <h3>Best Brewer and/or Club</h3>
 <!-- BEST BREWER / BEST CLUB --->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group">
     <label for="prefsShowBestBrewer" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Display? Up to which Position?</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsShowBestBrewer" id="prefsShowBestBrewer" data-size="10" data-width="auto">
-        <?php for ($i=-1; $i <= 50; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestBrewer'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Indicate whether you want to display the list of best brewers according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display.</span>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">    
+        <select class="selectpicker" name="prefsShowBestBrewer" id="prefsShowBestBrewer" data-size="10" data-width="auto">
+            <?php for ($i=-1; $i <= 50; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestBrewer'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Indicate whether you want to display the list of best brewers according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display.</span>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+</div>
+<div class="form-group">
     <label for="prefsBestBrewerTitle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Title</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <input class="form-control" id="prefsBestBrewerTitle" name="prefsBestBrewerTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestBrewerTitle']; ?>" data-error="A Best Brewer title is required." placeholder="">
         <div class="help-block with-errors"></div>
         <div id="helpBlock" class="help-block">Enter the title for the Best Brewer award (e.g., Heavy Medal, Ninkasi Award).</div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <div id="bestClub">
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <div class="form-group">
         <label for="prefsShowBestClub" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Club Display? Up to which Position?</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
         <select class="selectpicker" name="prefsShowBestClub" id="prefsShowBestClub" data-size="10" data-width="auto">
             <?php for ($i=-1; $i <= 50; $i++) { ?>
             <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestClub'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
@@ -810,23 +972,20 @@ $(document).ready(function(){
         </select>
         <span id="helpBlock" class="help-block">Indicate whether you want to display the list of best clubs according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display. Applies ONLY to the amateur edition.</span>
         </div>
-    </div><!-- ./Form Group -->
-    <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    </div>
+    <div class="form-group">
         <label for="prefsBestClubTitle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Club Title</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <!-- Input Here -->
-                <input class="form-control" id="prefsBestClubTitle" name="prefsBestClubTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestClubTitle']; ?>" data-error="A Best Club title is required." placeholder="">
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">         
+            <input class="form-control" id="prefsBestClubTitle" name="prefsBestClubTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestClubTitle']; ?>" data-error="A Best Club title is required." placeholder="">
             <div class="help-block with-errors"></div>
             <div id="helpBlock" class="help-block">Enter the title for the Best Club award.</div>
-
         </div>
-    </div><!-- ./Form Group -->
+    </div>
 </div>
-<div id="bos-in-calcs" class="form-group"><!-- Form Group Radio  -->
+<div id="bos-in-calcs" class="form-group">
     <label for="prefsBestUseBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Include BOS in Calculations?</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsBestUseBOS" value="1" id="prefsBestUseBOS_1" <?php if ($row_prefs['prefsBestUseBOS'] == 1) echo "CHECKED"; ?>> Yes
             </label>
@@ -836,12 +995,11 @@ $(document).ready(function(){
         </div>
         <span id="helpBlock" class="help-block">Indicate whether you wish to include any Best of Show (BOS) places in Best Brewer and Best Club calculations.</span>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio  -->
+</div>
+<div class="form-group">
     <label for="prefsBestUseBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Use Circuit of America Calculations?</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
-            <!-- Input Here -->
             <label class="radio-inline">
                 <input type="radio" name="prefsScoringCOA" value="1" id="prefsScoringCOA_1" <?php if ($row_prefs['prefsScoringCOA'] == 1) echo "CHECKED"; ?>> Yes
             </label>
@@ -859,7 +1017,7 @@ $(document).ready(function(){
             </div>
         </div>        
     </div>
-</div><!-- ./Form Group -->
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="prefsScoringCOAModal" tabindex="-1" role="dialog" aria-labelledby="prefsScoringCOAModalLabel">
@@ -881,73 +1039,67 @@ $(document).ready(function(){
 </div><!-- ./modal -->
 
 <section id="non-COA-scoring">
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <div class="form-group">
         <label for="prefsFirstPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for First Place</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
-            <?php for ($i=0; $i <= 25; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-            <?php } ?>
-        </select>
-        <span id="helpBlock" class="help-block">Enter the number of points awarded for each first place that an entrant receives.</span>
+            <select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
+                <?php for ($i=0; $i <= 25; $i++) { ?>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <?php } ?>
+            </select>
+            <span id="helpBlock" class="help-block">Enter the number of points awarded for each first place that an entrant receives.</span>
         </div>
-    </div><!-- ./Form Group -->
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    </div>
+    <div class="form-group">
         <label for="prefsSecondPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Second Place</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
-            <?php for ($i=0; $i <= 25; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-            <?php } ?>
-        </select>
-        <span id="helpBlock" class="help-block">Enter the number of points awarded for each second place that an entrant receives.</span>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+            <select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
+                <?php for ($i=0; $i <= 25; $i++) { ?>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <?php } ?>
+            </select>
+            <span id="helpBlock" class="help-block">Enter the number of points awarded for each second place that an entrant receives.</span>
         </div>
-    </div><!-- ./Form Group -->
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    </div>
+    <div class="form-group">
         <label for="prefsThirdPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Third Place</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
-            <?php for ($i=0; $i <= 25; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-            <?php } ?>
-        </select>
-        <span id="helpBlock" class="help-block">Enter the number of points awarded for each third place that an entrant receives.</span>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+            <select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
+                <?php for ($i=0; $i <= 25; $i++) { ?>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <?php } ?>
+            </select>
+            <span id="helpBlock" class="help-block">Enter the number of points awarded for each third place that an entrant receives.</span>
         </div>
-    </div><!-- ./Form Group -->
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    </div>
+    <div class="form-group">
         <label for="prefsFourthPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Fourth Place</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
-            <?php for ($i=0; $i <= 25; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-            <?php } ?>
-        </select>
-        <span id="helpBlock" class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</span>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+            <select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
+                <?php for ($i=0; $i <= 25; $i++) { ?>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <?php } ?>
+            </select>
+            <span id="helpBlock" class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</span>
         </div>
-    </div><!-- ./Form Group -->
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    </div>
+    <div class="form-group">
         <label for="prefsHMPts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Honorable Mention</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
-            <?php for ($i=0; $i <= 25; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-            <?php } ?>
-        </select>
-        <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</span>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+            <select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
+                <?php for ($i=0; $i <= 25; $i++) { ?>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <?php } ?>
+            </select>
+            <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</span>
         </div>
-    </div><!-- ./Form Group -->
+    </div>
 </section>
 
 <?php for ($i=1; $i<=6; $i++) { ?>
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group">
     <label for="<?php echo 'prefsTieBreakRule'.$i;?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Tie Break Rule #<?php echo $i; ?></label>
-    <div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
-    <!-- Input Here -->
+    <div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">    
     <select class="selectpicker" name="<?php echo 'prefsTieBreakRule'.$i;?>" id="<?php echo 'prefsTieBreakRule'.$i;?>" data-width="auto">
         <?php foreach ($tie_break_rules as $rule) {
            //$rule_info = explode("|",$rule);
@@ -956,25 +1108,23 @@ $(document).ready(function(){
         <?php } ?>
     </select>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <?php } ?>
 
 <h3>Entries</h3>
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Set</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
         <select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="12" data-width="auto">
         <?php echo $style_set_dropdown; ?>
         </select>
         <div id="helpBlock2-BA" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available in this application.</div>
         <div id="helpBlock3-AABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="http://www.aabc.org.au/" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+</div>
+<div class="form-group">
     <label for="prefsEntryForm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Printed Entry Bottle/Can Labels</label>
-    <div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
-    <!-- Input Here -->
+    <div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">    
     <select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm" data-size="12" data-width="auto">
         <optgroup label="Print Multiple Entries at a Time">
             <option value="7" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "7")) echo " SELECTED"; ?> />Standard</option>
@@ -982,15 +1132,6 @@ $(document).ready(function(){
             <option value="8" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "8")) echo " SELECTED"; ?> />Anonymous</option>
             <option value="6" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "6")) echo " SELECTED"; ?> />Anonymous with Barcode/QR Code</option>
         </optgroup>
-    <!--
-        <optgroup label="Print Single Entries at a Time">
-            <option value="1" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "1")) echo " SELECTED"; ?> />BCOE&amp;M</option>
-            <option value="2" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "2")) echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code</option>
-            <option value="0" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "0")) echo " SELECTED"; ?> />BCOE&amp;M Anonymous with Barcode/QR Code</option>
-            <option value="E" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "E")) echo " SELECTED"; ?> />BJCP Official</option>
-            <option value="C" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "C")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code</option>
-        </optgroup>
-    -->
     </select>
     <span id="helpBlock" class="help-block">
         <div class="btn-group" role="group" aria-label="entryFormModal">
@@ -1000,7 +1141,7 @@ $(document).ready(function(){
         </div>
     </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="entryFormModal" tabindex="-1" role="dialog" aria-labelledby="entryFormModalLabel">
     <div class="modal-dialog" role="document">
@@ -1029,49 +1170,10 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-
-<!--
-<div class="form-group">
-    <label for="prefsHideRecipe" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Entry Recipe Section</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <label class="radio-inline">
-                <input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0" checked> Yes
-            </label>
-        </div>
-        <span id="helpBlock" class="help-block">
-            <div class="btn-group" role="group" aria-label="hideRecipeModal">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#hideRecipeModal">
-                   Hide Entry Recipe Section Info
-                </button>
-            </div>
-            </div>
-        </span>
-    </div>
-</div>
-<div class="modal fade" id="hideRecipeModal" tabindex="-1" role="dialog" aria-labelledby="hideRecipeModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="hideRecipeModalLabel">Hide Entry Recipe Section Info</h4>
-            </div>
-            <div class="modal-body">
-                <p>As of version 2.5.0, the entry recipe section has been removed from the add/edit entry functions. This preference will be removed altogether in a future release; until then, it will be "Yes."</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
--->
-<div id="prefsHideSpecific" class="form-group"><!-- Form Group Radio INLINE -->
+<div id="prefsHideSpecific" class="form-group">
     <label for="prefsHideSpecific" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
-            <!-- Input Here -->
             <label class="radio-inline">
                 <input type="radio" name="prefsSpecific" value="1" id="prefsSpecific_0"  <?php if ($row_prefs['prefsSpecific'] == "1") echo "CHECKED"; ?> /> Yes
             </label>
@@ -1089,7 +1191,7 @@ $(document).ready(function(){
             </div>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="prefsSpecificModal" tabindex="-1" role="dialog" aria-labelledby="prefsSpecificModalLabel">
     <div class="modal-dialog" role="document">
@@ -1108,10 +1210,9 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group">
     <label for="prefsSpecialCharLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Character Limit for Text Entry</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">    
     <select class="selectpicker" name="prefsSpecialCharLimit" id="prefsSpecialCharLimit" data-size="10">
         <?php for ($i=25; $i <= 255; $i+=5) { ?>
         <option value="<?php echo $i; ?>" <?php if (($section == "step3") && ($i == "150")) echo "SELECTED"; elseif ((isset($row_limits['prefsSpecialCharLimit'])) && ($row_limits['prefsSpecialCharLimit'] == $i)) echo "SELECTED"; ?>><?php echo $i; ?></option>
@@ -1128,7 +1229,7 @@ $(document).ready(function(){
         </div>
     </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="charLimitModal" tabindex="-1" role="dialog" aria-labelledby="charLimitModalLabel">
     <div class="modal-dialog" role="document">
@@ -1147,19 +1248,16 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit &ndash; Paid/Unpaid</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <input class="form-control" id="prefsEntryLimit" name="prefsEntryLimit" type="text" value="<?php if (isset($row_limits['prefsEntryLimit'])) echo $row_limits['prefsEntryLimit']; ?>" placeholder="">
         <span id="helpBlock" class="help-block">Limit of <strong class="text-danger">total</strong> entries you will accept in the competition. Leave blank if no limit.</span>
     </div>
-</div><!-- ./Form Group -->
-
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+</div>
+<div class="form-group">
     <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit &ndash; Paid</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <input class="form-control" id="prefsEntryLimitPaid" name="prefsEntryLimitPaid" type="text" value="<?php if (isset($row_limits['prefsEntryLimitPaid'])) echo $row_limits['prefsEntryLimitPaid']; ?>" placeholder="">
             <span id="helpBlock" class="help-block">
         <div class="btn-group" role="group" aria-label="charLimitModal">
@@ -1172,7 +1270,7 @@ $(document).ready(function(){
         <p>Limit of <strong class="text-danger">paid</strong> entries you will accept in the competition. Leave blank if no limit.</p>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="entryLimitPaidModal" tabindex="-1" role="dialog" aria-labelledby="entryLimitPaidModalLabel">
     <div class="modal-dialog" role="document">
@@ -1199,7 +1297,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-
 <?php
 $st_arr = array();
 if (strpos($section, "step") === FALSE) {
@@ -1208,39 +1305,65 @@ if (strpos($section, "step") === FALSE) {
         $st_arr[] = $row_style_type['id'];
         $st_count++;
 ?>
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit &ndash; <?php echo $row_style_type['styleTypeName']; ?></label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" name="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" type="number" min="0" value="<?php echo $row_style_type['styleTypeEntryLimit']; ?>" placeholder="">
         <span id="helpBlock" class="help-block"><?php if ($st_count == $totalRows_style_type) echo "Individual style type entry limits above are only for those that have BOS enabled. <a href='".$base_url."index.php?section=admin&amp;go=style_types'>Manage your competition style types</a> to specify entry limits for others."; ?></span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <?php 
     } while ($row_style_type = mysqli_fetch_assoc($style_type)); 
 }
-
 ?>
-
 <input name="style_type_entry_limits" type="hidden" value="<?php if (!empty($st_arr)) echo implode(",", $st_arr); ?>">
-
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Participant</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
+<div class="form-group">
+    <label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Overall Entry Limit per Participant</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">    
     <select class="selectpicker" name="prefsUserEntryLimit" id="prefsUserEntryLimit" data-size="10">
-        <option value="" rel="none" <?php if (isset(($row_limits['prefsUserEntryLimit'])) && ($row_limits['prefsUserEntryLimit'] == "")); echo "SELECTED"; ?>></option>
+        <option value="" rel="none" <?php if (empty($real_overall_user_entry_limit)); echo "SELECTED"; ?>></option>
         <?php for ($i=1; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if (isset(($row_limits['prefsUserEntryLimit'])) && ($row_limits['prefsUserEntryLimit'] == $i)) echo "SELECTED"; ?>><?php echo $i; ?></option>
+        <option value="<?php echo $i; ?>" <?php if ($real_overall_user_entry_limit == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Limit of entries that each participant can enter. Leave blank if no limit.</span>
+    <span id="helpBlock" class="help-block">Overall limit of entries that each participant can enter. Will override any incremental limit defined below IF this number is lower. Leave blank if no OVERALL entry limit.</span>
     </div>
-</div><!-- ./Form Group -->
+</div>
+<?php for ($i=1; $i <= 4; $i++) { ?>
+<section id="user-entry-limit-increment-<?php echo $i; ?>">
+<?php if ($i == 2) echo "<hr>"; ?>
+<div class="form-group">
+    <label for="user-entry-limit-number-<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">#<?php echo $i; ?> Incremental Entry Limit per Participant</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    <select class="selectpicker" name="user-entry-limit-number-<?php echo $i; ?>" id="user-entry-limit-number-<?php echo $i; ?>" data-size="10">
+        <option value="" rel="none"></option>
+        <?php for ($a=1; $a <= 25; $a++) { ?>
+        <option value="<?php echo $a; ?>" <?php if ($incremental) { if ((isset($incremental_limits[$i]['limit-number'])) && ($incremental_limits[$i]['limit-number'] == $a)) echo "SELECTED"; } ; ?> ><?php echo $a; ?></option>
+        <?php } ?>
+    </select>
+    <span id="helpBlock" class="help-block">Numerical limit of entries per paricipant for the specifid number of days AFTER the entry window opening date (<?php echo $entry_open; ?>).</span>
+    </div>
+</div>
+<div class="form-group">
+    <label for="user-entry-limit-expire-days-<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">#<?php echo $i; ?> Incremental Entry Limit per Participant <span class="text-primary">Days</span></label>
+    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
+        <select class="selectpicker" id="user-entry-limit-expire-days-<?php echo $i; ?>" name="user-entry-limit-expire-days-<?php echo $i; ?>" data-size="10">
+            <option value="" rel="none"></option>
+            <?php for ($b=1; $b <= 60; $b++) { ?>
+            <option  value="<?php echo $b; ?>" <?php if ($incremental) { if ((isset($incremental_limits[$i]['limit-days'])) && ($incremental_limits[$i]['limit-days'] == $b)) echo "SELECTED"; } ; ?> ><?php echo $b; echo " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'],($row_contest_dates['contestEntryOpen'] + ($b*86400)), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Number of days AFTER the entry window opening date that the #<?php echo $i; ?> per participant limit will EXPIRE.</span>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+<?php if ($i > 1) echo "<hr>"; ?>
+</section>
+<?php } ?>
 <?php if ($go == "preferences") { ?>
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group">
     <label for="prefsUserSubCatLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Per Participant Sub-Style Entry Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
     <select class="selectpicker" name="prefsUserSubCatLimit" id="prefsUserSubCatLimit" data-size="10">
         <option value="" <?php ($row_limits['prefsUserSubCatLimit'] == ""); echo "SELECTED"; ?>></option>
         <?php for ($i=1; $i <= 25; $i++) { ?>
@@ -1249,13 +1372,12 @@ if (strpos($section, "step") === FALSE) {
     </select>
     <span id="helpBlock" class="help-block">Limit of entries that each participant can enter into a single sub-style. Leave blank if no limit.</span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Insert Collapsable -->
 <div id="subStyleExeptions">
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <div class="form-group">
         <label for="prefsUSCLExLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Per Participant Entry Limit For <em>Excepted</em> Sub-Styles</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
         <select class="selectpicker" name="prefsUSCLExLimit" id="prefsUSCLExLimit" data-size="10" data-width="auto">
             <option value="" rel="none" <?php ($row_limits['prefsUSCLExLimit'] == ""); echo "SELECTED"; ?>></option>
             <?php for ($i=1; $i <= 100; $i++) { ?>
@@ -1272,7 +1394,7 @@ if (strpos($section, "step") === FALSE) {
             </div>
         </span>
         </div>
-    </div><!-- ./Form Group -->
+    </div>
     <div class="form-group" id="subStyleExeptionsEdit">
         <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Per Participant Sub-Style Entry Limit</label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -1290,7 +1412,7 @@ if (strpos($section, "step") === FALSE) {
     </div>
     <?php echo $all_exceptions; ?>
 </div>
-<!-- ./Form Group -->
+
 <!-- Modal -->
 <div class="modal fade" id="exceptdSubstylesModal" tabindex="-1" role="dialog" aria-labelledby="exceptdSubstylesModalLabel">
     <div class="modal-dialog" role="document">
@@ -1313,20 +1435,18 @@ if (strpos($section, "step") === FALSE) {
 <input type="hidden" name="prefsUSCLExLimit" value="">
 <?php } ?>
 <h3>Performance and Data Clean-Up</h3>
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="prefsRecordPaging" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Records Displayed</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <input class="form-control" id="prefsRecordPaging" name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $row_prefs['prefsRecordPaging']; ?>" placeholder="12" required>
         <span id="helpBlock" class="help-block">The number of records displayed per page when viewing lists.</span>
         <div class="help-block with-errors"></div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+</div>
+<div class="form-group">
     <label for="prefsAutoPurge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Automatically Purge Unconfirmed Entries and Perform Data Clean Up</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($row_prefs['prefsAutoPurge'] == "1") echo "CHECKED";  ?> /> Enable
             </label>
@@ -1344,7 +1464,7 @@ if (strpos($section, "step") === FALSE) {
             </div>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="purgeModal" tabindex="-1" role="dialog" aria-labelledby="purgeModalLabel">
     <div class="modal-dialog" role="document">
@@ -1363,10 +1483,9 @@ if (strpos($section, "step") === FALSE) {
     </div>
 </div><!-- ./modal -->
 <h3>Localization</h3>
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group">
     <label for="prefsLanguage" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Language</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
         <select class="selectpicker" name="prefsLanguage" id="prefsLanguage" data-live-search="false" data-size="10" data-width="auto">
             <?php foreach ($languages as $lang => $lang_name) { ?>
             <option value="<?php echo $lang; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang) echo "SELECTED"; ?>><?php echo $lang_name; ?></option>
@@ -1375,12 +1494,11 @@ if (strpos($section, "step") === FALSE) {
         <span id="helpBlock" class="help-block">The language to display on all <em>public</em> areas of your installation (e.g., entry information, volunteers, account pages, etc.).</span>
         <div class="help-block with-errors"></div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+</div>
+<div class="form-group">
     <label for="prefsDateFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date Format</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsDateFormat" value="1" id="prefsDateFormat_0"  <?php if ($row_prefs['prefsDateFormat'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> MM/DD/YYYY
             </label>
@@ -1392,13 +1510,12 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsTimeFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time Format</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsTimeFormat" value="0" id="prefsTimeFormat_0"  <?php if ($row_prefs['prefsTimeFormat'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> 12 Hour
             </label>
@@ -1407,11 +1524,10 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+</div>
+<div class="form-group">
     <label for="prefsTimeZone" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time Zone</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
         <select class="selectpicker" name="prefsTimeZone" id="prefsTimeZone" data-live-search="true" data-size="10" data-width="auto">
             <option value="-12.000" <?php if ($row_prefs['prefsTimeZone'] == "-12.000") echo "SELECTED"; ?>>(GMT -12:00) International Date Line West, Eniwetok, Kwajalein, Baker Island, Howland Island</option>
             <option value="-11.000" <?php if ($row_prefs['prefsTimeZone'] == "-11.000") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa, Pago Pago</option>
@@ -1454,14 +1570,13 @@ if (strpos($section, "step") === FALSE) {
             <option value="12.000" <?php if ($row_prefs['prefsTimeZone'] == "12.000") echo "SELECTED"; ?>>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
         </select>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <h3>Measurements</h3>
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsTemp" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Temperature</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsTemp" value="Fahrenheit" id="prefsTemp_0"  <?php if ($row_prefs['prefsTemp'] == "Fahrenheit") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Fahrenheit
             </label>
@@ -1470,13 +1585,12 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsWeight1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Weight (Small)</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
-            <!-- Input Here -->
             <label class="radio-inline">
                 <input type="radio" name="prefsWeight1" value="ounces" id="prefsWeight1_0"  <?php if ($row_prefs['prefsWeight1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
             </label>
@@ -1485,13 +1599,12 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsWeight2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Weight (Large)</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsWeight2" value="pounds" id="prefsWeight2_0"  <?php if ($row_prefs['prefsWeight2'] == "pounds") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Pounds (lb)
             </label>
@@ -1500,13 +1613,12 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsLiquid1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Liquid (Small)</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsLiquid1" value="ounces" id="prefsLiquid1_0"  <?php if ($row_prefs['prefsLiquid1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
             </label>
@@ -1516,13 +1628,12 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsLiquid2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Liquid (Large)</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsLiquid2" value="gallons" id="prefsLiquid2_0"  <?php if ($row_prefs['prefsLiquid2'] == "gallons") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Gallons (gal)
             </label>
@@ -1532,13 +1643,12 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 
 <h3>Currency and Payment</h3>
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group">
     <label for="prefsCurrency" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Currency</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
         <select class="selectpicker" name="prefsCurrency" id="prefsCurrency" data-live-search="true" data-size="10" data-width="auto">
             <?php
                 $currency = currency_info($row_prefs['prefsCurrency'],2);
@@ -1566,7 +1676,7 @@ if (strpos($section, "step") === FALSE) {
 
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="currencyModal" tabindex="-1" role="dialog" aria-labelledby="currencyModalLabel">
     <div class="modal-dialog" role="document">
@@ -1584,11 +1694,11 @@ if (strpos($section, "step") === FALSE) {
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsPayToPrint" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Pay to Print Paperwork</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
-            <!-- Input Here -->
+            
             <label class="radio-inline">
                 <input type="radio" name="prefsPayToPrint" value="Y" id="prefsPayToPrint_0"  <?php if ($row_prefs['prefsPayToPrint'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
@@ -1607,7 +1717,7 @@ if (strpos($section, "step") === FALSE) {
         </div>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="payPrintModal" tabindex="-1" role="dialog" aria-labelledby="payPrintModalLabel">
     <div class="modal-dialog" role="document">
@@ -1627,11 +1737,10 @@ if (strpos($section, "step") === FALSE) {
     </div>
 </div><!-- ./modal -->
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsCash" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Cash for Payment</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($row_prefs['prefsCash'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
@@ -1641,12 +1750,11 @@ if (strpos($section, "step") === FALSE) {
           </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+</div>
+<div class="form-group">
     <label for="prefsCheck" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Checks for Payment</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($row_prefs['prefsCheck'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
@@ -1655,20 +1763,19 @@ if (strpos($section, "step") === FALSE) {
                 Disable</label>
         </div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group" id="checks-payment"><!-- Form Group NOT REQUIRED Text Input -->
+</div>
+<div class="form-group" id="checks-payment">
     <label for="prefsCheckPayee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Checks Payee</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+        
         <input class="form-control" id="prefsCheckPayee" name="prefsCheckPayee" type="text" value="<?php echo $row_prefs['prefsCheckPayee']; ?>" data-error="A check payee is required." placeholder="">
     <div class="help-block with-errors"></div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
+</div>
+<div class="form-group">
     <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">PayPal for Payment</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsPaypal" value="Y" id="prefsPaypal_0"  <?php if ($row_prefs['prefsPaypal'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
@@ -1677,12 +1784,11 @@ if (strpos($section, "step") === FALSE) {
                 Disable</label>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <div id="paypal-payment">
-    <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <div class="form-group">
         <label for="prefsPaypalAccount" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">PayPal Account Email</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <!-- Input Here -->
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">            
             <input class="form-control" id="prefsPaypalAccount" name="prefsPaypalAccount" type="text" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>" data-error="An email associated with a PayPal account is required if using PayPal to collect entry payments." placeholder="">
             <div class="help-block with-errors"></div>
             <div class="help-block">
@@ -1693,7 +1799,7 @@ if (strpos($section, "step") === FALSE) {
             </div>
             </div>
         </div>
-    </div><!-- ./Form Group -->
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="payPalPrintModal" tabindex="-1" role="dialog" aria-labelledby="payPalPrintModalLabel">
@@ -1714,11 +1820,10 @@ if (strpos($section, "step") === FALSE) {
         </div>
     </div><!-- ./modal -->
 
-    <div class="form-group"><!-- Form Group Radio INLINE -->
+    <div class="form-group">
         <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a class="hide-loader" href="https://developer.paypal.com/api/nvp-soap/ipn/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <div class="input-group">
-                <!-- Input Here -->
+            <div class="input-group">                
                 <label class="radio-inline">
                     <input type="radio" name="prefsPaypalIPN" value="1" id="prefsPaypalIPN_0"  <?php if ($row_prefs['prefsPaypalIPN'] == 1) echo "CHECKED"; ?> />Enable
                 </label>
@@ -1740,7 +1845,7 @@ if (strpos($section, "step") === FALSE) {
                 <p>Be sure to select the <em>PayPal IPN Info and Setup</em> button above for requirements and further info.</p>
             </div>
         </div>
-    </div><!-- ./Form Group -->
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="payPalIPNModal" tabindex="-1" role="dialog" aria-labelledby="payPalIPNModalLabel">
@@ -1767,11 +1872,10 @@ if (strpos($section, "step") === FALSE) {
         </div>
     </div><!-- ./modal -->
 
-    <div class="form-group"><!-- Form Group Radio INLINE -->
+    <div class="form-group">
         <label for="prefsTransFee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Checkout Fees Paid by Entrant</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <div class="input-group">
-                <!-- Input Here -->
+            <div class="input-group">                
                 <label class="radio-inline">
                     <input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($row_prefs['prefsTransFee'] == "Y") echo "CHECKED"; ?> />Enable
                 </label>
@@ -1788,7 +1892,7 @@ if (strpos($section, "step") === FALSE) {
 
             </span>
         </div>
-    </div><!-- ./Form Group -->
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="payPalFeeModal" tabindex="-1" role="dialog" aria-labelledby="payPalFeeModalLabel">
         <div class="modal-dialog" role="document">
@@ -1809,11 +1913,10 @@ if (strpos($section, "step") === FALSE) {
     </div><!-- ./modal -->
 </div>
 <h3>Sponsors</h3>
-<div class="form-group"><!-- Form Group Radio INLINE -->
+<div class="form-group">
     <label for="prefsSponsors" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sponsor Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsSponsors" value="Y" id="prefs0" <?php if (($section != "step3") && ($row_prefs['prefsSponsors'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
@@ -1822,13 +1925,11 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
-
-<div class="form-group"><!-- Form Group Radio INLINE -->
+</div>
+<div class="form-group">
     <label for="prefsSponsorLogos" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sponsor Logo Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
+        <div class="input-group">            
             <label class="radio-inline">
                 <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if (($section != "step3") && ($row_prefs['prefsSponsorLogos'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
@@ -1837,7 +1938,7 @@ if (strpos($section, "step") === FALSE) {
             </label>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <div class="bcoem-admin-element hidden-print">
     <div class="form-group">
         <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">

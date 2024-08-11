@@ -9,9 +9,9 @@ $update_table = $prefix."styles";
 if (!check_new_style("11","181","Kentucky Common")) {
 
 	$data =   array('brewStyleGroup' => '11','brewStyleNum' => '181','brewStyle' => 'Kentucky Common','brewStyleCategory' => 'Hybrid/Mixed Lagers or Ales','brewStyleVersion' => 'BA','brewStyleOG' => '1.040','brewStyleOGMax' => '1.055','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '4','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '30','brewStyleSRM' => '11','brewStyleSRMMax' => '20','brewStyleType' => '1','brewStyleInfo' => 'This American-born regional style proliferated around Louisville, Kentucky, from the Civil War era until Prohibition. Corn grits or flakes were commonly used at a rate or 25-35% of the total grist. Minerally attributes resulted from the use of hard brewing water. These beers were consumed very young, going from brewhouse to consumer in as little as one week. Early 20th century brewing literature mentions a slight tartness developing during fermentation as a characteristic attribute of this style. If tartness is present in modern versions, it should be at very low levels.','brewStyleLink' => 'https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/','brewStyleActive' => 'N','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => '2021','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
-	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>2021 BA style Kentucky Common added.</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_run_update .= "<li>2021 BA style Kentucky Common added.</li>";
 	else {
-		$output_off_sched_update .= "<li>2021 BA style Kentucky Common NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_run_update .= "<li>2021 BA style Kentucky Common NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count += 1;
 	}
 
@@ -20,9 +20,9 @@ if (!check_new_style("11","181","Kentucky Common")) {
 if (!check_new_style("06","182","New Zealand-Style Pale Ale")) {
 
 	$data = array('brewStyleGroup' => '06','brewStyleNum' => '182','brewStyle' => 'New Zealand-Style Pale Ale','brewStyleCategory' => 'Other Origin Ales','brewStyleVersion' => 'BA','brewStyleOG' => '1.04','brewStyleOGMax' => '1.052','brewStyleFG' => '1.006','brewStyleFGMax' => '1.01','brewStyleABV' => '4','brewStyleABVMax' => '6','brewStyleIBU' => '15','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '9','brewStyleType' => '1','brewStyleInfo' => 'Overall impression is a well-integrated easy drinking, refreshing pale ale style with distinctive fruity hop aromas and flavors. Diacetyl is absent in these beers. DMS should not be present.','brewStyleLink' => 'https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/','brewStyleActive' => 'N','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => '2021','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
-	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>2021 BA style New Zealand-Style Pale Ale added.</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_run_update .= "<li>2021 BA style New Zealand-Style Pale Ale added.</li>";
 	else {
-		$output_off_sched_update .= "<li>2021 BA style New Zealand-Style Pale Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_run_update .= "<li>2021 BA style New Zealand-Style Pale Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count += 1;
 	}
 	
@@ -31,9 +31,9 @@ if (!check_new_style("06","182","New Zealand-Style Pale Ale")) {
 if (!check_new_style("06","183","New Zealand-Style India Pale Ale")) {
 
 	$data = array('brewStyleGroup' => '06','brewStyleNum' => '182','brewStyle' => 'New Zealand-Style India Pale Ale','brewStyleCategory' => 'Other Origin Ales','brewStyleVersion' => 'BA','brewStyleOG' => '1.060','brewStyleOGMax' => '1.070','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '6.3','brewStyleABVMax' => '7.5','brewStyleIBU' => '50','brewStyleIBUMax' => '70','brewStyleSRM' => '6','brewStyleSRMMax' => '12','brewStyleType' => '1','brewStyleInfo' => 'Diacetyl and DMS should not be present. The use of water with high mineral content may result in a crisp, dry beer rather than a malt-accentuated version. Hop attributes are dominant and balanced with malt character.','brewStyleLink' => 'https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/','brewStyleActive' => 'N','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => '2021','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
-	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>2021 BA style New Zealand-Style India Pale Ale added.</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_run_update .= "<li>2021 BA style New Zealand-Style India Pale Ale added.</li>";
 	else {
-		$output_off_sched_update .= "<li>2021 BA style New Zealand-Style India Pale Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_run_update .= "<li>2021 BA style New Zealand-Style India Pale Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count += 1;
 	}
 	
@@ -42,9 +42,9 @@ if (!check_new_style("06","183","New Zealand-Style India Pale Ale")) {
 if (!check_new_style("05","184","Belgian-Style Session Ale")) {
 
 	$data = array('brewStyleGroup' => '05','brewStyleNum' => '184','brewStyle' => 'Belgian-Style Session Ale','brewStyleCategory' => 'Belgian and French Origin Ale','brewStyleVersion' => 'BA','brewStyleOG' => '1.018','brewStyleOGMax' => '1.040','brewStyleFG' => '1.002','brewStyleFGMax' => '1.010','brewStyleABV' => '2.1','brewStyleABVMax' => '5','brewStyleIBU' => '5','brewStyleIBUMax' => '35','brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '1','brewStyleInfo' => 'Beers in this category recognize the uniqueness and traditions of Belgian brewing, but do not hew to any other Belgian-style categories defined in these guidelines. The most notable characteristic that these beers share is a modest alcohol content ranging from 2.1% – 5% abv. These beers can be lower gravity formulations of their own, or can be produced from second run wort from the production of higher gravity beers. Balance is a key component when assessing these beers. Wood-aged or fruited versions will exhibit attributes of wood-aging or fruit(s) in harmony with overall flavor profile.','brewStyleLink' => 'https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/','brewStyleActive' => 'N','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => '2021','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
-	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>2021 BA style Belgian-Style Session Ale added.</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_run_update .= "<li>2021 BA style Belgian-Style Session Ale added.</li>";
 	else {
-		$output_off_sched_update .= "<li>2021 BA style Belgian-Style Session Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_run_update .= "<li>2021 BA style Belgian-Style Session Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count += 1;
 	}
 	
@@ -61,9 +61,9 @@ $data = array(
 	'brewStyleTags' => '2022'
 );
 $db_conn->where ('brewStyle', 'Experimental India Pale Ale');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA Experimental India Pale Ale style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA Experimental India Pale Ale style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA Experimental India Pale Ale style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA Experimental India Pale Ale style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -78,9 +78,9 @@ $data = array(
 );
 $db_conn->where ('brewStyle', 'Experimental India Pale Ale');
 $db_conn->where ('brewStyleVersion', 'BA');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA Session Beer style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA Session Beer style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA Session Beer style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA Session Beer style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -101,9 +101,9 @@ $data = array(
 );
 $db_conn->where ('brewStyle', 'Session India Pale Ale');
 $db_conn->where ('brewStyleVersion', 'BA');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA Session India Pale Ale style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA Session India Pale Ale style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA Session India Pale Ale style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA Session India Pale Ale style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -118,9 +118,9 @@ $data = array(
 );
 $db_conn->where ('brewStyle', 'Belgian-Style Gueuze Lambic');
 $db_conn->where ('brewStyleVersion', 'BA');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA Traditional Belgian-Style Gueuze style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA Traditional Belgian-Style Gueuze style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA Traditional Belgian-Style Gueuze style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA Traditional Belgian-Style Gueuze style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -136,9 +136,9 @@ $data = array(
 );
 $db_conn->where ('brewStyle', 'Bohemian-Style Pilsener');
 $db_conn->where ('brewStyleVersion', 'BA');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA Bohemian-Style Pilsener style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA Bohemian-Style Pilsener style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA Bohemian-Style Pilsener style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA Bohemian-Style Pilsener style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -149,9 +149,9 @@ $data = array(
 );
 $db_conn->where ('brewStyle', 'American-Style India Pale Lager');
 $db_conn->where ('brewStyleVersion', 'BA');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA American-Style India Pale Lager style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA American-Style India Pale Lager style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA American-Style India Pale Lager style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA American-Style India Pale Lager style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -164,9 +164,9 @@ $data = array(
 );
 $db_conn->where ('brewStyle', 'Specialty Beer');
 $db_conn->where ('brewStyleVersion', 'BA');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA Specialty Beer style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA Specialty Beer style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA Specialty Beer style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA Specialty Beer style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 
@@ -187,9 +187,9 @@ $data = array(
 );
 $db_conn->where ('brewStyle', 'Chili Pepper Beer');
 $db_conn->where ('brewStyleVersion', 'BA');
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>2022 BA Chili Pepper Beer style updated.</li>";
+if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>2022 BA Chili Pepper Beer style updated.</li>";
 else {
-	$output_off_sched_update .= "<li>2022 BA Chili Pepper Beer style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$output_run_update .= "<li>2022 BA Chili Pepper Beer style NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	$error_count += 1;
 }
 ?>

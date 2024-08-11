@@ -21,13 +21,7 @@ $nav_register_entrant_show = TRUE;
 
 if ($comp_entry_limit) $nav_register_entrant_show = FALSE;
 if ($comp_paid_entry_limit) $nav_register_entrant_show = FALSE;
-
-if ($entry_window_open == 1) {
-	if ($comp_entry_limit) $add_entry_link_show = FALSE;
-	elseif ($comp_paid_entry_limit) $add_entry_link_show = FALSE;
-	elseif ($remaining_entries <= 0) $add_entry_link_show = FALSE;
-	else $add_entry_link_show = TRUE;
-}
+if ($remaining_entries > 0) $add_entry_link_show = TRUE;
 
 $active_class = " class=\"active\"";
 
@@ -125,8 +119,6 @@ if ($logged_in)  {
 			// Only individuals can be judges, stewards, or staff; individuals will not have entries
 			$show_judge_steward_fields = FALSE;
 			$show_entries = TRUE;
-			$add_entry_link_show = TRUE;
-
 		}
 
 		else {

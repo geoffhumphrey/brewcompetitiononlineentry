@@ -336,6 +336,8 @@ if ($totalRows_log > 0) {
 
 		if (!empty($required_info)) $entry_output .= " <a class=\"hide-loader\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-info-circle\"></span></a> ";
 
+		if (!empty($row_log['brewCoBrewer'])) $entry_output .= sprintf("<br><em class=\"small\">%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
+
 		if (!empty($required_info)) {
 			$entry_output .= "<div style=\"margin-top: 8px;\" class=\"collapse small alert alert-info\" id=\"collapseEntryInfo".$row_log['id']."\">";
 			$entry_output .= "<ul class='list-unstyled'>";
@@ -351,8 +353,6 @@ if ($totalRows_log > 0) {
 			$entry_output .= $allergen_info;
 	    	$entry_output .= "</div>";
 		}
-
-		if (!empty($row_log['brewCoBrewer'])) $entry_output .= sprintf("<br><em class=\"small\">%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
 
 		$entry_output .= "<p class=\"well small hidden-lg\" style=\"margin-top: 10px; padding:10px;\">";
 
