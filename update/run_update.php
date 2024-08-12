@@ -4374,7 +4374,10 @@ if (!in_array($row_current_prefs['prefsEntryForm'],$entry_forms_allowed)) {
 
 if (!check_update("prefsUserEntryLimitDates", $prefix."preferences")) {
 	$sql = sprintf("ALTER TABLE `%s` ADD `prefsUserEntryLimitDates` MEDIUMTEXT NULL DEFAULT NULL AFTER `prefsUSCLExLimit`;", $prefix."preferences");
-	if ($db_conn->rawQuery($sql)) $output_run_update .= "<li>User incremental entry limit dates column added to preferences table.</li>";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_run_update .= "<li>User incremental entry limit dates column added to preferences table.</li>";
 	else {
 		$output_run_update .= "<li>User incremental entry limit dates column NOT added to preferences table.</li>";
 		$error_count++;
