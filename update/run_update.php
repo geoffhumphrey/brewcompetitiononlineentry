@@ -342,11 +342,6 @@ if (!$style_primary_key) {
 }
 
 // Make sure styles table is auto increment
-$sql = sprintf("ALTER TABLE `%s` ADD PRIMARY KEY (`id`);",$styles_db_table);
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$sql);
-$result = mysqli_query($connection,$sql);
-
 $sql = sprintf("ALTER TABLE `%s` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;",$styles_db_table);
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);

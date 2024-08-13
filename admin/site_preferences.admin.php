@@ -1350,8 +1350,7 @@ if (strpos($section, "step") === FALSE) {
         <select class="selectpicker" id="user-entry-limit-expire-days-<?php echo $i; ?>" name="user-entry-limit-expire-days-<?php echo $i; ?>" data-size="10">
             <option value="" rel="none"></option>
             <?php for ($b=1; $b <= 60; $b++) { ?>
-            <option  value="<?php echo $b; ?>" <?php if ($incremental) { if ((isset($incremental_limits[$i]['limit-days'])) && ($incremental_limits[$i]['limit-days'] == $b)) echo "SELECTED"; } ; ?> ><?php echo $b; echo " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'],($row_contest_dates['contestEntryOpen'] + ($b*86400)), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ?></option>
-            <?php } ?>
+            <option value="<?php echo $b; ?>" <?php if ($incremental) { if ((isset($incremental_limits[$i]['limit-days'])) && ($incremental_limits[$i]['limit-days'] == $b)) echo "SELECTED"; } ; ?> ><?php echo $b; if (isset($row_contest_dates['contestEntryOpen'])) echo " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'],($row_contest_dates['contestEntryOpen'] + ($b*86400)), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ?></option>
         </select>
         <span id="helpBlock" class="help-block">Number of days AFTER the entry window opening date that the #<?php echo $i; ?> per participant limit will EXPIRE.</span>
         <div class="help-block with-errors"></div>
@@ -1488,7 +1487,7 @@ if (strpos($section, "step") === FALSE) {
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
         <select class="selectpicker" name="prefsLanguage" id="prefsLanguage" data-live-search="false" data-size="10" data-width="auto">
             <?php foreach ($languages as $lang => $lang_name) { ?>
-            <option value="<?php echo $lang; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang) echo "SELECTED"; ?>><?php echo $lang_name; ?></option>
+            <option value="<?php echo $lang; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang) echo "SELECTED"; if (($section == "step3") && ($lang == "en-US")) echo "SELECTED"; ?>><?php echo $lang_name; ?></option>
             <?php } ?>
         </select>
         <span id="helpBlock" class="help-block">The language to display on all <em>public</em> areas of your installation (e.g., entry information, volunteers, account pages, etc.).</span>

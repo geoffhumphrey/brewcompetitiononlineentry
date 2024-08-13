@@ -21,7 +21,7 @@ $nav_register_entrant_show = TRUE;
 
 if ($comp_entry_limit) $nav_register_entrant_show = FALSE;
 if ($comp_paid_entry_limit) $nav_register_entrant_show = FALSE;
-if ($remaining_entries > 0) $add_entry_link_show = TRUE;
+if (($remaining_entries > 0) && ($entry_window_open == 1)) $add_entry_link_show = TRUE;
 
 $active_class = " class=\"active\"";
 

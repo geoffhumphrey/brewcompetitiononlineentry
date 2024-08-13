@@ -4,11 +4,31 @@ $today = time();
 $url = parse_url($_SERVER['PHP_SELF']);
 mysqli_select_db($connection,$database);
 
-if (check_setup($prefix."`system`",$database)) $query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."`system`");
-else  $query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."bcoem_sys");
-$version1 = mysqli_query($connection,$query_version1) or die (mysqli_error($connection));
-$row_version1 = mysqli_fetch_assoc($version1);
-$version = $row_version1['version'];
+$version = "";
+
+if (check_setup($prefix."system",$database)) {
+	$query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."`system`");
+	$version1 = mysqli_query($connection,$query_version1) or die (mysqli_error($connection));
+	$row_version1 = mysqli_fetch_assoc($version1);
+	$version = $row_version1['version'];
+}
+
+if (check_setup($prefix."bcoem_sys",$database)) {
+	$query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."bcoem_sys");
+	$version1 = mysqli_query($connection,$query_version1) or die (mysqli_error($connection));
+	$row_version1 = mysqli_fetch_assoc($version1);
+	$version = $row_version1['version'];
+}
+
+if (empty($version)) {
+	session_unset();
+	session_destroy();
+	session_write_close();
+	$redirect = $base_url."setup.php?section=step0";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+}
 
 // Provide a variable to signify that the session has been set
 $_SESSION['session_set_'.$prefix_session] = $prefix_session;
@@ -380,31 +400,35 @@ if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section !=
 
 	    $current_limit = 0;
 
-	    if ((isset($incremental_limits[1]['limit-number'])) && (isset($incremental_limits[1]['limit-days']))) {
-	    	$limit_date_1 = $_SESSION['contestEntryOpen'] + ($incremental_limits[1]['limit-days'] * 86400);
-	    	if (time() <= $limit_date_1) $current_limit = 1;	
-	    }
+	    if (isset($_SESSION['contestEntryOpen'])) {
 
-	    if ((isset($incremental_limits[2]['limit-number'])) && (isset($incremental_limits[2]['limit-days']))) {
-	    	$limit_date_2 = $_SESSION['contestEntryOpen'] + ($incremental_limits[2]['limit-days'] * 86400);
-	    	if ((time() > $limit_date_1) && (time() <= $limit_date_2)) $current_limit = 2;    	
-	    }
+	    	if ((isset($incremental_limits[1]['limit-number'])) && (isset($incremental_limits[1]['limit-days']))) {
+	    		$limit_date_1 = $_SESSION['contestEntryOpen'] + ($incremental_limits[1]['limit-days'] * 86400);
+	    		if (time() <= $limit_date_1) $current_limit = 1;	
+	    	}
 
-	    if ((isset($incremental_limits[3]['limit-number'])) && (isset($incremental_limits[3]['limit-days']))) {
-	    	$limit_date_3 = $_SESSION['contestEntryOpen'] + ($incremental_limits[3]['limit-days'] * 86400);
-	    	if ((time() > $limit_date_2) && (time() <= $limit_date_3)) $current_limit = 3;	    	
-	    }
+	    	if ((isset($incremental_limits[2]['limit-number'])) && (isset($incremental_limits[2]['limit-days']))) {
+	    		$limit_date_2 = $_SESSION['contestEntryOpen'] + ($incremental_limits[2]['limit-days'] * 86400);
+	    		if ((time() > $limit_date_1) && (time() <= $limit_date_2)) $current_limit = 2;    	
+	    	}
 
-	    if ((isset($incremental_limits[4]['limit-number'])) && (isset($incremental_limits[4]['limit-days']))) {
-	    	$limit_date_4 = $_SESSION['contestEntryOpen'] + ($incremental_limits[4]['limit-days'] * 86400);
-	    	if ((time() > $limit_date_3) && (time() <= $limit_date_4)) $current_limit = 4;	
-	    }
+	    	if ((isset($incremental_limits[3]['limit-number'])) && (isset($incremental_limits[3]['limit-days']))) {
+	    		$limit_date_3 = $_SESSION['contestEntryOpen'] + ($incremental_limits[3]['limit-days'] * 86400);
+	    		if ((time() > $limit_date_2) && (time() <= $limit_date_3)) $current_limit = 3;	    	
+	    	}
 
-	    if ($current_limit == 0) $row_limits['prefsUserEntryLimit'] = $real_overall_user_entry_limit;
-	    elseif ($current_limit == 1) $row_limits['prefsUserEntryLimit'] = $incremental_limits[1]['limit-number']; 
-	    elseif ($current_limit == 2) $row_limits['prefsUserEntryLimit'] = $incremental_limits[2]['limit-number'];
-	    elseif ($current_limit == 3) $row_limits['prefsUserEntryLimit'] = $incremental_limits[3]['limit-number']; 
-	    elseif ($current_limit == 4) $row_limits['prefsUserEntryLimit'] = $incremental_limits[4]['limit-number'];
+	    	if ((isset($incremental_limits[4]['limit-number'])) && (isset($incremental_limits[4]['limit-days']))) {
+	    		$limit_date_4 = $_SESSION['contestEntryOpen'] + ($incremental_limits[4]['limit-days'] * 86400);
+	    		if ((time() > $limit_date_3) && (time() <= $limit_date_4)) $current_limit = 4;	
+	    	}
+
+	    	if ($current_limit == 0) $row_limits['prefsUserEntryLimit'] = $real_overall_user_entry_limit;
+	    	elseif ($current_limit == 1) $row_limits['prefsUserEntryLimit'] = $incremental_limits[1]['limit-number']; 
+	    	elseif ($current_limit == 2) $row_limits['prefsUserEntryLimit'] = $incremental_limits[2]['limit-number'];
+	    	elseif ($current_limit == 3) $row_limits['prefsUserEntryLimit'] = $incremental_limits[3]['limit-number']; 
+	    	elseif ($current_limit == 4) $row_limits['prefsUserEntryLimit'] = $incremental_limits[4]['limit-number'];
+
+	    }
 
 	}
 

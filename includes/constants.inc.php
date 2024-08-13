@@ -2882,7 +2882,7 @@ if ((!isset($_SESSION['encryption_key'])) || (empty($_SESSION['encryption_key'])
  
 $regenerate_selected_styles = FALSE;
 
-if (strpos($section, 'step') === FALSE) {
+if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$database))) {
     
     if ((check_update("prefsSelectedStyles", $prefix."preferences")) && (empty($_SESSION['prefsSelectedStyles']))) {
 
@@ -3014,7 +3014,7 @@ if (isset($row_contest_dates)) {
     // Otherwise, use the drop_ship_deadline var value.
     if ((isset($row_contest_dates['contestEntryEditDeadline'])) && (!empty($row_contest_dates['contestEntryEditDeadline'])) && ($row_contest_dates['contestEntryEditDeadline'] < $drop_ship_deadline)) $entry_edit_deadline = $row_contest_dates['contestEntryEditDeadline'];
     else $entry_edit_deadline = $drop_ship_deadline;
-    $entry_edit_deadline_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_edit_deadline, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+    $entry_edit_deadline_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_edit_deadline, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 }
 
 ?>
