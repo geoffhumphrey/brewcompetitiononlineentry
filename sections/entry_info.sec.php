@@ -135,30 +135,35 @@ if ($show_entries) {
 				else  $page_info16 .= "<tr>";
 				$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[1]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
 				$page_info16 .= "</tr>";
+				
 				if (!empty($limit_date_2)) {
-					if ((time() > $limit_date_1) && (time() < $limit_date_2)) $page_info16 .= "<tr class='bg-info text-primary'>";
-					else  $page_info16 .= "<tr>";
+					if ($current_limit == 2) $page_info16 .= "<tr class='bg-info text-primary'>";
+					else $page_info16 .= "<tr>";
 					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[2]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_2, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
 					$page_info16 .= "</tr>";
 				}
+
 				if (!empty($limit_date_3)) {
-					if ((time() > $limit_date_2) && (time() < $limit_date_3)) $page_info16 .= "<tr class='bg-info text-primary'>";
-					else  $page_info16 .= "<tr>";
+					if ($current_limit == 3) $page_info16 .= "<tr class='bg-info text-primary'>";
+					else $page_info16 .= "<tr>";
 					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[3]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_3, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
 					$page_info16 .= "</tr>";
 				}
+
 				if (!empty($limit_date_4)) {
-					if ((time() > $limit_date_3) && (time() < $limit_date_4)) $page_info16 .= "<tr class='bg-info text-primary'>";
-					else  $page_info16 .= "<tr>";
+					if ($current_limit == 4) $page_info16 .= "<tr class='bg-info text-primary'>";
+					else $page_info16 .= "<tr>";
 					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[4]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_4, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
 					$page_info16 .= "</tr>";
 				}
-				if (!empty($real_overall_user_entry_limit)) {
-					if (time() > $limit_date_4) $page_info16 .= "<tr class='bg-info text-primary'>";
-					else  $page_info16 .= "<tr>";
+
+				if (!empty($real_overall_user_entry_limit)) {	
+					if ($current_limit == 0) $page_info16 .= "<tr class='bg-info text-primary'>";
+					else $page_info16 .= "<tr>";
 					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$real_overall_user_entry_limit, $label_entries, $entry_closed);
 					$page_info16 .= "</tr>";
 				}
+
 				$page_info16 .= "</tbody>";
 				$page_info16 .= "</table>";
 

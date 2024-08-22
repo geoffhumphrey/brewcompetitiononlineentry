@@ -189,17 +189,15 @@ $(document).ready(function(){
     $("#user-entry-limit-increment-3").hide();
     $("#user-entry-limit-increment-4").hide();
 
-    <?php if (isset($incremental_limits[2]['limit-number'])) { ?>
+    <?php if (isset($incremental_limits[1]['limit-number'])) { ?>
     $("#user-entry-limit-increment-2").show();
+    <?php } ?>
+
+    <?php if (isset($incremental_limits[2]['limit-number'])) { ?>
     $("#user-entry-limit-increment-3").show();
     <?php } ?>
 
     <?php if (isset($incremental_limits[3]['limit-number'])) { ?>
-    $("#user-entry-limit-increment-3").show();
-    $("#user-entry-limit-increment-4").show();
-    <?php } ?>
-
-    <?php if (isset($incremental_limits[4]['limit-number'])) { ?>
     $("#user-entry-limit-increment-4").show();
     <?php } ?>
 
@@ -1350,7 +1348,8 @@ if (strpos($section, "step") === FALSE) {
         <select class="selectpicker" id="user-entry-limit-expire-days-<?php echo $i; ?>" name="user-entry-limit-expire-days-<?php echo $i; ?>" data-size="10">
             <option value="" rel="none"></option>
             <?php for ($b=1; $b <= 60; $b++) { ?>
-            <option value="<?php echo $b; ?>" <?php if ($incremental) { if ((isset($incremental_limits[$i]['limit-days'])) && ($incremental_limits[$i]['limit-days'] == $b)) echo "SELECTED"; } ; ?> ><?php echo $b; if (isset($row_contest_dates['contestEntryOpen'])) echo " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'],($row_contest_dates['contestEntryOpen'] + ($b*86400)), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ?></option>
+            <option  value="<?php echo $b; ?>" <?php if ($incremental) { if ((isset($incremental_limits[$i]['limit-days'])) && ($incremental_limits[$i]['limit-days'] == $b)) echo "SELECTED"; } ; ?> ><?php echo $b; if (isset($row_contest_dates['contestEntryOpen'])) echo " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'],($row_contest_dates['contestEntryOpen'] + ($b*86400)), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ?></option>
+            <?php } ?>
         </select>
         <span id="helpBlock" class="help-block">Number of days AFTER the entry window opening date that the #<?php echo $i; ?> per participant limit will EXPIRE.</span>
         <div class="help-block with-errors"></div>
