@@ -169,9 +169,8 @@ if ($logged_in)  {
 
 	// Build Add Entry Link
 	$add_entry_link = "";
-	$add_entry_link .= $base_url;
-	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
-	else $add_entry_link .= "index.php?section=brew&amp;action=add";
+	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= $base_url."index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
+	else $add_entry_link .= build_public_url("brew","entry","add","default",$sef,$base_url);
 
 }
 if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>

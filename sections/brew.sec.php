@@ -73,6 +73,8 @@ if ($_SESSION['userLevel'] <= 1) $adminUser = TRUE;
 
 $adminUserAddDisable = FALSE;
 
+
+
 if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
 
 	// Fix fatal error when using [] operator on strings
@@ -94,42 +96,48 @@ if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
 if ($action == "add") {
 
 	// Registration and entry windows open; comp entry limit reached
-	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) {
+	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1)) {
 		if ($comp_entry_limit) $add_entry_disable = TRUE;
 		elseif ($remaining_entries <= 0) $add_entry_disable = TRUE;
 		elseif ($comp_paid_entry_limit) $add_entry_disable = TRUE;
 		elseif (($proEdition) && (!isset($_SESSION['brewerBreweryName'])))  $add_entry_disable = TRUE;
-		else $add_entry_disable = FALSE;
 	}
 
 	// Registration closed and entry window open; comp entry limit reached
-	elseif ((($registration_open == 0) || ($registration_open == 2)) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) {
+	elseif (($registration_open != 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1)) {
 		if ($comp_entry_limit) $add_entry_disable = TRUE;
 		elseif ($remaining_entries <= 0) $add_entry_disable = TRUE;
 		elseif ($comp_paid_entry_limit) $add_entry_disable = TRUE;
 		elseif (($proEdition) && (!isset($_SESSION['brewerBreweryName']))) $add_entry_disable = TRUE;
-		else $add_entry_disable = FALSE;
 	}
 
+	elseif (($registration_open == 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) $add_entry_disable = TRUE;
+
 }
+
 // Registration and entry not open
-if (($registration_open == 0) && ($entry_window_open == 0) && ($_SESSION['userLevel'] == 2)) {
+if (($registration_open < 1) && ($entry_window_open < 1) && ($_SESSION['userLevel'] > 1)) {
 	$add_entry_disable = TRUE;
 	$edit_entry_disable = TRUE;
 }
+
 // Entry window closed
-if (($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) {
+if (($entry_window_open == 2) && ($_SESSION['userLevel'] > 1)) {
+	
 	// Disable adding of entries
 	$add_entry_disable = TRUE;
 
 	// Can edit until either drop off closes or judging dates pass
 	if (($judging_started) || (time() > $_SESSION['contestDropoffDeadline'])) $edit_entry_disable = TRUE;
+
 }
 
-if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($_SESSION['userLevel'] == 2)) {
+if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($_SESSION['userLevel'] > 1)) {
+	
 	$add_entry_disable = TRUE;
 	$edit_entry_disable = TRUE;
 	$adminUserAddDisable = TRUE;
+
 }
 
 // Construct styles drop-down
@@ -233,7 +241,9 @@ if (($add_entry_disable) && (!$edit_entry_disable) && ($action == "add"))  {
 	}
 
 	else $add_edit_message .= "<p class=\"lead\">".$alert_text_029."</p>";
+	
 	$style_types_disabled = "";
+	
 	if (!empty($style_type_limits_alert)) {
 	  foreach ($style_type_limits_alert as $key => $value) {
 	    if ($value > 0) {
@@ -248,6 +258,10 @@ if (($add_entry_disable) && (!$edit_entry_disable) && ($action == "add"))  {
 	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) $add_edit_message .= sprintf("<p>%s</p>",$alert_text_031);
 	if (($adminUser) && ($adminUserAddDisable)) $add_edit_message .= "<p>".$brew_text_029."</p>";
 
+}
+
+if (($go != "entries") && ($go != "entry")) {
+	$add_or_edit = FALSE;
 }
 
 echo $add_edit_message;

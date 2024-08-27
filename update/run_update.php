@@ -3700,9 +3700,7 @@ if (!check_update("prefsSelectedStyles", $prefix."preferences")) {
 	$styles_selected_update = json_encode($styles_selected);
 
 	$update_table = $prefix."preferences";
-	$data = array(
-		'prefsSelectedStyles' => $styles_selected_update
-	);
+	$data = array('prefsSelectedStyles' => $styles_selected_update);
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 
@@ -4262,6 +4260,7 @@ if (!$setup_running) $output_run_update .= "</ul>";
  * Change brewerAHA column to VARCHAR to accomodate alpha-numeric input.
  * Update BJCP 2021 Styles C2B, C2E, and C2F to require special ingredient input.
  * Get current entry form preference and change to analagous multi-label option.
+ * Get current theme and change if it is one of the two deprecated themes.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -4377,6 +4376,20 @@ if (!check_update("prefsUserEntryLimitDates", $prefix."preferences")) {
 		$output_run_update .= "<li>User incremental entry limit dates column NOT added to preferences table.</li>";
 		$error_count++;
 	}
+}
+
+if (($row_current_prefs['prefsTheme'] == "claussenii") || ($row_current_prefs['prefsTheme'] == "naardenensis")) {
+
+	$update_table = $prefix."preferences";
+	$data = array('prefsTheme' => 'default');
+	$db_conn->where ('id', 1);
+	$result = $db_conn->update ($update_table, $data);
+	if ($result) $output_run_update .= "<li>Deprecated Theme updated to BCOE&amp;M Default (Gray). To change, update your site preferences.</li>";
+	else {
+		$output_run_update .= "<li class=\"text-danger\">Theme NOT updated. You'll need to update it manually. To change, update your site preferences.</li>";
+		$error_count++;
+	}
+
 }
 
 if (!$setup_running) $output_run_update .= "</ul>";

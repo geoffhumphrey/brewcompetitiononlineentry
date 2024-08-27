@@ -47,9 +47,8 @@ if (($_SESSION['prefsEntryForm'] >= "5") && ($print_bottle_labels)) $multiple_bo
 if (!$show_scores) {
 
 	$add_entry_link = "";
-	$add_entry_link .= $base_url;
-	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
-	else $add_entry_link .= "index.php?section=brew&amp;action=add";
+	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= $base_url."index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
+	else $add_entry_link .= build_public_url("brew","entry","add","default",$sef,$base_url);
 
 	$pay_button .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddPayEntries\">";
 	if (($show_entries) && ($add_entry_link_show)) $pay_button .= sprintf("<a class=\"btn btn-primary\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);
@@ -412,12 +411,21 @@ if ($totalRows_log > 0) {
 
 
 			if ($multiple_bottle_ids) {
+				
 				$entry_output .= "<td>";
-				$entry_output .= "<div class=\"checkbox\"><label>";
-				if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) $entry_output .= "<input class=\"entry-print\" name=\"id[]\" type=\"checkbox\" value=\"".$row_log['id']."\">";
+				
+				if (($row_log['brewReceived'] == 0) && (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1)))) {
+					$entry_output .= "<div class=\"checkbox\">";
+					$entry_output .= "<label>";
+					$entry_output .= "<input class=\"entry-print\" name=\"id[]\" type=\"checkbox\" value=\"".$row_log['id']."\">";
+					$entry_output .= "</label>";
+					$entry_output .= "</div>";
+				}
+
 				else $entry_output .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
-				$entry_output .= "</label></div>";
+				
 				$entry_output .= "</td>";
+				
 			}
 
 		}
@@ -455,7 +463,7 @@ if ($totalRows_log > 0) {
 
 		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $entry_edit_deadline))) {
 
-			$edit_link .= "<a href=\"".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id'];
+			$edit_link .= "<a href=\"".$base_url."index.php?section=brew&amp;go=entry&amp;action=edit&amp;id=".$row_log['id'];
 			if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory'];
 			$edit_link .= "&amp;view=".$brewCategory."-".$row_log['brewSubCategory'];
 			$edit_link .= "\" data-toggle=\"tooltip\" title=\"Edit ".$entry_name."\">";
@@ -607,7 +615,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 </table>
 <?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
 <div style="margin-top: 20px;">
-<input type="submit" id="btn" class="btn btn-primary pull-right hidden-print" value="<?php echo $brewer_entries_text_022; ?>" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="<?php echo $brewer_entries_text_022; ?>" data-content="<?php echo $brewer_entries_text_023; ?>">
+<button type="submit" id="btn" class="btn btn-primary pull-right hidden-print" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="<?php echo $brewer_entries_text_022; ?>" data-content="<?php echo $brewer_entries_text_023; ?>"><i class='fa fa-print'></i> <?php echo $brewer_entries_text_022; ?></button>
 </div>
 <?php } ?>
 </form>

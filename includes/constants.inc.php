@@ -28,9 +28,12 @@ $languages = array(
 $theme_name = array(
     "default" => "BCOE&amp;M Default (Gray)",
     "bruxellensis" => "Bruxellensis (Blue-Gray)",
-    "claussenii" => "Claussenii (Green)",
-    "naardenensis" => "Naardenensis (Teal)"
+    // "claussenii" => "Claussenii (Green)",
+    // "naardenensis" => "Naardenensis (Teal)"
 );
+
+// Failsafe fallback if prefsTheme session var value is a deprecated theme.
+if (($_SESSION['prefsTheme'] == "claussenii") || ($_SESSION['prefsTheme'] == "naardenensis")) $_SESSION['prefsTheme'] == "default";
 
 // -------------------------- Countries List ----------------------------------------------------
 // Array of countries to utilize when users sign up and for competition info
@@ -3010,9 +3013,9 @@ if (isset($row_contest_dates)) {
     else $drop_ship_deadline = $row_contest_dates['contestEntryDeadline'];
 
     // Specify the latest date users can edit their entries.
-    // If the contestEntryEditDeadline column has a value, and it's value is less than the drop_shop_deadline var value, default to it.
+    // If the contestEntryEditDeadline column has a value, and it's value is less than the drop_ship_deadline var value, default to it.
     // Otherwise, use the drop_ship_deadline var value.
-    if ((isset($row_contest_dates['contestEntryEditDeadline'])) && (!empty($row_contest_dates['contestEntryEditDeadline'])) && ($row_contest_dates['contestEntryEditDeadline'] < $drop_ship_deadline)) $entry_edit_deadline = $row_contest_dates['contestEntryEditDeadline'];
+    if ((!empty($row_contest_dates['contestEntryEditDeadline'])) && ($row_contest_dates['contestEntryEditDeadline'] < $drop_ship_deadline)) $entry_edit_deadline = $row_contest_dates['contestEntryEditDeadline'];
     else $entry_edit_deadline = $drop_ship_deadline;
     $entry_edit_deadline_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_edit_deadline, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 }
