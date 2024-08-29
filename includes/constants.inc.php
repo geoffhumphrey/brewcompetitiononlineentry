@@ -3001,15 +3001,30 @@ $default_to = "prost";
 $default_from = "noreply";
 
 $drop_ship_dates = array();
-if (isset($row_contest_dates)) {
-        // Get drop-off and shipping deadlines, if any.
+if ($row_contest_dates) {
+
+    // Get drop-off and shipping deadlines, if any.
+
+    $drop_off_deadline = "9999999999";
+    $shipping_deadline = "9999999999";
+
+    if (!empty($row_contest_dates['contestDropoffDeadline'])) $drop_off_deadline = $row_contest_dates['contestDropoffDeadline'];
+    if (!empty($row_contest_dates['contestShippingDeadline'])) $shipping_deadline = $row_contest_dates['contestShippingDeadline'];
+
     $drop_ship_dates = array(
-        $row_contest_dates['contestDropoffDeadline'], 
-        $row_contest_dates['contestShippingDeadline']
+        $drop_off_deadline, 
+        $shipping_deadline
     );
+
     // Determine the earliest of the two dates.
     // If no drop-off and shipping deadlines specified, default to entry deadline date since it's required.
-    if (!empty($drop_ship_dates)) $drop_ship_deadline = min($drop_ship_dates);
+    if (!empty($drop_ship_dates)) {
+
+        if ((min($drop_ship_dates)) == "9999999999") $drop_ship_deadline = $row_contest_dates['contestEntryDeadline'];
+        else $drop_ship_deadline = min($drop_ship_dates);
+
+    }
+
     else $drop_ship_deadline = $row_contest_dates['contestEntryDeadline'];
 
     // Specify the latest date users can edit their entries.
@@ -3018,6 +3033,8 @@ if (isset($row_contest_dates)) {
     if ((!empty($row_contest_dates['contestEntryEditDeadline'])) && ($row_contest_dates['contestEntryEditDeadline'] < $drop_ship_deadline)) $entry_edit_deadline = $row_contest_dates['contestEntryEditDeadline'];
     else $entry_edit_deadline = $drop_ship_deadline;
     $entry_edit_deadline_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_edit_deadline, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+
 }
+
 
 ?>
