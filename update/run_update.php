@@ -754,7 +754,7 @@ if (check_update("prefsPaypalIPN", $prefix."preferences")) {
 }
 
 else {
-	$output_run_update .= "<li class=\"text-danger\">Paypal IPN column missing in the preferences table.</li>";
+	$output_run_update .= "<li class=\"text-danger\">PayPal IPN column missing in the preferences table.</li>";
 	$error_count++;
 }
 
@@ -1793,7 +1793,7 @@ $sql = sprintf("ALTER TABLE `%s` CHANGE `prefsTimeZone` `prefsTimeZone` FLOAT NU
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output_run_update .= "<li>prefsTimeZone DB column altered to FLOAT to accomodate fractional time zone numbers.</li>";
+if ($result) $output_run_update .= "<li>prefsTimeZone DB column altered to FLOAT to accommodate fractional time zone numbers.</li>";
 else {
 	$output_run_update .= "<li class=\"text-danger\">prefsTimeZone DB column NOT altered to FLOAT to accomodate fractional time zone numbers.</li>";
 	$error_count++;
@@ -4392,7 +4392,7 @@ if (($row_current_prefs['prefsTheme'] == "claussenii") || ($row_current_prefs['p
 
 }
 
-$output_run_update .= "<li>Claussenii and Naardenensis themes are deprecated and were removed due to accessability issues.</li>";
+$output_run_update .= "<li>Claussenii and Naardenensis themes are deprecated and were removed due to accessibility issues.</li>";
 
 if (!$setup_running) $output_run_update .= "</ul>";
 
