@@ -4384,13 +4384,15 @@ if (($row_current_prefs['prefsTheme'] == "claussenii") || ($row_current_prefs['p
 	$data = array('prefsTheme' => 'default');
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
-	if ($result) $output_run_update .= "<li>Deprecated Theme updated to BCOE&amp;M Default (Gray). To change, update your site preferences.</li>";
+	if ($result) $output_run_update .= "<li>Deprecated theme updated to BCOE&amp;M Default. To change, update your site preferences.</li>";
 	else {
 		$output_run_update .= "<li class=\"text-danger\">Theme NOT updated. You'll need to update it manually. To change, update your site preferences.</li>";
 		$error_count++;
 	}
 
 }
+
+$output_run_update .= "<li>Claussenii and Naardenensis themes are deprecated and were removed due to accessability issues.</li>";
 
 if (!$setup_running) $output_run_update .= "</ul>";
 
