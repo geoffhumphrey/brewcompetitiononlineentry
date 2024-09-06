@@ -2806,7 +2806,12 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($totalRows_organizer > 0) {
 
-                        if ((!empty($row_org['brewerFirstName'])) && (!empty($row_org['brewerLastName']))) {
+                        $organ_uid = $row_org['uid'];
+                        
+                        if ((!empty($row_org['brewerJudgeID'])) && (validate_bjcp_id($row_org['brewerJudgeID']))) $organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));            
+                        else $organ_bjcp_id = "";
+
+                        if ((!empty($row_org['brewerFirstName'])) && (!empty($row_org['brewerLastName'])) && (!empty($organ_bjcp_id))) {
                                 
                             $output .= "\t\t<JudgeData>\n";
                             $output .= "\t\t\t<JudgeName>".convert_to_entities($row_org['brewerFirstName'])." ".convert_to_entities($row_org['brewerLastName'])."</JudgeName>\n";
@@ -3030,6 +3035,18 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     
                     // Non BJCP
                     $output .= "\t<NonBJCP>\n";
+
+                    if (($totalRows_organizer > 0) && ((!empty($row_org['brewerFirstName'])) && (!empty($row_org['brewerLastName'])) && (empty($organ_bjcp_id)))) {
+                                
+                        $output .= "\t\t<JudgeData>\n";
+                        $output .= "\t\t\t<JudgeName>".convert_to_entities($row_org['brewerFirstName'])." ".convert_to_entities($row_org['brewerLastName'])."</JudgeName>\n";
+                        $output .= "\t\t\t<JudgeID></JudgeID>\n";
+                        $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
+                        $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                        $output .= "\t\t\t<NonJudgePts>".number_format(($organ_max_points),1)."</NonJudgePts>\n";
+                        $output .= "\t\t</JudgeData>\n";
+                    
+                    }
 
                     // Judges WITHOUT a properly formatted BJCP IDs in the system
                     foreach (array_unique($j) as $uid) {
