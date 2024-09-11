@@ -1177,6 +1177,7 @@ $club_array = array(
     "Homebrew Battleground Brewers",
     "Homebrew Club [WA]",
     "Homebrew Club At Virginia Tech",
+    "Homebrew Collab (Bristol)",
     "Homebrew Connection",
     "Homebrew Hawaii",
     "Homebrew Heroes",
