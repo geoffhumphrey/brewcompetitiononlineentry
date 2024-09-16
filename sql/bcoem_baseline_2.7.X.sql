@@ -164,7 +164,7 @@ INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`,
 
 DROP TABLE IF EXISTS `baseline_brewing`;
 CREATE TABLE `baseline_brewing` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `brewName` varchar(250) DEFAULT NULL,
   `brewStyle` varchar(250) DEFAULT NULL,
   `brewCategory` varchar(4) DEFAULT NULL,
