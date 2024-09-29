@@ -1,19 +1,19 @@
 FROM php:7.3-apache
 
-# Habilitar mod_rewrite, mod_headers y otros módulos necesarios
+# Enable mod_rewrite, mod_headers, and other necessary modules
 RUN a2enmod rewrite headers cgi include
 
-# Instalar extensiones de PHP necesarias, incluyendo mysqli
+# Install necessary PHP extensions, including mysqli
 RUN docker-php-ext-install pdo_mysql mysqli
 
-# Copiar el código fuente
-COPY ./html /var/www/html
+# Copy the source code
+COPY ./ /var/www/html
 
-# Establecer permisos adecuados
+# Set appropriate permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Establecer permisos de acceso al archivo .htaccess
+# Set access permissions for the .htaccess file
 RUN chmod -R 755 /var/www/html/.htaccess
 
-# Reiniciar Apache para aplicar cambios
+# Restart Apache to apply changes
 CMD ["apache2-foreground"]
