@@ -27,7 +27,7 @@ if ($action == "html") {
 	<li>In accordance with your installation's Scoresheet Unique Identifier <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">site preference</a>, be named with the <strong><u>entry</u> number in six (6) digit format</strong> with leading zeroes (e.g., 000198.pdf, 000567.pdf, etc.).</li>
 	<?php } ?>
 	<li>Have a .pdf or .PDF extension.</li>
-	<li>Be <strong>less than 10 MB</strong> in size.</li>
+	<li>Be <strong>less than <?php if (HOSTED) echo "4"; else echo "10"; ?> MB</strong> in size.</li>
 </ul>
 <p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case. If you choose to use an FTP program, make sure that all file names and extensions are lower case to ensure the application will recognize them.</p>
 <?php if ($action == "html") { ?>

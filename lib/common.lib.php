@@ -4542,6 +4542,10 @@ function eval_exits($eid="default",$method="default",$dbTable) {
 
 // See https://core.trac.wordpress.org/browser/tags/4.1/src/wp-includes/formatting.php
 function remove_accents($string) {
+
+	// Converts all accent characters to ASCII characters.
+	// If there are no accent characters, then the string given is just returned.
+
     if (!preg_match('/[\x80-\xff]/', $string)) return $string;
 
     $chars = array(
@@ -5172,5 +5176,48 @@ function scrub_filename($filename) {
 	$scrub_characters = array("&" => "", "?" => "", "=" => "", "%" => "", "\"" => "", "'" => "", "$" => "", "*" => "");
 	$filename = strtr($filename, $scrub_characters);
 	return $filename;
+}
+
+function clean_filename($filename) {
+
+	// Get the file extension
+	$file_extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+	// Get the file name without the extension 
+	$file_name = pathinfo($filename, PATHINFO_FILENAME); 
+
+	// Call function in common.lib.php to convert accented characters to ASCII
+	$file_name = remove_accents($file_name);
+
+	// Call function in common.lib.php to remove characters like &, $, etc.
+	$file_name = scrub_filename($file_name);
+
+	// Replace spaces with dashes
+	$file_name = str_replace(' ', '-', $file_name);
+
+	// Replace underscores with dashes
+	$file_name = str_replace('_', '-', $file_name);
+
+	// Remove any remaining special characters
+	$file_name = preg_replace('/[^A-Za-z0-9\-\_]/', '', $file_name); 
+
+	// Strip any html or php tags
+	$file_name = strip_tags($file_name);
+
+	// Strip any slashes
+	$file_name = stripcslashes($file_name);
+	$file_name = stripslashes($file_name);
+
+	// Failsafe in case the remove_accents function missed something
+	$file_name = filter_var($file_name, FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
+
+	// Replace two or more dashes together with a single dash
+	$file_name = preg_replace('/-+/', '-', $file_name); 
+
+	// Add extension back
+	$cleaned_file = $file_name.".".$file_extension;
+
+	return $cleaned_file;
+
 }
 ?>
