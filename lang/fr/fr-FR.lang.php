@@ -2113,6 +2113,18 @@ $label_hectoliters = "Hectolitres";
 $sidebar_text_027 = "en vigueur jusqu'à";
 $entry_info_text_055 = "Aucun mode de paiement n'est spécifié dans le système pour le moment. Vérifiez les règles du concours ou contactez l'organisateur.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.7.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$brew_text_055 = "Retournez ici pour ajouter une autre entrée ?";
+$brewer_info_015 = "<p>Il semble que vous vous soyez inscrit pour servir comme juge ou assistant, mais vous n'avez pas indiqué que vous êtes disponible pour une quelconque session de jugement dans l'un ou l'autre des rôles.</p><p>Veuillez sélectionner le bouton ci-dessous pour modifier votre compte, puis sélectionner \"Oui\" pour chacune des sessions auxquelles vous êtes disponible en tant que juge dans la section Disponibilité des Sessions de Jugement et celles où vous êtes disponible comme assistant dans la section Disponibilité des Sessions d'Assistance.</p><p>Si vous n'êtes pas disponible pour une session dans l'un ou l'autre des rôles, veuillez sélectionner \"Non\" dans les sections Jugement et/ou Assistance.</p>";
+$brewer_info_016 = "<p>Il semble que vous vous soyez inscrit pour servir comme juge, mais vous n'avez pas indiqué que vous êtes disponible pour une quelconque session de jugement.</p><p>Veuillez sélectionner le bouton ci-dessous pour modifier votre compte, puis sélectionner \"Oui\" pour chacune des sessions auxquelles vous êtes disponible comme juge dans la section Disponibilité des Sessions de Jugement.</p><p>Si vous n'êtes disponible pour aucune session, veuillez sélectionner \"Non\" dans la section Jugement.</p>";
+$brewer_info_017 = "<p>Il semble que vous vous soyez inscrit pour servir comme assistant, mais vous n'avez pas indiqué que vous êtes disponible pour une quelconque session de jugement.</p><p>Veuillez sélectionner le bouton ci-dessous pour modifier votre compte, puis sélectionner \"Oui\" pour chacune des sessions auxquelles vous êtes disponible comme assistant dans la section Disponibilité des Sessions d'Assistance.</p><p>Si vous n'êtes disponible pour aucune session, veuillez sélectionner \"Non\" dans la section Jugement.</p>";
+$brewer_info_018 = "<strong>Vous avez indiqué que vous êtes prêt à servir comme juge, mais vous n'avez pas indiqué que vous êtes disponible pour une session de jugement répertoriée.</strong> Veuillez modifier les informations de votre compte et sélectionner \"Oui\" pour une ou plusieurs sessions de jugement.";
+$brewer_info_019 = "<strong>Vous avez indiqué que vous êtes prêt à servir comme assistant, mais vous n'avez pas indiqué que vous êtes disponible pour une session d'assistance répertoriée.</strong> Veuillez modifier les informations de votre compte et sélectionner \"Oui\" pour une ou plusieurs sessions d'assistance.";
+
 
 /**
  * ----------------------------------------------------------------------------------

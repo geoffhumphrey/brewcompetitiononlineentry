@@ -2113,6 +2113,18 @@ $sidebar_text_027 = "vigente hasta";
 $entry_info_text_055 = "No se especifican métodos de pago en el sistema en este momento. Consulte las reglas del concurso o contacte al organizador.";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.7.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$brew_text_055 = "¿Volver aquí para añadir otra entrada?";
+$brewer_info_015 = "<p>Parece que te has registrado para servir como juez o asistente, pero no has indicado que estás disponible para ninguna sesión de evaluación en ninguno de los roles.</p><p>Por favor, selecciona el botón a continuación para editar tu cuenta y luego selecciona \"Sí\" para cada una de las sesiones en las que estés disponible como juez en la sección de Disponibilidad de Sesiones de Evaluación y aquellas en las que estés disponible como asistente en la sección de Disponibilidad de Sesiones de Asistencia.</p><p>Si no estás disponible para ninguna sesión en alguno o ambos roles, selecciona \"No\" en las secciones de Evaluación y/o Asistencia.</p>";
+$brewer_info_016 = "<p>Parece que te has registrado para servir como juez, pero no has indicado que estás disponible para ninguna sesión de evaluación.</p><p>Por favor, selecciona el botón a continuación para editar tu cuenta y luego selecciona \"Sí\" para cada una de las sesiones en las que estés disponible como juez en la sección de Disponibilidad de Sesiones de Evaluación.</p><p>Si no estás disponible para ninguna sesión, selecciona \"No\" en la sección de Evaluación.</p>";
+$brewer_info_017 = "<p>Parece que te has registrado para servir como asistente, pero no has indicado que estás disponible para ninguna sesión de evaluación.</p><p>Por favor, selecciona el botón a continuación para editar tu cuenta y luego selecciona \"Sí\" para cada una de las sesiones en las que estés disponible como asistente en la sección de Disponibilidad de Sesiones de Asistencia.</p><p>Si no estás disponible para ninguna sesión, selecciona \"No\" en la sección de Evaluación.</p>";
+$brewer_info_018 = "<strong>Has indicado que estás dispuesto a servir como juez, pero no has indicado que estés disponible para ninguna sesión de evaluación listada.</strong> Por favor, edita la información de tu cuenta y selecciona \"Sí\" para una o más sesiones de evaluación.";
+$brewer_info_019 = "<strong>Has indicado que estás dispuesto a servir como asistente, pero no has indicado que estés disponible para ninguna sesión de asistencia listada.</strong> Por favor, edita la información de tu cuenta y selecciona \"Sí\" para una o más sesiones de asistencia.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

@@ -29,7 +29,7 @@ $alert_text_045 = sprintf("<strong>%s</strong> %s %s %s.",$alert_text_042,$alert
 $alert_text_048 = sprintf("<strong>%s</strong> %s",$alert_text_046,$alert_text_047);
 $alert_text_051 = sprintf("<strong>%s</strong> %s",$alert_text_049,$alert_text_050);
 $alert_text_054 = sprintf("<strong>%s</strong> %s",$alert_text_052,$alert_text_053);
-$alert_text_058 = sprintf("<strong>%s</strong> %s <a class=\"alert-link\" href=\"%s\">%s</a>.",$alert_text_055,$alert_text_056,build_public_url("login","default","default","default",$sef,$base_url),$alert_text_057);
+$alert_text_058 = sprintf("<strong>%s</strong> %s <a class=\"alert-link\" href=\"%s\">%s</a>.",$alert_text_055,$alert_text_056,build_public_url("login","default","default","default",$sef,$base_url,"default"),$alert_text_057);
 $alert_text_061 = sprintf("<strong>%s</strong> %s",$alert_text_059,$alert_text_060);
 $alert_text_064 = sprintf("<strong>%s</strong> %s",$alert_text_062,$alert_text_063);
 $alert_text_067 = sprintf("<strong>%s</strong> %s",$alert_text_065,$alert_text_066);
@@ -99,7 +99,7 @@ if ($msg != "default") {
   }
 
   if ($section == "brew") {
-    $warning_msg = array(1);
+    $warning_msg = array(4);
   }
 
   if ($section == "admin") {

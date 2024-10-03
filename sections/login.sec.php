@@ -43,7 +43,7 @@ if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUserna
 	$totalRows_userCheck = mysqli_num_rows($userCheck);
 	
 	if (($totalRows_userCheck == 0) && ($msg == "default")) { 
-		$message2 .= sprintf("<div class='text-warning lead'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div><p><a class=\"btn btn-primary\" href=\"%s\">%s</a></p>",$login_text_001, build_public_url("login","password","forgot","default",$sef,$base_url),$login_text_002);
+		$message2 .= sprintf("<div class='text-warning lead'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div><p><a class=\"btn btn-primary\" href=\"%s\">%s</a></p>",$login_text_001, build_public_url("login","password","forgot","default",$sef,$base_url,"default"),$login_text_002);
 	}
 	
 }
@@ -77,7 +77,7 @@ if (($action == "reset-password") && ($token != "default")) {
 // Build Links
 
 if ($section != "update") {
-	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display) && (!$reset_token_form_display)) $primary_links .= sprintf("<p class=\"lead\"><span class=\"fa fa-lg fa-exlamation-circle\"></span> <a href=\"%s\">%s</a></p>",build_public_url("register","default","default","default",$sef,$base_url),$login_text_003);
+	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display) && (!$reset_token_form_display)) $primary_links .= sprintf("<p class=\"lead\"><span class=\"fa fa-lg fa-exlamation-circle\"></span> <a href=\"%s\">%s</a></p>",build_public_url("register","default","default","default",$sef,$base_url,"default"),$login_text_003);
 	if ($login_form_display) $primary_links .= sprintf("<p class=\"lead\"><span class=\"fa fa-lg fa-exlamation-circle\"></span> %s <a href=\"%s\">%s</a>.</p>",$login_text_004,$base_url."index.php?section=login&amp;go=password&amp;action=forgot",$login_text_005);
 }
 echo $message0;
@@ -124,7 +124,7 @@ echo $primary_links;
 
 <?php if ($forget_form_display) { ?>
 <p class="lead"><?php echo $login_text_006; ?></p>
-<form class="form-horizontal" action="<?php echo build_public_url("login","verify","forgot","default",$sef,$base_url); ?>" method="POST" name="form1" id="form1">
+<form class="form-horizontal" action="<?php echo build_public_url("login","verify","forgot","default",$sef,$base_url,"default"); ?>" method="POST" name="form1" id="form1">
 	<div class="form-group">
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_email; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">

@@ -56,7 +56,7 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 
 	$header1_20 .= "<h2>".$default_page_text_010;
 	if ($section == "past_winners") $header1_20 .= ": ".$trimmed;
-	if ($filter == "default") $header1_20 .= sprintf(" <small><a class=\"hide-loader\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><span class=\"fa fa-fw fa-file-pdf hidden-print\"></span></a><a class=\"hide-loader\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><span class=\"fa fa-fw fa-file-code hidden-print\"></span></a>",$base_url,$default_page_text_020,$base_url,$default_page_text_021,$base_url,$default_page_text_021);
+	if ($filter == "default") $header1_20 .= sprintf(" <small><a class=\"hide-loader\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><span class=\"fa fa-fw fa-file-pdf hidden-print\"></span></a><a class=\"hide-loader\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><span class=\"fa fa-fw fa-file-code hidden-print\"></span></a></small>",$base_url,$default_page_text_020,$base_url,$default_page_text_021,$base_url,$default_page_text_021);
 	$header1_20 .= "</h2>";
 
 	$page_info .= sprintf("<h2>%s</h2><p>%s %s.</p>",$default_page_text_004,$default_page_text_005,getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
@@ -67,7 +67,7 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 else {
 
 	if ($section != "past-winners") {
-		if ($logged_in) $primary_page_info .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" title=\"%s\">%s</a></small></p>",$default_page_text_006,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$default_page_text_007,$default_page_text_008);
+		if ($logged_in) $primary_page_info .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" title=\"%s\">%s</a></small></p>",$default_page_text_006,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url,"default"),$default_page_text_007,$default_page_text_008);
 		$primary_page_info .= "<p class='lead'>";
 		$primary_page_info .= sprintf("%s %s %s ",$default_page_text_022, $_SESSION['contestName'], $default_page_text_023);
 		if ($_SESSION['contestHostWebsite'] != "") $primary_page_info .= sprintf("<a class='hide-loader' href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
@@ -86,7 +86,7 @@ else {
 		if ($contact_count > 0) {
 			if ($contact_count == 1) $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_013."</h2>";
 			else $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_014."</h2>";
-			if ($action != "print") $page_info10 .= sprintf("<p>%s <a href='%s'>%s</a>.</p>",$default_page_text_015,build_public_url("contact","default","default","default",$sef,$base_url),$label_contact);
+			if ($action != "print") $page_info10 .= sprintf("<p>%s <a href='%s'>%s</a>.</p>",$default_page_text_015,build_public_url("contact","default","default","default",$sef,$base_url,"default"),$label_contact);
 			$page_info10 .= "<ul>";
 			do {
 				$page_info10 .= "<li>";
@@ -100,7 +100,7 @@ else {
 		if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) {
 			$header1_30 = "<h1>".$label_sponsors."</h1>";
 			 $page_info30 .= sprintf("<p>%s %s ",$_SESSION['contestHost'],$default_page_text_016);
-			if ($_SESSION['prefsSponsorLogos'] == "Y") $page_info30 .= sprintf("<a href='%s'>%s</a>",build_public_url("sponsors","default","default","default",$sef,$base_url),strtolower($label_sponsors)); else $page_info20 .= "sponsors";
+			if ($_SESSION['prefsSponsorLogos'] == "Y") $page_info30 .= sprintf("<a href='%s'>%s</a>",build_public_url("sponsors","default","default","default",$sef,$base_url,"default"),strtolower($label_sponsors)); else $page_info20 .= "sponsors";
 	        $page_info30 .= sprintf(" %s %s.",$default_page_text_017,$_SESSION['contestName']);
 		}
 	}

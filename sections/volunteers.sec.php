@@ -32,7 +32,7 @@ if (($judge_window_open > 0) && (!$logged_in)) {
 }
 
 elseif (($judge_window_open > 0) && ($logged_in)) {
-	$page_info_vol_1 .= sprintf("<p>%s <a href=\"%s\">%s</a> %s.</p>",$volunteers_text_005, build_public_url("list","default","default","default",$sef,$base_url), $volunteers_text_006, $volunteers_text_007);
+	$page_info_vol_1 .= sprintf("<p>%s <a href=\"%s\">%s</a> %s.</p>",$volunteers_text_005, build_public_url("list","default","default","default",$sef,$base_url,"default"), $volunteers_text_006, $volunteers_text_007);
 }
 
 else {
@@ -42,7 +42,7 @@ else {
 if ($registration_open < 2) {
 	$staff_locations = "";
 	$header_vol_1_2 .= sprintf("<h2>%s</h2>",$label_staff);
-	$page_info_vol_2 .= sprintf("<p>%s",$volunteers_text_009, build_public_url("contact","default","default","default",$sef,$base_url), $volunteers_text_010);
+	$page_info_vol_2 .= sprintf("<p>%s",$volunteers_text_009, build_public_url("contact","default","default","default",$sef,$base_url,"default"), $volunteers_text_010);
 	
 	if ($row_judging1) {
 		do {

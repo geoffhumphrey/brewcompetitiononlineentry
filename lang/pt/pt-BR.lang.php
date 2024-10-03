@@ -2100,6 +2100,18 @@ $sidebar_text_027 = "em vigor até";
 $entry_info_text_055 = "Nenhum método de pagamento está especificado no sistema neste momento. Verifique as regras da competição ou entre em contato com o organizador.";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.7.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$brew_text_055 = "Voltar aqui para adicionar outra entrada?";
+$brewer_info_015 = "<p>Parece que você se inscreveu para servir como juiz ou assistente, mas não indicou que está disponível para nenhuma sessão de julgamento em qualquer dos papéis.</p><p>Por favor, selecione o botão abaixo para editar sua conta e, em seguida, selecione \"Sim\" para cada uma das sessões em que você estiver disponível como juiz na seção de Disponibilidade de Sessões de Julgamento e aquelas em que você estiver disponível como assistente na seção de Disponibilidade de Sessões de Assistência.</p><p>Se você não estiver disponível para nenhuma sessão em um ou ambos os papéis, selecione \"Não\" nas seções de Julgamento e/ou Assistência.</p>";
+$brewer_info_016 = "<p>Parece que você se inscreveu para servir como juiz, mas não indicou que está disponível para nenhuma sessão de julgamento.</p><p>Por favor, selecione o botão abaixo para editar sua conta e, em seguida, selecione \"Sim\" para cada uma das sessões em que você estiver disponível como juiz na seção de Disponibilidade de Sessões de Julgamento.</p><p>Se você não estiver disponível para nenhuma sessão, selecione \"Não\" na seção de Julgamento.</p>";
+$brewer_info_017 = "<p>Parece que você se inscreveu para servir como assistente, mas não indicou que está disponível para nenhuma sessão de julgamento.</p><p>Por favor, selecione o botão abaixo para editar sua conta e, em seguida, selecione \"Sim\" para cada uma das sessões em que você estiver disponível como assistente na seção de Disponibilidade de Sessões de Assistência.</p><p>Se você não estiver disponível para nenhuma sessão, selecione \"Não\" na seção de Julgamento.</p>";
+$brewer_info_018 = "<strong>Você indicou que está disposto a servir como juiz, mas não indicou que está disponível para nenhuma sessão de julgamento listada.</strong> Por favor, edite as informações da sua conta e selecione \"Sim\" para uma ou mais sessões de julgamento.";
+$brewer_info_019 = "<strong>Você indicou que está disposto a servir como assistente, mas não indicou que está disponível para nenhuma sessão de assistência listada.</strong> Por favor, edite as informações da sua conta e selecione \"Sim\" para uma ou mais sessões de assistência.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

@@ -575,7 +575,7 @@ $header_text_086 = "All entry styles have been converted from BJCP 2008 to BJCP 
 $header_text_087 = "Data deleted successfully.";
 $header_text_088 = "The judge/steward has been added successfully. Remember to assign the user as a judge or steward before assigning to tables.";
 $header_text_089 = "The file has been uploaded successfully. Check the list to verify.";
-$header_text_090 = "The file that was attempted to be uploaded is not an accepted file type.";
+$header_text_090 = "The file that was attempted to be uploaded is not an accepted file type and/or it exceeds the maximum file size.";
 $header_text_091 = "File(s) deleted successfully.";
 $header_text_092 = "The test email has been generated. Be sure to check your spam folder.";
 $header_text_093 = "The user&rsquo;s password has been changed. Be sure to let them know what their new password is!";
@@ -2091,6 +2091,19 @@ $label_hectoliters = "Hectoliters";
  */
 $sidebar_text_027 = "enforced until";
 $entry_info_text_055 = "No payment methods are specified in the system at this time. Check the competition rules or contact the organizer.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.7.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$brew_text_055 = "Return here to add another entry?";
+$brewer_info_015 = "<p>It appears that you've signed up to serve as a judge or steward, but have not indicated that you are available for any judging session for either role.</p><p>Please select the button below to edit your account and then select \"Yes\" for each of the sessions you are available to judge in the Judging Session Availability and those that you are available as a steward in the Stewarding Session Availability section.</p><p>If you are not available for any session for either or both roles, please select \"No\" in the Judging and/or Stewarding section.</p>";
+$brewer_info_016 = "<p>It appears that you've signed up to serve as a judge, but have not indicated that you are available for any judging session.</p><p>Please select the button below to edit your account and then select \"Yes\" for each of the sessions you are available to judge in the Judging Session Availability section.</p><p>If you are not available for any session, please select \"No\" in the Judging section.</p>";
+$brewer_info_017 = "<p>It appears that you've signed up to serve as a steward, but have not indicated that you are available for any judging session.</p><p>Please select the button below to edit your account and then select \"Yes\" for each of the sessions you are available to serve as a steward in the Stewarding Session Availability section.</p><p>If you are not available for any session, please select \"No\" in the Judging section.</p>";
+$brewer_info_018 = "<strong>You have indicated that you are willing to serve as a judge but have not indicated that you are available for any listed judging session.</strong> Please edit your account info and select \"Yes\" to one or more judging sessions.";
+$brewer_info_019 = "<strong>You have indicated that you are willing to serve as a steward but have not indicated that you are available for any listed stewarding session.</strong> Please edit your account info and select \"Yes\" to one or more stewarding sessions.";
+
 
 /**
  * ----------------------------------------------------------------------------------

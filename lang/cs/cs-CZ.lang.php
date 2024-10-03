@@ -2031,14 +2031,27 @@ $label_hectoliters = "Hektolitrů";
  * Version 2.7.1 Additions
  * ------------------------------------------------------------------------
  */
+$sidebar_text_027 = "platné do";
+$entry_info_text_055 = "V systému nejsou v tuto chvíli uvedeny žádné způsoby platby. Zkontrolujte pravidla soutěže nebo kontaktujte organizátora.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.7.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$brew_text_055 = "Vrátit se sem a přidat další položku?";
+$brewer_info_015 = "<p>Zdá se, že jste se zaregistrovali jako porotce nebo asistent, ale neuvedli jste, že jste k dispozici pro jakoukoli hodnotící relaci v kterékoli z těchto rolí.</p><p>Vyberte prosím níže uvedené tlačítko pro úpravu vašeho účtu a poté vyberte \"Ano\" pro každou z relací, pro které jste dostupní jako porotce v sekci Dostupnost Hodnotících Relací a pro ty, kde jste dostupní jako asistent v sekci Dostupnost Relací Asistenta.</p><p>Pokud nejste k dispozici pro žádnou relaci v jedné nebo obou rolích, vyberte prosím \"Ne\" v sekci Hodnocení a/nebo Asistence.</p>";
+$brewer_info_016 = "<p>Zdá se, že jste se zaregistrovali jako porotce, ale neuvedli jste, že jste k dispozici pro jakoukoli hodnotící relaci.</p><p>Vyberte prosím níže uvedené tlačítko pro úpravu vašeho účtu a poté vyberte \"Ano\" pro každou z relací, pro které jste dostupní jako porotce v sekci Dostupnost Hodnotících Relací.</p><p>Pokud nejste k dispozici pro žádnou relaci, vyberte prosím \"Ne\" v sekci Hodnocení.</p>";
+$brewer_info_017 = "<p>Zdá se, že jste se zaregistrovali jako asistent, ale neuvedli jste, že jste k dispozici pro jakoukoli hodnotící relaci.</p><p>Vyberte prosím níže uvedené tlačítko pro úpravu vašeho účtu a poté vyberte \"Ano\" pro každou z relací, pro které jste dostupní jako asistent v sekci Dostupnost Relací Asistenta.</p><p>Pokud nejste k dispozici pro žádnou relaci, vyberte prosím \"Ne\" v sekci Hodnocení.</p>";
+$brewer_info_018 = "<strong>Uvedli jste, že jste ochotni sloužit jako porotce, ale neuvedli jste, že jste k dispozici pro jakoukoli uvedenou hodnotící relaci.</strong> Prosím, upravte informace o svém účtu a vyberte \"Ano\" pro jednu nebo více hodnotících relací.";
+$brewer_info_019 = "<strong>Uvedli jste, že jste ochotni sloužit jako asistent, ale neuvedli jste, že jste k dispozici pro jakoukoli uvedenou asistentskou relaci.</strong> Prosím, upravte informace o svém účtu a vyberte \"Ano\" pro jednu nebo více asistentských relací.";
 
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------
  */
-$sidebar_text_027 = "platné do";
-$entry_info_text_055 = "V systému nejsou v tuto chvíli uvedeny žádné způsoby platby. Zkontrolujte pravidla soutěže nebo kontaktujte organizátora.";
+
 
 
 /**

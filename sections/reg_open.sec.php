@@ -58,7 +58,7 @@ if (($registration_open == 1) && ($judge_window_open == 1) && (!isset($_SESSION[
 	$page_info1 .= sprintf("<p>%s <span class=\"fa fa-lg fa-user\"></span> %s</p>",$reg_open_text_004,$reg_open_text_005);
 }
 
-if (($registration_open == 1) && (!isset($_SESSION['brewerBreweryName'])) && (isset($_SESSION['loginUsername']))) $page_info1 .= sprintf("<p>%s <a href=\"%s\">%s</a> %s</p>",$reg_open_text_006,build_public_url("list","default","default","default",$sef,$base_url),$reg_open_text_007,$reg_open_text_008);
+if (($registration_open == 1) && (!isset($_SESSION['brewerBreweryName'])) && (isset($_SESSION['loginUsername']))) $page_info1 .= sprintf("<p>%s <a href=\"%s\">%s</a> %s</p>",$reg_open_text_006,build_public_url("list","default","default","default",$sef,$base_url,"default"),$reg_open_text_007,$reg_open_text_008);
 
 if ($registration_open != 1) $page_info1 .= sprintf("<p>%s %s.</p>",$reg_open_text_009,$judge_open);
 
@@ -104,7 +104,7 @@ if (($entry_window_open == 1) && ($show_entries)) {
 	$page_info2 .= "<p>";
 	$page_info2 .= sprintf("%s, ",$reg_open_text_011);
 	if (!isset($_SESSION['loginUsername'])) $page_info2 .= sprintf("%s or %s %s",$reg_open_text_012,strtolower($label_log_in),$reg_open_text_013);
-	else $page_info2 .= sprintf("<a href=\"%s\">%s</a>.",build_public_url("brew","entry","add","default",$sef,$base_url),$reg_open_text_014);
+	else $page_info2 .= sprintf("<a href=\"%s\">%s</a>.",build_public_url("brew","entry","add","default",$sef,$base_url,"default"),$reg_open_text_014);
 	$page_info2 .= "</p>";
 
 }

@@ -18,9 +18,14 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 
 if ($row_scored_entries['count'] > 0) {
 
-	$a = styles_active(0,$go);
+	$a = json_decode($_SESSION['prefsSelectedStyles'],true);
+	$actual_styles = array();
 
-	foreach (array_unique($a) as $style) {
+	foreach ($a as $key => $value) {
+		$actual_styles[] = $value['brewStyleGroup'];
+	}
+
+	foreach (array_unique($actual_styles) as $style) {
 
 		if (!empty($style)) {
 
@@ -47,17 +52,16 @@ if ($row_scored_entries['count'] > 0) {
 				$table_head1 = "";
 				$table_body1 = "";
 
-
-				// Build headers
 				if ($winner_style_set == "BA") {
 					include (INCLUDES.'ba_constants.inc.php');
 					$header1_1 .= sprintf("<h3>%s <small>%s %s</small></h3>",$ba_category_names[$style],$row_entry_count['count'],$entries);
 
 				}
+				
 				else {
 					$header1_1 .= sprintf("<h3>%s %s: %s <small>%s %s</small></h3>",$label_category,ltrim($style,"0"),style_convert($style,"1",$base_url,$go),$row_entry_count['count'],$entries);
 				}
-				// $header1_1 .=  $go;
+				
 				// Build table headers
 				$table_head1 .= "<tr>";
 				$table_head1 .= sprintf("<th nowrap>%s</th>",$label_place);
@@ -69,7 +73,6 @@ if ($row_scored_entries['count'] > 0) {
 				$table_head1 .= "</tr>";
 
 				// Build table body
-
 				include (DB.'scores.db.php');
 
 				do {
@@ -147,6 +150,7 @@ if ($row_scored_entries['count'] > 0) {
 	// --------------------------------------------------------------
 
 	echo $header1_1;
+	
 	?>
 	 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

@@ -481,7 +481,7 @@ if ($totalRows_brewer > 0) {
   
 } // end if ($totalRows_brewer > 0)
 
-$dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
+$dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url,"default");
 $head_judge_explain = "<p>Choose the Head Judge for this table. <p>The Head Judge, <a class='hide-loader' href='https://www.bjcp.org/exam-certification/judge-procedures-manual/' target='_blank'>according to the BJCP</a>, is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p>";
 if ($_SESSION['prefsEval'] == 1) $head_judge_explain .= "<p>Additionally, Head Judges confirm consensus scores and enter the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
 

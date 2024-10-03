@@ -440,7 +440,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($section == "admin") {
 
 			if ($_POST['brewStyle'] == "0-A") $insertGoTo = $base_url."index.php?section=brew&go=entries&action=edit&filter=".$brewBrewerID."&id=".$id."&view=0-A&msg=4";
-			else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
+			else {
+				if ((isset($_POST['return-to-add'])) && ($_POST['return-to-add'] == 1)) $insertGoTo = $base_url."index.php?section=brew&go=entries&action=add&filter=admin&msg=1";
+				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
+			}
 
 		}
 
@@ -450,7 +453,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		else $insertGoTo = $base_url."index.php?section=list&msg=1";
+		else {
+			if ((isset($_POST['return-to-add'])) && ($_POST['return-to-add'] == 1)) $insertGoTo = $base_url."index.php?section=brew&go=entries&action=add&msg=1";
+			else $insertGoTo = $base_url."index.php?section=list&msg=1";
+		}
 
 		// Check if entry requires special ingredients or a classic style
 		if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {

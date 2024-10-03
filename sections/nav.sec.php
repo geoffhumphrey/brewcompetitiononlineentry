@@ -63,47 +63,47 @@ if ($section == "rules") {
 	$link_rules = "#";
 	$print_icon = TRUE;
 }
-else $link_rules = build_public_url("rules","default","default","default",$sef,$base_url);
+else $link_rules = build_public_url("rules","default","default","default",$sef,$base_url,"default");
 
 if ($section == "entry") {
 	$link_entry_info = "#";
 	$print_icon = TRUE;
 }
-else $link_entry_info = build_public_url("entry","default","default","default",$sef,$base_url);
+else $link_entry_info = build_public_url("entry","default","default","default",$sef,$base_url,"default");
 
 if ($section == "volunteers") { $link_volunteer_info = "#";  $print_icon = TRUE; }
-else $link_volunteer_info = build_public_url("volunteers","default","default","default",$sef,$base_url);
+else $link_volunteer_info = build_public_url("volunteers","default","default","default",$sef,$base_url,"default");
 
 if (($_SESSION['prefsSponsors'] == "Y") && ($_SESSION['sponsorCount'] > 0)) {
 	if ($section == "sponsors") {
 		$link_sponsors = "#";
 		$print_icon = TRUE;
 	}
-	else $link_sponsors = build_public_url("sponsors","default","default","default",$sef,$base_url);
+	else $link_sponsors = build_public_url("sponsors","default","default","default",$sef,$base_url,"default");
 	$sponsors = TRUE;
 }
 else $sponsors = FALSE;
 
 if ($section == "contact") $link_contacts = "#";
-else $link_contacts = build_public_url("contact","default","default","default",$sef,$base_url);
+else $link_contacts = build_public_url("contact","default","default","default",$sef,$base_url,"default");
 
 if ($section == "register") $link_register = "#";
-elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url);
-elseif (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
-elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
-else $link_register = build_public_url("register","default","default","default",$sef,$base_url);
+elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url,"default");
+elseif (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url,"default");
+elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url,"default");
+else $link_register = build_public_url("register","default","default","default",$sef,$base_url,"default");
 
 if ($section == "login") $link_login = "#";
-else $link_login = build_public_url("login","default","default","default",$sef,$base_url);
+else $link_login = build_public_url("login","default","default","default",$sef,$base_url,"default");
 
 if ($section == "logout") $link_logout = "#";
-else $link_logout = build_public_url("logout","default","default","default",$sef,$base_url);
+else $link_logout = build_public_url("logout","default","default","default",$sef,$base_url,"default");
 
 $qr_enable = FALSE;
 $link_qr = "";
 if (!empty($row_contest_dates['contestCheckInPassword'])) {
 	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2) && ($judging_past > 0) && (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array))) $qr_enable = TRUE;
-	$link_qr .= build_public_url("qr","default","default","default",$sef,$base_url);
+	$link_qr .= build_public_url("qr","default","default","default",$sef,$base_url,"default");
 }
 
 // Session specific
@@ -137,21 +137,21 @@ if ($logged_in)  {
 		$link_pay = "#";
 		if ($msg != "default") $print_icon = TRUE;
 		}
-	else $link_pay = build_public_url("pay","default","default","default",$sef,$base_url);
+	else $link_pay = build_public_url("pay","default","default","default",$sef,$base_url,"default");
 
 	// Build My Account Link
 	if ($section == "list") {
 		$link_list = "#";
 		$print_icon = TRUE;
 	}
-	else $link_list = build_public_url("list","default","default","default",$sef,$base_url);
+	else $link_list = build_public_url("list","default","default","default",$sef,$base_url,"default");
 
 	// Build My Entries Link
-	$link_user_entries = build_public_url("list","default","default","default",$sef,$base_url)."#entries";
+	$link_user_entries = build_public_url("list","default","default","default",$sef,$base_url,"default")."#entries";
 
 	// Build Edit My Info link
     $edit_user_info_link = "";
-	if ($_SESSION['brewerID'] != "") $edit_user_info_link .= build_public_url("brewer","account","edit",$_SESSION['brewerID'],$sef,$base_url);
+	if ($_SESSION['brewerID'] != "") $edit_user_info_link .= build_public_url("brewer","account","edit",$_SESSION['brewerID'],$sef,$base_url,"default");
 
 	/*
 	$edit_user_info_link = $base_url."index.php?";
@@ -160,17 +160,17 @@ if ($logged_in)  {
 	*/
 
 	// Build Change My Email Address link
-	$edit_user_email_link = build_public_url("user","account","username",$_SESSION['user_id'],$sef,$base_url);
+	$edit_user_email_link = build_public_url("user","account","username",$_SESSION['user_id'],$sef,$base_url,"default");
 	//$edit_user_email_link = $base_url."index.php?section=user&amp;action=username&amp;id=".$_SESSION['brewerID'];
 
 	// Build Change My Email Address link
-	$edit_user_password_link = build_public_url("user","account","password",$_SESSION['user_id'],$sef,$base_url);
+	$edit_user_password_link = build_public_url("user","account","password",$_SESSION['user_id'],$sef,$base_url,"default");
 	//$edit_user_password_link = $base_url."index.php?section=user&amp;action=password&amp;id=".$_SESSION['brewerID'];
 
 	// Build Add Entry Link
 	$add_entry_link = "";
 	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= $base_url."index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
-	else $add_entry_link .= build_public_url("brew","entry","add","default",$sef,$base_url);
+	else $add_entry_link .= build_public_url("brew","entry","add","default",$sef,$base_url,"default");
 
 }
 if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
@@ -348,7 +348,7 @@ $(document).ready(function(){
 				<p align="center"><?php echo sprintf("<span class=\"fa fa-lg fa-exlamation-circle\"></span> %s <a href=\"%s\">%s</a>.", $login_text_004, $base_url."index.php?section=login&amp;go=password&amp;action=forgot", $login_text_005); ?></p>
 				<?php if ((!$logged_in) && ($registration_open == 1)) { ?>
 				<p align="center" class="small"><?php echo $label_or; ?></p>
-				<a class="btn btn-block btn-default" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_register; ?></a>
+				<a class="btn btn-block btn-default" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_register; ?></a>
 				<?php } ?>
 			</div>
 		</div>
@@ -381,13 +381,13 @@ $(document).ready(function(){
                     <ul class="dropdown-menu">
                     	<?php if (($registration_open == 1) && (!$ua) && (!isset($_SESSION['loginUsername']))) { ?>
                         <?php if ($nav_register_entrant_show) { ?>
-                    	<li><a class="hide-loader" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></a></li>
+                    	<li><a class="hide-loader" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_entrant; ?></a></li>
                         <?php } ?>
                         <?php } ?>
                         <?php if ((!$judge_limit) && ($judge_window_open == 1)) { ?>
-                        <li><a class="hide-loader" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></a></li>
+                        <li><a class="hide-loader" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_judge; ?></a></li>
                         <?php } if ((!$steward_limit) && ($judge_window_open == 1)) { ?>
-                        <li><a class="hide-loader" href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward; ?></a></li>
+                        <li><a class="hide-loader" href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_steward; ?></a></li>
                         <?php } ?>
                     </ul>
                 </li>
@@ -424,7 +424,7 @@ $(document).ready(function(){
 						$assignment_array = explode(",", $assignment_array);
 						if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (judging_winner_display($row_judging_prefs['jPrefsJudgingOpen']))) { 
                    	?>
-					<li><a href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url); ?>" tabindex="-1"><?php echo $label_judging_dashboard; ?></a></li>
+					<li><a href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url,"default"); ?>" tabindex="-1"><?php echo $label_judging_dashboard; ?></a></li>
                     <?php }
                     } if ((!$disable_pay) && ($show_entries)) { ?>
                         <?php if (!$comp_paid_entry_limit) { ?>

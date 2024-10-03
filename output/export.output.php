@@ -1621,15 +1621,22 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     } // end if ($winner_method == 0)
 
+                    
+
                     /**
                      * Winners by style category
                      */
 
                     if ($winner_method == 1) {
 
-                        $a = styles_active(0);
+                        $a = json_decode($_SESSION['prefsSelectedStyles'],true);
+                        $actual_styles = array();
 
-                        foreach (array_unique($a) as $style) {
+                        foreach ($a as $key => $value) {
+                            $actual_styles[] = $value['brewStyleGroup'];
+                        }
+
+                        foreach (array_unique($actual_styles) as $style) {
 
                             if ($style > 0) {
 
@@ -1668,30 +1675,34 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                             do {
 
-                                                $string = display_place($row_scores['scorePlace'],1);
-                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
-                                                $table->easyCell($string);
-                                                
-                                                if ($_SESSION['prefsProEdition'] == 1) $string = html_entity_decode($row_scores['brewerBreweryName']);
-                                                else $string = html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']); 
-                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
-                                                $table->easyCell($string);
-                                                
-                                                $string = html_entity_decode($row_scores['brewName']);
-                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
-                                                $table->easyCell($string);
-                                                
-                                                $string = truncate_string($row_scores['brewStyle'],30," ");
-                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
-                                                $table->easyCell($string);
-                                                
-                                                if ($_SESSION['prefsProEdition'] == 0) {
-                                                    $string = html_entity_decode($row_scores['brewerClubs']);
+                                                if (!empty($row_scores['scorePlace'])) {
+
+                                                    $string = display_place($row_scores['scorePlace'],1);
                                                     $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
                                                     $table->easyCell($string);
-                                                }
+                                                    
+                                                    if ($_SESSION['prefsProEdition'] == 1) $string = html_entity_decode($row_scores['brewerBreweryName']);
+                                                    else $string = html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']); 
+                                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                    $table->easyCell($string);
+                                                    
+                                                    $string = html_entity_decode($row_scores['brewName']);
+                                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                    $table->easyCell($string);
+                                                    
+                                                    $string = truncate_string($row_scores['brewStyle'],30," ");
+                                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                    $table->easyCell($string);
+                                                    
+                                                    if ($_SESSION['prefsProEdition'] == 0) {
+                                                        $string = html_entity_decode($row_scores['brewerClubs']);
+                                                        $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                        $table->easyCell($string);
+                                                    }
 
-                                                $table->printRow();
+                                                    $table->printRow();
+
+                                                }                                                
 
                                             } while ($row_scores = mysqli_fetch_assoc($scores));
 
@@ -1722,12 +1733,19 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($winner_method == 2) {
 
-                        $styles = styles_active(2);
-                        $styles = array_unique($styles);
+                        $a = json_decode($_SESSION['prefsSelectedStyles'],true);
+                        $actual_styles = array();
 
-                        foreach ($styles as $style) {
-
-                            $style = explode("^",$style);
+                        foreach ($a as $key => $value) {
+                            $actual_styles[] = array(
+                                "id" => $key,
+                                "brewStyle" => $value['brewStyle'],
+                                "brewStyleGroup" => $value['brewStyleGroup'],
+                                "brewStyleNum" => $value['brewStyleNum']            
+                            );
+                        }
+                        
+                        foreach ($actual_styles as $key => $value) {
                             
                             include (DB.'winners_subcategory.db.php');
 
@@ -1740,8 +1758,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 if ($row_scores) {
 
-                                    if ($_SESSION['prefsStyleSet'] == "BA") $title = sprintf("%s (%s %s)",$style[2],$row_entry_count['count'],$entries);
-                                    else $title = sprintf("%s%s: %s (%s %s)",ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
+                                    if ($_SESSION['prefsStyleSet'] == "BA") $title = sprintf("%s (%s %s)",$value['brewStyle'],$row_entry_count['count'],$entries);
+                                    else $title = sprintf("%s%s: %s (%s %s)",ltrim($value['brewStyleGroup'],"0"),$value['brewStyleNum'],$value['brewStyle'],$row_entry_count['count'],$entries);
+                                    $title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $title)));
 
                                     $title_table = new easyTable($pdf,1);
                                     $title_table->easyCell($title, 'font-size:16; font-style:B; font-color:#000000;');

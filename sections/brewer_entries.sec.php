@@ -48,7 +48,7 @@ if (!$show_scores) {
 
 	$add_entry_link = "";
 	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= $base_url."index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
-	else $add_entry_link .= build_public_url("brew","entry","add","default",$sef,$base_url);
+	else $add_entry_link .= build_public_url("brew","entry","add","default",$sef,$base_url,"default");
 
 	$pay_button .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddPayEntries\">";
 	if (($show_entries) && ($add_entry_link_show)) $pay_button .= sprintf("<a class=\"btn btn-primary\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);

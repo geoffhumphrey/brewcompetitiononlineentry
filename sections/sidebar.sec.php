@@ -98,8 +98,8 @@ if ($section != "admin") {
 		else $page_info100 .= sprintf("<p>%s %s %s %s.</p>", $sidebar_text_005, $reg_open_sidebar, $sidebar_text_004, $reg_closed_sidebar);
 		
 		if ((!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<p>%s %s %s %s.</p>", $sidebar_text_000, $judge_open_sidebar, $sidebar_text_004, $judge_closed_sidebar);
-		elseif (($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> %s %s %s.</p>", build_public_url("register","steward","default","default",$sef,$base_url), $sidebar_text_001, $sidebar_text_004, $judge_open_sidebar, $judge_closed_sidebar);
-		elseif ((!$judge_limit) && ($steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> %s %s %s.</p>", build_public_url("register","judge","default","default",$sef,$base_url), $sidebar_text_002, $sidebar_text_004, $judge_open_sidebar, $judge_closed_sidebar);
+		elseif (($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> %s %s %s.</p>", build_public_url("register","steward","default","default",$sef,$base_url,"default"), $sidebar_text_001, $sidebar_text_004, $judge_open_sidebar, $judge_closed_sidebar);
+		elseif ((!$judge_limit) && ($steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> %s %s %s.</p>", build_public_url("register","judge","default","default",$sef,$base_url,"default"), $sidebar_text_002, $sidebar_text_004, $judge_open_sidebar, $judge_closed_sidebar);
 		
 		$page_info100 .= "</div>";
 		$page_info100 .= "</div>";
@@ -157,13 +157,13 @@ if ($section != "admin") {
 			$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 			$page_info100 .= sprintf("<strong class=\"text-danger\">%s</strong>",$label_confirmed_entries);
 			if ($section == "list") 	$page_info100 .= sprintf("<span class=\"pull-right\"><a href=\"#entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></span>",$sidebar_text_016,$totalRows_log_confirmed);
-			else $page_info100 .= sprintf("<span class=\"pull-right\"><a href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></span>",build_public_url("list","default","default","default",$sef,$base_url)."#entries", $sidebar_text_012, $totalRows_log_confirmed);
+			else $page_info100 .= sprintf("<span class=\"pull-right\"><a href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></span>",build_public_url("list","default","default","default",$sef,$base_url,"default")."#entries", $sidebar_text_012, $totalRows_log_confirmed);
 			$page_info100 .= "</div>";
 			if (($totalRows_log - $totalRows_log_confirmed) > 0) {
 				$page_info100 .= "<div class=\"bcoem-sidebar-panel bg-warning\">";
 				$page_info100 .= sprintf("<strong class=\"text-danger\">%s</strong>",$label_unconfirmed_entries);
 				if ($section == "list") 	$page_info100 .= sprintf("<span class=\"pull-right\"><a href=\"#entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></span>",$sidebar_text_015,($totalRows_log - $totalRows_log_confirmed));
-				else $page_info100 .= sprintf("<span class=\"pull-right\"><a href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></span>",build_public_url("list","default","default","default",$sef,$base_url)."#entries",$sidebar_text_015,($totalRows_log - $totalRows_log_confirmed));
+				else $page_info100 .= sprintf("<span class=\"pull-right\"><a href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></span>",build_public_url("list","default","default","default",$sef,$base_url,"default")."#entries",$sidebar_text_015,($totalRows_log - $totalRows_log_confirmed));
 				$page_info100 .= "</div>";
 			}
 
@@ -186,7 +186,7 @@ if ($section != "admin") {
 				if (!$disable_pay) {
 					$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 					$page_info100 .= sprintf("<strong class=\"text-danger\">%s</strong>",$label_entry_fees_to_pay);
-					if ($section != "pay") $page_info100 .= sprintf("<span class=\"pull-right\"><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"%s\">%s%s</a></span>",$sidebar_text_013,build_public_url("pay","default","default","default",$sef,$base_url),$currency_symbol,number_format($total_to_pay,2));
+					if ($section != "pay") $page_info100 .= sprintf("<span class=\"pull-right\"><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"%s\">%s%s</a></span>",$sidebar_text_013,build_public_url("pay","default","default","default",$sef,$base_url,"default"),$currency_symbol,number_format($total_to_pay,2));
 					else $page_info100 .= sprintf("<span class=\"pull-right\">%s%s</span>",$currency_symbol,number_format($total_to_pay,2));
 					$page_info100 .= "</div>";
 				}
@@ -214,8 +214,8 @@ if ($section != "admin") {
 					$page_info100 .= sprintf("%s</strong>",$sidebar_text_019);
 					
 					if ($incremental) {
-						// $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
-						$limits_link = build_public_url("entry","default","default","default",$sef,$base_url);
+						// $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url,"default");
+						$limits_link = build_public_url("entry","default","default","default",$sef,$base_url,"default");
 						$limits_link .= "#per-entrant-limits";
 
 						if (time() < $limit_date_1) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
@@ -235,8 +235,8 @@ if ($section != "admin") {
 					$page_info100 .= sprintf("%s</strong>",$sidebar_text_019);
 
 					if ($incremental) {
-						// $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
-						$limits_link = build_public_url("entry","default","default","default",$sef,$base_url);
+						// $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url,"default");
+						$limits_link = build_public_url("entry","default","default","default",$sef,$base_url,"default");
 						$limits_link .= "#per-entrant-limits";
 
 						if (time() < $limit_date_1) $page_info100 .= sprintf(" (<a href=\"%s\">%s</a> %s).", $limits_link, $sidebar_text_027, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
@@ -283,10 +283,10 @@ if ($section != "admin") {
 			$header1_300 .= "</div>";
 			$page_info300 .= "<div class=\"panel-body\">";
 			if ($totalRows_dropoff == 1) {
-				$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url)."#".str_replace(" ", "-", strtolower($label_drop_off)),strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
+				$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url,"default")."#".str_replace(" ", "-", strtolower($label_drop_off)),strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
 			}
 			else {
-				$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url)."#".str_replace(" ", "-", strtolower($label_drop_offs)),strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
+				$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url,"default")."#".str_replace(" ", "-", strtolower($label_drop_offs)),strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
 			}
 			$page_info300 .= "</p>";
 			$page_info300 .= "<p><small>".$dropoff_qualifier_text_001."</small></p>";
@@ -308,7 +308,7 @@ if ($section != "admin") {
 			$header1_500 .= "</h4>";
 			$header1_500 .= "</div>";
 			$page_info500 .= "<div class=\"panel-body\">";
-			$page_info500 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022, build_public_url("entry","default","default","default",$sef,$base_url)."#".str_replace(" ", "-", strtolower($label_shipping_info)), $sidebar_text_023, $shipping_open_sidebar, $sidebar_text_004, $shipping_closed_sidebar);
+			$page_info500 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022, build_public_url("entry","default","default","default",$sef,$base_url,"default")."#".str_replace(" ", "-", strtolower($label_shipping_info)), $sidebar_text_023, $shipping_open_sidebar, $sidebar_text_004, $shipping_closed_sidebar);
 			$page_info500 .= "</p>";
 			$page_info500 .= "</div>";
 			$page_info500 .= "</div>";
@@ -419,7 +419,7 @@ if ($section != "admin") {
 					$table_archive = $prefix."judging_scores_".$row_archive['archiveSuffix'];
 					if (table_exists($table_archive)) {
 				   		if (get_archive_count($table_archive) > 0) {
-				   			$archive_link = build_public_url("past-winners",$row_archive['archiveSuffix'],"default","default",$sef,$base_url);
+				   			$archive_link = build_public_url("past-winners",$row_archive['archiveSuffix'],"default","default",$sef,$base_url,"default");
 				   			$archive_sidebar_count++;
 							if ($go == $row_archive['archiveSuffix']) $archive_sidebar_content .= "<li><i class=\"fa fa-fw fa-trophy text-gold\"></i> <strong>".$row_archive['archiveSuffix']."</strong></li>";
 							else $archive_sidebar_content .= "<li><i class=\"fa fa-fw fa-trophy text-silver\"></i> <a href=\"".$archive_link."\">".$row_archive['archiveSuffix']."</a></li>";

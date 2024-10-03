@@ -38,7 +38,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	else $sef = FALSE;
 
 	if ($view == "admin") $insertGoTo = $base_url."index.php?section=evaluation&go=default&filter=default&view=admin";
-	else $insertGoTo = build_public_url("evaluation","default","default","default",$sef,$base_url);
+	else $insertGoTo = build_public_url("evaluation","default","default","default",$sef,$base_url,"default");
 
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 	$config_html_purifier = HTMLPurifier_Config::createDefault();

@@ -151,13 +151,14 @@ function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$
 	return $return;
 }
 
-function build_public_url($section="default",$go="default",$action="default",$id="default",$sef,$base_url) {
+function build_public_url($section="default",$go="default",$action="default",$id="default",$sef,$base_url,$view="default") {
 	
 	if ($_SESSION['prefsSEF'] == 'Y') {
 		$url = $base_url."";
 		if ($section != "default") $url .= $section."/";
 		if ($go != "default") $url .= $go."/";
 		if ($action != "default") $url .= $action."/";
+		if ($view != "default") $url .= $view."/";
 		if ($id != "default") $url .= $id."/";
 		return rtrim($url,"/");
 	}
@@ -166,6 +167,7 @@ function build_public_url($section="default",$go="default",$action="default",$id
 		$url = $base_url."index.php?section=".$section;
 		if ($go != "default") $url .= "&amp;go=".$go;
 		if ($action != "default") $url .= "&amp;action=".$action;
+		if ($view != "default") $url .= "&amp;view=".$view;
 		if ($id != "default") $url .= "&amp;id=".$id;
 		return $url;
 	}

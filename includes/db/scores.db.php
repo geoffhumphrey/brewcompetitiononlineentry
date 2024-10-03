@@ -1,8 +1,11 @@
 <?php
 
 if ($winner_method != 0) {
+
+    if ($winner_method == 2) $style = $value['brewStyleGroup'].$value['brewStyleNum'];
 	if ((isset($style)) && (is_numeric($style))) $style_pad = sprintf("%02d", $style);
 	else $style_pad = $style;
+
 }
 
 // Display by Table
@@ -13,16 +16,18 @@ if ($winner_method == 1) {
 
     if ($style_set == "BA") $query_scores = sprintf("SELECT * FROM %s a, %s b, %s c WHERE b.brewCategory='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
 
-    else $query_scores = sprintf("SELECT * FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style_pad);
+    else {
+        $query_scores = sprintf("SELECT * FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style_pad);
+    }
 
 }
 
 // Display by Subcategory
 if ($winner_method == 2) {
 
-    if ($style_set == "BA") $query_scores = sprintf("SELECT * FROM %s a, %s b, %s c WHERE b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[1]);
+    if ($style_set == "BA") $query_scores = sprintf("SELECT * FROM %s a, %s b, %s c WHERE b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $value['brewStyleNum']);
 
-    else $query_scores = sprintf("SELECT * FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
+    else $query_scores = sprintf("SELECT * FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $value['brewStyleGroup'], $value['brewStyleNum']);
 
 }
 

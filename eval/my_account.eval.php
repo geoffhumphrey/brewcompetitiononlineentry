@@ -13,6 +13,6 @@ if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == 
 		$primary_page_info .= "</p>";
 		$primary_page_info .= "</div>";
 	}
-	$user_edit_links .= "<div style=\"margin-right: 5px;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-primary\" href=\"".build_public_url("evaluation","default","default","default",$sef,$base_url)."\"><i class=\"fa fa-gavel\"></i> ".$label_judging_dashboard."</a></div>";
+	$user_edit_links .= "<div style=\"margin-right: 5px;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-primary\" href=\"".build_public_url("evaluation","default","default","default",$sef,$base_url,"default")."\"><i class=\"fa fa-gavel\"></i> ".$label_judging_dashboard."</a></div>";
 }
 ?>
