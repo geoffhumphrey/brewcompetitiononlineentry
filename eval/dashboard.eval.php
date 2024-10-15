@@ -322,9 +322,10 @@ if ($totalRows_table_assignments > 0) {
 			$table_assignment_pre .= "<table id=\"table-".$random."\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 			$table_assignment_pre .= "<thead>";
 			$table_assignment_pre .= "<tr>";
-			$table_assignment_pre .= "<th width=\"10%\">".$label_number."</th>";
+			$table_assignment_pre .= "<th width=\"5%\" nowrap>".$label_number."</th>";
 			$table_assignment_pre .= "<th width=\"20%\" class=\"hidden-xs\">".$label_style."</th>";
-			$table_assignment_pre .= "<th width=\"35%\">".$label_notes."</th>";
+			$table_assignment_pre .= "<th width=\"20%\">".$label_info."</th>";
+			$table_assignment_pre .= "<th width=\"25%\">".$label_notes."</th>";
 			$table_assignment_pre .= "<th>".$label_actions."</th>";
 			$table_assignment_pre .= "</tr>";
 			$table_assignment_pre .= "</thead>";
@@ -337,7 +338,9 @@ if ($totalRows_table_assignments > 0) {
 				\"bStateSave\" : false,
 				\"bLengthChange\" : false,
 				\"aaSorting\": [[1,'asc'],[0,'asc']],
+				\"bProcessing\" : false,
 				\"aoColumns\": [
+					null,
 					null,
 					null,
 					null,
@@ -368,9 +371,8 @@ if ($totalRows_table_assignments > 0) {
 
 					$score_style_data = explode("^",$score_style_data);
 			        
-					$query_entries = sprintf("SELECT id, brewBrewerID, brewStyle, brewCategorySort, brewCategory, brewSubCategory, brewInfo, brewJudgingNumber, brewName, brewPossAllergens, brewABV, brewJuiceSource, brewSweetnessLevel, brewMead1, brewMead2, brewMead3 FROM %s WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $prefix."brewing", $score_style_data[0], $score_style_data[1]);
-					if ($_SESSION['prefsDisplaySpecial'] == "J") $query_entries .= " ORDER BY brewJudgingNumber ASC;";
-					else $query_entries .= " ORDER BY id ASC;";
+					$query_entries = sprintf("SELECT * FROM %s WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $prefix."brewing", $score_style_data[0], $score_style_data[1]);
+					//$query_entries .= " ORDER BY brewJudgingNumber, brewCategorySort, brewSubCategory ASC;";
 					$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 					$row_entries = mysqli_fetch_assoc($entries);
 					$totalRows_entries = mysqli_num_rows($entries);
@@ -440,8 +442,8 @@ if ($totalRows_table_assignments > 0) {
 								
 							}
 							
-			        		$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-							$style_display = $style.": ".$score_style_data[2];
+			        		$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
+							$style_display = $style." ".$row_entries['brewStyle'];
 
 							$info_display = "";
 							$allergen_display = "";
@@ -487,7 +489,7 @@ if ($totalRows_table_assignments > 0) {
 							
 							if (!empty($row_entries['brewABV'])) {
 								$additional_info++;
-								$abv_display .= "<strong>".$label_abv.":</strong> ".$row_entries['brewABV'];
+								$abv_display .= "<strong>".$label_abv.":</strong> ".number_format($row_entries['brewABV'],1);
 							}
 
 							if (($admin) && ($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewJuiceSource']))) {
@@ -530,21 +532,23 @@ if ($totalRows_table_assignments > 0) {
 					        	$table_assignment_data .= "<td><a class=\"anchor\" name=\"".$number."\"></a>".$number."</td>";
 					        	$table_assignment_data .= "<td class=\"hidden-xs\">";
 					        	$table_assignment_data .= $style_display;
-					        	
-					        	if ($additional_info > 0) {
-					        		$table_assignment_data .= "<ul class=\"list-unstyled small\">";
-					        		if (!empty($info_display)) $table_assignment_data .= "<li><em>".str_replace("^",", ",$info_display)."</em></li>";
-					        		if (!empty($carb_display)) $table_assignment_data .= "<li><em>".$carb_display."</em></li>";
-					        		if (!empty($sweetness_display)) $table_assignment_data .= "<li><em>".$sweetness_display."</em></li>";
-					        		if (!empty($sweetness_level_display)) $table_assignment_data .= "<li><em>".$sweetness_level_display."</em></li>";
-					        		if (!empty($allergen_display)) $table_assignment_data .= "<li><em>".$allergen_display."</em></li>";
-					        		if (!empty($abv_display)) $table_assignment_data .= "<li><em>".$abv_display."</em></li>";
-					        		if (!empty($juice_src_display)) $table_assignment_data .= "<li><em>".$juice_src_display."</em></li>";
-					        		if (!empty($strength_display)) $table_assignment_data .= "<li><em>".$strength_display."</em></li>";
-					        		$table_assignment_data .= "</ul>";
-					        	}
-						        	
 					        	$table_assignment_data .= "</td>";
+					        	
+					        	$table_assignment_data .= "<td>";
+					        	if ($additional_info > 0) {
+					        		$table_assignment_data .= "<small><ul class=\"list-unstyled\">";
+					        		if (!empty($info_display)) $table_assignment_data .= "<li>".str_replace("^",", ",$info_display)."</li>";
+					        		if (!empty($carb_display)) $table_assignment_data .= "<li>".$carb_display."</li>";
+					        		if (!empty($sweetness_display)) $table_assignment_data .= "<li>".$sweetness_display."</li>";
+					        		if (!empty($sweetness_level_display)) $table_assignment_data .= "<li>".$sweetness_level_display."</li>";
+					        		if (!empty($allergen_display)) $table_assignment_data .= "<li>".$allergen_display."</li>";
+					        		if (!empty($abv_display)) $table_assignment_data .= "<li>".$abv_display."%</li>";
+					        		if (!empty($juice_src_display)) $table_assignment_data .= "<li>".$juice_src_display."</li>";
+					        		if (!empty($strength_display)) $table_assignment_data .= "<li>".$strength_display."</li>";
+					        		$table_assignment_data .= "</ul></small>";
+					        	}
+					        	$table_assignment_data .= "</td>";
+
 					        	$table_assignment_data .= "<td>".$notes."</td>";
 					        	$table_assignment_data .= "<td>".$eval_place_actions.$actions."</td>";
 					            $table_assignment_data .= "</tr>";

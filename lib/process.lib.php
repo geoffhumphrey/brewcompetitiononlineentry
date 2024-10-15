@@ -184,7 +184,7 @@ function generate_judging_numbers($brewing_db_table,$method) {
 	$result = $db_conn->update ($brewing_db_table, $data);
 	if (!$result) $status += 1;
 
-	$query_judging_numbers = sprintf("SELECT id,brewCategory,brewName FROM %s", $brewing_db_table);
+	$query_judging_numbers = sprintf("SELECT id,brewCategory,brewCategorySort,brewSubCategory,brewName FROM %s ORDER BY brewCategorySort,brewSubCategory ASC", $brewing_db_table);
 	$judging_numbers = mysqli_query($connection,$query_judging_numbers) or die (mysqli_error($connection));
 	$row_judging_numbers = mysqli_fetch_assoc($judging_numbers);
 

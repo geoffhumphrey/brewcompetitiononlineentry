@@ -128,7 +128,7 @@ if ($go == "all_entry_info") {
 
 							if ($row_entries) {
 
-								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 								$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
 								do {
@@ -220,6 +220,11 @@ if ($go == "all_entry_info") {
 						$table_info_header .= "</small>";
 					}
 					$table_info_header .= "</h2>";
+
+					$table_info_header .= "<h3>";
+					$table_info_header .= table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+					if ($round != "default") $table_info_header .= sprintf("<br>%s %s",$label_round,$round);
+					$table_info_header .= "</h3>";
 					
 					if (!empty($table_flight_tbody)) {
 
@@ -241,14 +246,14 @@ if ($go == "all_entry_info") {
 						$table_flight_datatables .= "\"aaSorting\": [[1,'asc'],[0,'asc']],";
 						$table_flight_datatables .= "\"bProcessing\" : false,";
 						$table_flight_datatables .= "\"aoColumns\": [";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						//if ($filter != "mini_bos") $table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						//if ($filter != "mini_bos") $table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null";
 						$table_flight_datatables .= "]";
 						$table_flight_datatables .= "} );";
 						$table_flight_datatables .= "} );";
@@ -329,7 +334,7 @@ if ($go == "all_entry_info") {
 					foreach (array_unique($a) as $value) {
 
 						include (DB.'output_pullsheets_entries.db.php');
-						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
  
 						do {
@@ -415,14 +420,14 @@ if ($go == "all_entry_info") {
 						$table_flight_datatables .= "\"aaSorting\": [[1,'asc'],[0,'asc']],";
 						$table_flight_datatables .= "\"bProcessing\" : false,";
 						$table_flight_datatables .= "\"aoColumns\": [";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						//if ($filter != "mini_bos") $table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						//if ($filter != "mini_bos") $table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null";
 						$table_flight_datatables .= "]";
 						$table_flight_datatables .= "} );";
 						$table_flight_datatables .= "} );";
@@ -494,13 +499,13 @@ if ($go == "mini_bos") {
 		$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
 		$table_flight_datatables .= "\"bProcessing\" : false,";
 		$table_flight_datatables .= "\"aoColumns\": [";
-		$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-		$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-		$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-		$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-		$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-		$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-		$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+		$table_flight_datatables .= "null,";
+		$table_flight_datatables .= "null,";
+		$table_flight_datatables .= "null,";
+		$table_flight_datatables .= "null,";
+		$table_flight_datatables .= "null,";
+		$table_flight_datatables .= "null,";
+		$table_flight_datatables .= "null";
 		$table_flight_datatables .= "]";
 		$table_flight_datatables .= "} );";
 		$table_flight_datatables .= "} );";
@@ -515,7 +520,7 @@ if ($go == "mini_bos") {
 
 		do {
 
-			$style = style_number_const($row_entries_mini['brewCategorySort'],$row_entries_mini['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+			$style = style_number_const($row_entries_mini['brewCategorySort'],$row_entries_mini['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 			$style_special = $row_entries_mini['brewCategorySort']."^".$row_entries_mini['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 			$special = style_convert($style_special,"9",$base_url);
 			$special = explode("^",$special);
@@ -674,14 +679,14 @@ if ($go == "judging_scores_bos") {
 				$table_flight_datatables .= "\"aaSorting\": [[3,'asc'],[2,'asc'],[1,'asc']],";
 				$table_flight_datatables .= "\"bProcessing\" : false,";
 				$table_flight_datatables .= "\"aoColumns\": [";
-				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-				$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+				$table_flight_datatables .= "null,";
+				$table_flight_datatables .= "null,";
+				$table_flight_datatables .= "null,";
+				$table_flight_datatables .= "null,";
+				$table_flight_datatables .= "null,";
+				$table_flight_datatables .= "null,";
+				$table_flight_datatables .= "null,";
+				$table_flight_datatables .= "null";
 				$table_flight_datatables .= "]";
 				$table_flight_datatables .= "} );";
 				$table_flight_datatables .= "} );";
@@ -887,14 +892,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
 						$table_flight_datatables .= "\"bProcessing\" : false,";
 						$table_flight_datatables .= "\"aoColumns\": [";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						if ($filter != "mini_bos") $table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						if ($filter != "mini_bos") $table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null";
 						$table_flight_datatables .= "]";
 						$table_flight_datatables .= "} );";
 						$table_flight_datatables .= "} );";
@@ -919,7 +924,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 							$style_special = "";
 
 							if ($row_entries) {
-								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 								$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 							}
 							
@@ -932,10 +937,12 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "<td>";
 									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
+
 									$table_flight_tbody .= "<td>";
 									if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
 									else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
 									$table_flight_tbody .= "</td>";
+
 									$table_flight_tbody .= "<td>";
 									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle']; 
 									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
@@ -1095,14 +1102,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
 					$table_flight_datatables .= "\"bProcessing\" : false,";
 					$table_flight_datatables .= "\"aoColumns\": [";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					if ($filter != "mini_bos") $table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					if ($filter != "mini_bos") $table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null";
 					$table_flight_datatables .= "]";
 					$table_flight_datatables .= "} );";
 					$table_flight_datatables .= "} );";
@@ -1125,7 +1132,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 						if ($row_entries) {
 
-							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 							$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
 							do {
@@ -1136,10 +1143,12 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "<td>";
 									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
+
 									$table_flight_tbody .= "<td>";
 									if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
 									else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
 									$table_flight_tbody .= "</td>";
+
 									$table_flight_tbody .= "<td>";
 									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
 									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
@@ -1316,14 +1325,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
 					$table_flight_datatables .= "\"bProcessing\" : false,";
 					$table_flight_datatables .= "\"aoColumns\": [";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					if ($filter != "mini_bos") $table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					if ($filter != "mini_bos") $table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null";
 					$table_flight_datatables .= "]";
 					$table_flight_datatables .= "} );";
 					$table_flight_datatables .= "} );";
@@ -1364,10 +1373,12 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 										$table_flight_tbody .= "<td>";
 										$table_flight_tbody .= "<p>&nbsp;</p>";
 										$table_flight_tbody .= "</td>";
+
 										$table_flight_tbody .= "<td>";
 										if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
 										else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
 										$table_flight_tbody .= "</td>";
+
 										$table_flight_tbody .= "<td>";
 										if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
 										else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
@@ -1542,14 +1553,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
 						$table_flight_datatables .= "\"bProcessing\" : false,";
 						$table_flight_datatables .= "\"aoColumns\": [";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						if ($filter != "mini_bos") $table_flight_datatables .= "{ \"asSorting\": [  ] },";
-						$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null,";
+						if ($filter != "mini_bos") $table_flight_datatables .= "null,";
+						$table_flight_datatables .= "null";
 						$table_flight_datatables .= "]";
 						$table_flight_datatables .= "} );";
 						$table_flight_datatables .= "} );";
@@ -1568,7 +1579,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						foreach (array_unique($a) as $value) {
 
 							include (DB.'output_pullsheets_entries.db.php');
-							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 							$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
 							do {
@@ -1746,13 +1757,13 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 				$pullsheet_output .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
 				$pullsheet_output .= "\"bProcessing\" : false,";
 				$pullsheet_output .= "\"aoColumns\": [";
-				$pullsheet_output .= "{ \"asSorting\": [  ] },";
-				$pullsheet_output .= "{ \"asSorting\": [  ] },";
-				$pullsheet_output .= "{ \"asSorting\": [  ] },";
-				$pullsheet_output .= "{ \"asSorting\": [  ] },";
-				$pullsheet_output .= "{ \"asSorting\": [  ] },";
-				$pullsheet_output .= "{ \"asSorting\": [  ] },";
-				$pullsheet_output .= "{ \"asSorting\": [  ] }";
+				$pullsheet_output .= "null,";
+				$pullsheet_output .= "null,";
+				$pullsheet_output .= "null,";
+				$pullsheet_output .= "null,";
+				$pullsheet_output .= "null,";
+				$pullsheet_output .= "null,";
+				$pullsheet_output .= "null";
 				$pullsheet_output .= "]";
 				$pullsheet_output .= "} );";
 				$pullsheet_output .= "} );";
@@ -1796,14 +1807,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
 					$table_flight_datatables .= "\"bProcessing\" : false,";
 					$table_flight_datatables .= "\"aoColumns\": [";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] }";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null,";
+					$table_flight_datatables .= "null";
 					$table_flight_datatables .= "]";
 					$table_flight_datatables .= "} );";
 					$table_flight_datatables .= "} );";
@@ -1828,7 +1839,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 					if (!empty($row_entries)) {
 
-						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
 						do {
