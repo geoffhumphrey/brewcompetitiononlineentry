@@ -1,19 +1,22 @@
 <?php
-
-/*
-// Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-*/
-
 if ($_SESSION['prefsProEdition'] == 1) $participant_orgs_label = $label_industry_affiliations;
 else $participant_orgs_label = $label_brewing_partners;
 
 $show_partners_orgs = FALSE;
+
+// User is already assigned to a table. Contact organizer.
+if (($table_assignment) && ($go == "account") && (!$entrant_type_brewery)) { ?>
+
+    <div class="form-group">
+        <label for="brewerJudge" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging."/".$label_stewarding; ?></label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group">
+                <div class="alert alert-warning"><?php echo $brewer_info_020; ?></div>
+            </div>
+        </div>
+    </div>
+
+<?php } 
 
 if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
 
@@ -62,7 +65,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     <div id="brewerJudgeFields">
 
         <?php if (($totalRows_judging > 0) || (($go == "admin") && ($filter != "default"))) { ?>
-        <div class="form-group <?php if (($view == "all-availability") || ($view == "judging-availabilty")) echo "text-warning"; ?>">
+        <div class="form-group <?php if (($view == "all-availability") || ($view == "judging-availability")) echo "text-warning"; ?>">
             <?php if (!empty($judge_location_avail)) { ?>
             <label for="brewerJudgeLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">

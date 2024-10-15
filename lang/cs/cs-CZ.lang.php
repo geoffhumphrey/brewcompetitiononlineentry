@@ -2045,6 +2045,7 @@ $brewer_info_016 = "<p>Zdá se, že jste se zaregistrovali jako porotce, ale neu
 $brewer_info_017 = "<p>Zdá se, že jste se zaregistrovali jako asistent, ale neuvedli jste, že jste k dispozici pro jakoukoli hodnotící relaci.</p><p>Vyberte prosím níže uvedené tlačítko pro úpravu vašeho účtu a poté vyberte \"Ano\" pro každou z relací, pro které jste dostupní jako asistent v sekci Dostupnost Relací Asistenta.</p><p>Pokud nejste k dispozici pro žádnou relaci, vyberte prosím \"Ne\" v sekci Hodnocení.</p>";
 $brewer_info_018 = "<strong>Uvedli jste, že jste ochotni sloužit jako porotce, ale neuvedli jste, že jste k dispozici pro jakoukoli uvedenou hodnotící relaci.</strong> Prosím, upravte informace o svém účtu a vyberte \"Ano\" pro jednu nebo více hodnotících relací.";
 $brewer_info_019 = "<strong>Uvedli jste, že jste ochotni sloužit jako asistent, ale neuvedli jste, že jste k dispozici pro jakoukoli uvedenou asistentskou relaci.</strong> Prosím, upravte informace o svém účtu a vyberte \"Ano\" pro jednu nebo více asistentských relací.";
+$brewer_info_020 = "<strong>Již jste byli přiděleni ke stolu jako rozhodčí nebo steward.</strong> Pokud si přejete změnit svou dostupnost, kontaktujte prosím organizátora soutěže nebo koordinátora rozhodčích.";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -61,8 +61,9 @@ else {
     $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
 }
 
-if ((!empty($table_assign_judge)) || (!empty($table_assign_steward))) $table_assignment = TRUE;
-if ((empty($table_assign_judge)) && (empty($table_assign_steward))) $table_assignment = FALSE;
+// If a the user is already assigned to a table, do not show the judge or steward availability fields
+$table_assignment = FALSE;
+if (($_SESSION['jPrefsTablePlanning'] == 0) && ((!empty($table_assign_judge)) || (!empty($table_assign_steward)))) $table_assignment = TRUE;
 
 if ($_SESSION['prefsProEdition'] == 1) {
 
@@ -240,7 +241,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $staff_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
             $staff_avail_option .= "</select>";
 
-            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+            if ((time() < $row_judging3['judgingDate']) || (($go == "admin") && ($filter != "default"))) {
                 $staff_location_avail .= $staff_avail_info;
                 $staff_location_avail .= $staff_avail_option;
             }

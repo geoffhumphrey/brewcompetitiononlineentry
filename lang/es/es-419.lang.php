@@ -2123,6 +2123,7 @@ $brewer_info_016 = "<p>Parece que te has registrado para servir como juez, pero 
 $brewer_info_017 = "<p>Parece que te has registrado para servir como asistente, pero no has indicado que estás disponible para ninguna sesión de evaluación.</p><p>Por favor, selecciona el botón a continuación para editar tu cuenta y luego selecciona \"Sí\" para cada una de las sesiones en las que estés disponible como asistente en la sección de Disponibilidad de Sesiones de Asistencia.</p><p>Si no estás disponible para ninguna sesión, selecciona \"No\" en la sección de Evaluación.</p>";
 $brewer_info_018 = "<strong>Has indicado que estás dispuesto a servir como juez, pero no has indicado que estés disponible para ninguna sesión de evaluación listada.</strong> Por favor, edita la información de tu cuenta y selecciona \"Sí\" para una o más sesiones de evaluación.";
 $brewer_info_019 = "<strong>Has indicado que estás dispuesto a servir como asistente, pero no has indicado que estés disponible para ninguna sesión de asistencia listada.</strong> Por favor, edita la información de tu cuenta y selecciona \"Sí\" para una o más sesiones de asistencia.";
+$brewer_info_020 = "<strong>Ya se le ha asignado una mesa como juez o comisario.</strong> Si desea cambiar su disponibilidad, póngase en contacto con el organizador de la competición o con el coordinador de jueces.";
 
 /**
  * ----------------------------------------------------------------------------------

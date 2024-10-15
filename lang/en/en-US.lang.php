@@ -1936,7 +1936,7 @@ $register_text_052 = "A \"Yes\" or \"No\" response is required for each location
 $brewer_text_044 = "Do you wish to change your security question and/or answer?";
 $brewer_text_045 = "No results have been recorded.";
 $brewer_text_046 = "For free-form club name entry, some symbols are not allowed, including ampersand (&amp;), single-quotation marks (&#39;), double-quotation marks (&quot;), and percent (&#37;).";
-$brewer_text_047 = "If you are not available for any of the sessions listed below, but still can serve as as staff member in another capacity, keep \"Yes\" selected above.";
+$brewer_text_047 = "If you are not available for any of the sessions listed when you select \"Yes\" above, but still are able to serve as as staff member in another capacity, please keep \"Yes\" as your response.";
 $brewer_text_048 = "Shipping Entries";
 $brewer_text_049 = "Select \"Not Applicable\" if you don't plan to submit any entries into the competition at this time.";
 $brewer_text_050 = "Select \"Shipping Entries\" if you plan to box up and send your entries to the provided Shipping Location.";
@@ -2103,7 +2103,7 @@ $brewer_info_016 = "<p>It appears that you've signed up to serve as a judge, but
 $brewer_info_017 = "<p>It appears that you've signed up to serve as a steward, but have not indicated that you are available for any judging session.</p><p>Please select the button below to edit your account and then select \"Yes\" for each of the sessions you are available to serve as a steward in the Stewarding Session Availability section.</p><p>If you are not available for any session, please select \"No\" in the Judging section.</p>";
 $brewer_info_018 = "<strong>You have indicated that you are willing to serve as a judge but have not indicated that you are available for any listed judging session.</strong> Please edit your account info and select \"Yes\" to one or more judging sessions.";
 $brewer_info_019 = "<strong>You have indicated that you are willing to serve as a steward but have not indicated that you are available for any listed stewarding session.</strong> Please edit your account info and select \"Yes\" to one or more stewarding sessions.";
-
+$brewer_info_020 = "<strong>You have already been assigned to a table as a judge or steward</strong>. If you wish to change your availability, please contact the competition organizer or judge coordinator.";
 
 /**
  * ----------------------------------------------------------------------------------

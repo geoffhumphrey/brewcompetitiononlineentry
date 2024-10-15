@@ -2124,7 +2124,7 @@ $brewer_info_016 = "<p>Il semble que vous vous soyez inscrit pour servir comme j
 $brewer_info_017 = "<p>Il semble que vous vous soyez inscrit pour servir comme assistant, mais vous n'avez pas indiqué que vous êtes disponible pour une quelconque session de jugement.</p><p>Veuillez sélectionner le bouton ci-dessous pour modifier votre compte, puis sélectionner \"Oui\" pour chacune des sessions auxquelles vous êtes disponible comme assistant dans la section Disponibilité des Sessions d'Assistance.</p><p>Si vous n'êtes disponible pour aucune session, veuillez sélectionner \"Non\" dans la section Jugement.</p>";
 $brewer_info_018 = "<strong>Vous avez indiqué que vous êtes prêt à servir comme juge, mais vous n'avez pas indiqué que vous êtes disponible pour une session de jugement répertoriée.</strong> Veuillez modifier les informations de votre compte et sélectionner \"Oui\" pour une ou plusieurs sessions de jugement.";
 $brewer_info_019 = "<strong>Vous avez indiqué que vous êtes prêt à servir comme assistant, mais vous n'avez pas indiqué que vous êtes disponible pour une session d'assistance répertoriée.</strong> Veuillez modifier les informations de votre compte et sélectionner \"Oui\" pour une ou plusieurs sessions d'assistance.";
-
+$brewer_info_020 = "<strong>Vous avez déjà été assigné à une table en tant que juge ou steward.</strong> Si vous souhaitez modifier votre disponibilité, veuillez contacter l'organisateur de la compétition ou le coordinateur des juges.";
 
 /**
  * ----------------------------------------------------------------------------------
