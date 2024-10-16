@@ -26,6 +26,7 @@ else {
 		elseif (($go == "judging") && (($action == "add") || ($action == "edit"))) $query_judging .= sprintf(" WHERE id='%s'",$id);
 		elseif (($go == "non-judging") && ($action == "default")) $query_judging .= " WHERE judgingLocType='2' ORDER BY judgingDate,judgingLocName ASC";
 		elseif (($go == "non-judging") && (($action == "add") || ($action == "edit"))) $query_judging .= sprintf(" WHERE id='%s'",$id);
+		elseif (($section == "admin") && ($go == "judging_tables")) $query_judging .= " ORDER BY judgingDate,judgingLocName ASC";
 	}
 	
 	else $query_judging .= " ORDER BY judgingDate,judgingLocName ASC";
@@ -38,7 +39,6 @@ $totalRows_judging = mysqli_num_rows($judging);
 
 // Separate connections for selected queries that are housed on the same page.
 // ********************* Should be replaced with function *********************
-
 
 // Apparently Unused - v 2.5.0
 $query_judging1 = sprintf("SELECT * FROM %s",$judging_locations_db_table);
