@@ -318,6 +318,9 @@ if ($entry_found) {
   }
 
   // Build entry info display
+  $entry_info_html .= "<h3>".$label_info." <a role=\"button\" id=\"show-hide-entry-info-btn\" data-toggle=\"collapse\" href=\"#scoresheet-entry-info\" aria-controls=\"scoresheet-entry-info\"><i id=\"toggle-icon-entry-info\" class=\"fa fa-chevron-circle-down\"></i></a></h3>";
+
+  $entry_info_html .= "<section class=\"collapse in\" id=\"scoresheet-entry-info\">";
   $entry_info_html .= "<div class=\"alert alert-teal\">";
   $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
   $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_number."</strong></div>";
@@ -432,7 +435,7 @@ if ($entry_found) {
   if (!empty($row_entry_info['brewABV'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
     $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_abv."</strong></div>";
-    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewABV']."&#37;</div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".number_format($row_entry_info['brewABV'],1)."&#37;</div>";
     $entry_info_html .= "</div>";
   }
 
@@ -527,7 +530,7 @@ if ($entry_found) {
   $sticky_score_tally = "<div id=\"sticky-score\" class=\"pull-right\">";
   $sticky_score_tally .= "<div class=\"pull-right\" style=\"display:block; font-size: 1.5em; padding-right: 5px;  margin-bottom: 15px;\">";
   $sticky_score_tally .= "<i style=\"padding: 5px 5px 0 0; font-size: .75em\"\" id=\"warning-indicator-icon\" class=\"fa fa-exclamation-triangle text-danger\"></i>";
-  $sticky_score_tally .= "<a style=\"padding-top: 5px; font-size: .75em\"\" id=\"show-hide-status-btn\" data-toggle=\"collapse\" href=\"#scoring-guide-status\" aria-controls=\"scoring-guide-status\"><span id=\"toggle-icon\" class=\"fa fa-chevron-circle-up\"></span></a>";
+  $sticky_score_tally .= "<a role=\"button\" style=\"padding-top: 5px; font-size: .75em\"\" id=\"show-hide-status-btn\" data-toggle=\"collapse\" href=\"#scoring-guide-status\" aria-controls=\"scoring-guide-status\"><span id=\"toggle-icon\" class=\"fa fa-chevron-circle-up\"></span></a>";
   $sticky_score_tally .= "</div>";
   
   if (!$nw_cider) { 
@@ -591,6 +594,8 @@ else {
   $entry_info_html .= "</form>";
   $scoresheet_version = "";
 }
+
+$entry_info_html .= "</section>";
 
 // Sub-nav Buttons
 if ($eval_source == 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
@@ -660,6 +665,36 @@ $(document).ready(function() {
   $('#show-hide-status-btn').click(function(){
       $('#toggle-icon').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
   });
+
+  $('#show-hide-aroma-btn').click(function(){
+      $('#toggle-icon-aroma').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+  });
+
+  $('#show-hide-appearance-btn').click(function(){
+      $('#toggle-icon-appearance').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+  });
+
+  $('#show-hide-flavor-btn').click(function(){
+      $('#toggle-icon-flavor').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+  });
+
+  $('#show-hide-mouthfeel-btn').click(function(){
+      $('#toggle-icon-mouthfeel').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+  });
+
+  $('#show-hide-overall-btn').click(function(){
+      $('#toggle-icon-overall').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+  });
+
+  $('#show-hide-flaws-btn').click(function(){
+      $('#toggle-icon-flaws').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+  });
+
+  $('#show-hide-entry-info-btn').click(function(){
+      $('#toggle-icon-entry-info').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+  });
+
+  // show-hide-entry-info-btn
 
 });
 </script>
