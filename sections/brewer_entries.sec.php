@@ -59,8 +59,11 @@ if (!$show_scores) {
 
 if (($totalRows_log > 0) && ($show_scores)) {
 
+	if ($_SESSION['prefsProEdition'] == 1) $pay_button_label = $label_results_export;
+	else $pay_button_label = $label_results_export_personal;
+
 	$link_results_export = $base_url."includes/output.inc.php?section=export-personal-results&amp;id=".$_SESSION['brewerID'];
-	$pay_button .= sprintf("<a href=\"%s\" class=\"btn btn-success hide-loader\" target=\"_blank\"><i class=\"fa fa-lg fa-file-csv\" style=\"margin-right: 8px;\"></i>%s</a>",$link_results_export, $label_results_export_personal);
+	$pay_button .= sprintf("<a href=\"%s\" class=\"btn btn-success hide-loader\" target=\"_blank\"><i class=\"fa fa-lg fa-file-csv\" style=\"margin-right: 8px;\"></i>%s</a>",$link_results_export, $pay_button_label);
 
 }
 

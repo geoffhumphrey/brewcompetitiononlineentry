@@ -14,6 +14,8 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
         if ((($go == "judging_scores_bos") || ($go == "judging_scores")) && (($view == "html") || ($view == "pdf"))) $authorized = TRUE;
     }
 
+    if ($section == "export-personal-results") $authorized = TRUE;
+
     if (!$authorized) {
         $redirect = "../../403.php";
         $redirect_go_to = sprintf("Location: %s", $redirect);
@@ -64,6 +66,10 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
  * Request from Hirendu Vaishnav (BJCP Assistant IT Director) to remove BOS 
  * info from BJCP XML output.
  */
+
+// Run the integrity function. 
+// This will make sure that user ids line up with brewer uids, etc.
+if ($authorized) data_integrity_check();
 
 // Queries for current data
 if ($filter == "default") {
@@ -3308,7 +3314,7 @@ else echo "Not allowed.";
 
 if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results") && ($id != "default")) {
 
-    $query_brewer = sprintf("SELECT DISTINCT a.brewCategory, a.brewSubCategory, a.id AS eid, a.brewStyle, a.brewInfo, a.brewInfoOptional, a.brewComments, b.scoreEntry, b.scorePlace, c.brewerFirstName, c.brewerLastName, c.brewerClubs, c.brewerEmail, c.brewerMHP FROM %s a, %s b, %s c WHERE a.brewBrewerID = '%s' AND b.bid = '%s' AND c.uid = '%s' AND a.id = b.eid", $prefix."brewing", $prefix."judging_scores", $prefix."brewer", $id, $id, $id);
+    $query_brewer = sprintf("SELECT DISTINCT a.brewCategory, a.brewSubCategory, a.id AS eid, a.brewStyle, a.brewInfo, a.brewInfoOptional, a.brewComments, b.scoreEntry, b.scorePlace, c.brewerFirstName, c.brewerLastName, c.brewerClubs, c.brewerEmail, c.brewerMHP, c.brewerBreweryName FROM %s a, %s b, %s c WHERE a.brewBrewerID = '%s' AND b.bid = '%s' AND c.uid = '%s' AND a.id = b.eid", $prefix."brewing", $prefix."judging_scores", $prefix."brewer", $id, $id, $id);
     $brewer = mysqli_query($connection,$query_brewer);
     $row_brewer = mysqli_fetch_assoc($brewer);
     $totalRows_brewer = mysqli_num_rows($brewer);
@@ -3327,7 +3333,7 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
     // Results data headers
     $results[] = array("Category", "Category Name", "Required Info", "Official Score", "Highest Score", "Place");
 
-    if ($row_brewer) {
+    if (($row_brewer) && ($totalRows_brewer > 0)) {
 
         do {
 
@@ -3396,6 +3402,7 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
             if ($results_count == $totalRows_brewer) {
                 $first_name = convert_to_entities($row_brewer['brewerFirstName']);
                 $last_name = convert_to_entities($row_brewer['brewerLastName']);
+                $org_name = convert_to_entities($row_brewer['brewerBreweryName']);
                 $club = convert_to_entities($row_brewer['brewerClubs']);
                 $email = convert_to_entities($row_brewer['brewerEmail']);
                 if ($filter == "MHP") $mhp = convert_to_entities($row_brewer['brewerMHP']);
@@ -3418,8 +3425,17 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
         }
         
         else {
-            $personal[] = array("Last Name", "First Name", "Club", "Email");
-            $personal[] = array($last_name,$first_name,$club,$email);
+            
+            if ($_SESSION['prefsProEdition'] == 1) {
+                $personal[] = array("Organization Name", "Contact Email");
+                $personal[] = array($org_name,$email);
+            }
+
+            else {
+                $personal[] = array("Last Name", "First Name", "Club", "Email");
+                $personal[] = array($last_name,$first_name,$club,$email);
+            }
+
         }        
 
         // Spacer
@@ -3437,7 +3453,8 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
     $separator = ","; 
     $extension = ".csv";
     $date = date("m-d-Y");
-    $filename = $first_name."_".$last_name."_Personal_Results_".$_SESSION['contestName']."_";
+    if ($_SESSION['prefsProEdition'] == 1) $filename = $org_name."_Organization_Results_".$_SESSION['contestName']."_";
+    else $filename = $first_name."_".$last_name."_Personal_Results_".$_SESSION['contestName']."_";
     if ($filter == "MHP") $filename .= "MHP_";
     $filename .= $date.$extension;
     $filename = filename($filename);
