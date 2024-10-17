@@ -448,6 +448,8 @@ if ($totalRows_table_assignments > 0) {
 							$info_display = "";
 							$allergen_display = "";
 							$abv_display = "";
+							$pouring_display = "";
+							$pouring_arr = "";
 							$juice_src_display = "";
 							$carb_display = "";
 							$sweetness_display = "";
@@ -490,6 +492,14 @@ if ($totalRows_table_assignments > 0) {
 							if (!empty($row_entries['brewABV'])) {
 								$additional_info++;
 								$abv_display .= "<strong>".$label_abv.":</strong> ".number_format($row_entries['brewABV'],1);
+							}
+
+							if (!empty($row_entries['brewPouring'])) {
+								$pouring_arr = json_decode($row_entries['brewPouring'],true);
+								$pouring_display .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
+								if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $pouring_display .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
+								$pouring_display .= "<li><strong>".$label_rouse_yeast.":</strong> ".$pouring_arr['pouring_rouse']."</li>";
+								unset($pouring_arr);
 							}
 
 							if (($admin) && ($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewJuiceSource']))) {
@@ -545,6 +555,7 @@ if ($totalRows_table_assignments > 0) {
 					        		if (!empty($abv_display)) $table_assignment_data .= "<li>".$abv_display."%</li>";
 					        		if (!empty($juice_src_display)) $table_assignment_data .= "<li>".$juice_src_display."</li>";
 					        		if (!empty($strength_display)) $table_assignment_data .= "<li>".$strength_display."</li>";
+					        		if (!empty($pouring_display)) $table_assignment_data .= $pouring_display;
 					        		$table_assignment_data .= "</ul></small>";
 					        	}
 					        	$table_assignment_data .= "</td>";
