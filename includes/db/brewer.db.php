@@ -40,27 +40,22 @@ if (isset($_SESSION['user_id'])) {
 	}
 
 	elseif ($section == "pay") {
-		$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'",  $_SESSION['user_id']);
+		$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);
 		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 		$row_brewer = mysqli_fetch_assoc($brewer);
 		$totalRows_brewer = mysqli_num_rows($brewer);
 	}
 
 	// Viewing all participants in current comp DB query
-	// @single
 	elseif ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) || ($section == "participant_summary") || ($section == "particpant-entries")) {
-		if (SINGLE) $query_brewer = sprintf("SELECT * FROM %s WHERE FIND_IN_SET('%s',brewerCompParticipant) > 0", $brewer_db_table, $_SESSION['comp_id']);
-		else $query_brewer = sprintf("SELECT * FROM %s ORDER BY brewerLastName", $brewer_db_table);
+		$query_brewer = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate FROM %s a, %s b WHERE a.brewerEmail = b.user_name ORDER BY brewerLastName ASC", $brewer_db_table, $users_db_table);
 		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 		$row_brewer = mysqli_fetch_assoc($brewer);
 		$totalRows_brewer = mysqli_num_rows($brewer);
 	}
 
-
-	// @single
 	elseif ((($section == "admin") && ($go == "participants") && ($filter == "with_entries")  && ($dbTable == "default"))) {
-		$query_brewer = sprintf("SELECT b.id, b.uid, b.brewerEmail, b.brewerLastName, b.brewerFirstName, b.brewerPhone1, b.brewerBreweryName, cb . *	FROM (SELECT brewBrewerLastName, brewBrewerFirstName, brewBrewerID, GROUP_CONCAT( id ORDER BY id ) AS 'Entries' FROM %s GROUP BY brewBrewerLastName, brewBrewerFirstName, brewBrewerID) cb, %s b WHERE cb.brewBrewerID = b.uid", $prefix."brewing", $prefix."brewer");
-		if (SINGLE) $query_brewer .= sprintf(" AND FIND_IN_SET('%s',brewerCompParticipant) > 0", $_SESSION['comp_id']);
+		$query_brewer = sprintf("SELECT a.id AS user_id, a.user_name, a.userLevel, a.userAdminObfuscate, b.id, b.uid, b.brewerEmail, b.brewerLastName, b.brewerFirstName, b.brewerPhone1, b.brewerBreweryName, cb.* FROM (SELECT brewBrewerLastName, brewBrewerFirstName, brewBrewerID, GROUP_CONCAT(id ORDER BY id) AS 'Entries', GROUP_CONCAT(brewJudgingNumber ORDER BY brewJudgingNumber) AS 'JudgingNums' FROM %s GROUP BY brewBrewerLastName, brewBrewerFirstName, brewBrewerID) cb, %s a, %s b WHERE cb.brewBrewerID = b.uid AND a.id = b.uid;", $prefix."brewing", $prefix."users", $prefix."brewer");
 		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 		$row_brewer = mysqli_fetch_assoc($brewer);
 		$totalRows_brewer = mysqli_num_rows($brewer);
@@ -74,9 +69,9 @@ if (isset($_SESSION['user_id'])) {
 
 		else {
 
-			$query_brewer = "SELECT * FROM $brewer_db_table";
-			if ($id == "default") $query_brewer .= " WHERE brewerJudge='Y'";
-			if ($id != "default") $query_brewer .= sprintf(" WHERE id='%s'",$id);
+			$query_brewer = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate FROM %s a, %s b WHERE a.brewerEmail = b.user_name", $brewer_db_table, $users_db_table);
+			if ($id == "default") $query_brewer .= " AND brewerJudge='Y'";
+			if ($id != "default") $query_brewer .= sprintf(" WHERE a.id='%s'",$id);
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);
 			$totalRows_brewer = mysqli_num_rows($brewer);
@@ -93,9 +88,9 @@ if (isset($_SESSION['user_id'])) {
 
 		else {
 
-			$query_brewer = "SELECT * FROM $brewer_db_table";
-			if ($id == "default") $query_brewer .= " WHERE brewerSteward='Y'";
-			if ($id != "default") $query_brewer .= sprintf(" WHERE id='%s'",$id);
+			$query_brewer = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate FROM %s a, %s b WHERE a.brewerEmail = b.user_name", $brewer_db_table, $users_db_table);
+			if ($id == "default") $query_brewer .= " AND brewerSteward='Y'";
+			if ($id != "default") $query_brewer .= sprintf(" WHERE a.id='%s'",$id);
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);
 			$totalRows_brewer = mysqli_num_rows($brewer);
@@ -105,7 +100,6 @@ if (isset($_SESSION['user_id'])) {
 	}
 
 	// Viewing all participants from archive query
-	// @single - needed?
 	elseif (($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable != "default")) {
 		$query_brewer = "SELECT * FROM $dbTable ORDER BY brewerLastName";
 		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
@@ -115,7 +109,6 @@ if (isset($_SESSION['user_id'])) {
 
 	// Updating assigned judges query
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "update")) {
-
 
 		// @single
 		if (SINGLE) include (SSO.'assigned_judges.db.php');
@@ -146,6 +139,7 @@ if (isset($_SESSION['user_id'])) {
 			$totalRows_brewer = mysqli_num_rows($brewer);
 
 		}
+	
 	}
 
 	// Assign Judge query
@@ -161,6 +155,7 @@ if (isset($_SESSION['user_id'])) {
 			$totalRows_brewer = mysqli_num_rows($brewer);
 
 		}
+	
 	}
 
 	// Assign Steward query
@@ -176,6 +171,7 @@ if (isset($_SESSION['user_id'])) {
 			$totalRows_brewer = mysqli_num_rows($brewer);
 
 		}
+	
 	}
 
 	// Assign staff query

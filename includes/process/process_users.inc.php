@@ -203,7 +203,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				}
 				
-				// User name not found. Update.
+				// User name not found. OK to update.
 				if ($totalRows_userCheck < 1) {
 
 					$update_table = $prefix."users";
@@ -218,9 +218,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						$errors = TRUE;
 					}
 
+					// Previously, changed the brewer record based upon a match of the user id and the brewer uid
+					// Match using the old email address, update the new email address in the brewer table as well
 					$update_table = $prefix."brewer";
-					$data = array('brewerEmail' => $username);			
-					$db_conn->where ('uid', $id);
+					$data = array(
+						'brewerEmail' => $username,
+						'uid' => $id
+					);
+					$db_conn->where ('brewerEmail', $row_brewerCheck['brewerEmail']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
 						$error_output[] = $db_conn->getLastError();

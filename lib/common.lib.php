@@ -3119,7 +3119,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	if ($method2 == 2) $output = array();
 	else $output = "";
 
-	$query_table_assignments = sprintf("SELECT assignTable,assignRoles,assignFlight,assignRound FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
+	$query_table_assignments = sprintf("SELECT assignTable,assignRoles,assignFlight,assignRound FROM %s WHERE bid='%s' AND assignment='%s' ORDER BY assignTable ASC",$prefix."judging_assignments",$uid,$method);
 	$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
 	$row_table_assignments = mysqli_fetch_assoc($table_assignments);
 	$totalRows_table_assignments = mysqli_num_rows($table_assignments);
@@ -3166,7 +3166,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 
 				elseif ($method2 == 1) {
 					if ((isset($table_info[0])) && (isset($table_info[1])) && (isset($table_info[3]))) {
-						if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
+						if ($method == "J") $output .= $table_info[0]." - <a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[1]."</a>,&nbsp;";
 						if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
 					}
 				}

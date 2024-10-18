@@ -206,7 +206,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	}
 
 	// Data clean up
-	elseif (($action == "purge") || ($action == "cleanup")) include(INCLUDES.'data_cleanup.inc.php');
+	elseif (($action == "purge") || ($action == "cleanup")) include (INCLUDES.'data_cleanup.inc.php');
 
 	// Regenerate judging numbers
 	elseif ($action == "generate_judging_numbers") {

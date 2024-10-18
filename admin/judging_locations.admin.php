@@ -327,7 +327,7 @@ if ($section != "step5") {
 					
 					}
 						
-					if ($none_selected == 0) {
+					if ((isset($none_selected)) && ($none_selected == 0)) {
 						if ($filter != "staff") $output .= "<span class=\"fa fa-sm fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
 					}
 					
