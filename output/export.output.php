@@ -106,6 +106,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) $admin
 $header = "";
 $table_width = "";
 
+$date_downloaded = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-no-gmt"); 
+
 // Establish standard widths
 // Total of 760 px for Portrait
 // Total of 1100 px for landscape
@@ -235,9 +237,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $contest = str_replace(' ', '_', $_SESSION['contestName']);
             if ($section == "export-loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
             else $loc = "";
-            $date = date("m-d-Y");
-            if ($sort != "default") $date = $sort;
-            $filename = ltrim(filename($contest)."_Entries".filename($filter_filename).filename($action).filename($view).filename($date).$loc.$extension,"_");
+            
+            if ($sort != "default") $date_downloaded = $sort;
+            $filename = ltrim(filename($contest)."_Entries".filename($filter_filename).filename($action).filename($view).filename($date_downloaded).$loc.$extension,"_");
 
             include (DB.'output_entries_export.db.php');
 
@@ -584,9 +586,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 $separator = ","; 
                 $extension = ".csv";
-                $date = date("m-d-Y");
                 $filename = "MHP_Results_".$_SESSION['contestName']."_";
-                $filename .= $date.$extension;
+                $filename .= $date_downloaded.$extension;
                 $filename = filename($filename);
                 $filename = ltrim($filename,"_");
 
@@ -944,6 +945,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 }
                 
+                $filename = filename($filename);
+                $filename = ltrim($filename,"_");
 
                 header("Content-Type: text/csv; charset=utf-8");
                 header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -994,15 +997,14 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                  $loc = filename($loc);
             }
             else $loc = "";
-            $date = date("Y-m-d");
 
             // Appropriately name the CSV file for each type of download
-            if ($filter == "judges")                $filename = $contest."_Assigned_Judge_Emails_".$date.$loc.$extension;
-            elseif ($filter == "stewards")          $filename = $contest."_Assigned_Steward_Email_Addresses_".$date.$loc.$extension;
-            elseif ($filter == "staff")             $filename = $contest."_Available_and_Assigned_Staff_Emails_".$date.$loc.$extension;
-            elseif ($filter == "avail_judges")      $filename = $contest."_Available_Judge_Emails_".$date.$loc.$extension;
-            elseif ($filter == "avail_stewards")    $filename = $contest."_Available_Steward_Emails_".$date.$loc.$extension;
-            else                                    $filename = $contest."_All_Participant_Emails_".$date.$loc.$extension;
+            if ($filter == "judges")                $filename = $contest."_Assigned_Judge_Emails_".$date_downloaded.$loc.$extension;
+            elseif ($filter == "stewards")          $filename = $contest."_Assigned_Steward_Email_Addresses_".$date_downloaded.$loc.$extension;
+            elseif ($filter == "staff")             $filename = $contest."_Available_and_Assigned_Staff_Emails_".$date_downloaded.$loc.$extension;
+            elseif ($filter == "avail_judges")      $filename = $contest."_Available_Judge_Emails_".$date_downloaded.$loc.$extension;
+            elseif ($filter == "avail_stewards")    $filename = $contest."_Available_Steward_Emails_".$date_downloaded.$loc.$extension;
+            else                                    $filename = $contest."_All_Participant_Emails_".$date_downloaded.$loc.$extension;
 
             // Set the header row of the CSV for each type of download
             if (($filter == "judges") || ($filter == "avail_judges")) $a [] = array(
@@ -1160,6 +1162,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             }
 
+            $filename = filename($filename);
+            $filename = ltrim($filename,"_");
+
             header("Content-Type: text/csv; charset=utf-8");
             header('Content-Disposition: attachment;filename="'.$filename.'"');
             header('Pragma: no-cache');
@@ -1204,7 +1209,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $contest = str_replace(' ', '_', $_SESSION['contestName']);
             if ($section == "export-loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
             else $loc = "";
-            $date = date("m-d-Y");
 
             if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_yearly_volume,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
             
@@ -1302,7 +1306,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             } while ($row_sql = mysqli_fetch_assoc($sql));
 
-            $filename = ltrim(filename($contest)."_Participants".filename($date).$loc.$extension,"_");
+            $filename = ltrim(filename($contest)."_Participants".filename($date_downloaded).$loc.$extension,"_");
 
             header("Content-Type: text/csv; charset=utf-8");
             header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -1343,19 +1347,25 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 		else $website = $_SERVER['SERVER_NAME'];
 
 		if ($action == "word") {
-			$filename = str_replace(" ", "_", $_SESSION['contestName'])."_Promo.doc";
+            $filename = $_SESSION['contestName']."_Promo_".$date_downloaded.".doc";
+            $filename = filename($filename);
+            $filename = ltrim($filename,"_");
 			header('Content-Type: application/msword;');
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}
 
 		if ($action == "html") {
-			$filename = str_replace(" ", "_", $_SESSION['contestName'])."_Promo.html";
+            $filename = $_SESSION['contestName']."_Promo_".$date_downloaded.".html";
+            $filename = filename($filename);
+            $filename = ltrim($filename,"_");
 			header('Content-Type: text/plain;');
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}
 
 		if ($action == "bbcode") {
-			$filename= str_replace(" ", "_", $_SESSION['contestName'])."_Promo.txt";
+            $filename = $_SESSION['contestName']."_Promo_".$date_downloaded.".txt";
+            $filename = filename($filename);
+            $filename = ltrim($filename,"_");
 			header('Content-Type: text/plain;');
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}
@@ -1537,7 +1547,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 if ($go == "judging_scores") {
 
-                    $filename = str_replace(" ","_",$_SESSION['contestName']).'_Winners.'.$view;
+                    $filename = $_SESSION['contestName']."_Winners_".$date_downloaded.".".$view;
+                    $filename = filename($filename);
+                    $filename = ltrim($filename,"_");
 
                     $string = sprintf("%s - %s",$label_winners,html_entity_decode($_SESSION['contestName']));
                     $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));                  
@@ -1626,8 +1638,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         } while ($row_tables = mysqli_fetch_assoc($tables));
 
                     } // end if ($winner_method == 0)
-
-                    
 
                     /**
                      * Winners by style category
@@ -1843,7 +1853,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; 
                     else $label_brewer = $label_brewer;
-                    $filename = str_replace(" ","_",$_SESSION['contestName']).'_BOS_Results.'.$view;
+
+                    $filename = $_SESSION['contestName']."_BOS_Results_".$date_downloaded.".".$view;
+                    $filename = filename($filename);
+                    $filename = ltrim($filename,"_");
 
                     $a = array();
                     do { 
@@ -2006,7 +2019,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     
                     $html = '';                
                     $html .= '<h1>Winners - '.$_SESSION['contestName'].'</h1>';
-                    $filename = str_replace(" ","_",$_SESSION['contestName']).'_Results.'.$view;
+                    $filename = $_SESSION['contestName']."_Results.".$view;
+                    $filename = filename($filename);
+                    $filename = ltrim($filename,"_");
 
                     /**
                      * Winners by table/medal group
@@ -2229,7 +2244,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         $pdf->SetFont('Arial','',7);
                     }
                     */
-                    $filename = str_replace(" ","_",$_SESSION['contestName']).'_BOS_Results.'.$view;
+                    $filename = $_SESSION['contestName']."_BOS_Results.".$view;
+                    $filename = filename($filename);
+                    $filename = ltrim($filename,"_");
 
                     $a = array();
 
@@ -2463,7 +2480,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             if ($view == "pdf") {
 
-                $filename = str_replace(" ","_",$_SESSION['contestName']).'_BJCP_Points_Report.'.$view;
+                $filename = $_SESSION['contestName']."_BJCP_Points_Report.".$view;
+                $filename = filename($filename);
+                $filename = ltrim($filename,"_");
+
                 include(CLASSES.'fpdf/fpdf.php');
                 include(CLASSES.'fpdf/exfpdf.php');
                 include(CLASSES.'fpdf/easyTable.php');
@@ -2770,7 +2790,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 $filename = "";
                 if (!empty($_SESSION['contestID'])) $filename .= $_SESSION['contestID']."_";
-                $filename .= str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.xml";
+                $filename .= $_SESSION['contestName']."_BJCP_Points_Report_".$date_downloaded.".xml";
+                $filename = filename($filename);
+                $filename = ltrim($filename,"_");
 
                 $all_rules_applied = TRUE;
                 $rule_org = FALSE;
@@ -3452,11 +3474,10 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
 
     $separator = ","; 
     $extension = ".csv";
-    $date = date("m-d-Y");
     if ($_SESSION['prefsProEdition'] == 1) $filename = $org_name."_Organization_Results_".$_SESSION['contestName']."_";
     else $filename = $first_name."_".$last_name."_Personal_Results_".$_SESSION['contestName']."_";
     if ($filter == "MHP") $filename .= "MHP_";
-    $filename .= $date.$extension;
+    $filename .= $date_downloaded.$extension;
     $filename = filename($filename);
     $filename = ltrim($filename,"_");
 
