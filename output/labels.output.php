@@ -158,8 +158,7 @@ if (isset($_SESSION['loginUsername'])) {
 								// Display the assigned table number(s)
 								if (isset($table_flights[0])) {
 
-									if (sizeof($table_flights) > 1) $t_sring = "Tables";
-									else $t_string = "Table";
+									$t_string = "Table(s)";
 									
 									$pdf->SetFont('Arial', 'B', 12);
 									$judge_flight = $t_string.": ". join(', ', $table_flights);

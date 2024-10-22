@@ -125,9 +125,6 @@ if (($table_card_output) && ($psort == "sorting-tables")) {
             $table_card_output_print .= "<h1>".sprintf("%s %s",$label_table, $row_tables['tableNumber'])."</h1>";
             $table_card_output_print .= "<h1><small>".$row_tables['tableName']."</small></h1>";
             $table_card_output_print .= "<h2><small>Styles: ".rtrim($styles, ",&nbsp;")."</small></h2>";
-            $table_card_output_print .= "<small><h3 style=\"margin-top: 100px;\">Entry Count: ".$received."<sup>&#10029;</sup></h3></small>";
-            $table_card_output_print .= "<small><h3>Session: ".$table_location."<sup>&#10033;</sup></h3></small>";
-            $table_card_output_print .= "<p><small><strong><sup>&#10029;</sup>Entry Count</strong> is <strong>prior</strong> to check-in in the system and may not reflect the true count of received entries.<br><strong><sup>&#10033;</sup>Session</strong> is subject to change.</small></p>";
             $table_card_output_print .= "</div>";
             $table_card_output_print .= "<div style=\"page-break-after:always;\"></div>";
         }

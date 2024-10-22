@@ -240,46 +240,49 @@ foreach ($a as $value) {
 		$b = substr($value, 2);
 
 		$judging_location_info = judging_location_info($b);
-		$judging_location_info = explode("^",$judging_location_info);
 
-		// Judging Location Availability
-		if (($judging_location_info[0] > 0) && ($judging_location_info[5] < 2))  {
+		if (isset($judging_location_info[0])) {
 
-			$user_available = yes_no(substr($value, 0, 1),$base_url,3);
-			if (ucwords($user_available) == ucwords($label_yes)) $judge_available_sessions++;
-			$judge_info .= "<tr>\n";
-			$judge_info .= "<td>";
-			$judge_info .= yes_no(substr($value, 0, 1),$base_url,1);
-			$judge_info .= "</td>\n";
-			$judge_info .= "<td>";
-			$judge_info .= $judging_location_info[1];
-			if ($judging_location_info[5] == "1") $judge_info .= "<br><em><small>".$judging_location_info[3]."</small></em>";
-			$judge_info .= "</td>\n";
-			$judge_info .= "<td>";
-			$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			if (!empty($judging_location_info[4])) $judge_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			$judge_info .= "</td>\n";
-			$judge_info .= "</tr>";
+			// Judging Location Availability
+			if (($judging_location_info[0] > 0) && ($judging_location_info[5] < 2))  {
 
-		}
+				$user_available = yes_no(substr($value, 0, 1),$base_url,3);
+				if (ucwords($user_available) == ucwords($label_yes)) $judge_available_sessions++;
+				$judge_info .= "<tr>\n";
+				$judge_info .= "<td>";
+				$judge_info .= yes_no(substr($value, 0, 1),$base_url,1);
+				$judge_info .= "</td>\n";
+				$judge_info .= "<td>";
+				$judge_info .= $judging_location_info[1];
+				if ($judging_location_info[5] == "1") $judge_info .= "<br><em><small>".$judging_location_info[3]."</small></em>";
+				$judge_info .= "</td>\n";
+				$judge_info .= "<td>";
+				$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+				if (!empty($judging_location_info[4])) $judge_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+				$judge_info .= "</td>\n";
+				$judge_info .= "</tr>";
 
-		// Staff Location Availability
-		if (($judging_location_info[0] > 0) && ($judging_location_info[5] == 2))  {
-			
-			$staff_info .= "<tr>\n";
-			$staff_info .= "<td>";
-			$staff_info .= yes_no(substr($value, 0, 1),$base_url,1);
-			$staff_info .= "</td>\n";
-			$staff_info .= "<td>";
-			$staff_info .= $judging_location_info[1];
-			if ($judging_location_info[5] == "1") $staff_info .= "<br><em><small>".$judging_location_info[3]."</small></em>";
-			$staff_info .= "</td>\n";
-			$staff_info .= "<td>";
-			$staff_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			if (!empty($judging_location_info[4])) $staff_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			$staff_info .= "</td>\n";
-			$staff_info .= "</tr>";
-			
+			}
+
+			// Staff Location Availability
+			if (($judging_location_info[0] > 0) && ($judging_location_info[5] == 2))  {
+				
+				$staff_info .= "<tr>\n";
+				$staff_info .= "<td>";
+				$staff_info .= yes_no(substr($value, 0, 1),$base_url,1);
+				$staff_info .= "</td>\n";
+				$staff_info .= "<td>";
+				$staff_info .= $judging_location_info[1];
+				if ($judging_location_info[5] == "1") $staff_info .= "<br><em><small>".$judging_location_info[3]."</small></em>";
+				$staff_info .= "</td>\n";
+				$staff_info .= "<td>";
+				$staff_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+				if (!empty($judging_location_info[4])) $staff_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+				$staff_info .= "</td>\n";
+				$staff_info .= "</tr>";
+				
+			}
+
 		}
 
 	}
@@ -297,9 +300,8 @@ foreach ($a as $value) {
 		$b = substr($value, 2);
 
 		$judging_location_info = judging_location_info($b);
-		$judging_location_info = explode("^",$judging_location_info);
 
-		if ($judging_location_info[0] > 0) {
+		if ((isset($judging_location_info[0])) && ($judging_location_info[0] > 0)) {
 
 			$user_available = yes_no(substr($value, 0, 1),$base_url,3);
 			if (ucwords($user_available) == ucwords($label_yes)) $steward_available_sessions++;
@@ -314,6 +316,7 @@ foreach ($a as $value) {
 			$steward_info .= "<td>";
 			$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 			$steward_info .= "</tr>";
+		
 		}
 	
 	}

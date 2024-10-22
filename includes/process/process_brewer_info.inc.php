@@ -261,7 +261,6 @@ if ($brewerJudge == "N") {
             foreach ($_POST['brewerJudgeLocation'] as $value) {
                 $loc = explode("-",$value);
                 $judging_location_info = judging_location_info($loc[1]);
-                $judging_location_info = explode("^",$judging_location_info);
                 if ($judging_location_info[5] == "2") $location_pref1 .= $loc[0]."-".$loc[1].",";
                 else $location_pref1 .= "N-".$loc[1].",";
             }
@@ -272,7 +271,6 @@ if ($brewerJudge == "N") {
             
             $loc = explode("-",$_POST['brewerJudgeLocation']);
             $judging_location_info = judging_location_info($loc[1]);
-            $judging_location_info = explode("^",$judging_location_info);
             if ($judging_location_info[5] == "2") $location_pref1 .= $loc[0]."-".$loc[1];
             else $location_pref1 .= "N-".$loc[1];
 
