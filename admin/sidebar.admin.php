@@ -170,6 +170,14 @@ if ($logged_in) {
 	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
 
+	if (!empty($organizer_assigned)) {
+		$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+		$page_info100 .= "<strong class=\"text-info\">Organizer</strong>";
+		$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned staff and organizer\">".$organizer_assigned['first_name']."  ".$organizer_assigned['last_name']."</a>";
+		$page_info100 .= "</span>";
+		$page_info100 .= "</div>";
+	}
+
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Entry Registration</strong>";
@@ -217,4 +225,5 @@ if ($logged_in) {
 
 echo $header1_100;
 echo $page_info100;
+
 ?>

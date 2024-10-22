@@ -54,6 +54,8 @@ $ps_loc_judging_mbos = "";
 
 $cards_loc_rnd = "";
 
+$organizer_assigned = get_participant_count('organizer-assigned');
+
 if ($totalRows_judging > 0) {
     
     do {
@@ -1805,11 +1807,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 <ul class="list-inline">
                                     <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
-                                    <?php if (empty($_SESSION['contestID'])) { ?>
-                                    <li><a href="#"  data-toggle="modal" data-target="#BJCPCompIDModal">XML</a></li>
-                                    <?php } else { ?>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
-                                    <?php } ?>
+                                    <li><a href="#" data-toggle="modal" data-target="#BJCPCompIDModal" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -2636,28 +2634,43 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
     </div>
 </div>
 
-<?php if (empty($_SESSION['contestID'])) { ?>
+
 <!-- Modal -->
 <div class="modal fade" id="BJCPCompIDModal" tabindex="-1" role="dialog" aria-labelledby="BJCPCompIDModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="BJCPCompIDModalLabel">BJCP Competition ID Not Found</h4>
+                <h4 class="modal-title" id="BJCPCompIDModalLabel">BJCP Competition ID <?php if (empty($_SESSION['contestID'])) echo "Not Found"; ?></h4>
             </div>
             <div class="modal-body">
-                <p><strong>An XML Report cannot be generated at this time</strong> - a BJCP Competition ID has not been entered via the competition info screen.</p>
-                <p>You should have received a competition ID from the BJCP when you <a class="hide-loader" href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>. If so, <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info">edit your competition info</a> and enter it in the appropriate field. The BJCP will <em>not</em> accept an XML competition report without a competition ID.</p>
+                <?php if (empty($_SESSION['contestID'])) { ?>
+                    <p><strong>An XML Report cannot be generated at this time</strong> - a BJCP Competition ID has not been entered via the competition info screen.</p>
+                    <p>You should have received a competition ID from the BJCP when you <a class="hide-loader" href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>. If so, go to the Admin Dashboard > Competition Preparation > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a> function and enter it in the appropriate field. The BJCP will <em>not</em> accept an XML competition report without a competition ID.</p>
+                <?php } else { ?>
+                    <p>Before generating and submitting your XML Report, <strong>double-check that your BJCP Competition ID is correct, especially if you entered an ID for any previous competition iterations</strong>.</p>
+                    <p>You should have received a competition ID from the BJCP when you <a class="hide-loader" href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>.
+                    <p><strong>The BJCP Competition ID that is currently entered is: <span class="text-danger"><?php echo $_SESSION['contestID']; ?></span>.</strong> If this is incorrect, go to the Admin Dashboard > Competition Preparation > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a> function and update the ID <strong>before</strong> generating the report.</p>
+                <?php } ?>
+                <?php if (empty($organizer_assigned)) { ?>
+                    <p><strong>A competition organizer has not been designiated in the system.</strong> The report cannot be generated without one. Go to the Admin Dashboard > Entries and Participants > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=staff">Assign Staff</a> function and choose the Organizer's name from the drop-down list near the top of the screen. If the Organizer's name is not present in the drop-down, an account will need to be created for them.</p>
+                <?php } else { ?>
+                    <p><strong>The competition Organizer designated in the system is <span class="text-danger"><?php echo $organizer_assigned['first_name']."  ".$organizer_assigned['last_name']; ?></span>.</strong> If this is incorrect, go to the Admin Dashboard > Entries and Participants > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=staff">Assign Staff</a> function and choose the current Organizer's name from the drop-down list near the top of the screen. If the Organizer's name is not present in the drop-down, an account will need to be created for them.</p>
+                <?php } ?>
             </div>
             <div class="modal-footer">
+                <?php if ((!empty($_SESSION['contestID'])) && (!empty($organizer_assigned))) { ?>
+                <a role="button" class="btn btn-success" target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml">Generate XML Report</a>
+                <?php } ?>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div><!-- ./modal -->
-<?php } ?>
 
-<?php foreach ($bcoem_dashboard_help_array as $content)  {
+<?php 
+
+foreach ($bcoem_dashboard_help_array as $content)  {
     echo bcoem_dashboard_help($content);
 }
 ?>

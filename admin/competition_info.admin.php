@@ -341,13 +341,17 @@ $(document).ready(function(){
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP Competition ID</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
-        <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestID']; ?>" placeholder="">
-
+        <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if (($section != "step4") && (time() < $later_date)) echo $row_contest_info['contestID']; ?>" placeholder="Current competition iteration BJCP ID.">
     	<span id="helpBlock" class="help-block">
+        <?php if (time() >= $later_date) { ?>
+        <p>The field above is blank because it has been 60 days or more since the latest date in the system associated with an entry window, judging sessions, or awards.</p>
+        <p>The ID currently in the system is <strong><?php echo $row_contest_info['contestID']; ?></strong>. If this is incorrect, enter the BJCP ID for the <strong>CURRENT</strong> competition iteration. If correct, re-enter the number. Please note that the BJCP will reject any XML report with a missing or incorrect ID number.</p>
+        <?php } else { ?>
+        <p>Be sure to enter the BJCP ID for the <strong>CURRENT</strong> competition iteration. Please note that the BJCP will reject any XML report with a missing or incorrect ID number.</p>
+        <?php } ?>
         <div class="btn-group" role="group" aria-label="BJCPCompIDModal">
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#BJCPCompIDModal">
@@ -369,6 +373,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Enter the Competition ID you received from the BJCP if you <a class="hide-loader" href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>. The BJCP will <em>not</em> accept an XML competition report without a Competition ID.</p>
+                <p><strong>Be sure to enter the BJCP ID for the CURRENT competition iteration.</strong></p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -387,21 +392,21 @@ $(document).ready(function(){
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestHostLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host Location</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="contestHostLocation" name="contestHostLocation" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHostLocation']; ?>" placeholder="">
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestHostWebsite" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host Website Address</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="contestHostWebsite" name="contestHostWebsite" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHostWebsite']; ?>" placeholder="http://www.yoursite.com">
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestWinnerLink" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Link to Past Winners</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="contestWinnerLink" name="contestWinnerLink" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestWinnerLink']; ?>" placeholder="http://www.yoursite.com">
@@ -410,7 +415,7 @@ $(document).ready(function(){
 </div>
 
 <?php if ($section != "step4") { ?>
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group">
     <label for="contestLogo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     <select class="selectpicker" name="contestLogo" id="contestLogo"  data-live-search="true" data-size="10" data-width="auto">
@@ -423,7 +428,7 @@ $(document).ready(function(){
 </div>
 <?php } ?>
 <?php if ($section == "step4") { ?>
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestCheckInPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">QR Code Log On Password</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
@@ -431,10 +436,9 @@ $(document).ready(function(){
     </div>
 </div>
 <?php } else { ?>
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestCheckInPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">QR Code Log On Password</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <a  href="#" class="btn btn-info" data-toggle="modal" data-target="#QRModal">Add, Update, or Change QR Code Log On Password</a>
         <span id="helpBlock" class="help-block">For use with the <a href="<?php echo $base_url; ?>qr.php">QR Code Entry Check-In</a> function.</span>
     </div>
@@ -459,14 +463,14 @@ $(document).ready(function(){
     <div class="col-lg-7 col-md-9 col-sm-8 col-xs-12 small" id="search-club-list-results"></div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestClubs" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <input class="form-control" id="contestClubs" name="contestClubs" type="text" value="<?php if ($section != "step4") echo $additional_clubs; ?>" placeholder="" pattern="[^%\x22]+" disabled>
         <span class="help-block"><p>Use the search/add function above to add any club names that cannot be found in the clubs database. <a class="btn btn-xs btn-default hide-loader" role="button" id="clear-additional-clubs">Clear Entire List</a><a class="btn btn-xs btn-default hide-loader" role="button" id="restore-additional-clubs">Restore List</a> <a class="btn btn-xs btn-default hide-loader" role="button" id="clear-last-added">Clear Last Added</a></p><p id="club-separated">Note: each club is separated by a semi-colon (;) for system use.</p></span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <h3>Entry Window</h3>
 
 <div class="form-group">
@@ -525,18 +529,17 @@ $(document).ready(function(){
 </div>
 
 <h3>Shipping Location</h3>
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestShippingName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        	<input class="form-control" id="contestShippingName" name="contestShippingName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingName']; ?>" placeholder="">
+        <input class="form-control" id="contestShippingName" name="contestShippingName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingName']; ?>" placeholder="">
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestShippingAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Address</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	
-        	<input class="form-control" id="contestShippingAddress" name="contestShippingAddress" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingAddress']; ?>" placeholder="">
+        <input class="form-control" id="contestShippingAddress" name="contestShippingAddress" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingAddress']; ?>" placeholder="">
     </div>
 </div>
 
@@ -544,8 +547,7 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestShippingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
-        	<input class="form-control date-time-picker-system" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingOpen']))) echo
+        <input class="form-control date-time-picker-system" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingOpen']))) echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div>
@@ -563,7 +565,6 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestRegistrationOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
@@ -575,7 +576,6 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestRegistrationDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
@@ -588,7 +588,6 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestJudgeOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestJudgeOpen" name="contestJudgeOpen" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
@@ -597,10 +596,9 @@ $(document).ready(function(){
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestJudgeDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <div class="input-group has-warning">
         	<input class="form-control date-time-picker-system" id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
@@ -612,7 +610,6 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
     <label for="competition_rules" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Rules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <textarea id="contestRules" class="form-control" name="competition_rules" rows="15" aria-describedby="helpBlock"><?php
 
         if ($section == "step4") {
@@ -649,7 +646,6 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
     <label for="contestBottles" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Acceptance Rules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <textarea id="contestBottles" class="form-control" name="contestBottles" rows="15" aria-describedby="helpBlock"><?php
 
         if ($section == "step4") {
@@ -659,6 +655,7 @@ $(document).ready(function(){
             }
             else echo $bottles;
         }
+
         else {
             if (ENABLE_MARKDOWN) {
                 if (is_html($row_contest_info['contestBottles'])) {
@@ -683,7 +680,6 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
     <label for="competitionPackingShipping" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Packaging and Shipping Rules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <textarea id="competitionPackingShipping" class="form-control" name="competition_packing_shipping" rows="15" aria-describedby="helpBlock">
         <?php
 
@@ -721,7 +717,6 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
     <label for="contestVolunteers" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Volunteer Information</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <textarea id="contestVolunteers" class="form-control" name="contestVolunteers" rows="15"><?php
         
         if ($section == "step4") {
@@ -765,12 +760,11 @@ $(document).ready(function(){
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestEntryCap" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Fee Cap</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<div class="input-group">
         	<span class="input-group-addon" id="contestEntryCap-addon1"><?php echo $currency_symbol; ?></span>
-        	
         	<input class="form-control" id="contestEntryCap" name="contestEntryCap" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryCap'])) && (!empty($row_contest_info['contestEntryCap']))) echo number_format($row_contest_info['contestEntryCap'],2); ?>" placeholder="">
         </div>
         <span id="helpBlock" class="help-block">Enter the maximum amount for each entrant. Leave blank if no cap.
@@ -782,8 +776,7 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="contestEntryFeeDiscount" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Discount Multiple Entries</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            
+        <div class="input-group">      
             <label class="radio-inline">
                 <input type="radio" name="contestEntryFeeDiscount" value="Y" id="contestEntryFeeDiscount_0" <?php if (($section != "step4") && ($row_contest_info['contestEntryFeeDiscount'] == "Y")) echo "CHECKED"; ?> /> Yes
             </label>
@@ -795,7 +788,7 @@ $(document).ready(function(){
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestEntryFeeDiscountNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Minimum Entries for Discount</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	
@@ -804,28 +797,26 @@ $(document).ready(function(){
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestEntryFee2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Discounted Entry Fee</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<div class="input-group">
-        	<span class="input-group-addon" id="contestEntryFee2-addon1"><?php echo $currency_symbol; ?></span>
-        	
+        	<span class="input-group-addon" id="contestEntryFee2-addon1"><?php echo $currency_symbol; ?></span>   	
         	<input class="form-control" id="contestEntryFee2" name="contestEntryFee2" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryFee2'])) && (!empty($row_contest_info['contestEntryFee2']))) echo number_format($row_contest_info['contestEntryFee2'],2); ?>" placeholder="">
         </div>
         <span id="helpBlock" class="help-block">Fee for a single, discounted entry.</span>
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestEntryFeePassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Member Discount Password</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	
-        	<input class="form-control" id="contestEntryFeePassword" name="contestEntryFeePassword" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFeePassword']; ?>" placeholder="">
+        <input class="form-control" id="contestEntryFeePassword" name="contestEntryFeePassword" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFeePassword']; ?>" placeholder="">
         <span id="helpBlock" class="help-block">Designate a password for participants to enter to receive discounted entry fees. Useful if your competition provides a discount for members of the sponsoring club(s).</span>
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestEntryFeePasswordNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Member Discount Fee</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<div class="input-group">
@@ -838,35 +829,31 @@ $(document).ready(function(){
 </div>
 
 <h3>Awards Ceremony</h3>
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestAwardsLocDate" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	
-        	<input class="form-control date-time-picker-system" id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" value="<?php if (($section != "step4") && (isset($row_contest_info['contestAwardsLocTime']))) echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+        <input class="form-control date-time-picker-system" id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" value="<?php if (($section != "step4") && (isset($row_contest_info['contestAwardsLocTime']))) echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
         <span id="helpBlock" class="help-block">Provide even if the date of judging is the same.</span>
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestAwardsLocName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	
-        	<input class="form-control" id="contestAwardsLocName" name="contestAwardsLocName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestAwardsLocName']; ?>" placeholder="">
+        <input class="form-control" id="contestAwardsLocName" name="contestAwardsLocName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestAwardsLocName']; ?>" placeholder="">
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
     <label for="contestAwardsLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location Address</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	
-        	<input class="form-control" id="contestAwardsLocation" name="contestAwardsLocation" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestAwardsLocation']; ?>" placeholder="">
+        <input class="form-control" id="contestAwardsLocation" name="contestAwardsLocation" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestAwardsLocation']; ?>" placeholder="">
     </div>
 </div>
 
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
     <label for="contestAwards" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Awards Structure</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <textarea id="contestAwards" class="form-control" name="contestAwards" rows="15" aria-describedby="helpBlock"><?php
         if ($section == "step4") {
             if (ENABLE_MARKDOWN) echo strip_tags($awards);
@@ -895,7 +882,6 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
     <label for="contestBOSAward" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best of Show</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <textarea id="contestBOSAward" class="form-control" name="contestBOSAward" rows="15" aria-describedby="helpBlock"><?php
         if ($section != "step4") {
             if ((ENABLE_MARKDOWN) && (is_html($row_contest_info['contestBOSAward']))) {
@@ -916,7 +902,6 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
     <label for="contestCircuit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Circuit Qualifying Events</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
         <textarea id="contestCircuit" class="form-control" name="contestCircuit" rows="15" aria-describedby="helpBlock"><?php
         if ($section != "step4") {
             if ((ENABLE_MARKDOWN) && (is_html($row_contest_info['contestCircuit']))) {
@@ -954,7 +939,7 @@ $(document).ready(function(){
       <div class="modal-body">
         <form data-toggle="validator" role="form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;go=qr&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form2">
         <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
-        <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <div class="form-group">
             <label for="contestCheckInPassword">QR Code Log On Password</label>
             <input class="form-control" id="contestCheckInPassword" name="contestCheckInPassword" type="password" value="" placeholder="" data-error="Please provide a password for QR Code entry check-in" required>
             <div class="help-block with-errors"></div>

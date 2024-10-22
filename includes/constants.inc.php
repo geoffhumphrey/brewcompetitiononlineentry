@@ -2509,6 +2509,16 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         
         $judging_past = judging_date_return();
         $judging_started = FALSE;
+        $judging_ended = FALSE;
+
+        $date_arr = array();
+        $later_date_arr = array();
+        $first_judging_date = "";
+        $last_judging_date = "";
+
+        $later_date_arr[] = $_SESSION['contestEntryDeadline'];
+        if (isset($_SESSION['contestJudgeDeadline'])) $later_date_arr[] = $_SESSION['contestJudgeDeadline'];
+        if (isset($_SESSION['contestAwardsLocDate'])) $later_date_arr[] = $_SESSION['contestAwardsLocDate'];
 
         if ((check_setup($prefix."judging_locations",$database)) && (check_update("judgingDateEnd", $prefix."judging_locations"))) {
 
@@ -2517,29 +2527,53 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
             $row_judging_dates = mysqli_fetch_assoc($judging_dates);
             $totalRows_judging_dates = mysqli_num_rows($judging_dates);
 
-            $date_arr = array();
-            $first_judging_date = "";
-            $last_judging_date = "";
-
             if ($totalRows_judging_dates > 0) {
                 do {
-                    if (!empty($row_judging_dates['judgingDate'])) $date_arr[] = $row_judging_dates['judgingDate'];
-                    if (!empty($row_judging_dates['judgingDateEnd'])) $date_arr[] = $row_judging_dates['judgingDateEnd'];
+                    
+                    if (!empty($row_judging_dates['judgingDate'])) {
+                        $date_arr[] = $row_judging_dates['judgingDate'];
+                        $later_date_arr[] = $row_judging_dates['judgingDate'];
+                    }
+
+                    if (!empty($row_judging_dates['judgingDateEnd'])) {
+                        $date_arr[] = $row_judging_dates['judgingDateEnd'];
+                        $later_date_arr[] = $row_judging_dates['judgingDateEnd'];
+                    }
+
                 } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
             }
 
             if (!empty($date_arr)) {
+                
                 $first_judging_date = min($date_arr);
                 $last_judging_date = max($date_arr);
+                
                 if (time() > $first_judging_date) {
                     $judging_started = TRUE;
                     $reg_closed_date = $first_judging_date;
                     $entry_closed_date = $first_judging_date;
                 }
+
+                // Generally safe to assume that judging has ended 24 hours after last posted date.
+                if (time() > ($last_judging_date + 86400)) {
+                    $judging_ended = TRUE;
+                }
+
             }
             
             $pay_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$last_judging_date);
 
+        }
+
+        $later_date = max($later_date_arr);
+
+        // Generally safe to assume that judging has ended 60 days post latest date (if no judging dates are present)
+        if (empty($later_date)) $later_date = time() - 5184000;
+        else {
+            if (time() > ($later_date + 5184000)) {
+                $judging_ended = TRUE;
+                $later_date = $later_date + 5184000;
+            }
         }
         
         /**

@@ -2537,6 +2537,9 @@ function get_participant_count($type,$filter="") {
 	if ($type == 'steward') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'",$brewer_db_table);
 	if ($type == 'staff') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerStaff='Y'",$brewer_db_table);
 	if ($type == 'staff-assigned') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff=1",$staff_db_table);
+	
+	if ($type == 'organizer-assigned') $query_participant_count = sprintf("SELECT a.uid, b.brewerFirstName, b.brewerLastName, b.uid FROM %s a, %s b WHERE a.staff_organizer=1 AND a.uid = b.uid LIMIT 1",$staff_db_table,$brewer_db_table);
+	
 	if ($type == 'received-entrant') $query_participant_count = sprintf("SELECT COUNT(DISTINCT brewBrewerID) as 'count' FROM %s WHERE brewReceived='1'",$brewing_db_table);
 	if ($type == 'with-entries') $query_participant_count = sprintf("SELECT COUNT(DISTINCT brewBrewerId) as 'count' FROM %s",$prefix."brewing");
 	if ($type == 'received-club') $query_participant_count = sprintf("SELECT COUNT(DISTINCT b.brewerClubs) as 'count' FROM %s a, %s b WHERE b.uid = a.brewBrewerID AND b.brewerClubs IS NOT NULL", $brewing_db_table, $brewer_db_table);
@@ -2547,7 +2550,19 @@ function get_participant_count($type,$filter="") {
 	// they would like to be a judge, steward, or staff
 	// SELECT sum(count) AS total_count FROM ((SELECT COUNT(DISTINCT uid) as count FROM $brewer_db_table WHERE brewerJudge='Y' OR brewerSteward='Y' OR brewerStaff='Y') UNION ALL (SELECT COUNT(DISTINCT brewBrewerID) as count FROM $brewing_db_table))t;
 
-	return $row_participant_count['count'];
+	$return_arr = array();
+
+	if ($type == 'organizer-assigned') {
+		$return_arr = array(
+			'first_name' => $row_participant_count['brewerFirstName'],
+			'last_name' => $row_participant_count['brewerLastName'],
+			'uid' => $row_participant_count['uid']
+		);
+
+		return $return_arr;
+	} 
+
+	else return $row_participant_count['count'];
 }
 
 function display_place($place,$method) {
@@ -3646,15 +3661,19 @@ function judging_location_info($id) {
 	$row_judging_loc3 = mysqli_fetch_assoc($judging_loc3);
 	$totalRows_judging_loc3 = mysqli_num_rows($judging_loc3);
 
-	$return = "";
+	$return = array();
+	
 	if ($totalRows_judging_loc3 > 0) {
-		$return .= $totalRows_judging_loc3."^"; // 0
-		$return .= $row_judging_loc3['judgingLocName']."^"; // 1
-		$return .= $row_judging_loc3['judgingDate']."^"; // 2
-		$return .= $row_judging_loc3['judgingLocation']."^"; // 3
-		$return .= $row_judging_loc3['judgingDateEnd']."^"; // 4
-		$return .= $row_judging_loc3['judgingLocType']; // 5
+		
+		$return[0] = $totalRows_judging_loc3;
+		$return[1] = $row_judging_loc3['judgingLocName'];
+		$return[2] = $row_judging_loc3['judgingDate'];
+		$return[3] = $row_judging_loc3['judgingLocation'];
+		$return[4] = $row_judging_loc3['judgingDateEnd'];
+		$return[5] = $row_judging_loc3['judgingLocType'];
+
 	}
+
 	return $return;
 
 }
