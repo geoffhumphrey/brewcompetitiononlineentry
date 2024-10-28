@@ -68,7 +68,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'contestID' => NULL
 		);
 		$db_conn->where ('id', 1);
-		$result = $db_conn->insert ($update_table, $data);
+		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
