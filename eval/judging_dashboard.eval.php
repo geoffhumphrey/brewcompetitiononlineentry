@@ -40,6 +40,7 @@ if (TESTING) {
 	$add_link_full = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=1&amp;id=".$row_entries['id'];
 	$add_link_checklist = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=2&amp;id=".$row_entries['id'];
 	$add_link_structured = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=3&amp;id=".$row_entries['id'];
+	$add_link_nw_cider = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=4&amp;id=".$row_entries['id'];
 }
 
 	
@@ -253,22 +254,39 @@ if (($add_disabled) && ($judging_open)) {
 
 			$actions .= "<p style=\"margin-top: 3px;\">Choose a scoresheet (demo mode only - Admins choose the official scoresheet for the competition):</p>";
 			$actions .= "<div class=\"row\" style=\"margin-top: 3px;\">";
-			$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
-			$actions .= "<a class=\"btn btn-block btn-xs btn-danger\" href=\"".$add_link_full."\">Classic</a>";
+			$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-6 col-sm-12\">";
+			$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_full."\">Classic</a>";
 			$actions .= "</div>";
-			if ($row_style['brewStyleType'] == 1) {
-				$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
-				$actions .= "<a class=\"btn btn-block btn-xs btn-danger\" href=\"".$add_link_checklist."\">Checklist</a>";
-				$actions .= "</div>";
-			}
-
+			
 			if ($row_style['brewStyleType'] <= 3) {
-				$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
-				$actions .= "<a class=\"btn btn-block btn-xs btn-danger\" href=\"".$add_link_structured."\">Structured</a>";
+				$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-6 col-sm-12\">";
+				$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_structured."\">Structured</a>";
 				$actions .= "</div>";
 			}
 
 			$actions .= "</div>"; // end row
+
+			if (($row_style['brewStyleType'] == 1) || ($row_style['brewStyleType'] == 2)) {
+
+				$actions .= "<div class=\"row\" style=\"margin-top: 3px;\">";
+
+				if ($row_style['brewStyleType'] == 1) {
+					$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-6 col-sm-12\">";
+					$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_checklist."\">Checklist</a>";
+					$actions .= "</div>";
+				}
+
+				if ($row_style['brewStyleType'] == 2) {
+					$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-6 col-sm-12\">";
+					$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_nw_cider."\">NW Cider</a>";
+					$actions .= "</div>";
+				}
+
+				$actions .= "</div>"; // end row
+
+			}
+			
+			$actions .= "</div>"; // end collapse
 		}
 
 		else {
@@ -293,7 +311,7 @@ elseif ($scored_by_user) {
 		$actions .= "<div class=\"btn-group btn-group-justified\" role=\"group\">";
 		
 		if (!$disable_add_edit) {
-    		$actions .= "<a class=\"btn btn-sm btn-warning\" href=\"".$edit_link."\">".$label_edit;
+    		$actions .= "<a onclick=\"localStorage.clear();\" class=\"btn btn-sm btn-warning\" href=\"".$edit_link."\">".$label_edit;
     		$actions .= "</a>";
     	}
 		
@@ -342,26 +360,45 @@ else {
 				$actions .= "<a class=\"btn btn-block btn-sm btn-primary\" role=\"button\" href=\"#add-choose-".$row_entries['id']."\" data-toggle=\"collapse\" aria-expanded=\"false\" aria-controls=\"add-choose-".$row_entries['id']."\">".$label_add."</a>";
 				$actions .= "<div class=\"collapse\" id=\"add-choose-".$row_entries['id']."\">";
 				$actions .= "<p style=\"margin-top: 3px;\"><small>Choose a scoresheet (demo mode only - Admins choose the official scoresheet for the competition):</small></p>";
+				
 				$actions .= "<div class=\"row\" style=\"margin-top: 3px;\">";
-				$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
-				$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_full."\">Classic</a>";
+				$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-6 col-sm-12\">";
+				$actions .= "<a onclick=\"localStorage.clear();\" class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_full."\">Classic</a>";
 				$actions .= "</div>";
-				if ($row_style['brewStyleType'] == 1) {
-					$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
-					$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_checklist."\">Checklist</a>";
-					$actions .= "</div>";
-				}
+				
 				if ($row_style['brewStyleType'] <= 3) {
-					$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
-					$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_structured."\">Structured</a>";
+					$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-6 col-sm-12\">";
+					$actions .= "<a onclick=\"localStorage.clear();\" class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_structured."\">Structured</a>";
 					$actions .= "</div>";
 				}
+
 				$actions .= "</div>"; // end row
+
+				if (($row_style['brewStyleType'] == 1) || ($row_style['brewStyleType'] == 2)) {
+
+					$actions .= "<div class=\"row\" style=\"margin-top: 3px;\">";
+
+					if ($row_style['brewStyleType'] == 1) {
+						$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-6 col-sm-12\">";
+						$actions .= "<a onclick=\"localStorage.clear();\" class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_checklist."\">Checklist</a>";
+						$actions .= "</div>";
+					}
+
+					if ($row_style['brewStyleType'] == 2) {
+						$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-6 col-sm-12\">";
+						$actions .= "<a onclick=\"localStorage.clear();\" class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_nw_cider."\">NW Cider</a>";
+						$actions .= "</div>";
+					}
+
+					$actions .= "</div>"; // end row
+
+				}
+				
 				$actions .= "</div>"; // end collapse
 			
 			}
 
-			else $actions .= "<a style=\"margin-bottom:5px;\" class=\"btn btn-block btn-sm btn-primary\" href=\"".$add_link."\">".$label_add."</a>";
+			else $actions .= "<a onclick=\"localStorage.clear();\" style=\"margin-bottom:5px;\" class=\"btn btn-block btn-sm btn-primary\" href=\"".$add_link."\">".$label_add."</a>";
 
 		}
 

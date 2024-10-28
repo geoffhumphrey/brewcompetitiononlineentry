@@ -376,6 +376,7 @@ if ($setup_success) {
 	if (HOSTED) $css_url = "https://brewingcompetitions.com/_bcoem_shared/css/";
 
 	$js_app_url = $js_url."app.min.js";
+	$js_eval_url = $js_url."eval_checks.min.js";
 	$css_common_url = $css_url."common.min.css";
 
 	if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
@@ -388,9 +389,11 @@ if ($setup_success) {
 	    
 	    if (strpos($base_url, 'test.brewingcompetitions.com') !== false) {
 	        $js_app_url = $base_url."js_source/app.js";
+	        $js_eval_url = $base_url."js_source/eval_checks.js";
 	    }
 	    
 	    $js_app_url .= "?t=".time();
+	    $js_eval_url .= "?t=".time();
 	    
 	}
 

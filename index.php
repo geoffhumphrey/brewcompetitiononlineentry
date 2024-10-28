@@ -392,6 +392,8 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
   </div>
 </div>
 
+<script src="<?php echo $js_app_url; ?>"></script>
+
 <?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
 <!-- Session Timer Displays and Auto Logout -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
@@ -487,7 +489,5 @@ if (strpos($section, 'step') === FALSE)  {
 }
 
 ?>
-
-<script src="<?php echo $js_app_url; ?>"></script>
 </body>
 </html>

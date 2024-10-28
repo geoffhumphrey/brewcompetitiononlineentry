@@ -37,8 +37,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($_SESSION['prefsSEF'] == "Y") $sef = TRUE;
 	else $sef = FALSE;
 
-	if ($view == "admin") $insertGoTo = $base_url."index.php?section=evaluation&go=default&filter=default&view=admin";
-	else $insertGoTo = build_public_url("evaluation","default","default","default",$sef,$base_url,"default");
+	if ($view == "admin") $insertGoTo = $base_url."index.php?section=evaluation&go=default&filter=default&view=admin";	
+	else $insertGoTo = $base_url."index.php?section=evaluation&go=default&action=success&view=clear";
+	// $insertGoTo = build_public_url("evaluation","default","success","default",$sef,$base_url,"clear");
+	if ($action == "add") $insertGoTo .= "&msg=3";
+	if ($action == "edit") $insertGoTo .= "&msg=2";
 
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 	$config_html_purifier = HTMLPurifier_Config::createDefault();

@@ -2552,17 +2552,22 @@ function get_participant_count($type,$filter="") {
 
 	$return_arr = array();
 
-	if ($type == 'organizer-assigned') {
-		$return_arr = array(
-			'first_name' => $row_participant_count['brewerFirstName'],
-			'last_name' => $row_participant_count['brewerLastName'],
-			'uid' => $row_participant_count['uid']
-		);
+	if ($row_participant_count) {
+		
+		if ($type == 'organizer-assigned') {
+			$return_arr = array(
+				'first_name' => $row_participant_count['brewerFirstName'],
+				'last_name' => $row_participant_count['brewerLastName'],
+				'uid' => $row_participant_count['uid']
+			);
 
-		return $return_arr;
-	} 
+			return $return_arr;
+		} 
 
-	else return $row_participant_count['count'];
+		else return $row_participant_count['count'];
+	}
+
+		
 }
 
 function display_place($place,$method) {
@@ -3189,6 +3194,25 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 				elseif ($method2 == 2) {
 					if (isset($table_info[3])) $output[] = $table_info[3];
 					else $output[] = "";
+				}
+
+				elseif ($method2 == 3) {
+					$output .= "\t\t<tr>\n";
+					$output .= "\t\t\t<td>".$location[2];
+					if (!empty($location[3]) && ($location[4] == "1")) $output .= "<br><em><small>".$location[3]."</small></em>";
+					$output .= "\t\t\t</td>";
+					$output .= "\t\t\t<td>";
+					$output .= getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "short", "date-time");
+					if (!empty($location[1])) $output .= " - ".getTimeZoneDateTime($time_zone, $location[1], $date_format,  $time_format, "short", "date-time");
+					$output .= "</td>\n";
+					$output .= "\t\t\t<td>";
+					$output .= sprintf("<a href=\"#table%s\">%s %s - %s</a>",$table_info[3],$label_table,$table_info[0],$table_info[1]);
+					if ($_SESSION['jPrefsQueued'] == "N") {
+						$output .= "<br>".$label_round." ".$row_table_assignments['assignFlight'].", ".$label_flight." ".$row_table_assignments['assignFlight'];
+					}
+					if (!empty($row_table_assignments['assignRoles'])) $output .= "<br>".$role;
+					$output .= "</td>\n";
+					$output .= "\t\t</tr>\n";
 				}
 
 				else {

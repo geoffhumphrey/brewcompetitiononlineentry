@@ -1,5 +1,7 @@
 <?php
 
+include(LIB.'output.lib.php');
+
 $eid = "";
 $uid = "";
 $style = "";
@@ -284,7 +286,8 @@ if ($entry_found) {
   if ($judging_scoresheet == 4) {
     $cider = TRUE;
     $nw_cider = TRUE;
-    $scoresheet_version .= " &ndash; ".$_SESSION['style_set_long_name'];
+    if ($sort == 4) $scoresheet_version .= " &ndash; Northwest Cider Cup";
+    else $scoresheet_version .= " &ndash; ".$_SESSION['style_set_long_name'];
   }
 
   // If style is Cider (2) or Mead (3), only use full scoresheet instad of checklist
@@ -543,8 +546,34 @@ if ($entry_found) {
   
   $sticky_score_tally .= "<section position: absolute; width: 100%; background-color: rgba(220,220,220,0.80);\" id=\"scoring-guide-status\" class=\"well sticky-glow collapse in\">";
   
+  if (!$nw_cider) {
+
+    $sticky_score_tally .= "<p style=\"margin-bottom: 0; padding-bottom: 5px;\"><i class=\"fa fa-info-circle\"></i> <strong>".$label_status." &ndash; ".$label_admin_scores."</strong></p>";
+    $sticky_score_tally .= "<div class=\"row small\">";
+    $sticky_score_tally .= "<div class=\"col col-xs-10\"><i id=\"score-icon-aroma-status\" class=\"fa text-danger fa-times-circle\"></i> ".truncate($label_aroma,"10","")."</div><div class=\"col col-xs-2 pull-right\"><span id=\"score-aroma-status\"></span></div>";
+    $sticky_score_tally .= "</div>";
+    $sticky_score_tally .= "<div class=\"row small\">";
+    $sticky_score_tally .= "<div class=\"col col-xs-10\"><i id=\"score-icon-appearance-status\" class=\"fa text-danger fa-times-circle\"></i> ".truncate($label_appearance,"10","")."</div><div class=\"col col-xs-2 pull-right\"><span id=\"score-appearance-status\"></span></div>";
+    $sticky_score_tally .= "</div>";
+    $sticky_score_tally .= "<div class=\"row small\">";
+    $sticky_score_tally .= "<div class=\"col col-xs-10\"><i id=\"score-icon-flavor-status\" class=\"fa text-danger fa-times-circle\"></i> ".truncate($label_flavor,"10","")."</div><div class=\"col col-xs-2 pull-right\"><span id=\"score-flavor-status\"></span></div>";
+    $sticky_score_tally .= "</div>";
+    if ($beer) {
+      $sticky_score_tally .= "<div class=\"row small\">";
+      $sticky_score_tally .= "<div class=\"col col-xs-10\"><i id=\"score-icon-mouthfeel-status\" class=\"fa text-danger fa-times-circle\"></i> ".truncate($label_mouthfeel,"10","")."</div><div class=\"col col-xs-2 pull-right\"><span id=\"score-mouthfeel-status\"></span></div>";
+      $sticky_score_tally .= "</div>";
+    }
+    $sticky_score_tally .= "<div class=\"row small\">";
+    $sticky_score_tally .= "<div class=\"col col-xs-10\"><i id=\"score-icon-overall-status\" class=\"fa text-danger fa-times-circle\"></i> ".truncate($label_overall_impression,"10","")."</div><div class=\"col col-xs-2 pull-right\"><span id=\"score-overall-status\"></span></div>";
+    $sticky_score_tally .= "</div>";
+    $sticky_score_tally .= "<div class=\"row small\">";
+    $sticky_score_tally .= "<div class=\"col col-xs-10\"><i id=\"score-icon-consensus-status\" class=\"fa text-danger fa-times-circle\"></i> ".truncate($label_assigned_score,"10","")."</div><div class=\"col col-xs-2 pull-right\"><span id=\"score-consensus-status\"></span></div>";
+    $sticky_score_tally .= "</div>";
+
+  }
+
   // Elapsed time
-  $sticky_score_tally .= "<p><span id=\"elapsed-time-p\"><i class=\"fa fa-clock\"></i> <strong>".$label_elapsed_time.": <span id=\"elapsed-time\"></span></strong></span><br><small id=\"session-end-eval-p\">".$label_auto_log_out." <span id=\"session-end-eval\"></span></small>";
+  $sticky_score_tally .= "<p style=\"margin-top: 15px; margin-bottom: 0; padding-bottom: 10px;\"><span id=\"elapsed-time-p\"><i class=\"fa fa-clock\"></i> <strong>".$label_elapsed_time.": <span id=\"elapsed-time\"></span></strong></span><br><small id=\"session-end-eval-p\">".$label_auto_log_out." <span id=\"session-end-eval\"></span></small>";
   $sticky_score_tally .= "</p>";
 
   // 15-minute courtesy warning.
@@ -600,7 +629,6 @@ $entry_info_html .= "</section>";
 // Sub-nav Buttons
 if ($eval_source == 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
 $eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><button class=\"btn btn-block btn-default\"  data-toggle=\"modal\" data-target=\"#unsaved-modal\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</button></div>";
-//$eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".build_public_url("evaluation","default","default","default",$sef,$base_url,"default")."\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</a></div>";
 if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104);
 ?>
 <!-- Unsaved Data Modal -->
@@ -609,14 +637,14 @@ if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="unsaved-modal-label">Caution: Possible Data Loss</h4>
+        <h4 class="modal-title" id="unsaved-modal-label">Caution &ndash; Possible Data Loss</h4>
       </div>
       <div class="modal-body">
         <?php echo sprintf("<p>%s</p><p>%s</p><p>%s</p>",$evaluation_info_073,$evaluation_info_074,$evaluation_info_075); ?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $label_close; ?></button>
-        <a class="btn btn-primary" href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_judging_dashboard; ?></a>
+        <a class="btn btn-primary" onclick="localStorage.clear();" href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_judging_dashboard; ?></a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -627,6 +655,7 @@ if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" />
 
 <script>
+
 var judgeScores = <?php echo json_encode($judge_scores); ?>;
 var consensusScores = <?php echo json_encode($consensus_scores); ?>;
 var score_range = <?php echo $score_range; ?>;
@@ -648,13 +677,23 @@ var score_range_caution_output = "<span class=\"text-danger\"><strong>" + score_
 var score_range_ok = "<?php echo $label_score_range_ok; ?>";
 var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
 var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
+
 </script>
-<script src="<?php echo $js_url; ?>eval_checks.min.js"></script>
+<script src="<?php echo $js_eval_url; ?>"></script>
 <script>
 $(document).ready(function() {
-  
+
   $("#courtesy-alert-warning-15").hide();
   $("#warning-indicator-icon").hide();
+  $("#score-icon-aroma").hide();
+  $("#score-icon-appearance").hide();
+  $("#score-icon-flavor").hide();
+  $("#score-icon-mouthfeel").hide();
+  $("#score-icon-overall").hide();
+  $("#appearance-icon-aroma").hide();
+  $("#flavor-icon-aroma").hide();
+  $("#mouthfeel-icon-aroma").hide();
+  $("#overall-icon-aroma").hide();
   
   <?php if ($action == "edit") { ?>
   displayCalc(<?php echo $eval_score; ?>);
@@ -694,7 +733,98 @@ $(document).ready(function() {
       $('#toggle-icon-entry-info').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
   });
 
-  // show-hide-entry-info-btn
+  $("#evalAromaScore").change(function() {
+
+    if ($(this).val() == "") {
+      $('#score-icon-aroma-status').attr('class', 'fa fa-times-circle text-danger');
+      $("#score-icon-aroma").fadeOut('fast');
+      $("#score-aroma-status").html("");
+    }
+
+    if ($(this).val() > 0) {
+      $('#score-icon-aroma-status').attr('class', 'fa fa-check-circle text-success');
+      $("#score-icon-aroma").fadeIn('fast');
+      $("#score-aroma-status").html($(this).val());
+    }   
+
+  });
+
+  $("#evalAppearanceScore").change(function() {
+
+    if ($(this).val() == "") {
+      $('#score-icon-appearance-status').attr('class', 'fa fa-times-circle text-danger');
+      $("#score-icon-appearance").fadeOut('fast');
+      $("#score-appearance-status").html("");
+    }
+
+    if ($(this).val() > 0) {
+      $('#score-icon-appearance-status').attr('class', 'fa fa-check-circle text-success');
+      $("#score-icon-appearance").fadeIn('fast');
+      $("#score-appearance-status").html($(this).val());
+    }
+
+  });
+
+  $("#evalFlavorScore").change(function() {
+
+    if ($(this).val() == "") {
+      $('#score-icon-flavor-status').attr('class', 'fa fa-times-circle text-danger');
+      $("#score-icon-flavor").fadeOut('fast');
+      $("#score-flavor-status").html("");
+    }
+
+    if ($(this).val() > 0) {
+      $('#score-icon-flavor-status').attr('class', 'fa fa-check-circle text-success');
+      $("#score-icon-flavor").fadeIn('fast');
+      $("#score-flavor-status").html($(this).val());
+    }
+
+  });
+
+  $("#evalMouthfeelScore").change(function() {
+
+    if ($(this).val() == "") {
+      $('#score-icon-mouthfeel-status').attr('class', 'fa fa-times-circle text-danger');
+      $("#score-icon-mouthfeel").fadeOut('fast');
+      $("#score-mouthfeel-status").html("");
+    }
+
+    if ($(this).val() > 0) {
+      $('#score-icon-mouthfeel-status').attr('class', 'fa fa-check-circle text-success');
+      $("#score-icon-mouthfeel").fadeIn('fast');
+      $("#score-mouthfeel-status").html($(this).val());
+    }
+
+  });
+
+  $("#evalOverallScore").change(function() {
+
+    if ($(this).val() == "") {
+      $('#score-icon-overall-status').attr('class', 'fa fa-times-circle text-danger');
+      $("#score-icon-overall").fadeOut('fast');
+      $("#score-overall-status").html("");
+    }
+
+    if ($(this).val() > 0) {
+      $('#score-icon-overall-status').attr('class', 'fa fa-check-circle text-success');
+      $("#score-icon-overall").fadeIn('fast');
+      $("#score-overall-status").html($(this).val());
+    }
+
+  });
+
+  $('#evalFinalScore').on('change input keyup keydown click onmouseout oninput', function() {
+
+    var currentLength = $(this).val().length;
+    if (currentLength >= 2) {
+      $('#score-icon-consensus-status').attr('class', 'fa fa-check-circle text-success');
+      $("#score-consensus-status").html($(this).val());
+    } else {
+      $('#score-icon-consensus-status').attr('class', 'fa fa-times-circle text-danger');
+      $("#score-consensus-status").html("");
+    }
+
+  });
 
 });
 </script>
@@ -702,15 +832,17 @@ $(document).ready(function() {
 <style type="text/css">
 
 .scoring-guide-bottom-text {
-    font-weight: bold;
-  }
+  font-weight: bold;
+}
 
 #sticky-score {
   position: -webkit-sticky;
   position: sticky;
   top: 70px;
   z-index: 999;
+  width: 250px;
   min-width: 250px;
+  max-width: 300px;
   /* font-family: initial !important; */
   font-size: .9em;
 }
@@ -795,7 +927,7 @@ if ($entry_found) {
 <?php include (EVALS.$scoresheet_form); ?>
 <h3 class="section-heading"><?php echo $label_score; ?></h3>
 
-<?php if (($_SESSION['jPrefsScoresheet'] == 4) && ($cider)) { ?>
+<?php if ((($_SESSION['jPrefsScoresheet'] == 4) || ($sort == 4)) && ($cider)) { ?>
 <div class="form-group">
   <label for="evalOverallScore"><?php echo $label_your_score; ?></label>
   <input type="number" min="5" max="50" name="evalOverallScore" id="evalOverallScore" class="form-control" placeholder="" data-error="<?php echo $evaluation_info_103; ?>" value="<?php if ($action == "edit") echo $row_eval['evalOverallScore']; ?>"required>
@@ -987,16 +1119,34 @@ if ($entry_found) {
   </div>
 </div>
 <?php } ?>
+
 <script src="<?php echo $js_url; ?>save_my_form.min.js"></script>
+
 <script type="text/javascript">
 var style_type = <?php echo $row_style['brewStyleType']; ?>;
 var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
+
 $(function() {
-    $('#scoresheet-form').saveMyForm();
+  $('#scoresheet-form').saveMyForm();
 });
+
+if (edit) {
+  localStorage.clear();
+  $('#score-icon-aroma-status').attr('class', 'fa fa-check-circle text-success');
+  $("#score-aroma-status").html("<?php if (isset($row_eval['evalAromaScore'])) echo $row_eval['evalAromaScore']; ?>");
+  $('#score-icon-appearance-status').attr('class', 'fa fa-check-circle text-success');
+  $("#score-appearance-status").html("<?php if (isset($row_eval['evalAppearanceScore'])) echo $row_eval['evalAppearanceScore']; ?>");
+  $('#score-icon-flavor-status').attr('class', 'fa fa-check-circle text-success');
+  $("#score-flavor-status").html("<?php if (isset($row_eval['evalFlavorScore'])) echo $row_eval['evalFlavorScore']; ?>");
+  $('#score-icon-mouthfeel-status').attr('class', 'fa fa-check-circle text-success');
+  $("#score-mouthfeel-status").html("<?php if (isset($row_eval['evalMouthfeelScore'])) echo $row_eval['evalMouthfeelScore']; ?>");
+  $('#score-icon-overall-status').attr('class', 'fa fa-check-circle text-success');
+  $("#score-overall-status").html("<?php if (isset($row_eval['evalOverallScore'])) echo $row_eval['evalOverallScore']; ?>");
+  $('#score-icon-consensus-status').attr('class', 'fa fa-check-circle text-success');
+  $("#score-consensus-status").html("<?php if (isset($row_eval['evalFinalScore'])) echo $row_eval['evalFinalScore']; ?>");
+}
+
 </script>
-
-
 
 <?php if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) { ?>
 <script type="text/javascript">
@@ -1024,11 +1174,9 @@ var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
     $(document).ready(function() {
 
         $('#min-words-message').hide();
-
         $('#evalOverallComments').on('keyup keydown click onmouseout oninput', function() {
 
             var currentWordCount = $('#evalOverallComments').val().match(/\S+/g).length;
-
             if (currentWordCount >= min_words) {
                 min_words_overall_ok = true;
                 $('#evalOverallComments-words').html(min_wordcount_reached + currentWordCount);      
@@ -1106,7 +1254,7 @@ var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
             $key_ok = "min_words_".$key."_ok";
         ?>
 
-        $('<?php echo $value; ?>').on('keyup keydown click onmouseout oninput', function() {
+        $('<?php echo $value; ?>').on('keyup keydown click onmouseout oninput', function() { //evalFinalScore
 
             var currentWordCount_<?php echo $key; ?> = $('<?php echo $value; ?>').val().match(/\S+/g).length;
 
@@ -1131,9 +1279,22 @@ var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
 
 </script>
 <?php } // end if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) ?>
-
-
-
-
 <?php } // End if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) ?>
-
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

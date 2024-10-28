@@ -154,7 +154,7 @@ if ($admin) {
 	$admin_add_eval .= "</div>"; // form group
 	$admin_add_eval .= "<div class=\"help-block with-errors\"></div>";
 	$admin_add_eval .= "<div class=\"col-sm-offset-4 col-sm-8\">";
-	$admin_add_eval .= sprintf("<button class=\"btn btn-success\" style=\"margin-top:5px;\" type=\"submit\">%s</button>",$label_add);
+	$admin_add_eval .= sprintf("<button onclick=\"localStorage.clear();\" class=\"btn btn-success\" style=\"margin-top:5px;\" type=\"submit\">%s</button>",$label_add);
 	$admin_add_eval .= "</div>";
 	$admin_add_eval .= "</form>";
 	$admin_add_eval .= "</div>"; // ./col
@@ -832,7 +832,7 @@ if ($totalRows_table_assignments > 0) {
 	// add an evalation for any entry they are not assigned to.
 	if (!$admin) {
 
-		if ($totalRows_table_assignments > 0) $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0,$label_table);
+		if ($totalRows_table_assignments > 0) $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],3,$label_table);
 		
 		$assignment_display .= "<h2>".$label_table_assignments."</h2>";
 
@@ -846,7 +846,7 @@ if ($totalRows_table_assignments > 0) {
 		$assignment_display .= sprintf("<br><span class=\"small text-muted\">%s %s &#8226; %s %s</span>",$evaluation_info_099,$current_or_past_sessions,$evaluation_info_100,$future_sessions);
 		$assignment_display .= "</div>";
 		
-		$assignment_display .= "<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
+		$assignment_display .= "\n<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 		$assignment_display .= "<thead>";
 		$assignment_display .= "<tr>";
 		$assignment_display .= sprintf("<th>%s</th>",$label_session);
@@ -865,7 +865,7 @@ if ($totalRows_table_assignments > 0) {
 			$assignment_display .= "<tr>";
 			$assignment_display .= sprintf("<td colspan=\"2\">%s<br><small><em>* %s</em></small></td>",$evaluation_info_011,$evaluation_info_012);
 			$assignment_display .= "<td>";
-			$assignment_display .= sprintf("<a class=\"btn btn-block btn-sm btn-default\" role=\"button\" href=\"#add-single-form\" data-toggle=\"collapse\" aria-expanded=\"false\" aria-controls=\"add-single-form\">%s</a>",$label_add);
+			$assignment_display .= sprintf("<a onclick=\"localStorage.clear();\" class=\"btn btn-block btn-sm btn-default\" role=\"button\" href=\"#add-single-form\" data-toggle=\"collapse\" aria-expanded=\"false\" aria-controls=\"add-single-form\">%s</a>",$label_add);
 			$assignment_display .= "<div class=\"collapse\" id=\"add-single-form\" style=\"margin-top:5px;\">";
 			$assignment_display .= "<form class=\"hide-loader-form-submit\"  name=\"form1\" data-toggle=\"validator\" role=\"form\" action=\"".$base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add\" method=\"post\">";
 			$assignment_display .= "<div class=\"form-group small\" style=\"margin-top:5px;\">";
@@ -1047,11 +1047,15 @@ if ($totalRows_table_assignments > 0) {
 
 ?>
 <script type="text/javascript" language="javascript">
+	
 	function update_place_display(number,element_id,table_id) {
+		
 		var value = $("#"+element_id).val();
+		
 		if ((value == 0) || (value == "")) {
 			$("#place-display-"+number).hide();
 		}
+
 		if (value > 0) {
 			$("#place-display-"+number).show();
 			if (value == 1) disp_val = "1st";
@@ -1061,7 +1065,9 @@ if ($totalRows_table_assignments > 0) {
 			if (value == 5) disp_val = "HM";
 			$("#place-display-num-"+number).html(disp_val);
 		}
+
 	}
+
 	$(document).ready(function() {
 		$("#next-session-refresh-button").hide();
 		$('#judge_assignments').dataTable( {
@@ -1084,6 +1090,7 @@ if ($totalRows_table_assignments > 0) {
 	        });
 	    });
 	});
+
 </script>
 <script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
 <?php
@@ -1176,6 +1183,11 @@ if (($admin) || ((!empty($table_assign_judge)) && (!$admin))) {
 	echo $table_assignment_entries;
 } 
 ?>
+<?php if (($action == "success") && ($view == "clear")) { ?>
+<script type="text/javascript">
+	localStorage.clear();
+</script>
+<?php } ?>
 <!-- Modal -->
 <div class="modal fade" id="noDupeModal" tabindex="-1" role="dialog" aria-labelledby="noDupeModalLabel" aria-hidden="true">
   <div class="modal-dialog">

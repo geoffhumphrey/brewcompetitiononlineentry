@@ -23,7 +23,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 <!-- Checklist Evaluation Form -->
 <input type="hidden" name="evalFormType" value="2">
 <!-- Aroma Checklist -->
-<h3 class="section-heading"><?php echo $label_aroma; ?> <a role="button" id="show-hide-aroma-btn" data-toggle="collapse" href="#scoresheet-aroma" aria-expanded="true" aria-controls="scoresheet-aroma"><i id="toggle-icon-aroma" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_aroma; ?> <a role="button" id="show-hide-aroma-btn" data-toggle="collapse" href="#scoresheet-aroma" aria-expanded="true" aria-controls="scoresheet-aroma"><i id="toggle-icon-aroma" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-aroma" class="fa fa-check-circle text-success"></i></h3>
 <!-- Aroma Score -->
 <div class="form-group">
     <div class="row">
@@ -31,7 +31,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             <label for="evalAromaScore"><?php echo sprintf("%s (%s %s)",$label_score,$aroma_points,$label_possible_points); ?></label>
         </div>
         <div class="col-md-9 col-sm-12 col-xs-12">
-            <select class="form-control selectpicker score-choose" name="evalAromaScore" id="type" data-size="10" required>
+            <select class="form-control selectpicker score-choose" name="evalAromaScore" id="evalAromaScore" data-size="10" required>
             <option value=""></option>
             <?php 
             for($i=$aroma_points; $i>=1; $i--) {
@@ -229,7 +229,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 </section>
 
 <!-- Appearance Checklist -->
-<h3 class="section-heading"><?php echo $label_appearance; ?> <a role="button" id="show-hide-appearance-btn" data-toggle="collapse" href="#scoresheet-appearance" aria-expanded="true" aria-controls="scoresheet-appearance"><i id="toggle-icon-appearance" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_appearance; ?> <a role="button" id="show-hide-appearance-btn" data-toggle="collapse" href="#scoresheet-appearance" aria-expanded="true" aria-controls="scoresheet-appearance"><i id="toggle-icon-appearance" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-appearance" class="fa fa-check-circle text-success"></i></h3>
 
 <!-- Appearance Score -->
 <div class="form-group">
@@ -238,7 +238,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             <label for="evalAppearanceScore"><?php echo sprintf("%s (%s %s)",$label_score,$appearance_points,$label_possible_points); ?></label>
         </div>
         <div class="col-md-9 col-sm-12 col-xs-12">
-            <select class="form-control selectpicker score-choose" name="evalAppearanceScore" id="type" data-size="10" required>
+            <select class="form-control selectpicker score-choose" name="evalAppearanceScore" id="evalAppearanceScore" data-size="10" required>
                 <option value=""></option>
                 <?php for($i=$appearance_points; $i>=1; $i--) {
                         if (($action == "edit") && ($i == $row_eval['evalAppearanceScore'])) $selected = "selected";
@@ -359,7 +359,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
     </section>
 </div>
 <!-- Flavor Checklist -->
-<h3 class="section-heading"><?php echo $label_flavor; ?> <a role="button" id="show-hide-flavor-btn" data-toggle="collapse" href="#scoresheet-flavor" aria-expanded="true" aria-controls="scoresheet-flavor"><i id="toggle-icon-flavor" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_flavor; ?> <a role="button" id="show-hide-flavor-btn" data-toggle="collapse" href="#scoresheet-flavor" aria-expanded="true" aria-controls="scoresheet-flavor"><i id="toggle-icon-flavor" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-flavor" class="fa fa-check-circle text-success"></i></h3>
 
 
 <!-- Flavor Score -->
@@ -369,7 +369,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             <label for="evalFlavorScore"><?php echo sprintf("%s (%s %s)",$label_score,$flavor_points,$label_possible_points); ?></label>
         </div>
         <div class="col-md-9 col-sm-12 col-xs-12">
-            <select class="form-control selectpicker score-choose" name="evalFlavorScore" id="type" data-size="10" required>
+            <select class="form-control selectpicker score-choose" name="evalFlavorScore" id="evalFlavorScore" data-size="10" required>
                 <option value=""></option>
                 <?php for($i=$flavor_points; $i>=1; $i--) {
                         if (($action == "edit") && ($i == $row_eval['evalFlavorScore'])) $selected = "selected";
@@ -611,7 +611,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 </section>
 
 <!-- Mouthfeel -->
-<h3 class="section-heading"><?php echo $label_mouthfeel; ?> <a role="button" id="show-hide-mouthfeel-btn" data-toggle="collapse" href="#scoresheet-mouthfeel" aria-expanded="true" aria-controls="scoresheet-mouthfeel"><i id="toggle-icon-mouthfeel" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_mouthfeel; ?> <a role="button" id="show-hide-mouthfeel-btn" data-toggle="collapse" href="#scoresheet-mouthfeel" aria-expanded="true" aria-controls="scoresheet-mouthfeel"><i id="toggle-icon-mouthfeel" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-mouthfeel" class="fa fa-check-circle text-success"></i></h3>
 
 <!-- Mouthfeel Score -->
 <div class="form-group">
@@ -620,7 +620,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             <label for="evalMouthfeelScore"><?php echo sprintf("%s (%s %s)",$label_score,$mouthfeel_points,$label_possible_points); ?></label>
         </div>
         <div class="col-md-9 col-sm-12 col-xs-12">
-            <select class="form-control selectpicker score-choose" name="evalMouthfeelScore" id="type" data-size="10" required>
+            <select class="form-control selectpicker score-choose" name="evalMouthfeelScore" id="evalMouthfeelScore" data-size="10" required>
                 <option value=""></option>
                 <?php for($i=$mouthfeel_points; $i>=1; $i--) {
                         if (($action == "edit") && ($i == $row_eval['evalMouthfeelScore'])) $selected = "selected";
@@ -760,7 +760,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 
 
 <!-- Overall Impression -->
-<h3 class="section-heading"><?php echo $label_overall_impression; ?> <a role="button" id="show-hide-overall-btn" data-toggle="collapse" href="#scoresheet-overall" aria-expanded="true" aria-controls="scoresheet-overall"><i id="toggle-icon-overall" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_overall_impression; ?> <a role="button" id="show-hide-overall-btn" data-toggle="collapse" href="#scoresheet-overall" aria-expanded="true" aria-controls="scoresheet-overall"><i id="toggle-icon-overall" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-overall" class="fa fa-check-circle text-success"></i></h3>
 
 <div class="form-group">
     <div class="row">
@@ -768,7 +768,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             <label for="evalOverallScore"><?php echo sprintf("%s (%s %s)",$label_score,$overall_points,$label_possible_points); ?></label>
         </div>
         <div class="col-md-9 col-sm-12 col-xs-12">
-            <select class="form-control selectpicker score-choose" name="evalOverallScore" id="type" data-size="10" required>
+            <select class="form-control selectpicker score-choose" name="evalOverallScore" id="evalOverallScore" data-size="10" required>
                 <option value=""></option>
                 <?php for($i=$overall_points; $i>=1; $i--) {
             			if (($action == "edit") && ($i == $row_eval['evalOverallScore'])) $selected = "selected";

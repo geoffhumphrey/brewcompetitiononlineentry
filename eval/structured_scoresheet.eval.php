@@ -1,7 +1,7 @@
 <?php
 
 $northwest = FALSE;
-if ($_SESSION['jPrefsScoresheet'] == 4) $northwest = TRUE;
+if (($_SESSION['jPrefsScoresheet'] == 4) || ($sort == 4)) $northwest = TRUE;
 
 if ($beer) {
 	$aroma_ticks = $aroma_ticks_beer;
@@ -40,7 +40,7 @@ else {
 <input type="hidden" name="evalFormType" value="3">
 
 <!-- Aroma -->
-<h3 class="section-heading"><?php if ($cider || $mead) echo $label_bouquet."/"; echo $label_aroma; ?> <a role="button" id="show-hide-aroma-btn" data-toggle="collapse" href="#scoresheet-aroma" aria-expanded="true" aria-controls="scoresheet-aroma"><i id="toggle-icon-aroma" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php if ($cider || $mead) echo $label_bouquet."/"; echo $label_aroma; ?> <a role="button" id="show-hide-aroma-btn" data-toggle="collapse" href="#scoresheet-aroma" aria-expanded="true" aria-controls="scoresheet-aroma"><i id="toggle-icon-aroma" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-aroma" class="fa fa-check-circle text-success"></i></h3>
 <!-- Aroma Score -->
 <div class="form-group">
 	<div class="row">
@@ -48,7 +48,7 @@ else {
     		<label for="evalAromaScore"><?php echo $label_score; ?> (<?php echo $aroma_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
     	</div>
     	<div class="col-md-9 col-sm-12 col-xs-12">
-	        <select class="form-control selectpicker score-choose" name="evalAromaScore" id="type" data-size="10" required>
+	        <select class="form-control selectpicker score-choose" name="evalAromaScore" id="evalAromaScore" data-size="10" required>
 	        <option value=""></option>
 	        <?php 
 	        for($i=$aroma_points; $i>=1; $i--) {
@@ -103,7 +103,7 @@ else {
 </section>
 
 <!-- Appearance -->
-<h3 class="section-heading"><?php echo $label_appearance; ?> <a role="button" id="show-hide-appearance-btn" data-toggle="collapse" href="#scoresheet-appearance" aria-expanded="true" aria-controls="scoresheet-appearance"><i id="toggle-icon-appearance" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_appearance; ?> <a role="button" id="show-hide-appearance-btn" data-toggle="collapse" href="#scoresheet-appearance" aria-expanded="true" aria-controls="scoresheet-appearance"><i id="toggle-icon-appearance" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-appearance" class="fa fa-check-circle text-success"></i></h3>
 <!-- Appearance Score -->
 <div class="form-group">
 	<div class="row">
@@ -111,7 +111,7 @@ else {
 			<label for="evalAppearanceScore"><?php echo $label_score; ?> (<?php echo $appearance_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
 		</div>
     	<div class="col-md-9 col-sm-12 col-xs-12">
-        <select class="form-control selectpicker score-choose" name="evalAppearanceScore" id="type" data-size="10" required>
+        <select class="form-control selectpicker score-choose" name="evalAppearanceScore" id="evalAppearanceScore" data-size="10" required>
 	        <option value=""></option>
 	        <?php for($i=$appearance_points; $i>=1; $i--) {
 	      			if (($action == "edit") && ($i == $row_eval['evalAppearanceScore'])) $selected = "selected";
@@ -361,7 +361,7 @@ else {
 </section>
 
 <!-- Flavor -->
-<h3 class="section-heading"><?php echo $label_flavor; ?> <a role="button" id="show-hide-flavor-btn" data-toggle="collapse" href="#scoresheet-flavor" aria-expanded="true" aria-controls="scoresheet-flavor"><i id="toggle-icon-flavor" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_flavor; ?> <a role="button" id="show-hide-flavor-btn" data-toggle="collapse" href="#scoresheet-flavor" aria-expanded="true" aria-controls="scoresheet-flavor"><i id="toggle-icon-flavor" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-flavor" class="fa fa-check-circle text-success"></i></h3>
 <!-- Flavor Score -->
 <div class="form-group">
 	<div class="row">
@@ -369,7 +369,7 @@ else {
 			<label for="evalFlavorScore"><?php echo $label_score; ?> (<?php echo $flavor_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
 		</div>
 		<div class="col-md-9 col-sm-12 col-xs-12">
-			<select class="form-control selectpicker score-choose" name="evalFlavorScore" id="type" data-size="10" required>
+			<select class="form-control selectpicker score-choose" name="evalFlavorScore" id="evalFlavorScore" data-size="10" required>
 		        <option value=""></option>
 		        <?php for($i=$flavor_points; $i>=1; $i--) {
 		    			if (($action == "edit") && ($i == $row_eval['evalFlavorScore'])) $selected = "selected";
@@ -536,7 +536,7 @@ else {
 
 <?php if ($beer) { // Mouthfeel for Beer only ?>
 <!-- Mouthfeel -->
-<h3 class="section-heading"><?php echo $label_mouthfeel; ?> <a role="button" id="show-hide-mouthfeel-btn" data-toggle="collapse" href="#scoresheet-mouthfeel" aria-expanded="true" aria-controls="scoresheet-mouthfeel"><i id="toggle-icon-mouthfeel" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_mouthfeel; ?> <a role="button" id="show-hide-mouthfeel-btn" data-toggle="collapse" href="#scoresheet-mouthfeel" aria-expanded="true" aria-controls="scoresheet-mouthfeel"><i id="toggle-icon-mouthfeel" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-mouthfeel" class="fa fa-check-circle text-success"></i></h3>
 <!-- Mouthfeel Score -->
 <div class="form-group">
 	<div class="row">
@@ -544,7 +544,7 @@ else {
 			<label for="evalMouthfeelScore"><?php echo $label_score; ?> (<?php echo $mouthfeel_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
 		</div>
 		<div class="col-md-9 col-sm-12 col-xs-12">
-			<select class="form-control selectpicker score-choose" name="evalMouthfeelScore" id="type" data-size="10" required>
+			<select class="form-control selectpicker score-choose" name="evalMouthfeelScore" id="evalMouthfeelScore" data-size="10" required>
 		        <option value=""></option>
 		        <?php for($i=$mouthfeel_points; $i>=1; $i--) {
 		    			if (($action == "edit") && ($i == $row_eval['evalMouthfeelScore'])) $selected = "selected";
@@ -598,14 +598,14 @@ else {
 </section>
 
 <!-- Overall Impression -->
-<h3 class="section-heading"><?php echo $label_overall_impression; ?> <a role="button" id="show-hide-overall-btn" data-toggle="collapse" href="#scoresheet-overall" aria-expanded="true" aria-controls="scoresheet-overall"><i id="toggle-icon-overall" class="fa fa-chevron-circle-down"></i></a></h3>
+<h3 class="section-heading"><?php echo $label_overall_impression; ?> <a role="button" id="show-hide-overall-btn" data-toggle="collapse" href="#scoresheet-overall" aria-expanded="true" aria-controls="scoresheet-overall"><i id="toggle-icon-overall" class="fa fa-chevron-circle-down"></i></a> <i id="score-icon-overall" class="fa fa-check-circle text-success"></i></h3>
 <div class="form-group">
 	<div class="row">
 		<div class="col-md-3 col-sm-12 col-xs-12">
 			<label for="evalOverallScore"><?php echo $label_score; ?> (<?php echo $overall_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
 		</div>
 		<div class="col-md-9 col-sm-12 col-xs-12">
-			<select class="form-control selectpicker score-choose" name="evalOverallScore" id="type" data-size="10" required>
+			<select class="form-control selectpicker score-choose" name="evalOverallScore" id="evalOverallScore" data-size="10" required>
 		        <option value=""></option>
 		        <?php for($i=$overall_points; $i>=1; $i--) {
 		    			if (($action == "edit") && ($i == $row_eval['evalOverallScore'])) $selected = "selected";
