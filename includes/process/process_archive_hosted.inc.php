@@ -31,6 +31,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	// Delete any uploaded scoresheets in the user_docs directory
 	rdelete(USER_DOCS,"");
 
+	// Clear BJCP ID from "contest_info"
+	$update_table = $prefix."contest_info";
+	$data = array(
+		'contestID' => NULL
+	);
+	$db_conn->where ('id', 1);
+	$result = $db_conn->update ($update_table, $data);
+	if (!$result) {
+		$error_output[] = $db_conn->getLastError();
+		$errors = TRUE;
+	}
+
 	// Reset judge, steward, and staff interest and availability
 	$update_table = $prefix."brewer";
 	$data = array(

@@ -62,6 +62,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
+		// Clear BJCP ID from "contest_info"
+		$update_table = $prefix."contest_info";
+		$data = array(
+			'contestID' => NULL
+		);
+		$db_conn->where ('id', 1);
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
 		// Clear out all participants (except for current user)
 		if (!isset($_POST['keepParticipants'])) {
 

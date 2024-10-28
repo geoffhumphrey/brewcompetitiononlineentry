@@ -238,11 +238,10 @@ if ($totalRows_tables > 0) {
                     <h3 class="modal-title">Post-Competition Tasks</h3>
                     <p>Below is a list of common tasks that organizers typically complete after publishing competition results.</p>
                 </div>
-                <div class="modal-body">
-                    
+                <div class="modal-body">                  
                     <p><strong>If this competition is BJCP sanctioned</strong>, send or complete the BJCP Organizer's Report within 21 days of the conclusion of judging.</p>
                         <ul>
-                            <li>Download the <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">BJCP XML Points Report</a> to send to the email address specified in your BJCP competition registration email. You can generate the report by expanding the Reports header on the Administration Dashboard and selecting the BJCP Points > XML link.</li>
+                            <li>Download the BJCP XML Points Report to send to the email address specified in your BJCP competition registration email. You can generate the report by expanding the Reports header on the Administration Dashboard and selecting the BJCP Points > XML link.</li>
                             <li>Or, go to the BJCP's <a href="https://www.bjcp.org/competitions/reporting/" target="_blank">Reporting Portal</a> to submit your competition report.</li>
                         </ul>
                     <p><strong>If this competition has entrants that are members of the Master Homebrewer Program</strong>, download the <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit&amp;filter=mhp">MHP Member Results report</a> and send to the MHP Secretary at <a href="mailto:mhpsecretary@gmail.com">mhpsecretary@gmail.com</a>. You can find this report under the Data Exports header on the Administration Dashboard.</p>
@@ -2633,7 +2632,6 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
     </div>
 </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="BJCPCompIDModal" tabindex="-1" role="dialog" aria-labelledby="BJCPCompIDModalLabel">
