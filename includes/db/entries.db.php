@@ -4,50 +4,53 @@ $totalRows_entry_count = total_paid_received("",0);
 
 if ($section == "list") {
 	
-	$query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s'", $brewing_db_table, $_SESSION['user_id']);
+	$query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s' ORDER BY brewCategorySort, brewSubCategory ASC", $brewing_db_table, $_SESSION['user_id']);
 	$query_log_paid = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s' AND NOT brewPaid='1'", $brewing_db_table, $_SESSION['user_id']);
 	$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s' AND brewConfirmed='1'", $brewing_db_table, $_SESSION['user_id']);
 
-	if (SINGLE) {
-		$query_log .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
-		$query_log_paid .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
-		$query_log_confirmed .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+	$query_contest_info = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1", $prefix."contest_info");
+	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
+	$row_contest_info = mysqli_fetch_assoc($contest_info);
+
+	if ($msg == "13") {
+
+		$PayerID = "";
+		if (isset($_GET['PayerID'])) $PayerID = sterilize($_GET['PayerID']);
+
+		if ((!empty($view)) && (!empty($PayerID))) {
+
+			// If redirected from PayPal, update the brewer table to mark entries as paid
+			$b = sterilize($view);
+			$a = explode('-', $b);
+			
+			foreach (array_unique($a) as $value) {
+
+				$update_table = $prefix."brewing";
+				$data = array('brewPaid' => 1);
+				$db_conn->where ('id', $value);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+			
+		}
+			
 	}
-		
+
 }
 
 elseif ($section == "pay") {
 
-	if ($msg == "10") {
-		// If redirected from PayPal, update the brewer table to mark entries as paid
-		$b = sterilize($view);
-		$a = explode('-', $b);
-		foreach (array_unique($a) as $value) {
-			$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1' WHERE id='".$value."';";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-	}
-
 	$query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s'", $brewing_db_table, $_SESSION['user_id']);
 	$query_log_paid = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s' AND NOT brewPaid='1'", $brewing_db_table, $_SESSION['user_id']);
 	$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s' AND brewConfirmed='1'", $brewing_db_table, $_SESSION['user_id']);
 
-	if (SINGLE) {
-		$query_log .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
-		$query_log_paid .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
-		$query_log_confirmed .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
-
-		$query_contest_info = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id='%s'", $prefix."contest_info", $_SESSION['comp_id']);
-		$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
-		$row_contest_info = mysqli_fetch_assoc($contest_info);
-	}
-
-	else {
-		$query_contest_info = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1", $prefix."contest_info");
-		$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
-		$row_contest_info = mysqli_fetch_assoc($contest_info);
-	}
+	$query_contest_info = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1", $prefix."contest_info");
+	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
+	$row_contest_info = mysqli_fetch_assoc($contest_info);
 
 }
 

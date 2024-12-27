@@ -46,8 +46,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 <!-- PRO Edition Only: Entering on behalf of a brewery/org -->
 <section id="pro-entrant">
     <div class="form-group">
-        <label for="brewerBreweryName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_organization." ".$label_name; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerBreweryName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_organization." ".$label_name; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerBreweryName-addon1"><span class="fa fa-beer"></span></span>
                 <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" data-error="<?php echo $brewer_text_032; ?>" required autofocus>
@@ -57,15 +57,15 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         </div>
     </div>
     <div class="form-group">
-        <label for="brewerBreweryTTB" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_ttb; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerBreweryTTB" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_ttb; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if ($action == "edit") echo $brewerBreweryTTB; ?>" placeholder="">
         </div>
     </div>
     <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { ?>
     <div class="form-group">
-        <label for="brewerBreweryProd" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_yearly_volume; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerBreweryProd" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_yearly_volume; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="radio">
                 <label>
                     <input type="radio" name="brewerBreweryProd" value="1 - 10,000" id="brewerBreweryProd_5" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "1 - 10,000") !== false)) echo "CHECKED"; if (($action == "add") || (empty($brewerBreweryInfo))) echo "CHECKED"; ?> />1 - 10,000 <?php echo $label_gallons; ?>
@@ -86,8 +86,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     <input type="hidden" name="brewerBreweryProdMeas" value="<?php echo $label_gallons; ?>">
     <?php } else { ?>
     <div class="form-group">
-        <label id="brewery-prod-label" for="brewerBreweryProd" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><i id="brewery-prod-label-icon" class="fa fa-fw fa-sm fa-star"></i> <?php echo $label_organization." ".$label_yearly_volume; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label id="brewery-prod-label" for="brewerBreweryProd" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><i id="brewery-prod-label-icon" class="fa fa-fw fa-sm fa-star"></i> <?php echo $label_organization." ".$label_yearly_volume; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="radio">
                 <label>
                     <input type="radio" name="brewerBreweryProd" value="1 - 5,000" id="brewerBreweryProd_0" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "1 - 5,000") !== false)) echo "CHECKED"; ?> />1 - 5,000
@@ -131,8 +131,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 <section id="participant-info">
     <!-- Participant Name -->
     <div class="form-group">
-        <label for="brewerFirstName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_first_name; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_first_name; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerFirstName-addon1"><span class="fa fa-user"></span></span>
                 
@@ -142,8 +142,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         </div>
     </div>
     <div class="form-group">
-        <label for="brewerLastName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_last_name; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerLastName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_last_name; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerLastName-addon1"><span class="fa fa-user"></span></span>
                 <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="" data-error="<?php echo $brewer_text_025; ?>" required>
@@ -154,8 +154,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     </div>
     <?php if (($go != "admin") && ($section != "step2")) { ?>
     <div class="form-group"><!-- Form Group Radio INLINE -->
-        <label for="changeSecurity" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_change_security; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="changeSecurity" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_change_security; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="radio-inline">
@@ -170,8 +170,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     </div><!-- ./Form Group -->
     <div id="security-question-change">
         <div class="form-group">
-            <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_question; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_question; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group">
                     <?php echo $security; ?>
                 </div>
@@ -180,8 +180,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
             </div>
         </div>
         <div class="form-group">
-            <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_answer; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_answer; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group has-warning">
                     <span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
                     <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>" data-error="<?php echo $brewer_text_034; ?>">
@@ -194,8 +194,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     <?php } ?>
     <!-- Phone Numbers -->
     <div class="form-group">
-        <label for="brewerPhone1" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_phone_primary; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerPhone1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_phone_primary; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerPhone1-addon1"><span class="fa fa-phone"></span></span>          
                 <input class="form-control" id="brewerPhone1" name="brewerPhone1" type="text" value="<?php if ($action == "edit") echo $phone1; ?>" placeholder="" data-error="<?php echo $brewer_text_026; ?>" required>
@@ -204,15 +204,15 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         </div>
     </div>
     <div class="form-group">
-        <label for="brewerPhone2" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_phone_secondary; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerPhone2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_phone_secondary; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             
             <input class="form-control" id="brewerPhone2" name="brewerPhone2" type="text" value="<?php if ($action == "edit") echo $phone2; ?>" placeholder="">
         </div>
     </div>
     <!-- Country of Residence -->
     <div class="form-group">
-        <label for="brewerCountry" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_country; ?></label>
+        <label for="brewerCountry" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_country; ?></label>
         <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 
@@ -226,8 +226,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     </div>
     <!-- Address -->
     <div class="form-group">
-        <label for="brewerAddress" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_street_address; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_street_address; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerAddress-addon1"><span class="fa fa-home"></span></span>
                 <input class="form-control" id="brewerAddress" name="brewerAddress" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" placeholder="" data-error="<?php echo $brewer_text_027; ?>" required>
@@ -238,8 +238,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!-- City -->
     <div class="form-group">
-        <label for="brewerCity" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_city; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerCity" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_city; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <input class="form-control" id="brewerCity" name="brewerCity" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" placeholder="" data-error="<?php echo $brewer_text_028; ?>" required>
             </div>
@@ -249,8 +249,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!-- State or Province -->
     <div class="form-group">
-        <label for="brewerState" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_state_province; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerState" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_state_province; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div id="non-us-state" class="input-group has-warning">
                 <span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
                 <input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_029; ?>" required>
@@ -277,8 +277,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!-- Zip/Postal Code -->
     <div class="form-group">
-        <label for="brewerZip" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_zip; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerZip" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_zip; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <input class="form-control" id="brewerZip" name="brewerZip" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerZip']; ?>" placeholder="" data-error="<?php echo $brewer_text_030; ?>" required>
             </div>
@@ -291,8 +291,8 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 <section id="entry-delivery"> 
 
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-        <label for="brewerDropOff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_drop_off; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerDropOff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_drop_off; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="false" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
             <?php if (!empty($dropoff_select)) { ?>
                 <optgroup label="<?php echo $label_drop_offs; ?>">

@@ -1209,7 +1209,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				<!-- Title Slide -->
 				<section>
 					<h1 style="margin:0;padding:0" class="r-fit-text"><?php echo $_SESSION['contestName']; ?></h1>
-					<h2 style="margin:0;padding:0"><?php echo $label_awards; ?></h2>
+					<h1 style="margin:0;padding:0" class="tight"><?php echo $label_awards; ?></h1>
 					<?php if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
 						<div class="logo-image">
 							<img src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
@@ -1220,6 +1220,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				<?php if ($_SESSION['prefsSponsorLogos'] == "Y") { ?>
 				<!-- Sponsor Carousel Slide -->	
 				<section>
+					<h1 style="margin:0;padding:0" class="r-fit-text"><?php echo $_SESSION['contestName']; ?></h1>
 					<h1 style="margin:0;padding:0" class="tight"><?php echo $label_sponsors; ?></h1>
 					    <ul id="sponsor-slider">
 					   	<?php do { 

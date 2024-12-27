@@ -247,7 +247,7 @@ if ($msg != "default") {
 
     <?php } ?>
 
-    <?php if (($go == "entries") || ($go == "judging_scores") || ($go == "judging_scores_bos")) { ?>
+    <?php if ((($go == "entries") && ($action == "default")) || ($go == "judging_scores") || ($go == "judging_scores_bos")) { ?>
     <style type="text/css">
       .sticky-alert {
         position: fixed;
@@ -381,7 +381,7 @@ if ($msg != "default") {
     </div>
   <?php } ?>
 
-  <?php if (($registration_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { ?>
+  <?php if (($registration_open == 2) && (!$ua) && ($section == "default") && (!$judging_started) && ($msg == "default")) { ?>
     <!-- Account registration closed -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -389,7 +389,7 @@ if ($msg != "default") {
     </div>
   <?php }   ?>
 
-  <?php if (($entry_window_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { ?>
+  <?php if (($entry_window_open == 2) && (!$ua) && ($section == "default") && (!$judging_started) && ($msg == "default")) { ?>
     <!-- Entry registration closed -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -397,7 +397,7 @@ if ($msg != "default") {
     </div>
   <?php }   ?>
 
-  <?php if (($dropoff_window_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { ?>
+  <?php if (($dropoff_window_open == 2) && (!$ua) && ($section == "default") && (!$judging_started) && ($msg == "default")) { ?>
     <!-- Drop-off window closed -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -405,7 +405,7 @@ if ($msg != "default") {
     </div>
   <?php }   ?>
 
-  <?php if (($shipping_window_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { ?>
+  <?php if (($shipping_window_open == 2) && (!$ua) && ($section == "default") && (!$judging_started) && ($msg == "default")) { ?>
     <!-- Drop-off window closed -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

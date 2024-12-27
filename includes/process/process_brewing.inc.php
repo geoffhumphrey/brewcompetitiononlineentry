@@ -368,7 +368,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-
 		$files = array_slice(scandir(USER_DOCS), 2);
 		$judging_number_looper = TRUE;
 
@@ -439,18 +438,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($section == "admin") {
 
-			if ($_POST['brewStyle'] == "0-A") $insertGoTo = $base_url."index.php?section=brew&go=entries&action=edit&filter=".$brewBrewerID."&id=".$id."&view=0-A&msg=4";
+			if ($_POST['brewStyle'] == "0-A") $insertGoTo = $base_url."index.php?section=admin&go=entries&action=edit&filter=".$brewBrewerID."&id=".$id."&view=0-A&msg=4";
 			else {
-				if ((isset($_POST['return-to-add'])) && ($_POST['return-to-add'] == 1)) $insertGoTo = $base_url."index.php?section=brew&go=entries&action=add&filter=admin&msg=1";
+				if ((isset($_POST['return-to-add'])) && ($_POST['return-to-add'] == 1)) $insertGoTo = $base_url."index.php?section=admin&go=entries&action=add&filter=admin&msg=1";
 				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
 			}
 
 		}
 
 		elseif (($section != "admin") && ($_POST['brewStyle'] == "0-A")) {
-
 			$insertGoTo = $base_url."index.php?section=brew&action=edit&id=".$id."&view=0-A&msg=4";
-
 		}
 
 		else {

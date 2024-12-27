@@ -41,7 +41,7 @@ switch($section) {
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_009);
-		elseif ($msg == "5") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
+		elseif ($msg == "5") $output = sprintf("<strong>%s</strong> <a class=\"hide-loader\" href=\"\" role=\"button\" data-bs-toggle=\"modal\" data-bs-target=\"#login-modal\">%s</a>",$header_text_036,$header_text_037);
 		elseif ($msg == "6") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
 		elseif ($msg == "7") $output = sprintf("<strong>%s</strong>",$alert_text_088);
 		elseif ($msg == "8") $output = sprintf("<strong>%s</strong>",$alert_text_089);
@@ -80,15 +80,15 @@ switch($section) {
 
 	case "register":
 		$header_output = $_SESSION['contestName'];
-		if ($go == "judge") $header_output .= " - ".$label_judge_reg;
-		elseif ($go == "steward") $header_output .= " - ".$label_steward_reg;
-		else $header_output .= " - ".$label_reg;
+		if ($go == "judge") $header_output = $label_judge_reg;
+		elseif ($go == "steward") $header_output = $label_steward_reg;
+		else $header_output = $label_reg;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong> %s",$header_text_017, $header_text_008);
 		elseif ($msg == "2") { $output = sprintf("<strong>%s</strong>",$header_text_018); $output_extend = sprintf("<p>%s <a href=\"index.php?section=login\">%s</a></p>",$header_text_019,$header_text_020); }
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_021, $header_text_022);
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_023, $header_text_008);
 		elseif ($msg == "5") $output = sprintf("<strong>%s</strong> %s",$header_text_024, $header_text_008);
-		elseif ($msg == "6") $output = sprintf("<strong></strong> %s",$header_text_025, $header_text_008);
+		elseif ($msg == "6") $output = sprintf("<strong>%s</strong>",$header_text_025, $header_text_008);
 		else $output = "";
 	break;
 
@@ -112,7 +112,7 @@ switch($section) {
 		if ($msg == "0") $output = sprintf("<strong>%s</strong> ",$header_text_031);
 		elseif ($msg == "1") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; }
 	 	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
-		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
+		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> <a class=\"hide-loader\" href=\"\" role=\"button\" data-bs-toggle=\"modal\" data-bs-target=\"#login-modal\">%s</a>",$header_text_036,$header_text_037);
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_038,$header_text_008);
 		elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_039);
 		elseif ($msg == "6") $output = sprintf("<strong>%s</strong>",$login_text_023);
@@ -222,6 +222,11 @@ switch($section) {
 		elseif ($msg == "10") $output = sprintf("<strong>%s</strong>",$header_text_109);
 		elseif ($msg == "11") $output = sprintf("<strong>%s</strong>",$output_text_004);
 		elseif ($msg == "12") $output = sprintf("<strong>%s</strong>",$header_text_113);
+		// V3 - Pay functions now part of list section
+		elseif ($msg == "13") $output = sprintf("<strong>%s</strong> %s",$header_text_026,$header_text_027);
+		elseif ($msg == "14") $output = sprintf("<strong>%s</strong>",$header_text_028);
+		elseif ($msg == "15") $output = sprintf("<strong>%s</strong>",$header_text_029);
+		elseif ($msg == "16") $output = sprintf("<strong>%s</strong>",$header_text_030);
 		else $output = "";
 	break;
 
@@ -627,8 +632,8 @@ switch($section) {
 	break;
 }
 
-if ($msg == "14") $output = sprintf("<strong>%s</strong>",$header_text_096);
-if ($msg == "16") {
+if (($section != "list") && ($msg == "14")) $output = sprintf("<strong>%s</strong>",$header_text_096);
+if (($section != "list") && ($msg == "16")) {
 	$output = sprintf("<strong>%s</strong>",$header_text_097);
 	$output_extend = sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div><div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>%s</strong>.</div>",$header_text_098,$header_text_099,$header_text_100);
 	}

@@ -376,11 +376,37 @@ if ($setup_success) {
 	if (HOSTED) $css_url = "https://brewingcompetitions.com/_bcoem_shared/css/";
 
 	$js_app_url = $js_url."app.min.js";
+	$js_app_pub_url = $js_url."app.pub.min.js";
 	$js_eval_url = $js_url."eval_checks.min.js";
+	$js_add_edit_entry_url = $js_url."entry.min.js";
+	$js_user_url = $js_url."user.min.js";
 	$css_common_url = $css_url."common.min.css";
 
-	if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
-	else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
+	if (V3) {
+
+		$css_common_url = $css_url."common-3.min.css";
+		$theme = $css_url."default-3.min.css";
+		
+		if ($section == "admin") {
+			if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
+			else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
+			$css_common_url = $css_common_url;
+		}
+		
+		else {
+			$theme = $css_url."default-3.min.css";
+			$css_common_url = $css_url."common-3.min.css";
+		}
+		
+
+	}
+
+	else {
+
+		if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
+		else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
+		
+	}
 
 	if ((DEBUG) || (TESTING)) {
 	   
@@ -388,12 +414,19 @@ if ($setup_success) {
 	    $theme = str_replace(".min", "", $theme);
 	    
 	    if (strpos($base_url, 'test.brewingcompetitions.com') !== false) {
-	        $js_app_url = $base_url."js_source/app.js";
-	        $js_eval_url = $base_url."js_source/eval_checks.js";
+	    	$js_app_url = $base_url."js_source/app.js";
+	        $js_app_pub_url = $base_url."js_source/app.pub.js";
+			$js_eval_url = $base_url."js_source/eval_checks.js";
+	        $js_add_edit_entry_url = $base_url."js_source/entry.js";
+	        $js_user_url = $base_url."js_source/user.js";
 	    }
 	    
 	    $js_app_url .= "?t=".time();
+	    $js_app_pub_url .= "?t=".time();
 	    $js_eval_url .= "?t=".time();
+	    $js_add_edit_entry_url .= "?t=".time();
+	    $js_user_url .= "?t=".time();
+	    $theme .= "?t=".time();
 	    
 	}
 

@@ -3,6 +3,7 @@
 if (HOSTED) $styles_db_table = "bcoem_shared_styles";
 else
 */
+
 $styles_db_table = $prefix."styles";
 
 if ($section == "step7") {
@@ -65,7 +66,11 @@ if (HOSTED) {
 */
 
 $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
-if (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) $query_styles .= " AND id='$id'";
+
+if ($section == "admin") {
+	if ((($action == "edit") || ($action == "add")) && ($go == "entries")) $query_styles .= "";
+	else $query_styles .= " AND id='$id'";
+}
 
 if (($view != "default") && ($section == "styles")) {
 	$explodies = explode("-",$view);

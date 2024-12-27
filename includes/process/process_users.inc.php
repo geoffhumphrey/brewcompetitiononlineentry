@@ -237,6 +237,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					if ($filter == "admin") {
 
 						if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+						else $updateGoTo = $_POST['relocate']."&msg=2";
 						$updateGoTo = prep_redirect_link($updateGoTo);
 						$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 					

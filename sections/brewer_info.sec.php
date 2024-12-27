@@ -175,7 +175,7 @@ if (($totalRows_log > 0) && ($show_entries)) {
 }
 */
 
-if ($_SESSION['prefsEval'] == 1) include (EVALS.'my_account.eval.php');
+
 
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
 $user_edit_links .= sprintf("<a class=\"btn btn-info\" href=\"%s\"><span class=\"fa fa-user\"></span> %s</a>",$edit_user_info_link,$label_edit_account);
@@ -195,6 +195,8 @@ if (($totalRows_log > 0) && ($show_entries)) {
 	$user_edit_links .= "<a class=\"btn btn-primary\" href=\"#entries\"><i class=\"fa fa-fw fa-list\"></i> ".$label_entries."</a>";
 
 }
+
+if ($_SESSION['prefsEval'] == 1) include (EVALS.'my_account.eval.php');
 
 $user_edit_links .= "</div><!-- ./button group -->";
 

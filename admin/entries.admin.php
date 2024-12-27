@@ -440,7 +440,7 @@ if ($totalRows_log > 0) {
 		}
 
 		if (($action != "print") && ($dbTable == "default")) {
-			$entry_actions .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;action=edit&amp;bid=".$row_log['uid']."&amp;id=".$row_log['id'];
+			$entry_actions .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;bid=".$row_log['uid']."&amp;id=".$row_log['id'];
 			if ($row_log['brewConfirmed'] == 0) $entry_actions .= "&amp;msg=1-".$row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 			else $entry_actions .= "&amp;view=".$row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 			$entry_actions .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit &ldquo;".$entry_name."&rdquo;\">";
@@ -544,19 +544,14 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= "<span class=\"hidden\">".$row_log['brewCategorySort'].$row_log['brewSubCategory']."</span>";
 
 		if (!$entry_confirmed) {
-			$unconfirmed_entry_link = $base_url."index.php?section=brew&amp;go=".$go."&amp;bid=".$row_log['uid']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory'];
+			$unconfirmed_entry_link = $base_url."index.php?section=admin&amp;go=".$go."&amp;bid=".$row_log['uid']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory'];
 			$entry_unconfirmed_display .= "<br><a href=\"".$unconfirmed_entry_link."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Select to Edit\">";
 			$entry_unconfirmed_display .= "<span class=\"fa fa-exclamation-triangle text-danger\"></span>";
 			$entry_unconfirmed_display .= "</a>&nbsp;";
 			$entry_unconfirmed_display .= "<span class=\"text-danger small\"><strong>Unconfirmed entry.</strong> <a href=\"".$unconfirmed_entry_link."\">Edit</a> or contact the participant to confirm.";
-		}
-
-		
+		}		
 
 		$tbody_rows .= $entry_style_display;
-
-		
-
 	    $tbody_rows .= $entry_unconfirmed_display;
 		$tbody_rows .= $entry_allergens_display;
 

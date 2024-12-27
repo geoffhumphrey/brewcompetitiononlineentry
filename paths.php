@@ -34,6 +34,7 @@ define('USER_TEMP',ROOT.'user_temp'.DIRECTORY_SEPARATOR);
 define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
 define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARATOR);
 define('AJAX',ROOT.'ajax'.DIRECTORY_SEPARATOR);
+define('PUB',ROOT.'pub'.DIRECTORY_SEPARATOR);
 
 /**
  * --------------------------------------------------------
@@ -50,6 +51,7 @@ define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
 define('EVALUATION', TRUE);
+define('V3', TRUE);
 
 /**
  * Enable to following to put your installation into
@@ -80,14 +82,14 @@ define('CDN', TRUE);
  * Default is FALSE.
  */
 
-define('TESTING', FALSE);
+define('TESTING', TRUE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE.
  */
 
-define('DEBUG', FALSE);
+define('DEBUG', TRUE);
 
 /**
  * Enable the following to show a collapsable table of all
@@ -117,7 +119,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', FALSE);
+define('ENABLE_MARKDOWN', TRUE);
 
 /**
  * Set the following to TRUE if you would like to use

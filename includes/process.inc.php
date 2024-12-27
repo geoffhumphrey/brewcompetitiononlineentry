@@ -231,10 +231,10 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", GetSQLValueString("Y", "text"), GetSQLValueString($id, "text"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12");
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&bid=".$id."&msg=15");
 		}
 
-		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13");
+		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&bid=".$id."&msg=16");
 	}
 
 	// Convert entries to selected BJCP version

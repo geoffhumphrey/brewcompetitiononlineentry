@@ -1568,7 +1568,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		// Used only on My Account page for judges.
 		case "4":
 		$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
-		$replacement2 = array('<strong class="text-danger">Entry Instructions:</strong>','<strong class="text-info">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
+		$replacement2 = array('<strong>Entry Instructions:</strong>','<strong>Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
 
 		if ($style_set == "BA") $styleSet = "Brewers Association";
 		else $styleSet = str_replace("2"," 2",$style_set);
@@ -1580,10 +1580,6 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		foreach ($a as $value) {
 
-			/*
-			if (HOSTED) $query_style = sprintf("SELECT * FROM %s WHERE id='%s' UNION ALL SELECT * FROM %s WHERE id='%s'", $prefix."styles", $value, $styles_db_table, $value);	
-			else 
-			*/
 			$query_style = sprintf("SELECT * FROM %s WHERE id='%s'",$styles_db_table,$value);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
@@ -1620,7 +1616,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 				$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
 				$styleColor .= " &ndash; ";
-				$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+				$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> SRM";
 			}
 			else $styleColor = "&nbsp;";
 
@@ -1642,10 +1638,31 @@ function style_convert($number,$type,$base_url="",$archive="") {
 			</tr>
 			</table>";
 
-			$style_convert_1[] = "<a href=\"#\" data-target=\"#".$trimmed.$row_style['brewStyleNum']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
-			$style_modal[] = "
+			if ($archive == "v3-public") {
+				$style_convert_1[] = "\n<span title=\"".$row_style['brewStyle']."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$trimmed.$row_style['brewStyleNum']."</a></span>";
+				$style_modal[] = "
 				<!-- Modal -->
-				<div class=\"modal fade\" id=\"".$trimmed.$row_style['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$trimmed.$row_style['brewStyleNum']."Label\">
+				<div class=\"modal fade\" id=\"s-".$value."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$value."Label\">
+				  <div class=\"modal-dialog modal-lg\">
+					<div class=\"modal-content\">
+					  <div class=\"modal-header\">
+						<h4 class=\"modal-title\" id=\"".$value."Label\">".$styleSet." ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</h4>
+						<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"".$label_close."\"></button>
+					  </div>
+					  <div class=\"modal-body\">".$info."</div>
+					  <div class=\"modal-footer\">
+						<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">".$label_close."</button>
+					  </div>
+					</div>
+				  </div>
+				</div>";
+			}
+
+			else {
+				$style_convert_1[] = "<a href=\"#\" data-target=\"#s-".$value."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$value."</a>";
+				$style_modal[] = "
+				<!-- Modal -->
+				<div class=\"modal fade\" id=\"s-".$value."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$value."Label\">
 				  <div class=\"modal-dialog modal-lg\" role=\"document\">
 					<div class=\"modal-content\">
 					  <div class=\"modal-header\">
@@ -1659,6 +1676,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 					</div>
 				  </div>
 				</div>";
+			}
 
 		} // end foreach
 
@@ -1682,10 +1700,6 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		foreach ($a as $value) {
 
-			/*
-			if (HOSTED) $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);	
-			else 
-			*/
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'",$styles_db_table, $value);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
@@ -1705,10 +1719,6 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		
 		foreach ($a as $value) {
 			
-			/*
-			if (HOSTED) $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);	
-			else 
-			*/
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s'",$styles_db_table,$value);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
@@ -5209,8 +5219,6 @@ function display_array_content_style($arrayname,$method,$base_url) {
 function admin_relocate($user_level,$go,$referrer) {
 	$list = FALSE;
 	if (strstr($referrer,"list")) $list = TRUE;
-	if (strstr($referrer,"entries")) $list = FALSE;
-	if (strstr($referrer,"0-A")) $list = FALSE;
 	if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
 	elseif (($user_level <= 1) && ($go == "entries") && ($list)) $output = "list";
 	else $output = "list";
@@ -5265,4 +5273,64 @@ function clean_filename($filename) {
 	return $cleaned_file;
 
 }
+
+/**
+ * Version 3.0 Additions
+ */
+
+function create_bs_alert($alert_id,$alert_type,$alert_header="",$alert_body="",$alert_icon="",$alert_dismiss="",$alert_stacked=FALSE) {
+
+    if ($alert_dismiss == "no-dismiss") $alert_dismissable = "";
+    else $alert_dismissable = "alert-dismissible";
+
+    if ($alert_stacked) $alert_added_classes = "alert-stacked";
+    else $alert_added_classes = "d-flex align-items-center alert-full-width";
+
+    $alert_output = sprintf("<div id=\"%s\" class=\"alert alert-%s %s %s fade show %s\" role=\"alert\">",$alert_id,$alert_type,$alert_dismiss,$alert_dismissable,$alert_added_classes);
+    if (!empty($alert_header)) {
+      $alert_output .= "<h5 class=\"alert-heading\">";
+      if (!empty($alert_icon)) $alert_output .= sprintf("<i class=\"fa fa-lg fa-fw %s me-1\"></i>",$alert_icon);
+      $alert_output .= "<strong>";
+      $alert_output .= $alert_header;
+      $alert_output .= "</strong>";
+      $alert_output .= "</h5>";
+      $alert_output .= "<hr>";
+    }
+    if ((!empty($alert_icon)) && (empty($alert_header))) $alert_output .= sprintf("<i class=\"fa fa-lg fa-fw %s me-1\"></i>",$alert_icon);
+    if (!empty($alert_body)) $alert_output .= "<span>".$alert_body."</span>";
+    if (!empty($alert_dismissable)) $alert_output .= "<button type=\"button\" class=\"small btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>";
+    // if (!$alert_stacked) $alert_output .= "<p><small><span id=\"alert-closing\">Closing in </span><span id=\"alert-countdown\">15</span></small></p>";
+    $alert_output .= "</div>";
+
+    return $alert_output;
+
+}
+
+function create_bs_popover($popover_id,$popover_class,$popover_type,$popover_title,$popover_body,$popover_trigger,$popover_icon,$popover_link_text) {
+
+    // $popover_type can be "button" (typically on its own), "link" or "icon" (typically inline with text)  
+    
+    // Button
+    if ($popover_type == "button") $popover_class .= " btn btn-primary"; 
+    $popover_output = "<a class=\"".$popover_class."\" ";
+    $popover_output .= "href=\"#\" ";
+    $popover_output .= "role=\"button\" ";
+    $popover_output .= "data-toggle=\"popover\" ";
+    $popover_output .= "title=\"".$popover_title."\" ";
+    $popover_output .= "data-trigger=\"".$popover_trigger."\" ";
+    $popover_output .= "data-placement=\"auto\" ";
+    $popover_output .= "data-html=\"true\" ";
+    $popover_output .= "data-content=\"".$popover_body."\"";
+    $popover_output .= ">";
+    if ($popover_type == "icon") $popover_output .= "<i class=\"".$popover_icon."\"></i>";
+    elseif (($popover_type == "button") && (!empty($popover_icon))) {
+        $popover_output .= $popover_title." <i class=\"".$popover_icon."\"></i>";
+    }
+    else $popover_output .= $popover_link_text;
+    $popover_output .= "</a>";
+
+    return $popover_output;
+}
+
+
 ?>

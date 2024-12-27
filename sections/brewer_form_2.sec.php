@@ -8,8 +8,8 @@ $show_partners_orgs = FALSE;
 if (($table_assignment) && ($go == "account") && (!$entrant_type_brewery)) { ?>
 
     <div class="form-group">
-        <label for="brewerJudge" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging."/".$label_stewarding; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerJudge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging."/".$label_stewarding; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 <div class="alert alert-warning"><?php echo $brewer_info_020; ?></div>
             </div>
@@ -31,8 +31,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 
 <a name="judging"></a><section id="judge-preferences">
     <div class="form-group">
-        <label for="brewerJudge" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerJudge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 <label class="radio-inline">
                     <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0" <?php if ($judge_checked) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
@@ -46,8 +46,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     </div>
 
     <div id="bjcp-id" class="form-group">
-        <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             
             <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
         </div>
@@ -67,8 +67,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         <?php if (($totalRows_judging > 0) || (($go == "admin") && ($filter != "default"))) { ?>
         <div class="form-group <?php if (($view == "all-availability") || ($view == "judging-availability")) echo "text-warning"; ?>">
             <?php if (!empty($judge_location_avail)) { ?>
-            <label for="brewerJudgeLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerJudgeLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <?php echo $judge_location_avail; ?>
             </div>
             <?php } // end if (!empty($judge_location_avail))?>
@@ -76,8 +76,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         <?php } // end if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) } ?>
 
         <div class="form-group">
-            <label for="brewerJudgeMead" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_mead; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerJudgeMead" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_mead; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group">
                     <label class="radio-inline">
                         <input type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
@@ -91,8 +91,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <div class="form-group">
-            <label for="brewerJudgeMead" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_cider; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerJudgeMead" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_cider; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group">
                     <label class="radio-inline">
                         <input type="radio" name="brewerJudgeCider" value="Y" id="brewerJudgeCider_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeCider'] == "Y")) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
@@ -107,8 +107,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 
         <?php $judge_array = explode(",",$row_brewer['brewerJudgeRank']); ?>
         <div class="form-group"><!-- Form Group Radio STACKED -->
-            <label for="brewerJudgeRank" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_rank; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_rank; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group">
                     <div class="radio">
                         <label>
@@ -170,8 +170,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <div class="form-group">
-            <label for="brewerJudgeRank" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_designations; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_designations; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group">
                     
                     <div class="checkbox">
@@ -216,8 +216,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
          <div class="form-group">
-            <label for="brewerJudgeExp" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_comps; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerJudgeExp" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_comps; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             
             <select class="selectpicker" name="brewerJudgeExp" id="brewerJudgeExp" data-width="auto" required>
                 <option value="0"<?php if (($action == "edit") && ($row_brewer['brewerJudgeExp'] == "0")) echo " SELECTED"; ?>>0</option>
@@ -230,8 +230,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <div class="form-group">
-            <label for="brewerJudgeLikes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <button class="btn btn-info btn-block" type="button" data-toggle="collapse" data-target="#collapsePref" aria-expanded="false" aria-controls="collapsePref"><?php echo $label_judge_preferred; ?></button>
                 <span class="help-block"><?php echo $brewer_text_017; ?></span>
             </div>
@@ -239,8 +239,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 
         <div class="collapse" id="collapsePref">
             <div class="form-group"><!-- Form Group Checkbox  -->
-                <label for="brewerJudgeLikes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_preferred; ?></label>
-                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_preferred; ?></label>
+                <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <p><strong class="text-danger"><?php echo $brewer_text_012; ?></strong></p>
                     <?php do {
                         $style_display = "";
@@ -262,8 +262,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <div class="form-group">
-        <label for="brewerJudgeDislikes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
-                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
+                <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                     <button class="btn btn-info btn-block" type="button" data-toggle="collapse" data-target="#collapseNonPref" aria-expanded="false" aria-controls="collapseNonPref"><?php echo $label_judge_non_preferred; ?></button>
                     <span class="help-block"><?php echo $brewer_text_013; ?></span>
                 </div>
@@ -271,8 +271,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 
         <div class="collapse" id="collapseNonPref">
             <div class="form-group"><!-- Form Group Checkbox  -->
-                <label for="brewJudgeDislikes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_non_preferred; ?></label>
-                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                <label for="brewJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_non_preferred; ?></label>
+                <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                     <p><strong class="text-danger"><?php echo $brewer_text_014; ?></strong></p>
                     <!-- <div class="row"> -->
                     <?php do {
@@ -307,8 +307,8 @@ if ((!empty($steward_location_avail)) && (((!$steward_limit) && ($go == "account
 ?>
 <a name="stewarding"></a><section id="steward-preferences">
     <div class="form-group">
-        <label for="brewerSteward" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerSteward" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 
                 <label class="radio-inline">
@@ -330,8 +330,8 @@ if ((!empty($steward_location_avail)) && (((!$steward_limit) && ($go == "account
     <div id="brewerStewardFields">
         <?php if (!empty($steward_location_avail)) { ?>
         <div class="form-group <?php if (($view == "all-availability") || ($view == "stewarding-availability")) echo "text-warning"; ?>"><!-- Form Group NOT REQUIRED Select -->
-            <label for="brewerStewardLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerStewardLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <?php echo $steward_location_avail; ?>
             </div>
         </div>
@@ -346,7 +346,7 @@ if ($show_partners_orgs) { ?>
 
 <section id="participant-orgs">
     <div class="form-group">
-        <label for="brewerAssignment" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label; ?></label>
+        <label for="brewerAssignment" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label; ?></label>
         <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">  
         <select class="selectpicker" multiple name="brewerAssignment[]" id="brewerAssignment" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $participant_orgs_label." - ".$label_select_below; ?>" title="<?php echo $participant_orgs_label." - ".$label_select_below; ?>">
             <?php echo $org_options; ?>
@@ -356,8 +356,8 @@ if ($show_partners_orgs) { ?>
     </div>
     <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
     <div id="brewerAssignmentOther" class="form-group">
-        <label for="brewerAssignmentOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label." &ndash; ".$label_other; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerAssignmentOther" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label." &ndash; ".$label_other; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%\x22]+">
             <div class="help-block">
                 <p><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_052; else echo $brewer_text_054; ?></p>
@@ -368,8 +368,8 @@ if ($show_partners_orgs) { ?>
 
 <section id="judge-steward-waiver">
     <div id="judge-waiver" class="form-group">
-        <label for="brewerJudgeWaiver" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_waiver; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerJudgeWaiver" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_waiver; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="checkbox">
                 <p><?php echo $brewer_text_016; ?></p>
                 <label>
@@ -382,8 +382,8 @@ if ($show_partners_orgs) { ?>
 </section>
 <section id="judge-steward-notes">
     <div class="form-group">
-        <label for="brewerJudgeNotes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_org_notes; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerJudgeNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_org_notes; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             
             <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeNotes']; ?>" placeholder="">
             <span class="help-block"><?php echo $brewer_text_004; ?></span>
