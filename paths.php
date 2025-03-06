@@ -247,15 +247,8 @@ $_SESSION['last_action'] = time();
  * preferences.
  */
 
-if ((HOSTED) || (strpos($base_url, 'test.brewingcompetitions.com') !== false)) {
-	$public_captcha_key = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
-	$private_captcha_key = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
-}
-
-else {
-    $public_captcha_key = "";
-    $private_captcha_key = "";
-}
+$public_captcha_key = "";
+$private_captcha_key = "";
 
 /** 
  * Uncomment to display paths. 
