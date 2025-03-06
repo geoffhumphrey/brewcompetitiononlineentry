@@ -1,7 +1,5 @@
 <?php
 
-include (LIB.'admin.lib.php');
-
 function dropoff_loc($id) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);

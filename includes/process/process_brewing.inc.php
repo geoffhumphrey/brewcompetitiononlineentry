@@ -103,7 +103,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewCoBrewer = "";
 		$styleBreak = $purifier->purify(sterilize($_POST['brewStyle']));
 		$styleName = "";
-		$brewName = capitalize($purifier->purify(sterilize($_POST['brewName'])));
+		$brewName = $purifier->purify(sterilize($_POST['brewName']));
 		$brewInfo = "";
 		$brewInfoOptional = "";
 		$index = ""; // Defined with Style

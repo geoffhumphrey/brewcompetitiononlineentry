@@ -36,8 +36,8 @@ switch($section) {
 			$output_extend = sprintf("<div class='alert alert-warning hidden-print'><span class=\"fa fa-lg fa-exclamation-triangle\">%s</div>",$header_text_003);
 			if (($setup_free_access == TRUE) && ($action != "print")) $output_extend .= sprintf("<div class='alert alert-warning hidden-print'><span class=\"fa fa-lg fa-exclamation-triangle\">%s</div>",$header_text_004);
 		}
-
-		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
+		if     ($msg == "0") $output = sprintf("<strong>%s</strong>",$header_text_031);
+		elseif ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_009);
@@ -46,6 +46,22 @@ switch($section) {
 		elseif ($msg == "7") $output = sprintf("<strong>%s</strong>",$alert_text_088);
 		elseif ($msg == "8") $output = sprintf("<strong>%s</strong>",$alert_text_089);
 		elseif ($msg == "9") $output = sprintf("<strong>%s</strong>",$header_text_066);
+
+		// Login-related
+		elseif ($msg == "11") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; } // Problem with login (warning)
+	 	elseif ($msg == "12") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; } // Reset token sent (success)
+		elseif ($msg == "13") $output = sprintf("<strong>%s</strong> <a class=\"hide-loader\" href=\"\" role=\"button\" data-bs-toggle=\"modal\" data-bs-target=\"#login-modal\">%s</a>",$header_text_036,$header_text_037); // Log out confirmation (success)
+		elseif ($msg == "14") $output = sprintf("<strong>%s</strong> %s",$header_text_038,$header_text_008); // Verification does not match (warning)
+		elseif ($msg == "15") $output = sprintf("<strong>%s</strong>",$header_text_039); 	// ID verification info sent (success)
+		elseif ($msg == "16") $output = sprintf("<strong>%s</strong>",$login_text_023); 	// Passwords do not match (danger) DEPRECATED
+		elseif ($msg == "17") $output= sprintf("<strong>%s</strong>",$login_text_022); 		// Email entered not associated with token (warning)
+		elseif ($msg == "18") $output= sprintf("<strong>%s</strong>",$login_text_027); 		// Password reset successfully (success)
+		elseif ($msg == "19") {
+			if ($view != "default") $contact_name = str_replace("+"," ",$view);
+			$output = sprintf("<strong>%s %s.</strong>",$header_text_040,$contact_name); // Contact email sent.
+		}
+		elseif ($msg == "20") $output = sprintf("<strong>%s</strong> %s",$header_text_041,$header_text_008); // Contact email NOT sent.
+
 	break;
 
 	case "evaluation":
@@ -472,7 +488,7 @@ switch($section) {
 				break;
 
 				case "judging_preferences":
-				$header_output .= ": ".$label_admin_judge_prefs;
+				$header_output .= ": ".$label_admin_web_prefs;
 				break;
 
 				case "archive":
@@ -571,6 +587,12 @@ switch($section) {
 				$header_output .= ": Sessions";
 				break;
 
+				case "evaluation":
+				if ($action == "add") $header_output .= ": Add a Scoresheet";
+				elseif  ($action == "edit")  $header_output .= ": Edit Scoresheet";
+				else $header_output .= ": Entry Evaluations";
+				break;
+
 			}
 
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
@@ -632,12 +654,20 @@ switch($section) {
 	break;
 }
 
-if (($section != "list") && ($msg == "14")) $output = sprintf("<strong>%s</strong>",$header_text_096);
-if (($section != "list") && ($msg == "16")) {
+// VERIFY the following. Can msg numbers be changed?
+if (($section != "list") && ($section != "default") && ($msg == "14")) $output = sprintf("<strong>%s</strong>",$header_text_096);
+if (($section != "list") && ($section != "default") && ($msg == "16")) {
 	$output = sprintf("<strong>%s</strong>",$header_text_097);
 	$output_extend = sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div><div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>%s</strong>.</div>",$header_text_098,$header_text_099,$header_text_100);
 	}
-if ($msg == "17") $output = sprintf("<strong>%s</strong>",$header_text_101);
+if (($section != "list") && ($section != "default") && ($msg == "17")) $output = sprintf("<strong>%s</strong>",$header_text_101); // Install set up successfully
+
+
+
+
+
+
+
 if ($msg == "27") $output = sprintf("<strong>%s</strong> %s",$header_text_102,$header_text_008);
 if ($msg == "98") $output = sprintf("<strong>%s</strong>",$header_text_112);
 if ($msg == "99") $output = sprintf("<strong>%s</strong>",$header_text_103);

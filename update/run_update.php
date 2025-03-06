@@ -90,6 +90,7 @@ if (!isset($output_run_update)) $output_run_update = "";
 $error_count = 0;
 
 require_once (LANG.'language.lang.php');
+require_once (CLASSES.'phpass/PasswordHash.php');
 
 /**
  * ---------------------------------------------- 2.3.2 ----------------------------------------------
@@ -2208,10 +2209,10 @@ if (!check_update("prefsEmailCC", $prefix."preferences")) {
 	}
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsEmailCC' => 1);
-	if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>The prefsEmailCC value was set to 1.</li>";
+	$data = array('prefsEmailCC' => 0);
+	if ($db_conn->update ($update_table, $data)) $output_run_update .= "<li>The prefsEmailCC value was set to 0 (disabled).</li>";
 	else {
-		$output_run_update .= "<li>The prefsEmailCC value was NOT set to 1. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_run_update .= "<li>The prefsEmailCC value was NOT set to 0. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count++;
 	}
 
@@ -2767,8 +2768,6 @@ $total_encrypted = 0;
 $total_not_encrypted = 0;
 
 if ($totalRows_security_resp > 0) {
-
-	require(CLASSES.'phpass/PasswordHash.php');
 
 	do {
 
@@ -4395,6 +4394,212 @@ if (($row_current_prefs['prefsTheme'] == "claussenii") || ($row_current_prefs['p
 $output_run_update .= "<li>Claussenii and Naardenensis themes are deprecated and were removed due to accessibility issues.</li>";
 
 if (!$setup_running) $output_run_update .= "</ul>";
+
+/**
+ * ----------------------------------------------- 3.0.0 ----------------------------------------------
+ * Add ability to store email SMTP variables.
+ * Remove temperature, weight, and volume measurement
+ * Add BJCP 2025 Cider Styles.
+ * Look at current cider entries and map to new style.
+ *  -- 
+ * Delete cider styles tagged as BJCP2021.
+ */
+
+
+/*
+ALTER TABLE `nerhbc_preferences` CHANGE `prefsTemp` `prefsEmailHost` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `nerhbc_preferences` CHANGE `prefsWeight1` `prefsEmailUsername` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `nerhbc_preferences` CHANGE `prefsWeight2` `prefsEmailPassword` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `nerhbc_preferences` CHANGE `prefsLiquid1` `prefsEmailEncrypt` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `nerhbc_preferences` CHANGE `prefsLiquid2` `prefsEmailPort` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+UPDATE `nerhbc_preferences` SET `prefsEmailHost` = NULL, `prefsEmailUsername` = NULL, `prefsEmailPassword` = NULL, `prefsEmailEncrypt` = NULL, `prefsEmailPort` = NULL WHERE `nerhbc_preferences`.`id` = 1;
+*/
+
+if (!check_update("prefsEmailSMTP", $prefix."preferences")) {
+	$sql = sprintf("ALTER TABLE `%s` ADD `prefsEmailSMTP` TINYINT(1) NULL AFTER `id`;", $prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_run_update .= "<li>SMTP Email Enable column added to preferences table.</li>";
+	else {
+		$output_run_update .= "<li>SMTP Email Enable column NOT added to preferences table.</li>";
+		$error_count++;
+	}
+}
+
+if (!check_update("prefsEmailHost", $prefix."preferences")) {
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsTemp` `prefsEmailHost` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_run_update .= "<li>SMTP Email Host column added to preferences table.</li>";
+	else {
+		$output_run_update .= "<li>SMTP Email Host column NOT added to preferences table.</li>";
+		$error_count++;
+	}
+}
+
+if (!check_update("prefsEmailFrom", $prefix."preferences")) {
+	$sql = sprintf("ALTER TABLE `%s` ADD `prefsEmailFrom` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `prefsEmailHost`;", $prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_run_update .= "<li>SMTP \"From\" email column added to preferences table.</li>";
+	else {
+		$output_run_update .= "<li>SMTP \"From\" email column NOT added to preferences table.</li>";
+		$error_count++;
+	}
+}
+
+if (!check_update("prefsEmailUsername", $prefix."preferences")) {
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsWeight1` `prefsEmailUsername` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_run_update .= "<li>SMTP Email Username column added to preferences table.</li>";
+	else {
+		$output_run_update .= "<li>SMTP Email Username column NOT added to preferences table.</li>";
+		$error_count++;
+	}
+}
+
+if (!check_update("prefsEmailPassword", $prefix."preferences")) {
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsWeight2` `prefsEmailPassword` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_run_update .= "<li>SMTP Email Password column added to preferences table.</li>";
+	else {
+		$output_run_update .= "<li>SMTP Email Password column NOT added to preferences table.</li>";
+		$error_count++;
+	}
+}
+
+if (!check_update("prefsEmailEncrypt", $prefix."preferences")) {
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsLiquid1` `prefsEmailEncrypt` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_run_update .= "<li>SMTP Email Encrypt column added to preferences table.</li>";
+	else {
+		$output_run_update .= "<li>SMTP Email Encrypt column NOT added to preferences table.</li>";
+		$error_count++;
+	}
+}
+
+if (!check_update("prefsEmailPort", $prefix."preferences")) {
+	
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsLiquid2` `prefsEmailPort` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_run_update .= "<li>SMTP Email Port column added to preferences table.</li>";
+	else {
+		$output_run_update .= "<li>SMTP Email Port column NOT added to preferences table.</li>";
+		$error_count++;
+	}
+
+	/**
+	 * If the installation already has SMTP credentials input into the config.mail.php
+	 * file, grab the var values and add to the newly updated DB columns.
+	 * Otherwise, update with null or values already defined from preferences.
+	 */
+
+	$mail_default_from = "";
+	$smtp_host = "";
+	$smtp_username = "";
+	$smtp_password = "";
+	$smtp_secure = "";
+	$smtp_port = "";
+	$smtp_enable = 0;
+	$prefsEmailRegConfirm = $row_current_prefs['prefsEmailRegConfirm'];
+	$prefsEmailCC = $row_current_prefs['prefsEmailCC'];
+	$prefsContact = $row_current_prefs['prefsContact'];
+
+	if (file_exists(CONFIG.'config.mail.php')) {
+
+		include (CONFIG.'config.mail.php');
+		if (!empty($mail_default_from)) $mail_default_from = sterilize($mail_default_from);
+		if (!empty($smtp_host)) $smtp_host = sterilize($smtp_host);
+		if (!empty($smtp_username)) $smtp_username = sterilize($smtp_username);
+		if (!empty($smtp_secure)) $smtp_secure = sterilize($smtp_secure);
+		if (!empty($smtp_port)) $smtp_port = sterilize($smtp_port);
+
+		// Need to encrypt the password for storage in DB
+		if (!empty($smtp_password)) {
+			$secretKey = base64_encode(bin2hex($password));
+			$nacl = base64_encode(bin2hex($server_root));
+			$smtp_password = sterilize($smtp_password);
+			$smtp_password = simpleEncrypt($smtp_password, $secretKey, $nacl);
+		}
+
+	}
+
+	if ((!empty($mail_default_from)) && (!empty($smtp_host)) && (!empty($smtp_username)) && (!empty($smtp_password)) && (!empty($smtp_secure)) && (!empty($smtp_port))) $smtp_enable = 1;
+
+	/**
+	 * If the current prefs indicate that the install was set up to send emails, 
+	 * but did not have phpMailer set up, make the $smtp_enable var value 3. 
+	 * This will trigger an alert in the Admin Dashboard.
+	 */
+
+	if (($smtp_enable == 0) && (($row_current_prefs['prefsEmailRegConfirm'] == 1) || ($row_current_prefs['prefsContact'] == "Y"))) $smtp_enable = 3;
+
+	if (($smtp_enable == 0) || ($smtp_enable == 3)) {
+		$prefsEmailRegConfirm = 0;
+		$prefsEmailCC = 0;
+		$prefsContact = "N";
+	}
+
+	$update_table = $prefix."preferences";
+	$data = array(
+		'prefsEmailSMTP' => $smtp_enable,
+		'prefsEmailFrom' => blank_to_null($mail_default_from),
+		'prefsEmailHost' => blank_to_null($smtp_host),
+		'prefsEmailUsername' => blank_to_null($smtp_username),
+		'prefsEmailPassword' => blank_to_null($smtp_password),
+		'prefsEmailEncrypt' => blank_to_null($smtp_secure),
+		'prefsEmailPort' => blank_to_null($smtp_port),
+		'prefsEmailRegConfirm' => $prefsEmailRegConfirm,
+		'prefsEmailCC' => $prefsEmailCC,
+		'prefsContact' => $prefsContact
+	);
+
+	$db_conn->where ('id', 1);
+	$result = $db_conn->update ($update_table, $data);
+
+}
+
+if (!check_new_style("C1","E","Spanish Cider")) {
+
+	$data = array(
+	  array('brewStyleGroup' => 'C1','brewStyleNum' => 'A','brewStyle' => 'Common Cider','brewStyleCategory' => 'Traditional Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.045','brewStyleOGMax' => '1.065','brewStyleFG' => '0.995','brewStyleFGMax' => '1.02','brewStyleABV' => '4.5','brewStyleABVMax' => '8','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'A Common Cider is made primarily from culinary (table) apples. Compared to most other styles in this category, these ciders are generally lower in tannin and higher in acidity.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Æppeltreow Barn Swallow Cider, Bellwether Liberty Spy, Doc’s Hard Apple Cider, Seattle Cider Dry, Tandem Ciders Smackintosh, 2 Towns BrightCider, Uncle John’s Apple Hard Cider','brewStyleEntry' => 'Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify apple varieties, particularly if those varieties introduce unusual characteristics.'),
+	  array('brewStyleGroup' => 'C1','brewStyleNum' => 'B','brewStyle' => 'Heirloom Cider','brewStyleCategory' => 'Traditional Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.05','brewStyleOGMax' => '1.08','brewStyleFG' => '0.995','brewStyleFGMax' => '1.02','brewStyleABV' => '6','brewStyleABVMax' => '9','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'Heirloom Cider is a broadly-defined style that often uses at least some cider apples to create a product having more tannin than Common Cider. It is usually made outside the regions associated with English, French, and Spanish Cider styles, and lacks the distinguishing MLF or rustic characteristics of those styles. It is a type of ‘craft’ cider produced in North America, eastern England, and elsewhere in the world.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Eve’s Cidery Autumn’s Gold, Farnum Hill Extra Dry, Redbyrd Orchard Cloudsplitter, Sea Cider Flagship, Snowdrift Cliffbreaks Blend, Tandem Ciders Crabster, West County Cider Redfield','brewStyleEntry' => 'Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify varieties of apples used; if specified, a varietal character will be expected.'),
+	  array('brewStyleGroup' => 'C1','brewStyleNum' => 'C','brewStyle' => 'English Cider','brewStyleCategory' => 'Traditional Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.05','brewStyleOGMax' => '1.075','brewStyleFG' => '0.995','brewStyleFGMax' => '1.015','brewStyleABV' => '6','brewStyleABVMax' => '9','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'English Cider is a regional product originating in the West Country, a group of counties in the southwest of England. Made from bittersweet and bittersharp apples, it is higher in tannin and lower in acidity than Common Cider. It may optionally have a phenolic-smoky character from intentional MLF. Not all cider from England fits this category; some are in the Heirloom Cider style','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Aspall Imperial Cyder, Burrow Hill Cider Bus, Farnum Hill Farmhouse, Henney’s Vintage Cider, Hogan’s Dry Cider (UK), Montana CiderWorks North Fork Traditional, Oliver’s Traditional Dry, Sea Cider Wild English','brewStyleEntry' => 'Entrants MUST specify carbonation level. Entrants MUST specify sweetness, restricted to dry through semi-sweet. Entrants MAY specify varieties of apples used; if specified, a varietal character will be expected.'),
+	  array('brewStyleGroup' => 'C1','brewStyleNum' => 'D','brewStyle' => 'French Cider','brewStyleCategory' => 'Traditional Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.045','brewStyleOGMax' => '1.065','brewStyleFG' => '1.005','brewStyleFGMax' => '1.02','brewStyleABV' => '3','brewStyleABVMax' => '6','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'French Cider is a regional product originating in the northwest of France, predominantly Normandy and Brittany. Made using bittersweet and bittersharp apples, it can have a higher tannin level, but it is often made sweeter to balance. The French also use MLF as do the English, but the character is often lower. Salts may be adjusted and nutrients may be deprived to arrest fermentation.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Bellot Vintage Cider, Domaine Dupont Cidre Bouché, Écusson Cidre Bio Doux, Eric Bordelet Sidre Tendre, Etienne Dupoint Brut, Maison Hérout Cuvée Tradition','brewStyleEntry' => 'Entrants MUST specify carbonation level. Entrants MUST specify sweetness, restricted to medium through sweet. Entrants MAY specify varieties of apples used; if specified, a varietal character will be expected.'),
+	  array('brewStyleGroup' => 'C1','brewStyleNum' => 'E','brewStyle' => 'Spanish Cider','brewStyleCategory' => 'Traditional Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.04','brewStyleOGMax' => '1.055','brewStyleFG' => '0.995','brewStyleFGMax' => '1.02','brewStyleABV' => '5','brewStyleABVMax' => '6.5','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'Spanish Cider is a regional product originating in the north of Spain, predominantly in Asturias, Cantabria, and Basque regions. Produced from sharp and bittersharp apples using a natural co-fermentation of yeast and bacteria. Often exhibits a wild note, with elevated volatile acidity (ethyl acetate or acetic acid) that traditionally is liberated using an exaggerated pour known as Escanciar.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Barrika Basque Country Cider, El Gaitero Sidra, Fanjul Sidra Natural Llagar de Fozana, Gurutzeta Sagardo Sidra Natural, Kupela Natural Basque Cider, Mayador Sidra Natural M. Busto, Trabanco Sidra Natural, Zapiain Sidra Natural','brewStyleEntry' => 'Entrants MUST specify carbonation level. Entrants MUST specify sweetness, restricted to dry through medium. Entrants MAY specify varieties of apples used; if specified, a varietal character will be expected.'),
+	  array('brewStyleGroup' => 'C2','brewStyleNum' => 'A','brewStyle' => 'New England Cider','brewStyleCategory' => 'Strong Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.06','brewStyleOGMax' => '1.1','brewStyleFG' => '0.995','brewStyleFGMax' => '1.02','brewStyleABV' => '7','brewStyleABVMax' => '13','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'This cider is made using traditional New England apples with relatively high acidity, and adjuncts to raise alcohol levels and contribute additional flavor notes. New England is a multi-state region in the northeast United States, east of New York state.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Blackbird Cider Works New England Style, Doc’s New England Small Batch Cider, Dressler Estate Outpost, Gypsy Circus New England Pantomime, Tandem Ciders Scrumpy Little Woody','brewStyleEntry' => 'Entrants MUST specify if the cider was barrel-fermented or -aged. Entrants MUST specify both carbonation and sweetness levels. '),
+	  array('brewStyleGroup' => 'C2','brewStyleNum' => 'B','brewStyle' => 'Applewine','brewStyleCategory' => 'Strong Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.07','brewStyleOGMax' => '1.1','brewStyleFG' => '0.995','brewStyleFGMax' => '1.2','brewStyleABV' => '9','brewStyleABVMax' => '12','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'A cider fermented with added neutral sugar that increases the starting gravity, and thus the resulting alcohol, to levels well above those typical for Common Cider. The amount of added sugar is greater than what could be used in other styles to compensate for low gravity. Uses no fruit other than apples, and uses only sugar to increase the starting gravity.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Æppeltreow Autumn Glory Apple Wine, McClure’s Sweet Apple Wine, 1911 Established Empire Dry Applewine','brewStyleEntry' => 'Entrants MUST specify both carbonation and sweetness levels.'),
+	  array('brewStyleGroup' => 'C2','brewStyleNum' => 'C','brewStyle' => 'Ice Cider','brewStyleCategory' => 'Strong Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.13','brewStyleOGMax' => '1.18','brewStyleFG' => '1.05','brewStyleFGMax' => '1.085','brewStyleABV' => '7','brewStyleABVMax' => '13','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'A cider fermented from juice concentrated either by freezing fruit before pressing or by freezing juice to remove water. Fermentation stops or is arrested before reaching dryness.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '0','brewStyleTags' => '','brewStyleComEx' => 'Champlain Orchards Honeycrisp Ice Cider, Cidrerie St-Nicolas Glace Du Verger Iced Orchard Cider, Domaine Pinnacle Cidre de Glace, Eden Heirloom Blend Ice Cider, Eve’s Cider Essence, Les Vergers de la Colline Le Glacé, Windfall Orchard Ice Cider','brewStyleEntry' => 'Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level.'),
+	  array('brewStyleGroup' => 'C2','brewStyleNum' => 'D','brewStyle' => 'Fire Cider','brewStyleCategory' => 'Strong Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.13','brewStyleOGMax' => '1.18','brewStyleFG' => '1.04','brewStyleFGMax' => '1.075','brewStyleABV' => '9','brewStyleABVMax' => '16','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'A Canadian cider style (cidre de feu) using classic North American table fruit varietals, and fermented from boiled, concentrated juice. Fermentation may be intentionally arrested or stopped while a substantial amount of residual sugar is present. No additives are permitted; in particular, sweeteners may not be used to increase gravity. Commercial versions may be aged for up to five years prior to release.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '0','brewStyleTags' => '','brewStyleComEx' => 'Cidrerie Milton Cidre de Feu, Domaine Labranche Cidre de Feu, Lacroix Feu Sacré, Petit et Fils Le Jaseux, Union Libre Fire Cider','brewStyleEntry' => 'Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level.'),
+	  array('brewStyleGroup' => 'C3','brewStyleNum' => 'A','brewStyle' => 'Fruit Cider','brewStyleCategory' => 'Specialty Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.045','brewStyleOGMax' => '1.07','brewStyleFG' => '0.995','brewStyleFGMax' => '1.01','brewStyleABV' => '5','brewStyleABVMax' => '9','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'A cider with additional non-apple fruit or fruit juices added. This is the correct style to enter a beverage fermented from a combination of apple and pear juice.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Apple Valley Black Currant, Bauman’s Cider Loganberry, Tandem Ciders Strawberry Jam, Tieton Cranberry, Uncle John’s Apple Cherry Hard Cider, Vander Mill Bluish Gold','brewStyleEntry' => ' Entrants MUST specify both carbonation and sweetness levels. Entrants MUST specify all fruit or fruit juice added. Entrants MAY specify a base cider style. Entrants MAY specify the color of added fruit.'),
+	  array('brewStyleGroup' => 'C3','brewStyleNum' => 'B','brewStyle' => 'Spiced Cider','brewStyleCategory' => 'Specialty Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.045','brewStyleOGMax' => '1.07','brewStyleFG' => '0.995','brewStyleFGMax' => '1.01','brewStyleABV' => '5','brewStyleABVMax' => '9','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'A cider with any combination of “botanicals” added. Hopped ciders are allowable in this category, in addition to ciders with the spices, herbs, and vegetables referenced in the Specialty Cider preamble.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Æppeltreow Sparrow Spiced Cider, Finnriver Dry Hopped Cider, Left Foot Charley Cinnamon Girl, Montana CiderWorks Hopped Up, Oliver’s At the Hop, Seattle Cider Basil Mint, Uncle John’s Atomic Apple','brewStyleEntry' => 'Entrants MUST specify both carbonation and sweetness levels. Entrants MUST specify all spices added. If hops are used, entrant MUST specify the varieties. Entrants MAY specify a base cider style.'),
+	  array('brewStyleGroup' => 'C3','brewStyleNum' => 'C','brewStyle' => 'Experimental Cider','brewStyleCategory' => 'Specialty Cider','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.045','brewStyleOGMax' => '1.1','brewStyleFG' => '0.995','brewStyleFGMax' => '1.01','brewStyleABV' => '5','brewStyleABVMax' => '13','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'This is an open-ended, catch-all category for cider with other ingredients or processes that do not fit any of the previous cider styles in categories C1 through C3. It also may be used for any other type of historical or regional traditional cider not already described. If the cider fits a previous style description, then it is not an Experimental Cider.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => ' Cidergeist Beezy, Domaine Dupoint Cidre Reserve, Finnriver Fire Barrel, Snowdrift Cornice, Tandem Ciders Bee’s Dream, Uncle John’s Blossom Blend, Uncle John’s Sidra de Tepache','brewStyleEntry' => ' Entrants MUST specify the ingredients or processes that make the entry an experimental cider. Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify a base style, or provide a more detailed description of the concept.'),
+	  array('brewStyleGroup' => 'C4','brewStyleNum' => 'A','brewStyle' => 'Common Perry','brewStyleCategory' => 'Perry','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.05','brewStyleOGMax' => '1.06','brewStyleFG' => '1','brewStyleFGMax' => '1.02','brewStyleABV' => '5','brewStyleABVMax' => '8','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'Common Perry is made from culinary (table) pears. ','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Æppeltreow Perry, EdenVale Pear Cider, Seattle Cider Perry, Snowdrift Semi-Dry Perry, Twin Pines Hammer Bent Perry, Uncle John’s Perry','brewStyleEntry' => 'Entrants MUST specify both carbonation and sweetness levels. '),
+	  array('brewStyleGroup' => 'C4','brewStyleNum' => 'B','brewStyle' => 'Heirloom Perry','brewStyleCategory' => 'Perry','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.05','brewStyleOGMax' => '1.07','brewStyleFG' => '1','brewStyleFGMax' => '1.02','brewStyleABV' => '4','brewStyleABVMax' => '9','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'A traditional perry made from “perry pears” grown specifically for that purpose, rather than for eating or cooking. Many of these varieties are nearly inedible due to high tannins; some are also quite hard. Perry pears may contain substantial amounts of sorbitol, a non-fermentable, sweet-tasting sugar alcohol. Hence a perry can exhibit the impression of sweetness, yet be completely dry (no RS).','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Æppeltreow Orchard Oriole Perry, Burrow Hill Perry, Christian Drouin Poiré, Dragon’s Head Sparkling Perry, Eric Bordelet Poiré Authentique, EZ Orchards Poire, Hogan’s Classic Perry (UK), Oliver’s Classic Perry','brewStyleEntry' => 'Entrants MUST specify both carbonation and sweetness levels. '),
+	  array('brewStyleGroup' => 'C4','brewStyleNum' => 'C','brewStyle' => 'Ice Perry','brewStyleCategory' => 'Perry','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.13','brewStyleOGMax' => '1.17','brewStyleFG' => '1.05','brewStyleFGMax' => '1.085','brewStyleABV' => '9','brewStyleABVMax' => '12','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'A regional style (Poiré de Glace) originating in Quebec in the 2000s, often produced by cideries or domaines where ice cider is made using a similar process. Pear juice is frozen before fermentation to concentrate sugars. Fermentation is often arrested before completion to achieve the desired sweetness level. Sweeteners must not be used to adjust the starting or finishing gravity.','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '0','brewStyleTags' => '','brewStyleComEx' => 'Coteau Rougemont Poiré de Glace, Domaine de la Galotière Poiré de Glace, Domaine de Lavoie Poiré de Glace, Vergers Écologiques Philion Gaia, Domaine des Salamandres Le Classique','brewStyleEntry' => 'Entrants MUST specify starting gravity, final gravity or residual sugar, alcohol level, and carbonation level.'),
+	  array('brewStyleGroup' => 'C4','brewStyleNum' => 'D','brewStyle' => 'Experimental Perry','brewStyleCategory' => 'Perry','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.045','brewStyleOGMax' => '1.1','brewStyleFG' => '0.995','brewStyleFGMax' => '1.02','brewStyleABV' => '5','brewStyleABVMax' => '12','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'This is an open-ended, catch-all category for perry with other ingredients or for perry using other processes that result in a product not fitting any other C4 styles, such as pear-based versions of C3A and C3B (fruited or spiced perry). It may also be used for any other type of historical or regional traditional perry not already described, or for perry that otherwise meets existing guideline definitions, except that it is noticeably outside listed style parameters (e.g., strength, sweetness, carbonation). If the perry fits a previously defined style, then it is not an Experimental Perry. Products derived from other pome fruit (e.g., quince) including those berry-like fruit in the Amelanchier genus (e.g., juneberry, serviceberry, saskatoon berry) may be entered here in lieu of a separate category, provided the experimental fruit is dominant in the formulation','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Æppeltreow Pear Wine, Sea Cider Ginger Perry, Snow Capped Cider JalaPEARño','brewStyleEntry' => 'Entrants MUST specify the ingredients or processes that make the entry an experimental perry. Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify a base style, or provide a more detailed description of the concept.')
+	);
+
+	$update_table = $prefix."styles";
+	$result = $db_conn->insertMulti($update_table, $data);
+	if ($result) $output_run_update .= "<li>Added BJCP 2025 Cider Styles to styles table.</li>"; 
+	else {
+	  $output_run_update .= "<li>Addition of BJCP 2025 Cider Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
+	  $error_count += 1;
+	}
+
+}
 
 /**
  * ----------------------------------------------- Future --------------------------------------------- 

@@ -34,6 +34,8 @@ foreach ($eval_scores as $key => $value) {
 		$eval_all_judges[] = $value['judge_id'];
 		$latest_submitted[$value['eid']] = $value['date_added'];
 		$latest_updated[$value['eid']] = $value['date_updated'];
+		if (!empty($value['consensus_score'])) $latest_consensus[$value['eid']] = $value['consensus_score'];
+		else $latest_consensus[$value['eid']] = "";
 		$table_judges[] = array(
 			"tj_first_name" => $eval_judge[0],
 			"tj_last_name" => $eval_judge[1],
@@ -47,8 +49,8 @@ foreach ($eval_scores as $key => $value) {
 
 		$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id']."&amp;tb=1";
 		$print_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id'];
-		$edit_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=edit&amp;filter=".$tbl_id."&amp;bid=".$value['judge_id']."&amp;view=admin&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
-		$delete_link = $base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$prefix."evaluation&amp;action=delete&amp;id=".$value['id'];
+		$edit_link = $base_url."index.php?section=admin&amp;go=evaluation&amp;action=edit&amp;filter=".$tbl_id."&amp;bid=".$value['judge_id']."&amp;view=admin&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
+		$delete_link = $base_url."includes/process.inc.php?section=evaluation&amp;go=default&amp;filter=".$filter."&amp;dbTable=".$prefix."evaluation&amp;action=delete&amp;id=".$value['id'];
 
 		$actions .= "<div style=\"margin-bottom:5px;\" class=\"row\">";
 		$actions .= "<div class=\"col col-lg-6 col-md-7 col-sm-12\">";
@@ -210,7 +212,8 @@ if ($count_evals > 0) {
 		"brewJudgingNumber" => $number,
 		"brewCategorySort" => $row_entries['brewCategorySort'],
 		"brewSubCategory" => $row_entries['brewSubCategory'],
-		"brewStyle" => $row_entries['brewStyle']
+		"brewStyle" => $row_entries['brewStyle'],
+		"consensus_score" => $latest_consensus[$row_entries['id']]
 	);
 
 	if (!empty($score_entry_data[3])) {

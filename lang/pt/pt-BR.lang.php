@@ -1379,7 +1379,7 @@ $pwd_email_reset_text_004 = "website. Se você não iniciou isto, não se preocu
 $pwd_email_reset_text_005 = "Para redefinir sua senha, clique no link abaixo ou copie / cole no seu navegador.";
 $best_brewer_text_000 = "cervejeiros participantes";
 $best_brewer_text_001 = "HM";
-$best_brewer_text_002 = "Os desempatadores foram aplicados de acordo com a <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\"> metodologia de pontuação </a>. ";
+$best_brewer_text_002 = "Os desempatadores foram aplicados de acordo com a <a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#scoreMethod\"> metodologia de pontuação </a>. ";
 $best_brewer_text_003 = "Metodologia de pontuação";
 $best_brewer_text_004 = "Cada amostra de colocação recebe os seguintes pontos:";
 $best_brewer_text_005 = "Os seguintes desempatadores foram aplicados, em ordem de prioridade:";

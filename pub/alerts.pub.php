@@ -164,6 +164,20 @@ if ($msg != "default") {
   $warning_msg = array();
   $danger_msg = array();
 
+  if ($section == "default") {
+
+    $info_msg = array(15);
+    $success_msg = array(13,18,19);
+    $warning_msg = array(11,14,16,17,20);
+    $danger_msg = array(0);
+    unset($danger_msg_alerts[1]);
+    unset($danger_msg_alerts[2]);
+    unset($danger_msg_alerts[3]);
+    unset($danger_msg_alerts[4]);
+    unset($info_msg_alerts[1]);
+
+  }
+
   if ($section == "login") {
     $warning_msg = array(1,4,7);
     $danger_msg = array(1);
@@ -242,7 +256,7 @@ if ($msg != "default") {
     if ((!empty($_SESSION['error_output'])) || (!empty($error_output))) {
         
         $errors_display .= "<div class=\"bcoem-admin-element\">";
-        $errors_display .= "<div class=\"alert alert-danger alert-dismissible hidden-print fade in\">";
+        $errors_display .= "<div class=\"alert alert-danger alert-dismissible d-print-none fade in\">";
         $errors_display .= "<p><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Error(s)</strong></p>";
         $errors_display .= "<p>The following errors were logged on the last MySQL server call:</p>";
         $errors_display .= "<ul>";

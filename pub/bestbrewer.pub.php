@@ -430,7 +430,9 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 			$table_body2 .= "<td width=\"1%\" nowrap>";
 			if ($section == "results") $table_body2 .= $points_clubs;
 			else $table_body2 .= number_format($points_clubs,2);
-			if ($section != "results") $table_body2 .= " <a href=\"#club-".$points_clubs."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points_clubs."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a>";
+			if ($section != "results") $table_body2 .= "<button class=\"m-0 btn btn-sm btn-link\" style=\"--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .1rem; \" tabindex=\"0\" data-bs-toggle=\"popover\" data-bs-trigger=\"hover focus\" data-bs-placement=\"top\" data-bs-container=\"body\" data-bs-title=\"Actual Calculated Value\" data-bs-content=\"".$points_clubs."\"><i class=\"hidden-xs hidden-sm hidden-md d-print-none fa fa-fw fa-question-circle\"></i></button>";
+
+			
 			$table_body2 .= "</td>";
 			$table_body2 .= "</tr>";
 
@@ -444,13 +446,13 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 // Build page headers
 if ($row_limits['prefsShowBestBrewer'] != 0) {
 	$header1_1 .= "<h3>".$row_bb_prefs['prefsBestBrewerTitle'];
-	$header1_1 .= sprintf(" (%s %s)", get_participant_count('received-entrant'), ucwords($best_brewer_text_000));
+	$header1_1 .= sprintf(" <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span>", get_participant_count('received-entrant'), ucwords($best_brewer_text_000));
 	$header1_1 .= "</h3>";
 }
 
 if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 0)) {
 	$header1_2 .= "<h3>".$row_bb_prefs['prefsBestClubTitle'];
-	$header1_2 .= sprintf(" (%s %s)", get_participant_count('received-club'), ucwords($best_brewer_text_014));
+	$header1_2 .= sprintf(" <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span>", get_participant_count('received-club'), ucwords($best_brewer_text_014));
 	$header1_2 .= "</h3>";
 }
 
@@ -512,7 +514,7 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 			$table_body1 .= "<td width=\"1%\" nowrap>";
 			if ($section == "results") $table_body1 .= $points;
 			else $table_body1 .= number_format($points,2);
-			if ($section != "results") $table_body1 .= " <a href=\"#".$points."\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a>";
+			if ($section != "results") $table_body1 .= "<button class=\"m-0 btn btn-sm btn-link\" style=\"--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .1rem; \" tabindex=\"0\" data-bs-toggle=\"popover\" data-bs-trigger=\"hover focus\" data-bs-placement=\"top\" data-bs-container=\"body\" data-bs-title=\"Actual Calculated Value\" data-bs-content=\"".$points."\"><i class=\"hidden-xs hidden-sm hidden-md d-print-none fa fa-fw fa-question-circle\"></i></button>";
 			$table_body1 .= "</td>";
 			if ($_SESSION['prefsProEdition'] == 0) $table_body1 .= "<td>".$bestbrewer[$key]['Clubs']."</td>";
 			$table_body1 .= "</tr>";
@@ -521,7 +523,7 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 	}
 }
 
-if ($section == "default") $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
+if ($section == "default") $page_info_1 .= "<p class=\"mt-3 d-print-none\">".$best_brewer_text_002."</p>";
 
 if ($tb == "default") {
 
@@ -530,7 +532,7 @@ if ($tb == "default") {
 	<div class="row">
 		<div class="col col-md-4 col-sm-12">
 			<div class="bcoem-admin-element">
-					<a class="btn btn-primary btn-block hide-loader" role="button" data-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View Scoring Methodology</a>
+					<a class="btn btn-primary btn-block hide-loader" role="button" data-bs-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View Scoring Methodology</a>
 			</div>
 		</div>
 		<div class="col col-md-4 col-sm-12">
@@ -609,33 +611,81 @@ foreach ($bestbrewer_clubs as $key => $value) {
 <div class="bcoem-winner-table">
 	<?php echo $header1_1; ?>
 	<?php if (!empty($table_body1)) { ?>
-    <table class="table table-responsive table-striped table-bordered"  id="sortable">
-    <thead>
-        <?php echo $table_head1; ?>
-    </thead>
-    <tbody>
-        <?php echo $table_body1; ?>
-    </tbody>
-    </table>
+	 <script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable-bb').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				null,
+				null,
+				null,
+				null,
+				null,
+				<?php if ($show_4th) { ?>null,<?php } ?>
+				<?php if ($show_HM) { ?>null,<?php } ?>
+				null,
+				null
+				]
+			} );
+		} );
+	</script>
+	<div class="table-responsive-md">
+	    <table class="table table-bordered table-striped border-dark-subtle" id="sortable-bb">
+	    <thead class="table-dark">
+	        <?php echo $table_head1; ?>
+	    </thead>
+	    <tbody>
+	        <?php echo $table_body1; ?>
+	    </tbody>
+	    </table>
+	</div>
     <?php 
     echo $page_info_1; } else echo $brewer_text_045; ?>
 </div>
 <?php } ?>
 <?php if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 0)) { ?>
-<div class="bcoem-winner-table">
 	<?php echo $header1_2; ?>
 	<?php if (!empty($table_body2)) { ?>
-    <table class="table table-responsive table-striped table-bordered"  id="sortable">
-    <thead>
-        <?php echo $table_head2; ?>
-    </thead>
-    <tbody>
-        <?php echo $table_body2; ?>
-    </tbody>
-    </table>
+	 <script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable-bc').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				null,
+				null,
+				null,
+				null,
+				null,
+				<?php if ($show_4th_clubs) { ?>null,<?php } ?>
+				<?php if ($show_HM_clubs) { ?>null,<?php } ?>
+				null
+				]
+			} );
+		} );
+	</script>
+	<div class="table-responsive-md">
+	    <table class="table table-bordered table-striped border-dark-subtle" id="sortable-bc">
+	    <thead class="table-dark">
+	        <?php echo $table_head2; ?>
+	    </thead>
+	    <tbody>
+	        <?php echo $table_body2; ?>
+	    </tbody>
+	    </table>
+	</div>
     <?php echo $page_info_1; } else echo $brewer_text_045; ?>
-</div>
-<?php } if ($section == "results")  { ?>
+<?php } 
+if ($section == "results")  { ?>
 <h4>
 	<?php
 				if ($row_limits['prefsShowBestBrewer'] != 0) echo $row_bb_prefs['prefsBestBrewerTitle'];
@@ -673,12 +723,12 @@ foreach ($bestbrewer_clubs as $key => $value) {
 	</ol>
 	<?php } ?>
 </div>
-<?php } if ($section == "default") { ?>
+<?php } 
+if ($section == "default") { ?>
 <div class="modal fade" id="scoreMethod" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title">
 				<?php
 				if ($row_limits['prefsShowBestBrewer'] != 0) echo $row_bb_prefs['prefsBestBrewerTitle'];
@@ -687,6 +737,7 @@ foreach ($bestbrewer_clubs as $key => $value) {
 				echo " ".$best_brewer_text_003;
 				?>
 				</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<?php 
@@ -718,7 +769,7 @@ foreach ($bestbrewer_clubs as $key => $value) {
 				<?php } ?>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>

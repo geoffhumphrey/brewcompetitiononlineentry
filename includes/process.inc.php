@@ -106,7 +106,9 @@ if (($request_method === "POST") && (!in_array($section,$bypass_token))) {
 
 if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) {
 
-	require(LIB.'process.lib.php');
+	// Load Sodium Compact encryption protocols
+	// require_once (CLASSES.'sodium_compact/autoload.php');
+	require_once (LIB.'process.lib.php');
 
 	$archive_db_table = $prefix."archive";
 	$brewer_db_table = $prefix."brewer";

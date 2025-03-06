@@ -1,86 +1,4 @@
 <?php
-
-/*
-// Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-*/
-
-?>
-
-<script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable_judge').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-
-		$('#judge_assignments').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-
-		$('#sortable_steward').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-
-		$('#sortable_staff').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-
-		$('#steward_assignments').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-		} );
-</script>
-<?php
 /**
  * Module:      brewer_info.sec.php
  * Description: This module displays user-related data including personal information,
@@ -867,3 +785,74 @@ if (($judge_no_availability) || ($steward_no_availability)) {
   </div>
 </div>
 <?php } ?>
+<script type="text/javascript" language="javascript">
+	 
+	 $(document).ready(function() {
+		
+		$('#sortable_judge').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[1,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+
+		$('#judge_assignments').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+
+		$('#sortable_steward').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[1,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+
+		$('#sortable_staff').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[1,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+
+		$('#steward_assignments').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+		
+	});
+</script>

@@ -87,7 +87,7 @@ if ($_SESSION['prefsProEdition'] == 0) {
             <div class="help-block"><?php echo "<p>".$brewer_text_020."</p>"; if (!empty($staff_location_avail)) echo "<p id=\"staff-help\" class=\"alert alert-teal fst-normall\">".$brewer_text_047."</p>";  ?></div>
         </div>
     </div>
-    <?php //if (!empty($staff_location_avail)) { ?>
+    <?php if (!empty($staff_location_avail)) { ?>
     <div id="brewerStaffFields">
         <div class="mb-3 row">
             <label for="brewerStaffLocation" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo "Staff Availability"; ?></strong></label>
@@ -96,5 +96,5 @@ if ($_SESSION['prefsProEdition'] == 0) {
             </div>
         </div>
     </div>
-    <?php //} // end if (!empty($staff_location_avail)) ?>
+    <?php } // end if (!empty($staff_location_avail)) ?>
 </section>

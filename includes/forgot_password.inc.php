@@ -56,41 +56,42 @@ if ($action == "forgot") {
 
 		$contestName = ucwords($_SESSION['contestName']);
 
-		$to_name = $first_name." ".$last_name;
-		$to_name = html_entity_decode($to_name);
-		$to_name = mb_convert_encoding($to_name, "UTF-8");
-
-		$to_email = $row_forgot['user_name'];
-		$to_email = mb_convert_encoding($to_email, "UTF-8");
-		$to_email_formatted = $to_name." <".$to_email.">";
-		
-		$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-		$from_email = mb_convert_encoding($from_email, "UTF-8");
-		$from_name = html_entity_decode($contestName);
-		$from_name = mb_convert_encoding($contestName, "UTF-8");
-
-		$subject = sprintf("%s: %s",$contestName,$label_password_reset);
-		$subject = html_entity_decode($subject);
-		$subject = mb_convert_encoding($subject, "UTF-8");
-		
-		$message = "<html>" . "\r\n";
-		$message .= "<body>" . "\r\n";
-		$message .= sprintf("<p>%s,</p>",$first_name);
-		$message .= sprintf("<p>%s %s %s</p>",$pwd_email_reset_text_003,$_SESSION['contestName'],$pwd_email_reset_text_004);
-		$message .= sprintf("<p>%s</p>",$pwd_email_reset_text_005);
-		$message .= sprintf("<p><a href=\"%s\">%s</a></p>", $reset_url, $reset_url);
-		$message .= ucwords($_SESSION['contestName'])." ".$label_server;
-		$message .= "<p><small>".$paypal_response_text_003."</small></p>";
-		if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
-		$message .= "</body>" . "\r\n";
-		$message .= "</html>";
-	
-		$headers  = "MIME-Version: 1.0"."\r\n";
-		$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-		$headers .= "From: ".$from_name." Server <".$from_email.">"."\r\n";
-		$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
-
 		if ($mail_use_smtp) {
+
+			$to_name = $first_name." ".$last_name;
+			$to_name = html_entity_decode($to_name);
+			$to_name = mb_convert_encoding($to_name, "UTF-8");
+
+			$to_email = $row_forgot['user_name'];
+			$to_email = mb_convert_encoding($to_email, "UTF-8");
+			$to_email_formatted = $to_name." <".$to_email.">";
+			
+			$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+			$from_email = mb_convert_encoding($from_email, "UTF-8");
+			$from_name = html_entity_decode($contestName);
+			$from_name = mb_convert_encoding($contestName, "UTF-8");
+
+			$subject = sprintf("%s: %s",$contestName,$label_password_reset);
+			$subject = html_entity_decode($subject);
+			$subject = mb_convert_encoding($subject, "UTF-8");
+			
+			$message = "<html>" . "\r\n";
+			$message .= "<body>" . "\r\n";
+			$message .= sprintf("<p>%s,</p>",$first_name);
+			$message .= sprintf("<p>%s %s %s</p>",$pwd_email_reset_text_003,$_SESSION['contestName'],$pwd_email_reset_text_004);
+			$message .= sprintf("<p>%s</p>",$pwd_email_reset_text_005);
+			$message .= sprintf("<p><a href=\"%s\">%s</a></p>", $reset_url, $reset_url);
+			$message .= ucwords($_SESSION['contestName'])." ".$label_server;
+			$message .= "<p><small>".$paypal_response_text_003."</small></p>";
+			if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+			$message .= "</body>" . "\r\n";
+			$message .= "</html>";
+		
+			$headers  = "MIME-Version: 1.0"."\r\n";
+			$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
+			$headers .= "From: ".$from_name." Server <".$from_email.">"."\r\n";
+			$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
+
 			$mail = new PHPMailer(true);
 			$mail->CharSet = 'UTF-8';
 			$mail->Encoding = 'base64';
@@ -99,8 +100,6 @@ if ($action == "forgot") {
 			$mail->Subject = $subject;
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
-		} else {
-			mail($to_email_formatted, $subject, $message, $headers);
 		}
 		
 		/*
@@ -155,9 +154,9 @@ if ($action == "reset") {
 		if ((sterilize($_POST['newPassword1']) == sterilize($_POST['newPassword2']))) {
 			
 			// Update the database
-			$password = md5(sterilize($_POST['newPassword1']));
+			$entered_password = md5(sterilize($_POST['newPassword1']));
 			$hasher = new PasswordHash(8, false);
-			$hash = $hasher->HashPassword($password);
+			$hash = $hasher->HashPassword($entered_password);
 			
 			// Update the DB with the new password and clear the token
 			$updateSQL = sprintf("UPDATE $users_db_table SET password='%s', userToken=NULL, userTokenTime=NULL WHERE id='%s'", $hash, $row_reset['id']);

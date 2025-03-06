@@ -85,9 +85,10 @@ if (($action == "default") && ($filter == "default")) {
 
     		do {
 
-                if (array_key_exists($row_styles['id'], $styles_selected)) {
+                if (((!empty($styles_selected))) && (!empty($row_styles['id'])) && (array_key_exists($row_styles['id'], $styles_selected))) {
 
                     if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default","default","default")) {
+                        
                         if (!get_table_info($row_styles['id'],"styles","default","default","default")) {
                             $a[] = $row_styles['id'];
                             $z[] = 1;
@@ -96,6 +97,7 @@ if (($action == "default") && ($filter == "default")) {
                             $orphan_modal_body_2 .= $row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)";
                             $orphan_modal_body_2 .= "</li>";
                         }
+                    
                     }
 
                 }
@@ -1014,7 +1016,7 @@ $(document).ready(function() {
 						<div id="collapseStep6" class="panel-collapse collapse">
 							<div class="panel-body">
 								<ul class="list-unstyled">
-                                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage Entry Evaluations</a></li>
+                                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage Entry Evaluations</a></li>
                                     <li><?php echo $import_scores_display; ?></li>
                                     <?php } ?>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">All Scores</a></li>

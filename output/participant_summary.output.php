@@ -13,7 +13,7 @@ include (DB.'brewer.db.php');
 include (DB.'winners.db.php');
 $total_entries_judged = get_entry_count('received');
 if (NHC) $base_url = "../";
-// include (LIB.'common.lib.php');
+include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
 
 // Best of Show check

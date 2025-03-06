@@ -34,7 +34,7 @@ else {
 	$brewing_db_table = $prefix."brewing";
 	$brewer_db_table = $prefix."brewer";
 }
-
+ 
 if ($row_scored_entries['count'] > 0) {
 
 	do {
@@ -88,8 +88,7 @@ if ($row_scored_entries['count'] > 0) {
 			if (score_count($row_tables['id'],"1",$suffix))	{
 
 				// Build page headers
-				if ($psort != "default") $winners_table_header .= sprintf("<h3>%s (%s %s)</h3>",$row_tables['tableName'],$entry_count,$entries);
-				else $winners_table_header .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
+				$winners_table_header .= sprintf("<h3>%s <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span></h3>",$row_tables['tableName'],$entry_count,$entries);
 
 				if ($missing_style) $winners_table_header .= sprintf("<p>%s</p>",$winners_text_006);
 
@@ -136,7 +135,7 @@ if ($row_scored_entries['count'] > 0) {
 						}
 						else {
 							$winners_table_body_1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-							if ((isset($row_scores['brewerMHP'])) && (!empty($row_scores['brewerMHP']))) $winners_table_body_1 .= " <span data-toggle=\"tooltip\" data-placement=\"top\" title=\"Master Homebrewer Program Participant\" style=\"color: #F2D06C; background-color: #000;\" class=\"badge\">MHP</span>";
+							if ((isset($row_scores['brewerMHP'])) && (!empty($row_scores['brewerMHP']))) $winners_table_body_1 .= " <span data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Master Homebrewer Program Participant\" style=\"color: #F2D06C; background-color: #000;\" class=\"badge\">MHP</span>";
 						}
 						if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_scores['brewCoBrewer'])) && ($row_scores['brewCoBrewer'] != " ")) $winners_table_body_1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
 						$winners_table_body_1 .= "</td>";
@@ -150,7 +149,7 @@ if ($row_scored_entries['count'] > 0) {
 						else $winners_table_body_1 .= $style.": ".$row_scores['brewStyle'];
 
 						if ((!empty($row_scores['brewInfo'])) && ($section != "results") && ($section != "past-winners")) {
-							$winners_table_body_1 .= " <a href=\"#".$row_scores['id']."\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a>";
+							$winners_table_body_1 .= "<button class=\"m-0 btn btn-sm btn-link\" style=\"--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .1rem; \" tabindex=\"0\" data-bs-toggle=\"popover\" data-bs-trigger=\"hover focus\" data-bs-placement=\"top\" data-bs-container=\"body\" data-bs-title=\"".$label_info."\" data-bs-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><i class=\"hidden-xs hidden-sm hidden-md d-print-none fa fa-fw fa-info-circle\"></i></button>";
 						}
 
 						$winners_table_body_1 .= "</td>";
@@ -189,15 +188,15 @@ if ($row_scored_entries['count'] > 0) {
 				$winners_table_all .= "
 				<script type=\"text/javascript\" language=\"javascript\">
 				$(document).ready(function() {
-				    $('#sortable".$random1."').dataTable( {
+				    $('#medal-category-".$random1."').dataTable( {
 				    	\"bPaginate\" : false,
 				    	\"sDom\": 'rt',
 				        \"aaSorting\": [ [0,'".$sort."'] ],
 				        \"aoColumns\": [
-				            { \"asSorting\": [  ] },
-				            { \"asSorting\": [  ] },
-				            { \"asSorting\": [  ] },
-				            { \"asSorting\": [  ] },";
+				            null,
+				            null,
+				            null,
+				            null,";
 
 				if ($_SESSION['prefsProEdition'] == 0) $winners_table_all .= " { \"asSorting\": [  ] },";
 				if ($tb == "scores") $winners_table_all .= " { \"asSorting\": [  ] }";
@@ -214,14 +213,16 @@ if ($row_scored_entries['count'] > 0) {
 				$winners_table_all .= $winners_table_header;
 				
 				if (!empty($winners_table_body_1)) {
-					$winners_table_all .= "<table class=\"table table-responsive table-striped table-bordered\" id=\"sortable".$random1."\">";
-					$winners_table_all .= "<thead>";
+					$winners_table_all .= "<div class=\"table-responsive-md\">";
+					$winners_table_all .= "<table class=\"table table-bordered table-striped border-dark-subtle\" id=\"medal-category-".$random1."\">";
+					$winners_table_all .= "<thead class=\"table-dark\">";
 					$winners_table_all .= $winners_table_head_1;
 					$winners_table_all .= "</thead>";
 					$winners_table_all .= "<tbody>";
 					$winners_table_all .= $winners_table_body_1;
 					$winners_table_all .= "</tbody>";
 					$winners_table_all .= "</table>";
+					$winners_table_all .= "</div>";
 				} else $winners_table_all .= sprintf("<p>%s</p>",$winners_text_007);
 
 				$winners_table_all .= "</div>";

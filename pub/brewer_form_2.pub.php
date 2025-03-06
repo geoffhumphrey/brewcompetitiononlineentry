@@ -191,7 +191,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             </div>
         </div>
 
-         <div class="mb-3 row">
+        <div class="mb-3 row">
             <label for="brewerJudgeExp" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judge_comps; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
             <select class="form-select bootstrap-select mb-1" name="brewerJudgeExp" id="brewerJudgeExp" required>
@@ -205,7 +205,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <div class="mb-3 row">
-            <label for="brewerJudgeLikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label">&nbsp;</label>
+            <label for="brewerJudgeLikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judge_preferred; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-md-6 d-grid">
                 <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePref" aria-expanded="false" aria-controls="collapsePref"><?php echo $label_judge_preferred; ?></button>
                 <div class="help-block mt-1"><?php echo $brewer_text_017; ?></div>
@@ -214,7 +214,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 
         <div class="collapse" id="collapsePref">
             <div class="mb-3 row">
-                <label for="brewerJudgeLikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judge_preferred; ?></strong></label>
+                <label for="brewerJudgeLikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"></label>
                 <div class="col-xs-12 col-sm-9 col-lg-10">
                 <p class="mb-1 small text-danger"><strong><?php echo $brewer_text_012; ?></strong></p>
                     <?php do {
@@ -236,7 +236,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <div class="mb-3 row">
-        <label for="brewerJudgeDislikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label">&nbsp;</label>
+        <label for="brewerJudgeDislikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judge_non_preferred; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-md-6 d-grid">
                 <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNonPref" aria-expanded="false" aria-controls="collapseNonPref"><?php echo $label_judge_non_preferred; ?></button>
                 <span class="help-block mt-1"><?php echo $brewer_text_013; ?></span>
@@ -244,8 +244,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <div class="collapse" id="collapseNonPref">
-            <div class="mb-3 row"><!-- Form Group Checkbox  -->
-                <label for="brewJudgeDislikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judge_non_preferred; ?></strong></label>
+            <div class="mb-3 row">
+                <label for="brewJudgeDislikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"></label>
                 <div class="col-xs-12 col-sm-9 col-lg-10">
                     <p class="mb-1 small text-danger"><strong><?php echo $brewer_text_014; ?></strong></p>
                     <!-- <div class="row"> -->
@@ -297,7 +297,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     <?php if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) { ?>
     <div id="brewerStewardFields">
         <?php if (!empty($steward_location_avail)) { ?>
-        <div class="mb-3 row"><!-- Form Group NOT REQUIRED Select -->
+        <div class="mb-3 row">
             <label for="brewerStewardLocation" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_stewarding_avail; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
             <?php echo $steward_location_avail; ?>

@@ -590,15 +590,15 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
     	<label for="sweetnessLambic" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i><?php echo $label_sweetness; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
         	<div class="form-check form-check-inline">
-        		<input class="form-check-input" type="radio" name="sweetnessLambic" id="sweetnessLambic1" value="Low Carbonation" <?php if ($action == "edit") echo $lambicSweetLow; ?>>
+        		<input class="form-check-input" type="radio" name="sweetnessLambic" id="sweetnessLambic1" value="Low/None Sweetness" <?php if ($action == "edit") echo $lambicSweetLow; ?>>
         		<label class="form-check-label" for="sweetnessLambic1"><?php echo $label_low; ?></label>
         	</div>
         	<div class="form-check form-check-inline">
-        		<input class="form-check-input" type="radio" name="sweetnessLambic" id="sweetnessLambic2" value="Medium Carbonation" <?php if ($action == "edit") echo $lambicSweetMed; ?>>
+        		<input class="form-check-input" type="radio" name="sweetnessLambic" id="sweetnessLambic2" value="Medium Sweetness" <?php if ($action == "edit") echo $lambicSweetMed; ?>>
         		<label class="form-check-label" for="sweetnessLambic2"><?php echo $label_med; ?></label>
         	</div>
         	<div class="form-check form-check-inline">
-        		<input class="form-check-input" type="radio" name="sweetnessLambic" id="sweetnessLambic3" value="High Carbonation" <?php if ($action == "edit") echo $lambicSweetHigh; ?>>
+        		<input class="form-check-input" type="radio" name="sweetnessLambic" id="sweetnessLambic3" value="High Sweetness" <?php if ($action == "edit") echo $lambicSweetHigh; ?>>
         		<label class="form-check-label" for="sweetnessLambic3"><?php echo $label_high; ?></label>
         	</div>
             <div>
@@ -853,7 +853,7 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
                 </div>
                 <div class="form-check form-check-inline">
                 	<input class="form-check-input" type="radio" name="brewPouringRouse" id="brewPouringRouse-No" value="<?php echo $label_no; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_no)) echo "CHECKED"; ?>>
-                	<label class="form-check-label" for="brewPouringRouse-No"><?php echo $label_yes; ?></label>
+                	<label class="form-check-label" for="brewPouringRouse-No"><?php echo $label_no; ?></label>
                 </div>
                 <div>
     	           <input class="display-d" type="radio" name="brewPouringRouse" value="" style="display: none;">
@@ -1079,7 +1079,7 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
 	<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
 <?php } ?>
 
-	<div class="bcoem-admin-element hidden-print">
+	<div class="bcoem-admin-element d-print-none">
 		<div class="mb-3 mt-5 row">
 			<div class="col-xs-12 col-sm-3 col-lg-2"></div>
 		    <div class="col-xs-12 col-sm-9 col-lg-10 d-grid">

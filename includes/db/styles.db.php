@@ -68,8 +68,16 @@ if (HOSTED) {
 $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
 
 if ($section == "admin") {
-	if ((($action == "edit") || ($action == "add")) && ($go == "entries")) $query_styles .= "";
-	else $query_styles .= " AND id='$id'";
+
+	if ((($action == "edit") || ($action == "add")) && ($go == "entries")) $styles_query_add = "";
+	elseif ((($action == "edit") || ($action == "add")) && ($go == "judging_tables"))  $styles_query_add = "";
+	elseif ((($action == "default") || ($action == "add"))&& ($go == "styles")) $styles_query_add = "";
+	elseif ((($action == "entries")) && ($go == "preferences")) $styles_query_add = "";
+	else $styles_query_add = " AND id='$id'";
+
+	$query_styles .= $styles_query_add;
+
+
 }
 
 if (($view != "default") && ($section == "styles")) {

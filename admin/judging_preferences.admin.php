@@ -33,15 +33,39 @@ if ($_SESSION['prefsEval'] == 1) {
 }
 
 ?>
+<script>
+$(document).ready(function() {
+
+    var electronic_scoresheets_show = "<?php echo $_SESSION['prefsEval']; ?>";
+
+    $("#electronic-scoresheets-show").hide();
+    if (electronic_scoresheets_show == 1) $("#electronic-scoresheets-show").show();
+
+    $("input[name$='prefsEval']").click(function() {
+        if ($(this).val() == "1") {
+            $("#electronic-scoresheets-show").show("fast");
+        }
+        else {
+            $("#electronic-scoresheets-show").hide("fast");
+        }
+    });
+
+});
+
+</script>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step8") echo "setup"; else echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php if ($section != "step8") { ?>
-<p class="lead"><?php echo $_SESSION['contestName'].": Set Judging/Competition Organization Preferences"; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName'].": Set Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
-	<div class="btn-group" role="group" aria-label="...">
-		<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> Website Preferences</a>
-	</div><!-- ./button group -->
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> General Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries"><span class="fa fa-beer"></span> Entry Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email"><span class="fa fa-envelope"></span> Email Sending Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment"><span class="fa fa-money"></span> Currency and Payment Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best"><span class="fa fa-trophy"></span> Best Brewer and/or Club Preferences</a>
+    <a class="btn btn-primary disabled"  style="margin: 5px 5px 5px 0"  href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-cog"></span> Judging/Competition Organization Preferences</a>
 </div>
+<h3>Judging/Competition Organization</h3>
 <?php } ?>
 <div class="form-group">
     <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
@@ -95,7 +119,68 @@ if ($_SESSION['prefsEval'] == 1) {
         </div>
     </div>
 </div><!-- ./modal -->
-<?php if ($_SESSION['prefsEval'] == 1) { ?>
+<div class="form-group">
+    <label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Unique Identifier</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsDisplaySpecial" value="J" id="prefsDisplaySpecial_0" <?php if (($section == "step3") || ($_SESSION['prefsDisplaySpecial'] == "J")) echo "CHECKED"; ?>> 6-Character Judging Number
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsDisplaySpecial" value="E" id="prefsDisplaySpecial_1" <?php if ($_SESSION['prefsDisplaySpecial'] == "E") echo "CHECKED"; ?>> 6-Digit Entry Number
+            </label>
+        </div>
+        <div id="helpBlock" class="help-block">
+            <p>How entries are identified to judges when evaluating. If uploading scoresheet PDF files, the PDFs for each entry should be named according to the exact 6-character number for use by the system. <span class="text-primary"><strong>Using the random, system-generated judging numbers ensures unique file names for live and archived entry data.</strong></span></p>
+            <div class="btn-group" role="group" aria-label="ScoresheetsModal">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#scoresheetModal">
+                   Scoresheet Unique Identifier Info/Examples
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsEval" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Electronic Scoresheets</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsEval" value="1" id="prefsEval_1"  <?php if ($_SESSION['prefsEval'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsEval" value="0" id="prefsEval_0" <?php if ($_SESSION['prefsEval'] == "0") echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">
+        <div class="btn-group" role="group" aria-label="prefsEvalModal">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsEvalModal">
+                   Electronic Scoresheets Info
+                </button>
+            </div>
+        </div>
+        </span>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="prefsEvalModal" tabindex="-1" role="dialog" aria-labelledby="prefsEvalModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="prefsEvalModalLabel">Electronic Scoresheets Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enable or disable the Electronic Scoresheets function. If enabled, Admins have the option to accept judges' entry evaluations via fully electronic, web-based scoresheets built to emulate BJCP official and quasi-official paper-based forms.</p>
+                <p>If enabling Electronic Scoresheets and associated functions, Admins should also make sure to set up their installation to take full advantage of them by following the steps outlined in the <a href="https://brewingcompetitions.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&amp;M Electronic Scoresheets</a> help article. Admins or competition officials should also direct all judges who will be using Electronic Scoresheets to review the <a href="https://brewingcompetitions.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&amp;M Electronic Scoresheets</a> primer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="electronic-scoresheets-show">
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="jPrefsScoresheet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Evaluation Scoresheet</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -114,13 +199,11 @@ if ($_SESSION['prefsEval'] == 1) {
                 <input type="radio" name="jPrefsScoresheet" value="3" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "3") echo "CHECKED"; ?>/> BJCP Structured Scoresheet (Beer, Mead, and Cider Only)
             </label>
         </div>
-
         <div class="radio">
             <label>
                 <input type="radio" name="jPrefsScoresheet" value="4" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "4") echo "CHECKED"; ?>/> NW Cider Cup Structured Scoresheet (Cider Only)
             </label>
         </div>
-
         <span id="helpBlock" class="help-block">
         <div class="btn-group" role="group" aria-label="queuedModal">
             <div class="btn-group" role="group">
@@ -154,7 +237,6 @@ if ($_SESSION['prefsEval'] == 1) {
         </div>
     </div>
 </div><!-- ./modal -->
-
 <div class="form-group">
     <label for="jPrefsMinWords" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Minimum Words for Scoresheet Comment/Feedback Fields</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -162,7 +244,6 @@ if ($_SESSION['prefsEval'] == 1) {
         <span id="helpBlock" class="help-block"><p>The minimum number of words judges must use when providing comments. Will be enforced for <strong>all comment fields</strong> on the Classic Scoresheet and Checklist Scoresheet, as well as the <strong>Overall Impression comment/feedback field</strong> on all Structured Scoresheets.</p><p>Leave blank or enter zero for no enforced minimum.</p></span>
     </div>
 </div>
-
 <div class="form-group">
     <label for="jPrefsScoreDispMax" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Difference for Consensus Scores</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -216,9 +297,11 @@ if ($_SESSION['prefsEval'] == 1) {
     <label for="jPrefsJudgingClosed" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Close Date and Time</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control date-time-picker-system" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        <div id="helpBlock" class="help-block">The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.
+        <div id="helpBlock" class="help-block">
+            <p>The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.
             <?php if ($suggested_close) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
-            <div style="margin-top: 5px;" class="btn-group" role="group" aria-label="judgingWindowModal">
+            </p>
+            <div class="btn-group" role="group" aria-label="judgingWindowModal">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">
                        Judging Open/Close Dates and Times Info
@@ -250,7 +333,7 @@ if ($_SESSION['prefsEval'] == 1) {
         </div>
     </div>
 </div><!-- ./modal -->
-<?php } ?>
+</section>
 <div class="form-group">
     <label for="jPrefsCapJudges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judge Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -305,7 +388,7 @@ if ($_SESSION['prefsEval'] == 1) {
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input type="submit" name="Submit" id="setJudgingPrefs" class="btn btn-primary" aria-describedby="helpBlock" value="Set Judging/Competition Organization Preferences" />
+			<input type="submit" name="Submit" id="setJudgingPrefs" class="btn btn-primary" aria-describedby="helpBlock" value="Set Preferences" />
 		</div>
 	</div>
 </div>

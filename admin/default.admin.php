@@ -204,6 +204,8 @@ if ($totalRows_tables > 0) {
 
 }
 
+if ($row_prefs['prefsEmailSMTP'] == 3) echo "<div class=\"alert alert-warning\"><p><i class=\"fa fa-lg fa-exclamation-circle\"></i> <strong>As of version 3.0.0, a valid email address and SMTP credentials are required to send emails via the BCOE&amp;M application.</strong> To keep the email sending functionality employed by this installation previously, expand the Preferences section below and select Email Sending to enable the associated functions by providing the necessary credentials. This message will appear here until the email sending functionality has been enabled or disabled.</p></div>";
+
 ?>
 <style>
     .row {
@@ -1031,7 +1033,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage</a></li>
                                     </ul> 
                                 </div>
                             </div><!-- ./row -->
@@ -2096,9 +2098,13 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             <strong>Preferences</strong>
                         </div>
                         <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                            <ul class="list-inline">
-                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Website</a></li>
-                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization</a></li>
+                            <ul class="list-unstyled">
+                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">General</a></li>
+                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries">Entry</a></li>
+                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email">Email Sending</a></li>
+                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment">Currency and Payment</a></li>
+                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best">Best Brewer and/or Club</a></li>
+                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Judging/Competition Organization</a></li>
                             </ul>
                         </div>
                         </div><!-- ./row -->

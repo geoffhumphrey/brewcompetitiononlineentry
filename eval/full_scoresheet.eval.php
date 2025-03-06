@@ -175,6 +175,7 @@ else $beer = TRUE;
         <?php } ?>
         <div class="help-block with-errors"></div>
     </div>
+    
 </section>
 
 <!-- Descriptors -->

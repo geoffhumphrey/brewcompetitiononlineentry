@@ -28,7 +28,7 @@ if ($registration_open == 1) {
 
 	else {
 		$link = build_public_url("register","entrant","default","default",$sef,$base_url,"default");
-		$button1 = array("text" => $label_create_account, "link" => $link);
+		$button1 = array("text" => $label_register, "link" => $link);
 	}
 
 	$glance_account_reg = array(
@@ -62,7 +62,17 @@ if ($entry_window_open == 1) {
 	$button1 = array();
 	$button2 = array();
 	if ($logged_in) {
-		$button1 = array("text" => $label_add_entry, "link" => "https://brewingcompetitions.com");
+
+		if ($section == "list") {
+
+		}
+
+		if ($section == "default") {
+			$link = "";
+			if ($remaining_entries > 0) $link = build_public_url("brew","entry","add","default",$sef,$base_url,"default");
+			$button1 = array("text" => $label_add_entry, "link" => $link);
+		}
+			
 	}
 
 	else {
@@ -145,10 +155,11 @@ else {
 
 }
 
-if ($judge_window_open== 1) {
+if ($judge_window_open == 1) {
 
 	$button1 = array();
 	$button2 = array();
+	
 	if ($logged_in) {
 		$link = build_public_url("brewer","account","edit","default",$sef,$base_url,"default");
 		$button1 = array("text" => $label_edit_account, "link" => $link);
@@ -183,10 +194,11 @@ else {
 
 }
 
-if ($judge_window_open== 1) {
+if ($judge_window_open == 1) {
 
 	$button1 = array();
 	$button2 = array();
+	
 	if ($logged_in) {
 		$link = build_public_url("brewer","account","edit","default",$sef,$base_url,"default");
 		$button1 = array("text" => $label_edit_account, "link" => $link);
@@ -291,7 +303,7 @@ if (!empty($date_arr)) {
 
 		$glance_judging = array(
 			"color" => "primary",
-			"status" => "<i class=\"fa fa-spinner fa-spin-pulse\">></i><span class=\"ps-2\">".$label_in_progress."</span>",
+			"status" => "<i class=\"fa fa-sync fa-spin\" style=\"--fa-animation-duration: 3s;\"></i><span class=\"ps-2\">".$label_in_progress."</span>",
 			"body-content" => $body_content,
 			"button1" => array(),
 			"button2" => array(),
@@ -349,7 +361,7 @@ else {
 
 ?>
 
-<div class="<?php echo $row_class; ?>">
+<div class="<?php echo $row_class; ?> d-print-none">
 
 <?php
 	
@@ -360,17 +372,11 @@ else {
 			$button1 = "";
 			$button2 = "";
 
-			if ($logged_in) {
-				
-				if ((!empty($card_state['button2'])) && (!empty($card_state['button2']['link']))) $button2 = sprintf("<div class=\"d-grid\"><a href=\"%s\" class=\"btn btn-%s\">%s</a></div>",$card_state['button2']['link'],$card_state['button-color'],$card_state['button2']['text']);
-				if ((!empty($card_state['button2'])) && (empty($card_state['button2']['link']))) $button2 = sprintf("<div class=\"d-grid\"><button class=\"btn btn-%s disabled\">%s</button></div>",$card_state['button-color'],$card_state['button2']['text']);
-				
-			} else {
+			if ((!empty($card_state['button1'])) && (!empty($card_state['button1']['link']))) $button1 = sprintf("<div class=\"d-grid\"><a href=\"%s\" class=\"btn btn-%s\">%s</a></div>",$card_state['button1']['link'],$card_state['button-color'],$card_state['button1']['text']);
+			if ((!empty($card_state['button1'])) && (empty($card_state['button1']['link']))) $button1 = sprintf("<div class=\"d-grid\"><button class=\"btn btn-%s disabled\">%s</button></div>",$card_state['button-color'],$card_state['button1']['text']);
 
-				if ((!empty($card_state['button1'])) && (!empty($card_state['button1']['link']))) $button1 = sprintf("<div class=\"d-grid\"><a href=\"%s\" class=\"btn btn-%s\">%s</a></div>",$card_state['button1']['link'],$card_state['button-color'],$card_state['button1']['text']);
-				if ((!empty($card_state['button1'])) && (empty($card_state['button1']['link']))) $button1 = sprintf("<div class=\"d-grid\"><button class=\"btn btn-%s disabled\">%s</button></div>",$card_state['button-color'],$card_state['button1']['text']);
-				
-			}
+			if ((!empty($card_state['button2'])) && (!empty($card_state['button2']['link']))) $button2 = sprintf("<div class=\"d-grid\"><a href=\"%s\" class=\"btn btn-%s\">%s</a></div>",$card_state['button1']['link'],$card_state['button-color'],$card_state['button1']['text']);
+			if ((!empty($card_state['button2'])) && (empty($card_state['button2']['link']))) $button2 = sprintf("<div class=\"d-grid\"><button class=\"btn btn-%s disabled\">%s</button></div>",$card_state['button-color'],$card_state['button2']['text']);
 
 ?>
 	<div class="col">

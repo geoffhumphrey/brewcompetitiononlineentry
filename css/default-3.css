@@ -123,7 +123,7 @@ a:active {
 }
 
 .layout-hero {
-  background: url(../images/cropped-bottles_3000x500.jpg);
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url(../images/cropped-bottles_3000x500.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center top;
@@ -242,60 +242,88 @@ a:active {
   font-size: .8em;
 }
 
-.landing-page-salutation {
-  font-size: 1.8em;
-}
-
-.landing-page-section-header {
-  border-bottom: 5px solid #000;
-  margin-bottom: 40px;
-  width: 90hw;
-}
-
 @media screen and (max-width: 768px) {
 
-  .landing-page-section-header h1 {
-    font-size: 2.5em;
-  }
-
-  .landing-page-section h2 {
+  .landing-page-salutation {
     font-size: 2.0em;
   }
 
-  .landing-page-section h3 {
+  .landing-page-salutation .lead {
     font-size: 1.8em;
   }
 
-  .landing-page-section h4 {
+  .landing-page-section-header {
+    border-bottom: 5px solid #000;
+    margin-bottom: 20px;
+    width: 90hw;
+  }
+
+  .landing-page-section-header h1 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+  }
+
+  .landing-page-section h2 {
+    font-size: 1.6em;
+    margin: 20px 0 10px 0;
+  }
+
+  .landing-page-section h3 {
     font-size: 1.4em;
+    margin: 20px 0 10px 0;
+  }
+
+  .landing-page-section h4 {
+    font-size: 1.2em;
+    margin: 20px 0 10px 0;
   }
 
   .landing-page-section h5 {
-    font-size: 1.1em;
+    font-size: 1.0em;
+    margin: 20px 0 10px 0;
   }
 
 }
 
 @media screen and (min-width: 769px) {
 
+  .landing-page-salutation {
+    font-size: 2.2em;
+  }
+
+  .landing-page-salutation small {
+    font-size: .8em;
+  }
+
+  .landing-page-section-header {
+    border-bottom: 5px solid #000;
+    margin: 20px 0 30px 0;
+    width: 90hw;
+  }
+
   .landing-page-section-header h1 {
-    font-size: 3.0em;
+    font-size: 2.5em;
+    margin-bottom: 20px;
   }
 
   .landing-page-section h2 {
-    font-size: 2.3em;
+    font-size: 1.8em;
+    margin: 30px 0 20px 0;
   }
 
   .landing-page-section h3 {
-    font-size: 1.9em;
+    font-size: 1.6em;
+    margin: 30px 0 20px 0;
   }
 
   .landing-page-section h4 {
-    font-size: 1.5em;
+    font-size: 1.4em;
+    margin: 30px 0 20px 0;
   }
 
   .landing-page-section h5 {
     font-size: 1.2em;
+    margin: 30px 0 20px 0;
   }
 
 }
@@ -303,31 +331,31 @@ a:active {
 .landing-page-section-header h1 {
   font-family: var(--font-family-sans-serif);
   font-weight: 900;
-  padding: 20px 0px 0px 0px;
+}
+
+.landing-page-section h1 {
+  font-family: var(--font-family-sans-serif);
+  font-weight: 800;
 }
 
 .landing-page-section h2 {
   font-family: var(--font-family-sans-serif);
   font-weight: 800;
-  margin: 30px 0 20px 0;
 }
 
 .landing-page-section h3 {
   font-family: var(--font-family-sans-serif);
   font-weight: 700;
-  margin: 30px 0 20px 0;
 }
 
 .landing-page-section h4 {
   font-family: var(--font-family-sans-serif);
   font-weight: 700;
-  margin: 30px 0 20px 0;
 }
 
 .landing-page-section h5 {
   font-family: var(--font-family-sans-serif);
   font-weight: 600;
-  margin: 30px 0 20px 0;
 }
 
 .landing-page-section p {
@@ -443,10 +471,12 @@ a:active {
 
 /* My Account */
 .winner-place-pill {
-  font-size: .85em;
+  font-size: .8em;
   font-weight: 600;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px 0px;
   right: -45px;
+  top: -15px;
+  width:45%; 
 }
 
 /* Alert */

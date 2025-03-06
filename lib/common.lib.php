@@ -2607,7 +2607,7 @@ function display_place($place,$method) {
 			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
 			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
 			case "5":
-			case "HM": $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM"; break;
+			case "HM": $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> HM"; break;
 			default: $place = "N/A";
 			}
 	}
@@ -2618,7 +2618,8 @@ function display_place($place,$method) {
 			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place); break;
 			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
 			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
-			case "HM":  $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM"; break;
+			case "5":
+			case "HM":  $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> HM"; break;
 			default: $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place);
 			}
 	}
@@ -2691,10 +2692,11 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 
 			if ($method == "0") {  // Display by Table
 
-			$query_table = sprintf("SELECT tableName FROM $judging_tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
-			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
-			$row_table = mysqli_fetch_assoc($table);
-			$r = display_place($row_scores['scorePlace'],1).": ".$row_table['tableName'];
+				$query_table = sprintf("SELECT tableName FROM $judging_tables_db_table WHERE id='%s'", $row_scores['scoreTable']);
+				$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
+				$row_table = mysqli_fetch_assoc($table);
+				$r = display_place($row_scores['scorePlace'],1).": ".$row_table['tableName'];
+			
 			}
 
 			if ($method == "1") {  // Display by Category
@@ -2723,20 +2725,22 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 
 			if ($method == "2") {  // Display by Sub-Category
 
-			$query_entry = sprintf("SELECT brewCategorySort,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
-			$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-			$row_entry = mysqli_fetch_assoc($entry);
+				$query_entry = sprintf("SELECT brewCategorySort,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+				$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
+				$row_entry = mysqli_fetch_assoc($entry);
 
-			/*
-			if (HOSTED) $query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
-			else 
-			*/
-			$query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'], $row_entry['brewSubCategory']);
-			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-			$row_style = mysqli_fetch_assoc($style);
+				/*
+				if (HOSTED) $query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+				else 
+				*/
+				$query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'], $row_entry['brewSubCategory']);
+				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+				$row_style = mysqli_fetch_assoc($style);
 
-			$r = display_place($row_scores['scorePlace'],1).": ".$row_style['brewStyle']." (".$row_entry['brewCategory'].$row_entry['brewSubCategory'].")";
+				$r = display_place($row_scores['scorePlace'],1).": ".$row_style['brewStyle']." (".$row_entry['brewCategory'].$row_entry['brewSubCategory'].")";
+			
 			}
+		
 		}
 
 		else $r = "";
@@ -3167,9 +3171,9 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			if (!empty($location)) {
 
 				if (!empty($row_table_assignments['assignRoles'])) {
-					$hj = "<span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
-					$lj = "<span class=\"text-purple\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
-					$mbos = "<span class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
+					$hj = "<span class=\"text-teal\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
+					$lj = "<span class=\"text-teal\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
+					$mbos = "<span class=\"text-teal\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
 					$role_replace1 = array("HJ","LJ","MBOS",", ");
 					$role_replace2 = array($hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;");
 					$role = str_replace($role_replace1,$role_replace2,$row_table_assignments['assignRoles']);

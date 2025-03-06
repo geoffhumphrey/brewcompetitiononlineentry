@@ -1276,7 +1276,7 @@ $pwd_email_reset_text_005 = "Pro obnovu vašeho hesla klikněte na odkaz níže 
 
 $best_brewer_text_000 = "zúčastněných sládků";
 $best_brewer_text_001 = "HM";
-$best_brewer_text_002 = "Hodnocení a rozstřely byly použity v souladu <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">metodikou hodnocení</a>. Zobrazená čísla jsou zaokrouhlena na setinu. Přejeďte myší nebo klepněte na ikonu otazníku (<span class=\"fa fa-question-circle\"></span>) pro zobrazení přesné hodnoty.";
+$best_brewer_text_002 = "Hodnocení a rozstřely byly použity v souladu <a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#scoreMethod\">metodikou hodnocení</a>. Zobrazená čísla jsou zaokrouhlena na setinu. Přejeďte myší nebo klepněte na ikonu otazníku (<span class=\"fa fa-question-circle\"></span>) pro zobrazení přesné hodnoty.";
 $best_brewer_text_003 = "Metodika hodnocení";
 $best_brewer_text_004 = "Každý vzorek, který se umístil, byl oceněn následujícím počtem bodů:";
 $best_brewer_text_005 = "Následující rozstřely byly použity, seřazeny podle priority:";

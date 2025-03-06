@@ -1,7 +1,6 @@
 <?php
-
 // Import PHPMailer classes into the global namespace
-// These must be at the top of your script, not inside a function
+// These must be at the top
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -12,7 +11,6 @@ require (CLASSES.'phpmailer/src/SMTP.php');
 function sendPHPMailerMessage($mail) {
 
     require (CONFIG.'config.php');
-    require (CONFIG.'config.mail.php');
 
     try {
         //Server settings

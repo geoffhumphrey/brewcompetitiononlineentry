@@ -106,19 +106,19 @@ require(DB.'winners.db.php');
 		"aaSorting": [[0,'asc']],
 		"bProcessing" : false,
 		"aoColumns": [
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
-			<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
-			{ "asSorting": [  ] }
+			null,
+			null,
+			null,
+			<?php if ($_SESSION['prefsProEdition'] == 0) { ?>null,<?php } ?>
+			null
 			]
 		} );
 	} );
 </script>
-<div class="bcoem-winner-table">
+<div class="table-responsive-md">
 <?php echo $header1_1; ?>
-<table class="table table-responsive table-striped table-bordered dataTable" id="sortable<?php echo $random; ?>">
-<thead>
+<table class="table table-bordered table-striped border-dark-subtle" id="sortable<?php echo $random; ?>">
+<thead class="table-dark">
 	<?php echo $table_head1; ?>
 </thead>
 <tbody>
@@ -220,19 +220,20 @@ if ($totalRows_sbi > 0) {
 			"aaSorting": [],
 			"bProcessing" : false,
 			"aoColumns": [
-				<?php if ($row_sbi['sbi_display_places'] == "1") { ?>{ "asSorting": [  ] },<?php } ?>
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
-				{ "asSorting": [  ] }
+				<?php if ($row_sbi['sbi_display_places'] == "1") { ?>null,<?php } ?>
+				null,
+				null,
+				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>null,<?php } ?>
+				null
 				]
 			} );
 		} );
 	</script>
-<div class="bcoem-winner-table">
+
 <?php echo $header2_1; ?>
-<table class="table table-responsive table-bordered table-striped dataTable" id="sortable<?php echo $random1; ?>">
-<thead>
+<div class="table-responsive-md">
+<table class="table table-bordered table-striped border-dark-subtle" id="sortable<?php echo $random1; ?>">
+<thead class="table-dark">
 	<?php echo $table_head2; ?>
 </thead>
 <tbody>

@@ -83,7 +83,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$row_user = mysqli_fetch_assoc($user);
 
 			$user_name = sterilize($row_user['user_name']);
-			$password = $row_user['password'];
+			$user_password = $row_user['password'];
 			$userLevel = $row_user['userLevel'];
 			$userQuestion = $purifier->purify($row_user['userQuestion']);
 			$userQuestionAnswer = $purifier->purify($row_user['userQuestionAnswer']);
@@ -294,7 +294,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$data = array(
 				'id' => 1, 
 				'user_name' => $user_name, 
-				'password' => $password,	
+				'password' => $user_password,	
 				'userLevel' => $userLevel, 
 				'userQuestion' => $userQuestion, 
 				'userQuestionAnswer' => $userQuestionAnswer, 
@@ -416,7 +416,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			}
 
-			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
+			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$user_password'";
 			$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
 			$row_login = mysqli_fetch_assoc($login);
 
@@ -570,7 +570,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 				
 				// If the username/password combo is incorrect or not found, relocate to the login error page
-				$redirect = $base_url."index.php?section=login&msg=1";
+				$redirect = $base_url."index.php?msg=1";
 				$redirect = prep_redirect_link($redirect);
 				$redirect_go_to = sprintf("Location: %s", $redirect);
 				

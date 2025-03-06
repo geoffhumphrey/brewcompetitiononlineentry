@@ -222,7 +222,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <ul class="dropdown-menu navmenu-nav">
                 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets">Upload Scoresheets</a></li>
                 <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
-                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin">Manage Entry Evaluations</a></li>
+                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin">Manage Entry Evaluations</a></li>
                 	<?php } ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage Scores</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage BOS Entries and Places</a></li>
@@ -259,7 +259,11 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Preferences <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Website</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">General</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries">Entry</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email">Email Sending</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment">Currency and Payment</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best">Best Brewer and/or Club</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Judging/Competition Organization</a></li>
                 </ul>
             </li>

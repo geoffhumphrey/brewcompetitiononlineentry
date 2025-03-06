@@ -139,7 +139,7 @@ if ($admin) {
 	$admin_add_eval .= "<p>To add an evaluation on behalf of a judge, choose the judge and input the entry number.</p>";
 	$admin_add_eval .= "<div class=\"row\">";
 	$admin_add_eval .= "<div class=\"col col-md-5 col-sm-7 col-xs-12\">";
-	$admin_add_eval .= "<form class=\"hide-loader-form-submit form-horizontal \" name=\"form1\" data-toggle=\"validator\" role=\"form\" action=\"".$base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add\" method=\"post\">";
+	$admin_add_eval .= "<form class=\"hide-loader-form-submit form-horizontal \" name=\"form1\" data-toggle=\"validator\" role=\"form\" action=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;action=add\" method=\"post\">";
 	$admin_add_eval .= "<div class=\"form-group\">";
 	$admin_add_eval .= sprintf("<label for=\"entry_number\" class=\"col-sm-4 control-label\">%s</label>",$label_judge);
 	$admin_add_eval .= "<div class=\"col-sm-8\">";
@@ -525,14 +525,18 @@ if ($totalRows_table_assignments > 0) {
 								$juice_src_display .= "<strong>".$label_juice_source.":</strong> ".$juice_src_disp;
 							
 							}
-
-							$add_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
 							
 			        		// Admin: Entry Evaluations
-			        		if ($admin) include (EVALS.'judging_admin.eval.php');
+			        		if ($admin) {
+			        			$add_link = $base_url."index.php?section=admin&amp;go=evaluation&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
+			        			include (EVALS.'judging_admin.eval.php');
+			        		}
 
 			        		// Judging Dashboard
-			        		else include (EVALS.'judging_dashboard.eval.php');
+			        		else {
+			        			$add_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
+			        			include (EVALS.'judging_dashboard.eval.php');
+			        		}
 				            
 				            // Build table data
 				            if (($judging_open) || ($admin) || ((!$judging_open) && ($scored_by_user))) {
@@ -1107,7 +1111,7 @@ if ($admin) {
 		$show_submitted += 1;
 		if ($show_submitted <=20) {
 			$submitted_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_submitted'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			$latest_submitted_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s)</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$submitted_date);
+			$latest_submitted_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s) - Score: %s</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$submitted_date,$value['consensus_score']);
 		}
 	}
 
@@ -1120,7 +1124,7 @@ if ($admin) {
 		$show_updated += 1;
 		if ($show_updated <=20) {
 			$updated_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_updated'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
-			$latest_updated_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s)</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$updated_date);
+			$latest_updated_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s) - Score: %s</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$updated_date,$value['consensus_score']);
 		}
 	}
 }
@@ -1197,10 +1201,28 @@ if (($admin) || ((!empty($table_assign_judge)) && (!$admin))) {
         <h4 class="modal-title" id="noDupeModalLabel"><?php echo $label_place_previously_selected; ?></h4>
       </div>
       <div class="modal-body">
-      <?php echo $evaluation_info_048; ?>
+      	<?php echo $evaluation_info_048; ?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $label_close; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal: Next Session Open -->
+<div class="modal fade" id="next-session-open-modal" tabindex="-1" role="dialog" aria-labelledby="next-session-open-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="next-session-open-modal-label"><?php echo $label_please_note; ?></h4>
+      </div>
+      <div class="modal-body">
+        <p><?php echo "<strong>".$evaluation_info_097."</strong> ".$evaluation_info_098; ?></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_stay_here; ?></button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
       </div>
     </div>
   </div>

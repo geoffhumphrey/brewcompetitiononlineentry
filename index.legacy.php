@@ -19,7 +19,7 @@
 
 <!-- ALERTS -->
 <div class="<?php echo $container_main; ?> bcoem-warning-container">
-    
+ 
 <?php
 
 $errors_display = "";
@@ -88,7 +88,7 @@ include (SECTIONS.'alerts.sec.php');
 <?php } ?>
 <?php if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) { ?>
 <!-- Admin Pages (Fluid Layout) -->
-<div class="container-fluid">
+<div class="<?php if (($go == "evaluation") && (($action == "add") || ($action == "edit"))) echo "container"; else echo $container_main; ?>">
     <?php if ($go == "default") { ?>
     <!-- Admin Dashboard - Has sidebar -->
     <div class="row">
@@ -135,7 +135,10 @@ include (SECTIONS.'alerts.sec.php');
             if ($go == "upload_scoresheets") include (ADMIN.'upload_scoresheets.admin.php');
             if ($go == "payments") include (ADMIN.'payments.admin.php');
 
-            if (($_SESSION['prefsEval'] == 1) && ($go == "eval")) include (EVALS.'admin.eval.php');
+            if (($_SESSION['prefsEval'] == 1) && ($go == "evaluation")) {
+                if ($action == "default") include (EVALS.'dashboard.eval.php');
+                if (($action == "add") || ($action == "edit")) include (EVALS.'scoresheet.eval.php');
+            }
 
             if ($_SESSION['userLevel'] == "0") {
 
@@ -294,8 +297,6 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
     </div>
   </div>
 </div>
-<script src="<?php echo $js_app_url; ?>"></script>
-
 <?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
 <!-- Session Timer Displays and Auto Logout -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
@@ -326,7 +327,7 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
 
 <script type="text/javascript">
 <?php if (($section == "brewer") || ($section == "admin")) { ?>
-    var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
+    var club_other = <?php if ((isset($club_other) && ($club_other))) echo "true"; else echo "false"; ?>;
 <?php } ?>
     var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
     var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
@@ -361,7 +362,7 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
 </script>
 <?php } ?>
 
-<?php if ($section == "brew") { ?>   
+<?php if (($section == "brew") || (($section == "admin") && ($go == "entries"))) { ?>   
 <script type="text/javascript">
     var style_set = "<?php echo $_SESSION['prefsStyleSet']; ?>";
     var req_pouring = <?php echo json_encode($req_pouring); ?>;
@@ -392,4 +393,5 @@ if (strpos($section, 'step') === FALSE)  {
 }
 
 ?>
+<script src="<?php echo $js_app_url; ?>"></script>
 </body>

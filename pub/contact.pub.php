@@ -16,7 +16,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 
 include (DB.'contacts.db.php');
 
-if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
+if ((!HOSTED) && (strpos($base_url, 'test.brewingcompetitions.com') === false) && (!empty($_SESSION['prefsGoogleAccount']))) {
     $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
     $public_captcha_key = $recaptcha_key[0];
 }
@@ -65,7 +65,7 @@ if ($_SESSION['prefsContact'] == "Y") {
     	$label6 = "CAPTCHA";
 
     	if ($msg == "1") {
-            if ($_SESSION['prefsEmailCC'] == 0) $message1 = sprintf("<p>%s <a href='".build_public_url("contact","default","default","default",$sef,$base_url)."'>%s</a></p>",$contact_text_002,$contact_text_003); 
+            if ($_SESSION['prefsEmailCC'] == 1) $message1 = sprintf("<p>%s <a href='".build_public_url("contact","default","default","default",$sef,$base_url)."'>%s</a></p>",$contact_text_002,$contact_text_003); 
     		else $message1 = sprintf("<p><a href='".build_public_url("contact","default","default","default",$sef,$base_url)."'>%s</a></p>",$contact_text_003);
     		echo $message1;
     	}
@@ -75,8 +75,7 @@ if ($_SESSION['prefsContact'] == "Y") {
     	echo $primary_page_info;
 ?>
 
-        <!-- <form id="bootstrap-form" class="justify-content-center hide-loader-form-submit" name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" novalidate> -->
-        <form id="contact-form" class="justify-content-center hide-loader-form-submit" name="contact-form" novalidate>
+        <form id="contact-form" class="justify-content-center hide-loader-form-submit needs-validation" name="contact-form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" novalidate>
 
             <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
             <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
@@ -86,63 +85,58 @@ if ($_SESSION['prefsContact'] == "Y") {
             <?php } ?>
 
             <div class="row mb-3">
-                <label for="select-contact" class="col-sm-2 col-form-label"><i class="fa fa-sm fa-star pe-1 text-primary"></i><strong><?php echo $label1; ?></strong></label>
-                <div class="col-sm-10">
-                    <select id="select-contact" class="form-select" name="to" placeholder="Select or search for a contact." autocomplete="off" required>
-                        <option value="">Select or search for a contact.</option>
+                <label for="select-contact" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label1; ?></strong></label>
+                <div class="col-sm-12 col-md-10">
+                    <select id="select-contact" class="form-select bootstrap-select" name="to" placeholder="<?php echo $contact_text_005; ?>" autocomplete="off" required>
+                        <option value=""><?php echo $contact_text_005; ?></option>
                         <?php echo $option; ?>
                     </select>
-                    <div class="invalid-feedback">Please select a person.</div>
+                    <div class="invalid-feedback"><?php echo $contact_text_006; ?></div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="from-name" class="col-sm-2 col-form-label"><i class="fa fa-sm fa-star pe-1 text-primary"></i><strong><?php echo $label2; ?></strong></label>
-                <div class="col-sm-10">
-                    <input id="from-name" class="form-control no-spam" name="from_name" type="text" size="35" placeholder="Please provide your first and last name." value="<?php if (($msg == "2") && (isset($_COOKIE['from_name']))) echo $_COOKIE['from_name']; ?>" required>
-                    <div class="invalid-feedback">Please provide your first and last name.</div>
+                <label for="from-name" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label2; ?></strong></label>
+                <div class="col-sm-12 col-md-10">
+                    <input id="from-name" class="form-control no-spam" name="from_name" type="text" size="35" placeholder="<?php echo $contact_text_007; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_name']))) echo $_COOKIE['from_name']; ?>" required>
+                    <div class="invalid-feedback"><?php echo $contact_text_007; ?></div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="from-email" class="col-sm-2 col-form-label"><i class="fa fa-sm fa-star pe-1 text-primary"></i><strong><?php echo $label3; ?></strong></label>
-                <div class="col-sm-10">
-                    <input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" placeholder="Please provide a valid email." value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo $_COOKIE['from_email']; ?>" required>
-                    <div class="invalid-feedback">Please provide a valid email.</div>
+                <label for="from-email" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label3; ?></strong></label>
+                <div class="col-sm-12 col-md-10">
+                    <input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" placeholder="<?php echo $contact_text_008; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo $_COOKIE['from_email']; ?>" required>
+                    <div class="invalid-feedback"><?php echo $contact_text_008; ?></div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="subject" class="col-sm-2 col-form-label"><i class="fa fa-sm fa-star pe-1 text-primary"></i><strong><?php echo $label4; ?></strong></label>
-                <div class="col-sm-10">
-                    <input id="subject" class="form-control no-spam" name="subject" type="text" placeholder="Please provide a subject." value="<?php if (($msg == "2") && (isset($_COOKIE['subject']))) echo $_COOKIE['subject']; ?>" required> 
-                    <div class="invalid-feedback">Please provide a subject.</div> 
+                <label for="subject" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label4; ?></strong></label>
+                <div class="col-sm-12 col-md-10">
+                    <input id="subject" class="form-control no-spam" name="subject" type="text" placeholder="<?php echo $contact_text_009; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['subject']))) echo $_COOKIE['subject']; ?>" required> 
+                    <div class="invalid-feedback"><?php echo $contact_text_009; ?></div> 
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="message" class="col-sm-2 col-form-label"><i class="fa fa-sm fa-star pe-1 text-primary"></i><strong><?php echo $label5; ?></strong></label>
-                <div class="col-sm-10">
+                <label for="message" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label5; ?></strong></label>
+                <div class="col-sm-12 col-md-10">
                     <textarea id="message" class="form-control no-spam" style="height: 140px" name="message" required><?php if (($msg == "2") && (isset($_COOKIE['message']))) echo $_COOKIE['message']; ?></textarea>
-                    <div class="invalid-feedback">Please provide a message.</div>
+                    <div class="invalid-feedback"><?php echo $contact_text_010; ?></div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="" class="col-sm-2 col-form-label"><i class="fa fa-sm fa-star pe-1 text-primary"></i><strong>CAPTCHA</strong></label>
-                <div class="col-sm-10">
+                <label for="" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong>CAPTCHA</strong></label>
+                <div class="col-sm-12 col-md-10">
                     <div class="g-recaptcha mb-3" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="" class="col-sm-2 col-form-label"></label>
-                <div class="col-sm-10">
-                    <!-- 
-                    <div class="alert alert-warning mb-3" id="form-submit-button-disabled-msg-required-1">
-                        <?php echo sprintf("<i class=\"fa fa-exclamation-triangle\"></i> <strong>%s</strong> %s",$form_required_fields_00,$form_required_fields_01); ?>
-                    </div>
-                    -->
+                <label for="form-submit-button-1" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-12 col-md-10">
                     <div class="d-grid">
                         <button id="form-submit-button-1" name="submit" type="submit" class="btn btn-primary"><?php echo $label_send_message; ?></button>
                     </div>
@@ -150,40 +144,6 @@ if ($_SESSION['prefsContact'] == "Y") {
             </div>
             
         </form>
-<script>
-
-    // $("#form-submit-button-disabled-msg-required-1").hide();
-
-    var my_select = new TomSelect("#select-contact",{
-        create: false,
-        allowEmptyOption: false,
-        sortField: {
-            field: "text",
-            direction: "asc"
-        }
-    });
-
-    var form = document.getElementById('contact-form');
-
-    form.addEventListener('submit', function (event){
-
-        // add was-validated to display custom colors
-        form.classList.add('was-validated');
-
-        if (form.checkValidity()) {
-            // $("#form-submit-button-disabled-msg-required-1").slideUp(500);
-        }
-
-        else {
-            // $("#form-submit-button-disabled-msg-required-1").slideDown(500);
-            event.preventDefault()
-            event.stopPropagation()
-        }
-
-    }, false);
-</script>
-
-
 <script src="https://www.google.com/recaptcha/api.js"></script>
 <?php } // end if ($msg != 1);
     } // end if ($totalRows_contact > 0)

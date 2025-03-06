@@ -550,9 +550,9 @@ require(CLASSES.'phpass/PasswordHash.php');
 
 do {
 	
-	$password = $row_user_passwords['password'];
+	$user_password = $row_user_passwords['password'];
 	$hasher = new PasswordHash(8, false);
-	$hash = $hasher->HashPassword($password);
+	$hash = $hasher->HashPassword($user_password);
 	
 	$updateSQL = sprintf("UPDATE %s SET password = '%s' WHERE id = '%s'", $users_db_table, $hash, $row_user_passwords['id']);
 	mysqli_real_escape_string($connection,$updateSQL);

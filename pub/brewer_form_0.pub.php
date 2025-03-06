@@ -137,16 +137,16 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     <div class="mb-3 row">
         <label for="brewerFirstName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_first_name; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" <?php if (($_SESSION['prefsProEdition'] == 0) && ($psort == "default")) echo "autofocus"; ?> data-error="<?php echo $brewer_text_024; ?>" required>
-            <div class="help-block mb-1 invalid-feedback text-danger"></div>
+            <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" <?php if (($_SESSION['prefsProEdition'] == 0) && ($psort == "default")) echo "autofocus"; ?> required>
+            <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_024; ?></div>
         </div>
     </div>
     <div class="mb-3 row">
         <label for="brewerLastName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_last_name; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="" data-error="<?php echo $brewer_text_025; ?>" required>
+            <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="" required>
             <div class="help-block"><?php if ($_SESSION['prefsProEdition'] == 0) echo $brewer_text_000; ?></div>
-            <div class="help-block mb-1 invalid-feedback text-danger"></div>
+            <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_025; ?></div>
         </div>
     </div>
     <?php if (($go != "admin") && ($section != "step2")) { ?>
@@ -180,9 +180,9 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         <div class="mb-3 row">
             <label for="userQuestionAnswer" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_answer; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
-                <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>" data-error="<?php echo $brewer_text_034; ?>">
+                <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>">
                 <div class="help-block"><?php echo $register_text_050; ?></div>
-                <div class="help-block mb-1 invalid-feedback text-danger"></div>
+                <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_034; ?></div>
             </div>
         </div>
     </div>
@@ -210,7 +210,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     <div class="mb-3 row">
         <label for="brewerCountry" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_country; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-                <select class="form-select selectpicker mb-1 bootstrap-select" name="brewerCountry" id="brewerCountry" placeholder="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" required>
+                <select class="form-select mb-1 bootstrap-select" name="brewerCountry" id="brewerCountry" placeholder="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" required>
                 <option value=""><?php echo $label_select_country; ?></option>
                 <?php echo $country_select; ?>
                 </select>
@@ -245,33 +245,30 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
                 <input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>">
                 <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_029; ?></div>
             </div>
-            
             <div id="us-state">
-                <select class="form-select selectpicker mb-1 bootstrap-select" name="brewerStateUS" id="brewerStateUS" placeholder="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>">
+                <select class="form-select mb-1 bootstrap-select" name="brewerStateUS" id="brewerStateUS" placeholder="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>">
                     <option value=""><?php echo $label_select_state; ?></option>
                     <?php echo $us_state_select; ?>
                 </select>
                 <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_030; ?></div>
             </div>
-            
             <div id="aus-state">
-                <select class="form-select selectpicker mb-1 bootstrap-select" name="brewerStateAUS" id="brewerStateAUS" placeholder="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>">
+                <select class="form-select mb-1 bootstrap-select" name="brewerStateAUS" id="brewerStateAUS" placeholder="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>">
                     <option value=""><?php echo $label_select_state; ?></option>
                     <?php echo $aus_state_select; ?>
                 </select>
                 <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_030; ?></div>
             </div>
-
             <div id="ca-state">
-                <select class="form-select selectpicker mb-1 bootstrap-select" name="brewerStateCA" id="brewerStateCA" placeholder="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>">
+                <select class="form-select mb-1 bootstrap-select" name="brewerStateCA" id="brewerStateCA" placeholder="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>">
                     <option value=""><?php echo $label_select_state; ?></option>
                     <?php echo $ca_state_select; ?>
                 </select>
                 <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_030; ?></div>
-            </div> 
-                       
+            </div>         
         </div>    
     </div>
+    
     <!-- Zip/Postal Code -->
     <div class="mb-3 row">
         <label for="brewerZip" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_zip; ?></strong></label>

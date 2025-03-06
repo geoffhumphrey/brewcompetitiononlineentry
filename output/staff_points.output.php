@@ -41,6 +41,7 @@ To figure out steward points, need to assess:
      exit();
  }
 
+include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
 include (DB.'judging_locations.db.php');
 include (DB.'styles.db.php');

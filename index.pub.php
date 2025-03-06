@@ -1,30 +1,121 @@
 <?php if ($section != "admin") { 
 
-    $salutation = "";
-    $salutation .= "";
-    if ($logged_in) $salutation .= sprintf("<p class='lead landing-page-salutation fw-bold'>%s %s!</p>",$default_page_text_006,$_SESSION['brewerFirstName']); 
+    include (DB.'sponsors.db.php');
+
     if ($section == "default") {
-        $salutation .= "<p class='lead landing-page-salutation fw-light'><small>";
-        $salutation .= sprintf("%s %s %s ",$default_page_text_022, $_SESSION['contestName'], $default_page_text_023);
-        if ($_SESSION['contestHostWebsite'] != "") $salutation .= sprintf("<a class='hide-loader' href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
-        else $salutation .= $_SESSION['contestHost'];
-        if (!empty($_SESSION['contestHostLocation'])) $salutation .= sprintf(", %s",$_SESSION['contestHostLocation']);
-        $salutation .= ".";
+        include (DB.'dropoff.db.php');
+        include (DB.'contacts.db.php');
+    } 
+
+    $salutation = "";
+    if (($section != "default") && (!is_numeric($section))) {
+        $salutation .= "<h1 class='fw-bold animate__animated animate__fadeInDown'>".$_SESSION['contestName']."</h1>";
+        if ($logged_in) $salutation .= sprintf("<p class='landing-page-salutation animate__animated animate__fadeInUp animate__delay-3s'><small>%s %s!</small></p>",$default_page_text_006,$_SESSION['brewerFirstName']);
+    }
+    
+    if (($section == "default") || (is_numeric($section))) {
+
+        if (is_numeric($section)) {
+            if ($section == "400") $error_header = sprintf("<strong>%s %s.</strong> <small class=\"text-secondary\">%s</small>", $section, ucfirst($label_error), $error_text_400);
+            elseif ($section == "401") $error_header = sprintf("<strong>%s %s.</strong> <small class=\"text-secondary\">%s</small>", $section, ucfirst($label_error), $error_text_401);
+            elseif ($section == "403") $error_header = sprintf("<strong>%s %s.</strong> <small class=\"text-secondary\">%s</small>", $section, ucfirst($label_error), $error_text_403);
+            elseif ($section == "404") $error_header = sprintf("<strong>%s %s.</strong> <small class=\"text-secondary\">%s</small>", $section, ucfirst($label_error), $error_text_404);
+            elseif ($section == "500") $error_header = sprintf("<strong>%s %s.</strong> <small class=\"text-secondary\">%s</small>", $section, ucfirst($label_error), $error_text_500);
+            else $error_header = sprintf("<strong>%s %s</strong>", $section, ucfirst($label_error));
+            $salutation .= sprintf("<p class='landing-page-salutation animate__animated animate__fadeInUp animate__delay-3s'>%s</p>",$error_header);
+        }
+        
+        else {
+
+            if ($logged_in) {
+                $salutation .= sprintf("<p class='landing-page-salutation animate__animated animate__fadeInDown animate__delay-3s'>%s %s!</p>",$default_page_text_006,$_SESSION['brewerFirstName']); 
+            }
+            $salutation .= "<p class='lead landing-page-salutation fw-light animate__animated animate__fadeInUp animate__delay-5s'><small>";
+            $salutation .= sprintf("%s %s %s ",$default_page_text_022, $_SESSION['contestName'], $default_page_text_023);
+            if ($_SESSION['contestHostWebsite'] != "") $salutation .= sprintf("<a class='hide-loader' href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
+            else $salutation .= $_SESSION['contestHost'];
+            if (!empty($_SESSION['contestHostLocation'])) $salutation .= sprintf(", %s",$_SESSION['contestHostLocation']);
+            $salutation .= ".";
+            $salutation .= "</small></p>";
+
+        }
+
+        
+    }
+
+    if ($section == "past-winners") {
+        $salutation .= "<p class='lead landing-page-salutation fw-light animate__animated animate__fadeInUp animate__delay-5s'><small>";
+        $salutation .= $label_past_winners." &ndash; ".$filter;
         $salutation .= "</small></p>";
+    }
+
+    $archive_alert_content = "";
+    $archive_alert = FALSE;
+    $archive_alert_count = 0;
+    $archive_alert_display = "";
+
+    if ((isset($_SESSION['contestWinnerLink'])) && (!empty($_SESSION['contestWinnerLink']))) $archive_alert = TRUE;
+
+    if (!HOSTED) {
+
+        if ($totalRows_archive > 0) {
+
+            do {
+
+                if (($row_archive['archiveDisplayWinners'] == "Y") && ($row_archive['archiveStyleSet'] != "")) {
+                    $table_archive = $prefix."judging_scores_".$row_archive['archiveSuffix'];
+                    if (table_exists($table_archive)) {
+                        if (get_archive_count($table_archive) > 0) {
+                            $archive_link = build_public_url("past-winners",$row_archive['archiveSuffix'],"default","default",$sef,$base_url,"default");
+                            $archive_alert_count++;
+                            if ($go == $row_archive['archiveSuffix']) $archive_alert_content .= "<li class=\"nav-item\"><i class=\"fa fa-fw fa-trophy text-gold me-2\"></i><strong class=\"nav-text\">".$row_archive['archiveSuffix']."</strong></li>";
+                            else $archive_alert_content .= "<li class=\"nav-item\"><a class=\"nav-link\" href=\"".$archive_link."\"><i class=\"fa fa-fw fa-trophy text-silver me-2\"></i>".$row_archive['archiveSuffix']."</a></li>";
+                        }
+                    }
+                }   
+
+            } while($row_archive = mysqli_fetch_assoc($archive));
+
+        }
+
+        if ($archive_alert_count > 0) $archive_alert = TRUE;
+        
+    }
+
+    if ($archive_alert) {
+
+        if ((isset($_SESSION['contestWinnerLink'])) && (!empty($_SESSION['contestWinnerLink']))) {
+            if ($archive_alert_count == 0) $archive_alert_content .= sprintf("<li class=\"nav-item\"><a class=\"nav-link\" href=\"%s\" target=\"_blank\">%s<i class=\"fa fa-fw fa-external-link-alt ms-2\"></i></a></li>",$_SESSION['contestWinnerLink'],$label_view);
+            else $archive_alert_content .= sprintf("<li class=\"nav-item\"><i class=\"fa fa-fw fa-external-link-alt text-gold me-2\"></i><a class=\"nav-link\" href=\"%s\" target=\"_blank\">%s</a></li>",$_SESSION['contestWinnerLink'],$label_more_info);
+        }
+        
+        $archive_alert_display .= "<div class=\"offcanvas offcanvas-end\" data-bs-scroll=\"true\" data-bs-theme=\"dark\" tabindex=\"-1\" id=\"archive-list\" aria-labelledby=\"archive-list-label\">";
+        $archive_alert_display .= "<div class=\"offcanvas-header\">";
+        $archive_alert_display .= sprintf("<h4 class=\"offcanvas-title\" id=\"archive-list-label\">%s</h4>",$label_past_winners);
+        $archive_alert_display .= "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"offcanvas\" aria-label=\"Close\"></button>";
+        $archive_alert_display .= "</div>"; // end offcanvas-header
+        $archive_alert_display .= "<div class=\"offcanvas-body\">";
+        $archive_alert_display .= "<p>".$past_winners_text_000."</p>";
+        $archive_alert_display .= "<ul class=\"navbar-nav justify-content-end flex-grow-1\">";
+        $archive_alert_display .= $archive_alert_content;
+        $archive_alert_display .= "</ul>";
+        $archive_alert_display .= "</div>"; // end offcanvas-body
+        $archive_alert_display .= "</div>"; // end offcanvas
+        
     }
 
 ?>
 
 <body data-bs-spy="scroll" data-bs-target="#site-nav">
 
-<div id="sticky-home" class="contains-link">
+<div id="sticky-home" class="contains-link d-print-none">
     <a href="#home"><i class="fas fa-2x fa-chevron-circle-up"></i></a>
 </div>
 
 <!-- LOADER -->
-<div id="loader-submit">
+<div id="loader-submit" class="d-print-none">
     <div class="center">
-        <span class="fa fa-spinner fa-spin fa-5x fa-fw mb-4"></span>
+        <span class="fa fa-spinner fa-spin-pulse fa-spin-reverse fa-5x fa-fw mb-4"></span>
         <p><strong><?php echo $label_working; ?>.<br><?php echo $output_text_030." ".$output_text_031; ?></strong></p>
     </div>
 </div>
@@ -33,26 +124,50 @@
 <header id="home" class="site-header">
 
     <!-- MAIN NAV -->
-    <div class="hidden-print">
-        <?php 
-        if ($section == "admin") include (PUB.'admin-nav.pub.php'); 
-        else include (PUB.'nav.pub.php'); 
-        ?>
+    <div class="hidden-print d-print-none">
+        <?php include (PUB.'nav.pub.php'); ?>
     </div>
 
-    <?php include (PUB.'alerts.pub.php'); ?>
+    <div class="hidden-print d-print-none">
+        <?php include (PUB.'alerts.pub.php'); ?>
+    </div>
+    
+    <?php 
+
+    if (($section == "default") || (is_numeric($section))) {
+
+        $hero_inner = "";
+
+        if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) {
+            $competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" style=\"min-width: 150px; max-width: 225px\" class=\"float-end me-5 d-none d-sm-none d-md-none d-lg-inline-block animate__animated animate__fadeInRight\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
+
+            $hero_inner .= "<div class=\"row align-items-center p-3 g-3\">";
+            $hero_inner .= "<div class=\"col-12 col-lg-9\">";
+            $hero_inner .= "<h1 class=\"text-center animate__animated animate__fadeInLeft\">".$_SESSION['contestName']."</h1>";
+            $hero_inner .= "</div>";
+            $hero_inner .= "<div class=\"col-12 col-lg-3\">";
+            $hero_inner .= $competition_logo;
+            $hero_inner .= "</div>";
+            $hero_inner .= "</div>"; // end row
+
+            
+        }
+        
+        else {
+            $hero_inner .= "<h1 class=\"text-center animate__animated animate__fadeInUp\">".$_SESSION['contestName']."</h1>";
+        }
+
+    ?>
     
     <!-- HERO -->
-    <div id="hero" class="layout-hero text-light d-flex align-items-center">
+    <div id="hero" class="layout-hero text-light d-flex align-items-center d-print-none">
         <section class="container-fluid shadow-text color-hero px-3">
-            <header>
-                <h1 class="text-center"><?php echo $_SESSION['contestName']; ?></h1>
-            </header>
+            <header><?php echo $hero_inner; ?></header>
         </section>
     </div>
-    <!-- ./HERO -->
+    <?php } ?>
 
-    <div id="salutation" class="text-light bg-black p-5">
+    <div id="salutation" class="text-light bg-black pt-4 pb-3 d-print-none">
         <section class="<?php echo $container_main; ?>">
             <?php echo $salutation; ?>
         </section>
@@ -69,27 +184,15 @@
 // include (PUB.'alerts.pub.php'); 
 if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');
 if ($_SESSION['prefsUseMods'] == "Y") include (INCLUDES.'mods_top.inc.php');
-
-// Admin
-if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) include (PUB.'admin.pub.php'); 
-
-// Electronic scoresheets and Judging Dashboard
-elseif (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($logged_in)) include (PUB.'electronic_scoresheets.pub.php');
-
-// If public pages
-else { 
     
-    if (ENABLE_MARKDOWN) {
-        include (CLASSES.'parsedown/Parsedown.php');
-        $Parsedown = new Parsedown();
-    }
+if (ENABLE_MARKDOWN) {
+    include (CLASSES.'parsedown/Parsedown.php');
+    $Parsedown = new Parsedown();
+}
 
 ?>
 
 <script>
-    
-    $("#no-js-alert").removeClass('show');
-    
     try {
         var ua = window.navigator.userAgent;
         var msie = ua.indexOf("MSIE ");
@@ -104,12 +207,13 @@ else {
 <!-- Public Pages -->
 
 <div id="main-content" class="container-xxl">
-    <?php
-    if ($section == "default") { 
-        include (DB.'dropoff.db.php');
-        include (DB.'sponsors.db.php');
-        include (DB.'contacts.db.php');
-    ?>
+
+    <div class="d-none d-print-block landing-page-section p-3">
+        <h1 class="fs-1 fw-bold"><?php echo $_SESSION['contestName'] ?></h1>
+    </div>
+
+    <?php if ($section == "default") { ?>
+
     <section id="at-a-glance" class="landing-page-section p-3">
         <?php include (PUB.'default.pub.php'); ?>
     </section>
@@ -137,34 +241,34 @@ else {
     </section>
     <?php } ?>
 
-    <section id="sponsors" class="landing-page-section pb-3">
+    <?php if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) { ?>
+
+    <section id="sponsors" class="landing-page-section pb-3 d-print-none">
         <header class="landing-page-section-header py-2">
             <h1><?php echo $label_sponsors; ?></h1>
         </header>
         <?php include (PUB.'sponsors.pub.php'); ?>
     </section>
+
+    <?php } ?>
     
-    <section id="contact" class="landing-page-section pb-3">
+    <section id="contact" class="landing-page-section pb-3 d-print-none">
         <header class="landing-page-section-header py-2">
             <h1><?php echo $label_contact; ?></h1>
         </header>
         <?php include (PUB.'contact.pub.php'); ?>
     </section>
     
-    <?php // if (!$logged_in) { ?>
-    <!--
-    <section id="login" class="landing-page-section pb-3">
-        <header class="landing-page-section-header py-2">
-            <h1><?php echo $label_log_in; ?></h1>
-        </header>
-        <?php // include (PUB.'login.pub.php'); ?>
-    </section>
-    -->
-    <?php // } ?>
     <?php } // end if ($section == "default") ?>
 
+    <?php if ($section == "past-winners") { ?>
+        <section id="past-winners" class="landing-page-section pb-3">
+            <?php include (PUB.'past_winners.pub.php'); ?>
+        </section>
+    <?php } ?>
+
     <?php if ($section == "list") { ?>
-        <section id="login" class="landing-page-section pb-3">
+        <section id="list" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
                 <h1><?php echo $header_output; ?></h1>
             </header>
@@ -173,7 +277,7 @@ else {
     <?php } ?>
 
     <?php if ($section == "brew") { ?>
-        <section id="login" class="landing-page-section pb-3">
+        <section id="brew" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
                 <h1><a name="add-entry"></a><?php echo $header_output; ?></h1>
             </header>
@@ -182,7 +286,7 @@ else {
     <?php } ?>
 
     <?php if ($section == "brewer") { ?>
-        <section id="login" class="landing-page-section pb-3">
+        <section id="brewer" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
                 <h1><a name="edit-account"></a><?php echo $header_output; ?></h1>
             </header>
@@ -191,9 +295,9 @@ else {
     <?php } ?>
 
     <?php if ($section == "user") { ?>
-        <section id="login" class="landing-page-section pb-3">
+        <section id="user" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
-                <h1><a name="edit-account"></a><?php echo $header_output; ?></h1>
+                <h1><a name="user-account"></a><?php echo $header_output; ?></h1>
             </header>
             <?php include (PUB.'user.pub.php'); ?>
         </section>
@@ -206,6 +310,28 @@ else {
             </header>
             <?php include (PUB.'register.pub.php'); ?>
         </section>
+    <?php } ?>
+
+    <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($logged_in)) { ?>
+
+        <section id="login" class="landing-page-section pb-3">
+            <header class="landing-page-section-header py-2">
+                <h1><?php echo $header_output; ?></h1>
+            </header>
+            <?php include (PUB.'electronic_scoresheets.pub.php'); ?>
+        </section>
+
+    <?php } ?>
+
+    <?php if (is_numeric($section)) { ?>
+
+        <section id="error-page" class="landing-page-section mt-4 mb-3">
+            <h4><?php echo $header_text_014; ?></h4>
+            <p class="lead"><?php echo $error_text_000; ?></p>
+            <p class="lead"><small><?php echo $error_text_001; ?></small></p>
+            <p><?php echo $label_cheers; ?>!</p>
+        </section>
+    
     <?php } ?>
     
 </div>
@@ -296,91 +422,27 @@ $forgot_password_card_footer .= "</div>";
 
 <!-- ./Public Pages -->
 
-<?php } // end else
-
-/*
-if ($logged_in) {
-    if ($section == "brewer") include (SECTIONS.'brewer.pub.php');
-    if ($section == "list") include (SECTIONS.'list.pub.php');
-    if ($section == "brew") include (SECTIONS.'brew.pub.php');
-    if ($section == "pay") include (SECTIONS.'pay.pub.php');
-    if ($section == "user") include (SECTIONS.'user.pub.php');
-}
-*/
-
+<?php 
 if (DEBUG) include (DEBUGGING.'query_count_end.debug.php'); 
 if ($_SESSION['prefsUseMods'] == "Y") include (INCLUDES.'mods_bottom.inc.php');
-
 ?>
 
 <!-- Footer -->
-<?php if ($section == "admin") { ?>
-<footer class="footer hidden-xs">
-    <div class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom">
-        <div class="<?php echo $container_main; ?> text-center">
-            <p class="navbar-text col-md-12 col-sm-12 col-xs-12 text-muted small bcoem-footer"><?php include (SECTIONS.'footer.sec.php'); ?></p>
-        </div>
-    </div>
-</footer>
-<?php } else { ?>
-<footer class="site-footer bg-dark text-light justify-content-center container-fluid fixed-bottom pt-3">
+<footer class="site-footer bg-dark text-light justify-content-center container-fluid fixed-bottom pt-3 d-print-none">
      <p class="text-center"><?php include (PUB.'footer.pub.php'); ?></p>
 </footer>
-<?php } 
 
-session_write_close(); 
-
-?>
-
-
-<?php if ($logged_in) {
-
+<?php 
+session_write_close();
+if ($logged_in) {
     $session_end_seconds = (time() + ($session_expire_after * 60));
     $session_end = date('Y-m-d H:i:s',$session_end_seconds);
     if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-
-    if ($section == "admin") { ?>
-    <!-- Admin: Session Expiring Modal: 2 Minute Warning -->
-    <div class="modal fade" id="session-expire-warning" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-label">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="session-expire-warning-label"><?php echo $label_session_expire; ?></h4>
-          </div>
-          <div class="modal-body">
-            <p><?php echo $alert_text_090; ?></p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_stay_here; ?></button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Session Expiring Modal: 30 Second Warning -->
-    <div class="modal fade" id="session-expire-warning-30" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-30-label">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="session-expire-warning-30-label"><?php echo $label_session_expire; ?></h4>
-          </div>
-          <div class="modal-body">
-            <p><?php echo $alert_text_091; ?></p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php } ?>
+?>
 
     <!-- Session Timer Displays and Auto Logout -->
     <?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
+    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
     <script>
         var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
@@ -390,9 +452,47 @@ session_write_close();
     </script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
     <script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
-    <?php } ?>
 
-    <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
+    <!-- Session Expiring Modal: 2 Minute Warning -->
+    <div class="modal fade" id="session-expire-warning" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-label">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="session-expire-warning-label"><?php echo $label_session_expire; ?></h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><?php echo $alert_text_090; ?></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-bs-dismiss="modal"><?php echo $label_stay_here; ?></button>
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Expiring Modal: 30 Second Warning -->
+    <div class="modal fade" id="session-expire-warning-30" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-30-label">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="session-expire-warning-30-label"><?php echo $label_session_expire; ?></h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><?php echo $alert_text_091; ?></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <?php } ?>
 
 <?php } // end if ($logged_in) ?>
 
@@ -400,7 +500,8 @@ session_write_close();
         var section = "<?php echo $section; ?>";
         var action = "<?php echo $action; ?>";
         var go = "<?php echo $go; ?>";
-        var edit_style = "<?php echo $action; ?>";
+        if (section != "brew") var edit_style = "<?php echo $action; ?>";
+        else edit_style = edit_style;
         var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
     <?php if (($section == "admin") && ($go == "styles") && ($action != "default")) { ?>
         var specialty_ipa_subs = <?php echo json_encode($specialty_ipa_subs); ?>;
@@ -442,194 +543,153 @@ session_write_close();
     </script>
 <?php } // end if ($section == "brewer") ?>
 
-<?php 
-if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); 
-echo create_bs_alert("no-js-alert","danger","",$alert_text_087,"fa-exclamation-circle","",FALSE);
-?>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
     <script src="<?php echo $js_app_pub_url; ?>"></script>
-    <script>
-    // All below are additions to app.pub.min.js 
-    // For V3 ONLY
-    $(document).ready(function() {
-
-        // https://tom-select.js.org/
-        document.querySelectorAll('.bootstrap-select').forEach((el)=>{
-            
-            let settings = {
-                
-                // failsafe to show all options
-                maxOptions: 1000, 
-
-                // allows for value="" to be used as a first option (placeholder)
-                allowEmptyOption: false 
-            
-            };
-
-            new TomSelect(el,settings);
-        });
-
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-        
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-          return new bootstrap.Popover(popoverTriggerEl)
-        });   
-        
-        var topoffset = 55;
-
-        // Links in nav
-        $('.navbar a[href*=\\#]:not([href=\\#])').click(
-          function() {
-            if (
-              location.pathname.replace(/^\//, '') ===
-                this.pathname.replace(/^\//, '') &&
-              location.hostname === this.hostname
-            ) {
-              var target = $(this.hash);
-              target = target.length
-                ? target
-                : $('[name=' + this.hash.slice(1) + ']');
-              if (target.length) {
-                $('html,body').animate(
-                  {
-                    scrollTop: target.offset().top - topoffset + 2
-                  },
-                  500
-                );
-                return false;
-              }
-            }
-          }
-        );
-
-        // Links in Modals
-        $('.modal-body a[href*=\\#]:not([href=\\#])').click(
-          function() {
-            if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
-              var target = $(this.hash);
-              target = target.length
-                ? target
-                : $('[name=' + this.hash.slice(1) + ']');
-              if (target.length) {
-                $('.modal').modal('hide');
-                $('html,body').animate(
-                  {
-                    scrollTop: target.offset().top - topoffset + 2
-                  },
-                  500
-                );
-                return false;
-              }
-            }
-          }
-        );
-
-        // Links in sections
-        $('.contains-link a[href*=\\#]:not([href=\\#])').click(
-          function() {
-            if (
-              location.pathname.replace(/^\//, '') ===
-                this.pathname.replace(/^\//, '') &&
-              location.hostname === this.hostname
-            ) {
-              var target = $(this.hash);
-              target = target.length
-                ? target
-                : $('[name=' + this.hash.slice(1) + ']');
-              if (target.length) {
-                $('html,body').animate(
-                  {
-                    scrollTop: target.offset().top - topoffset + 2
-                  },
-                  500
-                );
-                return false;
-              }
-            }
-          }
-        );
-
-        $(window).on('activate.bs.scrollspy', function() {
-          var hash = $('.site-nav')
-            .find('a.active')
-            .attr('href');
-
-          if (hash === '#home') {
-            $('#sticky-home').slideUp(500);
-          } else {
-            $('#sticky-home').slideDown(500);
-          }
-          
-        });
-
-        const animateCSS = (element, animation, prefix = 'animate__') =>
-
-        new Promise((resolve, reject) => {
-          const animationName = `${prefix}${animation}`;
-          const node = document.querySelector(element);
-
-          node.classList.add(`${prefix}animated`, animationName);
-
-          // When the animation ends, we clean the classes and resolve the Promise
-          function handleAnimationEnd(event) {
-            event.stopPropagation();
-            node.classList.remove(`${prefix}animated`, animationName);
-            resolve('Animation ended');
-          }
-
-          node.addEventListener('animationend', handleAnimationEnd, {once: true});
-        });
-
-    });
-
-    (() => {
-
-      'use strict'
-
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation');
-
-      // Loop over them and prevent submission
-      Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-          
-          if (!form.checkValidity()) {
-            document.getElementById('loader-submit').style.display = 'none';
-            event.preventDefault();
-            event.stopPropagation();
-            $("#form-submit-button-disabled-msg-required").modal('show');        
-          }
-
-          else {
-            document.getElementById('loader-submit').style.display = 'block';
-          }
-
-          form.classList.add('was-validated');
-        }, false);
-
-      });
-
-    })()
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+                document
+                    .querySelectorAll('.bootstrap-select')
+                    .forEach((el) => {
+                        let settings = {
+                            maxOptions: 1000,
+                            allowEmptyOption: false
+                        };
+                    new TomSelect(el, settings)
+                });
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+                var popoverTriggerList = []
+                    .slice
+                    .call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+                var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                    return new bootstrap.Popover(popoverTriggerEl)
+                });
+                var topoffset = 55;
+                $('.navbar a[href*=\\#]:not([href=\\#])').click(function () {
+                    if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
+                        var target = $(this.hash);
+                        target = target.length
+                            ? target
+                            : $('[name=' + this.hash.slice(1) + ']');
+                        if (target.length) {
+                            $('html,body').animate({
+                                scrollTop: target
+                                    .offset()
+                                    .top - topoffset + 2
+                            }, 500);
+                            return false
+                        }
+                    }
+                });
+                $('.modal-body a[href*=\\#]:not([href=\\#])').click(function () {
+                    if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
+                        var target = $(this.hash);
+                        target = target.length
+                            ? target
+                            : $('[name=' + this.hash.slice(1) + ']');
+                        if (target.length) {
+                            $('.modal').modal('hide');
+                            $('html,body').animate({
+                                scrollTop: target
+                                    .offset()
+                                    .top - topoffset + 2
+                            }, 500);
+                            return false
+                        }
+                    }
+                });
+                $('.contains-link a[href*=\\#]:not([href=\\#])').click(function () {
+                    if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
+                        var target = $(this.hash);
+                        target = target.length
+                            ? target
+                            : $('[name=' + this.hash.slice(1) + ']');
+                        if (target.length) {
+                            $('html,body').animate({
+                                scrollTop: target
+                                    .offset()
+                                    .top - topoffset + 2
+                            }, 500);
+                            return false
+                        }
+                    }
+                });
+                $(window).on('activate.bs.scrollspy', function () {
+                    var hash = $('.site-nav')
+                        .find('a.active')
+                        .attr('href');
+                    if (hash === '#home') {
+                        $('#sticky-home').slideUp(500)
+                    } else {
+                        $('#sticky-home').slideDown(500)
+                    }
+                });
+                const animateCSS = (element, animation, prefix = 'animate__') => new Promise((resolve, reject) => {
+                    const animationName = `${prefix}${animation}`;
+                    const node = document.querySelector(element);
+                    node
+                        .classList
+                        .add(`${prefix}animated`, animationName);
+                    function handleAnimationEnd(event) {
+                        event.stopPropagation();
+                        node
+                            .classList
+                            .remove(`${prefix}animated`, animationName);
+                        resolve('Animation ended')
+                    }
+                    node.addEventListener('animationend', handleAnimationEnd, {once: true})
+                })
+            });
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array
+                .from(forms)
+                .forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            document
+                                .getElementById('loader-submit')
+                                .style
+                                .display = 'none';
+                            event.preventDefault();
+                            event.stopPropagation();
+                            $("#form-submit-button-disabled-msg-required").modal('show')
+                        } else {
+                            document
+                                .getElementById('loader-submit')
+                                .style
+                                .display = 'block'
+                        }
+                        form
+                            .classList
+                            .add('was-validated')
+                    }, false)
+                })
+        })();
     </script>
-<!-- Required Info Missing Modal -->
-<div class="modal modal-lg fade" id="form-submit-button-disabled-msg-required" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="form-submit-button-disabled-msg-required-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h1 class="modal-title fs-5" id="form-submit-button-disabled-msg-required-label"><?php echo $label_required_info; ?></h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            <?php echo sprintf("<p><strong>%s</strong></p><p>%s</p>",$form_required_fields_00,$form_required_fields_01); ?>
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><?php echo $label_understand; ?></button>
+
+    <?php 
+    if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (PUB.'eval_warnings.pub.php');
+    // echo "<div id=\"no-js-alert\" class=\"d-print-none\">".create_bs_alert("no-js-alert-msg","danger","",$alert_text_087,"fa-exclamation-circle","",FALSE)."</div>";
+    ?>
+
+    <!-- Required Info Missing Modal -->
+    <div class="modal modal-lg fade" id="form-submit-button-disabled-msg-required" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="form-submit-button-disabled-msg-required-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="form-submit-button-disabled-msg-required-label"><?php echo $label_required_info; ?></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <?php echo sprintf("<p><strong>%s</strong></p><p>%s</p>",$form_required_fields_00,$form_required_fields_01); ?>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><?php echo $label_understand; ?></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </body>

@@ -401,7 +401,7 @@ if (($go != "entrant") && ($section != "step2")) include (PUB.'brewer_form_2.pub
     <input type="hidden" name="relocate" value="<?php echo $base_url; ?>index.php?section=list">
 <?php } ?>
 
-<div class="bcoem-admin-element hidden-print">
+<div class="bcoem-admin-element d-print-none">
     <div class="mb-3 mt-5 row">
         <div class="col-xs-12 col-sm-3 col-lg-2"></div>
         <div class="col-xs-12 col-sm-9 col-lg-10 d-grid">

@@ -1,6 +1,6 @@
-<?php 
-if ($go == "default") {  ?>
 <script>
+<?php if ($go == "default") {  ?>
+
 var judging_end = moment.tz("<?php echo $judging_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
 var label_weeks = "<?php echo strtolower($label_weeks); ?>";
 var label_days = "<?php echo strtolower($label_days); ?>";
@@ -35,7 +35,7 @@ $("#next-session-open").countdown(next_session_open.toDate(), function(event) {
     }
 
     if ((end_time == "02:00") || (end_time == "00:02:00") || (end_time == "00:00:02:00")) {
-      $("#next-session-open").attr("class", "text-warning");
+      $("#next-session-open").attr("class", "text-orange");
     }
 
     if ((end_time == "01:00") || (end_time == "00:01:00") || (end_time == "00:00:01:00")) {
@@ -47,85 +47,48 @@ $("#next-session-open").countdown(next_session_open.toDate(), function(event) {
         $("#next-session-refresh-button").show('fast');
     }
 });
-</script>
-<!-- Modal: Next Session Open -->
-<div class="modal fade" id="next-session-open-modal" tabindex="-1" role="dialog" aria-labelledby="next-session-open-modal-label">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="next-session-open-modal-label"><?php echo $label_please_note; ?></h4>
-      </div>
-      <div class="modal-body">
-        <p><?php echo "<strong>".$evaluation_info_097."</strong> ".$evaluation_info_098; ?></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_stay_here; ?></button>
-        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-      </div>
-    </div>
-  </div>
-</div>
 <?php } ?>
+
 <?php if ($go == "scoresheet") { ?>
-<!-- Modal: 15 Minutes Elapsed Warning
-<div class="modal fade" id="eval-courtesy-warning-15" tabindex="-1" role="dialog" aria-labelledby="eval-courtesy-warning-15-label">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="eval-courtesy-warning-15-label"><?php echo $label_please_note; ?></h4>
-      </div>
-      <div class="modal-body">
-        <p><?php echo $evaluation_info_071; ?></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $label_understand; ?></button>
-      </div>
-    </div>
-  </div>
-</div>
--->
-<script>
-var elapsedTimeStart = Date.now();
-setInterval(function() {
-  var elapsedTime = ((Date.now() - elapsedTimeStart) / 1000);
-  var elapsedTimeDisp = formatTimeDisplay(elapsedTime,1);
-  /**
-   * Add hour display after 60 minutes 
-   * (if session timeout is set to greater than 60)
-   */
-  if (elapsedTime > 3600) {
-    var elapsedTimeDisp = formatTimeDisplay(elapsedTime,0);
-  }
-  $("#elapsed-time").html(elapsedTimeDisp);
-  if ((elapsedTime > 600) && (elapsedTime < 900)) {
-    $("#elapsed-time-p").attr("class", "text-warning");
-    $("#warning-indicator-icon").show();
-  }
-  if ((elapsedTime >= 900) && (elapsedTime < 901)) {
-    // $("#eval-courtesy-warning-15").modal('show');
-    $("#courtesy-alert-warning-15").show('fast');
-    $("#courtesy-alert-warning-15-header").attr("class", "text-danger");
-    $("#warning-indicator-icon").show();
-  }
-  if (elapsedTime >= 900) {
-    $("#elapsed-time-p").attr("class", "text-danger");
-    $("#warning-indicator-icon").show();
-  }
-}, 1);
-// session_end var defined in index.php
-$("#session-end-eval").countdown(session_end.toDate(), function(event) {
-    if (session_end_min > 1440) var end_time = (event.strftime('%D:%H:%M:%S'));
-    else if (session_end_min > 60) var end_time = (event.strftime('%H:%M:%S'));
-    else var end_time = (event.strftime('%M:%S'));
-    $(this).html(end_time); 
-    if (end_time == "15:00") {
-        $("#session-end-eval-p").attr("class", "text-warning");
+
+  var elapsedTimeStart = Date.now();
+  
+  setInterval(function() {
+    
+    var elapsedTime = ((Date.now() - elapsedTimeStart) / 1000);
+    var elapsedTimeDisp = formatTimeDisplay(elapsedTime,1);
+    if (elapsedTime > 3600) {
+      var elapsedTimeDisp = formatTimeDisplay(elapsedTime,0);
     }
-    if (end_time == "10:00") {
-        $("#session-end-eval-p").attr("class", "text-danger");
+    
+    $("#elapsed-time").html(elapsedTimeDisp);
+    
+    if ((elapsedTime > 600) && (elapsedTime < 900)) {
+      $("#elapsed-time-p").attr("class", "text-warning");
+      $("#warning-indicator-icon").attr("class", "fa fa-exclamation-triangle text-warning");
+      $("#warning-indicator-icon").show();
+      $("#session-end-eval-p").attr("class", "text-warning");
     }
-});
-</script>
+    
+    if (elapsedTime >= 900) {
+      $("#elapsed-time-p").attr("class", "text-danger");
+      $("#courtesy-alert-warning-15").show();
+      $("#courtesy-alert-warning-15").attr("class", "text-danger");
+      $("#warning-indicator-icon").attr("class", "fa fa-beat-fade fa-exclamation-triangle text-danger");
+      $("#warning-indicator-icon").show();
+      $("#session-end-eval-p").attr("class", "text-danger");
+    }
+  }, 1);
+  
+  $("#session-end-eval").countdown(session_end.toDate(), function(event) {
+      if (session_end_min > 1440) var end_time = (event.strftime('%D:%H:%M:%S'));
+      else if (session_end_min > 60) var end_time = (event.strftime('%H:%M:%S'));
+      else var end_time = (event.strftime('%M:%S'));
+      $(this).html(end_time); 
+      if (end_time == "15:00") {
+          $("#session-end-eval-p").attr("class", "text-danger");
+      }
+  });
+
 <?php } ?>
+</script>

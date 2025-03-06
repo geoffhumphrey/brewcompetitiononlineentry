@@ -82,14 +82,14 @@ define('CDN', TRUE);
  * Default is FALSE.
  */
 
-define('TESTING', TRUE);
+define('TESTING', FALSE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE.
  */
 
-define('DEBUG', TRUE);
+define('DEBUG', FALSE);
 
 /**
  * Enable the following to show a collapsable table of all
@@ -119,7 +119,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', TRUE);
+define('ENABLE_MARKDOWN', FALSE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -128,10 +128,10 @@ define('ENABLE_MARKDOWN', TRUE);
  * emails instead of using PHP's native mail() function,
  * which may be disabled on certain web hosts.
  * Requires configuration in the /site/config.mail.php file
- * Default is FALSE.
+ * Deprecated as of 3.0.0.
  */
 
-define('ENABLE_MAILER', FALSE);
+define('ENABLE_MAILER', TRUE);
 
 /**
  * Error Reporting
@@ -221,7 +221,6 @@ require_once (CONFIG.'config.php');
 require_once (CONFIG.'MysqliDb.php');
 $db_conn = new MysqliDb($connection);
 
-if (ENABLE_MAILER) require_once (CONFIG.'config.mail.php');
 require_once (INCLUDES.'current_version.inc.php');
 
 if (isset($_SESSION['last_action'])) {
@@ -248,7 +247,7 @@ $_SESSION['last_action'] = time();
  * preferences.
  */
 
-if (HOSTED) {
+if ((HOSTED) || (strpos($base_url, 'test.brewingcompetitions.com') !== false)) {
 	$public_captcha_key = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
 	$private_captcha_key = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
 }

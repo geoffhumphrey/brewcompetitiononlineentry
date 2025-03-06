@@ -143,7 +143,7 @@ $totalRows_entry_count = total_paid_received($go,0);
 <?php if ($action == "default") { ?>
 <?php if ($_SESSION['prefsEval'] == 1) {
     if ($dbTable == "default") {
-        echo "<div style=\"margin: 0 0 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
+        echo "<div style=\"margin: 0 0 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
         include (EVALS.'import_scores.eval.php');
     }
 }

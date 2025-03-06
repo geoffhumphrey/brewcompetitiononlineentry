@@ -188,10 +188,12 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $first_judging_date = "";
         $last_judging_date = "";
 
+        // Get all deadline dates
         $later_date_arr[] = $_SESSION['contestEntryDeadline'];
         if (isset($_SESSION['contestJudgeDeadline'])) $later_date_arr[] = $_SESSION['contestJudgeDeadline'];
         if (isset($_SESSION['contestAwardsLocDate'])) $later_date_arr[] = $_SESSION['contestAwardsLocDate'];
 
+        // Get all judging session start and end dates
         if ((check_setup($prefix."judging_locations",$database)) && (check_update("judgingDateEnd", $prefix."judging_locations"))) {
 
             $query_judging_dates = sprintf("SELECT judgingDate,judgingDateEnd FROM %s WHERE judgingLocType < '2'",$judging_locations_db_table);
@@ -242,10 +244,23 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         // Generally safe to assume that judging has ended 60 days post latest date (if no judging dates are present)
         if (empty($later_date)) $later_date = time() - 5184000;
         else {
+            
             if (time() > ($later_date + 5184000)) {
+                
                 $judging_ended = TRUE;
                 $later_date = $later_date + 5184000;
+
+                $contestID = NULL;
+
+                $update_table = $prefix."contest_info";
+                $data = array(
+                    'contestID' => $contestID
+                );
+                $db_conn->where ('id', 1);
+                $result = $db_conn->update ($update_table, $data);
+
             }
+
         }
         
         /**
@@ -415,7 +430,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
 
         $remaining_entries = 0;
-        if ((($section == "brew") || ($section == "list") || ($section == "pay")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
+        if ((($section == "brew") || ($section == "list") || ($section == "pay") || ($section == "default")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
         else $remaining_entries = 1;
 
         if (isset($totalRows_entry_count)) {
@@ -743,5 +758,9 @@ if ($row_contest_dates) {
 
 }
 
+$mail_use_smtp = FALSE;
+if (isset($_SESSION['prefsEmailSMTP'])) { 
+    if (($_SESSION['prefsEmailSMTP'] == 1) && (!empty($_SESSION['prefsEmailHost'])) && (!empty($_SESSION['prefsEmailFrom'])) && (!empty($_SESSION['prefsEmailUsername'])) && (!empty($_SESSION['prefsEmailPassword'])) && (!empty($_SESSION['prefsEmailPort']))) $mail_use_smtp = TRUE;
+}
 
 ?>

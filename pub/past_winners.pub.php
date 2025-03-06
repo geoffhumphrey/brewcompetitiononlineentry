@@ -15,33 +15,54 @@
  *
  */
 
-/*
-// Redirect if directly accessed
-if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
- $redirect = "../../index.php";
- $redirect_go_to = sprintf("Location: %s", $redirect);
- header($redirect_go_to);
- exit();
-}
-*/
 
 include (DB.'archive.db.php');
 
-if ($section == "past_winners") { 
-	 
-	if ($totalRows_archive > 0) { 
-		echo "<p><span class=\"fa fa-star\"></span> ".$past_winners_text_000." ";
-		do { 
+// Query the archive table for preferences
+$query_archive_prefs = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive", $filter);
+$archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
+$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
+$totalRows_archive_prefs = mysqli_num_rows($archive_prefs);
 
-			if ($go != $row_archive['archiveSuffix']) echo "<a href='index.php?section=past_winners&amp;go=".$row_archive['archiveSuffix']."'>"; 
-			else echo "<strong>"; 
-			echo $row_archive['archiveSuffix']; 
-			if ($go != $row_archive['archiveSuffix']) echo "</a>"; 
-			else echo "</strong>"; 
-			echo "&nbsp;&nbsp;&nbsp;"; 
-		} while ($row_archive = mysqli_fetch_assoc($archive));
-		echo "</p>";
+$winner_method = $row_archive_prefs['archiveWinnerMethod'];
+$style_set = $row_archive_prefs['archiveStyleSet'];
+$judging_scores_db_table = $prefix."judging_scores_".$filter;
+$brewing_db_table = $prefix."brewing_".$filter;
+$brewer_db_table = $prefix."brewer_".$filter;
+
+	if (!empty($archive_alert_display)) {
+
+		include (DB.'score_count.db.php');
+
+	    $archive_alert_button = "<div class=\"d-grid mb-3 mt-3\">";
+	    $archive_alert_button .= "<button class=\"btn btn-dark btn-lg d-block d-sm-block d-md-none\" type=\"button\" data-bs-toggle=\"offcanvas\" data-bs-target=\"#archive-list\" aria-controls=\"archive-list\">";
+	    $archive_alert_button .= "<i class=\"fa fa-trophy me-2 text-gold\"></i>";
+	    $archive_alert_button .= ucwords(rtrim($past_winners_text_000, ":"));
+	    $archive_alert_button .= "</button>";
+	    $archive_alert_button .= "</div>";
+
+	    
+	    $archive_alert_button .= "<button class=\"btn btn-dark btn-lg float-end ms-4 d-none d-sm-none d-md-block\" type=\"button\" data-bs-toggle=\"offcanvas\" data-bs-target=\"#archive-list\" aria-controls=\"archive-list\">";
+	    $archive_alert_button .= "<i class=\"fa fa-trophy me-2 text-gold\"></i>";
+	    $archive_alert_button .= ucwords(rtrim($past_winners_text_000, ":"));
+	    $archive_alert_button .= "</button>";
+	    
+
+	    echo $archive_alert_button;
+	    if ($_SESSION['prefsProEdition'] == 1) $entry_count_text = sprintf("<%s <strong class=\"text-success\">%s</strong> %s",$judge_closed_001,get_participant_count('default',$filter),$judge_closed_003);
+	    else $entry_count_text =  sprintf("%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong> %s",$judge_closed_001,get_entry_count('received',$filter),$judge_closed_002,get_participant_count('default',$filter),$judge_closed_003);
+	    echo sprintf("<p class=\"lead\">%s %s.</p><p class=\"lead\"><small>%s</small></p>",$judge_closed_000, $_SESSION['contestName'],$entry_count_text);
+	    echo $archive_alert_display;
+		echo "<h2>".$default_page_text_009."</h2>";
+		include (PUB.'bos.pub.php');
+
+		echo "<h2>".$default_page_text_010."</h2>";
+		if ($winner_method == 0) include (PUB.'winners.pub.php');
+		elseif ($winner_method == 1) include (PUB.'winners_category.pub.php');
+		else include (PUB.'winners_subcategory.pub.php');
 	}
+
+	/*
 
 	if ($go != "default") {
 
@@ -62,15 +83,18 @@ if ($section == "past_winners") {
 		$row_scored_entries = mysqli_fetch_assoc($scored_entries);
 
 		$dbTable = $go;
-		$winner_display_method = 0; // TODO: get from query
-		$_SESSION['prefsWinnerMethod'] = $winner_display_method; // TODO: change in appropriate query scripts (scores.db.php)
+		//$winner_display_method = 0; // TODO: get from query
+		//$_SESSION['prefsWinnerMethod'] = $winner_display_method; // TODO: change in appropriate query scripts (scores.db.php)
+
+		$winner_method = $_SESSION['prefsWinnerMethod'];
 
 		include (DB.'winners.db.php');
-		if ($winner_display_method == 0) include (SECTIONS.'winners.sec.php');
-		if ($winner_display_method == 1) include (SECTIONS.'winners_category.sec.php');
-		if ($winner_display_method == 2) include (SECTIONS.'winners_subcategory.sec.php');
+		if ($winner_method == 0) include (PUB.'winners.pub.php');
+		if ($winner_method == 1) include (PUB.'winners_category.pub.php');
+		if ($_SESSION['prefsWinnerMethod'] == 2) include (PUB.'winners_subcategory.pub.php');
 		
 	}
 
-}
+	*/
+
 ?>

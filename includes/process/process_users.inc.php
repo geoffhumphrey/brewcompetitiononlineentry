@@ -48,8 +48,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				
 				require(CLASSES.'phpass/PasswordHash.php');
 				$hasher = new PasswordHash(8, false);
-				$password = md5($_POST['password']);
-				$hash = $hasher->HashPassword($password);
+				$entered_password = md5($_POST['password']);
+				$hash = $hasher->HashPassword($entered_password);
 				$hasher_question = new PasswordHash(8, false);
 				$hash_question = $hasher_question->HashPassword(sterilize($_POST['userQuestionAnswer']));
 
@@ -100,7 +100,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					else {
 						
 						// If the username/password combo is incorrect or not found, relocate to the login error page
-						$redirect = $base_url."index.php?section=login&go=".$go."&msg=1";
+						$redirect = $base_url."index.php?section=default&go=".$go."&msg=1";
 						$redirect = prep_redirect_link($redirect);
 						$redirect_go_to = sprintf("Location: %s", $redirect);
 						session_destroy();

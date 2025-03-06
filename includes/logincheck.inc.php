@@ -13,21 +13,21 @@ header('Pragma: no-cache');
 
 $hasher = new PasswordHash(8, false);
 $loginUsername = sterilize($_POST['loginUsername']);
-$password = sterilize($_POST['loginPassword']);
+$entered_password = sterilize($_POST['loginPassword']);
 $location = $base_url."index.php?section=login";
 
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 
-if (strlen($password) > 72) { 
+if (strlen($entered_password) > 72) { 
 	session_destroy();
-	header(sprintf("Location: %s", $base_url."index.php?section=login&msg=1"));
+	header(sprintf("Location: %s", $base_url."index.php?msg=11"));
 	exit;
 }
 
 mysqli_real_escape_string($connection,$loginUsername);
-mysqli_real_escape_string($connection,$password);
-$password = md5($password);
+mysqli_real_escape_string($connection,$entered_password);
+$entered_password = md5($entered_password);
 
 /**
  * ONLY for 1.3.0.0 release; evaluate for deletion in future releases
@@ -48,7 +48,7 @@ if ($section == "update") {
 	$check = 0;
 	
 	if ($totalRows_login > 0) {
-		$check = $hasher->CheckPassword($password, $stored_hash);
+		$check = $hasher->CheckPassword($entered_password, $stored_hash);
 		$check = 1;
 	}
 	
@@ -68,7 +68,7 @@ if ($section != "update") {
 	$stored_hash = $row_login['password'];
 	$check = 0;
 	
-	if ($totalRows_login > 0) $check = $hasher->CheckPassword($password, $stored_hash);
+	if ($totalRows_login > 0) $check = $hasher->CheckPassword($entered_password, $stored_hash);
 
 }
 
@@ -107,7 +107,7 @@ if ($check == 1) {
  */
 
 else {
-	$location = $base_url."index.php?section=login&msg=1";
+	$location = $base_url."index.php?msg=11";
 	session_destroy();
 	// Works with standard fail2ban apache-auth module to prevent Brute Force login attempts
 	trigger_error('user authentication failure', E_USER_WARNING);

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Module:      process_contacts.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "contacts" table
  */
@@ -45,13 +45,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			setcookie("subject", sterilize(ucwords($_POST['subject'])), 0, "/");
 			setcookie("message", sterilize($_POST['message']), 0, "/");
 			
-			$redirect = $base_url."index.php?section=contact&action=email&msg=2";
+			$redirect = $base_url."index.php?msg=20";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		}
 
-		else {
+		if ($mail_use_smtp) {
 
 			$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", $_POST['to']);
 			$contact = mysqli_query($connection,$query_contact) or die (mysqli_error($connection));
@@ -63,7 +63,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			$to_email = $row_contact['contactEmail'];
 			$to_email = mb_convert_encoding($to_email, "UTF-8");
-			$to_email_formatted = $to_name." <".$to_email.">";
 
 			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
@@ -90,15 +89,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message .= "<body>";
 			$message .= "<p>". $message_post. "</p>";
 			$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>** Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
-			if ((DEBUG || TESTING) && (ENABLE_MAILER)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+			if (DEBUG || TESTING) $message .= "<p><small>Sent using phpMailer.</small></p>";
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
-
-			$headers  = "MIME-Version: 1.0"."\r\n";
-			$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n"; 
-			$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
-			if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 0)) $headers .= "Bcc: ".$from_name." <".$from_email.">"."\r\n";
 
 			/*
 			// Debug
@@ -108,30 +101,32 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			echo "To: ".$to_name." ".$to_email."<br>";
 			echo "From: ".$comp_name." ".$from_competition_email."<br>";
 			echo "Reply-To: ".$from_name." ".$from_email."<br>";
-			if ($_SESSION['prefsEmailCC'] == 0) echo "Bcc: ".$from_name." ".$from_email."<br>";
+			if ($_SESSION['prefsEmailCC'] == 1) echo "Bcc: ".$from_name." ".$from_email."<br>";
 			echo $message;
-			exit;
+			exit();
 			*/
 
-			if ($mail_use_smtp) {				
-				$mail = new PHPMailer(true);
-				$mail->CharSet = 'UTF-8';
-				$mail->Encoding = 'base64';
-				$mail->addAddress($to_email, $to_name);
-				$mail->setFrom($from_competition_email, $comp_name);
-				$mail->addReplyTo($from_email, $from_name);
-				if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 0)) $mail->addBCC($from_email, $from_name);
-				$mail->Subject = $subject;
-				$mail->Body = $message;
-				sendPHPMailerMessage($mail);
-			} else {
-				mail($to_email_formatted, $subject, $message, $headers);
-			}
+			$mail = new PHPMailer(true);
+			$mail->CharSet = 'UTF-8';
+			$mail->Encoding = 'base64';
+			$mail->addAddress($to_email, $to_name);
+			$mail->setFrom($from_competition_email, $comp_name);
+			$mail->addReplyTo($from_email, $from_name);
+			if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 1)) $mail->addBCC($from_email, $from_name);
+			$mail->Subject = $subject;
+			$mail->Body = $message;
+			sendPHPMailerMessage($mail);
 
-			$redirect = $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1";
+			$redirect = $base_url."index.php?view=".str_replace(" ", "+", $to_name)."&msg=19";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
 
+		}
+
+		else {
+			$redirect = $base_url."index.php?&msg=3";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 		}
 
 	} // end if ($action == "email")

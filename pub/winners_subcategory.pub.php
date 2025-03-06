@@ -21,19 +21,22 @@ if ($row_scored_entries['count'] > 0) {
 	$category_end = $_SESSION['style_set_category_end'];
 
 	$a = styles_active(2,$go);
-	//print_r($a);
 	
 	foreach (array_unique($a) as $style) {
 
 		$style = explode("^",$style);
+		$value['brewStyleGroup'] = $style[0];
+		$value['brewStyleNum'] = $style[1];
 
 		include (DB.'winners_subcategory.db.php');
 
 		// Display all winners
 		if ($row_entry_count['count'] > 0) {
-			if ($row_entry_count['count'] > 1) $entries = "entries"; else $entries = "entry";
-			if ($row_score_count['count'] > 0) {
 
+			if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); 
+			else $entries = strtolower($label_entry);
+
+			if ($row_score_count['count'] > 0) {
 
 			$primary_page_info = "";
 			$header1_1 = "";
@@ -45,8 +48,8 @@ if ($row_scored_entries['count'] > 0) {
 			$table_body1 = "";
 
 			// Build headers
-			if ($winner_style_set == "BA") $header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$style[2],$row_entry_count['count'],$entries);
-			else $header1_1 .= sprintf("<h3>%s %s%s: %s <small>%s %s</small></h3>",$label_category,ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
+			if ($winner_style_set == "BA") $header1_1 .= sprintf("<h3>%s <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span></h3>",$style[2],$row_entry_count['count'],$entries);
+			else $header1_1 .= sprintf("<h3>%s %s%s: %s <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span></h3>",$label_category,ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
 
 			// Build table headers
 			$table_head1 .= "<tr>";
@@ -130,7 +133,7 @@ if ($row_scored_entries['count'] > 0) {
 				$table_body1 .= $style.": ".$style_long;
 
 				if ((!empty($row_scores['brewInfo'])) && ($section != "results") && ($section != "past-winners")) {
-					$table_body1 .= " <a href=\"#".$row_scores['id']."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a>";
+					$table_body1 .= "<button class=\"m-0 btn btn-sm btn-link\" style=\"--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .1rem; \" tabindex=\"0\" data-bs-toggle=\"popover\" data-bs-trigger=\"hover focus\" data-bs-placement=\"top\" data-bs-container=\"body\" data-bs-title=\"".$label_info."\" data-bs-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><i class=\"hidden-xs hidden-sm hidden-md d-print-none fa fa-fw fa-info-circle\"></i></button>";
 				}
 				
 				$table_body1 .= "</td>";
@@ -168,23 +171,23 @@ if ($row_scored_entries['count'] > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [<?php if ($action == "print") { ?>[0,'asc']<?php } ?>],
+			"aaSorting": [[0,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
-				{ "asSorting": [  ] }<?php if ($tb == "scores") { ?>,
-				{ "asSorting": [  ] }
+				null,
+				null,
+				null,
+				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>null,<?php } ?>
+				null<?php if ($tb == "scores") { ?>,
+				null
 				<?php } ?>
 				]
 			} );
 		} );
 	</script>
-	<div class="bcoem-winner-table">
-		<table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
-		<thead>
+	<div class="table-responsive-md">
+		<table class="table table-bordered table-striped border-dark-subtle" id="sortable<?php echo $random1; ?>">
+		<thead class="table-dark">
 			<?php echo $table_head1; ?>
 		</thead>
 		<tbody>
@@ -200,7 +203,3 @@ if ($row_scored_entries['count'] > 0) {
 
 else echo sprintf("<p>%s</p>",$winners_text_001);
 ?>
-
-
-<!-- Public Page Rebuild completed 08.26.15 -->
-

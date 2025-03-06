@@ -77,7 +77,7 @@ if ($action == "username") {
         </div>
     </div>
 
-    <div class="bcoem-admin-element hidden-print">
+    <div class="bcoem-admin-element d-print-none">
         <div class="mb-3 mt-5 row">
             <div class="col-xs-12 col-sm-3 col-lg-2"></div>
             <div class="col-xs-12 col-sm-9 col-lg-10 d-grid">
@@ -124,7 +124,7 @@ if ($action == "username") {
         </div>
     </div>
 
-	<div class="row mb-3"><!-- Form Group REQUIRED Text Input -->
+	<div class="row mb-3">
         <label for="password" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php echo $label_new." ".$label_password; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <input class="form-control" name="password" type="password" placeholder="" id="newPassword" required>
@@ -140,7 +140,7 @@ if ($action == "username") {
 		</div>
 	</div>
 
-    <div class="bcoem-admin-element hidden-print">
+    <div class="bcoem-admin-element d-print-none">
         <div class="mb-3 mt-5 row">
             <div class="col-xs-12 col-sm-3 col-lg-2"></div>
             <div class="col-xs-12 col-sm-9 col-lg-10 d-grid">

@@ -606,7 +606,7 @@ if ($entry_found) {
 
 else {
   $header_elements .= sprintf("<p class=\"alert alert-danger\"><strong><i class=\"fa fa-exclamation-triangle\"></i> %s</strong> %s</p>",$evaluation_info_013,$evaluation_info_014); 
-  $entry_info_html .= "<form class=\"hide-loader-form-submit form-horizontal\" name=\"form1\" data-toggle=\"validator\" role=\"form\" action=\"".$base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add\" method=\"post\">";
+  $entry_info_html .= "<form class=\"hide-loader-form-submit form-horizontal\" name=\"form1\" data-toggle=\"validator\" role=\"form\" action=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;action=add\" method=\"post\">";
   $entry_info_html .= "<div class=\"form-group\">";
   $entry_info_html .= sprintf("<label for=\"entry_number\" class=\"col-sm-2 control-label\">%s</label>",$label_entry_number);
   $entry_info_html .= "<div class=\"col-sm-10\">";
@@ -627,7 +627,7 @@ else {
 $entry_info_html .= "</section>";
 
 // Sub-nav Buttons
-if ($eval_source == 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
+if ($eval_source == 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
 $eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><button class=\"btn btn-block btn-default\"  data-toggle=\"modal\" data-target=\"#unsaved-modal\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</button></div>";
 if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104);
 ?>

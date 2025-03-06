@@ -212,7 +212,7 @@ if ($setup_success) {
 				'prefsAutoPurge' => '0',
 				'prefsEntryLimitPaid' => NULL,
 				'prefsEmailRegConfirm' => '0',
-				'prefsEmailCC' => '1',
+				'prefsEmailCC' => '0',
 				'prefsShipping' => '1',
 				'prefsDropOff' => '1',
 				'prefsLanguage' => 'en-US',
@@ -427,6 +427,7 @@ if ($setup_success) {
 	    $js_add_edit_entry_url .= "?t=".time();
 	    $js_user_url .= "?t=".time();
 	    $theme .= "?t=".time();
+	    $css_common_url .= "?t=".time();
 	    
 	}
 

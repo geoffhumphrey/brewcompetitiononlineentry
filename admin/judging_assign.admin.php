@@ -164,7 +164,7 @@ if ($totalRows_brewer > 0) {
       $cb_list = array();
       foreach ($co_brewers_table as $cb) {
          if (strpos($cb, $judge_info[1]) !== false) $cb_ct +=1;
-         $cb_list[] = $cb;
+         if (!empty($cb)) $cb_list[] = $cb;
       }
       if ($cb_ct > 0) $co_brewer_flag = TRUE;
     }

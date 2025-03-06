@@ -250,15 +250,19 @@ a:active {
 @media screen and (max-width: 768px) {
 
   .landing-page-section-header h1 {
-    font-size: 2.5em;
+    font-size: 2.2em;
+  }
+
+  .landing-page-section h1 {
+    font-size: 1.9em;
   }
 
   .landing-page-section h2 {
-    font-size: 2.0em;
+    font-size: 1.9em;
   }
 
   .landing-page-section h3 {
-    font-size: 1.8em;
+    font-size: 1.5em;
   }
 
   .landing-page-section h4 {
@@ -275,6 +279,10 @@ a:active {
 
   .landing-page-section-header h1 {
     font-size: 3.0em;
+  }
+
+  .landing-page-section h1 {
+    font-size: 2.3em;
   }
 
   .landing-page-section h2 {
@@ -299,6 +307,12 @@ a:active {
   font-family: var(--font-family-sans-serif);
   font-weight: 900;
   padding: 20px 0px 0px 0px;
+}
+
+.landing-page-section h1 {
+  font-family: var(--font-family-sans-serif);
+  font-weight: 800;
+  margin: 30px 0 20px 0;
 }
 
 .landing-page-section h2 {

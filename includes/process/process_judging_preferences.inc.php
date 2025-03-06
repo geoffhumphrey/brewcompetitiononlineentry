@@ -47,7 +47,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		if ($_SESSION['prefsEval'] == 1) {
+		$update_table = $prefix."preferences";
+		$data = array(
+			'prefsEval' => sterilize($_POST['prefsEval']),
+			'prefsDisplaySpecial' => sterilize($_POST['prefsDisplaySpecial']),
+		);
+		$db_conn->where ('id', 1);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+		if ($_POST['prefsEval'] == 1) {
 
 			if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
 
@@ -184,7 +196,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$errors = TRUE;
 			}
 
-			if (HOSTED) {
+			if ((HOSTED) && ($mail_use_smtp)) {
 
 				$server = "brewingcompetitions.com";
 
@@ -204,21 +216,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$headers  = "MIME-Version: 1.0"."\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
 				$headers .= "From: BCOEM Server <noreply@".$server.">"."\r\n";
-				
-				if ($mail_use_smtp) {
 					
-					$mail = new PHPMailer(true);
-					$mail->CharSet = 'UTF-8';
-					$mail->Encoding = 'base64';
-					$mail->addAddress($to_email, "BCOEM Admin");
-					$mail->setFrom("noreply@".$server, "BCOEM Server");
-					$mail->Subject = $subject;
-					$mail->Body = $message;
-					sendPHPMailerMessage($mail);
-
-				} else {
-					mail($to_email_formatted, $subject, $message, $headers);
-				}
+				$mail = new PHPMailer(true);
+				$mail->CharSet = 'UTF-8';
+				$mail->Encoding = 'base64';
+				$mail->addAddress($to_email, "BCOEM Admin");
+				$mail->setFrom("noreply@".$server, "BCOEM Server");
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				sendPHPMailerMessage($mail);				
 			
 			} // end if (HOSTED)
 
@@ -231,6 +237,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		else {
 			if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+			else $updateGoTo = $base_url."index.php?section=admin&msg=2";
 			$updateGoTo = prep_redirect_link($updateGoTo);
 			$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 		}

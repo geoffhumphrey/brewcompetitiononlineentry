@@ -1,5 +1,4 @@
 <?php
-
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
     $redirect = "../../403.php";
@@ -9,107 +8,112 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 }
 
 $style_set_dropdown = "";
+$style_set_description = "";
 $all_exceptions = "";
 $all_exceptions_js = "";
 $all_hide_js = "";
 $custom_exceptions_USCLEx = "";
 $prefsUSCLEx = "";
 $js_edit_show_hide_style_set_div = "";
+$incremental = FALSE;
+$email_sending_enable = FALSE;
 
 include (DB.'styles.db.php');
 
-if (($custom_styles_arr) && (!empty($custom_styles_arr))) {
-    foreach ($custom_styles_arr as $value) {
-        if ((is_array($value)) && ($value) && (!empty($value))) {
-            $custom_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\">";
-            $custom_exceptions_USCLEx .= "Custom Style: ";
-            $custom_exceptions_USCLEx .= $value['brewStyle']."</label></div>\n";
-        }
-    }
-}
+// Applies to both ($section vars - step3 and admin)
+if (($action == "default") || ($action == "entries")) {
 
-foreach ($style_sets as $style_set) {
-    
-    // Reset vars
-    $style_set_selected = "";
-    $all_exceptions_USCLEx = "";
-    $hide_other_js = "";
-    
-    // Build style set drop-down
-    if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet']))  $style_set_selected = "SELECTED";
-    if (($section == "step3") && ($style_set['style_set_name'] == "BJCP2021")) $style_set_selected = "SELECTED";
-    $style_set_dropdown .= sprintf("<option value=\"%s\" %s>%s (%s)</option>",$style_set['style_set_name'],$style_set_selected,$style_set['style_set_long_name'],$style_set['style_set_short_name']);
-
-    // Generate exception list for each of the style sets in the 
-    // array and show/hide the list as each are selected via jQuery.
-    
-    /*
-    if (HOSTED) $styles_db_table = "bcoem_shared_styles";
-    else
-    */
-    $styles_db_table = $prefix."styles";
-
-    $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
-    if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyle ASC";
-    else $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC";
-    $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
-    $row_styles_all = mysqli_fetch_assoc($styles_all);
-
-    if ($style_set['style_set_name'] == "BA") $method = 2;
-    else $method = 0;
-
-    if ($row_styles_all) {
-        do {
-            
-            $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
-            if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
-            if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
-            else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
-            
-        } while($row_styles_all = mysqli_fetch_assoc($styles_all));
-    }
-
-    $all_exceptions .= "<div class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."\">\n";
-    $all_exceptions .= "<label for=\"prefsUSCLEx\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Exceptions to Entry Limit per ".$style_set['style_set_name']." Sub-Style</label>\n";
-    $all_exceptions .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-12\">\n";
-    $all_exceptions .= "<div class=\"input-group\">\n";
-    $all_exceptions .= $all_exceptions_USCLEx;
-    $all_exceptions .= $custom_exceptions_USCLEx;
-    $all_exceptions .= "</div>";
-    $all_exceptions .= "</div>\n";
-    $all_exceptions .= "</div>\n\n";
-
-    // Generate js to hide other style set exception lists if not chosen in the drop-down
-    foreach ($style_sets as $hide_style_set) {
-        if ($hide_style_set['id'] != $style_set['id']) {
-            $hide_other_js .= "\t\t\t$(\"#".$hide_style_set['id']."-".$hide_style_set['style_set_name']."\").hide(\"fast\");\n";
-            $hide_other_js .= "\t\t\t$(\"#helpBlock".$hide_style_set['id']."-".$hide_style_set['style_set_name']."\").hide(\"fast\");\n";
+    if (($custom_styles_arr) && (!empty($custom_styles_arr))) {
+        foreach ($custom_styles_arr as $value) {
+            if ((is_array($value)) && ($value) && (!empty($value))) {
+                $custom_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\">";
+                $custom_exceptions_USCLEx .= "Custom Style: ";
+                $custom_exceptions_USCLEx .= $value['brewStyle']."</label></div>\n";
+            }
         }
     }
 
-    /**
-     * Generate jQuery for hide/show
-     * Unused as of now, but keeping just in case
-     */
-    /*
-    if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == $style_set['style_set_name'])) $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");";
-    else $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide(\"fast\");";
-    */
+    foreach ($style_sets as $style_set) {
+        
+        // Reset vars
+        $style_set_selected = "";
+        $all_exceptions_USCLEx = "";
+        $hide_other_js = "";
+        
+        // Build style set drop-down
+        if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet']))  $style_set_selected = "SELECTED";
+        if (($section == "step3") && ($style_set['style_set_name'] == "BJCP2021")) $style_set_selected = "SELECTED";
+        $style_set_dropdown .= sprintf("<option value=\"%s\" %s>%s (%s)</option>",$style_set['style_set_name'],$style_set_selected,$style_set['style_set_long_name'],$style_set['style_set_short_name']);
 
-    $all_exceptions_js .= "\t\telse if ($(\"#prefsStyleSet\").val() == \"".$style_set['style_set_name']."\") {\n";
-    $all_exceptions_js .= "\t\t\t$(\"#subStyleExeptionsEdit\").hide(\"fast\");\n"; // Hide default upon entry
-    $all_exceptions_js .= $hide_other_js; // hide all others
-    $all_exceptions_js .= "\t\t\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n"; // Show this 
-    $all_exceptions_js .= "\t\t\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n";
-    $all_exceptions_js .= "\t\t\t$(\"input[name='prefsUSCLEx[]']\").prop(\"checked\", false);\n";
-    $all_exceptions_js .= "\t\t\t$(\"#prefsHideSpecific\").show(\"fast\");\n";
-    $all_exceptions_js .= "\t\t}\n\n";
+        // Generate exception list for each of the style sets in the 
+        // array and show/hide the list as each are selected via jQuery.
+        $styles_db_table = $prefix."styles";
 
-    // Add to the list of divs to hide upon page load
-    $all_hide_js .= "\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide();\n";
-    $all_hide_js .= "\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").hide();\n";
+        $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
+        if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyle ASC";
+        else $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC";
+        $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
+        $row_styles_all = mysqli_fetch_assoc($styles_all);
 
-}
+        if ($style_set['style_set_name'] == "BA") $method = 2;
+        else $method = 0;
+
+        if ($row_styles_all) {
+            do {
+                
+                $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
+                if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
+                if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
+                else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
+                
+            } while($row_styles_all = mysqli_fetch_assoc($styles_all));
+        }
+
+        $all_exceptions .= "<div class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."\">\n";
+        $all_exceptions .= "<label for=\"prefsUSCLEx\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Exceptions to Entry Limit per ".$style_set['style_set_name']." Sub-Style</label>\n";
+        $all_exceptions .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-12\">\n";
+        $all_exceptions .= "<div class=\"input-group\">\n";
+        $all_exceptions .= $all_exceptions_USCLEx;
+        $all_exceptions .= $custom_exceptions_USCLEx;
+        $all_exceptions .= "</div>";
+        $all_exceptions .= "</div>\n";
+        $all_exceptions .= "</div>\n\n";
+
+        // Generate js to hide other style set exception lists if not chosen in the drop-down
+        foreach ($style_sets as $hide_style_set) {
+            if ($hide_style_set['id'] != $style_set['id']) {
+                $hide_other_js .= "\t\t\t$(\"#".$hide_style_set['id']."-".$hide_style_set['style_set_name']."\").hide(\"fast\");\n";
+                $hide_other_js .= "\t\t\t$(\"#helpBlock".$hide_style_set['id']."-".$hide_style_set['style_set_name']."\").hide(\"fast\");\n";
+            }
+        }
+
+        /**
+         * Generate jQuery for hide/show
+         * Unused as of now, but keeping just in case
+         */
+        /*
+        if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == $style_set['style_set_name'])) $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");";
+        else $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide(\"fast\");";
+        */
+
+        $all_exceptions_js .= "\t\telse if ($(\"#prefsStyleSet\").val() == \"".$style_set['style_set_name']."\") {\n";
+        $all_exceptions_js .= "\t\t\t$(\"#subStyleExeptionsEdit\").hide(\"fast\");\n"; // Hide default upon entry
+        $all_exceptions_js .= $hide_other_js; // hide all others
+        $all_exceptions_js .= "\t\t\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n"; // Show this 
+        $all_exceptions_js .= "\t\t\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n";
+        $all_exceptions_js .= "\t\t\t$(\"input[name='prefsUSCLEx[]']\").prop(\"checked\", false);\n";
+        $all_exceptions_js .= "\t\t\t$(\"#prefsHideSpecific\").show(\"fast\");\n";
+        $all_exceptions_js .= "\t\t}\n\n";
+
+        // Add to the list of divs to hide upon page load
+        $all_hide_js .= "\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide();\n";
+        $all_hide_js .= "\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").hide();\n";
+
+    }
+
+
+} // end if (($action == "default") || ($action == "entries"))
+
 
 if ($section == "step3") {
     $query_prefs = sprintf("SHOW COLUMNS FROM %s", $prefix."preferences");
@@ -121,74 +125,219 @@ if ($section == "step3") {
 
 if (($section == "admin") && ($go == "preferences")) {
 
-    $recaptcha_key = "";
-    if (isset($row_prefs['prefsGoogleAccount'])) $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
-    if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+    if ($action == "default") {
 
-    $styles_selected = array();
-    $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
+        // General: reCAPTCHA
+        $recaptcha_key = "";
+        if (isset($row_prefs['prefsGoogleAccount'])) $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
+        if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
 
-    if ($row_styles) {
+    } // end if ($action == "default")
 
-        // Generate the default sub-style exception list (current settings)
-        do {
+    if ($action == "entries") {
 
-            if (array_key_exists($row_styles['id'], $styles_selected)) {
+        // Entries: Styles
 
-                $checked = "";
+        $styles_selected = array();
+        $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
-                if ($go == "preferences") {
-                    $a = explode(",", $row_limits['prefsUSCLEx']);
-                    $b = $row_styles['id'];
-                    foreach ($a as $value) {
-                        if ($value == $b) $checked = "CHECKED";
+        if ($row_styles) {
+
+            // Generate the default sub-style exception list (current settings)
+            do {
+
+                if (array_key_exists($row_styles['id'], $styles_selected)) {
+
+                    $checked = "";
+
+                    if ($go == "preferences") {
+                        $a = explode(",", $row_limits['prefsUSCLEx']);
+                        $b = $row_styles['id'];
+                        foreach ($a as $value) {
+                            if ($value == $b) $checked = "CHECKED";
+                        }
                     }
+
+                    if ($row_styles['id'] != "") {
+                        $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+                        $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
+                    }
+
                 }
 
-                if ($row_styles['id'] != "") {
-                    $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
-                    $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
-                }
+            } while ($row_styles = mysqli_fetch_assoc($styles));
 
-            }
+        }
 
-        } while ($row_styles = mysqli_fetch_assoc($styles));
+        if (!empty($row_limits['prefsUserEntryLimitDates'])) {
+            $incremental = TRUE;
+            $incremental_limits = json_decode($row_limits['prefsUserEntryLimitDates'],true);
+        }
 
-    }
+    } // end if ($action == "entries")
 
-    $incremental = FALSE;
-
-    if (!empty($row_limits['prefsUserEntryLimitDates'])) {
-        $incremental = TRUE;
-        $incremental_limits = json_decode($row_limits['prefsUserEntryLimitDates'],true);
-    }
-    
 }
+?>
 
-if ($section == "admin") { ?>
-<p class="lead"><?php echo $_SESSION['contestName'].": Set Website Preferences"; ?></p>
+<?php if ($section == "admin") { ?>
+<p class="lead"><?php echo $_SESSION['contestName'].": Set Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
-    <div class="btn-group" role="group" aria-label="...">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-cog"></span> Judging/Competition Organization Preferences</a>
-    </div><!-- ./button group -->
+        <a class="btn btn-<?php if ($action == "default") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> General Preferences</a>
+        <a class="btn btn-<?php if ($action == "entries") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries"><span class="fa fa-beer"></span> Entry Preferences</a>
+        <a class="btn btn-<?php if ($action == "email") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email"><span class="fa fa-envelope"></span> Email Sending Preferences</a>
+        <a class="btn btn-<?php if ($action == "payment") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment"><span class="fa fa-money"></span> Currency and Payment Preferences</a>
+        <a class="btn btn-<?php if ($action == "best") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best"><span class="fa fa-trophy"></span> Best Brewer and/or Club Preferences</a>
+        <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-gavel"></span> Judging/Competition Organization Preferences</a>
 </div>
 <?php } ?>
-<script type='text/javascript'>
+
+<?php 
+
+if ((($section == "admin") && ($go == "preferences") && ($action == "email")) || ($section == "step3")) { 
+
+$email_disabled_all_creds = 0;
+$email_previous_no_creds = 0;
+if ((!empty($row_prefs['prefsEmailHost'])) && (!empty($row_prefs['prefsEmailFrom'])) && (!empty($row_prefs['prefsEmailUsername'])) && (!empty($row_prefs['prefsEmailPassword'])) && (!empty($row_prefs['prefsEmailPort']))) $email_disabled_all_creds = 1;
+if ($row_prefs['prefsEmailSMTP'] == 3) $email_previous_no_creds = 1;
+?>
+<script type="text/javascript">
+var email_sending_enable = "<?php echo $row_prefs['prefsEmailSMTP']; ?>"; 
+var email_password_hash = "<?php if (!empty($row_prefs['prefsEmailPassword'])) echo $row_prefs['prefsEmailPassword']; ?>";
+var email_disabled_all_creds = "<?php echo $email_disabled_all_creds; ?>";
+var email_previous_no_creds = "<?php echo $email_previous_no_creds; ?>";
+
+$(document).ready(function(){
+
+    <?php if ($view == "test-email") { ?>
+    $.fancybox.open({
+        src  : '<?php echo $base_url; ?>/admin/send_test_email.admin.php',
+        type : 'iframe',
+        opts : {
+            iframe : {
+                css: {
+                    width : '90%',
+                    height: '90%'
+                }
+            }
+        }
+    });
+    <?php } ?>
+
+    if ((email_password_hash.length === 0) && (email_sending_enable == 0)) $("#change-email-password").show();
+    else $("#change-email-password").hide();
+
+    $("#send-test-email-show").hide();
+    $("#sending-email-options").hide();
+    $('#send-test-email-show-button').hide();
+    
+    if (email_sending_enable == 1) {
+        $("#sending-email-options").show();
+        if (email_disabled_all_creds == 1) {
+            $('#send-test-email-show-button').show();
+        }
+        else {
+           $('#send-test-email-show').show(); 
+        }
+        $("#setWebsitePrefs").prop("disabled", false);
+    }
+    else {
+        $("#setWebsitePrefs").prop("disabled", true);
+    }
+   
+    if ((email_previous_no_creds == 1) && (email_sending_enable == 0)) $("#setWebsitePrefs").prop("disabled", false);
+
+    $("input[name='prefsEmailSMTP']").click(function() {
+        if ($(this).val() == "1") {
+            $("#sending-email-options").show("fast");
+            $("#setWebsitePrefs").prop("disabled", false);
+            $("input[name='prefsEmailFrom']").prop("required", true);
+            $("input[name='prefsEmailHost']").prop("required", true);
+            $("input[name='prefsEmailUsername']").prop("required", true);
+            $("input[name='prefsEmailPassword']").prop("required", true);
+            $("input[name='prefsEmailPort']").prop("required", true);
+            if (email_disabled_all_creds == 1) {
+                $('#send-test-email-show-button').show("fast");
+            }
+        }
+        else {
+            $("#sending-email-options").hide("fast");
+            $("#setWebsitePrefs").prop("disabled", false);
+            $("input[name='prefsEmailFrom']").prop("required", false);
+            $("input[name='prefsEmailHost']").prop("required", false);
+            $("input[name='prefsEmailUsername']").prop("required", false);
+            $("input[name='prefsEmailEncrypt']").prop("required", false);
+            $("input[name='prefsEmailPort']").prop("required", false);
+        }
+    });
+
+    $("input[name='change-email-password-choice']").click(function() {
+        if ($(this).val() == "1") {
+            $("#change-email-password").show("fast");
+            $("input[name='prefsEmailPassword']").prop("required", true);
+            $("input[name='prefsEmailPassword']").val('');
+        }
+        else {
+            $("#change-email-password").hide("fast");
+            $("input[name='prefsEmailPassword']").prop("required", false);
+            $("input[name='prefsEmailPassword']").val(email_password_hash);
+        }
+    });
+
+    $('input[type="text"], input[type="number"], input[type="email"]').bind('keyup change',function(){
+
+        $('#send-test-email-show-button').hide("fast");
+
+        // get elements that are empty.
+        var empty = $('input[type="text"], input[type="number"], input[type="email"]').map(function(index, el) {
+            return !$(el).val().length ? el : null;
+        }).get();
+
+        var test_show = $('#send-test-email-show');
+
+        // check if there are any empty elements, if there are none, show numbers, else hide number.
+        !empty.length ? test_show.show("fast") : test_show.hide("fast");
+
+    });
+
+});
+
+</script>
+
+<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "default")) || ($section == "step3")) { ?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $("#reCAPTCHA-keys").hide();
+
+    $("#reCAPTCHA-keys").hide();
+    <?php if (($row_prefs['prefsCAPTCHA'] == "1") || ($section == "step3")) { ?>
+    $("#reCAPTCHA-keys").show();
+    <?php } ?>
+
+    $("input[name$='prefsCAPTCHA']").click(function() {
+        if ($(this).val() == "1") {
+            $("#reCAPTCHA-keys").show("fast");
+        }
+        else {
+            $("#reCAPTCHA-keys").hide("fast");
+        }
+    });
+    
+});
+</script>
+<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "entries")) || ($section == "step3")) { ?>
+<script type="text/javascript">
 
 var entries_present = "<?php if (isset($totalRows_log)) echo $totalRows_log; ?>";
 var current_style_set = "<?php if (isset($_SESSION['prefsStyleSet'])) echo $_SESSION['prefsStyleSet']; ?>";
 
 $(document).ready(function(){
-    
+
     $("#prefsHideSpecific").show();
-    $("#reCAPTCHA-keys").hide();
-    $("#helpBlock-payPalIPN1").hide();
-    $("#paypal-payment").hide();
-    $("#checks-payment").hide();
     $("#user-entry-limit-increment-2").hide();
     $("#user-entry-limit-increment-3").hide();
     $("#user-entry-limit-increment-4").hide();
-
+    
     <?php if (isset($incremental_limits[1]['limit-number'])) { ?>
     $("#user-entry-limit-increment-2").show();
     <?php } ?>
@@ -352,39 +501,38 @@ $(document).ready(function(){
         }
     });
 
-    <?php 
-    echo $all_hide_js; 
-    // echo $js_edit_show_hide_style_set_div;
-    ?>
+    <?php echo $all_hide_js; ?>
 
-    <?php if (($row_prefs['prefsCAPTCHA'] == "1") || ($section == "step3")) { ?>
-     $("#reCAPTCHA-keys").show();
-    <?php } ?>
+    $("#prefsStyleSet").change(function() {
 
-    $("input[name$='prefsCAPTCHA']").click(function() {
-        if ($(this).val() == "1") {
-            $("#reCAPTCHA-keys").show("fast");
+        if (entries_present > 0) {
+           if ((current_style_set == "BJCP2015") && ($("#prefsStyleSet").val() == "BJCP2021")) $('#style-set-change-bjcp-2021').modal('show');
+           else {
+                if (current_style_set != $("#prefsStyleSet").val()) $('#style-set-change').modal('show');
+           } 
         }
-        else {
-            $("#reCAPTCHA-keys").hide("fast");
-        }
-    });
 
-    <?php if ($row_prefs['prefsScoringCOA'] == "1") { ?>
-     $("#non-COA-scoring").hide();
-     $("#bos-in-calcs").hide();
-    <?php } ?>
+        if ($("#prefsStyleSet").val() == "") {
+            $("input[name='prefsUSCLEx[]']").prop("checked", false);
+        }
 
-    $("input[name$='prefsScoringCOA']").click(function() {
-        if ($(this).val() == "0") {
-            $("#non-COA-scoring").show("fast");
-            $("#bos-in-calcs").show("fast");
-        }
-        else {
-            $("#non-COA-scoring").hide("fast");
-            $("#bos-in-calcs").hide("fast");
-        }
-    });
+    <?php echo $all_exceptions_js; ?>
+
+    }); // end $("#prefsStyleSet").change(function()
+
+});
+
+</script>
+
+<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "payment")) || ($section == "step3")) { ?>
+
+<script type="text/javascript">
+    
+$(document).ready(function(){
+
+    $("#helpBlock-payPalIPN1").hide();
+    $("#paypal-payment").hide();
+    $("#checks-payment").hide();
 
     <?php if ($row_prefs['prefsPaypal'] == "Y") { ?>
         $("#paypal-payment").show("fast");
@@ -430,50 +578,31 @@ $(document).ready(function(){
             $("input[name='prefsCheckPayee']").prop("required", false);
         }
     });
+    
+});
 
-    $("#prefsStyleSet").change(function() {
+</script>
 
-        if (entries_present > 0) {
-           if ((current_style_set == "BJCP2015") && ($("#prefsStyleSet").val() == "BJCP2021")) $('#style-set-change-bjcp-2021').modal('show');
-           else {
-                if (current_style_set != $("#prefsStyleSet").val()) $('#style-set-change').modal('show');
-           } 
-        }
+<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "best")) || ($section == "step3")) { ?>
 
-        if ($("#prefsStyleSet").val() == "") {
-            $("input[name='prefsUSCLEx[]']").prop("checked", false);
-        }
-
-<?php echo $all_exceptions_js; ?>
-
-    }); // end $("#prefsStyleSet").change(function()
-
-    <?php if ($row_prefs['prefsProEdition'] == "1") { ?>
-    $("#bestClub").hide("fast");
-    <?php } ?>
-
-    $('input[type="radio"]').click(function() {
-
-        if($(this).attr('id') == 'prefsProEdition_0') {
-            $("#bestClub").show("fast");
-        }
-
-        if($(this).attr('id') == 'prefsProEdition_1') {
-            $("#bestClub").hide("fast");
-        }
-
-    });
+<script type="text/javascript">
+    
+$(document).ready(function(){
 
     <?php if (($section == "step3") || ($row_prefs['prefsShowBestBrewer'] == 0)) { ?>
-        $("input[name='prefsBestBrewerTitle']").prop("required", false);
+    $("input[name='prefsBestBrewerTitle']").prop("required", false);
     <?php } else { ?>
-        $("input[name='prefsBestBrewerTitle']").prop("required", true);
+    $("input[name='prefsBestBrewerTitle']").prop("required", true);
     <?php } ?>
 
     <?php if (($section == "step3") || ($row_prefs['prefsShowBestClub'] == 0)) { ?>
-        $("input[name='prefsBestClubTitle']").prop("required", false);
+    $("input[name='prefsBestClubTitle']").prop("required", false);
     <?php } else { ?>
-        $("input[name='prefsBestClubTitle']").prop("required", true);
+    $("input[name='prefsBestClubTitle']").prop("required", true);
+    <?php } ?>
+
+    <?php if ($row_prefs['prefsProEdition'] == "1") { ?>
+    $("#bestClub").hide("fast");
     <?php } ?>
 
     $("#prefsShowBestBrewer").change(function() {
@@ -494,10 +623,27 @@ $(document).ready(function(){
         }
     });
 
+    <?php if ($row_prefs['prefsScoringCOA'] == "1") { ?>
+     $("#non-COA-scoring").hide();
+     $("#bos-in-calcs").hide();
+    <?php } ?>
 
+    $("input[name$='prefsScoringCOA']").click(function() {
+        if ($(this).val() == "0") {
+            $("#non-COA-scoring").show("fast");
+            $("#bos-in-calcs").show("fast");
+        }
+        else {
+            $("#non-COA-scoring").hide("fast");
+            $("#bos-in-calcs").hide("fast");
+        }
+    });
+    
+});
 
-}); // end $(document).ready(function(){
 </script>
+<?php } ?>
+
 <?php if ($section != "step3") { ?>
 <div class="modal fade" id="style-set-change" tabindex="-1" role="dialog" aria-labelledby="style-set-change-label">
   <div class="modal-dialog" role="document">
@@ -516,7 +662,6 @@ $(document).ready(function(){
     </div>
   </div>
 </div>
-
 <div class="modal fade" id="style-set-change-bjcp-2021" tabindex="-1" role="dialog" aria-labelledby="style-set-change-bjcp-2021-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -537,9 +682,12 @@ $(document).ready(function(){
   </div>
 </div>
 <?php } ?>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
+<style>h4 { margin-top: 25px; }</style>
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;go=<?php echo $action; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
+
+<?php if ((($section == "admin") && ($go == "preferences") && ($action == "default")) || ($section == "step3")) { ?>
 <h3>General</h3>
 <div class="form-group">
     <label for="prefsProEdition" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Type</label>
@@ -555,256 +703,6 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
     </div>
 </div>
-<div class="form-group">
-    <label for="prefsDisplayWinners" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if (($section != "step3") && ($row_prefs['prefsDisplayWinners'] == "Y")) echo "CHECKED"; ?> /> Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if (($section != "step3") && ($row_prefs['prefsDisplayWinners'] == "N")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> Disable
-            </label>
-        </div>
-        <span id="helpBlock" class="help-block">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</span>
-    </div>
-</div>
-<div class="form-group">
-    <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Date/Time</label>
-    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-        
-            <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
-        <span id="helpBlock" class="help-block">Date and time when the system will display winners if Winner Display is enabled.</span>
-        <div class="help-block with-errors"></div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="prefsWinnerMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Place Distribution Method</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <?php foreach ($results_method as $key => $value) { ?>
-            <label class="radio-inline">
-                <input type="radio" name="prefsWinnerMethod" value="<?php echo $key; ?>" id="prefsWinnerMethod_<?php echo $key; ?>" <?php if (($section == "step3") && ($key == "0")) echo "CHECKED"; elseif ($row_prefs['prefsWinnerMethod'] == $key) echo "CHECKED"; ?>> <?php echo $value; ?>
-            </label>
-            <?php } ?>
-        </div>
-        <span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
-    </div>
-</div>
-<div class="form-group">
-    <label for="prefsEval" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Electronic Scoresheets</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsEval" value="1" id="prefsEval_1"  <?php if ($row_prefs['prefsEval'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsEval" value="0" id="prefsEval_0" <?php if ($row_prefs['prefsEval'] == "0") echo "CHECKED"; ?>/> Disable
-            </label>
-        </div>
-        <span id="helpBlock" class="help-block">
-        <div class="btn-group" role="group" aria-label="prefsEvalModal">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsEvalModal">
-                   Electronic Scoresheets Info
-                </button>
-            </div>
-        </div>
-        </span>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="prefsEvalModal" tabindex="-1" role="dialog" aria-labelledby="prefsEvalModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="prefsEvalModalLabel">Electronic Scoresheets Info</h4>
-            </div>
-            <div class="modal-body">
-                <p>Enable or disable the Electronic Scoresheets function. If enabled, Admins have the option to accept judges' entry evaluations via fully electronic, web-based scoresheets built to emulate BJCP official and quasi-official paper-based forms.</p>
-                <p>If enabling Electronic Scoresheets and associated functions, Admins should also make sure to set up their installation to take full advantage of them by following the steps outlined in the <a href="https://brewingcompetitions.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&amp;M Electronic Scoresheets</a> help article. Admins or competition officials should also direct all judges who will be using Electronic Scoresheets to review the <a href="https://brewingcompetitions.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&amp;M Electronic Scoresheets</a> primer.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div><!-- ./modal -->
-<div class="form-group">
-    <label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Unique Identifier</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsDisplaySpecial" value="J" id="prefsDisplaySpecial_0" <?php if (($section == "step3") || ($row_prefs['prefsDisplaySpecial'] == "J")) echo "CHECKED"; ?>> 6-Character Judging Number
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsDisplaySpecial" value="E" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "E") echo "CHECKED"; ?>> 6-Digit Entry Number
-            </label>
-        </div>
-        <div id="helpBlock" class="help-block">
-            <p>How entries are identified to judges when evaluating. If uploading scoresheet PDF files, the PDFs for each entry should be named according to the exact 6-character number for use by the system. <span class="text-primary"><strong>Using the random, system-generated judging numbers ensures unique file names for live and archived entry data.</strong></span></p>
-            <div class="btn-group" role="group" aria-label="ScoresheetsModal">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#scoresheetModal">
-                   Scoresheet Unique Identifier Info/Examples
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="scoresheetModal" tabindex="-1" role="dialog" aria-labelledby="scoresheetModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="scoresheetModalLabel">Scoresheet Upload File Name Info/Examples</h4>
-            </div>
-            <div class="modal-body">
-                <h4>Judging Numbers</h4>
-                <p>If using <strong>judging numbers</strong>, the file names would be:</p>
-                    <ul>
-                        <li>562113.pdf (system-generated random 6-digit number) - this is the best method to ensure a unique number is used for archived and live data</li>
-                        <li>000369.pdf (six-digit judging number corresponding to a scanned barcode label)</li>
-                        <li>08-024.pdf, 01a-19.pdf, etc. (customized six-character judging id, input manually)</li>
-                    </ul>
-                <p class="text-danger"><span class="fa fa-exclamation-circle"></span> <strong>Keep in mind</strong> that any judging number or judging id that you use as a judging number <strong>should be unique for both live and archive entry data</strong>. If unique combinations are not used, archived data will display the currently available file.</p>
-                <h4>Entry Numbers</h4>
-                <p>If using <strong>entry numbers</strong>, the numbers <strong>must use leading zeroes</strong> to form a six-digit number. For example, if the entry number is 0193, the scoresheet PDF file should be named 000193.pdf.</p>
-                <p class="text-danger"><span class="fa fa-exclamation-circle"></span> <strong>Caution:</strong> if using Entry Numbers, the numbers will not be unique if you reset, purge, or archive the current set of entries. When the current set of entries is purged or archived, entry numbers begin again at 0001.</p>
-                <p>Therefore, it is advised that you use entry numbers only if you plan on purging and/or overwriting the PDF scoresheet files on the server for each competition iteration.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div><!-- ./modal -->
-<div class="form-group">
-    <label for="prefsContact" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($row_prefs['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($row_prefs['prefsContact'] == "N") echo "CHECKED"; ?>/> Disable
-            </label>
-        </div>
-        <span id="helpBlock" class="help-block">
-        <div class="btn-group" role="group" aria-label="contactFormModal">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#contactFormModal">
-                   Contact Form Info
-                </button>
-            </div>
-            <?php if ($section != "step3") { ?>
-            <div class="btn-group" role="group">
-                <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
-            </div>
-            <?php } ?>
-        </div>
-        <?php if (ENABLE_MAILER) {?>
-        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
-        <?php } else { ?>
-        <?php if ($section != "step3") { ?>
-        <p>If you are not sure that your server supports sending email via PHP scripts, select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
-        <?php } ?>
-        <?php } ?>
-        </span>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
-            </div>
-            <div class="modal-body">
-                <p>Enable or disable your installation's contact form. This may be necessary if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option. <?php if ($section != "step3") { ?>Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.<?php } ?></p>
-                <p>If mail() is not an option, Admins have the option to enable phpMailer to send system-generated emails via SMTP. To enable phpMailer, change the MAILER definition in paths.php to TRUE and customize the variables in the /site/config.mail.php folder to your server environment.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div><!-- ./modal -->
-<?php if (HOSTED) { ?>
-<input type="hidden" name="prefsEmailCC" value="0">
-<?php } else { ?>
-<div class="form-group">
-    <label for="prefsEmailCC" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form CC</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsEmailCC" value="0" id="prefsEmailCC_0" <?php if ((empty($row_prefs['prefsEmailCC'])) || ($row_prefs['prefsEmailCC'] == "0")) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsEmailCC" value="1" id="prefsEmailCC_1"  <?php if ($row_prefs['prefsEmailCC'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
-            </label>
-        </div>
-        <span id="helpBlock" class="help-block">
-        <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email. Since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam emails unrelated to the competition.</p>
-        </span>
-    </div>
-</div>
-<?php } ?>
-<div class="form-group">
-    <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsEmailRegConfirm" value="1" id="prefsEmailRegConfirm_1"  <?php if ($row_prefs['prefsEmailRegConfirm'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
-          </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($row_prefs['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> Disable
-            </label>
-        </div>
-        <span id="helpBlock" class="help-block">
-        <div class="btn-group" role="group" aria-label="contactFormModal">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#regEmailFormModalLabel">
-                   Confirmation Emails Info
-                </button>
-            </div>
-            <?php if ($section != "step3") { ?>
-            <div class="btn-group" role="group">
-                <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
-            </div>
-            <?php }?>
-        </div>
-        <?php if (ENABLE_MAILER) {?>
-        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
-        <?php } else { ?>
-        <?php if ($section != "step3") { ?>
-        <p>If you are not sure that your server supports sending email via PHP scripts, select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
-        <?php } ?>
-        <?php } ?>
-        </span>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="regEmailFormModalLabel" tabindex="-1" role="dialog" aria-labelledby="regEmailFormModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="regEmailFormModalLabel">Confirmation Emails</h4>
-            </div>
-            <div class="modal-body">
-                <p>Do you want a system-generated confirmation email sent to all users upon registering their account information?</p>
-                <p>Please note that these system-generated emails may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. <?php if ($section != "step3") { ?>Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.<?php } ?></p>
-                <p>If mail() is not an option, Admins have the option to enable phpMailer to send system-generated emails via SMTP. To enable phpMailer, change the MAILER definition in paths.php to TRUE and customize the variables in the /site/config.mail.php folder to your server environment.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div><!-- ./modal -->
 <div class="form-group">
     <label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Theme</label>
     <div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
@@ -859,7 +757,7 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
 <div class="form-group">
     <label for="prefsUseMods" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Custom Modules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -874,6 +772,71 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</span>
     </div>
 </div>
+<h4>Results</h4>
+<div class="form-group">
+    <label for="prefsDisplayWinners" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Results Display</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if (($section != "step3") && ($row_prefs['prefsDisplayWinners'] == "Y")) echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if (($section != "step3") && ($row_prefs['prefsDisplayWinners'] == "N")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Indicate if the results of the competition for each category and Best of Show Style Type will be displayed.</span>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Results Display Date/Time</label>
+    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
+            <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
+        <span id="helpBlock" class="help-block">Date and time when the system will display winners if Results Display is enabled.</span>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsWinnerMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Place Distribution Method</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <?php foreach ($results_method as $key => $value) { ?>
+            <label class="radio-inline">
+                <input type="radio" name="prefsWinnerMethod" value="<?php echo $key; ?>" id="prefsWinnerMethod_<?php echo $key; ?>" <?php if (($section == "step3") && ($key == "0")) echo "CHECKED"; elseif ($row_prefs['prefsWinnerMethod'] == $key) echo "CHECKED"; ?>> <?php echo $value; ?>
+            </label>
+            <?php } ?>
+        </div>
+        <span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="scoresheetModal" tabindex="-1" role="dialog" aria-labelledby="scoresheetModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="scoresheetModalLabel">Scoresheet Upload File Name Info/Examples</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Judging Numbers</h4>
+                <p>If using <strong>judging numbers</strong>, the file names would be:</p>
+                    <ul>
+                        <li>562113.pdf (system-generated random 6-digit number) - this is the best method to ensure a unique number is used for archived and live data</li>
+                        <li>000369.pdf (six-digit judging number corresponding to a scanned barcode label)</li>
+                        <li>08-024.pdf, 01a-19.pdf, etc. (customized six-character judging id, input manually)</li>
+                    </ul>
+                <p class="text-danger"><span class="fa fa-exclamation-circle"></span> <strong>Keep in mind</strong> that any judging number or judging id that you use as a judging number <strong>should be unique for both live and archive entry data</strong>. If unique combinations are not used, archived data will display the currently available file.</p>
+                <h4>Entry Numbers</h4>
+                <p>If using <strong>entry numbers</strong>, the numbers <strong>must use leading zeroes</strong> to form a six-digit number. For example, if the entry number is 0193, the scoresheet PDF file should be named 000193.pdf.</p>
+                <p class="text-danger"><span class="fa fa-exclamation-circle"></span> <strong>Caution:</strong> if using Entry Numbers, the numbers will not be unique if you reset, purge, or archive the current set of entries. When the current set of entries is purged or archived, entry numbers begin again at 0001.</p>
+                <p>Therefore, it is advised that you use entry numbers only if you plan on purging and/or overwriting the PDF scoresheet files on the server for each competition iteration.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<h4>reCAPTCHA</h4>
 <div class="form-group">
     <label for="prefsCAPTCHA" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Enable reCAPTCHA</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -900,7 +863,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" id="prefsGoogleAccount1" name="prefsGoogleAccount1" type="text" value="<?php if (isset($recaptcha_key[1])) echo $recaptcha_key[1]; ?>" placeholder="**OPTIONAL** reCAPTCHA Secret Key (Private)">
             <span id="helpBlock" class="help-block">
-            <div class="help-block"><strong>Specifying reCAPTCHA keys is OPTIONAL.</strong> However, if your installation is experiencing issues processing and/or displaying the reCAPTCHA challenge on the contact and registration pages, you can override the default BCOE&amp;M keys with your own. To get reCAPTCHA API keys, you will need a Google account. You can obtain keys on Google's <a class="hide-loader" href="https://www.google.com/recaptcha/admin" target="_blank">reCAPTCHA dashboard</a>. Follow all instructions there or unexpected functionality will occur.</div>
+            <div class="help-block"><strong>To get reCAPTCHA API keys, you will need a Google account.</strong> You can obtain keys on Google's <a class="hide-loader" href="https://www.google.com/recaptcha/admin" target="_blank">reCAPTCHA dashboard</a>. Follow all instructions there or unexpected functionality will occur.</div>
             </span>
         </div>
     </div>
@@ -909,6 +872,171 @@ $(document).ready(function(){
 <input type="hidden" name="prefsSEF" value="N" />
 <input type="hidden" name="prefsUseMods" value="N" />
 <?php } ?>
+<h4>Performance and Data Clean-Up</h4>
+<div class="form-group">
+    <label for="prefsRecordPaging" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Records Displayed</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+            <input class="form-control" id="prefsRecordPaging" name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $row_prefs['prefsRecordPaging']; ?>" placeholder="12" required>
+        <span id="helpBlock" class="help-block">The number of records displayed per page when viewing lists.</span>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsAutoPurge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Automatically Purge Unconfirmed Entries and Perform Data Clean Up</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($row_prefs['prefsAutoPurge'] == "1") echo "CHECKED";  ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($row_prefs['prefsAutoPurge'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">
+            <div class="btn-group" role="group" aria-label="purgeModal">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#purgeModal">
+                   Automatically Purge Info
+                </button>
+            </div>
+            </div>
+        </span>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="purgeModal" tabindex="-1" role="dialog" aria-labelledby="purgeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="purgeModalLabel">Automatically Purge Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry as well as any data clean-up functions. If disabled, Admins will have the option to manually purge the entries.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Localization</h4>
+<div class="form-group">
+    <label for="prefsLanguage" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Language</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+        <select class="selectpicker" name="prefsLanguage" id="prefsLanguage" data-live-search="false" data-size="10" data-width="auto">
+            <?php foreach ($languages as $lang => $lang_name) { ?>
+            <option value="<?php echo $lang; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang) echo "SELECTED"; if (($section == "step3") && ($lang == "en-US")) echo "SELECTED"; ?>><?php echo $lang_name; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">The language to display on all <em>public</em> areas of your installation (e.g., entry information, volunteers, account pages, etc.).</span>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsDateFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date Format</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsDateFormat" value="1" id="prefsDateFormat_0"  <?php if ($row_prefs['prefsDateFormat'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> MM/DD/YYYY
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsDateFormat" value="2" id="prefsDateFormat_1" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "CHECKED"; ?> /> DD/MM/YYYY
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsDateFormat" value="3" id="prefsDateFormat_2" <?php if ($row_prefs['prefsDateFormat'] == "3") echo "CHECKED"; ?> /> YYYY/MM/DD
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsTimeFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time Format</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsTimeFormat" value="0" id="prefsTimeFormat_0"  <?php if ($row_prefs['prefsTimeFormat'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> 12 Hour
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsTimeFormat" value="1" id="prefsTimeFormat_1" <?php if ($row_prefs['prefsTimeFormat'] == "1") echo "CHECKED"; ?> /> 24 Hour
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsTimeZone" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time Zone</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <select class="selectpicker" name="prefsTimeZone" id="prefsTimeZone" data-live-search="true" data-size="10" data-width="auto">
+            <option value="-12.000" <?php if ($row_prefs['prefsTimeZone'] == "-12.000") echo "SELECTED"; ?>>(GMT -12:00) International Date Line West, Eniwetok, Kwajalein, Baker Island, Howland Island</option>
+            <option value="-11.000" <?php if ($row_prefs['prefsTimeZone'] == "-11.000") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa, Pago Pago</option>
+            <option value="-10.000" <?php if ($row_prefs['prefsTimeZone'] == "-10.000") echo "SELECTED"; ?>>(GMT -10:00) Hawaii</option>
+            <option value="-9.000" <?php if ($row_prefs['prefsTimeZone'] == "-9.000") echo "SELECTED"; ?>>(GMT -9:00) Alaska</option>
+            <option value="-9.500" <?php if ($row_prefs['prefsTimeZone'] == "-9.000") echo "SELECTED"; ?>>(GMT -9:30) Marquesas</option>
+            <option value="-8.000" <?php if ($row_prefs['prefsTimeZone'] == "-8.000") echo "SELECTED"; ?>>(GMT -8:00) Pacific Time (US &amp; Canada), Tiajuana</option>
+            <option value="-7.000" <?php if ($row_prefs['prefsTimeZone'] == "-7.000") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+            <option value="-7.001" <?php if ($row_prefs['prefsTimeZone'] == "-7.001") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time - Arizona (No Daylight Savings)</option>
+            <option value="-6.000" <?php if ($row_prefs['prefsTimeZone'] == "-6.000") echo "SELECTED"; ?>>(GMT -6:00) Central Time (US &amp; Canada), Central America</option>
+            <option value="-6.001" <?php if ($row_prefs['prefsTimeZone'] == "-6.001") echo "SELECTED"; ?>>(GMT -6:00) Sonora, Mexico (No Daylight Savings)</option>
+            <option value="-6.002" <?php if ($row_prefs['prefsTimeZone'] == "-6.002") echo "SELECTED"; ?>>(GMT -6:00) Canada Central Time (No Daylight Savings)</option>
+            <option value="-5.000" <?php if ($row_prefs['prefsTimeZone'] == "-5.000") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+            <option value="-4.000" <?php if ($row_prefs['prefsTimeZone'] == "-4.000") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz, Santiago, Thule</option>
+            <option value="-4.001" <?php if ($row_prefs['prefsTimeZone'] == "-4.001") echo "SELECTED"; ?>>(GMT -4:00) Paraguay (No Daylight Savings)</option>
+            <option value="-3.500" <?php if ($row_prefs['prefsTimeZone'] == "-3.500") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
+            <option value="-3.000" <?php if ($row_prefs['prefsTimeZone'] == "-3.000") echo "SELECTED"; ?>>(GMT -3:00) Buenos Aires, Georgetown, Greenland</option>
+            <option value="-3.001" <?php if ($row_prefs['prefsTimeZone'] == "-3.001") echo "SELECTED"; ?>>(GMT -3:00) Brazil (Brasilia - No Daylight Savings)</option>
+            <option value="-2.000" <?php if ($row_prefs['prefsTimeZone'] == "-2.000") echo "SELECTED"; ?>>(GMT -2:00) Mid-Atlantic</option>
+            <option value="-1.000" <?php if ($row_prefs['prefsTimeZone'] == "-1.000") echo "SELECTED"; ?>>(GMT -1:00 hour) Azores, Cape Verde Islands, Ittoqqortoormiit</option>
+            <option value="0.000" <?php if ($row_prefs['prefsTimeZone'] == "0.000") echo "SELECTED"; ?>>(GMT) Western Europe Time, London, Lisbon, Casablanca, Monrovia</option>
+            <option value="1.000" <?php if ($row_prefs['prefsTimeZone'] == "1.000") echo "SELECTED"; ?>>(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris, Lagos</option>
+            <option value="2.000" <?php if ($row_prefs['prefsTimeZone'] == "2.000") echo "SELECTED"; ?>>(GMT +2:00) Kaliningrad, Johannesburg, Cairo Helsinki</option>
+            <option value="3.000" <?php if ($row_prefs['prefsTimeZone'] == "3.000") echo "SELECTED"; ?>>(GMT +3:00) Istanbul, Baghdad, Riyadh, Moscow, St. Petersburg, Nairobi</option>
+            <option value="3.500" <?php if ($row_prefs['prefsTimeZone'] == "3.500") echo "SELECTED"; ?>>(GMT +3:30) Tehran</option>
+            <option value="4.000" <?php if ($row_prefs['prefsTimeZone'] == "4.000") echo "SELECTED"; ?>>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+            <option value="4.500" <?php if ($row_prefs['prefsTimeZone'] == "4.500") echo "SELECTED"; ?>>(GMT +4:30) Kabul</option>
+            <option value="5.000" <?php if ($row_prefs['prefsTimeZone'] == "5.000") echo "SELECTED"; ?>>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+            <option value="5.500" <?php if ($row_prefs['prefsTimeZone'] == "5.500") echo "SELECTED"; ?>>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+            <option value="5.750" <?php if ($row_prefs['prefsTimeZone'] == "5.750") echo "SELECTED"; ?>>(GMT +5:45) Kathmandu</option>
+            <option value="6.000" <?php if ($row_prefs['prefsTimeZone'] == "6.000") echo "SELECTED"; ?>>(GMT +6:00) Almaty, Dhaka, Colombo, Krasnoyarsk</option>
+            <option value="7.000" <?php if ($row_prefs['prefsTimeZone'] == "7.000") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
+            <option value="8.000" <?php if ($row_prefs['prefsTimeZone'] == "8.000") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Singapore, Hong Kong</option>
+            <option value="8.001" <?php if ($row_prefs['prefsTimeZone'] == "8.001") echo "SELECTED"; ?>>(GMT +8:00) Perth, Western Australia (No Daylight Savings)</option>
+            <option value="9.000" <?php if ($row_prefs['prefsTimeZone'] == "9.000") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+            <option value="9.500" <?php if ($row_prefs['prefsTimeZone'] == "9.500") echo "SELECTED"; ?>>(GMT +9:30) Adelaide, Darwin, the Northern Territory</option>
+            <option value="10.000" <?php if ($row_prefs['prefsTimeZone'] == "10.000") echo "SELECTED"; ?>>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+            <option value="10.001" <?php if ($row_prefs['prefsTimeZone'] == "10.001") echo "SELECTED"; ?>>(GMT +10:00) Brisbane, Queensland (No Daylight Savings)</option>
+            <option value="11.000" <?php if ($row_prefs['prefsTimeZone'] == "11.000") echo "SELECTED"; ?>>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+            <option value="12.000" <?php if ($row_prefs['prefsTimeZone'] == "12.000") echo "SELECTED"; ?>>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+        </select>
+    </div>
+</div>
+<h4>Sponsors Display</h4>
+<div class="form-group">
+    <label for="prefsSponsors" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sponsor Display</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsSponsors" value="Y" id="prefs0" <?php if (($section != "step3") && ($row_prefs['prefsSponsors'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if (($section != "step3") && ($row_prefs['prefsSponsors'] == "N")) echo "CHECKED"; ?> /> Disable
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsSponsorLogos" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sponsor Logo Display</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if (($section != "step3") && ($row_prefs['prefsSponsorLogos'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if (($section != "step3") && ($row_prefs['prefsSponsorLogos'] == "N")) echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+    </div>
+</div>
+<h4>Drop-Off and Shipping Display</h4>
 <div class="form-group">
     <label for="prefsDropOff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop-off Location Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -923,7 +1051,6 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block">Disable if your competition does not have drop-off locations.</span>
     </div>
 </div>
-
 <div class="form-group">
     <label for="prefsShipping" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Shipping Location Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -938,6 +1065,240 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block">Disable if your competition does not have an entry shipping location.</span>
     </div>
 </div>
+<?php } //end if ($action == "default") ?>
+
+
+<?php if ((($section == "admin") && ($go == "preferences") && ($action == "email")) || ($section == "step3")) { ?>
+<h3>Email Sending</h3>
+<div class="form-group">
+    <label for="prefsEmailSMTP" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Allow BCOE&amp;M to Send Emails</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsEmailSMTP" value="1" id="prefsEmailSMTP_1"  <?php if (($section != "step3") && ($row_prefs['prefsEmailSMTP'] == 1)) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsEmailSMTP" value="0" id="prefsEmailSMTP_0" <?php if (($section != "step3") && ($row_prefs['prefsEmailSMTP'] == 0)) echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <?php if ($row_prefs['prefsEmailSMTP'] == 3) { ?>
+        <div class="text-danger help-block"><p><strong>As of version 3.0.0, a valid email address and SMTP credentials are required to send emails via the BCOE&amp;M application.</strong> To keep the email sending functionality employed in previous versions, select Enable above, provide the required information in the appropriate fields, and select Set Preferences. If you do not wish to send emails via the application, select Disable and then Set Preferences.</p></div>
+        <?php } ?>
+        <div id="helpBlock" class="help-block">
+            <p><strong>If enabled, you will need to provide a valid email address and associated information to send emails via the Simple Mail Transfer Protocol (SMTP).</strong></p>
+            <p>See your webhost's or email service's documentation for the necessary settings to set up sending emails using SMTP. If you would like to use a Gmail email address, you'll need to set up Gmail SMTP. <a href="https://mailtrap.io/blog/gmail-smtp/#Step-1-Enabling-SMTP-in-Gmail-settings" target="_blank">This guide</a> will help you get the necessary settings.</p>
+        </div>
+    </div>
+</div>
+
+<section id="sending-email-options">
+    <section id="send-test-email-show-button" class="row">
+        <label for="prefsEmailSMTP-port" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Settings Test</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12"> 
+            <div class="input-group">
+                <a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader btn btn-primary" href="<?php echo $base_url; ?>/admin/send_test_email.admin.php">Test Current Email Sending Settings</a>  
+            </div>
+            <div id="helpBlock" class="help-block">
+                <p>Send a test email to <?php echo $_SESSION['user_name']; ?> using the current settings as reflected in the database:</p>
+                <ul class="small">
+                    <li><strong>Originating Email:</strong> <?php echo $row_prefs['prefsEmailFrom']; ?></li>
+                    <li><strong>Username:</strong> <?php echo $row_prefs['prefsEmailUsername']; ?></li>
+                    <li><strong>Password:</strong> <em>*not displayed for security reasons*</em></li>
+                    <li><strong>Host:</strong> <?php echo $row_prefs['prefsEmailHost']; ?></li>
+                    <li><strong>Encryption:</strong> <?php echo $row_prefs['prefsEmailEncrypt']; ?></li>
+                    <li><strong>Port:</strong> <?php echo $row_prefs['prefsEmailPort']; ?></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <div class="form-group">
+        <label for="prefsEmailFrom" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Originating Email Address</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+                <input class="form-control" id="prefsEmailFrom" name="prefsEmailFrom" type="email" value="<?php if ($section == "step3") echo "";  if (($section != "step3") && (!empty($row_prefs['prefsEmailFrom']))) echo $row_prefs['prefsEmailFrom'];  ?>" data-error="An email address is required." placeholder="name@yourdomain.com" onChange="AjaxFunction(this.value);">
+            <div class="help-block with-errors"></div>
+            <div id="helpBlock" class="help-block">Enter the properly set up, functioning, and accessible email address. Participants will reply to this email if needed.</div>
+            <div id="msg_email" class="help-block"></div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="prefsEmailUsername" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Username</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+                <input class="form-control" id="prefsEmailUsername" name="prefsEmailUsername" type="text" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailUsername']))) echo $row_prefs['prefsEmailUsername']; ?>" data-error="The email address username is required. Typically, it's the email address itself." placeholder="name@yourdomain.com">
+            <div class="help-block with-errors"></div>
+            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation - typically, it's the email address itself, but methods may vary.</div>
+        </div>
+    </div>
+    <?php if (empty($row_prefs['prefsEmailPassword'])) { ?>
+        <input type="hidden" name="change-email-password-choice" value="1">
+    <?php } else { ?>
+    <div class="form-group">
+        <label for="change-email-password-choice" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (!empty($row_prefs['prefsEmailPassword'])) echo "Update "; ?>Password</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="input-group">            
+                <label class="radio-inline">
+                    <input type="radio" name="change-email-password-choice" value="1" id="change-email-password-choice_1" /> Yes
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="change-email-password-choice" value="0" id="change-email-password-choice_0" checked/> No
+                </label>
+            </div>
+            <div id="helpBlock" class="help-block">
+                <p>Do you need to update the password provided previously (i.e., has it changed on your email account)?</p>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    <div class="form-group" id="change-email-password">
+        <label for="prefsEmailPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Password</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+                <input class="form-control" id="prefsEmailPassword" name="prefsEmailPassword" type="password" value="" data-error="The password is required." placeholder="">
+            <div class="help-block with-errors"></div>
+            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation. This password will be stored encrypted.</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="prefsEmailHost" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Host</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
+                <input class="form-control" id="prefsEmailHost" name="prefsEmailHost" type="text" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailHost']))) echo $row_prefs['prefsEmailHost']; ?>" data-error="The SMTP email host name is required." placeholder="mail.yourdomain.com">
+            <div class="help-block with-errors"></div>
+            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation - e.g., mail.yourdomain.com.</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="prefsEmailEncrypt" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Encryption</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="input-group">            
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailEncrypt" value="" id="prefsEmailEncrypt_none"  <?php if (($section != "step3") && (empty($row_prefs['prefsEmailEncrypt']))) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> None
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailEncrypt" value="ssl" id="prefsEmailEncrypt_ssl" <?php if (($section != "step3") && (!empty($row_prefs['prefsEmailEncrypt'])) && ($row_prefs['prefsEmailEncrypt'] == "ssl")) echo "CHECKED"; ?>/> SSL
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailEncrypt" value="tls" id="prefsEmailEncrypt_tls" <?php if (($section != "step3") && (!empty($row_prefs['prefsEmailEncrypt'])) && ($row_prefs['prefsEmailEncrypt'] == "tls")) echo "CHECKED"; ?>/> TLS
+                </label>
+            </div>
+            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation.</p>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="prefsEmailPort" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Port</label>
+        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">        
+                <input class="form-control" id="prefsEmailPort" name="prefsEmailPort" type="number" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailPort']))) echo $row_prefs['prefsEmailPort']; ?>" data-error="The port required. Ports will vary depending upon the encryption protocol." placeholder="">
+            <div class="help-block with-errors"></div>
+            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation. Port numbers will vary depending upon the encryption protocol, but are likely to be 25, 465, or 587.</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="prefsContact" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="input-group">            
+                <label class="radio-inline">
+                    <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($row_prefs['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($row_prefs['prefsContact'] == "N") echo "CHECKED"; ?>/> Disable
+                </label>
+            </div>
+            <span id="helpBlock" class="help-block">
+            <div class="btn-group" role="group" aria-label="contactFormModal">    
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#contactFormModal">Contact Form Info</button>
+            </div>
+            </span>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bcoem-admin-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Enable or disable your installation's contact form. When users fill out the form, an email is generated from the Originating Email Address as input above to a competition official. If disabled, contact email addresses will be </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php if (HOSTED) { ?>
+    <input type="hidden" name="prefsEmailCC" value="0">
+    <?php } else { ?>
+    <div class="form-group">
+        <label for="prefsEmailCC" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form CC</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="input-group">            
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailCC" value="1" id="prefsEmailCC_1" <?php if ($row_prefs['prefsEmailCC'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Enable
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailCC" value="0" id="prefsEmailCC_0"  <?php if ((empty($row_prefs['prefsEmailCC'])) || ($row_prefs['prefsEmailCC'] == "0")) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
+                </label>
+            </div>
+            <span id="helpBlock" class="help-block">
+            <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email.</p>
+            <p><strong>Disabling this function is STRONGLY recommended</strong> &ndash; since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam email addresses unrelated to the competition.</p>
+            </span>
+        </div>
+    </div>
+    <?php } ?>
+    <div class="form-group">
+        <label for="prefsEmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="input-group">            
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailRegConfirm" value="1" id="prefsEmailRegConfirm_1"  <?php if ($row_prefs['prefsEmailRegConfirm'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+              </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($row_prefs['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> Disable
+                </label>
+            </div>
+            <span id="helpBlock" class="help-block">
+            <div class="btn-group" role="group" aria-label="contactFormModal">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#regEmailFormModalLabel">Confirmation Emails Info</button>
+            </div>
+            </span>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="regEmailFormModalLabel" tabindex="-1" role="dialog" aria-labelledby="regEmailFormModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bcoem-admin-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="regEmailFormModalLabel">Confirmation Emails</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Do you want a system-generated confirmation email sent to all users upon registering their account information?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id="send-test-email-show" class="row">
+        <label for="prefsEmailSMTP-port" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Settings Test</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12"> 
+            <div class="input-group">            
+                <label class="radio-inline">
+                    <input type="radio" name="send-test-email" value="1" id="send-test-email_1" /> Yes
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="send-test-email" value="0" id="send-test-email_0" checked/> No
+                </label>
+            </div>
+            <div id="helpBlock" class="help-block">After setting preferences, send a test email to <?php echo $_SESSION['user_name']; ?> using the settings input above.</div>
+        </div>
+    </section>
+</section>
+<?php } // end if ($action == "email") { ?>
+
+<?php if ((($section == "admin") && ($go == "preferences") && ($action == "best")) || ($section == "step3")) { ?>
 <h3>Best Brewer and/or Club</h3>
 <!-- BEST BREWER / BEST CLUB --->
 <div class="form-group">
@@ -1034,7 +1395,7 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
 
 <section id="non-COA-scoring">
     <div class="form-group">
@@ -1109,6 +1470,9 @@ $(document).ready(function(){
 </div>
 <?php } ?>
 
+<?php } // end if ($action == "best") ?>
+
+<?php if ((($section == "admin") && ($go == "preferences") && ($action == "entries")) || ($section == "step3")) { ?>
 <h3>Entries</h3>
 <div class="form-group">
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Set</label>
@@ -1116,8 +1480,8 @@ $(document).ready(function(){
         <select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="12" data-width="auto">
         <?php echo $style_set_dropdown; ?>
         </select>
-        <div id="helpBlock2-BA" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available in this application.</div>
-        <div id="helpBlock3-AABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="http://www.aabc.org.au/" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
+        <div id="helpBlock3-BA" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available in this application.</div>
+        <div id="helpBlock4-AABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="http://www.aabc.org.au/" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
     </div>
 </div>
 <div class="form-group">
@@ -1167,7 +1531,8 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
+
 <div id="prefsHideSpecific" class="form-group">
     <label for="prefsHideSpecific" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1207,7 +1572,7 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
 <div class="form-group">
     <label for="prefsSpecialCharLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Character Limit for Text Entry</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">    
@@ -1245,7 +1610,7 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
 <div class="form-group">
     <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit &ndash; Paid/Unpaid</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
@@ -1294,7 +1659,7 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
 <?php
 $st_arr = array();
 if (strpos($section, "step") === FALSE) {
@@ -1410,7 +1775,6 @@ if (strpos($section, "step") === FALSE) {
     </div>
     <?php echo $all_exceptions; ?>
 </div>
-
 <!-- Modal -->
 <div class="modal fade" id="exceptdSubstylesModal" tabindex="-1" role="dialog" aria-labelledby="exceptdSubstylesModalLabel">
     <div class="modal-dialog" role="document">
@@ -1427,222 +1791,15 @@ if (strpos($section, "step") === FALSE) {
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
 <?php } else { ?>
 <input type="hidden" name="prefsUserSubCatLimit" value="">
 <input type="hidden" name="prefsUSCLExLimit" value="">
 <?php } ?>
-<h3>Performance and Data Clean-Up</h3>
-<div class="form-group">
-    <label for="prefsRecordPaging" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Records Displayed</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
-            <input class="form-control" id="prefsRecordPaging" name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $row_prefs['prefsRecordPaging']; ?>" placeholder="12" required>
-        <span id="helpBlock" class="help-block">The number of records displayed per page when viewing lists.</span>
-        <div class="help-block with-errors"></div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="prefsAutoPurge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Automatically Purge Unconfirmed Entries and Perform Data Clean Up</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($row_prefs['prefsAutoPurge'] == "1") echo "CHECKED";  ?> /> Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($row_prefs['prefsAutoPurge'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
-            </label>
-        </div>
-        <span id="helpBlock" class="help-block">
-            <div class="btn-group" role="group" aria-label="purgeModal">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#purgeModal">
-                   Automatically Purge Info
-                </button>
-            </div>
-            </div>
-        </span>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="purgeModal" tabindex="-1" role="dialog" aria-labelledby="purgeModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="purgeModalLabel">Automatically Purge Info</h4>
-            </div>
-            <div class="modal-body">
-                <p>Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry as well as any data clean-up functions. If disabled, Admins will have the option to manually purge the entries.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div><!-- ./modal -->
-<h3>Localization</h3>
-<div class="form-group">
-    <label for="prefsLanguage" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Language</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
-        <select class="selectpicker" name="prefsLanguage" id="prefsLanguage" data-live-search="false" data-size="10" data-width="auto">
-            <?php foreach ($languages as $lang => $lang_name) { ?>
-            <option value="<?php echo $lang; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang) echo "SELECTED"; if (($section == "step3") && ($lang == "en-US")) echo "SELECTED"; ?>><?php echo $lang_name; ?></option>
-            <?php } ?>
-        </select>
-        <span id="helpBlock" class="help-block">The language to display on all <em>public</em> areas of your installation (e.g., entry information, volunteers, account pages, etc.).</span>
-        <div class="help-block with-errors"></div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="prefsDateFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date Format</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsDateFormat" value="1" id="prefsDateFormat_0"  <?php if ($row_prefs['prefsDateFormat'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> MM/DD/YYYY
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsDateFormat" value="2" id="prefsDateFormat_1" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "CHECKED"; ?> /> DD/MM/YYYY
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsDateFormat" value="3" id="prefsDateFormat_2" <?php if ($row_prefs['prefsDateFormat'] == "3") echo "CHECKED"; ?> /> YYYY/MM/DD
-            </label>
-        </div>
-    </div>
-</div>
 
-<div class="form-group">
-    <label for="prefsTimeFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time Format</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsTimeFormat" value="0" id="prefsTimeFormat_0"  <?php if ($row_prefs['prefsTimeFormat'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> 12 Hour
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsTimeFormat" value="1" id="prefsTimeFormat_1" <?php if ($row_prefs['prefsTimeFormat'] == "1") echo "CHECKED"; ?> /> 24 Hour
-            </label>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="prefsTimeZone" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time Zone</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <select class="selectpicker" name="prefsTimeZone" id="prefsTimeZone" data-live-search="true" data-size="10" data-width="auto">
-            <option value="-12.000" <?php if ($row_prefs['prefsTimeZone'] == "-12.000") echo "SELECTED"; ?>>(GMT -12:00) International Date Line West, Eniwetok, Kwajalein, Baker Island, Howland Island</option>
-            <option value="-11.000" <?php if ($row_prefs['prefsTimeZone'] == "-11.000") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa, Pago Pago</option>
-            <option value="-10.000" <?php if ($row_prefs['prefsTimeZone'] == "-10.000") echo "SELECTED"; ?>>(GMT -10:00) Hawaii</option>
-            <option value="-9.000" <?php if ($row_prefs['prefsTimeZone'] == "-9.000") echo "SELECTED"; ?>>(GMT -9:00) Alaska</option>
-            <option value="-9.500" <?php if ($row_prefs['prefsTimeZone'] == "-9.000") echo "SELECTED"; ?>>(GMT -9:30) Marquesas</option>
-            <option value="-8.000" <?php if ($row_prefs['prefsTimeZone'] == "-8.000") echo "SELECTED"; ?>>(GMT -8:00) Pacific Time (US &amp; Canada), Tiajuana</option>
-            <option value="-7.000" <?php if ($row_prefs['prefsTimeZone'] == "-7.000") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
-            <option value="-7.001" <?php if ($row_prefs['prefsTimeZone'] == "-7.001") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time - Arizona (No Daylight Savings)</option>
-            <option value="-6.000" <?php if ($row_prefs['prefsTimeZone'] == "-6.000") echo "SELECTED"; ?>>(GMT -6:00) Central Time (US &amp; Canada), Central America</option>
-            <option value="-6.001" <?php if ($row_prefs['prefsTimeZone'] == "-6.001") echo "SELECTED"; ?>>(GMT -6:00) Sonora, Mexico (No Daylight Savings)</option>
-            <option value="-6.002" <?php if ($row_prefs['prefsTimeZone'] == "-6.002") echo "SELECTED"; ?>>(GMT -6:00) Canada Central Time (No Daylight Savings)</option>
-            <option value="-5.000" <?php if ($row_prefs['prefsTimeZone'] == "-5.000") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-            <option value="-4.000" <?php if ($row_prefs['prefsTimeZone'] == "-4.000") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz, Santiago, Thule</option>
-            <option value="-4.001" <?php if ($row_prefs['prefsTimeZone'] == "-4.001") echo "SELECTED"; ?>>(GMT -4:00) Paraguay (No Daylight Savings)</option>
-            <option value="-3.500" <?php if ($row_prefs['prefsTimeZone'] == "-3.500") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
-            <option value="-3.000" <?php if ($row_prefs['prefsTimeZone'] == "-3.000") echo "SELECTED"; ?>>(GMT -3:00) Buenos Aires, Georgetown, Greenland</option>
-            <option value="-3.001" <?php if ($row_prefs['prefsTimeZone'] == "-3.001") echo "SELECTED"; ?>>(GMT -3:00) Brazil (Brasilia - No Daylight Savings)</option>
-            <option value="-2.000" <?php if ($row_prefs['prefsTimeZone'] == "-2.000") echo "SELECTED"; ?>>(GMT -2:00) Mid-Atlantic</option>
-            <option value="-1.000" <?php if ($row_prefs['prefsTimeZone'] == "-1.000") echo "SELECTED"; ?>>(GMT -1:00 hour) Azores, Cape Verde Islands, Ittoqqortoormiit</option>
-            <option value="0.000" <?php if ($row_prefs['prefsTimeZone'] == "0.000") echo "SELECTED"; ?>>(GMT) Western Europe Time, London, Lisbon, Casablanca, Monrovia</option>
-            <option value="1.000" <?php if ($row_prefs['prefsTimeZone'] == "1.000") echo "SELECTED"; ?>>(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris, Lagos</option>
-            <option value="2.000" <?php if ($row_prefs['prefsTimeZone'] == "2.000") echo "SELECTED"; ?>>(GMT +2:00) Kaliningrad, Johannesburg, Cairo Helsinki</option>
-            <option value="3.000" <?php if ($row_prefs['prefsTimeZone'] == "3.000") echo "SELECTED"; ?>>(GMT +3:00) Istanbul, Baghdad, Riyadh, Moscow, St. Petersburg, Nairobi</option>
-            <option value="3.500" <?php if ($row_prefs['prefsTimeZone'] == "3.500") echo "SELECTED"; ?>>(GMT +3:30) Tehran</option>
-            <option value="4.000" <?php if ($row_prefs['prefsTimeZone'] == "4.000") echo "SELECTED"; ?>>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
-            <option value="4.500" <?php if ($row_prefs['prefsTimeZone'] == "4.500") echo "SELECTED"; ?>>(GMT +4:30) Kabul</option>
-            <option value="5.000" <?php if ($row_prefs['prefsTimeZone'] == "5.000") echo "SELECTED"; ?>>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
-            <option value="5.500" <?php if ($row_prefs['prefsTimeZone'] == "5.500") echo "SELECTED"; ?>>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
-            <option value="5.750" <?php if ($row_prefs['prefsTimeZone'] == "5.750") echo "SELECTED"; ?>>(GMT +5:45) Kathmandu</option>
-            <option value="6.000" <?php if ($row_prefs['prefsTimeZone'] == "6.000") echo "SELECTED"; ?>>(GMT +6:00) Almaty, Dhaka, Colombo, Krasnoyarsk</option>
-            <option value="7.000" <?php if ($row_prefs['prefsTimeZone'] == "7.000") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
-            <option value="8.000" <?php if ($row_prefs['prefsTimeZone'] == "8.000") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Singapore, Hong Kong</option>
-            <option value="8.001" <?php if ($row_prefs['prefsTimeZone'] == "8.001") echo "SELECTED"; ?>>(GMT +8:00) Perth, Western Australia (No Daylight Savings)</option>
-            <option value="9.000" <?php if ($row_prefs['prefsTimeZone'] == "9.000") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
-            <option value="9.500" <?php if ($row_prefs['prefsTimeZone'] == "9.500") echo "SELECTED"; ?>>(GMT +9:30) Adelaide, Darwin, the Northern Territory</option>
-            <option value="10.000" <?php if ($row_prefs['prefsTimeZone'] == "10.000") echo "SELECTED"; ?>>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
-            <option value="10.001" <?php if ($row_prefs['prefsTimeZone'] == "10.001") echo "SELECTED"; ?>>(GMT +10:00) Brisbane, Queensland (No Daylight Savings)</option>
-            <option value="11.000" <?php if ($row_prefs['prefsTimeZone'] == "11.000") echo "SELECTED"; ?>>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
-            <option value="12.000" <?php if ($row_prefs['prefsTimeZone'] == "12.000") echo "SELECTED"; ?>>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
-        </select>
-    </div>
-</div>
-<h3>Measurements</h3>
+<?php } // end if ($action == "entries") ?>
 
-<div class="form-group">
-    <label for="prefsTemp" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Temperature</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsTemp" value="Fahrenheit" id="prefsTemp_0"  <?php if ($row_prefs['prefsTemp'] == "Fahrenheit") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Fahrenheit
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsTemp" value="Celsius" id="prefsTemp_1" <?php if ($row_prefs['prefsTemp'] == "Celsius") echo "CHECKED"; ?> /> Celsius
-            </label>
-        </div>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="prefsWeight1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Weight (Small)</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <label class="radio-inline">
-                <input type="radio" name="prefsWeight1" value="ounces" id="prefsWeight1_0"  <?php if ($row_prefs['prefsWeight1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsWeight1" value="grams" id="prefsWeight1_1" <?php if ($row_prefs['prefsWeight1'] == "grams") echo "CHECKED"; ?> /> Grams (gr)
-            </label>
-        </div>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="prefsWeight2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Weight (Large)</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsWeight2" value="pounds" id="prefsWeight2_0"  <?php if ($row_prefs['prefsWeight2'] == "pounds") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Pounds (lb)
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsWeight2" value="kilograms" id="prefsWeight2_1" <?php if ($row_prefs['prefsWeight2'] == "kilograms") echo "CHECKED";  ?> /> Kilograms (kg)
-            </label>
-        </div>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="prefsLiquid1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Liquid (Small)</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsLiquid1" value="ounces" id="prefsLiquid1_0"  <?php if ($row_prefs['prefsLiquid1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsLiquid1" value="millilitres" id="prefsLiquid1_1" <?php if ($row_prefs['prefsLiquid1'] == "millilitres") echo "CHECKED";  ?> />
-                Milliliters (ml)
-            </label>
-        </div>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="prefsLiquid2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Liquid (Large)</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsLiquid2" value="gallons" id="prefsLiquid2_0"  <?php if ($row_prefs['prefsLiquid2'] == "gallons") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Gallons (gal)
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsLiquid2" value="litres" id="prefsLiquid2_1" <?php if ($row_prefs['prefsLiquid2'] == "litres") echo "CHECKED"; ?> />
-                Liters (lt)
-            </label>
-        </div>
-    </div>
-</div>
-
+<?php if ((($section == "admin") && ($go == "preferences") && ($action == "payment")) || ($section == "step3")) { ?>
 <h3>Currency and Payment</h3>
 <div class="form-group">
     <label for="prefsCurrency" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Currency</label>
@@ -1691,7 +1848,7 @@ if (strpos($section, "step") === FALSE) {
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
 <div class="form-group">
     <label for="prefsPayToPrint" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Pay to Print Paperwork</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1733,8 +1890,7 @@ if (strpos($section, "step") === FALSE) {
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
-
+</div>
 <div class="form-group">
     <label for="prefsCash" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Cash for Payment</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1798,7 +1954,6 @@ if (strpos($section, "step") === FALSE) {
             </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="payPalPrintModal" tabindex="-1" role="dialog" aria-labelledby="payPalPrintModalLabel">
         <div class="modal-dialog" role="document">
@@ -1816,8 +1971,7 @@ if (strpos($section, "step") === FALSE) {
                 </div>
             </div>
         </div>
-    </div><!-- ./modal -->
-
+    </div>
     <div class="form-group">
         <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a class="hide-loader" href="https://developer.paypal.com/api/nvp-soap/ipn/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1844,7 +1998,6 @@ if (strpos($section, "step") === FALSE) {
             </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="payPalIPNModal" tabindex="-1" role="dialog" aria-labelledby="payPalIPNModalLabel">
         <div class="modal-dialog" role="document">
@@ -1868,8 +2021,7 @@ if (strpos($section, "step") === FALSE) {
                 </div>
             </div>
         </div>
-    </div><!-- ./modal -->
-
+    </div>
     <div class="form-group">
         <label for="prefsTransFee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Checkout Fees Paid by Entrant</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1908,39 +2060,14 @@ if (strpos($section, "step") === FALSE) {
                 </div>
             </div>
         </div>
-    </div><!-- ./modal -->
-</div>
-<h3>Sponsors</h3>
-<div class="form-group">
-    <label for="prefsSponsors" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sponsor Display</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="Y" id="prefs0" <?php if (($section != "step3") && ($row_prefs['prefsSponsors'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if (($section != "step3") && ($row_prefs['prefsSponsors'] == "N")) echo "CHECKED"; ?> /> Disable
-            </label>
-        </div>
     </div>
 </div>
-<div class="form-group">
-    <label for="prefsSponsorLogos" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sponsor Logo Display</label>
+<?php } // end if ($section == "payment") ?>
+<div style="margin-top: 30px;" class="bcoem-admin-element hidden-print">
+    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12 ">&nbsp;</div>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if (($section != "step3") && ($row_prefs['prefsSponsorLogos'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if (($section != "step3") && ($row_prefs['prefsSponsorLogos'] == "N")) echo "CHECKED"; ?>/> Disable
-            </label>
-        </div>
-    </div>
-</div>
-<div class="bcoem-admin-element hidden-print">
-    <div class="form-group">
-        <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-            <input type="submit" name="Submit" id="setWebsitePrefs" class="btn btn-primary" aria-describedby="helpBlock" value="Set Website Preferences" />
+        <div class="form-group">
+            <button type="submit" name="submit-prefs" id="setWebsitePrefs" class="btn btn-primary" />Set Preferences</button>
         </div>
     </div>
 </div>

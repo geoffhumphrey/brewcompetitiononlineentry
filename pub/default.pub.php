@@ -39,6 +39,9 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 	$show_at_a_glance = FALSE;
 	$bos_data_available = FALSE;
 
+	$header1_10 .= "<header class=\"landing-page-section-header py-2\"><h1>".$label_results."</h1></header>";
+	
+
 	if ($row_bos_scores['count'] > 0) $bos_data_available = TRUE;
 
 	if ($style_types_active > 0) {
@@ -46,7 +49,7 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 		if ($section == "past_winners") $header1_10 .= ": ".$trimmed;
 
 		if ($bos_data_available) {
-			if ($filter == "default") $header1_10 .= sprintf(" <small><a class=\"hide-loader\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><span class=\"fa fa-fw fa-file-pdf hidden-print\"></span></a><a class=\"hide-loader\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><span class=\"fa fa-fw fa-file-code hidden-print\"></span></a></small>",$base_url,$default_page_text_018,$base_url,$default_page_text_019);
+			if ($filter == "default") $header1_10 .= sprintf("<small><a class=\"hide-loader d-print-none\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf\" data-bs-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><i class=\"fa fa-xs fa-fw fa-file-pdf ms-2 d-print-none\"></i></a><a class=\"hide-loader d-print-none\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html\" data-bs-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><i class=\"fa fa-xs fa-fw fa-file-code d-print-none\"></i></a></small>",$base_url,$default_page_text_018,$base_url,$default_page_text_019);
 		}
 
 		$header1_10 .= "</h2>";
@@ -54,10 +57,10 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 		if (!$bos_data_available) $page_info10 .= "<p>".$winners_text_005."</p>";
 	}
 
-	$header1_20 .= "<h1>".$default_page_text_010;
+	$header1_20 .= "<h2>".$default_page_text_010;
 	if ($section == "past_winners") $header1_20 .= ": ".$trimmed;
-	if ($filter == "default") $header1_20 .= sprintf(" <small><a class=\"hide-loader\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><span class=\"fa fa-fw fa-file-pdf hidden-print\"></span></a><a class=\"hide-loader\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><span class=\"fa fa-fw fa-file-code hidden-print\"></span></a>",$base_url,$default_page_text_020,$base_url,$default_page_text_021,$base_url,$default_page_text_021);
-	$header1_20 .= "</h1>";
+	if ($filter == "default") $header1_20 .= sprintf("<small><a class=\"hide-loader d-print-none\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;filter=default&amp;view=pdf\" data-bs-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><i class=\"fa fa-xs fa-fw fa-file-pdf ms-2 d-print-none\"></i></a><a class=\"hide-loader d-print-none\" href=\"%sincludes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;filter=default&amp;view=html\" data-bs-toggle=\"tooltip\" title=\"%s\" target=\"_blank\"><i class=\"fa fa-xs fa-fw fa-file-code d-print-none\"></i></a>",$base_url,$default_page_text_020,$base_url,$default_page_text_021,$base_url,$default_page_text_021);
+	$header1_20 .= "</h2>";
 
 	$page_info .= sprintf("<h2>%s</h2><p>%s %s.</p>",$default_page_text_004,$default_page_text_005,getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
 
@@ -88,7 +91,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1") && ($
 }
 
 echo $primary_page_info;
-//echo $totalRowsSponsors;
 
 if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; else $label_brewer = $label_brewer;
 
@@ -149,6 +151,10 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 // If registration or entry window still open and the judging dates have not passed
 else echo $page_info;
 
-if ($show_at_a_glance) include (PUB.'at-a-glance.pub.php'); 
+if ($show_at_a_glance) {
+	echo "<div class=\"d-print-none\">";
+	include (PUB.'at-a-glance.pub.php');
+	echo "</div>";
+}
 
 ?>

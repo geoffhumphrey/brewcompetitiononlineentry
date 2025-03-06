@@ -1385,7 +1385,7 @@ $pwd_email_reset_text_004 = "sitio web. Si no lo inició, no se preocupe. Su con
 $pwd_email_reset_text_005 = "Para restablecer su contraseña, haga clic en el enlace de abajo o cópielo/pegúelo en su navegador.";
 $best_brewer_text_000 = "cerveceros participantes";
 $best_brewer_text_001 = "MH"; // ¿Qué significa "HM" en este contexto?
-$best_brewer_text_002 = "Se han aplicado puntuaciones y desempates de acuerdo con la <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">metodología de puntuación</a>. Los números reflejados están redondeados a la centésima. Coloque el cursor sobre el icono de interrogación (<span class=\"fa fa-question-circle\"></span>) para ver el valor calculado real.";
+$best_brewer_text_002 = "Se han aplicado puntuaciones y desempates de acuerdo con la <a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#scoreMethod\">metodología de puntuación</a>. Los números reflejados están redondeados a la centésima. Coloque el cursor sobre el icono de interrogación (<span class=\"fa fa-question-circle\"></span>) para ver el valor calculado real.";
 $best_brewer_text_003 = "Metodología de Puntuación";
 $best_brewer_text_004 = "A cada entrada que se coloca se le asigna la siguiente cantidad de puntos:";
 $best_brewer_text_005 = "Se han aplicado los siguientes desempates, en orden de prioridad:";

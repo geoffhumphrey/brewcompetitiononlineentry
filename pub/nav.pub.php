@@ -80,61 +80,56 @@ if ($logged_in) {
 	            
 	            <div class="navbar-nav ms-auto">
 	            	<?php if (!$judging_started) { ?>
-	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#rules">Rules</a>
-	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#entry-info">Entry Info</a>
-	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#volunteers">Volunteers</a>
+	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#rules"><?php echo $label_rules; ?></a>
+	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#entry-info"><?php echo $label_entry_info; ?></a>
+	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#volunteers"><?php echo $label_volunteers; ?></a>
 	            	<?php } ?>
-	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#sponsors">Sponsors</a>
-	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#contact">Contact</a>
-
+	            	<?php if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) { ?>
+	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#sponsors"><?php echo $label_sponsors; ?></a>
+	                <?php } ?>
+	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#contact"><?php echo $label_contact; ?></a>
 	                <?php if ($admin_user) { ?>
 	                <a class="nav-item nav-link" href="<?php echo $base_url."index.php?section=admin"; ?>"><?php echo $label_admin_short; ?></a>
 	                <?php } ?>
 	                <?php if ($logged_in) { ?>
+                	<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-lg fa-fw fa-user"></i></a>
+            	        <ul class="dropdown-menu dropdown-menu-end" data-bs-theme="dark">
+							<li class="small"><a class="dropdown-item <?php if ($section == "list") echo "disabled"; ?>" href="<?php echo $link_list; ?>"><?php echo $label_my_account; ?></a></li>
+							<?php if ($show_entries) { ?>
+							<li class="small"><a class="dropdown-item" href="<?php echo $link_user_entries; ?>"><?php echo $label_entries; ?></a></li>
+							<?php if ($add_entry_link_show) { ?>
+							<li class="small"><a class="dropdown-item <?php if ($section == "brew") echo "disabled"; ?>" href="<?php echo $add_entry_link; ?>"><?php echo $label_add_entry; ?></a></li>
+							<?php } ?>
+							<?php } ?>
 
-	                	<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-lg fa-fw fa-user"></i></a>
-                	        <ul class="dropdown-menu dropdown-menu-end" data-bs-theme="dark">
-								<li class="small"><a class="dropdown-item <?php if ($section == "list") echo "disabled"; ?>" href="<?php echo $link_list; ?>"><?php echo $label_my_account; ?></a></li>
-								<li class="small"><a class="dropdown-item <?php if ($action == "username") echo "disabled"; ?>" href="<?php echo $edit_user_email_link; ?>"><?php echo $label_change_email; ?></a></li>
-								<li class="small"><a class="dropdown-item <?php if ($action == "password") echo "disabled"; ?>" href="<?php echo $edit_user_password_link; ?>"><?php echo $label_change_password; ?></a></li>
-								<?php if ($show_entries) { ?>
-								<li class="small"><a class="dropdown-item" href="<?php echo $link_user_entries; ?>"><?php echo $label_entries; ?></a></li>
-								<?php if ($add_entry_link_show) { ?>
-								<li class="small"><a class="dropdown-item <?php if ($section == "brew") echo "disabled"; ?>" href="<?php echo $add_entry_link; ?>"><?php echo $label_add_entry; ?></a></li>
-								<?php } ?>
-								<?php } ?>
-						                    	
-						        <?php if ($_SESSION['prefsEval'] == 1) { 
-			                    	$brewer_assignment = brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable,$filter);
-									$assignment_array = str_replace(", ",",",$brewer_assignment);
-									$assignment_array = explode(",", $assignment_array);
-									if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (judging_winner_display($row_judging_prefs['jPrefsJudgingOpen']))) { 
-			                   	?>
-			                   	<li class="small"><a class="dropdown-item" href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_judging_dashboard; ?></a></li>
-			                   	<?php } ?>
-			                	<?php } ?>
-			                	<?php if ((!$disable_pay) && ($show_entries) && (!$comp_paid_entry_limit)) { ?>
-			                	<li class="small"><a class="dropdown-item" href="<?php echo $link_pay; ?>"><?php echo $label_pay; ?></a></li>
-			                	<?php } ?>
+							<?php if ((!$disable_pay) && ($show_entries) && (!$comp_paid_entry_limit)) { ?>
+		                	<li class="small"><a class="dropdown-item" href="<?php echo $link_pay; ?>"><?php echo $label_pay; ?></a></li>
+		                	<?php } ?>
 
-
-								<li class="small"><hr class="dropdown-divider"></li>
-								<li class="small" style="font-size: .75em;"><span class="dropdown-item-text"><?php echo $label_auto_log_out; ?> <span id="session-end"></span></span></li>
-							</ul>
-                	    </li>
-	                	<a class="nav-item nav-link" href="<?php echo $base_url."/includes/process.inc.php?section=logout&action=logout"; ?>"><i class="fa fa-lg fa-fw fa-sign-out-alt"></i></a>
-	                	
-	                <?php } else { ?>
-	                	<a class="nav-item nav-link hide-loader" data-bs-toggle="modal" data-bs-target="#login-modal" href=""><?php echo $label_log_in; ?></a>
-	                <?php } ?>
-	          
+							<?php if ($_SESSION['prefsEval'] == 1) { 
+		                    	$brewer_assignment = brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable,$filter);
+								$assignment_array = str_replace(", ",",",$brewer_assignment);
+								$assignment_array = explode(",", $assignment_array);
+								if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (judging_winner_display($row_judging_prefs['jPrefsJudgingOpen']))) { 
+		                   	?>
+		                   	<li class="small"><a class="dropdown-item <?php if ($section == "evaluation") echo "disabled"; ?>" href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_judging_dashboard; ?></a></li>
+		                   	<?php } ?>
+		                	<?php } ?>
+		                	<li class="small"><hr class="dropdown-divider"></li>
+							<li class="small"><a class="dropdown-item <?php if ($action == "username") echo "disabled"; ?>" href="<?php echo $edit_user_email_link; ?>"><?php echo $label_change_email; ?></a></li>
+							<li class="small"><a class="dropdown-item <?php if ($action == "password") echo "disabled"; ?>" href="<?php echo $edit_user_password_link; ?>"><?php echo $label_change_password; ?></a></li>
+							<li class="small"><hr class="dropdown-divider"></li>
+							<li class="small" style="font-size: .75em;"><span class="dropdown-item-text text-body-secondary"><?php echo $label_auto_log_out; ?> <span id="session-end"></span></span></li>
+						</ul>
+            	    </li>
+                	<a class="nav-item nav-link" href="<?php echo $base_url."/includes/process.inc.php?section=logout&action=logout"; ?>"><i class="fa fa-lg fa-fw fa-sign-out-alt"></i></a>	
+                	<?php } else { ?>
+                	<a class="nav-item nav-link hide-loader" data-bs-toggle="modal" data-bs-target="#login-modal" href=""><?php echo $label_log_in; ?></a>
+                	<?php } ?>
 	            </div>
-	        
 	        </section>
-
 	    </div>
-
 	</nav>
 
 	<!--

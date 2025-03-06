@@ -670,7 +670,7 @@ $alert_text_080 = "Password incorrect.";
 $alert_text_081 = "Password accepted.";
 $alert_email_valid = "Email format is valid.";
 $alert_email_not_valid = "Email format is not valid.";
-$alert_email_in_use = "The email address you entered is already in use. Please choose another.";
+$alert_email_in_use = "The email address you entered is already in use. Please choose another. You will not be able to complete registration using this email address.";
 $alert_email_not_in_use = "Congratulations! The email address you entered is not in use.";
 
 /**
@@ -934,9 +934,9 @@ $pay_text_011 = "You currently have";
 $pay_text_012 = "unpaid confirmed";
 $pay_text_013 = "Attach a check for the entire entry amount to one of your bottles. Checks should be made out to";
 $pay_text_014 = "Your check carbon or cashed check is your entry receipt.";
-$pay_text_015 = "Attach cash payment for the entire entry amount in a <em>sealed envelope</em> to one of  your bottles.";
+$pay_text_015 = "Attach cash payment for the entire entry amount in a <strong>sealed envelope</strong> to one of your bottles.";
 $pay_text_016 = "Your returned score sheets will serve as your entry receipt.";
-$pay_text_017 = "Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.";
+$pay_text_017 = "Your payment confirmation email is your entry receipt.";
 $pay_text_018 = "Select the <em>Pay with PayPal</em> button below to pay online.";
 $pay_text_019 = "Please note that a transaction fee of";
 $pay_text_020 = "will be added into your total.";
@@ -1334,7 +1334,7 @@ $brewer_info_009 = "If you wish to change your availability and/or withdraw your
 $brewer_info_010 = "You have already been assigned as a";
 $brewer_info_011 = "or";
 $brewer_info_012 = "Print your judging scoresheet labels ";
-$pay_text_030 = "By selecting the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site and will email you a receipt for the transaction. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong> Be sure to refresh the pay page or access your entries list.";
+$pay_text_030 = "By selecting the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site and will email you a receipt for the transaction. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong>";
 $pay_text_031 = "About to Leave this Site";
 $pay_text_032 = "No payment is necessary. Thank you!";
 $pay_text_033 = "You have unpaid entries. Select or tap to pay for your entries.";
@@ -1382,7 +1382,7 @@ $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry.
 $pwd_email_reset_text_005 = "To reset your password, select the link below or copy/paste it into your browser.";
 $best_brewer_text_000 = "participating brewers";
 $best_brewer_text_001 = "HM";
-$best_brewer_text_002 = "Scores and tie-breakers have been applied in accordance with the <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">scoring methodology</a>. Numbers reflected are rounded to the hundredth place. Hover over or tap the question mark icon (<span class=\"fa fa-question-circle\"></span>) for the actual calculated value.";
+$best_brewer_text_002 = "Scores and tie-breakers have been applied in accordance with the <a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#scoreMethod\">scoring methodology</a>. Numbers reflected are rounded to the hundredth place. Hover over or tap the question mark icon (<i class=\"fa fa-question-circle\"></i>) for the actual calculated value.";
 $best_brewer_text_003 = "Scoring Methodology";
 $best_brewer_text_004 = "Each placing entry is given the following points:";
 $best_brewer_text_005 = "The following tie-breakers have been applied, in order of priority:";
@@ -2070,7 +2070,7 @@ $label_kombucha = "Kombucha";
 $label_pulque = "Pulque";
 
 $form_required_fields_00 = "Not all required fields have been filled out or selected.";
-$form_required_fields_01 = "Required fields that are missing values are indicated with a star <i class=\"fa fa-sm fa-star\"></i> and/or with <strong class=\"text-danger\">red text</strong>. Please scroll/swipe up as necessary to find all required fields.";
+$form_required_fields_01 = "Required fields that are missing values are indicated with a star <i class=\"fa fa-sm fa-star\"></i> and/or in <strong class=\"text-danger\">red</strong>. Please scroll/swipe up as necessary to find all required fields.";
 $form_required_fields_02 = "This field is required.";
 
 $entry_info_text_054 = "Current entry count by style type and associated limits:";
@@ -2102,9 +2102,9 @@ $entry_info_text_055 = "No payment methods are specified in the system at this t
  * ------------------------------------------
  */
 $brew_text_055 = "Return here to add another entry?";
-$brewer_info_015 = "<p>It appears that you've signed up to serve as a judge or steward, but have not indicated that you are available for any judging session for either role.</p><p>Please select the button below to edit your account and then select \"Yes\" for each of the sessions you are available to judge in the Judging Session Availability and those that you are available as a steward in the Stewarding Session Availability section.</p><p>If you are not available for any session for either or both roles, please select \"No\" in the Judging and/or Stewarding section.</p>";
-$brewer_info_016 = "<p>It appears that you've signed up to serve as a judge, but have not indicated that you are available for any judging session.</p><p>Please select the button below to edit your account and then select \"Yes\" for each of the sessions you are available to judge in the Judging Session Availability section.</p><p>If you are not available for any session, please select \"No\" in the Judging section.</p>";
-$brewer_info_017 = "<p>It appears that you've signed up to serve as a steward, but have not indicated that you are available for any judging session.</p><p>Please select the button below to edit your account and then select \"Yes\" for each of the sessions you are available to serve as a steward in the Stewarding Session Availability section.</p><p>If you are not available for any session, please select \"No\" in the Judging section.</p>";
+$brewer_info_015 = "<p>It appears that you've signed up to serve as a judge or steward, but have not indicated that you are available for any judging session for either role.</p><p>Please select the button below to edit your account and then select \"Yes\" for each of the sessions you are available to judge in the Judging Session Availability section and those that you are available as a steward in the Stewarding Session Availability section.</p><p>If you are not available for any session for either or both roles, please select \"No\" in the Judging and/or Stewarding section.</p>";
+$brewer_info_016 = "<p>It appears that you've signed up to serve as a judge, but have not indicated that you are available for any judging session.</p><p>Please select the \"Edit Account Info\" button below to edit your account and then select \"Yes\" for each of the sessions you are available to judge in the Judging Session Availability section.</p><p>If you are not available for any session, please select the \"I Do Not Wish to Volunteer as a Judge\" button below or \"No\" in the Judging section when editing your account information.</p>";
+$brewer_info_017 = "<p>It appears that you've signed up to serve as a steward, but have not indicated that you are available for any judging session.</p><p>Please select the \"Edit Account Info\" button below to edit your account and then select \"Yes\" for each of the sessions you are available to serve as a steward in the Stewarding Session Availability section.</p><p>If you are not available for any session, please select the \"I Do Not Wish to Volunteer as a Steward\" button below or \"No\" in the Stewarding section when editing your account information.</p>";
 $brewer_info_018 = "<strong>You have indicated that you are willing to serve as a judge but have not indicated that you are available for any listed judging session.</strong> Please edit your account info and select \"Yes\" to one or more judging sessions.";
 $brewer_info_019 = "<strong>You have indicated that you are willing to serve as a steward but have not indicated that you are available for any listed stewarding session.</strong> Please edit your account info and select \"Yes\" to one or more stewarding sessions.";
 $brewer_info_020 = "<strong>You have already been assigned to a table as a judge or steward</strong>. If you wish to change your availability, please contact the competition organizer or judge coordinator.";
@@ -2127,19 +2127,41 @@ $label_create_account = "Create Your Account";
 $label_log_in_to_enter = "Register or Log In to Enter";
 $label_not_available = "Not Available";
 $label_fyi = "For Your Information";
+$label_results = "Results";
+$label_entries_remaining = "Entries Remaining Until Current Limit";
+$label_entry_limit_enforced = "Entry Limit Enforced Until";
+$label_button_no_steward = "I Do Not Wish to Volunteer as a Steward";
+$label_button_no_judge = "I Do Not Wish to Volunteer as a Judge";
+$label_staff_availability = "Staff Availability";
 
 $brew_text_056 = "Please provide the entry's carbonation level.";
 $brew_text_057 = "Please provide the entry's sweetness level.";
 $brew_text_058 = "Please provide the entry's strength.";
 $brew_text_059 = "Please provide the entry's color.";
 
+$bottle_labels_008 = "Make sure your browser printing settings are <strong>Portrait layout</strong> and <strong>100&#37; scale</strong>.";
+
+$contact_text_005 = "Select or search for a contact.";
+$contact_text_006 = "Please select a person.";
+$contact_text_007 = "Please provide your first and last name.";
+$contact_text_008 = "Please provide a valid email address.";
+$contact_text_009 = "Please provide a subject.";
+$contact_text_010 = "Please provide a message.";
+
+$error_text_000 = "Please use the main navigation above to get where you want to go.";
+$error_text_001 = "If the links above aren't working, please contact a site representative.";
+
+$error_text_400 = "Invalid request.";
+$error_text_401 = "Permission is needed for your request.";
+$error_text_403 = "Action forbidden.";
+$error_text_404 = "Page not found.";
+$error_text_500 = "Server misconfiguration.";
+
 /**
  * ------------------------------------------
  * END TRANSLATIONS
  * ------------------------------------------
- */
-
-/**
+ *
  * ------------------------------------------
  * Various conditionals
  * No translations below this line

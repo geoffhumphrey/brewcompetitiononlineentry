@@ -9,6 +9,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 }
 
 require (DB.'admin_common.db.php');
+include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
 include (DB.'output_pullsheets.db.php');
 include (INCLUDES.'scrubber.inc.php');

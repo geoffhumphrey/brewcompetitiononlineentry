@@ -18,7 +18,7 @@ require_once (DB.'mods.db.php');
 $account_pages = array("list","pay","brewer","user","brew","pay","evaluation");
 
 if ((!$logged_in) && (in_array($section,$account_pages))) {
-    $redirect = $base_url."index.php?section=login&msg=99";
+    $redirect = $base_url."index.php?msg=99";
     $redirect = prep_redirect_link($redirect);
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
@@ -48,7 +48,7 @@ if ($section == "admin") {
     // Redirect if non-admins try to access admin functions
     if (!$logged_in) {
 
-        $redirect = $base_url."index.php?section=login&msg=0";
+        $redirect = $base_url."index.php?msg=0";
         $redirect = prep_redirect_link($redirect);
         $redirect_go_to = sprintf("Location: %s", $redirect);
         header($redirect_go_to);
@@ -131,16 +131,15 @@ if (HOSTED) require_once (LIB.'hosted.lib.php');
 <?php if (!empty($_SESSION['contestLogo'])) { ?>
     <meta property="og:image" content="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>" />
 <?php } ?>
-    <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
+    <meta property="og:url" content="<?php echo "http".((!empty($_SERVER['HTTPS'])) ? "s://" : "://").$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']; ?>" />
+
 </head>
 
-<?php 
+<?php
 
 if (V3) {
-
     if (($section == "admin") || ($admin != "default")) require ('index.legacy.php');
     else require ('index.pub.php');
-
 }
 
 else require ('index.legacy.php');

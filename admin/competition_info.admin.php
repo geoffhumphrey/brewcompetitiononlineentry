@@ -329,7 +329,6 @@ $(document).ready(function(){
 <?php } // end if ($section == "step4")  ?>
 
 <h3>General</h3>
-
 <div class="form-group">
     <label for="contestName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -340,7 +339,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
-
 <div class="form-group">
     <label for="contestID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP Competition ID</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

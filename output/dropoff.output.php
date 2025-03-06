@@ -13,6 +13,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
     exit();
 }
 
+include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
 include (DB.'dropoff.db.php'); 
 

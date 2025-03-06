@@ -1382,7 +1382,7 @@ $pwd_email_reset_text_004 = ". Si vous n'avez pas initié cela, ne vous inquiét
 $pwd_email_reset_text_005 = "Pour réinitialiser votre mot de passe, sélectionnez le lien ci-dessous ou copiez/collez-le dans votre navigateur.";
 $best_brewer_text_000 = "brasseurs participants";
 $best_brewer_text_001 = "HM";
-$best_brewer_text_002 = "Les scores et les bris d'égalité ont été appliqués conformément à la <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">méthodologie de notation</a>. Les chiffres affichés sont arrondis au centième. Passez la souris sur l'icône du point d'interrogation (<span class=\"fa fa-question-circle\"></span>) pour obtenir la valeur calculée réelle.";
+$best_brewer_text_002 = "Les scores et les bris d'égalité ont été appliqués conformément à la <a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#scoreMethod\">méthodologie de notation</a>. Les chiffres affichés sont arrondis au centième. Passez la souris sur l'icône du point d'interrogation (<span class=\"fa fa-question-circle\"></span>) pour obtenir la valeur calculée réelle.";
 $best_brewer_text_003 = "Méthodologie de notation";
 $best_brewer_text_004 = "Chaque entrée placée reçoit les points suivants :";
 $best_brewer_text_005 = "Les bris d'égalité suivants ont été appliqués, par ordre de priorité :";

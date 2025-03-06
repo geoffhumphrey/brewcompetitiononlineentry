@@ -37,6 +37,7 @@ if (in_array($section,$print_sections)) {
 }
 
 if (in_array($section,$export_sections)) {
+	include (LIB.'admin.lib.php');
 	require (LIB.'output.lib.php');
 	require (INCLUDES.'scrubber.inc.php');
 	include (OUTPUT.'export.output.php');
@@ -46,6 +47,7 @@ if (in_array($section,$label_sections)) {
 	require (CLASSES.'fpdf/pdf_label.php');
 	require (CLASSES.'fpdf/FPDFPlus.php');
 	include (DB.'output_labels.db.php');
+	include (LIB.'admin.lib.php');
 	include (LIB.'output.lib.php');
 	include (DB.'styles.db.php');
 	include (INCLUDES.'scrubber.inc.php');
@@ -53,6 +55,7 @@ if (in_array($section,$label_sections)) {
 }
 
 if (in_array($section,$entry_sections)) {
+	include (LIB.'admin.lib.php');
 	require (LIB.'output.lib.php');
 	include (CLASSES.'tiny_but_strong/tbs_class.php');
 	include (DB.'output_entry.db.php');

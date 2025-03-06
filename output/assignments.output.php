@@ -87,7 +87,7 @@ if ($filter == "staff") {
     <div class="page-header">
         <h1>
 		<?php
-		if ($filter == "staff") echo "Staff Availability";
+		if ($filter == "staff") echo $label_staff_availability;
 		else {
 			if ($filter == "S") echo sprintf("%s ",$label_steward);
 			else echo sprintf("%s ",$label_judge);

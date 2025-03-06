@@ -63,8 +63,6 @@ if ($_SESSION['userLevel'] <= 1) $adminUser = TRUE;
 
 $adminUserAddDisable = FALSE;
 
-
-
 if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
 
 	// Fix fatal error when using [] operator on strings
