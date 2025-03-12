@@ -497,10 +497,10 @@ if ($totalRows_log > 0) {
 		if ($comp_entry_limit) $warning_append = sprintf("\n%s",$brewer_entries_text_011); else $warning_append = "";
 
 		$delete_alt_title = sprintf("%s %s",$label_delete, $entry_name);
-		$delete_warning = sprintf("%s %s - %s.",$label_delete, $entry_name, strtolower($label_undone));
+		$delete_warning = sprintf("%s %s? %s.",$label_delete, $entry_name, $label_undone);
 		
 		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $entry_edit_deadline))) {
-			$delete_link = sprintf("<a role=\"button\" data-bs-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s.\"><i class=\"fa fa-fw fa-lg fa-trash-can\"></i></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
+			$delete_link = sprintf("<a class=\"hide-loader\" role=\"button\" data-bs-toggle=\"tooltip\" title=\"%s\" data-confirm-title=\"%s\" data-confirm-cancel=\"%s\" data-confirm-proceed=\"%s\" href=\"%s\" data-confirm=\"%s.\"><i class=\"fa fa-fw fa-lg fa-trash-can\"></i></a>",$delete_alt_title,$label_please_confirm,$label_cancel,$label_delete,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
 		}
 
 		else {

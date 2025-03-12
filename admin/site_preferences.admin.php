@@ -1217,7 +1217,8 @@ $(document).ready(function(){
                     <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Enable or disable your installation's contact form. When users fill out the form, an email is generated from the Originating Email Address as input above to a competition official. If disabled, contact email addresses will be </p>
+                    <p>Enable or disable your installation's contact form. When users fill out the form, an email is generated from the Originating Email Address as input above to a competition official.</p>
+                    <p>If disabled, competition email addresses are obfuscated and users will need to select a link and manually copy/paste email addresses into their email platform. </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -1472,7 +1473,10 @@ $(document).ready(function(){
 
 <?php } // end if ($action == "best") ?>
 
-<?php if ((($section == "admin") && ($go == "preferences") && ($action == "entries")) || ($section == "step3")) { ?>
+<?php 
+if ((($section == "admin") && ($go == "preferences") && ($action == "entries")) || ($section == "step3")) { 
+include (DB.'entry_info.db.php');
+?>
 <h3>Entries</h3>
 <div class="form-group">
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Set</label>
@@ -1532,7 +1536,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
-
 <div id="prefsHideSpecific" class="form-group">
     <label for="prefsHideSpecific" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1611,6 +1614,94 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
+
+<h4>Fees and Discounts</h4>
+<div class="form-group">
+    <label for="contestEntryFee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Per Entry Fee</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group has-warning">
+            <span class="input-group-addon" id="contestEntryFee-addon1"><?php echo $currency_symbol; ?></span>
+            
+            <input class="form-control" id="contestEntryFee" name="contestEntryFee" type="number" maxlength="5" step=".01" value="<?php if ($section != "step4") echo number_format($row_contest_info['contestEntryFee'],2); ?>" placeholder="" required>
+            <div class="input-group-addon" id="contestEntryFee-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></div>
+        </div>
+        <span id="helpBlock" class="help-block">Fee for a single entry. Enter a zero (0) for a free entry fee.</span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="contestEntryCap" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Fee Cap</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <span class="input-group-addon" id="contestEntryCap-addon1"><?php echo $currency_symbol; ?></span>
+            <input class="form-control" id="contestEntryCap" name="contestEntryCap" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryCap'])) && (!empty($row_contest_info['contestEntryCap']))) echo number_format($row_contest_info['contestEntryCap'],2); ?>" placeholder="">
+        </div>
+        <span id="helpBlock" class="help-block">Enter the maximum amount for each entrant. Leave blank if no cap.
+        <a tabindex="0"  type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto right" data-container="body"  data-content="Useful for competitions with &ldquo;unlimited&rdquo; entries for a single fee (e.g., <?php if ($section != "step4") echo $currency_symbol; ?>X for the first X number of entries, <?php if ($section != "step4") echo $currency_symbol; ?>X for unlimited entries, etc.). "><span class="fa fa-question-circle"></span></a>
+        </span>
+    </div>
+</div>
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="contestEntryFeeDiscount" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Discount Multiple Entries</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">      
+            <label class="radio-inline">
+                <input type="radio" name="contestEntryFeeDiscount" value="Y" id="contestEntryFeeDiscount_0" <?php if (($section != "step4") && ($row_contest_info['contestEntryFeeDiscount'] == "Y")) echo "CHECKED"; ?> /> Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="contestEntryFeeDiscount" value="N" id="contestEntryFeeDiscount_1" <?php if (($section != "step4") && ($row_contest_info['contestEntryFeeDiscount'] == "N")) echo "CHECKED"; if ($section == "step4") echo "CHECKED"; ?>/> No
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Designate Yes or No if your competition offers a discounted entry fee after a certain number is reached.</span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="contestEntryFeeDiscountNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Minimum Entries for Discount</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        
+            <input class="form-control" id="contestEntryFeeDiscountNum" name="contestEntryFeeDiscountNum" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFeeDiscountNum']; ?>" placeholder="">
+        <span id="helpBlock" class="help-block">The entry threshold participants must exceed to take advantage of the per entry fee discount (designated below). If no, discounted fee exists, leave blank.</span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="contestEntryFee2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Discounted Entry Fee</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <span class="input-group-addon" id="contestEntryFee2-addon1"><?php echo $currency_symbol; ?></span>     
+            <input class="form-control" id="contestEntryFee2" name="contestEntryFee2" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryFee2'])) && (!empty($row_contest_info['contestEntryFee2']))) echo number_format($row_contest_info['contestEntryFee2'],2); ?>" placeholder="">
+        </div>
+        <span id="helpBlock" class="help-block">Fee for a single, discounted entry.</span>
+    </div>
+</div>
+<?php
+include(LIB.'process.lib.php');
+$secretKey = base64_encode(bin2hex($password));
+$nacl = base64_encode(bin2hex($server_root));
+$contestEntryFeePassword = simpleDecrypt($row_contest_info['contestEntryFeePassword'], $secretKey, $nacl);
+?>
+<div class="form-group">
+    <label for="contestEntryFeePassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Member Discount Password</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control" id="contestEntryFeePassword" name="contestEntryFeePassword" type="text" value="<?php echo $contestEntryFeePassword; ?>" placeholder="">
+        <span id="helpBlock" class="help-block">Designate a password for participants to enter to receive discounted entry fees. Useful if your competition provides a discount for members of the sponsoring club(s).</span>
+    </div>
+</div>
+<div class="form-group">
+    <label for="contestEntryFeePasswordNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Member Discount Fee</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <span class="input-group-addon" id="contestEntryFeePasswordNum-addon1"><?php echo $currency_symbol; ?></span>
+            
+            <input class="form-control" id="contestEntryFeePasswordNum" name="contestEntryFeePasswordNum" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryFeePasswordNum'])) && (!empty($row_contest_info['contestEntryFeePasswordNum']))) echo number_format($row_contest_info['contestEntryFeePasswordNum'],2); ?>" placeholder="">
+        </div>
+        <span id="helpBlock" class="help-block">Fee for a single, discounted member entry. If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</span>
+    </div>
+</div>
+
+<h4>Limits</h4>
 <div class="form-group">
     <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit &ndash; Paid/Unpaid</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        

@@ -90,6 +90,44 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		// Entry-related prefs
 		if ($go == "entries") {
 
+			/**
+			 * Entry-related fees and discounts moved from Competition Info to 
+			 * Preferences UI
+			 */
+
+			$contestEntryFee = "";
+			$contestEntryFee2 = "";
+			$contestEntryFeePassword = "";
+			$contestEntryFeeDiscountNum = "";
+			$contestEntryFeePasswordNum = "";
+			$contestEntryCap = "";
+
+			if ((empty($_POST['contestEntryFee2'])) || (empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "N";
+			if ((!empty($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "Y";
+			if ((isset($_POST['contestEntryFee'])) && (!empty($_POST['contestEntryFee']))) $contestEntryFee = sterilize($_POST['contestEntryFee']);
+			if ((isset($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFee2']))) $contestEntryFee2 = sterilize($_POST['contestEntryFee2']);
+			if ((isset($_POST['contestEntryFeeDiscountNum'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscountNum = sterilize($_POST['contestEntryFeeDiscountNum']);
+			if ((isset($_POST['contestEntryFeePasswordNum'])) && (!empty($_POST['contestEntryFeePasswordNum']))) $contestEntryFeePasswordNum = sterilize($_POST['contestEntryFeePasswordNum']);
+			if ((isset($_POST['contestEntryCap'])) && (!empty($_POST['contestEntryCap']))) $contestEntryCap = sterilize($_POST['contestEntryCap']);
+
+			$hash = NULL;
+			if (isset($_POST['contestEntryFeePassword'])) {
+				$secretKey = base64_encode(bin2hex($password));
+				$nacl = base64_encode(bin2hex($server_root));
+				$contestEntryFeePassword = sterilize($_POST['contestEntryFeePassword']);
+				$contestEntryFeePassword = simpleEncrypt($contestEntryFeePassword, $secretKey, $nacl);
+			}
+
+			$data_entry_fees = array(
+				'contestEntryFee' => blank_to_null($contestEntryFee),
+				'contestEntryFee2' => blank_to_null($contestEntryFee2),
+				'contestEntryFeeDiscount' => blank_to_null($contestEntryFeeDiscount),
+				'contestEntryFeeDiscountNum' => blank_to_null($contestEntryFeeDiscountNum),
+				'contestEntryCap' => blank_to_null($contestEntryCap),
+				'contestEntryFeePassword' => blank_to_null($contestEntryFeePassword),
+				'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum)
+			);
+
 			if ($_POST['prefsStyleSet'] != $_SESSION['prefsStyleSet']) $style_set_change = TRUE;
 			if (isset($_POST['prefsUSCLEx'])) $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
 			$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
@@ -466,6 +504,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		if ($go == "entries") {
+
+			$update_table_entry_fees = $prefix."contest_info";
+			$db_conn->where ('id', $id);
+			$result = $db_conn->update ($update_table_entry_fees, $data_entry_fees);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			/**
 			 * If the style set has changed from BJCP 2015 to BJCP 2021, map

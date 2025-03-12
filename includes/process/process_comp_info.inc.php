@@ -46,12 +46,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$contestCircuit = "";
 		$contestVolunteers = "";
 		$contestLogo = "";
+		/*
 		$contestEntryFee = "";
 		$contestEntryFee2 = "";
 		$contestEntryFeePassword = "";
 		$contestEntryFeeDiscountNum = "";
 		$contestEntryFeePasswordNum = "";
 		$contestEntryCap = "";
+		*/
 		$contestCheckInPassword = "";
 		$contestID = "";
 		$competition_rules = "";
@@ -87,18 +89,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (isset($_POST['contestCircuit'])) $contestCircuit = $purifier->purify($_POST['contestCircuit']);
 		if (isset($_POST['contestVolunteers'])) $contestVolunteers = $purifier->purify($_POST['contestVolunteers']);
 		if (isset($_POST['contestLogo'])) $contestLogo = $purifier->purify($_POST['contestLogo']);
-		if (isset($_POST['contestEntryFeePassword'])) $contestEntryFeePassword = sterilize($_POST['contestEntryFeePassword']);
 		if (isset($_POST['contestCheckInPassword'])) $contestCheckInPassword = sterilize($_POST['contestCheckInPassword']);
 		if (isset($_POST['contestID'])) $contestID = sterilize($_POST['contestID']);
-		if ((empty($_POST['contestEntryFee2'])) || (empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "N";
-		if ((!empty($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "Y";
-
-		if ((isset($_POST['contestEntryFee'])) && (!empty($_POST['contestEntryFee']))) $contestEntryFee = sterilize($_POST['contestEntryFee']);
-		if ((isset($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFee2']))) $contestEntryFee2 = sterilize($_POST['contestEntryFee2']);
-		if ((isset($_POST['contestEntryFeeDiscountNum'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscountNum = sterilize($_POST['contestEntryFeeDiscountNum']);
-		if ((isset($_POST['contestEntryFeePasswordNum'])) && (!empty($_POST['contestEntryFeePasswordNum']))) $contestEntryFeePasswordNum = sterilize($_POST['contestEntryFeePasswordNum']);
-		if ((isset($_POST['contestEntryCap'])) && (!empty($_POST['contestEntryCap']))) $contestEntryCap = sterilize($_POST['contestEntryCap']);
-
 		if ((isset($_POST['contestClubs'])) && (!empty($_POST['contestClubs']))) {
 			$contestClubs = $purifier->purify($_POST['contestClubs']);
 			$contestClubs = trim($contestClubs);
@@ -165,13 +157,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'contestCircuit' => blank_to_null($contestCircuit),
 			'contestVolunteers' => blank_to_null($contestVolunteers),
 			'contestLogo' => blank_to_null($contestLogo),
-			'contestEntryFee' => blank_to_null($contestEntryFee),
-			'contestEntryFee2' => blank_to_null($contestEntryFee2),
-			'contestEntryFeeDiscount' => blank_to_null($contestEntryFeeDiscount),
-			'contestEntryFeeDiscountNum' => blank_to_null($contestEntryFeeDiscountNum),
-			'contestEntryCap' => blank_to_null($contestEntryCap),
-			'contestEntryFeePassword' => blank_to_null($contestEntryFeePassword),
-			'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum),
 			'contestCheckInPassword' => blank_to_null($hash),
 			'contestID' => blank_to_null($contestID),
 			'contestClubs' => blank_to_null($contestClubs),
@@ -301,13 +286,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'contestCircuit' => blank_to_null($contestCircuit),
 				'contestVolunteers' => blank_to_null($contestVolunteers),
 				'contestLogo' => blank_to_null($contestLogo),
-				'contestEntryFee' => blank_to_null($contestEntryFee),
-				'contestEntryFee2' => blank_to_null($contestEntryFee2),
-				'contestEntryFeeDiscount' => blank_to_null($contestEntryFeeDiscount),
-				'contestEntryFeeDiscountNum' => blank_to_null($contestEntryFeeDiscountNum),
-				'contestEntryCap' => blank_to_null($contestEntryCap),
-				'contestEntryFeePassword' => blank_to_null($contestEntryFeePassword),
-				'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum),
 				'contestCheckInPassword' => blank_to_null($hash),
 				'contestID' => blank_to_null($contestID),
 				'contestClubs' => blank_to_null($contestClubs),

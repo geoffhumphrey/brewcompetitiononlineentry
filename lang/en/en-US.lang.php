@@ -940,7 +940,7 @@ $pay_text_017 = "Your payment confirmation email is your entry receipt.";
 $pay_text_018 = "Select the <em>Pay with PayPal</em> button below to pay online.";
 $pay_text_019 = "Please note that a transaction fee of";
 $pay_text_020 = "will be added into your total.";
-$pay_text_021 = "To make sure your PayPal payment is marked <strong>paid</strong> on <strong>this site</strong>, make sure to select the <em>Return to...</em> link on PayPal&rsquo;s confirmation screen <strong>after</strong> you have sent your payment. Also, make sure to print your payment receipt and attach it to one of your entry bottles.";
+$pay_text_021 = "To make sure your PayPal payment is marked <strong>paid</strong> on <strong>this site</strong>, make sure to select the <em>Return to...</em> link on PayPal&rsquo;s confirmation screen <strong>after</strong> you have sent your payment.";
 $pay_text_022 = "Make Sure to Select <em>Return To...</em> After Paying Your Fees";
 $pay_text_023 = "Enter the code supplied by the competition organizers for a discounted entry fee.";
 $pay_text_024 = $pay_text_010;
@@ -2156,6 +2156,9 @@ $error_text_401 = "Permission is needed for your request.";
 $error_text_403 = "Action forbidden.";
 $error_text_404 = "Page not found.";
 $error_text_500 = "Server misconfiguration.";
+
+$contact_email_text_000 = "Select the email address below to launch your native email application. Copy the address and paste it into a new message if using a web-based email services such as Gmail, etc.";
+$contact_email_text_001 = "Please note: this window is a result of multiple measures to mitigate email address exposure to spambot crawlers. If the competition contact's email address is not available above, contact the sponsors of the competition via other means (social media, organization website, etc.).";
 
 /**
  * ------------------------------------------

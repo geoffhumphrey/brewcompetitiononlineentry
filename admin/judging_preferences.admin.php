@@ -131,12 +131,7 @@ $(document).ready(function() {
             </label>
         </div>
         <div id="helpBlock" class="help-block">
-            <p>How entries are identified to judges when evaluating. If uploading scoresheet PDF files, the PDFs for each entry should be named according to the exact 6-character number for use by the system. <span class="text-primary"><strong>Using the random, system-generated judging numbers ensures unique file names for live and archived entry data.</strong></span></p>
-            <div class="btn-group" role="group" aria-label="ScoresheetsModal">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#scoresheetModal">
-                   Scoresheet Unique Identifier Info/Examples
-                </button>
-            </div>
+            <p>How entries are identified to judges when evaluating. If uploading scoresheet PDF files, the PDFs for each entry should be named according to the exact 6-character number for use by the system. <span class="text-primary"><strong>Using the random, system-generated <u>Judging Numbers</u> ensures unique file names for live and archived entry data.</strong></span></p>
         </div>
     </div>
 </div>

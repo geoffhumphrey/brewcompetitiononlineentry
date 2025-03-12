@@ -235,8 +235,8 @@ else {
 			$page_info4 .= "<div class=\"modal-header\">";
 			
 
-			if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $page_info4 .= sprintf("<h5 class=\"modal-title\">%s</h5>",$pay_text_031);
-			else $page_info4 .= sprintf("<h5 class=\"modal-title\">%s</h5>",$pay_text_022);
+			if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $page_info4 .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_031);
+			else $page_info4 .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_022);
 			$page_info4 .= "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>";
 
 			$page_info4 .= "</div>";
@@ -247,7 +247,7 @@ else {
 			$page_info4 .= "</div>";
 			$page_info4 .= "<div class=\"modal-footer\">";
 			$page_info4 .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">%s</button>",$label_cancel);
-			$page_info4 .= sprintf("<a href=\"#\" id=\"submit\" class=\"btn btn-success\">%s</a>",$label_understand);
+			$page_info4 .= sprintf("<a href=\"#\" id=\"submit\" class=\"btn btn-primary\">%s</a>",$label_understand);
 			$page_info4 .= "</div>";
 			$page_info4 .= "</div>";
 			$page_info4 .= "</div>";

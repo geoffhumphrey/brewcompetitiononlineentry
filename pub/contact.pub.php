@@ -8,7 +8,7 @@
 
 // Redirect if directly accessed
 if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
-    $redirect = "../../index.php?section=contact";
+    $redirect = "../../index.php#contact";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
     exit();
@@ -22,17 +22,33 @@ if ((!HOSTED) && (strpos($base_url, 'test.brewingcompetitions.com') === false) &
 }
 
 if ($_SESSION['prefsContact'] == "N") {
+
+    include (LIB.'process.lib.php');
+
 	$page_info = "";
+
     if ($totalRows_contact == 0) $page_info .= sprintf("<p>%s</p>",$contact_text_004);
+    
     else {
-    	$page_info .= sprintf("<p>%s</p>",$contact_text_000);
+    	
+        $page_info .= sprintf("<p>%s</p>",$contact_text_000);
     	$page_info .= "<ul>";
-    	do {
-    		$page_info .= "<li>".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition']." &ndash; <a href='mailto:".$row_contact['contactEmail']."'>".$row_contact['contactEmail']."</a></li>";
+    	
+        do {
+
+            $secretKey = base64_encode(bin2hex($password));
+            $nacl = base64_encode(bin2hex($server_root));
+            $link = simpleEncrypt($row_contact['id'], $secretKey, $nacl);
+            $email_redirect_link = sprintf("%sincludes/output.inc.php?section=contact&action=edit&tb=no-print&token=%s",$base_url,$link);
+            $page_info .= sprintf("<li><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">%s %s</a> &ndash; %s</li>",$email_redirect_link,$row_contact['contactFirstName'],$row_contact['contactLastName'],$row_contact['contactPosition']);
+            
     	} while ($row_contact = mysqli_fetch_assoc($contact));
-    	$page_info .= "</ul>";
+    	
+        $page_info .= "</ul>";
     }
+
 	echo $page_info;
+
 }
 
 if ($_SESSION['prefsContact'] == "Y") {
@@ -146,7 +162,9 @@ if ($_SESSION['prefsContact'] == "Y") {
         </form>
 <script src="https://www.google.com/recaptcha/api.js"></script>
 <?php } // end if ($msg != 1);
+    
     } // end if ($totalRows_contact > 0)
+
 } // end if ($_SESSION['prefsContact'] == "Y")
 
 ?>

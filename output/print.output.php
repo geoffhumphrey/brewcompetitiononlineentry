@@ -6,8 +6,8 @@
  */
 
 // Redirect if directly accessed without authenticated session
-if (!isset($_SESSION['loginUsername'])) {
-    $redirect = "../../403.php";
+if ((!isset($_SESSION['loginUsername'])) && ($token == "default")) {
+    $redirect = "../../index.php?section=403";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
     exit();
@@ -79,7 +79,49 @@ else {
     <div class="container-fluid">
     <?php
 
-		if ($_SESSION['userLevel'] <= 1) {
+    // Email contacts IF no form
+    if (($section == "contact") && ($token != "default")) {
+    	
+    	function hide_email($email) { 
+    	    
+    	    $character_set = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
+    	    $key = str_shuffle($character_set); 
+    	    $cipher_text = ''; 
+    	    $id = 'e'.rand(1,999999999);
+    	    for ($i=0;$i<strlen($email);$i+=1) {
+    	        $cipher_text.= $key[strpos($character_set,$email[$i])];
+    	    }
+    	    
+    	    $script = 'var a="'.$key.'";var b=a.split("").sort().join("");var c="'.$cipher_text.'";var d="";';
+    	    $script.= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
+    	    $script.= 'document.getElementById("'.$id.'").innerHTML="<a href=\\"mailto:"+d+"\\">"+d+"</a>"';
+    	    $script = "eval(\"".str_replace(array("\\",'"'),array("\\\\",'\"'), $script)."\")"; 
+    	    $script = '<script type="text/javascript">/*<![CDATA[*/'.$script.'/*]]>*/</script>';
+    	   
+    	    return '<span id="'.$id.'">[email address obfuscated]</span>'.$script;
+    	}
+
+    	// Include process library for encryption functions
+    	include (LIB.'process.lib.php');
+
+    	$secretKey = base64_encode(bin2hex($password));
+    	$nacl = base64_encode(bin2hex($server_root));
+    	$id = simpleDecrypt($token, $secretKey, $nacl);
+
+    	include (DB.'contacts.db.php');
+
+    	$page_info = "<div style=\"padding: 25px; min-height:400px\">";
+    	$page_info .= sprintf("<h2><strong>%s &ndash; %s %s</strong><br><small>%s</small></h2>",$label_contact, $row_contact['contactFirstName'], $row_contact['contactLastName'], $row_contact['contactPosition']);
+    	$page_info .= sprintf("<p>%s</p>",$contact_email_text_000);
+    	$page_info .= sprintf("<p><strong>%s</strong></p>",hide_email($row_contact['contactEmail']));
+    	$page_info .= sprintf("<p><small><em>%s</em></small></p>",$contact_email_text_001);
+    	$page_info .= "</div>";
+
+    	echo $page_info;
+
+    }
+
+		if ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) {
 			if ($section == "assignments") 			include (OUTPUT.'assignments.output.php');
 			if ($section == "bos-mat") 					include (OUTPUT.'bos_mat.output.php');
 			if ($section == "dropoff") 					include (OUTPUT.'dropoff.output.php');
@@ -112,6 +154,8 @@ else {
 			if ($go == "entries") 							include (ADMIN.'entries.admin.php');
 			if ($go == "participants") 					include (ADMIN.'participants.admin.php');
 		}
+
+		
 
 		?>
     </div><!-- ./container -->

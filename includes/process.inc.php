@@ -229,8 +229,12 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		$contest_info1 = mysqli_query($connection,$query_contest_info1) or die (mysqli_error($connection));
 		$row_contest_info1 = mysqli_fetch_assoc($contest_info1);
 
-		if (sterilize($_POST['brewerDiscount']) == $row_contest_info1['contestEntryFeePassword']) {
-			$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", GetSQLValueString("Y", "text"), GetSQLValueString($id, "text"));
+		$secretKey = base64_encode(bin2hex($password));
+		$nacl = base64_encode(bin2hex($server_root));
+		$contestEntryFeePassword = simpleDecrypt($row_contest_info1['contestEntryFeePassword'], $secretKey, $nacl);
+
+		if (sterilize($_POST['brewerDiscount']) == $contestEntryFeePassword) {
+			$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount='%s' WHERE uid='%s'", "Y", $id);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&bid=".$id."&msg=15");
