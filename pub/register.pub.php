@@ -24,7 +24,7 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
-if ((!HOSTED) && (strpos($base_url, 'test.brewingcompetitions.com') === false) && (!empty($_SESSION['prefsGoogleAccount']))) {
+if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
     $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
     $public_captcha_key = $recaptcha_key[0];
 }
@@ -248,8 +248,8 @@ $judge_location_avail = "";
 $staff_location_avail = "";
 
 if ((isset($row_judging3)) && (!empty($row_judging3))) {
-    
-    do { 
+
+	do { 
 
         $location_yes = "";
         $location_no = "";
@@ -276,7 +276,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $staff_avail_option .= "</div>";
             $staff_avail_option .= "</div>";
 
-            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+            if (((time() < $row_judging3['judgingDate']) || (($go == "admin") && ($filter != "default"))) && (!empty($staff_avail_info) && (!empty($staff_avail_option)))) {
                 $staff_location_avail .= "<section class=\"mb-3\">";
                 $staff_location_avail .= $staff_avail_info;
                 $staff_location_avail .= $staff_avail_option;
@@ -538,7 +538,7 @@ if ($go == "default") {  ?>
 	<div class="row mb-3">
         <label for="password" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php echo $label_password; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" name="password" id="password1" type="password" placeholder="<?php echo $label_password; ?>" value="" data-error="<?php echo $register_text_022; ?>" required>
+            <input class="form-control" name="password" id="password-entry" type="password" placeholder="<?php echo $label_password; ?>" value="" data-error="<?php echo $register_text_022; ?>" required>
             <div class="help-block invalid-feedback text-danger"><?php echo $register_text_022; ?></div>
         </div>
     </div>
@@ -549,6 +549,15 @@ if ($go == "default") {  ?>
 			<div id="length-help-text" class="small"></div>
 		</div>
 	</div>
+
+    <div class="row mb-3">
+        <label for="password-confirm" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-2"></i><?php echo $label_confirm_password; ?></strong></label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <input class="form-control password-field" name="password-confirm" id="password-confirm" type="password" required>
+            <div class="help-block mt-1 invalid-feedback text-danger"><?php echo $login_text_024; ?></div>
+            <div id="password-error" class="help-block mt-1 text-danger"><?php echo $login_text_023; ?></div>
+        </div>
+    </div>
 	<?php } // END if ($view == "default") ?>
    
    	<?php if ($section != "admin") { // Show only when NOT being added by an administrator ?>
@@ -755,10 +764,15 @@ if ($go == "default") {  ?>
 	                <input class="form-check-input" type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($msg != "default") && (isset($_COOKIE['brewerProAm'])) && ($_COOKIE['brewerProAm'] == "0")) echo "CHECKED";  if ($msg == "default") echo "CHECKED";  ?> />
 	                <label class="form-check-label"><?php echo $label_no; ?></label>
 	            </div>
+	            <div class="form-check form-check-inline">
+	                <input class="form-check-input" type="radio" name="brewerProAm" value="2" id="brewerProAm_2" <?php if (($msg != "default") && (isset($_COOKIE['brewerProAm'])) && ($_COOKIE['brewerProAm'] == "2")) echo "CHECKED"; ?> />
+	                <label class="form-check-label"><?php echo $label_opt_out; ?></label>
+	            </div>
 	            <div class="help-block">
 	                <p><?php echo $brewer_text_041; ?></p>
 	                <p><?php echo $brewer_text_043; ?></p>
 	                <p><?php echo $brewer_text_042; ?></p>
+	                <p><?php echo $brewer_text_056; ?></p>
 	            </div>
 	        </div>
 	    </div>
@@ -1196,7 +1210,7 @@ if ($go == "default") {  ?>
 	    <label for="" class="col-sm-2 col-form-label"></label>
 	    <div class="col-sm-12 col-md-10">
 	        <div class="d-grid">
-	            <button id="form-submit-button-1" name="submit" type="submit" class="btn btn-lg btn-primary"><?php echo $label_register; ?></button>
+	            <button id="submit-button" name="submit" type="submit" class="btn btn-lg btn-primary"><?php echo $label_register; ?></button>
 	        </div>
 	    </div>
 	</div>
@@ -1222,32 +1236,5 @@ if ($go == "default") {  ?>
 	    }
 	});
 </script>
-
 <?php } // end else ?>
 <?php } // end else ?>
-<script type="text/javascript">
-	$(document).ready(function () {
-		"use strict";
-		var options = {};
-		options.ui = {
-			container: "#pwd-container",
-			showErrors: true,
-			useVerdictCssClass: true,
-			showVerdictsInsideProgressBar: true,
-			viewports: {
-				progress: ".pwd-strength-viewport-progress"
-			},
-			progressBarExtraCssClasses: "progress-bar-striped active",
-			progressBarEmptyPercentage: 2,
-			progressBarMinPercentage: 6
-		};
-		options.common = {
-			zxcvbn: true,
-			minChar: 8,
-			onKeyUp: function (evt, data) {
-				$("#length-help-text").text("<?php echo $label_length; ?>: " + $(evt.target).val().length + " - <?php echo $label_score; ?>: " + data.score.toFixed(2));
-			},
-		};
-		$('#password1').pwstrength(options);
-	});
-</script>

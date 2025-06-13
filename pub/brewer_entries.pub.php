@@ -12,15 +12,14 @@ $pay_button = "";
 $entry_output = "";
 $entry_output_cards = "";
 $print_bottle_labels = FALSE;
-$multiple_bottle_ids = FALSE;
+$multiple_bottle_ids = TRUE;
 $discount = FALSE;
-
+$entry_editing = FALSE;
+if ((time() < $entry_edit_deadline)) $entry_editing = TRUE;
 if (($dropoff_window_open == 1) || ($shipping_window_open == 1) || ($entry_window_open == 1)) $print_bottle_labels = TRUE;
-if ((($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6")) && $print_bottle_labels) $multiple_bottle_ids = TRUE;
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE;
 
 $pay_button .= sprintf("<a class=\"btn btn-primary hide-loader %s\" href=\"#pay-fees\"><i class=\"fa fa-lg fa-money-bill me-2\"></i>%s</a>", $pay_button_disable, $label_pay);
-
 
 // Build Header
 $header1_1 .= sprintf("<a class=\"anchor-offset\" name=\"entries\"></a><h2>%s</h2>",$label_entries);
@@ -145,7 +144,7 @@ if ($totalRows_log > 0) {
 
 		$brewInfo = "";
 		if (!empty($row_log['brewInfo'])) {
-			if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $brewInfo .= "<li><strong>".$label_regional_variation.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
+			if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $brewInfo .= "<li><strong>".$label_regional_variation.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
 			else $brewInfo .= "<li><strong>".$label_required_info.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
 		}
 
@@ -158,7 +157,24 @@ if ($totalRows_log > 0) {
 		$cider_mead_req_info = "";
 		if (!empty($row_log['brewMead1'])) $cider_mead_req_info .= "<li><strong>".$label_carbonation.":</strong> ".$row_log['brewMead1']."</li>";
 		if (!empty($row_log['brewMead2'])) $cider_mead_req_info .= "<li><strong>".$label_sweetness.":</strong> ".$row_log['brewMead2']."</li>";
-		if (!empty($row_log['brewSweetnessLevel'])) $cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".$row_log['brewSweetnessLevel']."</li>";
+		
+		if (!empty($row_log['brewSweetnessLevel'])) {
+
+			$sweetness_json = json_decode($row_log['brewSweetnessLevel'],true);
+			
+			if (json_last_error() === JSON_ERROR_NONE) {
+
+				if (!empty($sweetness_json['OG'])) $cider_mead_req_info .= "<li><strong>".$label_original_gravity.":</strong> ".$sweetness_json['OG']."</li>";
+				if (!empty($sweetness_json['FG'])) $cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".$sweetness_json['FG']."</li>";
+
+			}
+			
+			else {
+				$cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".$row_log['brewSweetnessLevel']."</li>";
+			}
+		
+		}
+		
 		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".$row_log['brewMead3']."</li>";
 		if (!empty($cider_mead_req_info)) $required_info .= $cider_mead_req_info;
 		if (!empty($row_log['brewABV'])) $required_info .= "<li><strong>".$label_abv.":</strong> ".$row_log['brewABV']."%</li>";
@@ -398,7 +414,7 @@ if ($totalRows_log > 0) {
 
 
 			$multi_print_link = "";
-			if (($multiple_bottle_ids) && (!$judging_started)) {
+			if (($print_bottle_labels) && (!$judging_started)) {
 				$entry_output .= "<td class=\"d-print-none\">";
 				
 				if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) {
@@ -473,7 +489,7 @@ if ($totalRows_log > 0) {
 		$alt_title .= sprintf("%s ",$brewer_entries_text_009);
 		$alt_title .= "for ".$entry_name;
 
-		if (!$multiple_bottle_ids) {
+		if (($print_bottle_labels) && (!$judging_started)) {
 
 			if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) {
 					
@@ -486,10 +502,12 @@ if ($totalRows_log > 0) {
 			}
 
 			else {
-				$print_forms_link .= "<a class=\"hide-loader\" role=\"button\" data-bs-toggle=\"tooltip\" data-bs-title=\"";
-				if ($comp_paid_entry_limit) $print_forms_link .= $brewer_entries_text_019." ".$pay_text_034;
-				else $print_forms_link .= $brewer_entries_text_018;
-				$print_forms_link .= "\" data-bs-placement=\"top\" data-bs-container=\"body\"><i class=\"fa fa-lg fa-print text-muted me-1\"></i></a>";
+					$print_forms_link .= "<a class=\"hide-loader\" role=\"button\" data-bs-toggle=\"tooltip\" data-bs-title=\"";
+					if ($comp_paid_entry_limit) $print_forms_link .= $brewer_entries_text_019." ".$pay_text_034;
+					else $print_forms_link .= $brewer_entries_text_018;
+					$print_forms_link .= "\" data-bs-placement=\"top\" data-bs-container=\"body\"><i class=\"fa fa-lg fa-print text-muted me-1\"></i></a>";
+				
+			
 			}
 
 		}
@@ -558,7 +576,7 @@ if ($totalRows_log > 0) {
 
 		// Card Output
 		$entry_output_cards .= "<div class=\"col\">";
-		$entry_output_cards .= "<div class=\"card h-100 sponsor-card-bg bg-light-subtle border-secondary-subtle\">";
+		$entry_output_cards .= "<div class=\"card h-100 sponsor-card-bg bg-light-subtle border-secondary-subtle reveal-element\">";
 		$entry_output_cards .= "<div class=\"card-header bg-dark border-dark pt-3 pb-3\">";
 
 		if (!empty($medal_winner)) $entry_output_cards .= "<div class=\"position-absolute top-0 start-50 translate-middle badge bg-black border border-secondary text-white rounded-pill winner-place-pill\"><span class=\"fw-normal\"> ".display_place($winner_place,2)."</span></div>";
@@ -636,7 +654,7 @@ if ($totalRows_log > 0) {
 			// -- Print Button
 			$entry_output_cards .= "<div class=\"col-4\">";
 			if (!$judging_started) {
-				if ($multiple_bottle_ids) $entry_output_cards .= sprintf("<div class=\"text-center\"><i class=\"fa fa-fw fa-lg fa-print me-1\"></i>%s</div>", $multi_print_link);
+				if ($print_bottle_labels) $entry_output_cards .= sprintf("<div class=\"text-center\"><i class=\"fa fa-fw fa-lg fa-print me-1\"></i>%s</div>", $multi_print_link);
 				else $entry_output_cards .= sprintf("<div class=\"text-center\">%s</div>", $print_forms_link);
 			}
 			$entry_output_cards .= "</div>";
@@ -680,7 +698,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/output.inc.php?section=entry-form-multi" target="_blank" class="hide-loader-form-submit">
 
-	<div class="row g-2 d-print-none mb-3">
+	<div class="row g-2 d-print-none mb-3 reveal-element">
 		<div class="col-sm-12 col-md-3">
 			<div class="d-grid mb-1">
 				<?php 
@@ -702,7 +720,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 		</div>
 		<div class="col-sm-12 col-md-3">
 			<div class="d-grid mb-1">
-			<?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
+			<?php if (!$show_scores) { ?>
 				<button type="submit" id="btn" class="btn btn-primary" disabled data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-html="true" data-bs-content="<?php echo sprintf("%s %s",$brewer_entries_text_023,$bottle_labels_008); ?>"><i class='fa fa-print me-2'></i><?php echo $brewer_entries_text_024; ?></button>
 			<?php } ?>
 			</div>
@@ -720,7 +738,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 	<div id="entry-cards" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-2 mb-4 d-print-none">
 		<?php echo $entry_output_cards; ?>
 	</div>
-	<div id="entry-table" class="mt-2 table-responsive d-print-block">
+	<div id="entry-table" class="mt-2 table-responsive d-print-block reveal-element">
 		<table class="table table-bordered table-striped border-dark-subtle" id="sortable">
 			<thead class="table-dark">
 				<tr>
@@ -741,7 +759,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				    <th width="5%" nowrap><?php echo $label_mini_bos; ?></th>
 				  	<th width="5%"><?php echo $label_winner; ?></th>
 				  	<?php } ?>
-				  	<?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
+				  	<?php if ((!$show_scores) && ($print_bottle_labels)) { ?>
 				  	<?php if (!$judging_started) { ?>
 				    <th class="d-print-none" width="7%" nowrap>
 				    	<input class="form-check-input d-print-none" type="checkbox" id="select_all">

@@ -16,20 +16,19 @@ if ($action == "html") {
 <p class="lead">The <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets&amp;action=html">single file upload function</a> is also available as an alternative to this multiple upload function.</p>
 <?php } ?>
 <?php if (!HOSTED) { ?>
-<p class="lead"><small>If you are having issues with this browser-based file upload function, a fallback would be to use a File Transfer Protocol (FTP) application.</small></p>
+<p class="lead"><small>If you are having issues with this browser-based file upload function, or wish to upload files that are larger than 15 MB, a fallback would be to use a File Transfer Protocol (FTP) application.</small></p>
 <?php } ?>
 <p>For entrants to be able to view their scoresheets, each PDF should:</p>
-<ul>
+<ul style="margin-bottom: 30px;">
 	<li>Contain all judges' scoresheets and other documentation (cover sheet, etc.) in <strong>a single file</strong>.</li>
 	<?php if ($_SESSION['prefsDisplaySpecial'] == "J") { ?>
-	<li>In accordance with your installation's Scoresheet Unique Identifier <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">site preference</a>, be named with a <strong>six (6) character <u>judging</u> number</strong> (e.g., 000012.pdf, 987654.pdf, 01-234.pdf, abc123.pdf. 123abc.pdf, etc.) that corresponds EXACTLY to the entry's judging number as stored in the system's database.</li>
+	<li>In accordance with your installation's Scoresheet Unique Identifier <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">preference</a>, be named with a <strong>six (6) character <u>judging</u> number</strong> (e.g., 000012.pdf, 987654.pdf, 01-234.pdf, abc123.pdf. 123abc.pdf, etc.) that corresponds <strong>EXACTLY to the entry's judging number as stored in the system's database</strong>.</li>
 	<?php } else { ?>
-	<li>In accordance with your installation's Scoresheet Unique Identifier <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">site preference</a>, be named with the <strong><u>entry</u> number in six (6) digit format</strong> with leading zeroes (e.g., 000198.pdf, 000567.pdf, etc.).</li>
+	<li>In accordance with your installation's Scoresheet Unique Identifier <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">preference</a>, be named with the <strong><u>entry</u> number in six (6) digit format</strong> with leading zeroes (e.g., 000198.pdf, 000567.pdf, etc.).</li>
 	<?php } ?>
-	<li>Have a .pdf or .PDF extension.</li>
-	<li>Be <strong>less than <?php if (HOSTED) echo "4"; else echo "10"; ?> MB</strong> in size.</li>
+	<li>Have a .pdf or .PDF extension. Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case.<?php if (!HOSTED) { ?> If you choose to use an FTP program, make sure that all file names and extensions are lower case to ensure the application will recognize them.<?php } ?></li>
+	<li>Be <strong><?php if (HOSTED) echo "10"; else echo "15"; ?> MB or less</strong> in size.</li>
 </ul>
-<p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case. If you choose to use an FTP program, make sure that all file names and extensions are lower case to ensure the application will recognize them.</p>
 <?php if ($action == "html") { ?>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
@@ -40,7 +39,7 @@ if ($action == "html") {
 	<p><input type="submit" class="btn btn-primary" value="Upload PDF File"></p>
 </form>
 <?php } else { ?>
-<form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
+<form style="min-height: 300px;" id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="fallback">
     <input name="file" type="file" multiple />

@@ -678,7 +678,7 @@ $brew_text_005 = "Musíte zvolit sílu vzorku"; // missing punctuation intention
 $brew_text_006 = "Musíte zvolit nasycení vzorku"; // missing punctuation intentional
 $brew_text_007 = "Musíte zvolit sladkost vzorku"; // missing punctuation intentional
 $brew_text_008 = "Tento styl vyžaduje zadání podrobností k vašemu vzorku.";
-$brew_text_009 = "Požadavky na"; // missing punctuation intentional
+$brew_text_009 = "Požadavky:"; // missing punctuation intentional
 $brew_text_010 = "K tomuto stylu potřebujeme doplňující údaje. Prosím, zadejte je do nabízených polí.";
 $brew_text_011 = "Název vzorku je povinný.";
 $brew_text_012 = "***NEPOVINNÉ*** Pokud chcete, aby degustátoři vzali v úvahu to, co uvádíte, při posuzování a hodnocení vašeho vzorku. Uveďte pouze informace, které NENÍ MOŽNO ZADAT do jiných polí (např. způsob chmelení, druh chmele, druh medu, druh hroznů, druh hrušek, atd.)";
@@ -1828,7 +1828,7 @@ $evaluation_info_079 = "Komentujte tělo, nasycení, hřejivost, krémovitost, t
 $evaluation_info_080 = "Okomentujte celkový požitek z pití spojený se vzorkem, uveďte návrhy na zlepšení.";
 
 
-if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+if ((isset($_SESSION['prefsStyleSet'])) && (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025"))) {
     $styles_entry_text_21B = "Účastník MUSÍ zadat sílu (session, standard, double); pokud sílu nezadá, předpokládá se, že je standardní. Účastník MUSÍ uvést konkrétní typ Specialty IPA ze seznamu ve Style Guidelines nebo Provisonal Styles na internetových stránkách BJCP; NEBO MUSÍ popsat styl Specialty IPA a jeho klíčové vlastnosti formou komentáře, aby degustátoři věděli, co mají očekávat. Účastníci MOHOU uvést konkrétní použité odrůdy chmele, pokud se domnívají, že degustátoři nemusí rozpoznat odrůdové vlastnosti novějších chmelů. Účastníci MOHOU uvést kombinaci definovaných typů IPA (např. Black Rye IPA) bez uvedení dalších popisů.";
     $styles_entry_text_24C = "Účastník MUSÍ uvést světlé, jantarové nebo hnědé Bière de Garde.";
     $styles_entry_text_25B = "Účastník MUSÍ uvést sílu (table, standard, super) a barvu (světlá, tmavá). Účastník MŮŽE uvést druh použitého sladu.";

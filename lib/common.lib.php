@@ -1360,21 +1360,17 @@ function style_convert($number,$type,$base_url="",$archive="") {
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
 
-	/*
-	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
-	else
-	*/
 	$styles_db_table = $prefix."styles";
-
 	$style_set = $_SESSION['prefsStyleSet'];
 
 	mysqli_select_db($connection,$database);
 
-	/*
-	if (HOSTED) $query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $number, $style_set, $styles_db_table, $number, $style_set);
-	else 
-	*/
-	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $number, $style_set);
+	if ($style_set == "BJCP2025") {
+		$first_character = mb_substr($number, 0, 1);
+		if ($first_character == "C") $query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND brewStyleVersion='BJCP2025'",$styles_db_table,$number);
+		else $query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND brewStyleVersion='BJCP2021'",$styles_db_table,$number);
+	}
+	else $query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $number, $style_set);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 
@@ -1420,6 +1416,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		break;
 
+		/*
 		// Apparently unused. 2.6.2.
 		case "2":
 
@@ -1565,6 +1562,8 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		break;
 
+		*/
+
 		// Used only on My Account page for judges.
 		case "4":
 		$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
@@ -1683,11 +1682,13 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
 		break;
 
+		/*
 		// Apparently unused. 2.6.2.
 		case "5":
 		$n = preg_replace('/[^0-9]+/', '', $number);
 		if ((($style_set == "BJCP2015") || (($style_set == "BJCP2021"))) && ($n >= 35)) $style_convert = TRUE;
 		break;
+		*/
 
 		// Used primarily in export.output.php.
 		case "6":
@@ -1715,7 +1716,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		
 		$a = explode(",",$number);
 		$style_convert = "";
-		$style_convert .= "<ul>";
+		$style_convert .= "<ul class='list-inline'>";
 		
 		foreach ($a as $value) {
 			
@@ -1729,12 +1730,12 @@ function style_convert($number,$type,$base_url="",$archive="") {
 				else $style_name = $row_style['brewStyle'];
 
 				if ($row_style['brewStyleOwn'] == "bcoe") {
-					if ($style_set == "BA") $style_convert .= "<li>".$style_name."</li>";
-					elseif ($style_set == "AABC") $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").".".ltrim($row_style['brewStyleNum'],"0").": ".$style_name."</li>";
-					else $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$style_name."</li>";
+					if ($style_set == "BA") $style_convert .= "<li class='list-inline-item me-3'>".$style_name."</li>";
+					elseif ($style_set == "AABC") $style_convert .= "<li class='list-inline-item me-3'><strong>".ltrim($row_style['brewStyleGroup'],"0").".".ltrim($row_style['brewStyleNum'],"0").":</strong> ".$style_name."</li>";
+					else $style_convert .= "<li class='list-inline-item me-3'><strong>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].":</strong> ".$style_name."</li>";
 				}
 
-				else $style_convert .= "<li>".$label_custom_style.": ".$row_style['brewStyle']."</li>";
+				else $style_convert .= "<li class='list-inline-item me-3'><strong>".$label_custom_style.":</strong> ".$row_style['brewStyle']."</li>";
 
 			}
 				
@@ -1751,10 +1752,6 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$style_convert = "";
 		$style_name = "";
 
-		/*
-		if (HOSTED) $query_style = sprintf("SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s' UNION ALL SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s'", $styles_db_table, $number, $prefix."styles", $number);	
-		else 
-		*/
 		$query_style = sprintf("SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s'",$styles_db_table, $number);
 		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 		$row_style = mysqli_fetch_assoc($style);
@@ -1773,12 +1770,12 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$style_name = "";
 		$number = explode("^",$number);
 		
-		/*
-		if (HOSTED) $query_style = sprintf("SELECT brewStyleNum, brewStyleGroup, brewStyle, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND 
-			brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleNum, brewStyleGroup, brewStyle, brewStyleVersion, brewStyleReqSpec, brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom');", $styles_db_table, $number[0], $number[1], $number[2], $prefix."styles", $number[0], $number[1], $number[2]);
-		else 
-		*/
-		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$number[2]);
+		if ($number[2] == "BJCP2025") {
+			$first_character = mb_substr($number[0], 0, 1);
+			if ($first_character == "C") $query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1]);
+			else $query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1]);
+		}
+		else $query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$number[2]);
 		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 		$row_style = mysqli_fetch_assoc($style);
 
@@ -1799,20 +1796,16 @@ function style_convert($number,$type,$base_url="",$archive="") {
 	return $style_convert;
 }
 
-function get_table_info($input,$method,$table_id,$dbTable,$param,$base_url="") {
+function get_table_info($input,$method,$table_id,$db_table,$param,$base_url="") {
 
 	// Define Vars
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
 	mysqli_select_db($connection,$database);
 
-	/*
-	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
-	else
-	*/
 	$styles_db_table = $prefix."styles";
 
-	if ($dbTable == "default") {
+	if (($db_table == "default") || ($db_table == "current")) {
 		$judging_tables_db_table = $prefix."judging_tables";
 		$judging_locations_db_table = $prefix."judging_locations";
 		$judging_scores_db_table = $prefix."judging_scores";
@@ -1824,7 +1817,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param,$base_url="") {
 	// Archives
 	else {
 		
-		$suffix_1 = ltrim(get_suffix($dbTable), "_");
+		$suffix_1 = ltrim(get_suffix($db_table), "_");
 		$suffix = "_".$suffix_1;
 		$judging_tables_db_table = $prefix."judging_tables".$suffix;
 		$judging_locations_db_table = $prefix."judging_locations".$suffix;
@@ -1875,7 +1868,8 @@ function get_table_info($input,$method,$table_id,$dbTable,$param,$base_url="") {
 			$row_judging_location['judgingDateEnd']."^".
 			$row_judging_location['judgingLocName']."^".
 			$row_judging_location['judgingLocation']."^".
-			$row_judging_location['judgingLocType'];
+			$row_judging_location['judgingLocType']."^".
+			$row_judging_location['judgingLocNotes'];
 		}
 		
 		return $return;
@@ -1963,10 +1957,6 @@ function get_table_info($input,$method,$table_id,$dbTable,$param,$base_url="") {
 
 			foreach ($a as $value) {
 
-				/*
-				if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);
-				else 
-				*/
 				$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 				$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 				$row_styles = mysqli_fetch_assoc($styles);
@@ -2514,11 +2504,25 @@ function get_entry_count($method,$filter="") {
 	return $r;
 }
 
-function get_evaluation_count($method) {
+function get_evaluation_count($method,$table_id="default") {
+	
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+	
 	if ($method == "total") $sql = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."evaluation");
-	if ($method == "unique") $sql = sprintf("SELECT COUNT(DISTINCT `eid`) as 'count' FROM %s",$prefix."evaluation");	
+	
+	if ($method == "unique") $sql = sprintf("SELECT COUNT(DISTINCT `eid`) as 'count' FROM %s",$prefix."evaluation");
+	
+	if ($method == "table") {
+		if ($table_id != "default") $sql = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE evalTable='%s'",$prefix."evaluation",$table_id);
+		else $sql = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."evaluation");
+	}
+
+	if ($method == "table-unique") {
+		if ($table_id != "default") $sql = sprintf("SELECT COUNT(DISTINCT `eid`) as 'count' FROM %s WHERE evalTable='%s'",$prefix."evaluation",$table_id);
+		else $sql = sprintf("SELECT COUNT(DISTINCT `eid`) as 'count' FROM %s",$prefix."evaluation");
+	}
+
 	$query = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 	$row = mysqli_fetch_assoc($query);
 	return $row['count'];
@@ -2838,15 +2842,23 @@ function check_special_ingredients($style,$style_version) {
 	*/
 	$styles_db_table = $prefix."styles";
 
-	/*
-	if (HOSTED) $query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $style_version, $style_explodies[0], $style_explodies[1], $prefix."styles", $style_version, $style_explodies[0], $style_explodies[1]);
-	else 
-	*/
-	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $style_version, $style_explodies[0], $style_explodies[1]);
+	if ($style_version == "BJCP2025") {
+		$first_character = mb_substr($style, 0, 1);
+		if ($first_character == "C") $query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $style_explodies[0], $style_explodies[1]);
+		else $query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $style_version, $style_explodies[0], $style_explodies[1]);
+	}
+	else $query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $style_version, $style_explodies[0], $style_explodies[1]);
 	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 
-	if ((!empty($row_brews)) && ($row_brews['brewStyleReqSpec'] == 1)) return TRUE;
+	if ((!empty($row_brews)) && ($row_brews['brewStyleReqSpec'] == 1)) {
+		
+		// Execptions for some selected 2025 cider styles
+		if (($style_version == "BJCP2025") && (($style == "C2-C") || ($style == "C2-D") || ($style == "C4-C"))) return FALSE;
+		else return TRUE;
+	
+	}
+
 	else return FALSE;
 
 }
@@ -3171,11 +3183,11 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			if (!empty($location)) {
 
 				if (!empty($row_table_assignments['assignRoles'])) {
-					$hj = "<span class=\"text-teal\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
-					$lj = "<span class=\"text-teal\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
-					$mbos = "<span class=\"text-teal\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
+					$hj = "<span class=\"small text-teal\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span><br>";
+					$lj = "<span class=\"small text-teal\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span><br>";
+					$mbos = "<span class=\"small text-teal\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span><br>";
 					$role_replace1 = array("HJ","LJ","MBOS",", ");
-					$role_replace2 = array($hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;");
+					$role_replace2 = array($hj,$lj,$mbos,"");
 					$role = str_replace($role_replace1,$role_replace2,$row_table_assignments['assignRoles']);
 				}
 
@@ -3184,7 +3196,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 					$output .= "\t\t\t<td>".$location[2];
 					if (!empty($location[3]) && ($location[4] == "1")) $output .= "<br><em><small>".$location[3]."</small></em>";
 					$output .= "\t\t\t</td>";
-					$output .= "\t\t\t<td>";
+					$output .= sprintf("\t\t\t<td><span class=\"visually-hidden invisible hidden\">%s</span>",$location[0]);
 					$output .= getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "short", "date-time");
 					if (!empty($location[1])) $output .= " - ".getTimeZoneDateTime($time_zone, $location[1], $date_format,  $time_format, "short", "date-time");
 					$output .= "</td>\n";
@@ -3194,6 +3206,9 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 						$output .= "<br>".$label_round." ".$row_table_assignments['assignFlight'].", ".$label_flight." ".$row_table_assignments['assignFlight'];
 					}
 					if (!empty($row_table_assignments['assignRoles'])) $output .= "<br>".$role;
+					$output .= "</td>\n";
+					$output .= "\t\t\t<td>";
+					$output .= $location[5];
 					$output .= "</td>\n";
 					$output .= "\t\t</tr>\n";
 				}
@@ -3709,6 +3724,7 @@ function judging_location_info($id) {
 		$return[3] = $row_judging_loc3['judgingLocation'];
 		$return[4] = $row_judging_loc3['judgingDateEnd'];
 		$return[5] = $row_judging_loc3['judgingLocType'];
+		$return[6] = $row_judging_loc3['judgingLocNotes'];
 
 	}
 
@@ -3732,15 +3748,19 @@ function yes_no($input,$base_url,$method=0) {
 		if (($input == "Y") || ($input == 1)) {
 			$output = "<span class=\"fa fa-lg fa-check text-success\"></span> ";
 			if ($method == 0) $output = $label_yes;
-			if ($method == 1) $output = "<span class=\"fa fa-fw fa-check text-success\"></span> <small>".$label_yes."</small>";
-			if ($method == 2) $output = "<span class=\"fa fa-lg fa-fw fa-check text-success\"></span> ".$label_yes;
+			if ($method == 1) $output = "<span class=\"fa fa-check text-success\"></span> <small>".$label_yes."</small>";
+			if ($method == 2) $output = "<span class=\"fa fa-lg fa-check text-success\"></span> ".$label_yes;
+		}
+
+		elseif ($input == 2) {
+			$output = "<span class=\"fa fa-lg fa-times text-danger\"></span> ".$label_opt_out;
 		}
 
 		else {
-			$output .= "<span class=\"fa fa-lg fa-times text-danger\"></span> ";
+			$output = "<span class=\"fa fa-lg fa-times text-danger\"></span> ";
 			if ($method == 0) $output = $label_no;
-			if ($method == 1) $output = "<span class=\"fa fa-fw fa-times text-danger\"></span> <small>".$label_no."</small>";
-			if ($method == 2) $output = "<span class=\"fa fa-lg fa-fw fa-times text-danger\"></span> ".$label_no;
+			if ($method == 1) $output = "<span class=\"fa fa-times text-danger\"></span> <small>".$label_no."</small>";
+			if ($method == 2) $output = "<span class=\"fa fa-lg fa-times text-danger\"></span> ".$label_no;
 		}
 
 	}
@@ -4439,7 +4459,7 @@ function style_number_const($style_category_number,$style_sub,$style_set_display
 		case 0:
 			if (isset($_SESSION['prefsStyleSet'])) {
 				if ($_SESSION['prefsStyleSet'] == "BA") return "";
-				elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
+				elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
 				else return $style_category_number.$style_set_display_separator.$style_sub;
 			}
 			else return "";
@@ -5334,6 +5354,72 @@ function create_bs_popover($popover_id,$popover_class,$popover_type,$popover_tit
     $popover_output .= "</a>";
 
     return $popover_output;
+}
+
+function simpleEncrypt($data,$key,$salt) {
+
+	$encryption_key = base64_decode($key);
+	
+	if (HOSTED) {
+		$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('AES-128-CBC'));
+		$encrypted = openssl_encrypt($data, 'AES-128-CBC', $encryption_key, 0, $iv);
+		$encrypted_data = base64_encode($encrypted . '::' . $iv);
+	}
+
+	else {
+
+		if (function_exists('openssl_encrypt')) {
+			$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('AES-128-CBC'));
+			$encrypted = openssl_encrypt($data, 'AES-128-CBC', $encryption_key, 0, $iv);
+			$encrypted_data = base64_encode($encrypted . '::' . $iv);
+		}
+
+		// Use mcrypt if openssl not available; deprecated as of PHP 7.1
+		elseif (function_exists('mcrypt_encrypt')) {
+			$encrypted_data = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($salt), $data, MCRYPT_MODE_CBC, md5(md5($salt))));
+		}
+
+		// Fallback is simple obfuscation with base64 if allowed by function call params
+		else {
+			$encrypted_data = base64_encode($data);
+		}
+
+	}
+
+	return $encrypted_data;
+	
+}
+
+function simpleDecrypt($data,$key,$salt) {
+
+	$encryption_key = base64_decode($key);
+	
+	if (HOSTED) {
+		list($encrypted_data, $iv) = explode('::', base64_decode($data));
+		$decrypted_data = openssl_decrypt($encrypted_data, 'AES-128-CBC', $encryption_key, 0, $iv);
+	}
+	
+	else {
+		
+		if (function_exists('openssl_decrypt')) {
+			list($encrypted_data, $iv) = explode('::', base64_decode($data));
+			$decrypted_data = openssl_decrypt($encrypted_data, 'AES-128-CBC', $encryption_key, 0, $iv);
+		}
+
+		// Use mcrypt if openssl not available; deprecated as of PHP 7.1
+		elseif (function_exists('mcrypt_decrypt')) {
+			$decrypted_data = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($salt), base64_decode($data), MCRYPT_MODE_CBC, md5(md5($salt))), "\0");
+		}
+
+		// Fallback is simple decoding with base64 if allowed by function call params
+		else {
+			$decrypted_data = base64_decode($data);
+		}
+	
+	}
+
+	return $decrypted_data;
+
 }
 
 

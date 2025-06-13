@@ -208,7 +208,7 @@ if ($row_scored_entries['count'] > 0) {
 				</script>
 				";
 
-				$winners_table_all .= "<div class=\"bcoem-winner-table\">";
+				$winners_table_all .= "<div class=\"bcoem-winner-table reveal-element\">";
 				
 				$winners_table_all .= $winners_table_header;
 				

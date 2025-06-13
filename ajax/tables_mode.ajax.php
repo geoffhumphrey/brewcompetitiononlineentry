@@ -282,10 +282,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 				foreach (array_unique($a) as $value) {
 
-					/*
-					if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value); 
-					else 
-					*/
 					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);

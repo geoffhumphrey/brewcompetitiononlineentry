@@ -115,7 +115,7 @@ require(DB.'winners.db.php');
 		} );
 	} );
 </script>
-<div class="table-responsive-md">
+<div class="table-responsive-md reveal-element">
 <?php echo $header1_1; ?>
 <table class="table table-bordered table-striped border-dark-subtle" id="sortable<?php echo $random; ?>">
 <thead class="table-dark">
@@ -230,8 +230,8 @@ if ($totalRows_sbi > 0) {
 		} );
 	</script>
 
+<div class="table-responsive-md reveal-element">
 <?php echo $header2_1; ?>
-<div class="table-responsive-md">
 <table class="table table-bordered table-striped border-dark-subtle" id="sortable<?php echo $random1; ?>">
 <thead class="table-dark">
 	<?php echo $table_head2; ?>

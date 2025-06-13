@@ -131,7 +131,7 @@ define('ENABLE_MARKDOWN', FALSE);
  * Deprecated as of 3.0.0.
  */
 
-define('ENABLE_MAILER', TRUE);
+define('ENABLE_MAILER', FALSE);
 
 /**
  * Error Reporting
@@ -183,6 +183,7 @@ function sterilize($sterilize = NULL) {
 if (HOSTED) {
     $installation_id = md5(__FILE__);
     $session_expire_after = 60;
+    $base_url_hosted = "https://brewingcompetitions.com/";
 }
 
 /** 
@@ -236,19 +237,28 @@ $_SESSION['last_action'] = time();
 
 /**
  * RECAPTCHA Keys
- * One set is for hosted installations, the other is for outside use.
- * Per Google guidelines, all keys validate the domain from
+ * 
+ * Per Google guidelines, all keys must validate the domain from
  * which it was generated:
  * @see https://developers.google.com/recaptcha/docs/domain_validation
- * You may need to change the second set with your own API keys if
- * reCAPTCHA is not functioning on your self-hosted installation.
+ * 
+ * Custom keys are defined in site preferences. The other set is for 
+ * hosted installations.
+ * 
+ * As a fallback, you may need to define your own API keys using the first 
+ * set of variables below if reCAPTCHA is not functioning on your 
+ * self-hosted installation.
  * @see https://developers.google.com/recaptcha/
- * These are the fallback default. Custom keys must be defined in site 
- * preferences.
+ * 
  */
 
 $public_captcha_key = "";
 $private_captcha_key = "";
+
+if (HOSTED) {
+    $public_captcha_key = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
+    $private_captcha_key = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
+}
 
 /** 
  * Uncomment to display paths. 
@@ -277,5 +287,6 @@ echo USER_DOCS."<br>";
 echo USER_TEMP."<br>";
 echo LANG."<br>";
 echo DEBUGGING."<br>";
+exit();
 */
 ?>

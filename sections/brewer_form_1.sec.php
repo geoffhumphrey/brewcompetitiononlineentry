@@ -50,11 +50,15 @@ if ($_SESSION['prefsProEdition'] == 0) {
                 <label class="radio-inline">
                     <input type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "0") || (empty($row_brewer['brewerProAm']))) echo "CHECKED"; ?> /> <?php echo $label_no; ?>
                 </label>
+                <label class="radio-inline">
+                    <input type="radio" name="brewerProAm" value="2" id="brewerProAm_2" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "2")) echo "CHECKED"; ?> /> <?php echo $label_opt_out; ?>
+                </label>
             </div>
             <div class="help-block">
                 <p><?php echo $brewer_text_041; ?></p>
                 <p><?php echo $brewer_text_043; ?></p>
                 <p><?php echo $brewer_text_042; ?></p>
+                <p><?php echo $brewer_text_056; ?></p>
             </div>
         </div>
     </div>

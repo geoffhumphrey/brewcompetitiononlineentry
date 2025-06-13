@@ -4,42 +4,37 @@
  * Module:      staff_points.output.php
  * Description: This module calculates the BJCP points for staff, judges, and stewards
  *	            using the guidelines provided by the BJCP at https://dev.bjcp.org/about/reference/experience-point-award-schedule/.
+ * 
  * Revision History:
  * - fixed point output errors for judges and BOS judges
  * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, bos judge/staff, etc.)
  * - XML output is fully compliant with the BJCP Database Interface Specifications
  *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
+ * 
+ * To figure out judge points, need to assess:
+ * - Which sessions the judge was assigned to
+ * - Which day those sessions were on
+ * - For each day:
+ *   - Determine how many sessions the judge was assigned to and award 0.5 points for each
+ *   - Make sure that number is a minimum of 1.0 and a maximum of 1.5
+ * - Sum up the daily points
+ * - Compare that sum to the maximum judge points based upon the table; if more use the max, if less, use the sum
+ *
+ * To figure out steward points, need to assess:
+ * - Which sessions the steward was assigned to
+ * - Which day those sessions were on
+ * - For each day, determine how many sessions the steward was assigned to and award 0.5 points for each
+ * - Sum up the daily points
+ * - Compare that sum to the 1.0 maximum possible steward points for the entire competition; if more use maximum, if less use sum
  */
 
-
-/*
-
-To figure out judge points, need to assess:
- - Which sessions the judge was assigned to
- - Which day those sessions were on
- - For each day:
-   - Determine how many sessions the judge was assigned to and award 0.5 points for each
-   - Make sure that number is a minimum of 1.0 and a maximum of 1.5
- - Sum up the daily points
- - Compare that sum to the maximum judge points based upon the table; if more use the max, if less, use the sum
-
-To figure out steward points, need to assess:
- - Which sessions the steward was assigned to
- - Which day those sessions were on
- - For each day:
-   - Determine how many sessions the steward was assigned to and award 0.5 points for each
- - Sum up the daily points
- - Compare that sum to the 1.0 maximum possible steward points for the entire competition; if more use maximum, if less use sum
-
-*/
-
- // Redirect if directly accessed without authenticated session
- if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
-     $redirect = "../../403.php";
-     $redirect_go_to = sprintf("Location: %s", $redirect);
-     header($redirect_go_to);
-     exit();
- }
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
 
 include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
@@ -54,8 +49,13 @@ $total_entries = total_paid_received("judging_scores",0);
 
 $st_running_total = array();
 
-// Figure out whether BOS Judge Points are awarded or not
-// "BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
+/**
+ * Figure out whether BOS Judge Points are awarded or not
+ * "BOS points may only be awarded if a competition has at 
+ * least 30 entries in at least five beer and/or three 
+ * mead/cider categories."
+ */
+
 $beer_styles = array();
 $mead_styles = array();
 $cider_styles = array();
@@ -106,6 +106,10 @@ $output_staff = "";
 $organ_bjcp_id = "";
 $organ_uid = "";
 
+$j = array();
+$s = array();
+$st = array();
+
 if ($view == "default") {
 
 	if ($totalRows_organizer > 0) {
@@ -126,11 +130,11 @@ if ($view == "default") {
 	}
 
 	if ($totalRows_judges > 0) {
-        
-        $j = array();
 
 		do { 
+			
 			$j[] = $row_judges['uid']; 
+		
 		} while ($row_judges = mysqli_fetch_assoc($judges));
 
 		$j = array_unique($j);
@@ -179,7 +183,6 @@ if ($view == "default") {
 
 	} // endif ($totalRows_judges > 0)
 
-	
 	foreach (array_unique($bos_judge_no_assignment) as $uid) {
 
 		if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
@@ -214,20 +217,17 @@ if ($view == "default") {
 				$output_judges .= "</tr>";
 
 			}
-			
 
 		}	
 	
 	}
 
-	
-	
 	if ($totalRows_stewards > 0) {
         
-        $s = array();
-        
 		do { 
+			
 			$s[] = $row_stewards['uid']; 
+		
 		} while ($row_stewards = mysqli_fetch_assoc($stewards));
 
 		foreach (array_unique($s) as $uid) {
@@ -258,9 +258,10 @@ if ($view == "default") {
 
 	if ($totalRows_staff > 0) {
         
-        $st = array();
-		do { 
+		do {
+
 			$st[] = $row_staff['uid']; 
+		
 		} while ($row_staff = mysqli_fetch_assoc($staff));
 		
 		$st_running_total = 0;
@@ -302,6 +303,7 @@ if ($view == "default") {
 	} // end if ($totalRows_staff > 0)
 
 ?>
+	
 	<div class="page-header">
         	<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$output_text_024); ?> </h1>
     </div>
@@ -317,7 +319,7 @@ if ($view == "default") {
     <h2><?php echo $label_organizer; ?></h2>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable0').dataTable( {
+		$('#organizer_table').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -332,7 +334,7 @@ if ($view == "default") {
 			} );
 		} );
 	</script>
-    <table class="dataTable table table-striped table-bordered" id="sortable0">
+    <table class="dataTable table table-striped table-bordered" id="organizer_table">
     <thead>
     <tr>
     	<th width="35%"><?php echo $label_name; ?></th>
@@ -349,7 +351,7 @@ if ($view == "default") {
     <h2><?php echo $label_judges; ?></h2>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable1').dataTable( {
+		$('#judges_table').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -365,7 +367,7 @@ if ($view == "default") {
 			} );
 		} );
 	</script>
-    <table class="dataTable table table-striped table-bordered" id="sortable1">
+    <table class="dataTable table table-striped table-bordered" id="judges_table">
     <thead>
     <tr>
     	<th width="35%"><?php echo $label_name; ?></th>
@@ -383,7 +385,7 @@ if ($view == "default") {
     <h2><?php echo $label_stewards; ?></h2>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable2').dataTable( {
+		$('#stewards_table').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -398,7 +400,7 @@ if ($view == "default") {
 			} );
 		} );
 	</script>
-    <table class="dataTable table table-striped table-bordered" id="sortable2">
+    <table class="dataTable table table-striped table-bordered" id="stewards_table">
     <thead>
     <tr>
     	<th width="35%"><?php echo $label_name; ?></th>
@@ -417,7 +419,7 @@ if ($view == "default") {
     <?php if ($st_running_total > $staff_max_points) echo sprintf("<p><em>%s</em></p>",$output_text_033); ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable99').dataTable( {
+		$('#staff_table').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -432,7 +434,7 @@ if ($view == "default") {
 			} );
 		} );
 	</script>
-    <table class="dataTable table table-striped table-bordered" id="sortable99">
+    <table class="dataTable table table-striped table-bordered" id="staff_table">
     <thead>
     <tr>
     	<th width="35%"><?php echo $label_name; ?></th>
@@ -449,4 +451,4 @@ if ($view == "default") {
 </div>
 </body>
 </html>
-<?php } // end if ($view == "print") ?>
+<?php } // end if ($view == "default") ?>

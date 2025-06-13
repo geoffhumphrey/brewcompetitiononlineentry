@@ -10,30 +10,43 @@ require (CLASSES.'phpmailer/src/Exception.php');
 require (CLASSES.'phpmailer/src/PHPMailer.php');
 require (CLASSES.'phpmailer/src/SMTP.php');
 
+if (!HOSTED) {
+    $secretKey = base64_encode(bin2hex($password));
+    $nacl = base64_encode(bin2hex($server_root));
+    $smtp_password = simpleDecrypt($_SESSION['prefsEmailPassword'], $secretKey, $nacl);
+}
+
 $admin = FALSE;
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2)) {
   
     $admin = TRUE;
 
-    $secretKey = base64_encode(bin2hex($password));
-    $nacl = base64_encode(bin2hex($server_root));
-    $smtp_password = simpleDecrypt($_SESSION['prefsEmailPassword'], $secretKey, $nacl);
-
     function send_test_message($mail,$smtp_password) {
 
         require (CONFIG.'config.php');
+        
+        if (HOSTED) {
+            include(CONFIG.'config.mail.php');
+        }
+
+        else {
+            $smtp_host = $_SESSION['prefsEmailHost'];
+            $smtp_username = $_SESSION['prefsEmailUsername'];
+            $smtp_secure = $_SESSION['prefsEmailEncrypt'];
+            $smtp_port = $_SESSION['prefsEmailPort'];
+        }
 
         try { 
 
             $mail->SMTPDebug  = 1;
             $mail->isSMTP();
-            $mail->Host       = $_SESSION['prefsEmailHost'];
+            $mail->Host       = $smtp_host;
             $mail->SMTPAuth   = TRUE; 
-            $mail->Username   = $_SESSION['prefsEmailUsername']; 
+            $mail->Username   = $smtp_username; 
             $mail->Password   = $smtp_password; 
-            $mail->SMTPSecure = $_SESSION['prefsEmailEncrypt']; 
-            $mail->Port       = $_SESSION['prefsEmailPort'];
+            $mail->SMTPSecure = $smtp_secure; 
+            $mail->Port       = $smtp_port;
             $mail->isHTML(true);
             $mail->send();
               
@@ -62,19 +75,28 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2)) {
     $subject = mb_convert_encoding($subject, "UTF-8");
 
     $message = "";
-    // Build the message
     $message .= "<html>" . "\r\n";
     $message .= "<body>";
-    $message .= "<p>A request to send a test email to this address was made from the ".$from_name." using the following settings:</p>";
-    $message .= "<ul>";
-    $message .= "<li><strong>Originating Email Address:</strong> ".$_SESSION['prefsEmailFrom']."</li>";
-    $message .= "<li><strong>Host:</strong> ".$_SESSION['prefsEmailHost']."</li>";
-    $message .= "<li><strong>Username:</strong> ".$_SESSION['prefsEmailUsername']."</li>";
-    $message .= "<li><strong>Encryption:</strong> ".$_SESSION['prefsEmailEncrypt']."</li>";
-    $message .= "<li><strong>Port:</strong> ".$_SESSION['prefsEmailPort']."</li>";
-    $message .= "</li>";
-    $message .= "</ul>";
-    $message .= "<p>If you're reading this, your settings are correct!</p>";
+    
+    if (HOSTED) {
+        $message .= "<p>A request to send a test email to this address was made from the ".$from_name.".</p>";
+        $message .= "<p>If you're reading this, emails are being generated successfully.</p>";
+        $message .= "<p><small>Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.</small></p>";
+    }
+
+    else {
+        $message .= "<p>A request to send a test email to this address was made from the ".$from_name." using the following settings:</p>";
+        $message .= "<ul>";
+        $message .= "<li><strong>Originating Email Address:</strong> ".$_SESSION['prefsEmailFrom']."</li>";
+        $message .= "<li><strong>Host:</strong> ".$_SESSION['prefsEmailHost']."</li>";
+        $message .= "<li><strong>Username:</strong> ".$_SESSION['prefsEmailUsername']."</li>";
+        $message .= "<li><strong>Encryption:</strong> ".$_SESSION['prefsEmailEncrypt']."</li>";
+        $message .= "<li><strong>Port:</strong> ".$_SESSION['prefsEmailPort']."</li>";
+        $message .= "</li>";
+        $message .= "</ul>";
+        $message .= "<p>If you're reading this, your settings are correct and emails are being generated successfully.</p>";
+    }
+
     if ((DEBUG) || (TESTING)) $message .= "<p><small>Sent using phpMailer.</small></p>";
     $message .= "</body>" . "\r\n";
     $message .= "</html>";
@@ -124,6 +146,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2)) {
         </p>
         <p>If there are any errors sending your email with the credentials you provided, they will be displayed below. Close this window and check your settings, especially your password.</p>
         <pre>
+
         <?php
         $mail = new PHPMailer(true);
         $mail->CharSet = 'UTF-8';
@@ -134,6 +157,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2)) {
         $mail->Body = $message;
         send_test_message($mail,$smtp_password);
         ?>
+
         </pre>
 
         <?php } else { ?>

@@ -55,10 +55,27 @@ $page_info16 = "";
 $header1_17 = "";
 $page_info17 = "";
 $style_info_modals = "";
+
 $ba_accepted_styles = array();
 $anchor_links_nav = "";
 $anchor_links = array();
 $anchor_top = "<p class=\"d-print-none\"><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
+
+$entry_limits_by_style = "";
+if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimits']) > 1)) {
+	foreach ($style_sets as $style_set) {
+		if ($_SESSION['prefsStyleSet'] == $style_set['style_set_name']) {
+			foreach (json_decode($_SESSION['prefsStyleLimits'],true) as $key => $value) {
+				foreach ($style_set['style_set_categories'] as $k => $v) {
+					if ($k == $key) {
+						if ($style_limit_entry_count_display[$key] >= $value) $entry_limits_by_style .= sprintf("<tr><td>%s: %s</td><td>%s</td><td><span class=\"text-muted\">%s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i></td></tr>",$key,$v,$value,$style_limit_entry_count_display[$key],$entry_info_text_056);
+						else $entry_limits_by_style .= sprintf("<tr><td>%s: %s</td><td>%s</td><td>".$style_limit_entry_count_display[$key]."</td></tr>",$key,$v,$value);
+					} 
+				}
+			}
+		}
+    }
+}
 
 $contestRulesJSON = json_decode($row_contest_info['contestRules'],true);
 
@@ -94,24 +111,55 @@ if ($show_entries) {
 		if (NHC) $page_info4 .= sprintf("%s%s %s",$currency_symbol,number_format($_SESSION['contestEntryFeePasswordNum'],2),$entry_info_text_018);
 		$page_info4 .= "</p>";
 
-		// Entry Limit
-		if ((!empty($row_limits['prefsEntryLimit'])) || (!empty($style_type_limits_display))) {
+		// Entry Limits
+		if ((!empty($row_limits['prefsEntryLimit'])) || (!empty($row_limits['prefsEntryLimitPaid'])) || (!empty($style_type_limits_display)) || (!empty($entry_limits_by_style))) {
+
 			$anchor_links[] = $label_entry_limit;
 			$anchor_name = str_replace(" ", "-", $label_entry_limit);
 			
-			$header1_5 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_limit);
-			if (!empty($row_limits['prefsEntryLimit'])) $page_info5 .= sprintf("<p>%s %s %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
-			if (!empty($row_limits['prefsEntryLimitPaid'])) $page_info5 .= sprintf("<p>%s %s <strong>%s</strong> %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimitPaid'],strtolower($label_paid),$entry_info_text_020);
-			if (!empty($style_type_limits_display)) {
-				$page_info5 .= "<p>".$entry_info_text_053."</p>";
-				$page_info5 .= "<ul>";
-				foreach($style_type_limits_display as $key => $value) {
-					if ($value > 0) {
-						if (array_key_exists($key,$style_types_translations)) $page_info5 .= "<li>".ucfirst($style_types_translations[$key])." &ndash; ".$value."</li>";
-						else $page_info5 .= "<li>".ucfirst($key)." &ndash; ".$value."</li>";
+			$header1_5 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_limits);
+
+			if (($_SESSION['prefsProEdition'] == 0) && ((!empty($row_limits['prefsEntryLimit'])) || (!empty($row_limits['prefsEntryLimitPaid'])))) {
+
+				$page_info5 .= "<dl class=\"row\">";
+				if (!empty($row_limits['prefsEntryLimit'])) $page_info5 .= sprintf("<dt class=\"col-6 col-md-3 col-lg-2\">%s:</dt><dd class=\"col-6 col-md-9 col-lg-10\">%s</dd>",$label_entry_limit, $row_limits['prefsEntryLimit']);
+				if (!empty($row_limits['prefsEntryLimitPaid'])) $page_info5 .= sprintf("<dt class=\"col-6 col-md-3 col-lg-2\">%s &ndash; %s:</dt><dd class=\"col-6 col-md-9 col-lg-10\">%s</dd>",$label_entry_limit, $label_paid, $row_limits['prefsEntryLimitPaid']);
+				$page_info5 .= "</dl>";
+
+			}
+
+			if (!empty($style_type_entry_count_display)) {
+				
+				$page_info5 .= "<h3>".str_replace(":","",ucwords($entry_info_text_053))."</h3>";
+				$page_info5 .= "<table class='table table-bordered border-dark-subtle'>";
+				$page_info5 .= "<thead class='table-dark'>";
+				$page_info5 .= sprintf("<tr><th width='%s'>%s</th><th width='%s'>%s</th><th>%s</th></tr>","30%",$label_style_type,"30%",$label_limit,$label_current_count);
+				$page_info5 .= "</thead>";
+				$page_info5 .= "<tbody>";
+
+				foreach ($style_type_entry_count_display as $key => $value) {
+					if (!empty($value[1])) {
+						if ($value[0] >= $value[1]) $page_info5 .= sprintf("<tr><td>%s</td><td class=\"text-muted\">%s</td><td>%s<i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i></td>", $key, $value[1], $value[0], $entry_info_text_056);
+						else $page_info5 .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td>", $key, $value[1], $value[0]);
 					}
 				}
-				$page_info5 .= "</ul>";
+				
+				$page_info5 .= "</tbody>";
+				$page_info5 .= "</table>";
+
+			}
+
+			if (!empty($entry_limits_by_style)) {
+
+				$page_info5 .= sprintf("<h3>%s</h3>",$label_entry_limit_style);
+				$page_info5 .= "<table class='table table-bordered border-dark-subtle'>";
+				$page_info5 .= "<thead class='table-dark'>";
+				$page_info5 .= sprintf("<tr><th width='%s'>%s</th><th width='%s'>%s</th><th>%s</th></tr>","30%",$label_category,"30%",$label_limit,$label_current_count);
+				$page_info5 .= "</thead>";
+				$page_info5 .= "<tbody>";
+				$page_info5 .= $entry_limits_by_style;
+				$page_info5 .= "</tbody>";
+				$page_info5 .= "</table>";
 			}
 			
 		}
@@ -120,50 +168,50 @@ if ($show_entries) {
 			
 			$anchor_links[] = $label_entry_per_entrant;
 			$anchor_name = str_replace(" ", "-", $label_entry_per_entrant);
-			$header1_16 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_per_entrant);
+			$page_info5 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h3>%s</h3>",strtolower($anchor_name),$label_entry_per_entrant);
 
 			if ($incremental) {
 
-				$page_info16 .= "<table class='table table-bordered border-dark-subtle'>";
-				$page_info16 .= "<thead class='table-dark'>";
-				$page_info16 .= sprintf("<tr><th>%s</th><th>%s</th></tr>",$label_limit,ucwords($sidebar_text_027));
-				$page_info16 .= "</thead>";
-				$page_info16 .= "<tbody>";
-				if (time() < $limit_date_1) $page_info16 .= "<tr class='table-info border-dark-subtle'>";
-				else  $page_info16 .= "<tr>";
-				$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[1]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
-				$page_info16 .= "</tr>";
+				$page_info5 .= "<table class='table table-bordered border-dark-subtle'>";
+				$page_info5 .= "<thead class='table-dark'>";
+				$page_info5 .= sprintf("<tr><th width='%s'>%s</th><th>%s</th></tr>","30%",$label_limit,ucwords($sidebar_text_027));
+				$page_info5 .= "</thead>";
+				$page_info5 .= "<tbody>";
+				if (time() < $limit_date_1) $page_info5 .= "<tr class='table-info border-dark-subtle'>";
+				else  $page_info5 .= "<tr>";
+				$page_info5 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[1]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
+				$page_info5 .= "</tr>";
 				
 				if (!empty($limit_date_2)) {
-					if ($current_limit == 2) $page_info16 .= "<tr class='table-info border-dark-subtle'>";
-					else $page_info16 .= "<tr>";
-					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[2]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_2, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
-					$page_info16 .= "</tr>";
+					if ($current_limit == 2) $page_info5 .= "<tr class='table-info border-dark-subtle'>";
+					else $page_info5 .= "<tr>";
+					$page_info5 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[2]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_2, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
+					$page_info5 .= "</tr>";
 				}
 
 				if (!empty($limit_date_3)) {
-					if ($current_limit == 3) $page_info16 .= "<tr class='table-info border-dark-subtle'>";
-					else $page_info16 .= "<tr>";
-					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[3]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_3, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
-					$page_info16 .= "</tr>";
+					if ($current_limit == 3) $page_info5 .= "<tr class='table-info border-dark-subtle'>";
+					else $page_info5 .= "<tr>";
+					$page_info5 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[3]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_3, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
+					$page_info5 .= "</tr>";
 				}
 
 				if (!empty($limit_date_4)) {
-					if ($current_limit == 4) $page_info16 .= "<tr class='table-info border-dark-subtle'>";
-					else $page_info16 .= "<tr>";
-					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[4]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_4, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
-					$page_info16 .= "</tr>";
+					if ($current_limit == 4) $page_info5 .= "<tr class='table-info border-dark-subtle'>";
+					else $page_info5 .= "<tr>";
+					$page_info5 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[4]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_4, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
+					$page_info5 .= "</tr>";
 				}
 
 				if (!empty($real_overall_user_entry_limit)) {	
-					if ($current_limit == 0) $page_info16 .= "<tr class='table-info border-dark-subtle'>";
-					else $page_info16 .= "<tr>";
-					$page_info16 .= sprintf("<td>%s %s</td><td>%s</td>",$real_overall_user_entry_limit, $label_entries, $entry_closed);
-					$page_info16 .= "</tr>";
+					if ($current_limit == 0) $page_info5 .= "<tr class='table-info border-dark-subtle'>";
+					else $page_info5 .= "<tr>";
+					$page_info5 .= sprintf("<td>%s %s</td><td>%s</td>",$real_overall_user_entry_limit, $label_entries, $entry_closed);
+					$page_info5 .= "</tr>";
 				}
 
-				$page_info16 .= "</tbody>";
-				$page_info16 .= "</table>";
+				$page_info5 .= "</tbody>";
+				$page_info5 .= "</table>";
 
 			}
 
@@ -171,20 +219,20 @@ if ($show_entries) {
 
 				if (!empty($row_limits['prefsUserEntryLimit'])) {
 
-					if ($row_limits['prefsUserEntryLimit'] == 1) $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_022);
-					else $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_023);
+					$page_info5 .= "<dl class=\"row\">";
+					if (!empty($row_limits['prefsUserEntryLimit'])) $page_info5 .= sprintf("<dt class=\"col-7 col-md-4 col-lg-3\">%s:</dt><dd class=\"col-5 col-md-8 col-lg-9\">%s</dd>", $label_entry_limit_participant, "14");
+					$page_info5 .= "</dl>";
 
 				}
 
 			}
 
 			if (!empty($row_limits['prefsUserSubCatLimit'])) {
-				$page_info16 .= "<p>";
-				if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info16 .= sprintf("%s %s %s",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_024);
-				else $page_info16 .= sprintf("%s %s %s",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_025);
-				if (!empty($row_limits['prefsUSCLExLimit'])) $page_info16 .= sprintf(" &ndash; %s",$entry_info_text_026);
-				$page_info16 .= ".";
-				$page_info16 .= "</p>";
+
+				$page_info5 .= "<dl class=\"row\">";
+				if (!empty($row_limits['prefsUserSubCatLimit'])) $page_info5 .= sprintf("<dt class=\"col-7 col-md-4 col-lg-3\">%s:</dt><dd class=\"col-5 col-md-8 col-lg-9\">%s</dd>", $label_entry_limit_substyle, $row_limits['prefsUserSubCatLimit']);
+				$page_info5 .= "</dl>";
+
 			}
 
 			if (!empty($row_limits['prefsUSCLExLimit'])) {
@@ -194,14 +242,14 @@ if ($show_entries) {
 				if (count($excepted_styles) == 1) $sub = $entry_info_text_027; 
 				else $sub = $entry_info_text_028;
 				
-				if ($row_limits['prefsUSCLExLimit'] == 1) $page_info16 .= sprintf("<p>%s to %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_029,$sub);
-				else $page_info16 .= sprintf("<p>%s %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_030,$sub);
-
-				$page_info16 .= "<div class=\"row mt-2\">";
-				$page_info16 .= "<div class=\"col col-lg-6 col-md-8 col-sm-10 col-xs-12\">";
-				$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7",$base_url,$filter);
-				$page_info16 .= "</div>";
-				$page_info16 .= "</div>";
+				$page_info5 .= "<dl class=\"row\">";
+				if (!empty($row_limits['prefsUSCLExLimit'])) $page_info5 .= sprintf("<dt class=\"col-7 col-md-4 col-lg-3\">%s:</dt><dd class=\"col-5 col-md-8 col-lg-9\">%s</dd>", $label_entry_limit_exception, $row_limits['prefsUSCLExLimit']);
+				
+				$page_info5 .= sprintf("<dt class=\"col-12 col-md-4 col-lg-3\">%s:</dt>",$label_style_excepted);
+				$page_info5 .= "<dd class=\"col-12 col-md-8 col-lg-9\">";	
+				$page_info5 .= style_convert($row_limits['prefsUSCLEx'],"7",$base_url,$filter);
+				$page_info5 .= "</dd>";
+				$page_info5 .= "</dl>";
 
 			}
 
@@ -218,9 +266,7 @@ if ($show_entries) {
 			if ($_SESSION['prefsCash'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_032);
 			if ($_SESSION['prefsCheck'] == "Y") $page_info6 .= sprintf("<li>%s <em>%s</em></li>",$entry_info_text_033,$_SESSION['prefsCheckPayee']);
 			if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_034);
-			//if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>";
 			$page_info6 .= "</ul>";
-			//$page_info6 .= $anchor_top;
 
 		}
 
@@ -268,6 +314,8 @@ else {
 			$page_info7 .= "<br><em><small>".$row_judging['judgingLocation']."</small></em>";
 		}
 
+		if ((!empty($row_judging['judgingLocNotes'])) && ($logged_in)) $page_info7 .= "<br><small><em>".$row_judging['judgingLocNotes']."</em></small>";
+
 		$page_info7 .= "</p>";
 
 	} while ($row_judging = mysqli_fetch_assoc($judging));
@@ -281,7 +329,10 @@ else {
 if ($row_styles) {
 
 	if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
-	else $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_046);
+	else {
+		$page_info8 .= sprintf("<p>%s</p>", $entry_info_text_046);
+		$page_info8 .= sprintf("<p>%s</p>", $entry_info_text_057);
+	}
 
 	$style_set = $_SESSION['style_set_short_name'];
 
@@ -310,49 +361,61 @@ if ($row_styles) {
 
 				$style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
 
-				if (!empty($row_styles['brewStyleEntry'])) {
-
-					$page_info8 .= "<a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".$style_number." ".$row_styles['brewStyle']."</a>";
-
-					$style_info_modal_body = "";
-
-					$brewStyleInfo = str_replace("<p>","",$row_styles['brewStyleInfo']);
-					$brewStyleInfo = str_replace("</p>","",$brewStyleInfo);
-
-					$brewStyleEntry = str_replace("<p>","",$row_styles['brewStyleEntry']);
-					$brewStyleEntry = str_replace("</p>","",$brewStyleEntry);
-
-					if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
-					if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
-
-					$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".$row_styles['id']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
-					$style_info_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
-					$style_info_modals .= "\t\t<div class=\"modal-content\">\n";
-					$style_info_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
-					$style_info_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\">".$row_styles['brewStyle']."</h4>\n";
-					$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n";
-					$style_info_modals .= "\t\t\t</div>\n";
-					$style_info_modals .= "\t\t\t<div class=\"modal-body\">\n";
-					$style_info_modals .= "\t\t\t\t".$style_info_modal_body."\n";
-					$style_info_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
-					$style_info_modals .= "\t\t\t<div class=\"modal-footer\">\n";
-					$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">Close</button>\n";
-					$style_info_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
-					$style_info_modals .= "\t\t</div><!-- ./modal-content -->\n";
-					$style_info_modals .= "\t</div><!-- ./modal-dialog -->\n";
-					$style_info_modals .= "</div><!-- ./modal -->\n";
+				if ($row_styles['brewStyleAtLimit'] == 1) {
+					
+					$page_info8 .= sprintf("<span class=\"text-muted\">%s %s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i>",$style_number,$row_styles['brewStyle'],$entry_info_text_056);
 
 				}
 
 				else {
-					$page_info8 .= $style_number." ".$row_styles['brewStyle'];
-				}
 
-				if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
-				if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-orange ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
-				if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-purple ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
-				if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-teal ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
-				if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-gold ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
+					if (!empty($row_styles['brewStyleEntry'])) {
+
+						$page_info8 .= "<a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".$style_number." ".$row_styles['brewStyle']."</a>";
+
+						$style_info_modal_body = "";
+
+						$brewStyleInfo = str_replace("<p>","",$row_styles['brewStyleInfo']);
+						$brewStyleInfo = str_replace("</p>","",$brewStyleInfo);
+
+						$brewStyleEntry = str_replace("<p>","",$row_styles['brewStyleEntry']);
+						$brewStyleEntry = str_replace("</p>","",$brewStyleEntry);
+
+						if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
+						if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
+
+						$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".$row_styles['id']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
+						$style_info_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
+						$style_info_modals .= "\t\t<div class=\"modal-content\">\n";
+						$style_info_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
+						$style_info_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\">".$row_styles['brewStyle']."</h4>\n";
+						$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n";
+						$style_info_modals .= "\t\t\t</div>\n";
+						$style_info_modals .= "\t\t\t<div class=\"modal-body\">\n";
+						$style_info_modals .= "\t\t\t\t".$style_info_modal_body."\n";
+						$style_info_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
+						$style_info_modals .= "\t\t\t<div class=\"modal-footer\">\n";
+						$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">Close</button>\n";
+						$style_info_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
+						$style_info_modals .= "\t\t</div><!-- ./modal-content -->\n";
+						$style_info_modals .= "\t</div><!-- ./modal-dialog -->\n";
+						$style_info_modals .= "</div><!-- ./modal -->\n";
+
+					}
+
+					else {
+						if ($row_styles['brewStyleAtLimit'] == 1) $page_info8 .= "<span class=\"text-muted\">";
+						$page_info8 .= $style_number." ".$row_styles['brewStyle'];
+						if ($row_styles['brewStyleAtLimit'] == 1) $page_info8 .= "</span>";
+					}
+
+					if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
+					if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-orange ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
+					if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-purple ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
+					if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-teal ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
+					if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-warning-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
+
+				}
 
 				$page_info8 .= "</td>";
 				$styles_endRow++;
@@ -627,58 +690,74 @@ if (is_array($anchor_links)) {
 */
 
 // Display Entry Fees
+echo "<div class=\"reveal-element\">";
 echo $header1_4;
 echo $page_info4;
+echo "</div>";
 
 // Display Entry Limits
+echo "<div class=\"reveal-element\">";
 echo $header1_5;
 echo $page_info5;
-
-// Display Per Entrant Limit
-echo $header1_16;
-echo $page_info16;
+echo "</div>";
 
 // Display Payment Info
+echo "<div class=\"reveal-element\">";
 echo $header1_6;
 echo $page_info6;
+echo "</div>";
 
 // Display Rules if winners displays on the home page
 // echo $header1_17;
 // echo $page_info17;
 
 // Display Categories Accepted
+echo "<div class=\"reveal-element\">";
 echo $header1_8;
 echo $page_info8;
+echo "</div>";
 
 // Display Entry Acceptance Rules
 // echo $header1_9;
 // echo $page_info9;
 
 // Display Drop-Off Locations and Acceptance Dates
+echo "<div class=\"reveal-element\">";
 echo $header1_11;
 echo $page_info11;
+echo "</div>";
 
 // Display Shipping Location and Acceptance Dates
+echo "<div class=\"reveal-element\">";
 echo $header1_10;
 echo $page_info10;
+echo "</div>";
 
 // Display Judging Dates
+echo "<div class=\"reveal-element\">";
 echo $header1_7;
 echo $page_info7;
+echo "</div>";
 
 // Display Best of Show
+echo "<div class=\"reveal-element\">";
 echo $header1_12;
 echo $page_info12;
+echo "</div>";
 
 // Display Awards and Awards Ceremony Location
+echo "<div class=\"reveal-element\">";
 echo $header1_13;
 echo $page_info13;
 echo $header1_14;
 echo $page_info14;
+echo "</div>";
 
 // Display Circuit Qualification
+echo "<div class=\"reveal-element\">";
 echo $header1_15;
 echo $page_info15;
+echo "</div>";
 
 echo $style_info_modals;
 ?>

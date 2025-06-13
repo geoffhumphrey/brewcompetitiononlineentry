@@ -16,14 +16,12 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 
 include (DB.'contacts.db.php');
 
-if ((!HOSTED) && (strpos($base_url, 'test.brewingcompetitions.com') === false) && (!empty($_SESSION['prefsGoogleAccount']))) {
+if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
     $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
     $public_captcha_key = $recaptcha_key[0];
 }
 
 if ($_SESSION['prefsContact'] == "N") {
-
-    include (LIB.'process.lib.php');
 
 	$page_info = "";
 
@@ -38,7 +36,8 @@ if ($_SESSION['prefsContact'] == "N") {
 
             $secretKey = base64_encode(bin2hex($password));
             $nacl = base64_encode(bin2hex($server_root));
-            $link = simpleEncrypt($row_contact['id'], $secretKey, $nacl);
+            $link = sprintf('%06d', $row_contact['id']);
+            $link = simpleEncrypt($link, $secretKey, $nacl);
             $email_redirect_link = sprintf("%sincludes/output.inc.php?section=contact&action=edit&tb=no-print&token=%s",$base_url,$link);
             $page_info .= sprintf("<li><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">%s %s</a> &ndash; %s</li>",$email_redirect_link,$row_contact['contactFirstName'],$row_contact['contactLastName'],$row_contact['contactPosition']);
             
@@ -90,7 +89,6 @@ if ($_SESSION['prefsContact'] == "Y") {
 
     	echo $primary_page_info;
 ?>
-
         <form id="contact-form" class="justify-content-center hide-loader-form-submit needs-validation" name="contact-form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" novalidate>
 
             <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">

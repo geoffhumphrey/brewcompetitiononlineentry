@@ -49,7 +49,8 @@ foreach ($eval_scores as $key => $value) {
 
 		$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id']."&amp;tb=1";
 		$print_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id'];
-		$edit_link = $base_url."index.php?section=admin&amp;go=evaluation&amp;action=edit&amp;filter=".$tbl_id."&amp;bid=".$value['judge_id']."&amp;view=admin&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
+		// $edit_link = $base_url."index.php?section=admin&amp;go=evaluation&amp;action=edit&amp;filter=".$tbl_id."&amp;bid=".$value['judge_id']."&amp;view=admin&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
+		$edit_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=edit&amp;filter=".$tbl_id."&amp;bid=".$value['judge_id']."&amp;view=admin&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
 		$delete_link = $base_url."includes/process.inc.php?section=evaluation&amp;go=default&amp;filter=".$filter."&amp;dbTable=".$prefix."evaluation&amp;action=delete&amp;id=".$value['id'];
 
 		$actions .= "<div style=\"margin-bottom:5px;\" class=\"row\">";
@@ -61,10 +62,10 @@ foreach ($eval_scores as $key => $value) {
 		if ($value['date_added'] != $value['date_updated']) $actions .= "<br><small><span class\"text-muted\">".$label_updated.": ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_updated'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></small>";
 		$actions .= "</div>";
 		$actions .= "<div class=\"col col-lg-6 col-md-5 col-sm-12\">";
-		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" title=\"View the generated scoresheet from the evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></a> ";
-		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" title=\"Print the generated scoresheet from the evaluation  completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
-		$actions .= "<a href=\"".$edit_link."\" data-toggle=\"tooltip\" data-toggle=\"tooltip\" title=\"Edit this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-lg fa-pencil\"></i></a> ";
-		$actions .= "<a class=\"hide-loader\" href=\"".$delete_link."\" data-toggle=\"tooltip\" title=\"Delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\" data-confirm=\"Are you sure you want to delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1]."? This cannot be undone.\"><i class=\"fa fa-lg fa-trash-o\"></i></a> ";
+		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" title=\"View the generated scoresheet from the evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><span class=\"fa-stack\"><i class=\"fa fa-fw fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></a> ";
+		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" title=\"Print the generated scoresheet from the evaluation  completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-fw fa-lg fa-file-text\"></i></a> ";
+		$actions .= "<a href=\"".$edit_link."\" data-toggle=\"tooltip\" data-toggle=\"tooltip\" title=\"Edit this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-fw fa-lg fa-pencil\"></i></a> ";
+		$actions .= "<a class=\"hide-loader\" href=\"".$delete_link."\" data-toggle=\"tooltip\" title=\"Delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\" data-confirm=\"Are you sure you want to delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1]."? This cannot be undone.\"><i class=\"fa fa-fw fa-lg fa-trash-o\"></i></a> ";
 		$actions .= "</div>";
 		$actions .= "</div>";
 		

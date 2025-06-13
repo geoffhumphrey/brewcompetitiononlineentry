@@ -260,11 +260,11 @@ $style_sets = array(
 	*/
 
 	array(
-		"id" => 7,
+		"id" => 1,
 		"style_set_name" => "BJCP2025",
-		"style_set_long_name" => "Beer Judge Certification Program - Beer 2021, Mead 2015, Cider 2025",
-		"style_set_short_name" => "BJCP 2025",
-		"style_set_description" => "2025 update of cider styles only. Beer and mead remain the same as 2021 update.",
+		"style_set_long_name" => "BJCP Beer 2021, Mead 2015, Cider 2025",
+		"style_set_short_name" => "BJCP 2021 / 2025",
+		"style_set_description" => "2025 update of cider styles only. Beer and mead remain the same as 2021 and 2015 updates, respectively.",
 		"style_set_display_separator" => "",
 		"style_set_system_separator" => "-",
 		"style_set_sub_style_method" => "0",
@@ -322,8 +322,8 @@ $style_sets = array(
 	array(
 		"id" => 2,
 		"style_set_name" => "BJCP2021",
-		"style_set_long_name" => "Beer Judge Certification Program - Beer 2021, Mead and Cider 2015",
-		"style_set_short_name" => "BJCP 2021",
+		"style_set_long_name" => "BJCP Beer 2021, Mead and Cider 2015",
+		"style_set_short_name" => "BJCP 2015 / 2021",
 		"style_set_description" => "2021 update of beer styles. Mead and cider remain the same as 2015 update.",
 		"style_set_display_separator" => "",
 		"style_set_system_separator" => "-",

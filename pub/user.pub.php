@@ -88,34 +88,7 @@ if ($action == "username") {
 
 <?php } ?>
 
-<?php if ($action == "password") { ?>
-<script type="text/javascript">
-    $(document).ready(function () {
-        "use strict";
-        var options = {};
-        options.ui = {
-            container: "#pwd-container",
-			showErrors: true,
-			useVerdictCssClass: true,
-            showVerdictsInsideProgressBar: true,
-            viewports: {
-                progress: ".pwd-strength-viewport-progress"
-            },
-			progressBarExtraCssClasses: "progress-bar-striped active",
-			progressBarEmptyPercentage: 2,
-			progressBarMinPercentage: 6
-        };
-        options.common = {
-            zxcvbn: true,
-			minChar: 8,
-			onKeyUp: function (evt, data) {
-				$("#length-help-text").text("<?php echo $label_length; ?>: " + $(evt.target).val().length + " - <?php echo $label_score; ?>: " + data.score.toFixed(2));
-			},
-        };
-        $('#newPassword').pwstrength(options);
-    });
-</script>
-	
+<?php if ($action == "password") { ?>	
     <div class="row mb-3">
         <label for="passwordOld" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php echo $label_old." ".$label_password; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
@@ -127,7 +100,7 @@ if ($action == "username") {
 	<div class="row mb-3">
         <label for="password" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php echo $label_new." ".$label_password; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" name="password" type="password" placeholder="" id="newPassword" required>
+            <input class="form-control" name="password" type="password" placeholder="" id="password-entry" required>
             <div class="help-block invalid-feedback text-danger"><?php echo $user_text_002; ?></div>
         </div>
     </div>
@@ -140,11 +113,20 @@ if ($action == "username") {
 		</div>
 	</div>
 
+    <div class="row mb-3">
+        <label for="password-confirm" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-2"></i><?php echo $label_confirm_password; ?></strong></label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <input class="form-control password-field" name="password-confirm" id="password-confirm" type="password" required>
+            <div class="help-block mt-1 invalid-feedback text-danger"><?php echo $login_text_024; ?></div>
+            <div id="password-error" class="help-block mt-1 text-danger"><?php echo $login_text_023; ?></div>
+        </div>
+    </div>
+
     <div class="bcoem-admin-element d-print-none">
         <div class="mb-3 mt-5 row">
             <div class="col-xs-12 col-sm-3 col-lg-2"></div>
             <div class="col-xs-12 col-sm-9 col-lg-10 d-grid">
-                <button name="submit" type="submit" class="btn btn-lg btn-primary" ><?php echo $label_change_password; ?><i class="ms-2 fa fa-fw fa-key"></i></button>
+                <button id="submit-button" name="submit" type="submit" class="btn btn-lg btn-primary" ><?php echo $label_change_password; ?><i class="ms-2 fa fa-fw fa-key"></i></button>
             </div>
         </div>
     </div>

@@ -9,6 +9,8 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 
 $style_set_dropdown = "";
 $style_set_description = "";
+$entry_limit_by_style = "";
+$current_entry_limits_by_style = "";
 $all_exceptions = "";
 $all_exceptions_js = "";
 $all_hide_js = "";
@@ -16,12 +18,24 @@ $custom_exceptions_USCLEx = "";
 $prefsUSCLEx = "";
 $js_edit_show_hide_style_set_div = "";
 $incremental = FALSE;
-$email_sending_enable = FALSE;
 
 include (DB.'styles.db.php');
 
 // Applies to both ($section vars - step3 and admin)
 if (($action == "default") || ($action == "entries")) {
+
+    /**
+     * Three possible states of the prefsStyleLimits column:
+     *  1) Empty (disabled)
+     *  2) JSON data (by style enabled)
+     *  3) Single integer numerical value only (by table enabled)
+     */
+
+    $limits_by_style = FALSE;
+    $limits_by_table = FALSE;
+    $style_limits_json = json_decode($row_prefs['prefsStyleLimits'],true);
+    if ((strlen($row_prefs['prefsStyleLimits']) > 1) && (json_last_error() === JSON_ERROR_NONE)) $limits_by_style = TRUE;
+    if ((strlen($row_prefs['prefsStyleLimits']) == 1) && (is_numeric($row_prefs['prefsStyleLimits']))) $limits_by_table = TRUE;
 
     if (($custom_styles_arr) && (!empty($custom_styles_arr))) {
         foreach ($custom_styles_arr as $value) {
@@ -42,16 +56,20 @@ if (($action == "default") || ($action == "entries")) {
         
         // Build style set drop-down
         if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet']))  $style_set_selected = "SELECTED";
-        if (($section == "step3") && ($style_set['style_set_name'] == "BJCP2021")) $style_set_selected = "SELECTED";
+        if (($section == "step3") && ($style_set['style_set_name'] == "BJCP2025")) $style_set_selected = "SELECTED";
         $style_set_dropdown .= sprintf("<option value=\"%s\" %s>%s (%s)</option>",$style_set['style_set_name'],$style_set_selected,$style_set['style_set_long_name'],$style_set['style_set_short_name']);
 
         // Generate exception list for each of the style sets in the 
         // array and show/hide the list as each are selected via jQuery.
         $styles_db_table = $prefix."styles";
 
-        $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
-        if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyle ASC";
-        else $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC";
+        if ($style_set['style_set_name'] == "BJCP2025") $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
+
+        else $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
+        
+        if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleType,brewStyleGroup,brewStyle ASC";
+        else $query_styles_all .= " ORDER BY brewStyleType,brewStyleGroup,brewStyleNum,brewStyle ASC";
+        
         $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
         $row_styles_all = mysqli_fetch_assoc($styles_all);
 
@@ -79,11 +97,61 @@ if (($action == "default") || ($action == "entries")) {
         $all_exceptions .= "</div>\n";
         $all_exceptions .= "</div>\n\n";
 
+        if ($_SESSION['prefsStyleSet'] == $style_set['style_set_name']) {
+
+            $style_limits = json_decode($row_prefs['prefsStyleLimits'],true);
+
+            $current_entry_limits_by_style .= "<div id=\"styleLimitsEdit\" class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."-entry-limit"."\">\n";
+            $current_entry_limits_by_style .= "<label for=\"styleLimitsEdit\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Entry Limits per ".$style_set['style_set_name']." Style</label>\n";
+            $current_entry_limits_by_style .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-12\">\n";
+
+            foreach ($style_set['style_set_categories'] as $key => $value) {
+
+                $limit_value = "";
+                if ((isset($style_limits[$key])) && (!empty($style_limits[$key]))) $limit_value = $style_limits[$key];
+
+                $current_entry_limits_by_style .= "
+                    <div class=\"form-group small\">
+                        <div for=\"".$style_set['style_set_name']."-".$key."\" class=\"col-sm-3 col-md-2\">".$key." - ".$value."</div>
+                        <div class=\"col-sm-9 col-md-5\">
+                        <input type=\"number\" min=\"0\" pattern=\" 0+\.[0-9]*[1-9][0-9]*$\" onkeypress=\"return event.charCode >= 48 && event.charCode <= 57\" oninput=\"validity.valid||(value='');\" name=\"styleEntryLimitCurrent-".$style_set['style_set_name']."-".$key."\" class=\"form-control input-sm current-style-limit\" id=\"".$style_set['style_set_name']."-".$key."\" value=\"".$limit_value."\" placeholder=\"\">
+                        </div>
+                    </div>
+                ";
+
+            }
+
+            $current_entry_limits_by_style .= "</div>\n";
+            $current_entry_limits_by_style .= "</div>\n\n";
+
+        }
+
+        $entry_limit_by_style .= "<div class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."-entry-limit"."\">\n";
+        $entry_limit_by_style .= "<label for=\"styleLimitsEdit\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Entry Limits per ".$style_set['style_set_name']." Style</label>\n";
+        $entry_limit_by_style .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-12\">\n";
+
+        foreach ($style_set['style_set_categories'] as $key => $value) {
+
+            $entry_limit_by_style .= "
+                <div class=\"form-group small\">
+                    <div for=\"".$style_set['style_set_name']."-".$key."\" class=\"col-sm-3 col-md-2\">".$key." - ".$value."</div>
+                    <div class=\"col-sm-9 col-md-5\">
+                    <input type=\"number\" min=\"0\" pattern=\" 0+\.[0-9]*[1-9][0-9]*$\" onkeypress=\"return event.charCode >= 48 && event.charCode <= 57\" oninput=\"validity.valid||(value='');\" name=\"styleEntryLimit-".$style_set['style_set_name']."-".$key."\" class=\"form-control input-sm current-style-limit\" id=\"".$style_set['style_set_name']."-".$key."\" placeholder=\"\">
+                    </div>
+                </div>
+            ";
+
+        }
+
+        $entry_limit_by_style .= "</div>\n";
+        $entry_limit_by_style .= "</div>\n\n";
+
         // Generate js to hide other style set exception lists if not chosen in the drop-down
         foreach ($style_sets as $hide_style_set) {
             if ($hide_style_set['id'] != $style_set['id']) {
                 $hide_other_js .= "\t\t\t$(\"#".$hide_style_set['id']."-".$hide_style_set['style_set_name']."\").hide(\"fast\");\n";
                 $hide_other_js .= "\t\t\t$(\"#helpBlock".$hide_style_set['id']."-".$hide_style_set['style_set_name']."\").hide(\"fast\");\n";
+                $hide_other_js .= "\t\t\t$(\"#".$hide_style_set['id']."-".$hide_style_set['style_set_name']."-entry-limit"."\").hide(\"fast\");\n";
             }
         }
 
@@ -98,8 +166,10 @@ if (($action == "default") || ($action == "entries")) {
 
         $all_exceptions_js .= "\t\telse if ($(\"#prefsStyleSet\").val() == \"".$style_set['style_set_name']."\") {\n";
         $all_exceptions_js .= "\t\t\t$(\"#subStyleExeptionsEdit\").hide(\"fast\");\n"; // Hide default upon entry
+        $all_exceptions_js .= "\t\t\t$(\"#styleLimitsEdit\").hide(\"fast\");\n"; // Hide default upon entry
         $all_exceptions_js .= $hide_other_js; // hide all others
         $all_exceptions_js .= "\t\t\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n"; // Show this 
+        $all_exceptions_js .= "\t\t\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."-entry-limit"."\").show(\"fast\");\n"; // Show this 
         $all_exceptions_js .= "\t\t\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n";
         $all_exceptions_js .= "\t\t\t$(\"input[name='prefsUSCLEx[]']\").prop(\"checked\", false);\n";
         $all_exceptions_js .= "\t\t\t$(\"#prefsHideSpecific\").show(\"fast\");\n";
@@ -108,6 +178,7 @@ if (($action == "default") || ($action == "entries")) {
         // Add to the list of divs to hide upon page load
         $all_hide_js .= "\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide();\n";
         $all_hide_js .= "\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").hide();\n";
+        $all_hide_js .= "\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."-entry-limit"."\").hide();\n";
 
     }
 
@@ -309,7 +380,6 @@ $(document).ready(function(){
 
     $("#reCAPTCHA-keys").hide();
 
-    $("#reCAPTCHA-keys").hide();
     <?php if (($row_prefs['prefsCAPTCHA'] == "1") || ($section == "step3")) { ?>
     $("#reCAPTCHA-keys").show();
     <?php } ?>
@@ -325,13 +395,57 @@ $(document).ready(function(){
     
 });
 </script>
-<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "entries")) || ($section == "step3")) { ?>
+<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "entries")) || ($section == "step3")) { 
+?>
 <script type="text/javascript">
 
 var entries_present = "<?php if (isset($totalRows_log)) echo $totalRows_log; ?>";
 var current_style_set = "<?php if (isset($_SESSION['prefsStyleSet'])) echo $_SESSION['prefsStyleSet']; ?>";
+var limits_by_style = "<?php if ($limits_by_style) echo "1"; ?>";
+var limits_by_table = "<?php if ($limits_by_table) echo "1"; ?>";
 
 $(document).ready(function(){
+
+    $("#define-style-entry-limits").hide();
+    $("#limit-entries-will-reset").hide();
+
+    if (limits_by_style == 1) {
+        $("#define-style-entry-limits").show();
+        $("#limit-entries-by-style-help").addClass("alert");
+        $("#limit-entries-by-style-help").addClass("alert-success");
+    }
+
+    if (limits_by_table == 1) {
+        $("#limit-entries-by-table-help").addClass("alert");
+        $("#limit-entries-by-table-help").addClass("alert-success");
+    }
+
+    $("input[name$='choose-style-entry-limits']").click(function() {
+
+        $("#limit-entries-will-reset").show("fast");
+        $("#limit-entries-by-style-help").removeClass("alert");
+        $("#limit-entries-by-style-help").removeClass("alert-success");
+        $("#limit-entries-by-table-help").removeClass("alert");
+        $("#limit-entries-by-table-help").removeClass("alert-success");
+
+        if ($(this).val() == "1") {
+            $("#define-style-entry-limits").show("fast");
+            $("#limit-entries-by-style-help").addClass("alert");
+            $("#limit-entries-by-style-help").addClass("alert-success");
+        }
+
+        else if ($(this).val() == "2") {
+            $("#define-style-entry-limits").hide("fast");
+            $("#limit-entries-by-table-help").addClass("alert");
+            $("#limit-entries-by-table-help").addClass("alert-success");
+        }
+
+        else {
+            $(".current-style-limit").val("");
+            $("#define-style-entry-limits").hide("fast");
+        }
+
+    });
 
     $("#prefsHideSpecific").show();
     $("#user-entry-limit-increment-2").hide();
@@ -505,8 +619,11 @@ $(document).ready(function(){
 
     $("#prefsStyleSet").change(function() {
 
+        $('.current-style-limit').val("");
+
         if (entries_present > 0) {
            if ((current_style_set == "BJCP2015") && ($("#prefsStyleSet").val() == "BJCP2021")) $('#style-set-change-bjcp-2021').modal('show');
+           else if ((current_style_set == "BJCP2021") && ($("#prefsStyleSet").val() == "BJCP2025")) $('#style-set-change-bjcp-2025').modal('show');
            else {
                 if (current_style_set != $("#prefsStyleSet").val()) $('#style-set-change').modal('show');
            } 
@@ -670,9 +787,30 @@ $(document).ready(function(){
         <h4 class="modal-title" id="style-set-change-bjcp-2021-label">Caution! Entries Present</h4>
       </div>
       <div class="modal-body">
+        <p>Choosing this option incorporates the 2021 update of beer styles only. Mead and cider remain the same as defined the 2015 update.</p>
         <p>There are currently entries logged into the database from participants using BJCP 2015 styles.</p>
-        <p>Entries currently in the database will be converted from BJCP 2015 to BJCP 2021.</p>
-        <p>Additionally, preferred and non-preferred styles will be updated to BJCP 2021 for all judges. All defined table styles will be updated as well.</p>
+        <p><strong>Beer entries</strong> that are currently in the database will be converted from the 2015 updade to to the 2021 update .</p>
+        <p>Additionally, preferred and non-preferred beer styles will be updated to 2021 for all judges. All defined tables incorporating beer styles will be updated as well.</p>
+        <p><strong class="text-primary">This cannot be undone.</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">I Understand</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="style-set-change-bjcp-2025" tabindex="-1" role="dialog" aria-labelledby="style-set-change-bjcp-2025-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="style-set-change-bjcp-2025-label">Caution! Entries Present</h4>
+      </div>
+      <div class="modal-body">
+        <p>Choosing this option incorporates the 2025 update of cider styles only. Beer and mead remain the same as defined in the 2021 and 2015 updates, respectively.</p>
+        <p>There are currently entries logged into the database from participants using previous BJCP cider styles.</p>
+        <p><strong>Cider entries</strong> that are currently in the database will be converted from the 2015 update to the 2025 update.</p>
+        <p>Additionally, preferred and non-preferred cider styles will be updated to 2025 for all judges. All defined tables incorporating cider styles will be updated as well.</p>
         <p><strong class="text-primary">This cannot be undone.</strong></p>
       </div>
       <div class="modal-footer">
@@ -683,7 +821,7 @@ $(document).ready(function(){
 </div>
 <?php } ?>
 <style>h4 { margin-top: 25px; }</style>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;go=<?php echo $action; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=edit&amp;go=<?php if ($section == "step3") echo "setup"; else echo $action; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 
@@ -700,11 +838,11 @@ $(document).ready(function(){
                 <input type="radio" name="prefsProEdition" value="1" id="prefsProEdition_1" <?php if (($section != "step3") && ($row_prefs['prefsProEdition'] == "1")) echo "CHECKED"; ?>/> Professional
             </label>
         </div>
-        <span id="helpBlock" class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
+        <span class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
     </div>
 </div>
 <div class="form-group">
-    <label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Theme</label>
+    <label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Admin Theme</label>
     <div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
     
     <select class="selectpicker" name="prefsTheme" id="prefsTheme" data-width="auto">
@@ -718,6 +856,7 @@ $(document).ready(function(){
         echo $themes;
         ?>
     </select>
+    <div class="help-block">This theme is only for the Administration side of the application. Public themes will be available in future releases.</div>
     </div>
 </div>
 <?php if (!HOSTED) { ?>
@@ -732,11 +871,12 @@ $(document).ready(function(){
                 <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($row_prefs['prefsSEF'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>Disable
             </label>
         </div>
-        <span id="helpBlock" class="help-block">
-        <div class="btn-group" role="group" aria-label="SEFModal">
-            <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#SEFModal">
-               SEF URLs Info
-            </button>
+        <div class="help-block">
+            <div class="btn-group" role="group" aria-label="SEFModal">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#SEFModal">
+                   SEF URLs Info
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -769,7 +909,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($row_prefs['prefsUseMods'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
-        <span id="helpBlock" class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</span>
+        <div class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</div>
     </div>
 </div>
 <h4>Results</h4>
@@ -784,14 +924,14 @@ $(document).ready(function(){
                 <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if (($section != "step3") && ($row_prefs['prefsDisplayWinners'] == "N")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
-        <span id="helpBlock" class="help-block">Indicate if the results of the competition for each category and Best of Show Style Type will be displayed.</span>
+        <div class="help-block">Indicate if the results of the competition for each category and Best of Show Style Type will be displayed.</div>
     </div>
 </div>
 <div class="form-group">
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Results Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
             <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
-        <span id="helpBlock" class="help-block">Date and time when the system will display winners if Results Display is enabled.</span>
+        <div class="help-block">Date and time when the system will display winners if Results Display is enabled.</div>
         <div class="help-block with-errors"></div>
     </div>
 </div>
@@ -805,7 +945,7 @@ $(document).ready(function(){
             </label>
             <?php } ?>
         </div>
-        <span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
+        <div class="help-block">How the competition will award places for winning entries.</div>
     </div>
 </div>
 <!-- Modal -->
@@ -848,7 +988,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsCAPTCHA" value="0" id="prefsCAPTCHA_0"  <?php if (($section != "step3") && ($row_prefs['prefsCAPTCHA'] == "0")) echo "CHECKED";  ?> /> No
             </label>
         </div>
-        <span id="helpBlock" class="help-block">reCAPTCHA is enabled by default. If you are having trouble with it, disable it here. However, <strong class="text-danger">this is a great security risk</strong> - disabling reCAPTCHA may allow bots to register and/or spam contacts via your site.</span>
+        <div class="help-block">reCAPTCHA is enabled by default. If you are having trouble with it, disable it here. However, <strong class="text-danger">this is a great security risk</strong> - disabling reCAPTCHA may allow bots to register and/or spam contacts via your site.</div>
     </div>
 </div>
 <div id="reCAPTCHA-keys">
@@ -862,9 +1002,7 @@ $(document).ready(function(){
         <label for="prefsGoogleAccount1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">reCAPTCHA Secret Key</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" id="prefsGoogleAccount1" name="prefsGoogleAccount1" type="text" value="<?php if (isset($recaptcha_key[1])) echo $recaptcha_key[1]; ?>" placeholder="**OPTIONAL** reCAPTCHA Secret Key (Private)">
-            <span id="helpBlock" class="help-block">
             <div class="help-block"><strong>To get reCAPTCHA API keys, you will need a Google account.</strong> You can obtain keys on Google's <a class="hide-loader" href="https://www.google.com/recaptcha/admin" target="_blank">reCAPTCHA dashboard</a>. Follow all instructions there or unexpected functionality will occur.</div>
-            </span>
         </div>
     </div>
 </div>
@@ -877,7 +1015,7 @@ $(document).ready(function(){
     <label for="prefsRecordPaging" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Records Displayed</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <input class="form-control" id="prefsRecordPaging" name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $row_prefs['prefsRecordPaging']; ?>" placeholder="12" required>
-        <span id="helpBlock" class="help-block">The number of records displayed per page when viewing lists.</span>
+        <div class="help-block">The number of records displayed per page when viewing lists.</div>
         <div class="help-block with-errors"></div>
     </div>
 </div>
@@ -892,7 +1030,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($row_prefs['prefsAutoPurge'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
-        <span id="helpBlock" class="help-block">
+        <div class="help-block">
             <div class="btn-group" role="group" aria-label="purgeModal">
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#purgeModal">
@@ -900,7 +1038,7 @@ $(document).ready(function(){
                 </button>
             </div>
             </div>
-        </span>
+        </div>
     </div>
 </div>
 <!-- Modal -->
@@ -930,7 +1068,7 @@ $(document).ready(function(){
             <option value="<?php echo $lang; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang) echo "SELECTED"; if (($section == "step3") && ($lang == "en-US")) echo "SELECTED"; ?>><?php echo $lang_name; ?></option>
             <?php } ?>
         </select>
-        <span id="helpBlock" class="help-block">The language to display on all <em>public</em> areas of your installation (e.g., entry information, volunteers, account pages, etc.).</span>
+        <div class="help-block">The language to display on all <em>public</em> areas of your installation (e.g., entry information, volunteers, account pages, etc.).</div>
         <div class="help-block with-errors"></div>
     </div>
 </div>
@@ -1048,7 +1186,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsDropOff" value="0" id="prefsDropOff_1" <?php if (($section != "step3") && ($row_prefs['prefsDropOff'] == "0")) echo "CHECKED";?>/> Disable
             </label>
         </div>
-        <span id="helpBlock" class="help-block">Disable if your competition does not have drop-off locations.</span>
+        <div class="help-block">Disable if your competition does not have drop-off locations.</div>
     </div>
 </div>
 <div class="form-group">
@@ -1062,7 +1200,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsShipping" value="0" id="prefsShipping_1" <?php if (($section != "step3") && ($row_prefs['prefsShipping'] == "0")) echo "CHECKED"; ?>/> Disable
             </label>
         </div>
-        <span id="helpBlock" class="help-block">Disable if your competition does not have an entry shipping location.</span>
+        <div class="help-block">Disable if your competition does not have an entry shipping location.</div>
     </div>
 </div>
 <?php } //end if ($action == "default") ?>
@@ -1078,27 +1216,31 @@ $(document).ready(function(){
                 <input type="radio" name="prefsEmailSMTP" value="1" id="prefsEmailSMTP_1"  <?php if (($section != "step3") && ($row_prefs['prefsEmailSMTP'] == 1)) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsEmailSMTP" value="0" id="prefsEmailSMTP_0" <?php if (($section != "step3") && ($row_prefs['prefsEmailSMTP'] == 0)) echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsEmailSMTP" value="0" id="prefsEmailSMTP_0" <?php if (($section == "step3") || (($section != "step3") && ($row_prefs['prefsEmailSMTP'] == 0))) echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <?php if ($row_prefs['prefsEmailSMTP'] == 3) { ?>
         <div class="text-danger help-block"><p><strong>As of version 3.0.0, a valid email address and SMTP credentials are required to send emails via the BCOE&amp;M application.</strong> To keep the email sending functionality employed in previous versions, select Enable above, provide the required information in the appropriate fields, and select Set Preferences. If you do not wish to send emails via the application, select Disable and then Set Preferences.</p></div>
         <?php } ?>
-        <div id="helpBlock" class="help-block">
+        <div class="help-block">
+        <?php if (HOSTED) { ?>
+            <p>If enabled, emails sent from your installation will originate from the noreply@brewingcompetitions.com address. This address is not monitored and all emails generated will contain a discslaimer stating as such.</p>
+        <?php } else { ?>
             <p><strong>If enabled, you will need to provide a valid email address and associated information to send emails via the Simple Mail Transfer Protocol (SMTP).</strong></p>
             <p>See your webhost's or email service's documentation for the necessary settings to set up sending emails using SMTP. If you would like to use a Gmail email address, you'll need to set up Gmail SMTP. <a href="https://mailtrap.io/blog/gmail-smtp/#Step-1-Enabling-SMTP-in-Gmail-settings" target="_blank">This guide</a> will help you get the necessary settings.</p>
+        <?php } ?>
         </div>
     </div>
 </div>
-
 <section id="sending-email-options">
-    <section id="send-test-email-show-button" class="row">
+    <div id="send-test-email-show-button" class="row">
         <label for="prefsEmailSMTP-port" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Settings Test</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12"> 
             <div class="input-group">
-                <a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader btn btn-primary" href="<?php echo $base_url; ?>/admin/send_test_email.admin.php">Test Current Email Sending Settings</a>  
+                <a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader btn btn-primary" href="<?php echo $base_url; ?>/admin/send_test_email.admin.php"><?php if (HOSTED) echo "Send Test Email"; else echo "Test Current Email Sending Settings"; ?></a>  
             </div>
-            <div id="helpBlock" class="help-block">
+            <?php if (!HOSTED) { ?>
+            <div class="help-block">
                 <p>Send a test email to <?php echo $_SESSION['user_name']; ?> using the current settings as reflected in the database:</p>
                 <ul class="small">
                     <li><strong>Originating Email:</strong> <?php echo $row_prefs['prefsEmailFrom']; ?></li>
@@ -1109,14 +1251,16 @@ $(document).ready(function(){
                     <li><strong>Port:</strong> <?php echo $row_prefs['prefsEmailPort']; ?></li>
                 </ul>
             </div>
+            <?php } ?>
         </div>
-    </section>
+    </div>
+<?php if (!HOSTED) { ?>
     <div class="form-group">
         <label for="prefsEmailFrom" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Originating Email Address</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
                 <input class="form-control" id="prefsEmailFrom" name="prefsEmailFrom" type="email" value="<?php if ($section == "step3") echo "";  if (($section != "step3") && (!empty($row_prefs['prefsEmailFrom']))) echo $row_prefs['prefsEmailFrom'];  ?>" data-error="An email address is required." placeholder="name@yourdomain.com" onChange="AjaxFunction(this.value);">
             <div class="help-block with-errors"></div>
-            <div id="helpBlock" class="help-block">Enter the properly set up, functioning, and accessible email address. Participants will reply to this email if needed.</div>
+            <div class="help-block">Enter the properly set up, functioning, and accessible email address. Participants will reply to this email if needed.</div>
             <div id="msg_email" class="help-block"></div>
         </div>
     </div>
@@ -1125,7 +1269,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
                 <input class="form-control" id="prefsEmailUsername" name="prefsEmailUsername" type="text" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailUsername']))) echo $row_prefs['prefsEmailUsername']; ?>" data-error="The email address username is required. Typically, it's the email address itself." placeholder="name@yourdomain.com">
             <div class="help-block with-errors"></div>
-            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation - typically, it's the email address itself, but methods may vary.</div>
+            <div class="help-block">As outlined in your webhost's or email service's documentation - typically, it's the email address itself, but methods may vary.</div>
         </div>
     </div>
     <?php if (empty($row_prefs['prefsEmailPassword'])) { ?>
@@ -1142,7 +1286,7 @@ $(document).ready(function(){
                     <input type="radio" name="change-email-password-choice" value="0" id="change-email-password-choice_0" checked/> No
                 </label>
             </div>
-            <div id="helpBlock" class="help-block">
+            <div class="help-block">
                 <p>Do you need to update the password provided previously (i.e., has it changed on your email account)?</p>
             </div>
         </div>
@@ -1153,7 +1297,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
                 <input class="form-control" id="prefsEmailPassword" name="prefsEmailPassword" type="password" value="" data-error="The password is required." placeholder="">
             <div class="help-block with-errors"></div>
-            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation. This password will be stored encrypted.</div>
+            <div class="help-block">As outlined in your webhost's or email service's documentation. This password will be stored encrypted.</div>
         </div>
     </div>
     <div class="form-group">
@@ -1161,7 +1305,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
                 <input class="form-control" id="prefsEmailHost" name="prefsEmailHost" type="text" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailHost']))) echo $row_prefs['prefsEmailHost']; ?>" data-error="The SMTP email host name is required." placeholder="mail.yourdomain.com">
             <div class="help-block with-errors"></div>
-            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation - e.g., mail.yourdomain.com.</div>
+            <div class="help-block">As outlined in your webhost's or email service's documentation - e.g., mail.yourdomain.com.</div>
         </div>
     </div>
     <div class="form-group">
@@ -1178,7 +1322,7 @@ $(document).ready(function(){
                     <input type="radio" name="prefsEmailEncrypt" value="tls" id="prefsEmailEncrypt_tls" <?php if (($section != "step3") && (!empty($row_prefs['prefsEmailEncrypt'])) && ($row_prefs['prefsEmailEncrypt'] == "tls")) echo "CHECKED"; ?>/> TLS
                 </label>
             </div>
-            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation.</p>
+            <div class="help-block">As outlined in your webhost's or email service's documentation.</p>
             </div>
         </div>
     </div>
@@ -1187,9 +1331,10 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">        
                 <input class="form-control" id="prefsEmailPort" name="prefsEmailPort" type="number" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailPort']))) echo $row_prefs['prefsEmailPort']; ?>" data-error="The port required. Ports will vary depending upon the encryption protocol." placeholder="">
             <div class="help-block with-errors"></div>
-            <div id="helpBlock" class="help-block">As outlined in your webhost's or email service's documentation. Port numbers will vary depending upon the encryption protocol, but are likely to be 25, 465, or 587.</div>
+            <div class="help-block">As outlined in your webhost's or email service's documentation. Port numbers will vary depending upon the encryption protocol, but are likely to be 25, 465, or 587.</div>
         </div>
     </div>
+<?php } // End if (!HOSTED); ?>
     <div class="form-group">
         <label for="prefsContact" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1201,11 +1346,11 @@ $(document).ready(function(){
                     <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($row_prefs['prefsContact'] == "N") echo "CHECKED"; ?>/> Disable
                 </label>
             </div>
-            <span id="helpBlock" class="help-block">
-            <div class="btn-group" role="group" aria-label="contactFormModal">    
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#contactFormModal">Contact Form Info</button>
+            <div class="help-block">
+                <div class="btn-group" role="group" aria-label="contactFormModal">    
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#contactFormModal">Contact Form Info</button>
+                </div>
             </div>
-            </span>
         </div>
     </div>
     <!-- Modal -->
@@ -1240,10 +1385,10 @@ $(document).ready(function(){
                     <input type="radio" name="prefsEmailCC" value="0" id="prefsEmailCC_0"  <?php if ((empty($row_prefs['prefsEmailCC'])) || ($row_prefs['prefsEmailCC'] == "0")) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
                 </label>
             </div>
-            <span id="helpBlock" class="help-block">
-            <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email.</p>
-            <p><strong>Disabling this function is STRONGLY recommended</strong> &ndash; since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam email addresses unrelated to the competition.</p>
-            </span>
+            <div class="help-block">
+                <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email.</p>
+                <p><strong>Disabling this function is STRONGLY recommended</strong> &ndash; since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam email addresses unrelated to the competition.</p>
+            </div>
         </div>
     </div>
     <?php } ?>
@@ -1258,11 +1403,11 @@ $(document).ready(function(){
                     <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($row_prefs['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> Disable
                 </label>
             </div>
-            <span id="helpBlock" class="help-block">
-            <div class="btn-group" role="group" aria-label="contactFormModal">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#regEmailFormModalLabel">Confirmation Emails Info</button>
+            <div class="help-block">
+                <div class="btn-group" role="group" aria-label="contactFormModal">
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#regEmailFormModalLabel">Confirmation Emails Info</button>
+                </div>
             </div>
-            </span>
         </div>
     </div>
     <!-- Modal -->
@@ -1293,14 +1438,14 @@ $(document).ready(function(){
                     <input type="radio" name="send-test-email" value="0" id="send-test-email_0" checked/> No
                 </label>
             </div>
-            <div id="helpBlock" class="help-block">After setting preferences, send a test email to <?php echo $_SESSION['user_name']; ?> using the settings input above.</div>
+            <div class="help-block">After setting preferences, send a test email to <?php echo $_SESSION['user_name']; ?> using the settings input above.</div>
         </div>
     </section>
 </section>
 <?php } // end if ($action == "email") { ?>
 
 <?php if ((($section == "admin") && ($go == "preferences") && ($action == "best")) || ($section == "step3")) { ?>
-<h3>Best Brewer and/or Club</h3>
+<h3>Best Brewer<?php if ($_SESSION['prefsProEdition'] == 0) { ?> and/or Club<?php } ?></h3>
 <!-- BEST BREWER / BEST CLUB --->
 <div class="form-group">
     <label for="prefsShowBestBrewer" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Display? Up to which Position?</label>
@@ -1310,7 +1455,7 @@ $(document).ready(function(){
             <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestBrewer'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
             <?php } ?>
         </select>
-        <span id="helpBlock" class="help-block">Indicate whether you want to display the list of best brewers according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display.</span>
+        <div class="help-block">Indicate whether you want to display the list of best brewers according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display.</div>
     </div>
 </div>
 <div class="form-group">
@@ -1318,7 +1463,7 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <input class="form-control" id="prefsBestBrewerTitle" name="prefsBestBrewerTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestBrewerTitle']; ?>" data-error="A Best Brewer title is required." placeholder="">
         <div class="help-block with-errors"></div>
-        <div id="helpBlock" class="help-block">Enter the title for the Best Brewer award (e.g., Heavy Medal, Ninkasi Award).</div>
+        <div class="help-block">Enter the title for the Best Brewer award (e.g., Heavy Medal, Ninkasi Award).</div>
     </div>
 </div>
 <div id="bestClub">
@@ -1330,7 +1475,7 @@ $(document).ready(function(){
             <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestClub'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
             <?php } ?>
         </select>
-        <span id="helpBlock" class="help-block">Indicate whether you want to display the list of best clubs according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display. Applies ONLY to the amateur edition.</span>
+            <div class="help-block">Indicate whether you want to display the list of best clubs according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display. Applies ONLY to the amateur edition.</div>
         </div>
     </div>
     <div class="form-group">
@@ -1338,7 +1483,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">         
             <input class="form-control" id="prefsBestClubTitle" name="prefsBestClubTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestClubTitle']; ?>" data-error="A Best Club title is required." placeholder="">
             <div class="help-block with-errors"></div>
-            <div id="helpBlock" class="help-block">Enter the title for the Best Club award.</div>
+            <div class="help-block">Enter the title for the Best Club award.</div>
         </div>
     </div>
 </div>
@@ -1353,7 +1498,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsBestUseBOS" value="0" id="prefsBestUseBOS_0" <?php if (($section == "step3") || ($row_prefs['prefsBestUseBOS'] == 0)) echo "CHECKED"; ?>> No
             </label>
         </div>
-        <span id="helpBlock" class="help-block">Indicate whether you wish to include any Best of Show (BOS) places in Best Brewer and Best Club calculations.</span>
+        <span class="help-block">Indicate whether you wish to include any Best of Show (BOS) places in Best Brewer and Best Club calculations.</span>
     </div>
 </div>
 <div class="form-group">
@@ -1367,8 +1512,8 @@ $(document).ready(function(){
                 <input type="radio" name="prefsScoringCOA" value="0" id="prefsScoringCOA_0" <?php if (($section == "step3") || ($row_prefs['prefsScoringCOA'] == 0)) echo "CHECKED"; ?>> No
             </label>
         </div>
-        <span id="helpBlock" class="help-block">Indicate whether you wish use the Master Homebrewer Program's <a href="https://www.masterhomebrewerprogram.com/circuit-of-america" target="_blank">Circuit of America</a> scoring methodolgy for all Best Brewer and Best Club calculations. <strong>Indicating "Yes" here will override all other calculation preferences.</strong>
-        </span>
+            <div class="help-block">Indicate whether you wish use the Master Homebrewer Program's <a href="https://www.masterhomebrewerprogram.com/circuit-of-america" target="_blank">Circuit of America</a> scoring methodolgy for all Best Brewer and Best Club calculations. <strong>Indicating "Yes" here will override all other calculation preferences.</strong>
+            </div>
         <div class="btn-group" role="group" aria-label="prefsEvalModal">
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsScoringCOAModal">
@@ -1407,7 +1552,7 @@ $(document).ready(function(){
                 <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
-            <span id="helpBlock" class="help-block">Enter the number of points awarded for each first place that an entrant receives.</span>
+            <div class="help-block">Enter the number of points awarded for each first place that an entrant receives.</div>
         </div>
     </div>
     <div class="form-group">
@@ -1418,7 +1563,7 @@ $(document).ready(function(){
                 <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
-            <span id="helpBlock" class="help-block">Enter the number of points awarded for each second place that an entrant receives.</span>
+            <div class="help-block">Enter the number of points awarded for each second place that an entrant receives.</div>
         </div>
     </div>
     <div class="form-group">
@@ -1429,7 +1574,7 @@ $(document).ready(function(){
                 <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
-            <span id="helpBlock" class="help-block">Enter the number of points awarded for each third place that an entrant receives.</span>
+            <div class="help-block">Enter the number of points awarded for each third place that an entrant receives.</div>
         </div>
     </div>
     <div class="form-group">
@@ -1440,7 +1585,7 @@ $(document).ready(function(){
                 <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
-            <span id="helpBlock" class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</span>
+            <div class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</div>
         </div>
     </div>
     <div class="form-group">
@@ -1451,7 +1596,7 @@ $(document).ready(function(){
                 <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
-            <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</span>
+            <div class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</div>
         </div>
     </div>
 </section>
@@ -1499,13 +1644,13 @@ include (DB.'entry_info.db.php');
             <option value="6" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "6")) echo " SELECTED"; ?> />Anonymous with Barcode/QR Code</option>
         </optgroup>
     </select>
-    <span id="helpBlock" class="help-block">
-        <div class="btn-group" role="group" aria-label="entryFormModal">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryFormModal">Printed Entry Form and/or Bottle Labels Info</button>
+        <div class="help-block">
+            <div class="btn-group" role="group" aria-label="entryFormModal">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryFormModal">Printed Entry Form and/or Bottle Labels Info</button>
+                </div>
             </div>
         </div>
-    </span>
     </div>
 </div>
 <!-- Modal -->
@@ -1547,15 +1692,13 @@ include (DB.'entry_info.db.php');
                 <input type="radio" name="prefsSpecific" value="0" id="prefsSpecific_1" <?php if ($row_prefs['prefsSpecific'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
             </label>
         </div>
-        <span id="helpBlock" class="help-block">
+        <div class="help-block">
             <div class="btn-group" role="group" aria-label="prefsSpecificModal">
-            <div class="btn-group" role="group">
                 <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsSpecificModal">
-                   Hide Brewer&rsquo;s Specifics Field Info
+                       Hide Brewer&rsquo;s Specifics Field Info
                 </button>
             </div>
-            </div>
-        </span>
+        </div>
     </div>
 </div>
 <!-- Modal -->
@@ -1584,7 +1727,7 @@ include (DB.'entry_info.db.php');
         <option value="<?php echo $i; ?>" <?php if (($section == "step3") && ($i == "150")) echo "SELECTED"; elseif ((isset($row_limits['prefsSpecialCharLimit'])) && ($row_limits['prefsSpecialCharLimit'] == $i)) echo "SELECTED"; ?>><?php echo $i; ?></option>
     <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">
+    <div class="help-block">
         <p>Indicate the limit of characters users can enter when specifying special ingredients, optional ingredients, and brewer's specifics. A limit of <strong>65 characters or less</strong> is suggested for competitions that attach &ldquo;Bottle Labels with Required Info&rdquo; to entry bottles at sorting.</p>
         <div class="btn-group" role="group" aria-label="charLimitModal">
             <div class="btn-group" role="group">
@@ -1593,7 +1736,7 @@ include (DB.'entry_info.db.php');
                 </button>
             </div>
         </div>
-    </span>
+    </div>
     </div>
 </div>
 <!-- Modal -->
@@ -1625,7 +1768,7 @@ include (DB.'entry_info.db.php');
             <input class="form-control" id="contestEntryFee" name="contestEntryFee" type="number" maxlength="5" step=".01" value="<?php if ($section != "step4") echo number_format($row_contest_info['contestEntryFee'],2); ?>" placeholder="" required>
             <div class="input-group-addon" id="contestEntryFee-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></div>
         </div>
-        <span id="helpBlock" class="help-block">Fee for a single entry. Enter a zero (0) for a free entry fee.</span>
+        <div class="help-block">Fee for a single entry. Enter a zero (0) for a free entry fee.</div>
     </div>
 </div>
 
@@ -1636,9 +1779,9 @@ include (DB.'entry_info.db.php');
             <span class="input-group-addon" id="contestEntryCap-addon1"><?php echo $currency_symbol; ?></span>
             <input class="form-control" id="contestEntryCap" name="contestEntryCap" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryCap'])) && (!empty($row_contest_info['contestEntryCap']))) echo number_format($row_contest_info['contestEntryCap'],2); ?>" placeholder="">
         </div>
-        <span id="helpBlock" class="help-block">Enter the maximum amount for each entrant. Leave blank if no cap.
-        <a tabindex="0"  type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto right" data-container="body"  data-content="Useful for competitions with &ldquo;unlimited&rdquo; entries for a single fee (e.g., <?php if ($section != "step4") echo $currency_symbol; ?>X for the first X number of entries, <?php if ($section != "step4") echo $currency_symbol; ?>X for unlimited entries, etc.). "><span class="fa fa-question-circle"></span></a>
-        </span>
+        <div class="help-block">Enter the maximum amount for each entrant. Leave blank if no cap.
+            <a tabindex="0"  type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto right" data-container="body"  data-content="Useful for competitions with &ldquo;unlimited&rdquo; entries for a single fee (e.g., <?php if ($section != "step4") echo $currency_symbol; ?>X for the first X number of entries, <?php if ($section != "step4") echo $currency_symbol; ?>X for unlimited entries, etc.). "><span class="fa fa-question-circle"></span></a>
+        </div>
     </div>
 </div>
 
@@ -1653,7 +1796,7 @@ include (DB.'entry_info.db.php');
                 <input type="radio" name="contestEntryFeeDiscount" value="N" id="contestEntryFeeDiscount_1" <?php if (($section != "step4") && ($row_contest_info['contestEntryFeeDiscount'] == "N")) echo "CHECKED"; if ($section == "step4") echo "CHECKED"; ?>/> No
             </label>
         </div>
-        <span id="helpBlock" class="help-block">Designate Yes or No if your competition offers a discounted entry fee after a certain number is reached.</span>
+        <div class="help-block">Designate Yes or No if your competition offers a discounted entry fee after a certain number is reached.</div>
     </div>
 </div>
 
@@ -1662,7 +1805,7 @@ include (DB.'entry_info.db.php');
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
             <input class="form-control" id="contestEntryFeeDiscountNum" name="contestEntryFeeDiscountNum" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFeeDiscountNum']; ?>" placeholder="">
-        <span id="helpBlock" class="help-block">The entry threshold participants must exceed to take advantage of the per entry fee discount (designated below). If no, discounted fee exists, leave blank.</span>
+        <div class="help-block">The entry threshold participants must exceed to take advantage of the per entry fee discount (designated below). If no, discounted fee exists, leave blank.</div>
     </div>
 </div>
 
@@ -1673,20 +1816,20 @@ include (DB.'entry_info.db.php');
             <span class="input-group-addon" id="contestEntryFee2-addon1"><?php echo $currency_symbol; ?></span>     
             <input class="form-control" id="contestEntryFee2" name="contestEntryFee2" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryFee2'])) && (!empty($row_contest_info['contestEntryFee2']))) echo number_format($row_contest_info['contestEntryFee2'],2); ?>" placeholder="">
         </div>
-        <span id="helpBlock" class="help-block">Fee for a single, discounted entry.</span>
+        <div class="help-block">Fee for a single, discounted entry.</div>
     </div>
 </div>
 <?php
-include(LIB.'process.lib.php');
 $secretKey = base64_encode(bin2hex($password));
 $nacl = base64_encode(bin2hex($server_root));
-$contestEntryFeePassword = simpleDecrypt($row_contest_info['contestEntryFeePassword'], $secretKey, $nacl);
+$contestEntryFeePassword = "";
+if (isset($row_contest_info['contestEntryFeePassword'])) $contestEntryFeePassword = simpleDecrypt($row_contest_info['contestEntryFeePassword'], $secretKey, $nacl);
 ?>
 <div class="form-group">
     <label for="contestEntryFeePassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Member Discount Password</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="contestEntryFeePassword" name="contestEntryFeePassword" type="text" value="<?php echo $contestEntryFeePassword; ?>" placeholder="">
-        <span id="helpBlock" class="help-block">Designate a password for participants to enter to receive discounted entry fees. Useful if your competition provides a discount for members of the sponsoring club(s).</span>
+        <div class="help-block">Designate a password for participants to enter to receive discounted entry fees. Useful if your competition provides a discount for members of the sponsoring club(s).</div>
     </div>
 </div>
 <div class="form-group">
@@ -1697,7 +1840,7 @@ $contestEntryFeePassword = simpleDecrypt($row_contest_info['contestEntryFeePassw
             
             <input class="form-control" id="contestEntryFeePasswordNum" name="contestEntryFeePasswordNum" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryFeePasswordNum'])) && (!empty($row_contest_info['contestEntryFeePasswordNum']))) echo number_format($row_contest_info['contestEntryFeePasswordNum'],2); ?>" placeholder="">
         </div>
-        <span id="helpBlock" class="help-block">Fee for a single, discounted member entry. If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</span>
+        <div class="help-block">Fee for a single, discounted member entry. If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</div>
     </div>
 </div>
 
@@ -1706,23 +1849,23 @@ $contestEntryFeePassword = simpleDecrypt($row_contest_info['contestEntryFeePassw
     <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit &ndash; Paid/Unpaid</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <input class="form-control" id="prefsEntryLimit" name="prefsEntryLimit" type="text" value="<?php if (isset($row_limits['prefsEntryLimit'])) echo $row_limits['prefsEntryLimit']; ?>" placeholder="">
-        <span id="helpBlock" class="help-block">Limit of <strong class="text-danger">total</strong> entries you will accept in the competition. Leave blank if no limit.</span>
+        <div class="help-block">Limit of <strong class="text-danger">total</strong> entries you will accept in the competition. Leave blank if no limit.</div>
     </div>
 </div>
 <div class="form-group">
     <label for="prefsEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit &ndash; Paid</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
-            <input class="form-control" id="prefsEntryLimitPaid" name="prefsEntryLimitPaid" type="text" value="<?php if (isset($row_limits['prefsEntryLimitPaid'])) echo $row_limits['prefsEntryLimitPaid']; ?>" placeholder="">
-            <span id="helpBlock" class="help-block">
-        <div class="btn-group" role="group" aria-label="charLimitModal">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryLimitPaidModal">
-                   Paid Entry Limit Info
-                </button>
+        <input class="form-control" id="prefsEntryLimitPaid" name="prefsEntryLimitPaid" type="text" value="<?php if (isset($row_limits['prefsEntryLimitPaid'])) echo $row_limits['prefsEntryLimitPaid']; ?>" placeholder="">
+        <div class="help-block">
+            <div class="btn-group" role="group" aria-label="charLimitModal">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryLimitPaidModal">
+                       Paid Entry Limit Info
+                    </button>
+                </div>
             </div>
+            <p>Limit of <strong class="text-danger">paid</strong> entries you will accept in the competition. Leave blank if no limit.</p>
         </div>
-        <p>Limit of <strong class="text-danger">paid</strong> entries you will accept in the competition. Leave blank if no limit.</p>
-        </span>
     </div>
 </div>
 <!-- Modal -->
@@ -1763,7 +1906,7 @@ if (strpos($section, "step") === FALSE) {
     <label for="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit &ndash; <?php echo $row_style_type['styleTypeName']; ?></label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" name="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" type="number" min="0" value="<?php echo $row_style_type['styleTypeEntryLimit']; ?>" placeholder="">
-        <span id="helpBlock" class="help-block"><?php if ($st_count == $totalRows_style_type) echo "Individual style type entry limits above are only for those that have BOS enabled. <a href='".$base_url."index.php?section=admin&amp;go=style_types'>Manage your competition style types</a> to specify entry limits for others."; ?></span>
+        <div class="help-block"><?php if ($st_count == $totalRows_style_type) echo "Individual style type entry limits above are only for those that have BOS enabled. <a href='".$base_url."index.php?section=admin&amp;go=style_types'>Manage your competition style types</a> to specify entry limits for others."; ?></div>
     </div>
 </div>
 <?php 
@@ -1771,6 +1914,37 @@ if (strpos($section, "step") === FALSE) {
 }
 ?>
 <input name="style_type_entry_limits" type="hidden" value="<?php if (!empty($st_arr)) echo implode(",", $st_arr); ?>">
+<div class="form-group">
+    <label for="choose-style-entry-limits" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limits by Style or Table/Medal Group</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <label class="radio-inline">
+                <input type="radio" name="choose-style-entry-limits" value="0" id="choose-style-entry-limits_0" <?php if (($section != "step3") && (!$limits_by_style) && (!$limits_by_table)) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> Disable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="choose-style-entry-limits" value="2" id="choose-style-entry-limits_2"  <?php if (($section != "step3") && ($limits_by_table)) echo "CHECKED";  ?> /> Enable By Table or Medal Group
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="choose-style-entry-limits" value="1" id="choose-style-entry-limits_1"  <?php if (($section != "step3") && ($limits_by_style)) echo "CHECKED";  ?> /> Enable By Style
+            </label>
+        </div>
+        <div class="help-block">
+            <p id="limit-entries-will-reset" class="alert alert-info"><strong class="text-primary">Please note:</strong> If you choose a different entry limit method than what is currently defined, any limits set previously will be deleted and all styles previously disabled due to limits will be enabled.</p> 
+            <p id="limit-entries-by-table-help" class=""><strong>Limiting by table or medal group</strong> requires that your installation be placed into <strong>Tables Planning Mode</strong> and <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">tables/medal groups defined</a> (limits are set when creating or editing tables/medal groups).</p>
+            <p id="limit-entries-by-style-help" class=""><strong>Limiting entries by style</strong> allows you to define a numerical limit on overall styles or style groups. Define your per-style limits below.</p>
+        </div>
+    </div>
+</div>
+<section id="define-style-entry-limits">
+<?php echo $current_entry_limits_by_style; ?>
+<?php echo $entry_limit_by_style; ?>
+</section>
+
+
+
+
+
+
 <div class="form-group">
     <label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Overall Entry Limit per Participant</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">    
@@ -1780,7 +1954,7 @@ if (strpos($section, "step") === FALSE) {
         <option value="<?php echo $i; ?>" <?php if ($real_overall_user_entry_limit == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Overall limit of entries that each participant can enter. Will override any incremental limit defined below IF this number is lower. Leave blank if no OVERALL entry limit.</span>
+    <div class="help-block">Overall limit of entries that each participant can enter. Will override any incremental limit defined below IF this number is lower. Leave blank if no OVERALL entry limit.</div>
     </div>
 </div>
 <?php for ($i=1; $i <= 4; $i++) { ?>
@@ -1795,7 +1969,7 @@ if (strpos($section, "step") === FALSE) {
         <option value="<?php echo $a; ?>" <?php if ($incremental) { if ((isset($incremental_limits[$i]['limit-number'])) && ($incremental_limits[$i]['limit-number'] == $a)) echo "SELECTED"; } ; ?> ><?php echo $a; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Numerical limit of entries per paricipant for the specifid number of days AFTER the entry window opening date (<?php echo $entry_open; ?>).</span>
+    <div class="help-block">Numerical limit of entries per paricipant for the specifid number of days AFTER the entry window opening date (<?php echo $entry_open; ?>).</div>
     </div>
 </div>
 <div class="form-group">
@@ -1807,7 +1981,7 @@ if (strpos($section, "step") === FALSE) {
             <option  value="<?php echo $b; ?>" <?php if ($incremental) { if ((isset($incremental_limits[$i]['limit-days'])) && ($incremental_limits[$i]['limit-days'] == $b)) echo "SELECTED"; } ; ?> ><?php echo $b; if (isset($row_contest_dates['contestEntryOpen'])) echo " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'],($row_contest_dates['contestEntryOpen'] + ($b*86400)), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ?></option>
             <?php } ?>
         </select>
-        <span id="helpBlock" class="help-block">Number of days AFTER the entry window opening date that the #<?php echo $i; ?> per participant limit will EXPIRE.</span>
+        <div class="help-block">Number of days AFTER the entry window opening date that the #<?php echo $i; ?> per participant limit will EXPIRE.</div>
         <div class="help-block with-errors"></div>
     </div>
 </div>
@@ -1824,7 +1998,7 @@ if (strpos($section, "step") === FALSE) {
         <option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUserSubCatLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Limit of entries that each participant can enter into a single sub-style. Leave blank if no limit.</span>
+    <div class="help-block">Limit of entries that each participant can enter into a single sub-style. Leave blank if no limit.</div>
     </div>
 </div>
 <!-- Insert Collapsable -->
@@ -1832,21 +2006,19 @@ if (strpos($section, "step") === FALSE) {
     <div class="form-group">
         <label for="prefsUSCLExLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Per Participant Entry Limit For <em>Excepted</em> Sub-Styles</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
-        <select class="selectpicker" name="prefsUSCLExLimit" id="prefsUSCLExLimit" data-size="10" data-width="auto">
-            <option value="" rel="none" <?php ($row_limits['prefsUSCLExLimit'] == ""); echo "SELECTED"; ?>></option>
-            <?php for ($i=1; $i <= 100; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUSCLExLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
-            <?php } ?>
-        </select>
-        <span id="helpBlock" class="help-block">
-            <div class="btn-group" role="group" aria-label="exceptdSubstylesModal">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#exceptdSubstylesModal">
-                   Per Participant Entry Limit For <em>Excepted</em> Sub-Styles Info
-                </button>
+            <select class="selectpicker" name="prefsUSCLExLimit" id="prefsUSCLExLimit" data-size="10" data-width="auto">
+                <option value="" rel="none" <?php ($row_limits['prefsUSCLExLimit'] == ""); echo "SELECTED"; ?>></option>
+                <?php for ($i=1; $i <= 100; $i++) { ?>
+                <option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUSCLExLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <?php } ?>
+            </select>
+            <div class="help-block">
+                <div class="btn-group" role="group" aria-label="exceptdSubstylesModal">
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#exceptdSubstylesModal">
+                       Per Participant Entry Limit For <em>Excepted</em> Sub-Styles Info
+                    </button>
+                </div>
             </div>
-            </div>
-        </span>
         </div>
     </div>
     <div class="form-group" id="subStyleExeptionsEdit">
@@ -1911,16 +2083,13 @@ if (strpos($section, "step") === FALSE) {
                 echo $currency_dropdown;
             ?>
         </select>
-        <span id="helpBlock" class="help-block">
+        <div class="help-block">
             <div class="btn-group" role="group" aria-label="currencyModal">
-            <div class="btn-group" role="group">
                 <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#currencyModal">
                    Currency Info
                 </button>
             </div>
-            </div>
-
-        </span>
+        </div>
     </div>
 </div>
 <!-- Modal -->
@@ -1953,15 +2122,13 @@ if (strpos($section, "step") === FALSE) {
                 Disable
             </label>
         </div>
-        <span id="helpBlock" class="help-block">
-        <div class="btn-group" role="group" aria-label="payPrintModal">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#payPrintModal">
-               Pay to Print Paperwork Info
-            </button>
+        <div class="help-block">
+            <div class="btn-group" role="group" aria-label="payPrintModal">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#payPrintModal">
+                   Pay to Print Paperwork Info
+                </button>
+            </div>
         </div>
-        </div>
-        </span>
     </div>
 </div>
 <!-- Modal -->
@@ -2124,14 +2291,13 @@ if (strpos($section, "step") === FALSE) {
                     <input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($row_prefs['prefsTransFee'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
                     Disable</label>
             </div>
-            <span id="helpBlock" class="help-block">
-            <div class="btn-group" role="group" aria-label="payPalFeeModal">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#payPalFeeModal">
-                   Entrant Pays Checkout Fees Info
-                </button>
+            <div class="help-block">
+                <div class="btn-group" role="group" aria-label="payPalFeeModal">
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#payPalFeeModal">
+                       Entrant Pays Checkout Fees Info
+                    </button>
+                </div>
             </div>
-
-            </span>
         </div>
     </div>
     <!-- Modal -->

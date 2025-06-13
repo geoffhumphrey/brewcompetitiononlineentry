@@ -182,7 +182,7 @@ if ($totalRows_log > 0) {
 		// Required Info
 		$brewInfo = "";
 		if (!empty($row_log['brewInfo'])) {
-			if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $brewInfo .= "<li><strong>".$label_regional_variation.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
+			if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $brewInfo .= "<li><strong>".$label_regional_variation.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
 			else $brewInfo .= "<li><strong>".$label_required_info.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
 		}
 
@@ -197,7 +197,24 @@ if ($totalRows_log > 0) {
 		$cider_mead_req_info = "";
 		if (!empty($row_log['brewMead1'])) $cider_mead_req_info .= "<li><strong>".$label_carbonation.":</strong> ".$row_log['brewMead1']."</li>";
 		if (!empty($row_log['brewMead2'])) $cider_mead_req_info .= "<li><strong>".$label_sweetness.":</strong> ".$row_log['brewMead2']."</li>";
-		if (!empty($row_log['brewSweetnessLevel'])) $cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".$row_log['brewSweetnessLevel']."</li>";
+		
+		if (!empty($row_log['brewSweetnessLevel'])) {
+			
+			$sweetness_json = json_decode($row_log['brewSweetnessLevel'],true);
+			
+			if (json_last_error() === JSON_ERROR_NONE) {
+
+				if (!empty($sweetness_json['OG'])) $cider_mead_req_info .= "<li><strong>".$label_original_gravity.":</strong> ".$sweetness_json['OG']."</li>";
+				if (!empty($sweetness_json['FG'])) $cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".$sweetness_json['FG']."</li>";
+
+			}
+			
+			else {
+				$cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".$row_log['brewSweetnessLevel']."</li>";
+			}
+
+		}
+
 		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".$row_log['brewMead3']."</li>";
 
 		if (!empty($cider_mead_req_info)) $required_info .= $cider_mead_req_info;
@@ -569,7 +586,7 @@ if ($totalRows_log > 0) {
 	    $tbody_rows .= "</div>";
 	    $tbody_rows .= "</section>";
 
-		if ($row_log['brewerProAm'] == 1) $tbody_rows .= "<p><span class=\"label label-info hidden-print <?php echo $hidden_sm; ?>\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
+		if ($row_log['brewerProAm'] >= 1) $tbody_rows .= "<p><span class=\"label label-info hidden-print <?php echo $hidden_sm; ?>\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td nowrap=\"nowrap\" class=\"<?php echo $hidden_sm; ?>\">".$entry_brewer_display."</td>";
 		if ($pro_edition == 0) $tbody_rows .= "<td class=\"<?php echo $hidden_md; ?> hidden-print\">".$row_log['brewerClubs']."</td>";

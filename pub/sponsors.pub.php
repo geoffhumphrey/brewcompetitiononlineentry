@@ -24,7 +24,7 @@
 
 ?>
 	<div class="col">
-		<div class="card h-100 sponsor-card-bg">
+		<div class="card h-100 sponsor-card-bg reveal-element">
 			<div class="card-body">
 				<header class="sponsor-header"><?php echo $row_sponsors['sponsorName']; ?></header>
 				<?php if ($_SESSION['prefsSponsorLogos'] == "Y") { ?>

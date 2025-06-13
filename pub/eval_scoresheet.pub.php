@@ -140,7 +140,7 @@ if ($judging_scoresheet == 2) {
 
 if (($judging_scoresheet == 3) || ($judging_scoresheet == 4)) {
   $output_form = "structured_output.eval.php";
-  $scoresheet_form = "structured_scoresheet.eval.pub.php";
+  $scoresheet_form = "eval_scoresheet_structured.pub.php";
   $process_type = "process-eval-structured";
   $scoresheet_version = $label_structured_version;
 }
@@ -355,8 +355,10 @@ if ($entry_found) {
     else $style_link = $row_style['brewStyleLink'];
 
   }
-  
-  elseif ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+
+  elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
+
+    $first_character = mb_substr($row_style['brewStyleGroup'], 0, 1);
 
     // Exceptions
     if (array_key_exists($style_concat, $bjcp2021_exceptions)) $style_link = $bjcp2021_exceptions[$style_concat];
@@ -364,7 +366,10 @@ if ($entry_found) {
     // 2021 update was beer only; find numbered styles
     elseif (is_numeric(ltrim($row_style['brewStyleGroup'],"0"))) $style_link = "//bjcp.org/style/2021/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
-    // If mead or cider, use 2015 link
+    // 2025 update was cider only; find styles that begin with C
+    elseif (($_SESSION['prefsStyleSet'] == "BJCP2025") && ($first_character == "C")) $style_link = "//bjcp.org/style/2025/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+
+    // If mead, use 2015 link
     else $style_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
   }
@@ -372,7 +377,7 @@ if ($entry_found) {
   if (empty($style_link)) {
 
     $entry_info_html .= $style_num." ".$row_style['brewStyle'];
-    if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
     if ($_SESSION['prefsStyleSet'] == "AABC") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"http://www.aabc.org.au/docs/AABC2022CategoriesAndStyles.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
     if ($_SESSION['prefsStyleSet'] == "BA") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
 
@@ -392,7 +397,7 @@ if ($entry_found) {
 
   if (!empty($row_entry_info['brewInfo'])) {
     $entry_info_html .= "<div class=\"row mb-3\">";
-    if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style_num == "2A")) $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_regional_variation."</strong></div>";
+    if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style_num == "2A")) $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_regional_variation."</strong></div>";
     else $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_required_info."</strong></div>";
     $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".str_replace("^", " - ", $row_entry_info['brewInfo'])."</div>";
     $entry_info_html .= "</div>";
@@ -438,6 +443,40 @@ if ($entry_found) {
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_final_gravity."</strong></div>";
     $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewSweetnessLevel']."</div>";
     $entry_info_html .= "</div>";
+  }
+
+  if (($_SESSION['prefsStyleSet'] != "NWCiderCup") && (!empty($row_entry_info['brewSweetnessLevel']))) {
+
+    $sweetness_json = json_decode($row_entry_info['brewSweetnessLevel'],true);
+    
+    if (json_last_error() === JSON_ERROR_NONE) {
+
+      if (!empty($sweetness_json['OG'])) {
+        $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+        $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_original_gravity."</strong></div>";
+        $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$sweetness_json['OG']."</div>";
+        $entry_info_html .= "</div>";
+      }
+
+      if (!empty($sweetness_json['FG'])) {
+        $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+        $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_final_gravity."</strong></div>";
+        $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$sweetness_json['FG']."</div>";
+        $entry_info_html .= "</div>";
+      }
+
+    }
+    
+    else {
+
+      $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+      $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_final_gravity."</strong></div>";
+      $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewSweetnessLevel']."</div>";
+      $entry_info_html .= "</div>";
+
+      $sweetness_level_display .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
+    }
+
   }
 
   if (!empty($row_entry_info['brewABV'])) {
@@ -493,10 +532,7 @@ if ($entry_found) {
 
 
   $entry_info_html .= "</section>"; // end alert-teal
-  $entry_info_html .= "</div>"; // end col-12 ps-0
-  $entry_info_html .= "</section>"; // end row mb-3
 
-  
   if ((isset($_POST['participants'])) || ($bid != "default")) {
     
     $eval_source = 0;
@@ -512,34 +548,59 @@ if ($entry_found) {
       $eval_judge = brewer_info($bid);
     }
 
+    
+
     $eval_judge = explode("^",$eval_judge);
 
-    $judge_info_html .= "<div class=\"alert alert-info\">";
+    if (strpos($eval_judge[3], ",") !== false) {
+        $judge_rank = explode(",",$eval_judge[3]);
+        $judge_rank_display = $judge_rank[0];
+    }
+
+    else $judge_rank_display = $eval_judge[3];
+
+    $judge_info_html .= "<section class=\"alert alert-info\">";
     $judge_info_html .= "<div class=\"row mb-3\">";
     $judge_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_judge."</strong></div>";
     $judge_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$eval_judge[0]." ".$eval_judge[1]."</div>";
-    $judge_info_html .= "</div>";
+    $judge_info_html .= "</div>"; // end row
     $judge_info_html .= "<div class=\"row mb-3\">";
-    $judge_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_bjcp_rank." / ".$label_designations."</strong></div>";
-    $judge_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".str_replace(",", ", ", $eval_judge[3])."</div>";
+    $judge_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\">";
+    $judge_info_html .= "<strong>".$label_bjcp_rank;
+    if (($eval_judge[4] != "&nbsp;") && ((isset($judge_rank)) && ($judge_rank[0] != "Non-BJCP"))) $judge_info_html .= " (".$label_bjcp_id.")";
+    $judge_info_html .= "</strong>";
     $judge_info_html .= "</div>";
-    
-    if ($eval_judge[4] != "&nbsp;") {
-      $judge_info_html .= "<div class=\"row mb-3\">";
-      $judge_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_bjcp_id."</strong></div>";
-      $judge_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$eval_judge[4]."</div>";
-      $judge_info_html .= "</div>";
+    $judge_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">";
+    $judge_info_html .= $judge_rank_display;
+    if (($eval_judge[4] != "&nbsp;") && ((isset($judge_rank)) && ($judge_rank[0] != "Non-BJCP"))) $judge_info_html .= " (".$eval_judge[4].")";
+    if ((isset($judge_rank)) && (is_array($judge_rank))) {
+      $judge_credentials = "<br>";
+      foreach ($judge_rank as $key => $value) {
+        if ($key != 0) $judge_credentials .= $value.", ";
+      }
+      $judge_credentials = rtrim($judge_credentials, ", ");
+      $judge_info_html .= $judge_credentials;
     }
-    
     $judge_info_html .= "</div>";
+    $judge_info_html .= "</div>"; // end row
+    $judge_info_html .= "</section>"; // end alert-info
   
   }
+
+  if (!empty($judge_info_html)) $entry_info_html .= $judge_info_html;
+
+  $entry_info_html .= "</div>"; // end col-12 ps-0
+
+  $entry_info_html .= "</section>"; // end row mb-3
+
+  
+  
   
   // If admin is adding eval on behalf of a judge, or if editing a judge's evaluation, display their judge's info
-  if (!empty($judge_info_html)) $entry_info_html .= $judge_info_html;
+  
   
   // Sticky score
-  $sticky_score_tally = "<div id=\"sticky-score\" class=\"float-end\">";
+  $sticky_score_tally = "\n\n<div id=\"sticky-score\" class=\"float-end\">";
 
   $sticky_score_tally .= "<div class=\"float-end mb-3 pt-2 pb-2\">";
   $sticky_score_tally .= "<i id=\"warning-indicator-icon\" class=\"fa fa-lg fa-exclamation-triangle text-warning-emphasis mt-2 mb-2 me-1\"></i>";
@@ -648,7 +709,7 @@ if ($entry_found) {
 
   $sticky_score_tally .= "</section>"; // end scoring-guide-status
 
-  $sticky_score_tally .= "</div>"; // end sticky-score
+  $sticky_score_tally .= "</div>\n\n"; // end sticky-score
 
   
 
@@ -676,8 +737,8 @@ else {
 
 // Sub-nav Buttons
 $eval_nav_buttons .= "<div class=\"d-print-none mb-3\">";
-if ($eval_source == 0) $eval_nav_buttons .= "<a class=\"btn btn-dark me-2\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><i class=\"fa fa-chevron-circle-left me-2\"></i>".$label_admin.": ".$label_evaluations."</a>";
-$eval_nav_buttons .= "<button class=\"btn btn-dark\" data-bs-toggle=\"modal\" data-bs-target=\"#unsaved-modal\"><i class=\"fa fa-chevron-circle-left me-2\"></i>".$label_judging_dashboard."</button>";
+if ($eval_source == 0) $eval_nav_buttons .= "<a class=\"btn btn-dark me-2\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><i class=\"fa fa-chevron-circle-left me-2\"></i>".$label_admin.": ".$label_evaluations."</a>";
+else $eval_nav_buttons .= "<button class=\"btn btn-dark\" data-bs-toggle=\"modal\" data-bs-target=\"#unsaved-modal\"><i class=\"fa fa-chevron-circle-left me-2\"></i>".$label_judging_dashboard."</button>";
 $eval_nav_buttons .= "</div>";
 if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104);
 ?>
@@ -1307,7 +1368,18 @@ var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
         <?php } // end foreach ?>
 
     });
-
 </script>
 <?php } // end if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) ?>
 <?php } // End if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) ?>
+
+<script>
+  $(document).ready(function() {
+    initCollapseStateManager({
+      collapseElementId: "scoring-guide-status",
+      toggleButtonId: "show-hide-status-btn",
+      toggleIconId: "toggle-icon",
+      iconClassExpanded: "fa-chevron-circle-up",
+      iconClassCollapsed: "fa-chevron-circle-down"
+    });
+  });
+</script>

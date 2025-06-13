@@ -712,7 +712,7 @@ $brew_text_005 = "Força necessária"; // falta de pontuação intencional
 $brew_text_006 = "Nível de carbonatação necessário"; // falta de pontuação intencional
 $brew_text_007 = "Nível de doçura necessário"; // falta de pontuação intencional
 $brew_text_008 = "Este estilo requer que você forneça informações específicas para a amostra.";
-$brew_text_009 = "Requisitos para"; // falta de pontuação intencional
+$brew_text_009 = "Requisitos:"; // falta de pontuação intencional
 $brew_text_010 = "Este estilo requer mais informações. Por favor, entre na área fornecida.";
 $brew_text_011 = "O nome da amostra é obrigatório.";
 $brew_text_012 = "*** NÃO REQUERIDO *** Forneça APENAS se você deseja que os juízes considerem completamente o que você escreve aqui ao avaliar e pontuar sua inscrição. Use para registrar detalhes que você gostaria que os juízes considerassem ao avaliar sua inscrição que você NÃO ESPECIFICAR em outros campos (por exemplo, técnica de mostura, variedade de lúpulo, variedade de mel, variedade de uva, variedade de pêra, etc.). ";
@@ -1900,7 +1900,8 @@ $evaluation_info_077 = "Comente sobre cor, clareza e cabeça (retenção, cor e 
 $evaluation_info_078 = "Comente sobre malte, lúpulo, características de fermentação, equilíbrio, acabamento/sabor, e outras características de sabor.";
 $evaluation_info_079 = "Comentário sobre o corpo, carbonação, calor, cremosidade, adstringência e outras sensações palatinas.";
 $evaluation_info_080 = "Comente sobre o prazer geral de beber associado à entrada, dê sugestões para melhorias.";
-if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+
+if ((isset($_SESSION['prefsStyleSet'])) && (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025"))) {
     $styles_entry_text_21B = "O participante DEVE especificar uma força (sessão, padrão, duplo); se nenhuma força for especificada, o padrão será assumido. O participante DEVE especificar o tipo específico de Especialidade IPA da lista de Tipos Definidos Atualmente identificados nas Diretrizes de Estilo, ou conforme emendado pelos Estilos Provisórios no site do BJCP; OU o participante DEVE descrever o tipo de Especialidade IPA e suas principais características em forma de comentários para que os juízes saibam o que esperar. Os participantes PODEM especificar as variedades específicas de lúpulo utilizadas, se os participantes acharem que os juízes podem não reconhecer as características varietais dos lúpulos mais recentes. Os participantes PODEM especificar uma combinação de tipos IPA definidos (por exemplo, IPA Centeio Negro) sem fornecer descrições adicionais.";
     $styles_entry_text_24C = "O participante DEVE especificar a Bière de Garde loira, âmbar ou marrom.";
     $styles_entry_text_25B = "O participante DEVE especificar a força (tabela, padrão, super) e a cor (pálido, escuro). O participante PODE identificar os grãos de caráter utilizados.";

@@ -340,7 +340,7 @@ if ($totalRows_table_assignments > 0) {
 
 								if ($score_style_data[3] <= 3) {
 									$output_form = "structured-scoresheet";
-									$scoresheet_form = "eval_structured_scoresheet.pub.php";
+									$scoresheet_form = "eval_scoresheet_structured.pub.php";
 								}
 
 								else {
@@ -367,7 +367,7 @@ if ($totalRows_table_assignments > 0) {
 							
 							if (!empty($row_entries['brewInfo'])) {
 								$additional_info++;
-								if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= "<strong>".$label_regional_variation; 
+								if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= "<strong>".$label_regional_variation; 
 								else $info_display .= "<strong>".$label_required_info;
 								$info_display .= ":</strong> ".$row_entries['brewInfo'];
 							}
@@ -383,8 +383,21 @@ if ($totalRows_table_assignments > 0) {
 							}
 
 							if (!empty($row_entries['brewSweetnessLevel'])) {
+
 								$additional_info++;
-								$sweetness_level_display .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
+								$sweetness_json = json_decode($row_entries['brewSweetnessLevel'],true);
+								
+								if (json_last_error() === JSON_ERROR_NONE) {
+
+									if (!empty($sweetness_json['OG'])) $sweetness_level_display .= "<li><strong>".$label_original_gravity.":</strong> ".$sweetness_json['OG']."</li>";
+									if (!empty($sweetness_json['FG'])) $sweetness_level_display .= "<li><strong>".$label_final_gravity.":</strong> ".$sweetness_json['FG']."</li>";
+
+								}
+								
+								else {
+									$sweetness_level_display .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
+								}
+
 							}
 
 							if (!empty($row_entries['brewMead3'])) {
@@ -746,8 +759,8 @@ if ($totalRows_table_assignments > 0) {
 
 	// Build mini-bos mismatch alert
 	if (!empty($mini_bos_mismatch)) {
-		$mini_bos_mismatch_alert .= "<div class=\"alert alert-info\">";
-		$mini_bos_mismatch_alert .= sprintf("<p><strong><i class=\"fa fa-info-circle\"></i> %s</strong></p><p>%s</p>",$label_please_note,$evaluation_info_105);
+		$mini_bos_mismatch_alert .= "<div class=\"alert alert-info alert-dismissible\">";
+		$mini_bos_mismatch_alert .= sprintf("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><p><strong><i class=\"fa fa-info-circle\"></i> %s</strong></p><p>%s</p>",$label_please_note,$evaluation_info_105);
 		$mini_bos_mismatch_alert .= "<ul>";
 		asort($mini_bos_mismatch);
 		foreach ($mini_bos_mismatch as $key => $value) {

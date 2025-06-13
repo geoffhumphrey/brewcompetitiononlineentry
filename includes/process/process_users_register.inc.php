@@ -310,7 +310,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						if ($brewerJudge == "Y") $brewerJudge1 = $label_yes; else $brewerJudge1 = $label_no;
 						if ($brewerSteward == "Y") $brewerSteward1 = $label_yes; else $brewerSteward1 = $label_no;
 						if ($brewerStaff == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
-						if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; else $brewerProAm1 = $label_no;
+						if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; 
+						elseif ($_POST['brewerProAm'] == 2) $brewerProAm1 = $label_opt_out;  
+						else $brewerProAm1 = $label_no;
 
 						if (!empty($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
 						if (!empty($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);

@@ -64,7 +64,7 @@ if (($action == "reset-password") && ($token != "default")) {
 		
 	}
 	
-	else $primary_links .= "<p class=\"lead\"><a href=\"".$base_url."index.php?section=login&amp;go=password&amp;action=forgot\">".$login_text_025."</a> <a href=\"#\" role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">".ucfirst(strtolower($label_log_in))."?</a></p>";
+	else $primary_links .= "<p class=\"lead\"><a href=\"".$base_url."index.php?section=login&amp;go=password&amp;action=forgot\">".$login_text_004."</a> <a href=\"#\" role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">".ucfirst(strtolower($label_log_in))."?</a></p>";
 	
 	// If not valid, show an error
 	if ($token_valid == 1) $message3 .= sprintf("<div class='alert alert-warning'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div>",$login_text_020);

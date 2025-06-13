@@ -17,7 +17,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 2)) {
 
 		// Check whether user is "authorized" to edit the entry in DB
-		$query_brewer_id = sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);
+		$query_brewer_id = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerEmail FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);
 		$brewer_id = mysqli_query($connection,$query_brewer_id) or die (mysqli_error($connection));
 		$row_brewer_id = mysqli_fetch_assoc($brewer_id);
 
@@ -789,12 +789,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			// Build vars
 			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+			$first_name = $row_brewer_id['brewerFirstName'];
+			$last_name = $row_brewer_id['brewerLastName'];
 			
 			$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 			if (strpos($url, 'brewingcompetitions.com') !== false) $from_email = $default_from."@brewingcompetitions.com";
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$contestName = $_SESSION['contestName'];
+			$from_name = $_SESSION['contestName']." Server";
 			$from_name = html_entity_decode($from_name);
 			$from_name = mb_convert_encoding($contestName, "UTF-8");
 
@@ -841,7 +844,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			echo $message;
 			exit();
 			*/
-			
+
 			$mail = new PHPMailer(true);
 			$mail->CharSet = 'UTF-8';
 			$mail->Encoding = 'base64';

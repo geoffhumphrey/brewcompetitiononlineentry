@@ -21,25 +21,6 @@ $token_valid = "";
 // Build Messages
 if (isset($_SESSION['loginUsername'])) $message1 .= sprintf("<p class=\"lead\">%s</p>",$login_text_000);
 
-if ((($action == "default") || ($action == "login") || ($action == "logout")) && (!isset($_SESSION['loginUsername']))) $login_form_display = TRUE; 
-if (($action == "forgot") && ($go == "password") && (!isset($_SESSION['loginUsername']))) $forget_form_display = TRUE;
-if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUsername']))) { 
-	
-	$verify_form_display = TRUE;
-	if ($username == "default") $username_check = $_POST['loginUsername'];
-	else $username_check = $username;
-
-	$query_userCheck = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$username_check);
-	$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
-	$row_userCheck = mysqli_fetch_assoc($userCheck);
-	$totalRows_userCheck = mysqli_num_rows($userCheck);
-	
-	if (($totalRows_userCheck == 0) && ($msg == "default")) { 
-		$message2 .= sprintf("<div class='text-warning lead'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div><p><a class=\"btn btn-primary\" href=\"%s\">%s</a></p>",$login_text_001, build_public_url("login","password","forgot","default",$sef,$base_url),$login_text_002);
-	}
-	
-}
-
 // If there is a reset token in the URL
 if (($action == "reset-password") && ($token != "default")) {
 	
@@ -56,13 +37,15 @@ if (($action == "reset-password") && ($token != "default")) {
 		
 	}
 	
-	else $primary_links .= "<p class=\"lead\"><a href=\"".$base_url."index.php?section=login&amp;go=password&amp;action=forgot\">".$login_text_025."</a> <a href=\"#\" role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">".ucfirst(strtolower($label_log_in))."?</a></p>";
-	
 	// If not valid, show an error
-	if ($token_valid == 1) $message3 .= sprintf("<div class='alert alert-warning'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div>",$login_text_020);
+	if ($token_valid == 1) $message3 .= sprintf("<p class=\"lead\">%s</p>",$login_text_020);
 	
 	// If expired, show an error
-	if ($token_valid == 2) $message3 .= sprintf("<div class='alert alert-warning'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div>",$login_text_021);
+	if ($token_valid == 2) $message3 .= sprintf("<p class=\"lead\">%s</p>",$login_text_021);
+
+
+
+	if ($token_valid > 0) $message3 .= sprintf("<div class=\"mt-2\"><button type=\"button\" class=\"btn btn-lg btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#forgot-modal\">%s</button></div>",$label_reset_password);
 	
 }
 
@@ -79,176 +62,53 @@ echo $message3;
 echo $primary_links;
 ?>
 
-<?php if ($login_form_display) { ?>
-<!-- <form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=login&action=login" method="POST" name="form1" id="form1"> -->
-	<form id="contact-form" class="justify-content-center hide-loader-form-submit" name="login-form" action="<?php echo $base_url; ?>includes/process.inc.php?section=login&action=login" method="POST" novalidate>
-
-		<div class="row mb-3">
-		    <label for="login-username" class="col-sm-2 col-form-label"><strong><?php echo $label_email; ?></strong></label>
-            <div class="col-sm-10">
-                <input id="login-username" class="form-control" name="loginUsername" type="email" placeholder="<?php echo $login_text_018; ?>" value="<?php if ($username != "default") echo $username; ?>" required>
-                <div class="invalid-feedback"><?php echo $login_text_018; ?></div>
-            </div>
-		</div>
-
-		<div class="row mb-3">
-		    <label for="login-password" class="col-sm-2 col-form-label"><strong><?php echo $label_password; ?></strong></label>
-            <div class="col-sm-10">
-                <input id="login-password" class="form-control" name="loginPassword" type="password" placeholder="<?php echo $login_text_019; ?>" value="<?php if ($username != "default") echo $username; ?>" required>
-                <div class="invalid-feedback"><?php echo $login_text_019; ?></div>
-            </div>
-		</div>
-
-		<div class="row mb-3">
-			<label for="" class="col-sm-2 col-form-label"></label>
-			<div class="col-sm-10 d-grid">
-				<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_log_in; ?> <span class="fa fa-sign-in" aria-hidden="true"></span> </button>
-			</div>
-	</form>
-
-<?php } ?>
-
-<?php if ($forget_form_display) { ?>
-<p class="lead"><?php echo $login_text_006; ?></p>
-<form class="form-horizontal" action="<?php echo build_public_url("login","verify","forgot","default",$sef,$base_url); ?>" method="POST" name="form1" id="form1">
-	<div class="form-group">
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_email; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-			<div class="input-group">
-				<span class="input-group-addon" id="reset-addon1"><span class="fa fa-envelope"></span></span>
-				<!-- Input Here -->
-				<input class="form-control" name="loginUsername" type="email" value="<?php if ($username != "default") echo $username; ?>">
+<?php if ($reset_token_form_display) { ?>
+	
+	
+	<form id="submit-form" role="form" class="form-horizontal hide-loader-form-submit needs-validation" action="<?php echo $base_url; ?>includes/process.inc.php?section=reset&action=reset&token=<?php echo $token; ?>" method="POST" name="form1" novalidate>
+		<div class="mb-3 row">
+			<label for="loginUsername" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-2"></i><?php echo $label_email; ?></strong></label>
+			<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+				<input class="form-control" id="loginUsername" name="loginUsername" type="email" value="<?php if ($username != "default") echo $username; ?>" required>
+				<div class="help-block mt-1 invalid-feedback text-danger"><?php echo $login_text_018; ?></div>
 			</div>
 		</div>
-	</div><!-- Form Group -->
-	<div class="form-group">
-		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" ><?php echo $login_text_007." ".$label_email; ?> <span class="fa fa-check-circle" aria-hidden="true"></span> </button>
+		<div class="mb-3 row">
+			<label for="password" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-2"></i><?php echo $label_new_password; ?></strong></label>
+			<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+				<input class="form-control password-field" name="newPassword1" id="password-entry" type="password" required>
+				<div class="help-block mt-1 invalid-feedback text-danger"><?php echo $login_text_019; ?></div>
+			</div>
 		</div>
-	</div><!-- Form Group -->
-</form>
-<?php } ?>
-
-<?php if ($verify_form_display) {
-
-	$secret_question = "";
-	
-	if ((empty($message2)) || (empty($msg))) { 
-	
-		if ($row_userCheck) {
-			
-			if ($row_userCheck['userQuestion'] == $login_text_008) {
-				$secret_question = $login_text_009; 
-				if ($_SESSION['prefsContact'] == "Y") $secret_question .= sprintf(" %s",$login_text_010);
-			}
-
-			else $secret_question = $row_userCheck['userQuestion'];
-		}
-
-	?>	
-	<p class="lead"><?php echo $login_text_011; ?> <small class="text-muted"><em><?php echo $secret_question; ?></em></small></p>
-	<p class="lead"><small><?php echo $login_text_015; ?></small></p>
-	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=forgot&action=forgot" method="POST" name="form1" id="form1">
-		<div class="form-group">
-			<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_answer; ?></label>
-			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-				<div class="input-group">
-					<span class="input-group-addon" id="id-verify-addon1"><span class="fa fa-bullhorn"></span></span>
-					<!-- Input Here -->
-					<input class="form-control" name="userQuestionAnswer" type="text">
+		<div class="mb-3 row" id="pwd-container">
+			<label class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_password_strength; ?></strong></label>
+			<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+				<div class="pwd-strength-viewport-progress mt-2"></div>
+				<div id="length-help-text" class="small"></div>
+			</div>
+		</div>
+		<div class="mb-3 row">
+			<label for="password-confirm" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-2"></i><?php echo $label_confirm_password; ?></strong></label>
+			<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+				<input class="form-control password-field" name="newPassword2" id="password-confirm" type="password" required>
+				<div class="help-block mt-1 invalid-feedback text-danger"><?php echo $login_text_024; ?></div>
+				<div id="password-error" class="help-block mt-1 text-danger"><?php echo $login_text_023; ?></div>
+			</div>
+		</div>
+		<div class="mb-3 row">
+			<label for="button" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"></label>
+			<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+				<div class="d-grid gap-2 mx-auto mb-4">
+					<button id="submit-button" name="submit" type="submit" class="btn btn-primary" disabled><?php echo $label_reset_password; ?><i class="fa fa-key ms-2"></i></button>
 				</div>
 			</div>
-		</div><!-- Form Group -->
-		<div class="form-group">
-			<div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-4">
-				<!-- Input Here -->
-				<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_submit; ?></button>
-			</div>
-		</div><!-- Form Group -->
-	<input type="hidden" name="loginUsername" value="<?php echo $username_check; ?>">
+		</div>
 	</form>
-<?php 
-	} // end if ((empty($message2)) || (empty($msg)))
-} // end if ($verify_form_display)
-?>
 
-<?php if ($reset_token_form_display) { ?>
-<script type="text/javascript">
-        $(document).ready(function () {
-            "use strict";
-            var options = {};
-            options.ui = {
-                container: "#pwd-container",
-				showErrors: true,
-				useVerdictCssClass: true,
-                showVerdictsInsideProgressBar: true,
-                viewports: {
-                    progress: ".pwd-strength-viewport-progress"
-                },
-				progressBarExtraCssClasses: "progress-bar-striped active",
-				progressBarEmptyPercentage: 2,
-				progressBarMinPercentage: 6
-            };
-            options.common = {
-                zxcvbn: true,
-				minChar: 8,
-				onKeyUp: function (evt, data) {
-					$("#length-help-text").text("<?php echo $label_length; ?>: " + $(evt.target).val().length + " - <?php echo $label_score; ?>: " + data.score.toFixed(2));
-				},
-            };
-            $('#password').pwstrength(options);
-        });
+<script>
+$(document).ready(function() {
+    // Check for autofill on page load and after a short delay
+    setTimeout(checkFieldsMatch, 100);
+});
 </script>
-<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=reset&action=reset&token=<?php echo $token; ?>" method="POST" name="form1" id="form1">
-	<div class="form-group">
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_email; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-			<div class="input-group has-warning">
-				<span class="input-group-addon" id="login-addon1"><span class="fa fa-envelope"></span></span>
-				<!-- Input Here -->
-				<input class="form-control" name="loginUsername" type="email" value="<?php if ($username != "default") echo $username; ?>" required data-error="<?php echo $login_text_018; ?>">
-				<span class="input-group-addon" id="login-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-			</div>
-			<span class="help-block with-errors"></span>
-		</div>
-	</div><!-- Form Group -->
-	<div class="form-group">
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_new_password; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-			<div class="input-group has-warning">
-				<span class="input-group-addon" id="login-addon3"><span class="fa fa-key"></span></span>
-				<!-- Input Here -->
-				<input class="form-control" name="newPassword1" id="password" type="password" data-error="<?php echo $login_text_019; ?>" required>
-				<span class="input-group-addon" id="login-addon4" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-			</div>
-			<span class="help-block with-errors"></span>
-		</div>
-	</div>
-	<div class="form-group" id="pwd-container">
-		<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_password_strength; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-			<div class="pwd-strength-viewport-progress"></div>
-			<div id="length-help-text" class="small"></div>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_confirm_password; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-			<div class="input-group has-warning">
-				<span class="input-group-addon" id="login-addon3"><span class="fa fa-key"></span></span>
-				<!-- Input Here -->
-				<input class="form-control" name="newPassword2" id="password2" type="password" required data-error="<?php echo $login_text_024; ?>" data-match="#password" data-match-error="<?php echo $login_text_023; ?>" required>
-				<span class="input-group-addon" id="login-addon4" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-			</div>
-			<span class="help-block with-errors"></span>
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_reset_password; ?> <span class="fa fa-key" aria-hidden="true"></span></button>
-		</div>
-	</div><!-- Form Group -->
-</form>
 <?php } ?>

@@ -352,7 +352,9 @@ if ($entry_found) {
 
   }
   
-  elseif ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+  elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
+
+    $first_character = mb_substr($row_style['brewStyleGroup'], 0, 1);
 
     // Exceptions
     if (array_key_exists($style_concat, $bjcp2021_exceptions)) $style_link = $bjcp2021_exceptions[$style_concat];
@@ -360,7 +362,10 @@ if ($entry_found) {
     // 2021 update was beer only; find numbered styles
     elseif (is_numeric(ltrim($row_style['brewStyleGroup'],"0"))) $style_link = "//bjcp.org/style/2021/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
-    // If mead or cider, use 2015 link
+    // 2025 update was cider only; find styles that begin with C
+    elseif (($_SESSION['prefsStyleSet'] == "BJCP2025") && ($first_character == "C")) $style_link = "//bjcp.org/style/2025/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+
+    // If mead, use 2015 link
     else $style_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
   }
@@ -368,7 +373,7 @@ if ($entry_found) {
   if (empty($style_link)) {
 
     $entry_info_html .= $style_num." ".$row_style['brewStyle'];
-    if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
     if ($_SESSION['prefsStyleSet'] == "AABC") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"http://www.aabc.org.au/docs/AABC2022CategoriesAndStyles.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
     if ($_SESSION['prefsStyleSet'] == "BA") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
 
@@ -387,7 +392,7 @@ if ($entry_found) {
 
   if (!empty($row_entry_info['brewInfo'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
-    if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style_num == "2A")) $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_regional_variation."</strong></div>";
+    if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style_num == "2A")) $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_regional_variation."</strong></div>";
     else $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_required_info."</strong></div>";
     $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".str_replace("^", " - ", $row_entry_info['brewInfo'])."</div>";
     $entry_info_html .= "</div>";
@@ -433,6 +438,40 @@ if ($entry_found) {
     $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_final_gravity."</strong></div>";
     $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewSweetnessLevel']."</div>";
     $entry_info_html .= "</div>";
+  }
+
+  if (($_SESSION['prefsStyleSet'] != "NWCiderCup") && (!empty($row_entry_info['brewSweetnessLevel']))) {
+
+    $sweetness_json = json_decode($row_entry_info['brewSweetnessLevel'],true);
+    
+    if (json_last_error() === JSON_ERROR_NONE) {
+
+      if (!empty($sweetness_json['OG'])) {
+        $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+        $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_original_gravity."</strong></div>";
+        $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$sweetness_json['OG']."</div>";
+        $entry_info_html .= "</div>";
+      }
+
+      if (!empty($sweetness_json['FG'])) {
+        $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+        $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_final_gravity."</strong></div>";
+        $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$sweetness_json['FG']."</div>";
+        $entry_info_html .= "</div>";
+      }
+
+    }
+    
+    else {
+
+      $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+      $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_final_gravity."</strong></div>";
+      $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewSweetnessLevel']."</div>";
+      $entry_info_html .= "</div>";
+
+      $sweetness_level_display .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
+    }
+
   }
 
   if (!empty($row_entry_info['brewABV'])) {

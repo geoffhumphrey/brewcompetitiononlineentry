@@ -17,6 +17,13 @@ include (LIB.'common.lib.php');
 include (LIB.'update.lib.php');
 require (DB.'common.db.php');
 include (LANG.'language.lang.php');
+require (LIB.'process.lib.php');
+
+$mail_use_smtp = FALSE;
+if (HOSTED) $mail_use_smtp = TRUE;
+elseif (isset($_SESSION['prefsEmailSMTP'])) { 
+    if (($_SESSION['prefsEmailSMTP'] == 1) && (!empty($_SESSION['prefsEmailHost'])) && (!empty($_SESSION['prefsEmailFrom'])) && (!empty($_SESSION['prefsEmailUsername'])) && (!empty($_SESSION['prefsEmailPassword'])) && (!empty($_SESSION['prefsEmailPort']))) $mail_use_smtp = TRUE;
+}
 
 mysqli_select_db($connection,$database);
 
@@ -106,10 +113,6 @@ if (($request_method === "POST") && (!in_array($section,$bypass_token))) {
 
 if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) {
 
-	// Load Sodium Compact encryption protocols
-	// require_once (CLASSES.'sodium_compact/autoload.php');
-	require_once (LIB.'process.lib.php');
-
 	$archive_db_table = $prefix."archive";
 	$brewer_db_table = $prefix."brewer";
 	$brewing_db_table = $prefix."brewing";
@@ -174,7 +177,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	// Log in, log out, forgot password
 	if ($action == "login") include (INCLUDES.'logincheck.inc.php');
 	elseif ($action == "logout") include (INCLUDES.'logout.inc.php');
-	elseif (($action == "forgot") || ($action == "reset")) include (INCLUDES.'forgot_password.inc.php');
+	elseif (($action == "forgot") || ($action == "reset")) include (PROCESS.'process_forgot_password.inc.php');
 
 	// Delete
 	elseif ($action == "delete") include (PROCESS.'process_delete.inc.php');
@@ -263,6 +266,16 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
 
 			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2021","1");
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		}
+
+		if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+
+			include (INCLUDES.'convert/convert_bjcp_2025.inc.php');
+
+			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2025","1");
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

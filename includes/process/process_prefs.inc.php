@@ -34,26 +34,150 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$style_alert = FALSE;
 	$style_set_change = FALSE;
-
+	$prefsStyleLimits = "";
 	$prefsGoogleAccount = "";
 	$prefsUSCLEx = "";
 	$prefsBestBrewerTitle = "";
 	$prefsBestClubTitle = "";
-	$prefsUserEntryLimitDates = "";	
-		
+	$prefsUserEntryLimitDates = "";
+	$style_limits = array();
+
+	$current_limits_undefined = FALSE;
+	$current_limits_by_style = FALSE;
+	$current_limits_by_table = FALSE;
+	
+	if (empty($row_prefs['prefsStyleLimits'])) $current_limits_undefined = TRUE;
+	else {
+		$style_limits_json = json_decode($row_prefs['prefsStyleLimits'],true);
+		if ((strlen($row_prefs['prefsStyleLimits']) > 1) && (json_last_error() === JSON_ERROR_NONE)) $current_limits_by_style = TRUE;
+		if ((strlen($row_prefs['prefsStyleLimits']) == 1) && (is_numeric($row_prefs['prefsStyleLimits']))) $current_limits_by_table = TRUE;
+	}
+	
+
 	$update_table = $prefix."preferences";
 
 	if (!isset($_POST['prefsCompLogoSize'])) $_POST['prefsCompLogoSize'] = NULL;
 	if (!isset($_POST['prefsBOSMead'])) $_POST['prefsBOSMead'] = NULL;
 	if (!isset($_POST['prefsBOSCider'])) $_POST['prefsBOSCider'] = NULL;
 
-	if (($section == "setup") && ($action == "add")) {
+	if (isset($_POST['choose-style-entry-limits'])) {
+
+		if ($_POST['choose-style-entry-limits'] == 0) {
+			
+			$prefsStyleLimits = "";
+
+			if (($current_limits_by_table) || ($current_limits_by_style)) {
+
+				// If the style limit method has changed, clear out any defined 
+				// table or medal group entry limits. Just in case.
+				$data = array(
+					'tableEntryLimit' => NULL
+				);
+				$result = $db_conn->update ($prefix."judging_tables", $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+				// Also clear any style "at limit" flags.
+				$data = array(
+					'brewStyleAtLimit' => NULL
+				);
+				$result = $db_conn->update ($prefix."styles", $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+		}
+
+		if ($_POST['choose-style-entry-limits'] == 1) {
+			
+			foreach ($_POST as $key => $value) {
+				if (strpos($key, $_POST['prefsStyleSet']) !== false) {
+					$this_style_limit = explode("-",$key);
+					if (!empty($value)) $style_limits[$this_style_limit[2]] = $value;
+				}
+			}
+			
+			if (!empty($style_limits)) {
+				$prefsStyleLimits = json_encode($style_limits);
+			}
+
+			if (($current_limits_by_table) || ($current_limits_undefined)) {
+
+				// If the style limit method has changed, clear out any defined 
+				// table or medal group entry limits. Just in case.
+				$data = array(
+					'tableEntryLimit' => NULL
+				);
+				$result = $db_conn->update ($prefix."judging_tables", $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+				// Also clear any style "at limit" flags, if any
+				$data = array(
+					'brewStyleAtLimit' => NULL
+				);
+				$result = $db_conn->update ($prefix."styles", $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+		}
+			
+		if ($_POST['choose-style-entry-limits'] == 2) {
+			
+			$prefsStyleLimits = sterilize($_POST['choose-style-entry-limits']);
+
+			if (($current_limits_by_style) || ($current_limits_undefined)) {
+
+				// If the style limit method has changed, clear out any defined 
+				// table or medal group entry limits. Just in case.
+				$data = array(
+					'tableEntryLimit' => NULL
+				);
+				$result = $db_conn->update ($prefix."judging_tables", $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+				// Also clear any style "at limit" flags, if any.
+				$data = array(
+					'brewStyleAtLimit' => NULL
+				);
+				$result = $db_conn->update ($prefix."styles", $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+		}
 
 	}
 
-	if (($section == "admin") && ($action == "edit")) {
+	if (($section == "setup") && ($action == "add")) { }
 
-		if ($go == "default") {
+	if ((($section == "admin") || ($section == "setup")) && ($action == "edit")) {
+
+		$data_1 = array();
+		$data_2 = array();
+		$data_3 = array();
+		$data_4 = array();
+		$data_5 = array();
+		$data_6 = array();
+
+		if (($go == "default") || ($go == "setup")) {
 
 			// CAPTCHA uses prefsGoogleAccount column
 			if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1']))) $prefsGoogleAccount = $_POST['prefsGoogleAccount0']."|".$_POST['prefsGoogleAccount1'];
@@ -63,7 +187,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = strtotime(sterilize($_POST['prefsWinnerDelay']));
 			else $prefsWinnerDelay = 2145916800;
 
-			$data = array(
+			$data_1 = array(
 
 				'prefsProEdition' => sterilize($_POST['prefsProEdition']),
 				'prefsDisplayWinners' => sterilize($_POST['prefsDisplayWinners']),
@@ -88,7 +212,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		// Entry-related prefs
-		if ($go == "entries") {
+		if (($go == "entries") || ($go == "setup")) {
 
 			/**
 			 * Entry-related fees and discounts moved from Competition Info to 
@@ -111,7 +235,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if ((isset($_POST['contestEntryCap'])) && (!empty($_POST['contestEntryCap']))) $contestEntryCap = sterilize($_POST['contestEntryCap']);
 
 			$hash = NULL;
-			if (isset($_POST['contestEntryFeePassword'])) {
+			if ((isset($_POST['contestEntryFeePassword'])) && (!empty($_POST['contestEntryFeePassword']))) {
 				$secretKey = base64_encode(bin2hex($password));
 				$nacl = base64_encode(bin2hex($server_root));
 				$contestEntryFeePassword = sterilize($_POST['contestEntryFeePassword']);
@@ -165,7 +289,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if (!empty($incremental_limits)) $prefsUserEntryLimitDates = json_encode($incremental_limits);
 
-			$data = array(
+			$data_2 = array(
 				'prefsStyleSet' => $prefsStyleSet,
 				'prefsEntryForm' => sterilize($_POST['prefsEntryForm']),
 				'prefsSpecific' => sterilize($_POST['prefsSpecific']),
@@ -176,7 +300,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'prefsUserSubCatLimit' => blank_to_null(sterilize($_POST['prefsUserSubCatLimit'])),
 				'prefsUSCLExLimit' => blank_to_null(sterilize($_POST['prefsUSCLExLimit'])),
 				'prefsUSCLEx' => blank_to_null($prefsUSCLEx),
-				'prefsUserEntryLimitDates' => blank_to_null($prefsUserEntryLimitDates)
+				'prefsUserEntryLimitDates' => blank_to_null($prefsUserEntryLimitDates),
+				'prefsStyleLimits' => blank_to_null($prefsStyleLimits) 
 			);
 
 			// Check if style type entry limits were specified
@@ -200,12 +325,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		// Email sending prefs
-		if ($go == "email") {
+		if (($go == "email") || ($go == "setup")) {
 
 			$prefsEmailSMTP = sterilize($_POST['prefsEmailSMTP']);			
 			$prefsContact = sterilize($_POST['prefsContact']);
 			$prefsEmailRegConfirm = sterilize($_POST['prefsEmailRegConfirm']);
-			$prefsEmailPassword = sterilize($row_prefs['prefsEmailPassword']);
+			$prefsEmailPassword = sterilize($_POST['prefsEmailPassword']);
+			if (($go == "email") && (!empty($row_prefs['prefsEmailPassword']))) $prefsEmailPassword = sterilize($row_prefs['prefsEmailPassword']);
 			$prefsEmailFrom = sterilize($_POST['prefsEmailFrom']);
 			$prefsEmailUsername = sterilize($_POST['prefsEmailUsername']);
 			$prefsEmailHost = sterilize($_POST['prefsEmailHost']);
@@ -237,7 +363,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				
 			}
 
-			$data = array(
+			$data_3 = array(
 				'prefsEmailSMTP' => $prefsEmailSMTP,
 				'prefsEmailFrom' => blank_to_null($prefsEmailFrom),
 				'prefsEmailUsername' => blank_to_null($prefsEmailUsername),
@@ -253,9 +379,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		// Currency and payment prefs
-		if ($go == "payment") {
+		if (($go == "payment") || ($go == "setup")) {
 
-			$data = array(
+			$data_4 = array(
 				'prefsCurrency' => sterilize($_POST['prefsCurrency']),
 				'prefsPayToPrint' => sterilize($_POST['prefsPayToPrint']),
 				'prefsCash' => sterilize($_POST['prefsCash']),
@@ -270,7 +396,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		// Best brewer/club prefs
-		if ($go == "best") {
+		if (($go == "best") || ($go == "setup")) {
 
 			if (!empty($_POST['prefsBestBrewerTitle'])) {
 				$prefsBestBrewerTitle = $purifier->purify($_POST['prefsBestBrewerTitle']);
@@ -286,7 +412,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$prefsScoringCOA = sterilize($_POST['prefsScoringCOA']);
 			if ($prefsScoringCOA == 1) $prefsBestUseBOS = 0;
 
-			$data = array(
+			$data_5 = array(
 				'prefsShowBestBrewer' => sterilize($_POST['prefsShowBestBrewer']),
 				'prefsBestBrewerTitle' => blank_to_null($prefsBestBrewerTitle),
 				'prefsShowBestClub' => sterilize($_POST['prefsShowBestClub']),
@@ -347,10 +473,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 						$sub_style = str_pad($sub_style_id,3,"0", STR_PAD_LEFT);
 						
-						$update_table = $prefix."styles";
 						$data = array('brewStyleNum' => $sub_style);
 						$db_conn->where ('id', $row_style_name['id']);
-						$result = $db_conn->update ($update_table, $data);
+						$result = $db_conn->update ($prefix."styles", $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
 							$errors = TRUE;
@@ -367,13 +492,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	            	if ($key['style_set_sub_style_method'] == 0) $sub_style_id = "A";
 	            	else $sub_style_id = "001";
 
-	            	$update_table = $prefix."styles";
 	            	$data = array(
 	            		'brewStyleVersion' => $prefsStyleSet,
 	            		'brewStyleNum' => $sub_style_id
 	            	);
 	            	$db_conn->where ('brewStyleOwn', 'custom');
-	            	$result = $db_conn->update ($update_table, $data);
+	            	$result = $db_conn->update ($prefix."styles", $data);
 	            	if (!$result) {
 	            		$error_output[] = $db_conn->getLastError();
 	            		$errors = TRUE;
@@ -386,16 +510,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
         } // end foreach
 
         // Deactivate all styles
-		$update_table = $prefix."styles";
 		$data = array('brewStyleActive' => 'N');
-		$result = $db_conn->update ($update_table, $data);
+		$result = $db_conn->update ($prefix."styles", $data);
 
 		// Activate all styles associated with the chosen style set
 		// User will deselect any unwanted in Step 7
-		$update_table = $prefix."styles";
 		$data = array('brewStyleActive' => 'Y');
 		$db_conn->where ('brewStyleVersion', sterilize($_POST['prefsStyleSet']));
-		$result = $db_conn->update ($update_table, $data);
+		$result = $db_conn->update ($prefix."styles", $data);
 
 		if ($_POST['prefsPaypalIPN'] == 1) {
 
@@ -435,10 +557,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		// If so, mark step as complete in system table and redirect to next step.
 		if ($row_prefs_check['count'] == 1) {
 			
-			$update_table = $prefix."bcoem_sys";
 			$data = array('setup_last_step' => 3);
 			$db_conn->where ('id', 1);
-			$result = $db_conn->update ($update_table, $data);
+			$result = $db_conn->update ($prefix."bcoem_sys", $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
@@ -462,6 +583,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "edit") {
 
+		$data = array_merge($data_1,$data_2,$data_3,$data_4,$data_5);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -469,7 +591,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		if ($go == "payment") {
+		if (($go == "payment") || ($go == "setup")) {
 
 			if ($_POST['prefsPaypalIPN'] == 1) {
 
@@ -503,11 +625,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
-		if ($go == "entries") {
+		if (($go == "entries") || ($go == "setup")) {
 
-			$update_table_entry_fees = $prefix."contest_info";
+			
 			$db_conn->where ('id', $id);
-			$result = $db_conn->update ($update_table_entry_fees, $data_entry_fees);
+			$result = $db_conn->update ($prefix."contest_info", $data_entry_fees);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
@@ -516,20 +638,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			/**
 			 * If the style set has changed from BJCP 2015 to BJCP 2021, map
 			 * 2015 styles to updated 2021 styles in brewing DB.
-			 * Update scripting changed BJCP2008 preference to BJCP2015 and
-			 * performed a conversion from 2008 to 2015 on all entries in the DB.
+			 * 
 			 * As a safeguard to make sure the brewing table data is updated, 
 			 * perform a query for any old styles whose names have changed and/or
 			 * whose category has changed.
 			 */
 			
 			if ($prefsStyleSet == "BJCP2021") {
-				
-				if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
-					include (LIB.'convert.lib.php');
-					include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
+				include (LIB.'convert.lib.php');
 					
+				if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
+					include (INCLUDES.'convert/convert_bjcp_2021.inc.php');	
 				}
 
 				$query_check_entry_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='Clone Beer' OR brewStyle='New England IPA' OR brewStyle='Trappist Single' OR brewCategorySort='PR' OR (brewCategorySort='21' AND brewSubCategory='B7' AND brewStyle='New England IPA') OR (brewCategorySort='27' AND brewSubCategory='A1' AND brewStyle='Gose')", $prefix."brewing");
@@ -537,10 +657,34 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$row_check_entry_styles = mysqli_fetch_assoc($check_entry_styles);
 
 				if ($row_check_entry_styles['count'] > 0) {
-
-					include (LIB.'convert.lib.php');
 					include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
+				}
 
+			}
+
+			/**
+			 * If the style set has changed from BJCP 2021 to BJCP 2025, map
+			 * 2021 styles to updated 2025 styles in brewing DB.
+			 *
+			 * As a safeguard to make sure the brewing table data is updated, 
+			 * perform a query for any old styles whose names have changed and/or
+			 * whose category has changed.
+			 */
+
+			if ($prefsStyleSet == "BJCP2025") {
+
+				include (LIB.'convert.lib.php');
+				
+				if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+					include (INCLUDES.'convert/convert_bjcp_2025.inc.php');
+				}
+
+				$query_check_entry_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='New World Perry' OR brewStyle='Traditional Perry' OR brewStyle='Specialty Cider/Perry' OR brewStyle='Cider with Herbs/Spices' OR brewStyle='Cider with Other Fruit' OR brewStyle='New World Cider'", $prefix."brewing");
+				$check_entry_styles = mysqli_query($connection,$query_check_entry_styles) or die (mysqli_error($connection));
+				$row_check_entry_styles = mysqli_fetch_assoc($check_entry_styles);
+
+				if ($row_check_entry_styles['count'] > 0) {
+					include (INCLUDES.'convert/convert_bjcp_2025.inc.php');
 				}
 
 			}
@@ -574,15 +718,71 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				$update_selected_styles = json_encode($update_selected_styles);
 
-				$update_table = $prefix."preferences";
 				$data = array(
 					'prefsSelectedStyles' => blank_to_null($update_selected_styles)
 				);
 				$db_conn->where ('id', 1);
-				$result = $db_conn->update ($update_table, $data);
+				$result = $db_conn->update ($prefix."preferences", $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
+				}
+
+			}
+
+			// If no style limits prescribed
+			if (empty($style_limits)) {
+
+				// If the "By Table or Medal Group" method leave style at limit
+				// intact. Otherwise, remove all at limit flags.
+				if ($_POST['choose-style-entry-limits'] != 1) {
+
+					$data = array(
+						'brewStyleAtLimit' => NULL
+					);
+					$result = $db_conn->update ($prefix."styles", $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				}
+
+			}
+
+			if (!empty($style_limits)) {
+
+				// Check if any set limits have been reached. 
+				// If so, disable. 
+
+				foreach ($style_limits as $key => $value) {
+
+					$query_style_limit_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s'", $prefix."brewing", $key);
+					$style_limit_entry_count = mysqli_query($connection,$query_style_limit_entry_count) or die (mysqli_error($connection));
+					$row_style_limit_entry_count = mysqli_fetch_assoc($style_limit_entry_count);
+
+					if ($prefsStyleSet == "BJCP2025") {
+						$first_character = mb_substr($key, 0, 1);
+						if ($first_character == "C") $chosen_style_set = "BJCP2025";
+						else $chosen_style_set = "BJCP2021";
+					}
+
+					else $chosen_style_set = $prefsStyleSet;
+
+					if ($row_style_limit_entry_count['count'] >= $value) {
+						$data = array('brewStyleAtLimit' => 1);
+						$db_conn->where ('brewStyleGroup', $key);
+						$db_conn->where ('brewStyleVersion', $chosen_style_set);
+						$result = $db_conn->update ($prefix."styles", $data);
+					}  
+
+					if ($row_style_limit_entry_count['count'] < $value) {
+						$data = array('brewStyleAtLimit' => 0);
+						$db_conn->where ('brewStyleGroup', $key);
+						$db_conn->where ('brewStyleVersion', $chosen_style_set);
+						$result = $db_conn->update ($prefix."styles", $data);
+					}		
+
 				}
 
 			}
@@ -597,10 +797,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if ($section == "setup") {
 			
-			$update_table = $prefix."bcoem_sys";
 			$data = array('setup_last_step' => 3);
 			$db_conn->where ('id', 1);
-			$result = $db_conn->update ($update_table, $data);
+			$result = $db_conn->update ($prefix."bcoem_sys", $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
@@ -610,12 +809,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		else {
 
-		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
-		elseif ($style_set_change) $updateGoTo = $base_url."index.php?section=admin&go=styles&msg=37";
-		elseif (($go == "email") && (isset($_POST['send-test-email'])) && ($_POST['send-test-email'] == 1)) $updateGoTo = $base_url."index.php?section=admin&go=preferences&action=email&view=test-email&msg=2";
-		else $updateGoTo = $base_url."index.php?section=admin&msg=2";
+			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+			if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+			elseif ($style_set_change) $updateGoTo = $base_url."index.php?section=admin&go=styles&msg=37";
+			elseif (($go == "email") && (isset($_POST['send-test-email'])) && ($_POST['send-test-email'] == 1)) $updateGoTo = $base_url."index.php?section=admin&go=preferences&action=email&view=test-email&msg=2";
+			else $updateGoTo = $base_url."index.php?section=admin&msg=2";
+
+		}
+		
 		$updateGoTo = prep_redirect_link($updateGoTo);
 		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 

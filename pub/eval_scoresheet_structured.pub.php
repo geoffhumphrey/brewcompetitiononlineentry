@@ -212,7 +212,8 @@ else {
 			<label class="form-label" for="evalAppearanceOther"><strong><?php echo $label_other; ?></strong></label>
 		</div>
 		<div class="col-md-9 col-sm-9 col-xs-12">
-			<input class="form-control" type="text" id="evalAppearanceOther" name="evalAppearanceOther" placeholder="<?php echo $label_legs." ".$label_lacing." ".$label_particulate; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceOther'])) echo htmlentities($appearance_data['evalAppearanceOther']); } ?>">
+			<input class="form-control" type="text" id="evalAppearanceOther" name="evalAppearanceOther" placeholder="" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceOther'])) echo htmlentities($appearance_data['evalAppearanceOther']); } ?>">
+			<div class="help-block small"><?php echo $label_legs." ".$label_lacing." ".$label_particulate; ?></div>
 		</div>	
 	</div>
 	<!-- Appearance: Beer Head  -->

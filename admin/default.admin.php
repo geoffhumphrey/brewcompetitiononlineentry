@@ -213,6 +213,111 @@ if ($row_prefs['prefsEmailSMTP'] == 3) echo "<div class=\"alert alert-warning\">
     }
 </style>
 <script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
+<script type="text/javascript">
+
+var admin_function = "<?php echo $go; ?>";
+var prefs_planning = "<?php echo $_SESSION['jPrefsTablePlanning']; ?>";
+var ajax_url = "<?php echo $ajax_url; ?>";
+
+$(document).ready(function(){
+
+    $("#tables-competition-button").hide();
+    $("#table-planning-button").hide();
+    
+    if (prefs_planning == 0) {
+
+        $("#tables-mode-indicator").removeClass("text-primary");
+        $("#tables-mode-indicator").removeClass("text-success");
+        $("#tables-mode-indicator").addClass("text-primary");
+        $("#tables-mode-indicator").html("*** Tables Competition Mode ***");
+        $("#table-planning-button").show();
+        $("#tables-planning-mode-help").show();
+        $("#tables-competition-mode-help").hide();
+
+        $("#tables-mode-indicator-sidebar").removeClass("text-success");
+        $("#tables-mode-indicator-sidebar").removeClass("text-danger");
+        $("#tables-mode-indicator-sidebar").addClass("text-danger");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-icon").addClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-text").html("Disabled");
+
+    }
+
+    if (prefs_planning == 1) {
+        $("#tables-mode-indicator").removeClass("text-primary");
+        $("#tables-mode-indicator").removeClass("text-success");
+        $("#tables-mode-indicator").addClass("text-success");
+        $("#tables-mode-indicator").html("*** Tables Planning Mode ***");
+        $("#tables-competition-button").show();
+        $("#tables-planning-mode-help").hide(); 
+        $("#tables-competition-mode-help").show();
+
+        $("#tables-mode-indicator-sidebar").removeClass("text-success");
+        $("#tables-mode-indicator-sidebar").removeClass("text-danger");
+        $("#tables-mode-indicator-sidebar").addClass("text-success");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-icon").addClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-text").html("Enabled"); 
+    
+    }
+
+    $("#table-planning-button").click(function(){ 
+        
+        enable_planning_mode(ajax_url,admin_function);
+        
+        $("#table-planning-button").hide();
+        $("#tables-competition-button").show();
+        $("#tables-mode-indicator").removeClass("text-primary");
+        $("#tables-mode-indicator").removeClass("text-success");
+        $("#tables-mode-indicator").addClass("text-success");
+        $("#tables-mode-indicator").html("*** Tables Planning Mode ***");
+        $("#tables-planning-mode-help").hide();
+        $("#tables-competition-mode-help").show();
+
+        $("#tables-mode-indicator-sidebar").removeClass("text-success");
+        $("#tables-mode-indicator-sidebar").removeClass("text-danger");
+        $("#tables-mode-indicator-sidebar").addClass("text-success");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-icon").addClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-text").html("Enabled"); 
+
+    });
+
+    $("#tables-competition-button").click(function(){
+        $('#tables-competition-mode-modal').modal('show');       
+    });
+
+    $("#tables-competition-button-yes").click(function(){
+        
+        enable_competition_mode(ajax_url,admin_function);
+        
+        $('#tables-competition-mode-modal').modal('hide');
+        $("#tables-competition-button").hide();
+        $("#table-planning-button").show();
+        $("#tables-mode-indicator").removeClass("text-primary");
+        $("#tables-mode-indicator").removeClass("text-success");
+        $("#tables-mode-indicator").addClass("text-primary");
+        $("#tables-mode-indicator").html("*** Tables Competition Mode ***");
+        $("#table-planning-button").show();
+        $("#tables-planning-mode-help").show();
+        $("#tables-competition-mode-help").hide();
+
+        $("#tables-mode-indicator-sidebar").removeClass("text-success");
+        $("#tables-mode-indicator-sidebar").removeClass("text-danger");
+        $("#tables-mode-indicator-sidebar").addClass("text-danger");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-icon").addClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-text").html("Disabled");
+
+    });
+
+});
+
+</script>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available to you in each category.<?php if ($_SESSION['userLevel'] == 1) echo " Your user level features limited access to Administration functions."; ?></span></p>
 <div class="row bcoem-admin-element">
     <?php if ($hosted_setup) { ?>
@@ -354,7 +459,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dates" data-toggle="tooltip" data-placement="top" title="Edit all competition-related dates in one location.">Edit</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Competition Info</strong>
@@ -365,7 +470,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload your logo before editing your Competition Information">Upload Logo</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Contacts</strong>
@@ -376,7 +481,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Custom Categories</strong>
@@ -387,7 +492,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Drop-Off Locations</strong>
@@ -398,7 +503,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Judging Sessions</strong>
@@ -409,7 +514,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Non-Judging Sessions</strong>
@@ -420,7 +525,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=non-judging&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -433,7 +538,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload" data-toggle="tooltip" data-placement="top" title="Upload sponsor logo images BEFORE adding sponsor information">Upload Logos</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Styles Accepted</strong>
@@ -444,7 +549,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Style Types</strong>
@@ -455,7 +560,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } // end if ($_SESSION['userLevel'] == "0") ?>
                         </div>
                     </div>
@@ -479,7 +584,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manage</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if ($_SESSION['prefsPaypalIPN'] == 1) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -490,7 +595,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=payments">Manage</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -508,7 +613,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <?php } ?>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Register</strong>
@@ -526,7 +631,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register" data-toggle="tooltip" title="Add a steward inputting all registration data">A Steward (Standard)</a><li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                         </div>
                     </div>
                 </div><!-- ./ Entry and Data Gathering Panel -->
@@ -569,7 +674,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -580,7 +685,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a class="hide-loader" href="http://brewingcompetitions.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels <span class="fa fa-sm fa-external-link"></span></a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <?php } ?>
                             <div class="row">
@@ -599,7 +704,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <?php } ?>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Sorting Sheets</strong>
@@ -614,7 +719,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <?php } ?>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Sorting Into Tables</strong>
@@ -625,12 +730,12 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables">Tables and Associated Styles Placards</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row" style="padding: 25px 0px 15px 0px;">
                                 <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <strong>Print Box Labels (PDF)</strong>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 small">
                                     <strong><a class="hide-loader" href="https://www.avery.com/products/labels/5160" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160">Letter <span class="fa fa-sm fa-external-link"></span></a></strong>
@@ -661,7 +766,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 small">
                                     <strong><a class="hide-loader" href="https://www.avery.fi/product/multipurpose-labels-ultragrip-3422" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422">A4 <span class="fa fa-sm fa-external-link"></span></a></strong>
@@ -692,13 +797,13 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                             <div class="row" style="padding: 25px 0px 15px 0px;">
                                 <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <strong>Print Bottle Labels (PDF)</strong>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="https://www.avery.com/products/labels/5167" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5167"><strong>Letter <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -768,7 +873,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                             </div><!-- ./row -->
+                             </div>
                              <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="https://www.avery.fi/product/multipurpose-labels-ultragrip-3422" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422"><strong>A4 <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -827,7 +932,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                             </div><!-- ./row -->
+                             </div>
                              <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank" data-toggle="tooltip" data-placement="auto" title="Online Lables OL32"><strong>0.50 in/13 mm Round <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -880,7 +985,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank" data-toggle="tooltip" data-placement="auto" title="Online Lables OL5275WR"><strong>0.75 in/19 mm Round <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -933,7 +1038,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                         <?php } ?>
                         </div>
                     </div>
@@ -959,15 +1064,12 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Staff</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Tables</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                    <ul class="list-inline">
-                                        <li><strong><?php if ($_SESSION['jPrefsTablePlanning'] == 1) echo "<span class=\"text-purple\">** Tables Planning Mode **</span>"; else echo "<span class=\"text-teal\">** Tables Competition Mode **</span>"; ?></strong></li>
-                                    </ul>
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add">Add</a></li>
@@ -975,8 +1077,15 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=assign">Assign Judges/Stewards</a></li>
                                         <?php } ?>
                                     </ul>
+                                    <ul class="list-inline">
+                                        <li><strong><span id="tables-mode-indicator" class=""></span></strong></li>
+                                        <li><button id="tables-competition-button" class="btn btn-xs btn-success">Switch to Tables <strong>Competition</strong> Mode</button>
+                                            <a id="tables-competition-mode-help" href="#" data-toggle="popover" title="Tables Competition Mode" data-content="<p>When the Tables Competition Mode function is enabled by an admin, it indicates to the system that the planning stage is over and <strong>all applicable entries have been marked as <u>received</u></strong>.</p><p>Table configurations and assignments can still be changed as necessary while in Competition Mode. Pullsheets will be available.</p>" data-trigger="hover click" data-placement="right" data-html="true" data-container="body"><i style="margin-left: 5px" class="fa fa-lg fa-question-circle"></i></a></li>
+                                        <li><button id="table-planning-button" class="btn btn-xs btn-primary">Switch to Tables <strong>Planning</strong> Mode</button>
+                                            <a id="tables-planning-mode-help" class="padding-left: 5px;" href="#" data-toggle="popover" title="Tables Planning Mode" data-content="<p>When the Tables Planning Mode function is enabled, Admins can define tables, flights, rounds, judge/steward assignments, and, as of version 3.0.0, associated entry limits <strong>prior</strong> to entries being marked as paid and/or received (i.e., prior to sorting).</p><p>Any table configurations and associated assignments <strong>will not be official</strong> until an Admin returns to Tables Competition Mode after entries have been sorted and marked as received in the system. Pullsheets will <strong>not</strong> be available.</p>" data-trigger="hover click" data-placement="right" data-html="true" data-container="body"><i style="margin-left: 5px" class="fa fa-lg fa-question-circle"></i></a></li> 
+                                    </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -988,7 +1097,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <?php if ($totalRows_tables > 1) { ?>
                             <div class="row">
@@ -1000,7 +1109,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                         </div>
                     </div>
@@ -1025,7 +1134,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload scoresheets for judged entries">Upload Individually</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if (($_SESSION['prefsEval'] == 1) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1036,7 +1145,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage</a></li>
                                     </ul> 
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                             <div class="row">
@@ -1058,7 +1167,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </ul>
                                     </div>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>BOS Entries and Places</strong>
@@ -1068,7 +1177,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
@@ -1088,7 +1197,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </ul>
                                     </div>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                         </div>
                     </div>
@@ -1115,7 +1224,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <strong>Before Judging</strong>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Staff Availability</strong>
@@ -1126,7 +1235,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Non-Judging Session</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Notes</strong>
@@ -1137,7 +1246,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=admin" data-toggle="tooltip" data-placement="top" title="Notes attached to individual entries for Admin and Staff use.">Admin and Staff Notes</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1148,7 +1257,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1160,7 +1269,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff&amp;go=check" data-toggle="tooltip" data-placement="top" title="Print Entries By Drop-Off Location and Shipping Location">List of Entries</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                         <div class="row">
                             <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
@@ -1231,7 +1340,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </div>
                             </div>
                             <?php } ?>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Judge Inventories</strong> <a class="hide-loader" href="#" data-toggle="modal" data-target="#judgeInventoryModal"><i class="fa fa-question-circle"></i></a>
@@ -1277,7 +1386,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                             </div>
-                        </div><!-- ./row -->    
+                        </div>    
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Sign In Sheets</strong>
@@ -1288,7 +1397,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if ($totalRows_tables > 0) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1330,7 +1439,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1342,7 +1451,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1455,7 +1564,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1466,7 +1575,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         
                         <?php if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                         <div class="row" style="padding: 25px 0px 15px 0px;">
@@ -1474,7 +1583,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 <hr style="margin-bottom: 10px;">
                                 <strong>During Judging</strong>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
 
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1548,7 +1657,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>BOS Pullsheets</strong>
@@ -1575,7 +1684,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>BOS Cup Mats</strong>
@@ -1605,7 +1714,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Pro-Am/Scale-Up Pullsheets</strong>
@@ -1651,7 +1760,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php } ?>
 
                 <?php if ($judging_started) { ?>
@@ -1661,7 +1770,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 <hr style="margin-bottom: 10px;">
                                 <strong>After Judging</strong>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if ($totalRows_tables > 0) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1674,7 +1783,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1685,7 +1794,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1744,7 +1853,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>All Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?> - Single Report)</strong>
@@ -1798,7 +1907,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </ul>
                                 <?php } ?>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1811,7 +1920,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a href="#" data-toggle="modal" data-target="#BJCPCompIDModal" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
+                        <!-- 
                         
                         <?php if ($totalRows_tables > 0) { ?>
                         <div class="row">
@@ -1824,8 +1934,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
-
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Medal Labels (Round)</strong>
@@ -1837,6 +1946,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                         </div>
                         <?php } ?>
+
+                        -->
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Address Labels</strong>
@@ -1853,7 +1964,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Summaries</strong>
@@ -1864,7 +1975,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all participants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Inventory</strong>
@@ -1875,7 +1986,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - without scores">Without Scores</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                     <?php } ?>
                     </div>
                 </div>
@@ -1904,7 +2015,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=staff&amp;action=email">Available and Assigned Staff</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Participant Data (CSV)</strong>
@@ -1912,14 +2023,14 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-participants&amp;go=csv">All Participants</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=winners">Winners: Limited Data</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=winners">Winners: Limited Data</a> <em class="small text-muted">for generating award labels, etc.</em></li>
                                     <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit&amp;filter=mhp">Master Homebrewer Program: Member Results</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a> <em class="small text-muted">suitable for local/regional circuits</em></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit&amp;filter=mhp">Winners: Master Homebrewer Program Member Data</a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1938,22 +2049,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;action=required&amp;tb=required">Entries with Required &amp; Optional Info</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
-                        <!--
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Promo Materials</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=html&amp;action=html">HTML</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=word&amp;action=word">Word</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a></li>
-                                </ul>
-                            </div>
                         </div>
-                        -->
+                        <?php } ?>
+                        
                     </div>
                 </div>
             </div>
@@ -1981,7 +2079,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </div>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Entries</strong>
@@ -2065,7 +2163,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </div>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if ($_SESSION['userLevel'] == "0") { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -2079,7 +2177,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <?php } ?>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php } ?>
                     </div>
                 </div>
@@ -2107,7 +2205,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Judging/Competition Organization</a></li>
                             </ul>
                         </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>
                          <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -2119,7 +2217,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add">Add</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->
+                        </div>
                         <?php } ?>
                     </div>
                 </div>
@@ -2225,7 +2323,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <?php } ?>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>How Do I...</strong>
@@ -2254,7 +2352,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <?php echo $server_environ; ?>
                                     </div>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2671,6 +2769,32 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
     </div>
 </div><!-- ./modal -->
+
+<div class="modal fade" id="tables-competition-mode-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Please Confirm</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to switch to Tables Competition Mode? This should only be done after <strong>all</strong> entries have been sorted and those present are <strong>marked as <u>received</u> in the system</strong>.</p>
+                <p>Before you do, take note that, after switching to Tables Competition Mode:</p>
+                <ul>
+                    <li>Table entry counts will only reflect entries marked as <strong>received</strong>.</li>
+                    <li>Non-received entries' flight designations will be reset to 1 (default) should any be marked as received after switching to Competition Mode. Flight positions and associated rounds should be reviewed prior to judging.</li>
+                    <li>If there are no entries marked as received for a particular sub-style, the <strong>sub-style will be removed</strong> from the table's styles list.</li>
+                    <li>If there are no entries marked as received for <strong>all</strong> sub-styles defined for a table, <strong>that table will be deleted</strong>.</li>
+                    <li>Judges and stewards that have entries at a table where they are assigned will be un-assigned from that table as a failsafe.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="tables-competition-button-yes" type="button" class="btn btn-success">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php 
 

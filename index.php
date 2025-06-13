@@ -85,6 +85,29 @@ require_once (INCLUDES.'constants_post_lang.inc.php');
 // Hosted installations only
 if (HOSTED) require_once (LIB.'hosted.lib.php');
 
+// Pay modal is defined here to make sure it's top-level
+$pay_modal = "";
+$pay_modal .= "<!-- Form submit confirmation modal -->";
+$pay_modal .= "<!-- Refer to bcoem_custom.js for configuration -->";
+$pay_modal .= "<div class=\"modal modal-lg fade\" id=\"confirm-submit\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">";
+$pay_modal .= "<div class=\"modal-dialog\">";
+$pay_modal .= "<div class=\"modal-content\">";
+$pay_modal .= "<div class=\"modal-header\">";
+if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $pay_modal .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_031);
+else $pay_modal .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_022);
+$pay_modal .= "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>";
+$pay_modal .= "</div>";
+if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $pay_modal .= sprintf("<div class=\"modal-body\"><p>%s</p>",$pay_text_030);
+else $pay_modal .= sprintf("<div class=\"modal-body\"><p>%s</p>",$pay_text_021);
+$pay_modal .= "</div>";
+$pay_modal .= "<div class=\"modal-footer\">";
+$pay_modal .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">%s</button>",$label_cancel);
+$pay_modal .= sprintf("<a href=\"#\" id=\"submit\" class=\"btn btn-primary\">%s</a>",$label_understand);
+$pay_modal .= "</div>";
+$pay_modal .= "</div>";
+$pay_modal .= "</div>";
+$pay_modal .= "</div>";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -138,8 +161,11 @@ if (HOSTED) require_once (LIB.'hosted.lib.php');
 <?php
 
 if (V3) {
+
     if (($section == "admin") || ($admin != "default")) require ('index.legacy.php');
     else require ('index.pub.php');
+    if ($section == "list") echo $pay_modal;
+
 }
 
 else require ('index.legacy.php');

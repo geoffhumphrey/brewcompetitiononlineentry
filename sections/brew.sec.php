@@ -156,7 +156,8 @@ do {
 			$styles_disabled_count++;
 		}
 		
-		if (($remaining_entries > 0) && (!$disable_fields) && ($subcat_limit)) $selected_disabled = "DISABLED";
+		if ((isset($row_styles['brewStyleAtLimit'])) && ($row_styles['brewStyleAtLimit'] == 1) && ($_SESSION['userLevel'] > 1)) $selected_disabled = "DISABLED";
+		elseif (($remaining_entries > 0) && (!$disable_fields) && ($subcat_limit)) $selected_disabled = "DISABLED";
 		elseif ($disable_fields) $selected_disabled = "DISABLED";
 		elseif (!empty($style_type_limits)) {
 			
@@ -487,7 +488,7 @@ echo $add_edit_entry_modals;
     </div>
     <!-- Entry Requirements -->
 	<div id="specialInfo" class="form-group">
-    	<label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $brew_text_009; ?> <span id="specialInfoName">Style Name</span></label>
+    	<label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo str_replace(":", "", $brew_text_009); ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <p class="form-control-static"><strong class="text-teal"><?php echo $brew_text_008; ?></strong><br> 
         <p class="form-control-static alert alert-teal" id="specialInfoText">Entry info goes here.</p>
@@ -611,9 +612,51 @@ echo $add_edit_entry_modals;
         <label for="brewCoBrewer" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_regional_variation; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         	<!-- Input Here -->
-            <input class="form-control" id="regionalVar" name="regionalVar" type="text" value="<?php if (($action == "edit") && ($view == "02-A") && ($_SESSION['prefsStyleSet'] == "BJCP2021") && (!empty($row_log['brewInfo']))) echo $row_log['brewInfo']; ?>" placeholder="<?php echo $brew_text_041; ?>" maxlength="100">
+            <input class="form-control" id="regionalVar" name="regionalVar" type="text" value="<?php if (($action == "edit") && ($view == "02-A") && (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && (!empty($row_log['brewInfo']))) echo $row_log['brewInfo']; ?>" placeholder="<?php echo $brew_text_041; ?>" maxlength="100">
         </div>
     </div>
+
+    <?php if ($_SESSION['prefsStyleSet'] != "NWCiderCup") { 
+
+    	$gravity_readings = "";
+    	
+    	if (!empty($row_log['brewSweetnessLevel'])) {
+    		$is_json = json_decode($row_log['brewSweetnessLevel'],true);
+    		if (json_last_error() === JSON_ERROR_NONE) $gravity_readings = $is_json;
+    		else $gravity_readings = "";
+    	}
+    
+    ?>
+    <section id="cider-gravity">
+		<div class="form-group">
+	        <label for="brewOriginalGravity" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-star"></i> <strong><?php echo $label_original_gravity; ?></strong></label>
+	        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	            <input class="form-control" name="brewOriginalGravity" id="og" type="number" min="0" step=".001" value="<?php if (($action == "edit") && (is_array($gravity_readings)) && (isset($gravity_readings['OG']))) echo $gravity_readings['OG']; ?>" placeholder="">
+	            <div class="help-block mb-1" id="og-feedback"></div>
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label for="brewFinalGravity" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-star"></i> <strong><?php echo $label_final_gravity; ?></strong></label>
+	        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	            <input class="form-control" name="brewFinalGravity" id="fg" type="number" min="0" step=".001" value="<?php if (($action == "edit") && (is_array($gravity_readings)) && (isset($gravity_readings['FG']))) echo $gravity_readings['FG']; ?>" placeholder="">
+	            <div class="help-block mb-1" id="fg-feedback"></div>
+	        </div>
+	    </div>
+	</section>
+
+	<?php } ?>
+
+    <!-- ABV (Optional for all except NW Cider Cup) -->
+	<div class="form-group">
+        <label id="brewABV-label" for="brewABV" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><strong><i id="brewABV-label-icon" class="fa fa-star"></i> <?php echo $label_abv; ?>%</strong></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        	<!-- Input Here -->
+            <input class="form-control" name="brewABV" id="brewABV" type="number" min="0" step=".01" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewABV']; ?>" data-error="<?php echo $brew_text_042; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>
+            <div class="help-block with-errors"></div>
+            <div class="help-block"><?php echo $brew_text_043; ?></div>
+        </div>
+    </div>
+
     <!-- Select Strength -->
     <div id="strength">
     	<div id="fg-strength" class="form-group">
@@ -765,17 +808,6 @@ echo $add_edit_entry_modals;
 	        </div>
 	    </div>
 	</div>
-
-    <!-- ABV (Optional for all except NW Cider Cup) -->
-	<div class="form-group">
-        <label for="brewABV" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "text-warning"; ?>"><?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "<i class=\"fa fa-sm fa-star\"></i> "; echo $label_abv; ?></label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        	<!-- Input Here -->
-            <input class="form-control" name="brewABV" id="brewABV" type="number" min="0" step=".01" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewABV']; ?>" data-error="<?php echo $brew_text_042; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>
-            <div class="help-block with-errors"></div>
-            <div class="help-block"><?php echo $brew_text_043; ?></div>
-        </div>
-    </div>
 
     <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { 
 
@@ -1052,3 +1084,7 @@ if ($action == "edit") {
 <?php } ?>
 </form>
 <?php } // end adding and editing allowed (line 52 or so) ?>
+<script>
+	var ogfgFeedback = "<?php echo $brew_text_060; ?>";
+</script>
+<script src="<?php echo $js_add_edit_entry_url; ?>"></script>

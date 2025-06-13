@@ -201,6 +201,8 @@ foreach ($aus_state_abbrevs_names as $key => $value) {
 $judge_location_avail = "";
 $steward_location_avail = "";
 $staff_location_avail = "";
+$judging_location_count = 0;
+$non_judging_location_count = 0;
 
 if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
@@ -215,10 +217,13 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
         $location_steward_no = "";
         $judge_avail_info = "";
         $judge_avail_option = "";
+        $judge_single_option = "";
         $staff_avail_info = "";
         $staff_avail_option = "";
+        $single_single_option = "";
         $steward_avail_info = "";
         $steward_avail_option = "";
+        $steward_single_option = "";
 
         /*
         $a = "Y-".$row_judging3['id'];
@@ -239,19 +244,10 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
         else $location_steward_no = " selected";
 
         if ($row_judging3['judgingLocType'] == 2) {
+
+            $non_judging_location_count++;
             
             $staff_avail_info .= sprintf("<p class=\"mb-1\">%s <small class=\"ps-2\">%s</small></p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
-
-            /*
-            $staff_avail_option .= "<div class=\"form-check form-check-inline\">";
-            $staff_avail_option .= sprintf("<input class=\"form-check-input\" type=\"radio\" name=\"brewerNonJudgeLocation".$row_judging3['id']."\" value=\"Y-%s\" id=\"brewerNonJudgeLocation_0\" %s>",$row_judging3['id'],$location_yes);
-            $staff_avail_option .= "<label class=\"form-check-label\">".$label_yes."</label>";
-            $staff_avail_option .= "</div>";
-            $staff_avail_option .= "<div class=\"form-check form-check-inline\">";
-            $staff_avail_option .= sprintf("<input class=\"form-check-input\" type=\"radio\" name=\"brewerNonJudgeLocation".$row_judging3['id']."\" value=\"N-%s\" id=\"brewerNonJudgeLocation_1\" %s>",$row_judging3['id'],$location_no);
-            $staff_avail_option .= "<label class=\"form-check-label\">".$label_no."</label>";
-            $staff_avail_option .= "</div>";
-            */
 
             $staff_avail_option .= "<div class=\"row\">";
             $staff_avail_option .= "<div class=\"col-xs-12 col-sm-6 col-md-3\">";
@@ -260,10 +256,9 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $staff_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
             $staff_avail_option .= "</select>";
             $staff_avail_option .= "</div>";
-            $staff_avail_option .= "</div>";
-            
+            $staff_avail_option .= "</div>";   
 
-            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+            if (((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) && (!empty($staff_avail_info) && (!empty($staff_avail_option)))) {
                 $staff_location_avail .= "<section class=\"mb-3\">";
                 $staff_location_avail .= $staff_avail_info;
                 $staff_location_avail .= $staff_avail_option;
@@ -274,18 +269,12 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
         else {
 
-            $judge_avail_info .= sprintf("<p class=\"mb-1\">%s <small class=\"ps-2\">%s</small></p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+            $judging_location_notes = "";
+            $judging_location_count++;
 
-            /*
-            $judge_avail_option .= "<div class=\"form-check form-check-inline\">";
-            $judge_avail_option .= sprintf("<input class=\"form-check-input\" type=\"radio\" name=\"brewerJudgeLocation".$row_judging3['id']."\" value=\"Y-%s\" id=\"brewerJudgeLocation_0\" %s>",$row_judging3['id'],$location_yes);
-            $judge_avail_option .= "<label class=\"form-check-label\">".$label_yes."</label>";
-            $judge_avail_option .= "</div>";
-            $judge_avail_option .= "<div class=\"form-check form-check-inline\">";
-            $judge_avail_option .= sprintf("<input class=\"form-check-input\" type=\"radio\" name=\"brewerJudgeLocation".$row_judging3['id']."\" value=\"N-%s\" id=\"brewerJudgeLocation_1\" %s>",$row_judging3['id'],$location_no);
-            $judge_avail_option .= "<label class=\"form-check-label\">".$label_no."</label>";
-            $judge_avail_option .= "</div>";
-            */
+            if (!empty($row_judging3['judgingLocNotes'])) $judging_location_notes .= sprintf("<br><small><em class=\"text-muted\">%s</em></small>",$row_judging3['judgingLocNotes']);
+
+            $judge_avail_info .= sprintf("<p class=\"mb-1\">%s <small class=\"ps-2\">%s</small>%s</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"),$judging_location_notes);
 
             $judge_avail_option .= "<div class=\"row\">";
             $judge_avail_option .= "<div class=\"col-xs-12 col-sm-6 col-md-3\">";
@@ -296,25 +285,16 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $judge_avail_option .= "</div>";
             $judge_avail_option .= "</div>";
             
-            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+            if (((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) && (!empty($judge_avail_info) && (!empty($judge_avail_option)))) {
                 $judge_location_avail .= "<section class=\"mb-3\">";
                 $judge_location_avail .= $judge_avail_info;
                 $judge_location_avail .= $judge_avail_option;
                 $judge_location_avail .= "</section>";
             }
 
-            $steward_avail_info .= sprintf("<p class=\"mb-1\">%s <small class=\"ps-2\">%s</small></p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+            $judge_single_option .= "<input name=\"brewerJudgeLocation\" type=\"hidden\" value=\"Y-".$row_judging3['id']."\" />";
 
-            /*
-            $steward_avail_option .= "<div class=\"form-check form-check-inline\">";
-            $steward_avail_option .= sprintf("<input class=\"form-check-input\" type=\"radio\" name=\"brewerStewardLocation".$row_judging3['id']."\" value=\"Y-%s\" id=\"brewerStewardLocation_0\" %s>",$row_judging3['id'],$location_steward_yes);
-            $steward_avail_option .= "<label class=\"form-check-label\">".$label_yes."</label>";
-            $steward_avail_option .= "</div>";
-            $steward_avail_option .= "<div class=\"form-check form-check-inline\">";
-            $steward_avail_option .= sprintf("<input class=\"form-check-input\" type=\"radio\" name=\"brewerStewardLocation".$row_judging3['id']."\" value=\"N-%s\" id=\"brewerStewardLocation_1\" %s>",$row_judging3['id'],$location_steward_no);
-            $steward_avail_option .= "<label class=\"form-check-label\">".$label_no."</label>";
-            $steward_avail_option .= "</div>";
-            */
+            $steward_avail_info .= sprintf("<p class=\"mb-1\">%s <small class=\"ps-2\">%s</small></p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
             
             $steward_avail_option .= "<div class=\"row\">";
             $steward_avail_option .= "<div class=\"col-xs-12 col-sm-6 col-md-3\">";
@@ -324,14 +304,15 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $steward_avail_option .= "</select>";
             $steward_avail_option .= "</div>";
             $steward_avail_option .= "</div>";
-            
 
-            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+            if (((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) && (!empty($steward_avail_info) && (!empty($steward_avail_option))))  {
                 $steward_location_avail .= "<section class=\"mb-3\">";
                 $steward_location_avail .= $steward_avail_info;
                 $steward_location_avail .= $steward_avail_option;
                 $steward_location_avail .= "</section>";
             }
+
+            $steward_single_option .= "<input name=\"brewerStewardLocation\" type=\"hidden\" value=\"Y-".$row_judging3['id']."\" />";
 
         }
 

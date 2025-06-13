@@ -58,7 +58,9 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 
     <div id="brewerJudgeFields">
 
-        <?php if (($totalRows_judging > 0) || (($go == "admin") && ($filter != "default"))) { ?>
+        <?php if (($judging_location_count == 1) && (($go != "admin") && ($filter == "default"))) echo $judge_single_option; ?>
+
+        <?php if (($judging_location_count > 1) || (($go == "admin") && ($filter != "default"))) { ?>
         <div class="mb-3 row">
             <?php if (!empty($judge_location_avail)) { ?>
             <label for="brewerJudgeLocation" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judging_avail; ?></strong></label>
@@ -290,11 +292,9 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
     </div>
 
-    <?php if (($totalRows_judging == 1) && (($go != "admin") && ($filter == "default"))) {?>
-    <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-    <?php } ?>
-
-    <?php if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) { ?>
+    <?php if (($judging_location_count == 1) && (($go != "admin") && ($filter == "default"))) echo $steward_single_option; ?>
+   
+    <?php if (($judging_location_count > 1) || (($go == "admin") && ($filter != "default"))) { ?>
     <div id="brewerStewardFields">
         <?php if (!empty($steward_location_avail)) { ?>
         <div class="mb-3 row">

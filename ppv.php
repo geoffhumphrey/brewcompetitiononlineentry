@@ -56,11 +56,20 @@ $user_info = mysqli_query($connection,$query_user_info) or die (mysqli_error($co
 $row_user_info = mysqli_fetch_assoc($user_info);
 $totalRows_user_info = mysqli_num_rows($user_info);
 
-$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-
 $paypal_email_address = filter_var($row_prefs['prefsPayPalAccount'],FILTER_SANITIZE_EMAIL);
 
-$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+
+if (HOSTED) {
+	include (CONFIG.'config.mail.php');
+	if ((!isset($mail_default_from)) || (trim($mail_default_from) === '')) $from_email = "noreply@".$url;
+	else $from_email = $mail_default_from;
+}
+
+else {
+	if ($mail_use_smtp) $from_email = $_SESSION['prefsEmailFrom'];
+	else $from_email = "noreply@".$url;
+}
 
 $confirm_to_email_address = "PayPal IPN Confirmation <".$paypal_email_address.">";
 $confirm_to_email_address = mb_convert_encoding($confirm_to_email_address, "UTF-8");
@@ -219,6 +228,7 @@ if ($verified) {
 			$mail->Subject = $subject;
 			$mail->Body = $message_all;
 			sendPHPMailerMessage($mail);
+		
 		}
 
     }

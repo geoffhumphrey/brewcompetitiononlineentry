@@ -742,6 +742,9 @@ if ($go == "default") {  ?>
                 <label class="radio-inline">
                     <input type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($msg != "default") && (isset($_COOKIE['brewerProAm'])) && ($_COOKIE['brewerProAm'] == "0")) echo "CHECKED";  if ($msg == "default") echo "CHECKED";  ?> /> <?php echo $label_no; ?>
                 </label>
+                <label class="radio-inline">
+                    <input type="radio" name="brewerProAm" value="2" id="brewerProAm_2" <?php if (($msg != "default") && (isset($_COOKIE['brewerProAm'])) && ($_COOKIE['brewerProAm'] == "2")) echo "CHECKED"; ?> /> <?php echo $label_opt_out; ?>
+                </label>
             </div>
             <div class="help-block"><?php echo $brewer_text_042; ?></div>
         </div>

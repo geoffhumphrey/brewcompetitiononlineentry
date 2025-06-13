@@ -16,19 +16,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$purifier = new HTMLPurifier($config_html_purifier);
 
 	$judgingDate = strtotime(sterilize($_POST['judgingDate']));
-	$judgingLocName = $purifier->purify($_POST['judgingLocName']);
-	$judgingLocName = sterilize($judgingLocName);
-	$judgingLocation = $purifier->purify($_POST['judgingLocation']);
-	$judgingLocation = sterilize($judgingLocation);
+	$judgingLocName = sterilize($_POST['judgingLocName']);
+	$judgingLocName = $purifier->purify($judgingLocName);
+	$judgingLocation = sterilize($_POST['judgingLocation']);
+	$judgingLocation = $purifier->purify($judgingLocation);
 	$judgingLocType = sterilize($_POST['judgingLocType']);
-
-	if (empty($judgingLocType)) $judgingLocType = 0;
-
 	$judgingRounds = "";
-	if (isset($_POST['judgingRounds'])) $judgingRounds = sterilize($_POST['judgingRounds']);
-	
 	$judgingDateEnd = "";
+	$judgingLocNotes = "";
+	
+	if (isset($_POST['judgingLocNotes'])) {
+		$judgingLocNotes = sterilize($_POST['judgingLocNotes']);
+		$judgingLocNotes = $purifier->purify($judgingLocNotes);
+	}
+	
+	if (isset($_POST['judgingRounds'])) $judgingRounds = sterilize($_POST['judgingRounds']);
 	if (!empty($_POST['judgingDateEnd'])) $judgingDateEnd = strtotime(sterilize($_POST['judgingDateEnd']));
+	if (empty($judgingLocType)) $judgingLocType = 0;
 
 	$update_table = $prefix."judging_locations";
 	$data = array(
@@ -37,7 +41,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'judgingDateEnd' => blank_to_null($judgingDateEnd),
 		'judgingLocation' => blank_to_null($judgingLocation),
 		'judgingLocName' => blank_to_null($judgingLocName),
-		'judgingRounds' => blank_to_null($judgingRounds)
+		'judgingRounds' => blank_to_null($judgingRounds),
+		'judgingLocNotes' => blank_to_null($judgingLocNotes)
 	);
 
 	if ($action == "add") {

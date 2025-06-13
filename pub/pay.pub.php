@@ -29,10 +29,9 @@ else {
 $bid = $_SESSION['user_id'];
 include (DB.'entries.db.php');
 
-$total_entry_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
-
-$total_paid_entry_fees = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
-$total_to_pay = $total_entry_fees - $total_paid_entry_fees;
+$total_paid_entry_fees_user = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
+$total_entry_fees_user = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
+$total_to_pay_user = $total_entry_fees_user - $total_paid_entry_fees_user;
 $total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 $unconfirmed = array_sum(entries_unconfirmed($_SESSION['user_id']));
 
@@ -87,14 +86,14 @@ else {
 		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"me-1 fa fa-fw fa-lg fa-tag text-primary-emphasis\"></span> %s <strong class=\"text-primary-emphasis\">%s</strong> %s.</small></p>",$pay_text_007,$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2),$pay_text_004);
 	}
 	$primary_page_info .= "<p class=\"lead\">";
-	if ($total_to_pay == 0) $primary_page_info .= sprintf("<small><span class=\"me-1 fa fa-fw fa-lg fa-check-circle text-success-emphasis\"></span> %s <strong class=\"text-success-emphasis\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2));
-	else $primary_page_info .= sprintf("<small><span class=\"me-2 fa fa-fw fa-fw fa-lg fa-info-circle text-primary-emphasis\"></span> %s <strong class=\"text-primary-emphasis\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2));
-	if ($total_to_pay == 0) $primary_page_info .= sprintf(" %s <strong class=\"text-success-emphasis\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
-	else $primary_page_info .= sprintf(" %s <strong class=\"text-primary-emphasis\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
-	if (($_SESSION['prefsTransFee'] == "Y") && ($total_to_pay > 0)) $primary_page_info .= "<strong><span class=\"text-primary-emphasis\">*</span></strong>";
+	if ($total_to_pay_user == 0) $primary_page_info .= sprintf("<small><span class=\"me-1 fa fa-fw fa-lg fa-check-circle text-success-emphasis\"></span> %s <strong class=\"text-success-emphasis\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees_user,2));
+	else $primary_page_info .= sprintf("<small><span class=\"me-2 fa fa-fw fa-fw fa-lg fa-info-circle text-primary-emphasis\"></span> %s <strong class=\"text-primary-emphasis\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees_user,2));
+	if ($total_to_pay_user == 0) $primary_page_info .= sprintf(" %s <strong class=\"text-success-emphasis\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay_user,2));
+	else $primary_page_info .= sprintf(" %s <strong class=\"text-primary-emphasis\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay_user,2));
+	if (($_SESSION['prefsTransFee'] == "Y") && ($total_to_pay_user > 0)) $primary_page_info .= "<strong><span class=\"text-primary-emphasis\">*</span></strong>";
 	$primary_page_info .= ".</small></p>";
 
-	if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"me-1 fa fa-fw fa-lg fa-check-circle text-success-emphasis\"></span> %s</p></small></p>",$pay_text_010);
+	if (($total_not_paid == 0) || ($total_to_pay_user == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"me-1 fa fa-fw fa-lg fa-check-circle text-success-emphasis\"></span> %s</p></small></p>",$pay_text_010);
 
 
 	else {
@@ -120,7 +119,7 @@ else {
 
 	if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1))  $return = $base_url."index.php?section=list&msg=13";
 	else $return = $base_url."index.php?section=list&msg=13&view=".rtrim($return_entries,'-');
-	if (($total_to_pay > 0) && ($view == "default")) {
+	if (($total_to_pay_user > 0) && ($view == "default")) {
 
 		// Cash Payment
 		if ($_SESSION['prefsCash'] == "Y") {
@@ -184,12 +183,12 @@ else {
 				if ((isset($_SESSION['prefsCurrency'])) && (array_key_exists($_SESSION['prefsCurrency'],$pp_fixed_fees_arr))) $pp_fixed_fee = $pp_fixed_fees_arr[$_SESSION['prefsCurrency']];
 				else $pp_fixed_fee = 0;
 
-				$payment_amount = (($total_to_pay + $pp_fixed_fee) / 0.9651);
-				$fee = number_format($payment_amount - $total_to_pay, 2, '.', '');
+				$payment_amount = (($total_to_pay_user + $pp_fixed_fee) / 0.9651);
+				$fee = number_format($payment_amount - $total_to_pay_user, 2, '.', '');
 
 
 			} else {
-				$payment_amount = $total_to_pay;
+				$payment_amount = $total_to_pay_user;
 			}
 
 			// Online
@@ -227,6 +226,8 @@ else {
 			$page_info4 .= "</div>";
 			$page_info4 .= "</form>\n";
 
+			/*
+
 			$page_info4 .= "<!-- Form submit confirmation modal -->";
 			$page_info4 .= "<!-- Refer to bcoem_custom.js for configuration -->";
 			$page_info4 .= "<div class=\"modal modal-lg fade\" id=\"confirm-submit\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">";
@@ -253,11 +254,13 @@ else {
 			$page_info4 .= "</div>";
 			$page_info4 .= "</div>";
 
+			*/
+
 		} // end if (($_SESSION['prefsPaypal'] == "Y") || ($_SESSION['prefsGoogle'] == "Y"))
 
 	}
 
-	if (($row_brewer['brewerDiscount'] != "Y") && ($_SESSION['contestEntryFeePassword'] != "") && ((($total_entry_fees > 0) && ($total_entry_fees != $total_paid_entry_fees)))) {
+	if (($row_brewer['brewerDiscount'] != "Y") && ($_SESSION['contestEntryFeePassword'] != "") && ((($total_entry_fees_user > 0) && ($total_entry_fees_user != $total_paid_entry_fees_user)))) {
 		$header1_7 .= sprintf("<a name=\"pay-verify\"></a><h3>%s</h3>",$label_fee_discount);
 		$page_info7 .= sprintf("<p>%s</p>",$pay_text_023);
 		$page_info7 .= sprintf("<form action=\"%sincludes/process.inc.php?action=check_discount&amp;dbTable=%s&amp;id=%s\" method=\"POST\" name=\"form1\" id=\"form1\">",$base_url,$brewer_db_table,$row_brewer['uid']);
@@ -282,10 +285,10 @@ else {
 	 * --------------------------------------------------------------
 	 */
 
-	if ($total_entry_fees > 0) {
+	if ($total_entry_fees_user > 0) {
 
 		if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div>",$pay_text_028,$pay_text_029);
-		echo "<div class=\"row\">";
+		echo "<div class=\"row reveal-element\">";
 		echo $header1_0;
 		echo $warning1;
 		echo $warning2;
@@ -303,7 +306,7 @@ else {
 		echo $page_info2;
 		echo "</div>";
 		
-	} // end if ($total_entry_fees > 0)
+	} // end if ($total_entry_fees_user > 0)
 
 
 } // end if payment options are not disabled

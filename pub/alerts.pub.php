@@ -179,7 +179,7 @@ if ($msg != "default") {
   }
 
   if ($section == "login") {
-    $warning_msg = array(1,4,7);
+    $warning_msg = array(1,4,7,9);
     $danger_msg = array(1);
   }
 
@@ -283,7 +283,7 @@ if ($msg != "default") {
 
     echo create_bs_alert("alert-auto-dismiss",$alert_type,"",$output,$alert_icon,"",FALSE);
     
-    // echo $output_extend;
+    echo $output_extend;
 
   } // end if (!empty($output))
 

@@ -93,10 +93,10 @@ include (SECTIONS.'alerts.sec.php');
     <!-- Admin Dashboard - Has sidebar -->
     <div class="row">
         <div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
-        <div class="page-header">
-            <h1><?php echo $header_output; ?></h1>
-        </div>
-        <?php include (ADMIN.'default.admin.php'); ?>
+            <div class="page-header">
+                <h1><?php echo $header_output; ?></h1>
+            </div>
+            <?php include (ADMIN.'default.admin.php'); ?>
         </div><!-- ./left column -->
         <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
             <?php include (ADMIN.'sidebar.admin.php'); ?>
@@ -173,7 +173,7 @@ include (SECTIONS.'alerts.sec.php');
             <h1><?php echo $header_output; ?></h1>
         </div>
     <?php 
-        if ($go == "default") include (EVALS.'default.eval.php');
+        if ($go == "default") include (EVALS.'dashboard.eval.php');
         if ($go == "scoresheet") include (EVALS.'scoresheet.eval.php');
     ?>
 </div><!-- ./container-fluid -->
@@ -297,7 +297,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
     </div>
   </div>
 </div>
-<?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
+<?php //if ((!in_array($go,$datetime_load)) || ($go == "default") || (($section == "admin") && ($go == "evaluation"))) { ?>
 <!-- Session Timer Displays and Auto Logout -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
 <script>
@@ -308,9 +308,12 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
 <script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
-<?php } ?>
+<?php //} ?>
 
-<?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
+<?php 
+//if (($_SESSION['prefsEval'] == 1) && ($section == "admin") && ($go == "evaluation")) 
+include (EVALS.'warnings.eval.php'); 
+?>
 
 <?php 
 

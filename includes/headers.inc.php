@@ -61,6 +61,7 @@ switch($section) {
 			$output = sprintf("<strong>%s %s.</strong>",$header_text_040,$contact_name); // Contact email sent.
 		}
 		elseif ($msg == "20") $output = sprintf("<strong>%s</strong> %s",$header_text_041,$header_text_008); // Contact email NOT sent.
+		elseif ($msg == "21") $output = sprintf("<strong>%s</strong>",$header_text_014); // There was a problem with the last request. Please try again.
 
 	break;
 
@@ -123,7 +124,7 @@ switch($section) {
 	case "login":
 		if ($action == "forgot") $header_output = $_SESSION['contestName']." - ".$label_reset_password;
 		elseif ($action == "logout") $header_output = $_SESSION['contestName']." - ".$label_logged_out;
-		elseif ($action == "reset-password") $header_output = $_SESSION['contestName']." - ".$label_reset_password." ".$label_with_token;
+		elseif ($action == "reset-password") $header_output = $label_reset_password." ".$label_with_token;
 		else $header_output = $_SESSION['contestName']." - ".$label_log_in;
 		if ($msg == "0") $output = sprintf("<strong>%s</strong> ",$header_text_031);
 		elseif ($msg == "1") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; }
@@ -134,6 +135,7 @@ switch($section) {
 		elseif ($msg == "6") $output = sprintf("<strong>%s</strong>",$login_text_023);
 		elseif ($msg == "7") $output= sprintf("<strong>%s</strong>",$login_text_022);
 		elseif ($msg == "8") $output= sprintf("<strong>%s</strong>",$login_text_027);
+		elseif ($msg == "9") $output= sprintf("<strong>%s</strong>",$header_text_014);
 		else $output = "";
 	break;
 
@@ -655,18 +657,15 @@ switch($section) {
 }
 
 // VERIFY the following. Can msg numbers be changed?
+
 if (($section != "list") && ($section != "default") && ($msg == "14")) $output = sprintf("<strong>%s</strong>",$header_text_096);
-if (($section != "list") && ($section != "default") && ($msg == "16")) {
-	$output = sprintf("<strong>%s</strong>",$header_text_097);
-	$output_extend = sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div><div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>%s</strong>.</div>",$header_text_098,$header_text_099,$header_text_100);
-	}
-if (($section != "list") && ($section != "default") && ($msg == "17")) $output = sprintf("<strong>%s</strong>",$header_text_101); // Install set up successfully
 
+// Setup/install success
+if (($section == "default") && ($msg == "22")) {
+	$output = sprintf("<strong>%s</strong> %s.<br><span class=\"text-danger-emphasis\"><strong>%s</strong> %s.</span>",$header_text_097,$header_text_100,$header_text_098,$header_text_099);
+}
 
-
-
-
-
+if (($section == "default") && ($msg == "23")) $output = sprintf("<strong>%s</strong>",$header_text_101); // Install updated successfully
 
 if ($msg == "27") $output = sprintf("<strong>%s</strong> %s",$header_text_102,$header_text_008);
 if ($msg == "98") $output = sprintf("<strong>%s</strong>",$header_text_112);

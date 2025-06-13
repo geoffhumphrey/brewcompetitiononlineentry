@@ -29,6 +29,51 @@ a.anchor-offset {
     visibility: hidden;
 }
 
+/** Reveal Elements **/
+
+.reveal-element {
+    position: relative;
+    transform: translateY(-15px); /* affects topOffset var in invoke.js */
+    opacity: 0;
+    transition: 1s all ease;
+}
+
+.reveal-element.active-element {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#scroll-indicator {
+    position: fixed;
+    bottom: 88px;
+    right: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    z-index: 1000;
+}
+
+.text-scroll {
+    font-size: .7em;
+}
+
+.bounce {
+    animation: bounce 4s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
 /** Sidebar **/
 
 .sidebar .bcoem-comp-logo {
@@ -418,6 +463,8 @@ table.dataTable thead th.sorting:after {
 #sticker {
     z-index: 3000 !important;
 }
+
+
 
 /** Loading Overlay **/
 

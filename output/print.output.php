@@ -102,7 +102,7 @@ else {
     	}
 
     	// Include process library for encryption functions
-    	include (LIB.'process.lib.php');
+    	if (!function_exists('simpleDecrypt')) include (LIB.'common.lib.php');
 
     	$secretKey = base64_encode(bin2hex($password));
     	$nacl = base64_encode(bin2hex($server_root));
@@ -111,11 +111,26 @@ else {
     	include (DB.'contacts.db.php');
 
     	$page_info = "<div style=\"padding: 25px; min-height:400px\">";
-    	$page_info .= sprintf("<h2><strong>%s &ndash; %s %s</strong><br><small>%s</small></h2>",$label_contact, $row_contact['contactFirstName'], $row_contact['contactLastName'], $row_contact['contactPosition']);
-    	$page_info .= sprintf("<p>%s</p>",$contact_email_text_000);
-    	$page_info .= sprintf("<p><strong>%s</strong></p>",hide_email($row_contact['contactEmail']));
-    	$page_info .= sprintf("<p><small><em>%s</em></small></p>",$contact_email_text_001);
+    	
+    	if ($row_contact) {
+
+    		$page_info .= sprintf("<h2><strong>%s &ndash; %s %s</strong><br><small>%s</small></h2>",$label_contact,$row_contact['contactFirstName'],$row_contact['contactLastName'],$row_contact['contactPosition']);
+    		$page_info .= sprintf("<p><strong>%s</strong></p>",hide_email($row_contact['contactEmail']));
+    		$page_info .= sprintf("<p>%s</p>",$contact_text_011);
+    		$page_info .= sprintf("<p><small><em>%s</em></small></p>",$contact_text_012);
+
+    	}
+
+    	else {
+    		$page_info .= sprintf("<h2>%s</h2>",$label_error);
+    		$page_info .= sprintf("<p>%s</p>",$contact_text_012);
+    	}
+
     	$page_info .= "</div>";
+
+    	
+    	
+    	
 
     	echo $page_info;
 

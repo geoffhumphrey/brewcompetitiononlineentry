@@ -41,10 +41,15 @@ if ($_SESSION['prefsProEdition'] == 0) {
                 <input class="form-check-input" type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "0") || (empty($row_brewer['brewerProAm']))) echo "CHECKED"; ?> />
                 <label class="form-check-label"><?php echo $label_no; ?></label>
             </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="brewerProAm" value="2" id="brewerProAm_2" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "2")) echo "CHECKED"; ?> />
+                <label class="form-check-label"><?php echo $label_opt_out; ?></label>
+            </div>
             <div class="help-block">
                 <p><?php echo $brewer_text_041; ?></p>
                 <p><?php echo $brewer_text_043; ?></p>
                 <p><?php echo $brewer_text_042; ?></p>
+                <p><?php echo $brewer_text_056; ?></p>
             </div>
         </div>
     </div>
@@ -90,7 +95,7 @@ if ($_SESSION['prefsProEdition'] == 0) {
     <?php if (!empty($staff_location_avail)) { ?>
     <div id="brewerStaffFields">
         <div class="mb-3 row">
-            <label for="brewerStaffLocation" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo "Staff Availability"; ?></strong></label>
+            <label for="brewerStaffLocation" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_staff_availability; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
             <?php echo $staff_location_avail; ?>
             </div>

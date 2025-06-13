@@ -347,7 +347,7 @@ $label_entry_registration = "Entry Registration";
 $label_entry_fees = "Entry Fees";
 $label_entry_limit = "Entry Limit";
 $label_entry_info = "Entry Info";
-$label_entry_per_entrant = "Per Entrant Limits";
+$label_entry_per_entrant = "Entry Limits Per Participant";
 $label_categories_accepted = "Categories Accepted";
 $label_judging_categories = "Judging Categories";
 $label_entry_acceptance_rules = "Entry Acceptance Rules";
@@ -711,12 +711,12 @@ $brew_text_000 = "Select for specifics about style"; // missing punctuation inte
 $brew_text_001 = "Judges will not know the name of your entry.";
 $brew_text_002 = "[disabled - style or style type entry limit reached]"; // missing punctuation intentional
 $brew_text_003 = "[disabled - entry limit reached]"; // missing punctuation intentional
-$brew_text_004 = "Specific type, special ingredients, classic style, strength (for beer styles), and/or color are required";
+$brew_text_004 = "Specific type, special ingredients, classic style, strength (for beer styles), color, and/or other information is required";
 $brew_text_005 = "Strength required"; // missing punctuation intentional
 $brew_text_006 = "Carbonation level required"; // missing punctuation intentional
 $brew_text_007 = "Sweetness level required"; // missing punctuation intentional
 $brew_text_008 = "This style requires that you provide specific information for entry.";
-$brew_text_009 = "Requirements for"; // missing punctuation intentional
+$brew_text_009 = "Requirements:"; // missing punctuation intentional
 $brew_text_010 = "This style requires more information. Please enter in the provided area.";
 $brew_text_011 = "The entry's name is required.";
 $brew_text_012 = "***NOT REQUIRED*** Provide ONLY if you wish the judges to fully consider what you write here when evaluating and scoring your entry. Use to record specifics that you would like judges to consider when evaluating your entry that you have NOT SPECIFIED in other fields (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.).";
@@ -858,14 +858,14 @@ $entry_info_text_017 = "for unlimited entries.";
 $entry_info_text_018 = "for AHA members.";
 $entry_info_text_019 = "There is a limit of";
 $entry_info_text_020 = "entries for this competition.";
-$entry_info_text_021 = "Each entrant is limited to";
+$entry_info_text_021 = "Each participant is limited to";
 $entry_info_text_022 = strtolower($label_entry);
 $entry_info_text_023 = strtolower($label_entries);
-$entry_info_text_024 = "entry per subcategory";
-$entry_info_text_025 = "entries per subcategory";
+$entry_info_text_024 = "entry per sub-style";
+$entry_info_text_025 = "entries per sub-style";
 $entry_info_text_026 = "exceptions are detailed below";
 $entry_info_text_027 = strtolower($label_subcategory);
-$entry_info_text_028 = "subcategories";
+$entry_info_text_028 = "sub-styles";
 $entry_info_text_029 = "entry for the following";
 $entry_info_text_030 = "entries for for the following";
 $entry_info_text_031 = "After creating your account and adding your entries to the system, you must pay your entry fee(s). Accepted payment methods are:";
@@ -883,7 +883,7 @@ $entry_info_text_042 = "If you live in the United States, please note that it is
 $entry_info_text_043 = "Entry bottles accepted at our drop-off locations";
 $entry_info_text_044 = "Map to";
 $entry_info_text_045 = "Select/Tap for Required Entry Info";
-$entry_info_text_046 = "If a style's name is hyperlinked, it has specific entry requirements. Select or tap on the name to view the subcategory's requirements.";
+$entry_info_text_046 = "If a style's name is linked, it has specific entry requirements. Select or tap the name to view the subcategory's requirements.";
 
 /**
  * ------------------------------------------
@@ -940,8 +940,8 @@ $pay_text_017 = "Your payment confirmation email is your entry receipt.";
 $pay_text_018 = "Select the <em>Pay with PayPal</em> button below to pay online.";
 $pay_text_019 = "Please note that a transaction fee of";
 $pay_text_020 = "will be added into your total.";
-$pay_text_021 = "To make sure your PayPal payment is marked <strong>paid</strong> on <strong>this site</strong>, make sure to select the <em>Return to...</em> link on PayPal&rsquo;s confirmation screen <strong>after</strong> you have sent your payment.";
-$pay_text_022 = "Make Sure to Select <em>Return To...</em> After Paying Your Fees";
+$pay_text_021 = "To make sure your PayPal payment is marked <strong>paid</strong> on <strong>this site</strong>, make sure to select the <em>Return to Merchant</em> button on PayPal&rsquo;s confirmation screen <strong>after</strong> you have completed your payment.";
+$pay_text_022 = "Make Sure to Select the <em>Return To Merchant</em> Button After Paying Your Fees";
 $pay_text_023 = "Enter the code supplied by the competition organizers for a discounted entry fee.";
 $pay_text_024 = $pay_text_010;
 $pay_text_025 = "You have not logged any entries yet.";
@@ -1355,12 +1355,12 @@ $user_text_005 = "Your current email address is";
 $login_text_017 = "Email Me My Security Question Answer";
 $login_text_018 = "Your user name (email address) is required.";
 $login_text_019 = "Your password is required.";
-$login_text_020 = "The token provided is invalid or has already been used. Please use the forgot password function again to generate a new password reset token.";
-$login_text_021 = "The token provided has expired. Please use the forgot password function again to generate a new password reset token.";
+$login_text_020 = "The token provided is invalid or has already been used. Please use the reset password function again to generate a new token.";
+$login_text_021 = "The token provided has expired. Please use the reset password function again to generate a new token.";
 $login_text_022 = "The email you entered is not associated with the provided token. Please try again.";
 $login_text_023 = "The passwords do not match. Please try again.";
 $login_text_024 = "A confirmation password is required.";
-$login_text_025 = "Forgot your password?";
+$login_text_025 = $login_text_004;
 $login_text_026 = "Enter your account email address and new password below.";
 $login_text_027 = "Your password has been reset successfully. You may now log in with the new password.";
 $winners_text_005 = "Best of Show winner(s) have not been posted yet. Please check back later.";
@@ -1376,7 +1376,7 @@ $paypal_response_text_008 = "Invalid PayPal Payment";
 $paypal_response_text_009 = "PayPal Payment";
 $pwd_email_reset_text_000 = "A request was made to verify the account at the";
 $pwd_email_reset_text_001 = "website using the ID Verification email function. If you did not initiate this, please contact the competition's organizer.";
-$pwd_email_reset_text_002 = "The ID verification answer is case sensitive";
+$pwd_email_reset_text_002 = "The answer is case sensitive.";
 $pwd_email_reset_text_003 = "A request was made to change your password at the";
 $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry. Your password cannot be reset without the link below.";
 $pwd_email_reset_text_005 = "To reset your password, select the link below or copy/paste it into your browser.";
@@ -1898,7 +1898,8 @@ $evaluation_info_077 = "Comment on color, clarity, and head (retention, color, a
 $evaluation_info_078 = "Comment on malt, hops, fermentation characteristics, balance, finish/aftertaste, and other flavor characteristics.";
 $evaluation_info_079 = "Comment on body, carbonation, warmth, creaminess, astringency, and other palate sensations.";
 $evaluation_info_080 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
-if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
+
+if ((isset($_SESSION['prefsStyleSet'])) && (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025"))) {
     $styles_entry_text_21B = "Entrant MUST specify a strength (session, standard, double); if no strength is specified, standard will be assumed. Entrant MUST specify specific type of Specialty IPA from the list of Currently Defined Types identified in the Style Guidelines, or as amended by Provisional Styles on the BJCP website; OR the entrant MUST describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants MAY specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants MAY specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions.";
     $styles_entry_text_24C = "Entrant MUST specify blond, amber, or brown Bière de Garde.";
     $styles_entry_text_25B = "The entrant MUST specify the strength (table, standard, super) and the color (pale, dark). The entrant MAY identify character grains used.";
@@ -2133,11 +2134,33 @@ $label_entry_limit_enforced = "Entry Limit Enforced Until";
 $label_button_no_steward = "I Do Not Wish to Volunteer as a Steward";
 $label_button_no_judge = "I Do Not Wish to Volunteer as a Judge";
 $label_staff_availability = "Staff Availability";
+$label_original_gravity = "Original Gravity";
+$label_verified = "Verified";
+$label_style_type = "Style Type";
+$label_entry_limit_style = "Entry Limits Per Style Category";
+$label_current_count = "Current Count";
+$label_scroll = "Scroll";
+$label_opt_out = "Opt Out";
+$label_opening = "Opening";
+$label_entry_limits = "Entry Limits";
+$label_entry_limit_participant = "Entry Limit Per Participant";
+$label_entry_limit_substyle = "Per Style Entry Limit";
+$label_entry_limit_exception = "Per Style Exceptions Limit";
+$label_exceptions = "Exceptions";
+$label_style_excepted = "Style Exceptions";
+$label_no_sessions = "No Sessions Selected";
+
+$brewer_text_056 = "Select &quot;Opt Out&quot; above if you do not wish to participate in any Pro-Am opportunities associated with this competition.";
 
 $brew_text_056 = "Please provide the entry's carbonation level.";
 $brew_text_057 = "Please provide the entry's sweetness level.";
 $brew_text_058 = "Please provide the entry's strength.";
 $brew_text_059 = "Please provide the entry's color.";
+$brew_text_060 = "Please enter gravity up to the thousandth place (e.g., 1.120 or 1.014, etc.).";
+$brew_text_061 = "Counts update every two minutes.";
+$brew_text_062 = "Counts paused while window is inactive. Click or tap to reactivate.";
+$brew_text_063 = "Counts update every minute.";
+$brew_text_064 = "Count updates paused.";
 
 $bottle_labels_008 = "Make sure your browser printing settings are <strong>Portrait layout</strong> and <strong>100&#37; scale</strong>.";
 
@@ -2148,17 +2171,39 @@ $contact_text_008 = "Please provide a valid email address.";
 $contact_text_009 = "Please provide a subject.";
 $contact_text_010 = "Please provide a message.";
 
+$contact_text_011 = "Select the email address to launch your native email application. Copy the address and paste it into a new message if using a web-based email services such as Gmail, etc.";
+$contact_text_012 = "Please note: this window is a result of multiple measures attempting to mitigate email address exposure to spambot crawlers. If there is an error or the competition contact's email address is not available above, it has been obfuscated for security reasons. If this is the case, contact this competition official via other means (social media, organization website, etc.).";
+
 $error_text_000 = "Please use the main navigation above to get where you want to go.";
 $error_text_001 = "If the links above aren't working, please contact a site representative.";
-
 $error_text_400 = "Invalid request.";
 $error_text_401 = "Permission is needed for your request.";
 $error_text_403 = "Action forbidden.";
 $error_text_404 = "Page not found.";
 $error_text_500 = "Server misconfiguration.";
 
-$contact_email_text_000 = "Select the email address below to launch your native email application. Copy the address and paste it into a new message if using a web-based email services such as Gmail, etc.";
-$contact_email_text_001 = "Please note: this window is a result of multiple measures to mitigate email address exposure to spambot crawlers. If the competition contact's email address is not available above, contact the sponsors of the competition via other means (social media, organization website, etc.).";
+$styles_entry_text_C1A_2025 = "Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify apple varieties, particularly if those varieties introduce unusual characteristics.";
+$styles_entry_text_C1B_2025 = "Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify varieties of apples used; if specified, a varietal character will be expected.";
+$styles_entry_text_C1C_2025 = "Entrants MUST specify carbonation level. Entrants MUST specify sweetness, restricted to dry through semi-sweet. Entrants MAY specify varieties of apples used; if specified, a varietal character will be expected.";
+$styles_entry_text_C1D_2025 = "Entrants MUST specify carbonation level. Entrants MUST specify sweetness, restricted to medium through sweet. Entrants MAY specify varieties of apples used; if specified, a varietal character will be expected.";
+$styles_entry_text_C1E_2025 = "Entrants MUST specify carbonation level. Entrants MUST specify sweetness, restricted to dry through medium. Entrants MAY specify varieties of apples used; if specified, a varietal character will be expected.";
+$styles_entry_text_C2A_2025 = "Entrants MUST specify if the cider was barrel-fermented or -aged. Entrants MUST specify both carbonation and sweetness levels.";
+$styles_entry_text_C2B_2025 = "Entrants MUST specify both carbonation and sweetness levels.";
+$styles_entry_text_C2C_2025 = "Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level.";
+$styles_entry_text_C2D_2025 = "Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level.";
+$styles_entry_text_C3A_2025 = "Entrants MUST specify both carbonation and sweetness levels. Entrants MUST specify all fruit or fruit juice added. Entrants MAY specify a base cider style. Entrants MAY specify the color of added fruit.";
+$styles_entry_text_C3B_2025 = "Entrants MUST specify both carbonation and sweetness levels. Entrants MUST specify all spices added. If hops are used, entrant MUST specify the varieties. Entrants MAY specify a base cider style.";
+$styles_entry_text_C3C_2025 = "Entrants MUST specify the ingredients or processes that make the entry an experimental cider. Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify a base style, or provide a more detailed description of the concept.";
+$styles_entry_text_C4A_2025 = "Entrants MUST specify both carbonation and sweetness levels.";
+$styles_entry_text_C4B_2025 = "Entrants MUST specify both carbonation and sweetness levels.";
+$styles_entry_text_C4C_2025 = "Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level.";
+$styles_entry_text_C4D_2025 = "Entrants MUST specify the ingredients or processes that make the entry an experimental perry. Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify a base style, or provide a more detailed description of the concept.";
+
+$login_text_028 = "User name not found. Please check it and try again.";
+$login_text_029 = "If you cannot remember your user name, contact an administrator of this site.";
+
+$entry_info_text_056 = "Limit reached. No more entries accepted.";
+$entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indicates that the style's entry limit has been reached and no more entries of that style will be accepted.";
 
 /**
  * ------------------------------------------

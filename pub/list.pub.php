@@ -36,26 +36,19 @@ if ((isset($assignment_array) && ((in_array($label_judge,$assignment_array)) && 
 $user_edit_links .= "</div>";
 
 ?>
-
+<a name="my-account"></a>
 <div class="row">
-
 	<div class="col-12 col-md-8 col-lg-9 mb-3"> 
 		<?php include (PUB.'brewer_info.pub.php'); ?>
 	</div>
-	
 	<div class="col-12 col-md-4 col-lg-3 mb-3">
-		
-		<?php 
-		
-		echo "<section class=\"d-none d-sm-none d-md-block d-lg-block d-xl-block d-xxl-block d-print-none\">";
+		<section class="d-none d-sm-none d-md-block d-lg-block d-xl-block d-xxl-block d-print-none">
+		<?php
 		echo $user_edit_links;	
 		include (PUB.'at-a-glance.pub.php');
-		echo "</section>"; 
-		
 		?>
-		
+		</section>
 	</div>
-
 </div>
 <?php 
 if ($show_entries) include (PUB.'brewer_entries.pub.php'); 
@@ -67,6 +60,170 @@ $("#entry-table").hide();
 $("#toggle-entry-cards").prop("disabled", true);
 
 $(document).ready(function() {
+    /**
+     * Toggle State Manager
+     * A generic jQuery solution for toggling between two states and remembering the selection
+     * 
+     * @param {Object} config Configuration object with the following properties:
+     * - cookieName: Name of the cookie to store the state
+     * - states: Array of state objects, each containing:
+     *   - name: Unique identifier for this state
+     *   - element: jQuery selector for the element to show when this state is active
+     *   - button: jQuery selector for the button that activates this state
+     *   - isDefault: Boolean indicating if this is the default state
+     * - fadeSpeed: (Optional) Speed for fade transitions in milliseconds
+     * - fadeDelay: (Optional) Delay before showing the new element in milliseconds
+     */
+    $.toggleStateManager = function(config) {
+        // Set default values if not provided
+        config = $.extend({
+            fadeSpeed: 'slow',
+            fadeDelay: 500
+        }, config);
+
+        // Function to set a session cookie (expires when browser closes)
+        $.setCookie = function(name, value) {
+            document.cookie = name + "=" + value + "; path=/";
+        };
+
+        // Function to get cookie value by name
+        $.getCookie = function(name) {
+            const cookieName = name + "=";
+            const cookies = document.cookie.split(';');
+            let cookieValue = "";
+            
+            $.each(cookies, function(i, cookie) {
+                cookie = $.trim(cookie);
+                if (cookie.indexOf(cookieName) === 0) {
+                    cookieValue = cookie.substring(cookieName.length);
+                    return false; // Break the loop
+                }
+            });
+            
+            return cookieValue;
+        };
+
+        // Function to set the active state
+        function setActiveState(stateName) {
+            // Find the active state
+            let activeState = null;
+            let inactiveStates = [];
+            
+            $.each(config.states, function(i, state) {
+                if (state.name === stateName) {
+                    activeState = state;
+                } else {
+                    inactiveStates.push(state);
+                }
+            });
+            
+            if (!activeState) return;
+
+            // Hide all inactive elements
+            $.each(inactiveStates, function(i, state) {
+                $(state.element).fadeOut(config.fadeSpeed);
+                $(state.button).prop("disabled", false);
+            });
+
+            // Show active element after delay
+            setTimeout(function() {
+                $(activeState.element).fadeIn(config.fadeSpeed);
+                $(activeState.button).prop("disabled", true);
+            }, config.fadeDelay);
+
+            // Save state to cookie
+            $.setCookie(config.cookieName, stateName);
+        }
+
+        // Initialize event handlers for all buttons
+        $.each(config.states, function(i, state) {
+            $(state.button).on('click', function() {
+                setActiveState(state.name);
+            });
+        });
+
+        // Find the default state
+        let defaultState = null;
+        $.each(config.states, function(i, state) {
+            if (state.isDefault) {
+                defaultState = state;
+                return false; // Break the loop
+            }
+        });
+        
+        // If no default is specified, use the first state
+        if (!defaultState && config.states.length > 0) {
+            defaultState = config.states[0];
+        }
+
+        // Set initial state based on cookie or default
+        const savedState = $.getCookie(config.cookieName);
+        let initialState = null;
+        
+        if (savedState) {
+            $.each(config.states, function(i, state) {
+                if (state.name === savedState) {
+                    initialState = state;
+                    return false; // Break the loop
+                }
+            });
+        }
+        
+        // If no saved state or invalid state, use default
+        if (!initialState) {
+            initialState = defaultState;
+        }
+        
+        // Apply initial state immediately without animation on page load
+        $.each(config.states, function(i, state) {
+            if (state.name !== initialState.name) {
+                $(state.element).hide();
+                $(state.button).prop("disabled", false);
+            } else {
+                $(state.element).show();
+                $(state.button).prop("disabled", true);
+            }
+        });
+    };
+
+    // Initialize the toggle state manager for the entry view
+    $.toggleStateManager({
+        cookieName: "entryViewType",
+        states: [
+            {
+                name: "cards",
+                element: "#entry-cards",
+                button: "#toggle-entry-cards",
+                isDefault: true
+            },
+            {
+                name: "table",
+                element: "#entry-table",
+                button: "#toggle-entry-table",
+                isDefault: false
+            }
+        ],
+        fadeSpeed: "slow",
+        fadeDelay: 500
+    });
+
+
+    /*
+    $("#toggle-entry-cards").click(function() {
+    	$("#entry-table").fadeOut("slow");
+        $("#entry-cards").delay(500).fadeIn("slow");
+        $("#toggle-entry-cards").prop("disabled", true);
+        $("#toggle-entry-table").prop("disabled", false);
+    });
+
+    $("#toggle-entry-table").click(function() {
+    	$("#entry-cards").fadeOut("slow");
+        $("#entry-table").delay(500).fadeIn("slow");
+        $("#toggle-entry-cards").prop("disabled", false);
+        $("#toggle-entry-table").prop("disabled", true);
+    });
+    */
+
 
  	$(".entry-print").on("click", function() {
 		
@@ -108,20 +265,6 @@ $(document).ready(function() {
 	
 	});
 
-	$("#toggle-entry-cards").click(function() {
-		$("#entry-table").fadeOut("slow");
-	    $("#entry-cards").delay(500).fadeIn("slow");
-	    $("#toggle-entry-cards").prop("disabled", true);
-	    $("#toggle-entry-table").prop("disabled", false);
-	});
-
-	$("#toggle-entry-table").click(function() {
-		$("#entry-cards").fadeOut("slow");
-	    $("#entry-table").delay(500).fadeIn("slow");
-	    $("#toggle-entry-cards").prop("disabled", false);
-	    $("#toggle-entry-table").prop("disabled", true);
-	});
-
 	$('#sortable').dataTable( {
 	"bPaginate" : false,
 	"sDom": 'rt',
@@ -129,7 +272,6 @@ $(document).ready(function() {
 	"bLengthChange" : false,
 	"aaSorting": [[2,'asc']],
 	"aoColumns": [
-
 		null,
 		<?php if ($show_scores) { ?>
 		null,
@@ -141,7 +283,7 @@ $(document).ready(function() {
 		null,
 		null,
 		null,
-		<?php if ($multiple_bottle_ids) { ?>{ "asSorting": [  ] },<?php } ?>
+		<?php if ($print_bottle_labels) { ?>{ "asSorting": [  ] },<?php } ?>
 		<?php } ?>
 		<?php if ($show_scores) { ?>
 		null,
@@ -159,8 +301,9 @@ $(document).ready(function() {
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[1,'asc']],
+		"aaSorting": [[2,'asc']],
 		"aoColumns": [
+			null,
 			null,
 			null,
 			null
@@ -172,8 +315,9 @@ $(document).ready(function() {
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']],
+		"aaSorting": [[1,'asc']],
 		"aoColumns": [
+			null,
 			null,
 			null,
 			null
@@ -185,8 +329,9 @@ $(document).ready(function() {
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[1,'asc']],
+		"aaSorting": [[2,'asc']],
 		"aoColumns": [
+			null,
 			null,
 			null,
 			null
@@ -198,8 +343,9 @@ $(document).ready(function() {
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[1,'asc']],
+		"aaSorting": [[2,'asc']],
 		"aoColumns": [
+			null,
 			null,
 			null,
 			null
@@ -213,6 +359,7 @@ $(document).ready(function() {
 		"bLengthChange" : false,
 		"aaSorting": [[0,'asc']],
 		"aoColumns": [
+			null,
 			null,
 			null,
 			null

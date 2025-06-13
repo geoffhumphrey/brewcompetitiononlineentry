@@ -76,11 +76,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$subject = mb_convert_encoding($subject, "UTF-8");
 
 			$message_post = sterilize($_POST['message']);
-	
-			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-			
-			$from_competition_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-			$from_competition_email = mb_convert_encoding($from_competition_email, "UTF-8");
+				
+			$from_competition_email = mb_convert_encoding(filter_var($_SESSION['prefsEmailFrom'], FILTER_SANITIZE_EMAIL), "UTF-8");
 			
 			$comp_name = mb_convert_encoding($_SESSION['contestName'], "UTF-8");
 
@@ -97,7 +94,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			// Debug
 			echo $to_email."<br>";
 			echo $to_name."<br>";
-			echo $headers."<br>";
 			echo "To: ".$to_name." ".$to_email."<br>";
 			echo "From: ".$comp_name." ".$from_competition_email."<br>";
 			echo "Reply-To: ".$from_name." ".$from_email."<br>";
@@ -105,7 +101,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			echo $message;
 			exit();
 			*/
-
+			
 			$mail = new PHPMailer(true);
 			$mail->CharSet = 'UTF-8';
 			$mail->Encoding = 'base64';

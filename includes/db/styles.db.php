@@ -15,7 +15,7 @@ if ($section == "step7") {
 }
 
 elseif (isset($_SESSION['prefsStyleSet'])) $styleSet = $_SESSION['prefsStyleSet'];
-else $styleSet = "BJCP2021";
+else $styleSet = "BJCP2025";
 
 $styles_selected = array();
 $styles_selected = json_decode($_SESSION['prefsSelectedStyles'], true);
@@ -23,10 +23,6 @@ $styles_selected = json_decode($_SESSION['prefsSelectedStyles'], true);
 if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) {
 
 	// Get custom styles from all style sets
-	/*
-	if (HOSTED) $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC;",$prefix."styles");
-	else
-	*/
 	$query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC;",$styles_db_table);
 	$styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
 	$row_styles_all = mysqli_fetch_assoc($styles_all);
@@ -65,7 +61,8 @@ if (HOSTED) {
 }
 */
 
-$query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
+if ($styleSet == "BJCP2025") $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table);
+else $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
 
 if ($section == "admin") {
 

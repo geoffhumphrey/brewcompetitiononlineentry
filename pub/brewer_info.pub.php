@@ -76,6 +76,7 @@ $header1_1 .= sprintf("<h2>%s</h2>",$label_account_info);
 // Build primary page info (thank you message)
 $primary_page_info .= sprintf("<p class=\"lead\">%s %s, %s. <small class=\"text-muted\">%s %s.</small></p>",$brewer_info_000,$_SESSION['contestName'],$_SESSION['brewerFirstName'],$brewer_info_001,getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($_SESSION['userCreated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt"));
 
+/*
 if (($totalRows_log > 0) && ($show_entries) && (!$show_scores)) {
 	$primary_page_info .= "<p class=\"lead d-print-none\"><small>";
 	$primary_page_info .= sprintf("%s",$brewer_info_002);
@@ -87,6 +88,7 @@ if (($totalRows_log > 0) && ($show_entries) && (!$show_scores)) {
 	}
 	$primary_page_info .= "</small></p>";
 }
+*/
 
 if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (time() >= $row_judging_prefs['jPrefsJudgingOpen'])) {
 	
@@ -106,12 +108,18 @@ if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == 
 // Build User Info
 $name .= $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName'];
 $email .= $_SESSION['user_name'];
-if (!empty($_SESSION['brewerAddress'])) $address = $_SESSION['brewerAddress']; else $address = $label_none_entered;
-if (!empty($_SESSION['brewerCity'])) $city = $_SESSION['brewerCity']; else $city = $label_none_entered;
-if (!empty($_SESSION['brewerState'])) $state_province = $_SESSION['brewerState']; else $state_province = $label_none_entered;
-if (!empty($_SESSION['brewerZip'])) $zip = $_SESSION['brewerZip']; else $zip = $label_none_entered;
-if (!empty($_SESSION['brewerCountry'])) $country = $_SESSION['brewerCountry']; else $country = $label_none_entered;
-if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
+if (!empty($_SESSION['brewerAddress'])) $address = $_SESSION['brewerAddress']; 
+else $address = $label_none_entered;
+if (!empty($_SESSION['brewerCity'])) $city = $_SESSION['brewerCity']; 
+else $city = $label_none_entered;
+if (!empty($_SESSION['brewerState'])) $state_province = $_SESSION['brewerState']; 
+else $state_province = $label_none_entered;
+if (!empty($_SESSION['brewerZip'])) $zip = $_SESSION['brewerZip']; 
+else $zip = $label_none_entered;
+if (!empty($_SESSION['brewerCountry'])) $country = $_SESSION['brewerCountry']; 
+else $country = $label_none_entered;
+if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; 
+else $us_phone = FALSE;
 
 if (!empty($_SESSION['brewerPhone1'])) {
 	if ($us_phone) $phone .= format_phone_us($_SESSION['brewerPhone1'])." (1)";
@@ -123,7 +131,8 @@ if (!empty($_SESSION['brewerPhone2'])) {
 	else $phone .= "<br>".$_SESSION['brewerPhone2']." (2)";
 }
 
-if (!empty($_SESSION['brewerClubs'])) $club = $_SESSION['brewerClubs']; else $club = $label_none_entered;
+if (!empty($_SESSION['brewerClubs'])) $club = $_SESSION['brewerClubs']; 
+else $club = $label_none_entered;
 
 $discount .= "<i class=\"fa fa-fw fa-lg fa-check me-1 text-success\"></i>".$label_yes;
 
@@ -163,12 +172,14 @@ foreach ($a as $value) {
 				$judge_info .= "</td>\n";
 				$judge_info .= "<td>";
 				$judge_info .= $judging_location_info[1];
-				if ($judging_location_info[5] == "1") $judge_info .= "<br><em><small>".$judging_location_info[3]."</small></em>";
 				$judge_info .= "</td>\n";
 				$judge_info .= "<td>";
+				$judge_info .= sprintf("<span class=\"visually-hidden invisible\">%s</span>",$judging_location_info[2]);
 				$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 				if (!empty($judging_location_info[4])) $judge_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 				$judge_info .= "</td>\n";
+				if ($judging_location_info[5] == 1) $judge_info .= sprintf("<td>%s %s</td>",$judging_location_info[3], $judging_location_info[6]);
+				else $judge_info .= sprintf("<td>%s</td>",$judging_location_info[6]);
 				$judge_info .= "</tr>";
 
 			}
@@ -188,6 +199,7 @@ foreach ($a as $value) {
 				$staff_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 				if (!empty($judging_location_info[4])) $staff_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 				$staff_info .= "</td>\n";
+				$staff_info .= sprintf("<td>%s</td>",$judging_location_info[6]);
 				$staff_info .= "</tr>";
 				
 			}
@@ -225,6 +237,7 @@ foreach ($a as $value) {
 			$steward_info .= "</td>\n";
 			$steward_info .= "<td>";
 			$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+			$steward_info .= sprintf("<td>%s</td>",$judging_location_info[6]);
 			$steward_info .= "</tr>";
 		
 		}
@@ -536,9 +549,10 @@ if ($show_judge_steward_fields) {
 						$account_display .= "<table id=\"sortable_judge\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">";
 						$account_display .= "<thead class=\"table-dark\">";
 						$account_display .= "<tr>";
-						$account_display .= sprintf("<th width=\"14%%\">%s/%s</th>",$label_yes,$label_no);
-						$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_session);
-						$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_date);
+						$account_display .= sprintf("<th width=\"10%%\">%s/%s</th>",$label_yes,$label_no);
+						$account_display .= sprintf("<th width=\"30%%\">%s</th>",$label_session);
+						$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_date);
+						$account_display .= sprintf("<th width=\"35%%\">%s</th>",$label_notes);
 						$account_display .= "</tr>";
 						$account_display .= "</thead>";
 						$account_display .= "<tbody>";
@@ -560,9 +574,10 @@ if ($show_judge_steward_fields) {
 					$account_display .= "<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">";
 					$account_display .= "<thead class=\"table-dark\">";
 					$account_display .= "<tr>";
-					$account_display .= sprintf("<th width=\"34%%\">%s</th>",$label_session);
-					$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_date);
-					$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_table);
+					$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_session);
+					$account_display .= sprintf("<th width=\"20%%\">%s</th>",$label_date);
+					$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_table);
+					$account_display .= sprintf("<th width=\"30%%\">%s</th>",$label_notes);
 					$account_display .= "</tr>";
 					$account_display .= "</thead>";
 					$account_display .= "<tbody>";
@@ -603,9 +618,10 @@ if ($show_judge_steward_fields) {
 						$account_display .= "<table id=\"sortable_steward\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">";
 						$account_display .= "<thead class=\"table-dark\">";
 						$account_display .= "<tr>";
-						$account_display .= sprintf("<th width=\"14%%\">%s/%s</th>",$label_yes,$label_no);;
-						$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_session);
-						$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_date);
+						$account_display .= sprintf("<th width=\"10%%\">%s/%s</th>",$label_yes,$label_no);
+						$account_display .= sprintf("<th width=\"30%%\">%s</th>",$label_session);
+						$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_date);
+						$account_display .= sprintf("<th width=\"35%%\">%s</th>",$label_notes);
 						$account_display .= "</tr>";
 						$account_display .= "</thead>";
 						$account_display .= "<tbody>";
@@ -629,9 +645,10 @@ if ($show_judge_steward_fields) {
 					$account_display .= "<table id=\"steward_assignments\" class=\"table table-striped table-bordered table-responsive border-dark-subtle\">";
 					$account_display .= "<thead class=\"table-dark\">";
 					$account_display .= "<tr>";
-					$account_display .= sprintf("<th width=\"34%%\">%s</th>",$label_session);
-					$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_date);
-					$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_table);
+					$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_session);
+					$account_display .= sprintf("<th width=\"20%%\">%s</th>",$label_date);
+					$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_table);
+					$account_display .= sprintf("<th width=\"30%%\">%s</th>",$label_notes);
 					$account_display .= "</tr>";
 					$account_display .= "</thead>";
 					$account_display .= "<tbody>";
@@ -673,9 +690,10 @@ if ((!isset($_SESSION['brewerBreweryInfo'])) || (empty($_SESSION['brewerBreweryI
 			$account_display .= "<table id=\"sortable_staff\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">";
 			$account_display .= "<thead class=\"table-dark\">";
 			$account_display .= "<tr>";
-			$account_display .= sprintf("<th width=\"14%%\">%s/%s</th>",$label_yes,$label_no);;
-			$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_session);
-			$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_date);
+			$account_display .= sprintf("<th width=\"10%%\">%s/%s</th>",$label_yes,$label_no);
+			$account_display .= sprintf("<th width=\"30%%\">%s</th>",$label_session);
+			$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_date);
+			$account_display .= sprintf("<th width=\"35%%\">%s</th>",$label_notes);
 			$account_display .= "</tr>";
 			$account_display .= "</thead>";
 			$account_display .= "<tbody>";
@@ -759,7 +777,7 @@ if (($judge_no_availability) || ($steward_no_availability)) {
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#no-sessions").modal('show');
+        // $("#no-sessions").modal('show');
     });
 </script>
 <!-- Modal -->
@@ -767,7 +785,7 @@ if (($judge_no_availability) || ($steward_no_availability)) {
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">No Sessions Selected</h4>
+        <h4 class="modal-title" id="myModalLabel"><?php echo $label_no_sessions; ?></h4>
       </div>
       <div class="modal-body">
         <?php echo $no_availability_body; ?>

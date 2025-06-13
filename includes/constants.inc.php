@@ -374,8 +374,23 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $totalRows_style_type_entry_limits = mysqli_num_rows($style_type_entry_limits);
 
         $style_type_entry_count_display = array();
+        $style_limit_entry_count_display = array();
         $style_type_running_count = 0;
         $style_type_limit_running_count = 0;
+
+        if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimits']) > 1)) {
+
+            foreach (json_decode($_SESSION['prefsStyleLimits'],true) as $key => $value) {
+
+                $query_style_limit_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s'", $prefix."brewing", $key);
+                $style_limit_entry_count = mysqli_query($connection,$query_style_limit_entry_count) or die (mysqli_error($connection));
+                $row_style_limit_entry_count = mysqli_fetch_assoc($style_limit_entry_count);
+
+                $style_limit_entry_count_display[$key] = $row_style_limit_entry_count['count'];
+            
+            }
+
+        }
 
         if ($totalRows_style_type_entry_limits > 0) {
 
@@ -449,6 +464,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
         $current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
         $current_date_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date");
+        $current_date_display_short = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'],"short", "date");
         $current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time-gmt");
 
     } // end if ((isset($row_contest_dates)) && (!empty($row_contest_dates)))
@@ -465,6 +481,7 @@ else {
 
         $current_date = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], "system", "date");
         $current_date_display = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], $sidebar_date_format, "date");
+        $current_date_display_short = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'],"short", "date");
         $current_time = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], "system", "time-gmt");
 
     }
@@ -484,6 +501,8 @@ if (isset($_SESSION['loginUsername']))  {
     $logged_in = TRUE;
     $logged_in_name = $_SESSION['loginUsername'];
 
+    $total_paid_entry_fees_user = 0;
+
     if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
         if ($_SESSION['userLevel'] <= "1") {
@@ -499,6 +518,7 @@ if (isset($_SESSION['loginUsername']))  {
            if ($bid == "default") $user_id_paid = $_SESSION['user_id'];
            else $user_id_paid = $bid;
            $total_paid_entry_fees = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $user_id_paid, $filter, $_SESSION['comp_id']);
+           $total_paid_entry_fees_user = $total_paid_entry_fees;
            $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
         
         }
@@ -563,6 +583,14 @@ elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "N
 else {
     $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-A","C1-B","C1-C");
     if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) $optional_info_styles[] = "25-B";
+    if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
+        $optional_info_styles[] = "C1-D"; 
+        $optional_info_styles[] = "C1-E"; 
+        $optional_info_styles[] = "C3-A"; 
+        $optional_info_styles[] = "C3-B";
+        $optional_info_styles[] = "C3-C";
+        $optional_info_styles[] = "C4-D";
+    }
 }
 
 $results_method = array("0" => "By Table/Medal Group", "1" => "By Style", "2" => "By Sub-Style");
@@ -583,7 +611,7 @@ if (isset($_SESSION['prefsStyleSet'])) {
     if (isset($_SESSION['style_set_mead'])) $mead_array = $_SESSION['style_set_mead'];
     if (isset($_SESSION['style_set_cider'])) $cider_array = $_SESSION['style_set_cider'];
     if (isset($_SESSION['style_set_category_end'])) $category_end = $_SESSION['style_set_category_end'];
-    if (($_SESSION['prefsStyleSet'] == "BJCP2015") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
+    if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
         $specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6","21-B7");
         $historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
     }
@@ -759,8 +787,15 @@ if ($row_contest_dates) {
 }
 
 $mail_use_smtp = FALSE;
-if (isset($_SESSION['prefsEmailSMTP'])) { 
-    if (($_SESSION['prefsEmailSMTP'] == 1) && (!empty($_SESSION['prefsEmailHost'])) && (!empty($_SESSION['prefsEmailFrom'])) && (!empty($_SESSION['prefsEmailUsername'])) && (!empty($_SESSION['prefsEmailPassword'])) && (!empty($_SESSION['prefsEmailPort']))) $mail_use_smtp = TRUE;
+if (HOSTED) $mail_use_smtp = TRUE;
+elseif (isset($_SESSION['prefsEmailSMTP'])) { 
+    if (
+        ($_SESSION['prefsEmailSMTP'] == 1) && 
+        (!empty($_SESSION['prefsEmailHost'])) && 
+        (!empty($_SESSION['prefsEmailFrom'])) && 
+        (!empty($_SESSION['prefsEmailUsername'])) && 
+        (!empty($_SESSION['prefsEmailPassword'])) && 
+        (!empty($_SESSION['prefsEmailPort']))
+    ) $mail_use_smtp = TRUE;
 }
-
 ?>

@@ -40,12 +40,11 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 	$bos_data_available = FALSE;
 
 	$header1_10 .= "<header class=\"landing-page-section-header py-2\"><h1>".$label_results."</h1></header>";
-	
 
 	if ($row_bos_scores['count'] > 0) $bos_data_available = TRUE;
 
 	if ($style_types_active > 0) {
-		$header1_10 .= "<h2>".$default_page_text_009;
+		$header1_10 .= "<h2 class=\"reveal-element\">".$default_page_text_009;
 		if ($section == "past_winners") $header1_10 .= ": ".$trimmed;
 
 		if ($bos_data_available) {
@@ -66,24 +65,9 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 
 } // end if (($judging_past == 0) && ($registration_open == "2"))
 
-
-else {
-
-	/*
-	if (!isset($_SESSION['loginUsername'])) {
-		$page_info .= "<p class='lead'><small>".$default_page_text_011;
-		if ($_SESSION['prefsPaypal'] == "Y") $page_info .= " ".$default_page_text_012;
-		$page_info .= "</small></p>";
-	}
-	*/
-	
-}
-
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
-
-//if ($action != "print") echo $print_page_link;
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1") && ($section == "admin")) {
 	if ($totalRows_dropoff == 0) echo $message1;
@@ -125,25 +109,30 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 
 		if (judging_winner_display($_SESSION['prefsWinnerDelay'])) {
 
-			if (((NHC) && ($prefix == "final_")) || (!NHC)) {
-				echo $header1_10;
-				echo $page_info10;
-				include (PUB.'bos.pub.php');
+			echo $header1_10;
+			echo "<div class=\"mt-4 reveal-element\">";
+			echo $page_info10;
+			include (PUB.'bos.pub.php');
+			echo "</div>";
+
+			if (($row_scored_entries['count'] > 0) && (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0))) {
+				include (PUB.'bestbrewer.pub.php');
 			}
 
-			if (($row_scored_entries['count'] > 0) && (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0))) include (PUB.'bestbrewer.pub.php');
-
+			echo "<div class=\"mt-4 reveal-element\">";
 			echo $header1_20;
 			if ($winner_method == "1") include (PUB.'winners_category.pub.php');
 			elseif ($winner_method == "2") include (PUB.'winners_subcategory.pub.php');
 			else include (PUB.'winners.pub.php');
+			echo "</div>";
+		
 		}
 
 		else {
 			if (isset($page_info)) echo $page_info;
 			$show_at_a_glance = TRUE;
 		}
-	
+
 	}
 
 }

@@ -21,7 +21,7 @@
     <!-- Load Bootstrap 5.X / https://getbootstrap.com/ -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <!-- Load Animate Styles -->
+    <!-- Load Animate Styles / https://animate.style -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
@@ -39,10 +39,10 @@
     <!-- Load Moment -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
 
-    <?php if (($section == "register") || ($section == "step1") || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
-    
-    <!-- Load Password Strength Indicator -->
+    <?php if (($section == "register") || ($section == "login") || ($section == "step1") || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
+        
+    <!-- Load Password Strength Indicator / https://github.com/ablanco/jquery.pwstrength.bootstrap -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pwstrength-bootstrap/3.1.3/pwstrength-bootstrap.min.js"></script>
-    
+
     <?php } ?>

@@ -7,11 +7,6 @@
  *
  */
 
-// ---------------------------- Base URL -----------------------------------------------
-
-if (NHC) $base_url = "";
-else $base_url = $base_url;
-
 // ---------------------------- Preflight Checks ---------------------------------------
 require_once (LIB.'preflight.lib.php');
 
@@ -51,7 +46,7 @@ if ($setup_success) {
 		$ua_array = explode(' ', $_SERVER['HTTP_USER_AGENT']);
 		$msie_key = array_search('MSIE', $ua_array);
 
-		if($msie_key !== false) {
+		if ($msie_key !== false) {
 			$msie_version_key = $msie_key + 1;
 			$msie_version = intval($ua_array[$msie_version_key]);
 			if ($msie_version <= 9) $ua = TRUE;
@@ -62,18 +57,18 @@ if ($setup_success) {
 	// ---------------------------- Load Required Scripts ----------------------------
 
 	if (SINGLE) require_once(SSO.'sso.inc.php');
-	require_once (LIB.'common.lib.php');
-	require_once (INCLUDES.'db_tables.inc.php');
+	require (LIB.'common.lib.php');
+	require (INCLUDES.'db_tables.inc.php');
 	if ($force_update) include (UPDATE.'run_update.php');
-	require_once (LIB.'help.lib.php');
-	require_once (INCLUDES.'styles.inc.php'); // Establishing session vars depends upon arrays here
-	require_once (DB.'common.db.php');
-	require_once (DB.'brewer.db.php');
-	require_once (DB.'entries.db.php');
-	require_once (INCLUDES.'constants.inc.php');
-	require_once (LANG.'language.lang.php');
-	require_once (INCLUDES.'headers.inc.php');
-	require_once (INCLUDES.'scrubber.inc.php');
+	require (LIB.'help.lib.php');
+	require (INCLUDES.'styles.inc.php'); // Establishing session vars depends upon arrays here
+	require (DB.'common.db.php');
+	require (DB.'brewer.db.php');
+	require (DB.'entries.db.php');
+	require (INCLUDES.'constants.inc.php');
+	require (LANG.'language.lang.php');
+	require (INCLUDES.'headers.inc.php');
+	require (INCLUDES.'scrubber.inc.php');
 	if ($_SESSION['prefsSEF'] == "Y") $sef = TRUE;
 	else $sef = FALSE;
 
@@ -208,7 +203,7 @@ if ($setup_success) {
 				'prefsUseMods' => 'N',
 				'prefsSEF' => 'N',
 				'prefsSpecialCharLimit' => '200',
-				'prefsStyleSet' => 'BJCP2021',
+				'prefsStyleSet' => 'BJCP2025',
 				'prefsAutoPurge' => '0',
 				'prefsEntryLimitPaid' => NULL,
 				'prefsEmailRegConfirm' => '0',
@@ -283,7 +278,7 @@ if ($setup_success) {
 				'id' => '1',
 				'contestName' => 'Baseline Data Installation',
 				'contestHost' => 'Baseline',
-				'contestHostWebsite' => 'http://www.brewingcompetitions.com',
+				'contestHostWebsite' => NULL,
 				'contestHostLocation' => 'Denver, CO',
 				'contestRegistrationOpen' => '1438322400',
 				'contestRegistrationDeadline' => '1483253940',
@@ -318,6 +313,7 @@ if ($setup_success) {
 				'contestVolunteers' => '<p>Volunteer information coming soon!</p>',
 				'contestCheckInPassword' => NULL
 			);
+
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -365,27 +361,25 @@ if ($setup_success) {
 	$php_version = phpversion();
 
 	$ajax_url = $base_url."ajax/";
-
-	$js_url = $base_url."js_includes/";
-	if (HOSTED) $js_url = "https://brewingcompetitions.com/_bcoem_shared/js_includes/";
-
-	$images_url = $base_url."images/";
-	if (HOSTED) $images_url = "https://brewingcompetitions.com/_bcoem_shared/images/";
-
 	$css_url = $base_url."css/";
-	if (HOSTED) $css_url = "https://brewingcompetitions.com/_bcoem_shared/css/";
+	$images_url = $base_url."images/";
+	$js_url = $base_url."js_includes/";
+	
+	if (HOSTED) {
+		$css_url = $base_url_hosted."_bcoem_shared/css/";
+		$images_url = $base_url_hosted."_bcoem_shared/images/";
+		$js_url = $base_url_hosted."_bcoem_shared/js_includes/";
+	}
 
 	$js_app_url = $js_url."app.min.js";
 	$js_app_pub_url = $js_url."app.pub.min.js";
+	$js_invoke_url = $js_url."invoke.min.js";
 	$js_eval_url = $js_url."eval_checks.min.js";
 	$js_add_edit_entry_url = $js_url."entry.min.js";
 	$js_user_url = $js_url."user.min.js";
 	$css_common_url = $css_url."common.min.css";
 
 	if (V3) {
-
-		$css_common_url = $css_url."common-3.min.css";
-		$theme = $css_url."default-3.min.css";
 		
 		if ($section == "admin") {
 			if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
@@ -398,7 +392,6 @@ if ($setup_success) {
 			$css_common_url = $css_url."common-3.min.css";
 		}
 		
-
 	}
 
 	else {
@@ -416,6 +409,7 @@ if ($setup_success) {
 	    if (strpos($base_url, 'test.brewingcompetitions.com') !== false) {
 	    	$js_app_url = $base_url."js_source/app.js";
 	        $js_app_pub_url = $base_url."js_source/app.pub.js";
+	        $js_invoke_url = $base_url."js_source/invoke.js";
 			$js_eval_url = $base_url."js_source/eval_checks.js";
 	        $js_add_edit_entry_url = $base_url."js_source/entry.js";
 	        $js_user_url = $base_url."js_source/user.js";
@@ -423,6 +417,7 @@ if ($setup_success) {
 	    
 	    $js_app_url .= "?t=".time();
 	    $js_app_pub_url .= "?t=".time();
+	    $js_invoke_url .= "?t=".time();
 	    $js_eval_url .= "?t=".time();
 	    $js_add_edit_entry_url .= "?t=".time();
 	    $js_user_url .= "?t=".time();

@@ -2,6 +2,7 @@
 ob_start();
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
+if (session_status() === PHP_SESSION_NONE) session_start();
 
 if ($section == "setup") {
 	$alert_email_valid = "Email format is valid!";

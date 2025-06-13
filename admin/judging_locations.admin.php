@@ -99,19 +99,21 @@ if ($filter == "bos") {
 
 // Judging Locations & Dates List
 if ($section != "step5") {
+	
 	if (($action == "default") && ($totalRows_judging_locs > 0)) {
 		
 		$output_datatables_aaSorting = "[2,'asc']";
-		$output_datatables_aoColumns = "null, null, null, null, null, null, { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns = "null, null, null, null, null, null, null, { \"asSorting\": [  ] }";
 		
 		$output_datatables_head .= "<tr>";
 		$output_datatables_head .= "<th>Name</th>";
-		$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Type</th>";
-		$output_datatables_head .= "<th>Start Date/Time</th>";
-		$output_datatables_head .= "<th>End Date/Time</th>";
-		$output_datatables_head .= "<th>Address or Entry Distribution Info</th>";
-		$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\"># of Rounds</th>";
-		$output_datatables_head .= "<th>Actions</th>";
+		$output_datatables_head .= "<th width=\"5%\" nowrap class=\"hidden-xs hidden-sm\">Type</th>";
+		$output_datatables_head .= "<th width=\"10%\">Start Date/Time</th>";
+		$output_datatables_head .= "<th width=\"10%\">End Date/Time</th>";
+		$output_datatables_head .= "<th width=\"20%\">Address or Entry Distribution Info</th>";
+		$output_datatables_head .= "<th width=\"5%\" nowrap class=\"hidden-xs hidden-sm\">Rounds</th>";
+		$output_datatables_head .= "<th width=\"25%\" class=\"hidden-xs hidden-sm\">Notes</th>";
+		$output_datatables_head .= "<th width=\"5%\">Actions</th>";
 		$output_datatables_head .= "</tr>";
 
 		do {
@@ -135,12 +137,14 @@ if ($section != "step5") {
 			$output_datatables_body .= "</td>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocation']."</td>";
 			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$row_judging_locs['judgingRounds']."</td>";
+			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$row_judging_locs['judgingLocNotes']."</td>";
 			$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 			$output_datatables_body .= "</tr>";
 
 		} while($row_judging_locs = mysqli_fetch_assoc($judging_locs));
 
 	} // end if (($totalRows_judging_locs > 0) && ($action == "default"))
+
 } // end if ($section != "step5")
 
 
@@ -225,10 +229,12 @@ if ($section != "step5") {
 							if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".$table_assign_judge."<p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
 						}
+
 						if (strpos($brewer_assignment,"Steward") !== false) {
 							if (!empty($table_assign_steward))  $assignment_modal_body .= "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
 						}
+
 						if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in: ".$judge_entries."</p>";
 						$output_assignment_modals .= "<div class=\"modal fade\" id=\"assignment-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_brewer['uid']."\">\n";
 						$output_assignment_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
@@ -246,7 +252,9 @@ if ($section != "step5") {
 						$output_assignment_modals .= "\t\t</div><!-- ./modal-content -->\n";
 						$output_assignment_modals .= "\t</div><!-- ./modal-dialog -->\n";
 						$output_assignment_modals .= "</div><!-- ./modal -->\n";
+					
 					}
+				
 				}
 
 				$assignment_checked = str_replace(", ",",",$brewer_assignment);
@@ -434,12 +442,8 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 
 } // end if ((($action == "add") || ($action == "edit")) || ($section == "step5"))
 
-
-
 // ----------------------------------------- Presentation ------------------------------------------
 
-
-// Display HTML/JS elements and compiled PHP elements
 ?>
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
 
@@ -463,8 +467,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 <?php } // end if (($filter == "default") && ($msg == "9")) ?>
 
 <?php if ($section != "step5") { ?>
-<div class="bcoem-admin-element hidden-print">
-	<!-- Page Navigation Elements -->
+<div class="bcoem-admin-element hidden-print">	
 	
 	<?php if (($action == "add") || ($action == "edit")) { ?>
 	<!-- Postion 1: View All Button -->
@@ -537,7 +540,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
             <?php } ?>
 			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables">Judges/Stewards to Tables</a><li>
 		</ul>
-	</div><!-- ./button group -->
+	</div>
 
 	<?php if ($filter == "bos") { ?>
 	<div class="btn-group" role="group" aria-label="...">
@@ -546,7 +549,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
     	<?php } else { ?>
         <a class="btn btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos&amp;view=ranked"><span class="fa fa-filter"></span> Filter: Ranked Judges Only</a>
     	<?php } ?>
-    </div><!-- ./button group -->
+    </div>
 	<?php } ?>
 
 	<?php if ($filter == "staff") { ?>
@@ -557,7 +560,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
             <?php echo $form_organizer_select; ?>
             </select>
         </div>
-    </div><!-- ./button group -->
+    </div>
     <?php } ?>
 
     <?php if ($filter == "judges") { ?>
@@ -565,7 +568,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#judgeEmailModal">
               Assigned Judge Email Addresses
             </button>
-    </div><!-- ./button group -->
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="judgeEmailModal" tabindex="-1" role="dialog" aria-labelledby="judgeEmailModalLabel">
       	<div class="modal-dialog" role="document">
@@ -583,7 +586,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
             </div>
         	</div>
       	</div>
-    </div><!-- ./modal -->
+    </div>
     <?php } ?>
 
     <?php if ($filter == "stewards") { ?>
@@ -591,7 +594,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#judgeEmailModal">
               Assigned Steward Email Addresses
             </button>
-    </div><!-- ./button group -->
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="judgeEmailModal" tabindex="-1" role="dialog" aria-labelledby="judgeEmailModalLabel">
       	<div class="modal-dialog" role="document">
@@ -609,7 +612,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
             </div>
         	</div>
       	</div>
-    </div><!-- ./modal -->
+    </div>
     <?php } ?>
 
     <?php if ($filter == "staff") { ?>
@@ -768,7 +771,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	});
 </script>
 
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div class="form-group">
 	<label for="judgingLocName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Name</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
@@ -778,7 +781,7 @@ if (($output_add_edit) && ($msg != 9)) {
 		</div>
 		<span class="help-block">Provide the name of the judging location.</span>
 	</div>
-</div><!-- ./Form Group -->
+</div>
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="judgingLocType" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Type</label>
@@ -797,9 +800,9 @@ if (($output_add_edit) && ($msg != 9)) {
         <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member's home.</span>
     	<span class="help-block">Traditional sessions only require a start time. Distributed sessions require a start AND end time.</span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div class="form-group">
 	<label for="judgingDate" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Start Date/Time</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group date has-warning">
@@ -809,9 +812,9 @@ if (($output_add_edit) && ($msg != 9)) {
 		</div>
 		<span class="help-block">Provide an start date and time for the session.</span>
 	</div>
-</div><!-- ./Form Group -->
+</div>
 
-<div id="judgingDateEndDiv"  class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div id="judgingDateEndDiv"  class="form-group">
 	<label for="judgingDateEnd" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session End Date/Time</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group date has-warning">
@@ -821,9 +824,9 @@ if (($output_add_edit) && ($msg != 9)) {
 		</div>
 		<span class="help-block">For a distributed session, it is required that you provide an end date and time that will serve as a deadline for judges to submit their evaluations.</span>
 	</div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div class="form-group">
 	<label id="judgingLocationLabel" for="judgingLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Address</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
@@ -832,11 +835,11 @@ if (($output_add_edit) && ($msg != 9)) {
 			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <span id="helpBlockLocation1" class="help-block">Provide the street address, city, and zip/postal code where the session will take place.</span>
-        <span id="helpBlockLocation2" class="help-block">Inform judges how they will receive their entries to evaluate (e.g., a designated pick-up location with address, shipped directly, etc.). 255 character maximum.</span>
+        <span id="helpBlockLocation2" class="help-block">Inform judges how they will receive their entries to evaluate (e.g., a designated pick-up location with address, shipped directly, etc.). 255 character maximum. Use the Notes field below for further instructions and information.</span>
 	</div>
-</div><!-- ./Form Group -->
+</div>
 
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div class="form-group">
 	<label for="judgingRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Rounds</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
@@ -844,9 +847,17 @@ if (($output_add_edit) && ($msg != 9)) {
 			<input class="form-control" id="judgingRounds" name="judgingRounds" type="number" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingRounds']; ?>" placeholder="" required>
         	<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
-        <span class="help-block">Provide the number of judging rounds anticipated for this session (see the <a class="hide-loader" href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> in their rules).</span>
+        <span class="help-block">Provide the number of judging rounds anticipated for this session (see the <a class="hide-loader" href="https://www.bjcp.org/competitions/rules-regulations/" target="_blank">BJCP's definition of a session in their rules</a>).</span>
 	</div>
-</div><!-- ./Form Group -->
+</div>
+
+<div class="form-group">
+    <label id="judgingLocNotesLabel" for="judgingLocNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Notes</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control" id="judgingLocNotes" name="judgingLocNotes" type="text" maxlength="1000" value="<?php if ($action == "edit") echo $row_judging['judgingLocNotes']; ?>" placeholder="">  
+        <id id="helpBlock" class="help-block">Further information or notes for judges, stewards, and/or staff.</span>
+    </div>
+</div>
 
 <?php if (!empty($form_submit_button)) { ?>
 <div class="bcoem-admin-element hidden-print">

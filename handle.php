@@ -21,8 +21,8 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	else $target_path = USER_DOCS;
 	
 	// Limit size of upload
-	if (HOSTED) $max_size = 4000000;
-	else $max_size = 10000000;
+	if (HOSTED) $max_size = 10000000;
+	else $max_size = 15000000;
 
 	// Allowable file mime types and extensions for images
 	if (($action == "default") || ($action == "html")) {	
