@@ -1,22 +1,49 @@
 <?php if ($section != "admin") {
 
     $bg_hero_images = array(
-        "cropped-bottles_3000x500.jpg",
-        "barley-malt_3000x500.jpg",
-        "hop-cones_3000x500.jpg",
-        "kegs_3000x500.jpg",
-        "munich-mugs_3000x500.jpg",
-        "brussels-bottles_3000x500.jpg",
-        "brussels-barrels_3000x500.jpg",
-        "plzen-fermenters_3000x500.jpg",
-        "bottles_3000x500.jpg",
-        "beer-on-bar_3000x500.jpg",
-        "mead-bottles_3000x500.jpg",
-        "cider-bottles_3000x500.jpg"
+        "0-a" => "misc-cropped-bottles_3000x500.jpg",
+        "0-b" => "misc-brussels-bottles_3000x500.jpg",
+        "0-c" => "misc-plzen-fermenters_3000x500.jpg",
+        "0-d" => "misc-bottles_3000x500.jpg",
+        "1-a" => "beer-barley-malt_3000x500.jpg",
+        "1-b" => "beer-brussels-barrels_3000x500.jpg",
+        "1-c" => "beer-hop-cones_3000x500.jpg",
+        "1-d" => "beer-kegs_3000x500.jpg",
+        "1-e" => "beer-munich-mugs_3000x500.jpg",
+        "1-f" => "beer-on-bar_3000x500.jpg",
+        "2-a" => "cider-bottles_3000x500.jpg",
+        "3-a" => "mead-bottles_3000x500.jpg",     
     );
 
-    $i = rand(0, count($bg_hero_images)-1);
-    $hero_background = $bg_hero_images[$i];
+    if ((!isset($_SESSION['bg_hero_image_types'])) || (empty($_SESSION['bg_hero_image_types']))) {
+
+        $_SESSION['bg_hero_image_types'] = array();
+
+        $a = json_decode($_SESSION['prefsSelectedStyles'],true);
+        $actual_styles_types = array();
+        $actual_styles_types[] = 0;
+
+        foreach ($a as $key => $value) {
+            $actual_styles_types[] = $value['brewStyleType'];
+        }
+
+        $_SESSION['bg_hero_image_types'] = array_unique($actual_styles_types);
+        
+    }
+
+    if ((!isset($_SESSION['bg_hero_image_display'])) || (empty($_SESSION['bg_hero_image_display']))) {
+
+        $_SESSION['bg_hero_image_display'] = array();
+
+        foreach ($bg_hero_images as $key => $value) {
+            $image_style_type = explode("-",$key);
+            if (in_array($image_style_type[0],$_SESSION['bg_hero_image_types'])) $_SESSION['bg_hero_image_display'][] = $value;
+        }
+
+    }
+    
+    $i = rand(0, count($_SESSION['bg_hero_image_display'])-1);
+    $hero_background = $_SESSION['bg_hero_image_display'][$i];
 
     include (DB.'sponsors.db.php');
 
@@ -138,7 +165,7 @@
     $forgot_password_card_body = "";
     $forgot_password_card_body .= "<p class=\"lead\">".$login_text_006."</p>";
     $forgot_password_card_body .= "<div class=\"form-floating mb-3\">";
-    $forgot_password_card_body .= "<input class=\"form-control form-control-lg mb-3\" name=\"forgot-user-name\" id=\"forgot-user-name\" type=\"text\" onkeyup=\"check_valid_email('".$base_url."','forgot-user-name','forgot-user-name-email-status')\" placeholder=\"".$label_email."\">";
+    $forgot_password_card_body .= "<input class=\"form-control form-control-lg mb-3\" name=\"forgot-user-name\" id=\"forgot-user-name\" type=\"text\" onkeyup=\"check_valid_email('".$ajax_url."','forgot-user-name','forgot-user-name-email-status')\" placeholder=\"".$label_email."\">";
     $forgot_password_card_body .= "<label for=\"login-user-name\">".$label_email."</label>";
     $forgot_password_card_body .= "<div class=\"invalid-feedback mb-4\">".$login_text_018."</div>";
     $forgot_password_card_body .= "</div>";
@@ -148,7 +175,7 @@
 
     $forgot_password_card_footer = "";
     $forgot_password_card_footer .= "<div class=\"d-grid gap-1 mx-auto mb-4\">";
-    $forgot_password_card_footer .= "<button id=\"forgot-user-name-check-button\" class=\"btn btn-block btn-lg btn-primary mb-3\" onclick=\"check_user_name_avail('".$base_url."','forgot-user-name','forgot-user-name-status','forgot_password')\">".$label_verify."<i class=\"fas fa-search ps-2\"></i></button>";
+    $forgot_password_card_footer .= "<button id=\"forgot-user-name-check-button\" class=\"btn btn-block btn-lg btn-primary mb-3\" onclick=\"check_user_name_avail('".$ajax_url."','forgot-user-name','forgot-user-name-status','forgot_password')\">".$label_verify."<i class=\"fas fa-search ps-2\"></i></button>";
     $forgot_password_card_footer .= "<button id=\"forgot-user-name-clear-button\" class=\"btn btn-block btn-lg btn-secondary\" onclick=\"forgot_password_clear_all()\">".$label_clear."<i class=\"fas fa-eraser ps-2\"></i></button>";
     $forgot_password_card_footer .= "</div>";
 
@@ -170,7 +197,7 @@
     <a href="#home"><i class="fas fa-2x fa-chevron-circle-up"></i></a>
 </div>
 
-<?php if ($section == "default") { ?>
+<?php if (($section == "default") || ($section == "past-winners")) { ?>
 <!-- Scroll indicator -->
 <div id="scroll-indicator" class="bounce text-center p-2 bg-white border-1 rounded bg-opacity-50">
     <div class="text-scroll text-purple"><strong><?php echo $label_scroll; ?></strong></div>
@@ -205,7 +232,7 @@
         $hero_inner = "";
 
         if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) {
-            $competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" style=\"min-width: 150px; max-width: 225px\" class=\"float-end me-5 d-none d-sm-none d-md-none d-lg-inline-block animate__animated animate__fadeInRight\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
+            $competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" style=\"min-width: 150px; max-width: 225px;\" class=\"float-end me-5 d-none d-sm-none d-md-none d-lg-inline-block animate__animated animate__fadeInRight\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
 
             $hero_inner .= "<div class=\"row align-items-center p-3 g-3\">";
             $hero_inner .= "<div class=\"col-12 col-lg-9\">";
@@ -248,7 +275,7 @@
 
 // Top-of-screen items
 // include (PUB.'alerts.pub.php'); 
-if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');
+// if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');
 if ($_SESSION['prefsUseMods'] == "Y") include (INCLUDES.'mods_top.inc.php');
     
 if (ENABLE_MARKDOWN) {
@@ -280,7 +307,7 @@ if (ENABLE_MARKDOWN) {
 
     <?php if ($section == "default") { ?>
 
-    <section id="at-a-glance" class="landing-page-section p-3">
+    <section id="at-a-glance" class="landing-page-section pb-3">
         <?php include (PUB.'default.pub.php'); ?>
     </section>
 
@@ -552,6 +579,7 @@ if ($logged_in) {
 
     <script type="text/javascript">
         var base_url = "<?php echo $base_url; ?>";
+        var ajax_url = "<?php echo $ajax_url; ?>";
         var section = "<?php echo $section; ?>";
         var action = "<?php echo $action; ?>";
         var go = "<?php echo $go; ?>";
@@ -605,14 +633,14 @@ if ($logged_in) {
             $(".count-two-minute-info").html(count_update_text);
             
             // Function to update all counters
-            function updateAllCounters(base_url) {
+            function updateAllCounters(ajax_url) {
 
                 // Initial counter call
-                fetchRecordCount(base_url,'entry-total-count','1','brewing');
+                fetchRecordCount(ajax_url,'entry-total-count','1','brewing');
                 
                 // Delay successive counter calls by 2 seconds.
                 setTimeout(function() {
-                    fetchRecordCount(base_url,'entry-paid-count','1','brewing','brewPaid','1');
+                    fetchRecordCount(ajax_url,'entry-paid-count','1','brewing','brewPaid','1');
                 }, 2000);
             
             }
@@ -622,7 +650,7 @@ if ($logged_in) {
 
             window.onload = function () {
                 interval_onload = setInterval(function() { 
-                    updateAllCounters(base_url); 
+                    updateAllCounters(ajax_url); 
                 }, 120000);
                 $(".count-two-minute-info").html(count_update_text);
             };
@@ -630,9 +658,9 @@ if ($logged_in) {
             window.onfocus = function () {
                 clearInterval(interval_onload);
                 clearInterval(interval_onfocus);
-                updateAllCounters(base_url);
+                updateAllCounters(ajax_url);
                 interval_onfocus = setInterval(function() { 
-                    updateAllCounters(base_url); 
+                    updateAllCounters(ajax_url); 
                 }, 120000);
                 $(".count-two-minute-info").text(count_update_text);
             };

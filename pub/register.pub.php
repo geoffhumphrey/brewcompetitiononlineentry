@@ -564,7 +564,7 @@ if ($go == "default") {  ?>
 
 
 	<div class="mb-3 row">
-	    <label for="security" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_question; ?></strong></label>
+	    <label for="security" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_security_question; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
 	        <?php echo $security; ?>
 	        <div class="help-block"><?php echo $register_text_018; ?></div>
@@ -577,7 +577,7 @@ if ($go == "default") {  ?>
 	</div>
 
 	<div class="mb-3 row">
-	    <label for="userQuestionAnswer" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_answer; ?></strong></label>
+	    <label for="userQuestionAnswer" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_security_answer; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
 	        <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['userQuestionAnswer']))) echo $_COOKIE['userQuestionAnswer']; ?>" required>
 	        <div class="help-block"><?php echo $register_text_024; ?></div>
@@ -589,14 +589,14 @@ if ($go == "default") {  ?>
 
   	<!-- Name -->
 	<div class="mb-3 row">
-	    <label for="brewerFirstName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_first_name; ?></strong></label>
+	    <label for="brewerFirstName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_first_name; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
 	        <input class="form-control" name="brewerFirstName" id="brewerFirstName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerFirstName']; ?>" required>
 	        <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_025; ?></div>
 	    </div>
 	</div>
 	<div class="mb-3 row">
-	    <label for="brewerLastName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_last_name; ?></strong></label>
+	    <label for="brewerLastName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_last_name; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
 	        <input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerLastName']; ?>" data-error="" required>
 	        <div class="help-block"><?php if ($_SESSION['prefsProEdition'] == 0) echo $brewer_text_000; ?></div>
@@ -604,12 +604,11 @@ if ($go == "default") {  ?>
 	    </div>
 	</div>
 
-
     <?php if ($view == "default") { ?>
 
 	<!-- Country of Residence -->
 	<div class="mb-3 row">
-	    <label for="brewerCountry" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_country; ?></strong></label>
+	    <label for="brewerCountry" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_country; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
 	            <select class="form-select mb-1 bootstrap-select" name="brewerCountry" id="brewerCountry" placeholder="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" required>
 	            <option value=""><?php echo $label_select_country; ?></option>
@@ -624,7 +623,7 @@ if ($go == "default") {  ?>
 
 	    <!-- Address -->
 	    <div class="mb-3 row">
-	        <label for="brewerAddress" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_street_address; ?></strong></label>
+	        <label for="brewerAddress" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_street_address; ?></strong></label>
 	        <div class="col-xs-12 col-sm-9 col-lg-10">
 	            <input class="form-control" name="brewerAddress" id="brewerAddress" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAddress']))) echo $_COOKIE['brewerAddress']; ?>" required>
 	            <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_028; ?></div>
@@ -633,7 +632,7 @@ if ($go == "default") {  ?>
 
 		<!-- City -->
 		<div class="mb-3 row">
-		    <label for="brewerCity" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_city; ?></strong></label>
+		    <label for="brewerCity" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_city; ?></strong></label>
 		    <div class="col-xs-12 col-sm-9 col-lg-10">
 		        <input class="form-control" name="brewerCity" id="brewerCity" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerCity']))) echo $_COOKIE['brewerCity']; ?>" required>
 		        <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_029; ?></div>
@@ -641,7 +640,7 @@ if ($go == "default") {  ?>
 		</div>
 
 		<div class="mb-3 row">
-			<label for="brewerState" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_state_province; ?></strong></label>
+			<label for="brewerState" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_state_province; ?></strong></label>
 			<div class="col-xs-12 col-sm-9 col-lg-10">
 				<div id="non-us-state">
 				    <input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" title="<?php echo $label_select_state; ?>" required>
@@ -673,7 +672,7 @@ if ($go == "default") {  ?>
 
 		<!-- Zip/Postal Code -->
 		<div class="mb-3 row">
-		    <label for="brewerZip" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_zip; ?></strong></label>
+		    <label for="brewerZip" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_zip; ?></strong></label>
 		    <div class="col-xs-12 col-sm-9 col-lg-10">
 		            <input class="form-control" name="brewerZip" id="brewerZip" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerZip']))) echo $_COOKIE['brewerZip']; ?>" required>
 		        <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_031; ?></div>
@@ -684,7 +683,7 @@ if ($go == "default") {  ?>
 
 	<!-- Phone Number -->
 	<div class="mb-3 row">
-	    <label for="brewerPhone1" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_phone_primary; ?></strong></label>
+	    <label for="brewerPhone1" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_phone_primary; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
 	        <input class="form-control" name="brewerPhone1" id="brewerPhone1" type="tel" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerPhone1']))) echo $_COOKIE['brewerPhone1']; ?>" required>
 	        <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_032; ?></div>
@@ -693,7 +692,7 @@ if ($go == "default") {  ?>
 
 	<!--
 	<div class="mb-3 row">
-	    <label for="brewerPhone2" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_phone_secondary; ?></strong></label>
+	    <label for="brewerPhone2" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant"))  echo $label_contact." "; echo $label_phone_secondary; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
 	        <input class="form-control" name="brewerPhone2" id="brewerPhone2" type="tel" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerPhone2']))) echo $_COOKIE['brewerPhone2']; ?>">
 	    </div>

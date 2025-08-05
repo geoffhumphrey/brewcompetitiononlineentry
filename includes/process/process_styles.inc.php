@@ -91,17 +91,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					*/
 
-					$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE id='%s'", $styles_db_table, $style_id);
+					$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $style_id);
 					$styles_default = mysqli_query($connection,$query_styles_default);
 					$row_styles_default = mysqli_fetch_assoc($styles_default);
 					$totalRows_styles_default = mysqli_num_rows($styles_default);
 
 					if ($row_styles_default) {
 						$update_selected_styles[$row_styles_default['id']] = array(
+							'id' => $row_styles_default['id'],
 							'brewStyle' => sterilize($row_styles_default['brewStyle']),
 							'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
 							'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
-							'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion'])
+							'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion']),
+                            'brewStyleType' => $row_styles_default['brewStyleType']							
 						);
 					}
 
@@ -251,6 +253,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if (($action == "add") || ($action == "edit")) {
 
+		unset($_SESSION['bg_hero_image_types']);
+		unset($_SESSION['bg_hero_image_display']);
+
 		if ($_POST['brewStyleActive'] == "Y") {
 
 			// If adding, look up latest id
@@ -268,6 +273,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			
 			$update_selected_styles = json_decode($_SESSION['prefsSelectedStyles'], true);
 			$update_selected_styles[$id] = array(
+				'id' => $id,
 				'brewStyle' => $purifier->purify($_POST['brewStyle']),
 				'brewStyleGroup' => sterilize($_POST['brewStyleGroup']),
 				'brewStyleNum' => sterilize($_POST['brewStyleNum']),

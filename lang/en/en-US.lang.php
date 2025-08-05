@@ -1283,6 +1283,7 @@ $header_text_113 = "You can only edit your own account information.";
 $header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Participants > Manage Participants.";
 $header_text_115 = "Results are published.";
 $header_text_116 = "If you do not receive the email within a reasonable amount of time, check your email account's SPAM folder. If it is not there, contact a competition official or site administrator to reset your password for you.";
+if (!$mail_use_smtp) $header_text_116 .= " <strong>Inform the competition official that sending SMTP emails is not enabled and/or not functioning properly.</strong>";
 $alert_text_082 = "Since you signed up as a judge or steward, you are not allowed to add entries to your account. Only representatives of an organization are able to add entries to their accounts.";
 $alert_text_083 = "Adding and editing of entries is not available.";
 $alert_text_084 = "As an Administrator, you can add an entry to an organization's account by using the &quot;Add Entry For...&quot; dropdown menu on the Admin &gt; Entries and Participants &gt; Manage Entries page.";
@@ -2199,8 +2200,9 @@ $styles_entry_text_C4B_2025 = "Entrants MUST specify both carbonation and sweetn
 $styles_entry_text_C4C_2025 = "Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level.";
 $styles_entry_text_C4D_2025 = "Entrants MUST specify the ingredients or processes that make the entry an experimental perry. Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify a base style, or provide a more detailed description of the concept.";
 
-$login_text_028 = "User name not found. Please check it and try again.";
+$login_text_028 = "The user name you entered was not found. Please check it and try again.";
 $login_text_029 = "If you cannot remember your user name, contact an administrator of this site.";
+$login_text_030 = "Email provided is not valid. Please check it and try again.";
 
 $entry_info_text_056 = "Limit reached. No more entries accepted.";
 $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indicates that the style's entry limit has been reached and no more entries of that style will be accepted.";

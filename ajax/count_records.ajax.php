@@ -1,19 +1,17 @@
 <?php
 
 ob_start();
-
 // Set headers to prevent caching and specify JSON response
 header('Content-Type: application/json');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 header('Pragma: no-cache');
 header('Expires: 0');
-
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
-
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
 error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
+
 
 $p1 = "default";
 $c1 = "default";

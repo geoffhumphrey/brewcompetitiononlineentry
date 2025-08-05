@@ -135,14 +135,14 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 <section id="participant-info">
     <!-- Participant Name -->
     <div class="mb-3 row">
-        <label for="brewerFirstName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_first_name; ?></strong></label>
+        <label for="brewerFirstName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_first_name; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" <?php if (($_SESSION['prefsProEdition'] == 0) && ($psort == "default")) echo "autofocus"; ?> required>
             <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_024; ?></div>
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="brewerLastName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_last_name; ?></strong></label>
+        <label for="brewerLastName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_last_name; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="" required>
             <div class="help-block"><?php if ($_SESSION['prefsProEdition'] == 0) echo $brewer_text_000; ?></div>
@@ -166,7 +166,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     </div>
     <div id="security-question-change">
         <div class="mb-3 row">
-            <label for="security" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_question; ?></strong></label>
+            <label for="security" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_security_question; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
                 <?php echo $security; ?>
                 <div class="help-block"><?php echo $brewer_text_001; ?></div>
@@ -178,7 +178,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
             <div class="help-block invalid-feedback text-danger"></div>
         </div>
         <div class="mb-3 row">
-            <label for="userQuestionAnswer" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_security_answer; ?></strong></label>
+            <label for="userQuestionAnswer" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_security_answer; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
                 <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>">
                 <div class="help-block"><?php echo $register_text_050; ?></div>
@@ -190,7 +190,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!-- Phone Number -->
     <div class="mb-3 row">
-        <label for="brewerPhone1" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_phone_primary; ?></strong></label>
+        <label for="brewerPhone1" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_phone_primary; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <input class="form-control" id="brewerPhone1" name="brewerPhone1" type="text" value="<?php if ($action == "edit") echo $phone1; ?>" placeholder="" required>
             <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_026; ?></div>
@@ -199,7 +199,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!--
     <div class="mb-3 row">
-        <label for="brewerPhone2" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_phone_secondary; ?></strong></label>
+        <label for="brewerPhone2" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_phone_secondary; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <input class="form-control" id="brewerPhone2" name="brewerPhone2" type="text" value="<?php if ($action == "edit") echo $phone2; ?>" placeholder="">
         </div>
@@ -208,7 +208,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!-- Country of Residence -->
     <div class="mb-3 row">
-        <label for="brewerCountry" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_country; ?></strong></label>
+        <label for="brewerCountry" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_country; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
                 <select class="form-select mb-1 bootstrap-select" name="brewerCountry" id="brewerCountry" placeholder="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" required>
                 <option value=""><?php echo $label_select_country; ?></option>
@@ -220,7 +220,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!-- Address -->
     <div class="mb-3 row">
-        <label for="brewerAddress" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_street_address; ?></strong></label>
+        <label for="brewerAddress" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_street_address; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <input class="form-control" id="brewerAddress" name="brewerAddress" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" placeholder="" required>
             <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_027; ?></div>
@@ -229,7 +229,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!-- City -->
     <div class="mb-3 row">
-        <label for="brewerCity" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_city; ?></strong></label>
+        <label for="brewerCity" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_city; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <input class="form-control" id="brewerCity" name="brewerCity" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" placeholder="" required>
             <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_028; ?></div>
@@ -238,7 +238,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
     <!-- State or Province -->
     <div class="mb-3 row">
-        <label for="brewerState" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_state_province; ?></strong></label>
+        <label for="brewerState" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_state_province; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             
             <div id="non-us-state">
@@ -271,7 +271,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     
     <!-- Zip/Postal Code -->
     <div class="mb-3 row">
-        <label for="brewerZip" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_zip; ?></strong></label>
+        <label for="brewerZip" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_zip; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
                 <input class="form-control" id="brewerZip" name="brewerZip" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerZip']; ?>" placeholder="" required>
             <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_030; ?></div>

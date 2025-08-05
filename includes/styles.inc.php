@@ -411,7 +411,7 @@ $style_sets = array(
 	array(
 		"id" => 4,
 		"style_set_name" => "AABC",
-		"style_set_long_name" => "Australian Amateur Brewing Championship 2019",
+		"style_set_long_name" => "Australian Amateur Brewing Championship 2019 [Deprecated]",
 		"style_set_short_name" => "AABC 2019",
 		"style_set_description" => "",
 		"style_set_display_separator" => ".",
@@ -484,6 +484,43 @@ $style_sets = array(
 
 	array(
 		"id" => 6,
+		"style_set_name" => "AABC2025",
+		"style_set_long_name" => "Australian Amateur Brewing Championship 2025",
+		"style_set_short_name" => "AABC 2025",
+		"style_set_description" => "",
+		"style_set_display_separator" => ".",
+		"style_set_system_separator" => "-",
+		"style_set_sub_style_method" => "1",
+		"style_set_categories" => array(
+			"01" => "Low Alcohol",
+			"02" => "Pale Lager",
+			"03" => "Amber and Dark Lager",
+			"04" => "Pale Ale",
+			"05" => "American Pale Ale",
+			"06" => "IPA",
+			"07" => "Specialty IPA",
+			"08" => "Amber Ale",
+			"09" => "Brown Ale",
+			"10" => "Porter",
+			"11" => "Stout",
+			"12" => "Strong Stout",
+			"13" => "Wheat and Rye Beer",
+			"14" => "Belgian Ale",
+			"15" => "Strong Ale and Lager",
+			"16" => "Sour and Wild Ale",
+			"17" => "Fruit and Spice Beer",
+			"18" => "Specialty Beer",
+			"19" => "Mead",
+			"20" => "Cider and Perry"
+		),
+		"style_set_beer_end" => "18",
+		"style_set_mead" => array("19"),
+		"style_set_cider" => array("20"),
+		"style_set_category_end" => "49"
+	),
+
+	array(
+		"id" => 7,
 		"style_set_name" => "NWCiderCup",
 		"style_set_long_name" => "Northwest Cider Cup",
 		"style_set_short_name" => "NW Cider Cup",
@@ -506,7 +543,7 @@ $style_sets = array(
 		"style_set_mead" => array(),
 		"style_set_cider" => array("C1","C2","C3","C4","C5","C6","C7","C8","C9"),
 		"style_set_category_end" => "49"
-	),
+	)
 
 );
 ?>

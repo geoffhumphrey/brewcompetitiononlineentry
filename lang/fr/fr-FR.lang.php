@@ -1282,6 +1282,7 @@ $header_text_113 = "Vous ne pouvez modifier que les informations de votre propre
 $header_text_114 = "En tant qu'administrateur, vous pouvez modifier les informations du compte d'un utilisateur via Administration > Inscriptions et Participants > Gérer les Participants.";
 $header_text_115 = "Les résultats ont été publiés.";
 $header_text_116 = "Si vous ne recevez pas l'e-mail dans un délai raisonnable, vérifiez le dossier SPAM de votre compte e-mail. S'il n'est pas là, contactez un responsable de la compétition ou un administrateur du site pour réinitialiser votre mot de passe.";
+if (!$mail_use_smtp) $header_text_116 .= " <strong>Informez le responsable du concours que l'envoi d'e-mails SMTP n'est pas activé et/ou ne fonctionne pas correctement.</strong>";
 $alert_text_082 = "Étant donné que vous vous êtes inscrit en tant que juge ou steward, vous n'êtes pas autorisé à ajouter des inscriptions à votre compte. Seuls les représentants d'une organisation peuvent ajouter des inscriptions à leur compte.";
 $alert_text_083 = "L'ajout et la modification des inscriptions ne sont pas disponibles.";
 $alert_text_084 = "En tant qu'administrateur, vous pouvez ajouter une inscription au compte d'une organisation en utilisant le menu déroulant \"Ajouter une inscription pour...\" sur la page Admin > Inscriptions et Participants > Gérer les Inscriptions.";

@@ -16,7 +16,7 @@ include (INCLUDES.'scrubber.inc.php');
 include (LIB.'common.lib.php');
 include (LIB.'update.lib.php');
 require (DB.'common.db.php');
-include (LANG.'language.lang.php');
+include (LANG.'language.lang.php'); 
 require (LIB.'process.lib.php');
 
 $mail_use_smtp = FALSE;

@@ -1,9 +1,8 @@
 <?php
-ob_start();
 
+ob_start();
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
-
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
 error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
@@ -356,11 +355,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 				} // end else
 				
 			} while($row_table = mysqli_fetch_assoc($table));
-
-			$update_table = $prefix."judging_assignments";
-			$data = array('assignPlanning' => 0);
-			$result = $db_conn->update ($update_table, $data);
-			if (!$result) $error_count += 1;
 
 		} // end if (!empty($flight_entries_arr))
 

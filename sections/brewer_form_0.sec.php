@@ -289,7 +289,6 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
 <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($entrant_type_brewery))) { ?>
 <section id="entry-delivery"> 
-
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
         <label for="brewerDropOff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_drop_off; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

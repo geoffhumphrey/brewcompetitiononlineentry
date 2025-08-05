@@ -1058,7 +1058,7 @@ if ($action == "edit") {
 }
 ?>
 <div class="bcoem-admin-element hidden-print">
-<?php if (($action == "add") && (!$add_entry_disable)) { ?>
+<?php if (($action == "add") && (!$add_entry_disable) && ($bid == "default")) { ?>
 <div class="form-group">
 	<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-3 col-xs-12">
 		<label class="checkbox-inline"><input type="checkbox" name="return-to-add" value="1"> <?php echo $brew_text_055; ?></label>

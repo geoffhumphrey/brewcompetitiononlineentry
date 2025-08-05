@@ -1436,7 +1436,7 @@ if ($queued == "N") { // Non-queued judging
 	// Build the flights DropDown
 
 	$hj_add = "head_judge_add('".$bid."','assign-flight-".$random."','".$tid."')";
-	$save_column = "save_column('".$base_url."','assignFlight','judging_assignments','".$bid."','".$tid."','".$role."','".$round."','".$random."','assign-flight-".$location."')";
+	$save_column = "save_column('".$ajax_url."','assignFlight','judging_assignments','".$bid."','".$tid."','".$role."','".$round."','".$random."','assign-flight-".$location."')";
 
 	$r .= sprintf("\n\n<select id=\"assign-flight-%s\" class=\"selectpicker assign-flight\" name=\"assignFlight\" %s onchange=\"%s;%s;\">",$random, $disabled, $hj_add, $save_column);
 

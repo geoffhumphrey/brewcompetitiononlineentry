@@ -35,8 +35,17 @@ if ($logged_in) {
 	else $entry_panel_display = "panel-default";
 
 	$update_text_id = "";
-	if ($entry_window_open == 1) $update_text_id = "admin-dashboard-entries-count-updated";
+	if ($entry_window_open == 1) $update_text_id = "admin-dashboard-entries-paid-received-count-updated";
 	if (($judging_started) && (!$show_presentation)) $update_text_id = "admin-dashboard-evaluation-count-total-updated";
+
+	// Buttons - above sidebar
+	$admin_sidebar_header .= "<div class=\"bcoem-admin-element\">"; 
+	$admin_sidebar_header .= "<button id=\"dashboard-tour-button\" onclick=\"driverObjDashTour.drive()\" class=\"btn btn-dark btn-sm btn-block\">Take a Tour of the Admin Dashboard <i class=\"fa fa-directions fa-lg\"></i></button>";
+	if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) {
+    	$admin_sidebar_header .= "<button type=\"button\" class=\"btn btn-dark btn-sm btn-block\" data-toggle=\"modal\" data-target=\"#updateSummary\">".$current_version_display." Update Summary". $summary_button_errors. " <i class=\"".$summary_button_icon." fa-lg\"></i></button>";
+	}
+	$admin_sidebar_header .= "<a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Like the software? Buy the author a beer via PayPal!\" class=\"btn btn-dark btn-sm btn-block\" href=\"https://www.brewingcompetitions.com/donation\" target=\"_blank\">Donate <span class=\"fa fa-lg fa-paypal\"></span></a>";
+	$admin_sidebar_header .= "</div>";
 
 	// Competition Status Panel
 	$admin_sidebar_header .= "<div class=\"panel panel-info\">";
@@ -44,14 +53,16 @@ if ($logged_in) {
 
 	$admin_sidebar_header .= "<h4 style=\"margin: 0px; padding-bottom: 5px;\">Competition Status<span class=\"fa fa-2x fa-bar-chart text-info pull-right\"></span></h4>";
 	$admin_sidebar_header .= "<p class=\"small\" style=\"margin: 0px;\"><span class=\"small text-muted\">Updated <span id=\"".$update_text_id."\">".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></span></p>";
-	$admin_sidebar_header .= "<p class=\"updates-indicators small\" style=\"margin: 0px;\"><small><i class=\"fa fa-xs fa-circle text-success\"></i></small> <span class=\"small text-muted\"><span id=\"count-two-minute-info\"></span></span></p>";
-
-	$admin_sidebar_header .= "<div class=\"updates-indicators small\" style=\"margin-top: 5px;\">";
-	$admin_sidebar_header .= "<span class=\"small text-muted\" id=\"resume-updates\"><a href=\"#\" class=\"hide-loader\" onclick=\"resumeUpdates()\">Resume Updates</a></span>";
-	$admin_sidebar_header .= "<span class=\"small text-muted\" id=\"stop-updates\"><a href=\"#\" class=\"hide-loader\" onclick=\"stopUpdates()\">Pause Updates</a> <a href=\"#\" class=\"hide-loader pull-right\" onclick=\"resumeUpdates()\">Update Now</a></span></div>";
+	
+	if ($entry_window_open == 1) {
+		$admin_sidebar_header .= "<p class=\"updates-indicators small\" style=\"margin: 0px;\"><small><i class=\"fa fa-xs fa-circle text-success\"></i></small> <span class=\"small text-muted\"><span id=\"count-two-minute-info\">".$brew_text_061."</span></span></p>";
+		$admin_sidebar_header .= "<div class=\"updates-indicators small\" style=\"margin-top: 5px;\">";
+		$admin_sidebar_header .= "<span class=\"small text-muted\" id=\"resume-updates\"><a href=\"#\" class=\"hide-loader\" onclick=\"resumeUpdates()\">Resume Updates</a></span>";
+		$admin_sidebar_header .= "<span class=\"small text-muted\" id=\"stop-updates\"><a href=\"#\" class=\"hide-loader\" onclick=\"stopUpdates()\">Pause Updates</a> <a href=\"#\" class=\"hide-loader pull-right\" onclick=\"resumeUpdates()\">Update Now</a></span></div>";
+	}
+	
 	$admin_sidebar_header .= "</div>";
-	$admin_sidebar_body .= "<div class=\"panel-body\">";
-
+	$admin_sidebar_body .= "<div class=\"panel-body small\">";
 	$admin_sidebar_body .= "<div class=\"bcoem-sidebar-panel\">";
 	$admin_sidebar_body .= "<strong class=\"text-info\">Confirmed Entries</strong> <i id=\"icon-sync-entries-count\" class=\"fa fa-xs fa-sync fa-spin ms-1 hidden\"></i>";
 	$admin_sidebar_body .= "<span class=\"pull-right\"><small><i class=\"fa fa-xs fa-circle text-success entry-update-indicator\"></i></small> <a href=\"".$base_url."index.php?section=admin&amp;go=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all entries\"><span id=\"admin-dashboard-entries-count\">".$totalRows_log_confirmed."</span></a>";
@@ -86,7 +97,7 @@ if ($logged_in) {
 
 	$admin_sidebar_body .= "<div class=\"bcoem-sidebar-panel\">";
 	$admin_sidebar_body .= "<strong class=\"text-info\">Entry Counts</strong>";
-	$admin_sidebar_body .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=count_by_style\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by style\"><small>Style</small></a> / <a href=\"".$base_url."index.php?section=admin&amp;go=count_by_substyle\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by sub-style\"><small>Sub-Style</small></a></span>";
+	$admin_sidebar_body .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=count_by_style\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by style\">Style</a> / <a href=\"".$base_url."index.php?section=admin&amp;go=count_by_substyle\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by sub-style\">Sub-Style</a></span>";
 	$admin_sidebar_body .= "</div>";
 
 	$admin_sidebar_body .= "<div class=\"bcoem-sidebar-panel\">";
@@ -208,14 +219,13 @@ if ($logged_in) {
 	else $admin_sidebar_body .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$admin_sidebar_body .= "</div>";
 
-	$admin_sidebar_body .= "<div class=\"bcoem-sidebar-panel\" style=\"margin-top: 10px;\"><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Like the software? Buy the author a beer via PayPal!\" class=\"btn btn-small btn-default btn-block\" href=\"https://www.brewingcompetitions.com/donation\" target=\"_blank\">Donate <span class=\"fa fa-lg fa-cc-paypal\"></span></a></div>";
-
-	$admin_sidebar_body .= "<div class=\"bcoem-sidebar-panel\" style=\"margin-top: 10px; margin-bottom: 0px;\">";
-	$admin_sidebar_body .= "<em><span class=\"text-muted\" style=\"font-size:.75em;\">".$server_environ_sidebar."</span></em>";
+	$admin_sidebar_body .= "<div class=\"small\" style=\"margin-top: 10px; margin-bottom: 0px;\">";
+	$admin_sidebar_body .= "<em><span class=\"text-muted\">".$server_environ_sidebar."</span></em>";
 	$admin_sidebar_body .= "</div>";
 
 	$admin_sidebar_body .= "</div>";
 	$admin_sidebar_body .= "</div>";
+
 }
 
 // --------------------------------------------------------------
@@ -235,19 +245,19 @@ echo $admin_sidebar_body;
 	var interval_eval_onfocus = null;
 
 	var base_url = "<?php echo $base_url; ?>";
+	var ajax_url = "<?php echo $ajax_url; ?>";
 	var count_update_text = "<?php echo $brew_text_061; ?>";
     var count_paused_text = "<?php echo $brew_text_062; ?>";
     var count_paused_manually_text = "<?php echo $brew_text_064; ?>";
-    var base_url = "<?php echo $base_url; ?>";
-	var entry_open = "<?php echo $entry_window_open; ?>";
+    var entry_open = "<?php echo $entry_window_open; ?>";
 	var judging_started = "<?php if ($judging_started) echo "1"; else echo "0"; ?>";;
 	var results_published = "<?php if ($show_presentation) echo "1"; else echo "0"; ?>";
 
 	$("#resume-updates").hide();
 
-    function updateEntryCounters(base_url) {
+    function updateEntryCounters(ajax_url) {
 
-        fetchRecordCount(base_url,'admin-dashboard-entries-count','0','brewing','brewConfirmed','1');
+        fetchRecordCount(ajax_url,'admin-dashboard-entries-count','0','brewing','brewConfirmed','1');
         
         $("#icon-sync-entries-count").removeClass('hidden');
         $("#icon-sync-entries-count").fadeIn();
@@ -258,7 +268,7 @@ echo $admin_sidebar_body;
         
         setTimeout(function() {
             
-            fetchRecordCount(base_url,'admin-dashboard-entries-unconfirmed-count','0','brewing','brewConfirmed','2');
+            fetchRecordCount(ajax_url,'admin-dashboard-entries-unconfirmed-count','0','brewing','brewConfirmed','2');
 	        
 	        $("#icon-sync-entries-unconfirmed-count").removeClass('hidden');
 	        $("#icon-sync-entries-unconfirmed-count").fadeIn();
@@ -271,7 +281,7 @@ echo $admin_sidebar_body;
 
         setTimeout(function() {
             
-            fetchRecordCount(base_url,'admin-dashboard-entries-paid-count','0','brewing','brewPaid','1');
+            fetchRecordCount(ajax_url,'admin-dashboard-entries-paid-count','0','brewing','brewPaid','1');
 	        
 	        $("#icon-sync-entries-paid-count").removeClass('hidden');
 	        $("#icon-sync-entries-paid-count").fadeIn();
@@ -284,7 +294,7 @@ echo $admin_sidebar_body;
 
         setTimeout(function() {
             
-            fetchRecordCount(base_url,'admin-dashboard-entries-paid-received-count','0','brewing','brewPaid','1','brewReceived','1');
+            fetchRecordCount(ajax_url,'admin-dashboard-entries-paid-received-count','0','brewing','brewPaid','1','brewReceived','1');
 	        
 	        $("#icon-sync-entries-paid-received-count").removeClass('hidden');
 	        $("#icon-sync-entries-paid-received-count").fadeIn();
@@ -297,12 +307,12 @@ echo $admin_sidebar_body;
     
     }
 
-    function updateEvalCounters(base_url) {
+    function updateEvalCounters(ajax_url) {
 
-        fetchRecordCount(base_url,'admin-dashboard-evaluation-count-total','0','evaluation');
+        fetchRecordCount(ajax_url,'admin-dashboard-evaluation-count-total','0','evaluation');
 
         setTimeout(function() {
-        	fetchRecordCount(base_url,'admin-dashboard-evaluation-count','0','evaluation','eid','1');
+        	fetchRecordCount(ajax_url,'admin-dashboard-evaluation-count','0','evaluation','eid','1');
         }, 1000)
 
         $("#icon-sync-evaluation-count-total").removeClass('hidden');
@@ -314,9 +324,9 @@ echo $admin_sidebar_body;
 
     }
 
-	function updateFees(base_url) {
+	function updateFees(ajax_url) {
 		
-		fetchRecordCount(base_url,'admin-dashboard-total-fees','0','brewing','total-fees','1');
+		fetchRecordCount(ajax_url,'admin-dashboard-total-fees','0','brewing','total-fees','1');
        
         $("#icon-sync-total-fees").removeClass('hidden');
         $("#icon-sync-total-fees").fadeIn();
@@ -325,7 +335,7 @@ echo $admin_sidebar_body;
             $("#icon-sync-total-fees").fadeOut();
         }, 5000);
 		
-		fetchRecordCount(base_url,'admin-dashboard-total-fees-paid','0','brewing','total-fees-paid','1');
+		fetchRecordCount(ajax_url,'admin-dashboard-total-fees-paid','0','brewing','total-fees-paid','1');
         
         $("#icon-sync-total-fees-paid").removeClass('hidden');
         $("#icon-sync-total-fees-paid").fadeIn();
@@ -352,30 +362,22 @@ echo $admin_sidebar_body;
 
     function resumeUpdates() {
         
-        if (entry_open == 1) {
-        	
-        	$(".eval-update-indicator").hide();
-        	
-        	updateEntryCounters(base_url); 
-	        updateFees(base_url);
-        	
+        if (entry_open == 1) {        	
+        	$(".eval-update-indicator").hide();        	
+        	updateEntryCounters(ajax_url); 
+	        updateFees(ajax_url);        	
         	interval_entry_onfocus = setInterval(function() { 
-	            updateEntryCounters(base_url); 
-	            updateFees(base_url);
+	            updateEntryCounters(ajax_url); 
+	            updateFees(ajax_url);
 	        }, 120000);
-
 	    }
 
-		if ((judging_started == 1) && (results_published == 0)) {
-			
-			$(".entry-update-indicator").hide();
-			
-			updateEvalCounters(base_url); 
-	        
+		if ((judging_started == 1) && (results_published == 0)) {			
+			$(".entry-update-indicator").hide();			
+			updateEvalCounters(ajax_url); 	        
 	        interval_eval_onfocus = setInterval(function() { 
-	            updateEvalCounters(base_url); 
+	            updateEvalCounters(ajax_url); 
 	        }, 120000);
-
 	    }
 
     	$("#stop-updates").show();
@@ -395,73 +397,67 @@ echo $admin_sidebar_body;
 	    window.onload = function () {
 	    	
 	        if (entry_open == 1) {
-	        	
 	        	$(".eval-update-indicator").hide();
-	        	
 	        	interval_entry_onload = setInterval(function() { 
-		            updateEntryCounters(base_url); 
-		            updateFees(base_url);
+		            updateEntryCounters(ajax_url); 
+		            updateFees(ajax_url);
 		        }, 120000);
-
 		        $("#count-two-minute-info").text(count_update_text);
 		    }
 
-			if ((judging_started == 1) && (results_published == 0)) {
-				
+		    else {
+		    	$(".entry-update-indicator").hide();
+		    }
+
+			if ((judging_started == 1) && (results_published == 0)) {	
 				$(".entry-update-indicator").hide();
-		        
 		        interval_eval_onload = setInterval(function() { 
-		            updateEvalCounters(base_url); 
+		            updateEvalCounters(ajax_url); 
 		        }, 120000);
-
 		        $("#count-two-minute-info").text(count_update_text);
 		    }
-	    
+
 	    };
 	    
 	    window.onfocus = function () {
-	        
+
 	        clearInterval(interval_entry_onload);
 	        clearInterval(interval_eval_onload);
 	        clearInterval(interval_entry_onfocus);
 	        clearInterval(interval_eval_onfocus);
 	        
-	        if (entry_open == 1) {
-	        	
-	        	updateEntryCounters(base_url);
-	        	updateFees(base_url);
-		        
+	        if (entry_open == 1) {	        	
+	        	updateEntryCounters(ajax_url);
+	        	updateFees(ajax_url);		        
 		        interval_entry_onfocus = setInterval(function() { 
-		            updateEntryCounters(base_url); 
-		            updateFees(base_url);
+		            updateEntryCounters(ajax_url); 
+		            updateFees(ajax_url);
 		        }, 120000);
-
-		        $("#count-two-minute-info").text(count_update_text);
-		    
+		        $("#count-two-minute-info").text(count_update_text);		    
 		    }
 
-		    if ((judging_started == 1) && (results_published == 0)) {
-	        	
-	        	updateEvalCounters(base_url);
-		        
-		        interval_eval_onfocus = setInterval(function() { 
-		            updateEvalCounters(base_url); 
-		        }, 120000);
+		    else {
+		    	$(".entry-update-indicator").hide();
+		    }
 
-		        $("#count-two-minute-info").text(count_update_text);
-		    
+		    if ((judging_started == 1) && (results_published == 0)) {	        	
+	        	updateEvalCounters(ajax_url);
+		        interval_eval_onfocus = setInterval(function() { 
+		            updateEvalCounters(ajax_url); 
+		        }, 120000);
+		        $("#count-two-minute-info").text(count_update_text);		  
 		    }
 
 	    };
 
 	    window.onblur = function () {
-	        
+
 	        clearInterval(interval_entry_onload);
 	        clearInterval(interval_eval_onload);
 	        clearInterval(interval_entry_onfocus);
 	        clearInterval(interval_eval_onfocus);
 	        $("#count-two-minute-info").text(count_paused_text);
-	    
+	            
 	    };
 	
 	});

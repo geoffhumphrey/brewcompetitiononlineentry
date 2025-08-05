@@ -37,7 +37,8 @@ foreach ($eval_scores as $key => $value) {
 
 				// Style Info
 				$style_otf = style_number_const($row_entry['brewCategorySort'],$row_entry['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-	        	$style_display_otf = $style_otf.": ".$row_entry['brewStyle'];
+	        	if ($_SESSION['prefsStyleSet'] == "BA") $style_display_otf = $row_entry['brewStyle'];
+	        	else $style_display_otf = $style_otf.": ".$row_entry['brewStyle'];
 
 				// Get recorded evaluation entries
 				$query_evals = sprintf("SELECT evalFinalScore FROM %s WHERE eid='%s'", $prefix."evaluation", $value['eid']);
@@ -96,7 +97,7 @@ foreach ($eval_scores as $key => $value) {
 	        			$actions_otf .= "<a class=\"btn btn-sm btn-dark\" href=\"".$edit_link."\">".$label_edit;
 		        		$actions_otf .= "</a>";
 	        		}
-	        		$actions_otf .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-secondary hide-loader modal-window-link\" href=\"".$view_link."\">".$label_view_my_eval;
+	        		$actions_otf .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-secondary hide-loader modal-window-link\" href=\"".$view_link."\">".$label_view;
 	        		$actions_otf .= "</a>";
 	        		$actions_otf .= "</div>";
 
@@ -104,7 +105,7 @@ foreach ($eval_scores as $key => $value) {
 	        	
 	        	else {
 	        		$actions_otf .= "<div class=\"d-grid gap-1 mb-2\">";
-	        		$actions_otf = "<a data-fancybox data-type=\"iframe\" class=\"btn btn-block btn-sm btn-secondary hide-loader modal-window-link\" href=\"".$view_link."\">".$label_view_my_eval;
+	        		$actions_otf = "<a data-fancybox data-type=\"iframe\" class=\"btn btn-block btn-sm btn-secondary hide-loader modal-window-link\" href=\"".$view_link."\">".$label_view;
 	        		$actions_otf .= "</a>";
 	        		$actions_otf .= "</div>";
 	        	}

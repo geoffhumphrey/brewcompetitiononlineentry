@@ -1,9 +1,9 @@
 <?php
+
 ob_start();
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
 include (LIB.'admin.lib.php');
-
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
 error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.

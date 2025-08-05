@@ -33,8 +33,9 @@ $page_info1 .= "<ul class=\"list-unstyled m-0 p-0\">";
 if (!empty($_SESSION['jPrefsBottleNum'])) $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
 $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entry_edit_deadline,$entry_edit_deadline_date);
 if (((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserEntryLimitDates']))) && (!$comp_entry_limit) && (!$comp_paid_entry_limit) && (!$disable_pay)) {
-	
-	$page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entries_remaining,$remaining_entries);
+
+	if ($remaining_entries == 0) $page_info1 .= sprintf("<li><strong>%s:</strong> %s <div style=\"padding: .6em\" class=\"badge bg-warning text-dark fw-semibold lh-sm text-wrap\">%s</div></li>",$label_entries_remaining,$remaining_entries,$alert_text_031);
+	else $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entries_remaining,$remaining_entries);
 
 	if ($incremental) {
 
@@ -353,7 +354,7 @@ if ($totalRows_log > 0) {
 		$entry_output .= "</div>";
 
 		if (!empty($allergen_info)) {
-			$entry_output .= "<div style=\"padding: .6em\" class=\"badge text-bg-danger\">";
+			$entry_output .= "<div style=\"padding: .6em\" class=\"badge text-bg-danger fw-semibold lh-sm text-wrap\">";
 			$entry_output .= $allergen_info;
 	    	$entry_output .= "</div>";
 		}

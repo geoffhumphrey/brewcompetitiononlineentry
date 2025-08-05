@@ -1,16 +1,4 @@
-<?php
-
-/*
-// Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-*/
-
-if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
+<?php if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
 
     if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { 
         $judge_checked = FALSE;

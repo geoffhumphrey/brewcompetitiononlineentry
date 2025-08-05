@@ -101,6 +101,7 @@ else {
 
 }
 
+
 if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2) && ($section !="past-winners")) {
 
 	if ($_SESSION['prefsDisplayWinners'] == "Y") {

@@ -7,16 +7,138 @@ $non_judging_count = 0;
 
 if ($_SESSION['prefsEval'] == 1) {
 
-    if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
+    $judging_dates = array();
+    $judging_earliest_date = "";
+    $judging_latest_date = "";
+
+    // Check whether any judging sessions have been defined. 
+    // If so, loop through and find the earliest and the latest dates.
+    $query_judging_locations = sprintf("SELECT id, judgingDate, judgingDateEnd FROM %s WHERE judgingLocType <= '1';", $prefix."judging_locations");
+    $judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
+    $row_judging_locations = mysqli_fetch_assoc($judging_locations);
+    $totalRows_judging_locations = mysqli_num_rows($judging_locations);
+
+    if ($totalRows_judging_locations > 0) {
+
+        do {
+
+            if (!empty($row_judging_locations['judgingDate'])) $judging_dates[] = $row_judging_locations['judgingDate'];
+            if (!empty($row_judging_locations['judgingDateEnd'])) $judging_dates[] = $row_judging_locations['judgingDateEnd'];
+
+
+        } while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+
+        $judging_earliest_date = min($judging_dates);
+        if ((max($judging_dates) > $judging_earliest_date)) $judging_latest_date = max($judging_dates);
+
+    }
+
+    // If no session vars exist for open and/or closed dates, generate
+
+    if (!isset($_SESSION['jPrefsJudgingOpen'])) {
+
+        if (empty($judging_earliest_date)) $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+        else $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_earliest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+
+    }
+
+    if (!isset($_SESSION['jPrefsJudgingClosed'])) {
+
+        if (empty($judging_latest_date)) $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], (time()+86400), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); // Close one day after today
+        else $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_latest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+
+    }
+
+    // Get or generate open date
+
+    if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) {
+
+        $j_open_date = $_SESSION['jPrefsJudgingOpen'];
+        if ((!empty($judging_earliest_date)) && ($judging_earliest_date < $_SESSION['jPrefsJudgingOpen'])) $j_open_date = $judging_earliest_date;
+        $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $j_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+    
+    }
+
     else {
+
+        if (!empty($judging_earliest_date)) $suggested_open_date = $judging_earliest_date;
+        else $suggested_open_date = time();
+
         $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
         $suggested_open = TRUE;
+
     }
-    if ((isset($_SESSION['jPrefsJudgingClosed'])) && (!empty($_SESSION['jPrefsJudgingClosed']))) $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
+    
+
+    if ((isset($_SESSION['jPrefsJudgingClosed'])) && (!empty($_SESSION['jPrefsJudgingClosed']))) {
+    
+        // If the opening date is defined...
+        if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) {
+
+
+            // Make sure the closing date is after the opening date
+            if ($_SESSION['jPrefsJudgingClosed'] > $_SESSION['jPrefsJudgingOpen']) {
+
+                $j_closed_date = $_SESSION['jPrefsJudgingClosed'];
+                if ((!empty($judging_latest_date)) && ($judging_latest_date > $_SESSION['jPrefsJudgingClosed'])) $j_closed_date = $judging_latest_date;
+
+            }
+            
+            else {
+
+                if (empty($judging_earliest_date)) $j_closed_date = $_SESSION['jPrefsJudgingOpen'] + 86400; // open plus 1 day
+
+                else {
+
+                    if ($_SESSION['jPrefsJudgingOpen'] >= $judging_earliest_date) $j_closed_date = $_SESSION['jPrefsJudgingOpen'] + 86400;
+                    else $j_closed_date = $judging_earliest_date + 86400;
+
+                }
+
+            }
+
+        }
+           
+        // If not...
+        else {
+
+            if (empty($judging_latest_date)) {
+                if (empty($judging_earliest_date)) $j_closed_date = $judging_earliest_date + 86400;
+                else $j_closed_date = time() + 86400;
+            }
+
+            else $j_closed_date = $judging_latest_date;
+                
+        }
+
+        $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $j_closed_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
+
+    }
+
     else {
+
+        if (!empty($judging_latest_date)) $suggested_close_date = $judging_latest_date;
+        else {
+            if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) $suggested_close_date = $_SESSION['jPrefsJudgingOpen'] + 86400;
+            elseif (!empty($judging_earliest_date))   $suggested_close_date = $judging_earliest_date + 86400;
+            else $suggested_close_date = time() + 86400;
+        }
+
         $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
         $suggested_close = TRUE;
+    
     }
+
+    /*
+    echo "Judging Earliest Date: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_earliest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>";
+    echo "Judging Open Date Session Var: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
+    echo "Open Date to Display: ".$judging_open_date."<br>";
+    echo "---------<br>";
+    if (!empty($judging_latest_date)) echo "Judging Latest Date: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_latest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
+    else echo "No Judging Latest Date<br>";
+    echo "Judging Closed Date Session Var: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
+    echo "Closed Date to Display: ".$judging_close_date."<br>";
+    */
 
 }
 
@@ -159,57 +281,6 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
         <span id="helpBlock" class="help-block with-errors">The deadline for judges and stewards to create an account and indicate their session preferences.</span>
     </div>
 </div><!-- ./Form Group -->
-<?php if ($_SESSION['prefsEval'] == 1) { ?>
-<!-- If Evals Enabled -->
-<h3>Judging Open and Close</h3>
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-    <label for="jPrefsJudgingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control date-time-picker-system" id="jPrefsJudgingOpen" name="jPrefsJudgingOpen" type="text" value="<?php echo $judging_open_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        <div id="helpBlock" class="help-block">Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations.  Typically, the open date begins the day and time the first judging session begins.
-            <?php if ($suggested_open) echo "<br><span class='text-warning' style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the the earliest judging session's start time.</span>";  ?>
-        </div>
-    </div>
-</div>
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-    <label for="jPrefsJudgingClosed" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control date-time-picker-system" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        <div id="helpBlock" class="help-block">The closing date and time is the absolute latest judges will be allowed to enter or edit their evaluations and scores.
-            <?php if ($suggested_close) echo "<br><span class='text-warning' style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
-            <div style="margin-top:5px" class="btn-group bcoem-admin-element" role="group" aria-label="judgingWindowModal">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">
-                       Judging Open/Close Dates and Times Info
-                    </button>
-                </div>
-            </div>  
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="judgingWindowModal" tabindex="-1" role="dialog" aria-labelledby="judgingWindowModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="judgingWindowModalLabel">Judging Open/Close Dates and Times Info</h4>
-            </div>
-            <div class="modal-body">
-                <p>Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations. Typically, the open date begins the day and time the first judging session begins. The closing date and time is the absolute latest judges will be allowed to enter or edit their evaluations and scores.</p>
-                <p>If no dates are input here for either open or close, these defaults will be used by the system:</p>
-                <ul>
-                    <li><strong>Open</strong> &ndash; the earliest judging session's start date/time.</li>
-                    <li><strong>Closed</strong> &ndash; the last judging session's start date/time <span class="text-primary">+ 8 hours</span>.</li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div><!-- ./modal -->
-<?php } // END if ($_SESSION['prefsEval'] == 1) ?>
 
 <!-- Loop through Judging Sessions and show dates -->
 <h3>Judging Sessions</h3>
@@ -264,6 +335,60 @@ $judging_session_js = "";
 } // end if ($totalRows_judging_locs > 0) 
 ?>
 
+
+<?php if ($_SESSION['prefsEval'] == 1) { ?>
+<!-- If Evals Enabled -->
+<h3>Judging Open and Close</h3>
+<div class="form-group">
+    <label for="jPrefsJudgingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control date-time-picker-system" id="jPrefsJudgingOpen" name="jPrefsJudgingOpen" type="text" value="<?php echo $judging_open_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
+        <div id="helpBlock" class="help-block">Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations.  Typically, the open date begins the day and time the first judging session begins.
+        <?php if ($suggested_open) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested. It is the the earliest start day/time for any judging session.</span>"; ?>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="jPrefsJudgingClosed" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control date-time-picker-system" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
+        <div id="helpBlock" class="help-block">The closing date and time is the absolute latest judges will be allowed to enter or edit their evaluations and scores.
+            <?php if ($suggested_close) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested. It is the latest recorded end date/time for a judging session OR the last judging session's start time + 8 hours.</span>"; ?>
+            <div style="margin-top:5px" class="bcoem-admin-element" role="group" aria-label="judgingWindowModal">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">
+                       Judging Open/Close Dates and Times Info
+                    </button>
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="judgingWindowModal" tabindex="-1" role="dialog" aria-labelledby="judgingWindowModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="judgingWindowModalLabel">Judging Open/Close Dates and Times Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations. Typically, the open date begins the day and time the first judging session begins. The closing date and time is the absolute latest judges will be allowed to enter or edit their evaluations and scores.</p>
+                <p>If no dates are input here for either open or close, these defaults will be used by the system:</p>
+                <ul>
+                    <li><strong>Open</strong> &ndash; the earliest judging session's start date/time.</li>
+                    <li><strong>Closed</strong> &ndash; the last judging session's start date/time <span class="text-primary">+ 8 hours</span>.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+<?php } // END if ($_SESSION['prefsEval'] == 1) ?>
+
+
 <h3>Non-Judging Sessions</h3>
 <?php
 
@@ -280,7 +405,7 @@ if ($totalRows_judging > 0) {
         $non_judging_count += 1;
 
 ?>
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div class="form-group">
     <input type="hidden" name="id[]" value="<?php echo $row_judging['id']; ?>">
     <label for="judgingDate-<?php echo $row_judging['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $row_judging['judgingLocName']; ?> - Session Start</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -291,7 +416,7 @@ if ($totalRows_judging > 0) {
         </div>
         <span class="help-block">Provide a start date and time for the session.</span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <?php
         } // END if ($row_judging['judgingLocType'] == 2)
     } while($row_judging = mysqli_fetch_assoc($judging)); 
@@ -327,5 +452,7 @@ if ($non_judging_count == 0) echo "<p>No non-judging sessions have been defined.
         </div>
     </div>
 </div>
+
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin","default",$msg,$id); ?>">
+
 </form>

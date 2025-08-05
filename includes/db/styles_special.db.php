@@ -17,6 +17,7 @@ $spec_sweet_carb_only = array();
 $spec_sweet_carb_only_info = array();
 $spec_carb_only = array();
 $spec_carb_only_info = array();
+$styles_entry_text = array();
 
 $replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
 if ($go == "default") $replacement2 = array('<strong class="text-danger-emphasis">Entry Instructions:</strong>','<strong class="text-info-emphasis">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
@@ -124,7 +125,8 @@ if ($_SESSION['prefsLanguage'] == "en-US") {
 
 	}
 
-	$styles_entry_text = array_merge($styles_entry_text,$styles_entry_text_cider);
+	if (empty($styles_entry_text_cider)) $styles_entry_text = $styles_entry_text;
+	else $styles_entry_text = array_merge($styles_entry_text,$styles_entry_text_cider);
 
 }
 
@@ -232,7 +234,7 @@ elseif ($_SESSION['prefsLanguage'] != "en-US") {
 
 else $styles_entry_text = array();
 
-// --------------------------------------If BJCP Styles --------------------------------------
+// --------------------------------------If Non-BA Styles --------------------------------------
 
 if ($_SESSION['prefsStyleSet'] != "BA") $styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
 else $styleSet = $_SESSION['prefsStyleSet'];
@@ -247,6 +249,7 @@ else $styleSet = $_SESSION['prefsStyleSet'];
  */
 
 if ($_SESSION['prefsStyleSet'] == "BJCP2025") $query_required_optional = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table, $_SESSION['prefsStyleSet']);
+elseif ($_SESSION['prefsStyleSet'] == "AABC2025") $query_required_optional = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table, $_SESSION['prefsStyleSet']);
 else $query_required_optional = sprintf("SELECT * FROM %s WHERE (brewStyleVersion = '%s' OR brewStyleOwn = 'custom')", $styles_db_table, $_SESSION['prefsStyleSet']);
 $required_optional = mysqli_query($connection,$query_required_optional) or die (mysqli_error($connection));
 $row_required_optional = mysqli_fetch_assoc($required_optional);
@@ -279,7 +282,7 @@ do {
 	}
 
 	if ($_SESSION['prefsStyleSet'] == "BA") {
-		if (!empty($row_required_optional['brewStyleInfo'])) $styles_entry_text[$style_id] = str_replace($replacement1,$replacement2,$row_required_optional['brewStyleInfo']);
+		if (!empty($row_required_optional['brewStyleInfo'])) $styles_entry_text[$style_id] = $row_required_optional['brewStyleInfo'];
 	}
 	
 	else {
@@ -294,7 +297,10 @@ do {
 
 		if (($row_required_optional['brewStyleReqSpec'] == 1) || ($row_required_optional['brewStyleStrength'] == 1) || ($row_required_optional['brewStyleSweet'] == 1) || ($row_required_optional['brewStyleCarb'] == 1)) {
 
-			$info = str_replace($replacement1,$replacement2,"<p>".$row_required_optional['brewStyleInfo']."</p>");
+			$info = "";
+
+			if ($_SESSION['prefsStyleSet'] != "BA") $info .= str_replace($replacement1,$replacement2,"<p>".$row_required_optional['brewStyleInfo']."</p>");
+			
 			if ($_SESSION['prefsStyleSet'] == "BA") $info .= "<p>".$entry_info_text_052."</p>";
 
 			if ($row_required_optional['brewStyleOwn'] == "custom") $styleSet = "Custom"; else $styleSet = $styleSet;
@@ -363,7 +369,6 @@ do {
 			$info .= "</tr>";
 			$info .= "</table>";	
 			
-
 			$add_edit_entry_modals .= "<!-- Modal for ".$style_id." - ".$style_name." -->\n";
 			$add_edit_entry_modals .= "<div class=\"modal fade\" id=\"modal-".$style_id."\" tabindex=\"-1\" aria-labelledby=\"".$style_id."-label\" aria-hidden=\"true\">\n";
 			$add_edit_entry_modals .= "\t<div class=\"modal-dialog modal-lg\">\n";
@@ -379,8 +384,6 @@ do {
 			$add_edit_entry_modals .= "\t\t</div>\n";
 			$add_edit_entry_modals .= "\t</div>\n";
 			$add_edit_entry_modals .= "</div>\n\n";
-
-			
 
 		}
 

@@ -7,6 +7,7 @@
 $add_entry_link_show = FALSE;
 $show_entries = TRUE;
 $nav_register_entrant_show = TRUE;
+$at_a_glance_entry_info = TRUE;
 
 if ($comp_entry_limit) $nav_register_entrant_show = FALSE;
 if ($comp_paid_entry_limit) $nav_register_entrant_show = FALSE;
@@ -18,16 +19,24 @@ if ($entry_window_open == 1) {
 	else $add_entry_link_show = TRUE;
 }
 
+if ($_SESSION['prefsProEdition'] == 1) {
+	if (((isset($_SESSION['brewerJudge'])) && ($_SESSION['brewerJudge'] == "Y")) || ((isset($_SESSION['brewerSteward'])) && ($_SESSION['brewerSteward'] == "Y"))) {
+		$show_entries = FALSE;
+		$disable_pay = TRUE;
+		$add_entry_link_show = FALSE;
+		$at_a_glance_entry_info = FALSE;
+	}	
+}
 
 if ($section == "default") {
 	$link_bs_target_toggle = "data-bs-toggle=\"collapse\" data-bs-target=\".navbar-collapse\"";
 	$link_prefix = "";
 }
+
 else {
 	$link_bs_target_toggle = "";
 	$link_prefix = $base_url;
 }
-
 
 if ($logged_in) {
 
@@ -88,7 +97,9 @@ if ($logged_in) {
 	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#sponsors"><?php echo $label_sponsors; ?></a>
 	                <?php } ?>
 	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#contact"><?php echo $label_contact; ?></a>
-	                <?php if ($admin_user) { ?>
+	                <?php if (($judging_past != 0) && ($registration_open < 2) && ($entry_window_open < 2) && (!empty($archive_alert_display) && ($section != "past-winners"))) { ?>
+	                <button class="nav-item nav-link" data-bs-toggle="offcanvas" data-bs-target="#archive-list" aria-controls="archive-list"><?php echo $label_past_winners; ?></button>
+	                <?php } if ($admin_user) { ?>
 	                <a class="nav-item nav-link" href="<?php echo $base_url."index.php?section=admin"; ?>"><?php echo $label_admin_short; ?></a>
 	                <?php } ?>
 	                <?php if ($logged_in) { ?>
@@ -131,6 +142,8 @@ if ($logged_in) {
 	        </section>
 	    </div>
 	</nav>
+
+	<?php if (($judging_past != 0) && ($registration_open < 2) && ($entry_window_open < 2) && (!empty($archive_alert_display))) echo $archive_alert_display; ?>
 
 	<!--
 <li class="dropdown-header"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && (!empty($_SESSION['brewerBreweryName']))) echo $_SESSION['brewerBreweryName']; else echo $_SESSION['loginUsername']; ?></strong></li>

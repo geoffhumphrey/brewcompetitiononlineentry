@@ -1030,12 +1030,12 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
 		</div>
 	</div>
 
-<?php if (($action == "add") && ($remaining_entries > 1)) { ?>
+<?php if (($action == "add") && ($remaining_entries > 1) && ($bid == "default")) { ?>
 	<!-- Return to Add Another Entry -->
 	<div class="mb-3 row">
 		<div class="col-xs-12 col-sm-3 col-lg-2"></div>
 		<div class="col-xs-12 col-sm-9 col-lg-10">
-			<input class="form-check-input" type="checkbox" name="return-to-add" value="1" id="return-to-add-entry"> 
+			<input class="form-check-input" type="checkbox" name="return-to-add" value="1" id="return-to-add-entry">
 			<label class="form-check-label" for="return-to-add-entry"><?php echo $brew_text_055; ?></label>
 		</div>
 	</div>

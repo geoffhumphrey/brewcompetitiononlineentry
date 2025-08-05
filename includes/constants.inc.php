@@ -146,10 +146,12 @@ $tie_break_rules = array(
 
 /**
  * -------------------------- Clubs List ---------------------------
- *
+ * Grab the list from a centralized source.
+ * Source maintained by developer. Log an enhancement issue on
+ * GitHub to request a club be added to the list.
  */
-
-$club_json = file_get_contents('https://admin.brewingcompetitions.com/lib/clubs.php');
+$club_json_link = "https://admin.brewingcompetitions.com/lib/clubs.php";
+$club_json = file_get_contents($club_json_link);
 $club_array = json_decode($club_json,true);
 if ((isset($_SESSION['contestClubs'])) && (!empty($_SESSION['contestClubs']))) {
     $club_additions = json_decode($_SESSION['contestClubs'],true);
@@ -577,6 +579,9 @@ elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "A
 elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "AABC2022")) {
     $optional_info_styles = array("07-03","12-01","14-08","17-03","18-04","18-05","16-01","19-01","19-02","19-03","19-04","19-05","19-06","19-07","19-08","19-09","19-10","19-11","19-12","19-13","20-02","20-03","16-08");
 }
+elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "AABC2025")) {
+    $optional_info_styles = array("07-03","12-01","14-08","17-03","18-04","18-05","16-01","16-08","19-01","19-02","19-03","19-04","19-05","19-06","19-07","19-08","19-09","19-10","19-11","19-12","19-13","20-01","20-02","20-03","20-04","20-05","20-10","20-11","20-12","20-16");
+}
 elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "NWCiderCup")) {
     $optional_info_styles = array("C4-A","C4-B","C5-A","C8-A","C8-B","C8-C","C9-A","C9-B","C9-C");
 }
@@ -651,7 +656,7 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
             if (json_last_error() === JSON_ERROR_NONE) $styles_json_data = TRUE;
             else $styles_json_data = FALSE;
 
-            if ($styles_json_data) $_SESSION['prefsSelectedStyles'] = $row_cted_styles['prefsSelectedStyles'];
+            if ($styles_json_data) $_SESSION['prefsSelectedStyles'] = $row_selected_styles['prefsSelectedStyles'];
             else $regenerate_selected_styles = TRUE;
         
         }
@@ -663,7 +668,7 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
 
             if (HOSTED) {
                 
-                $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM `bcoem_shared_styles` WHERE brewStyleVersion='%s'", $prefsStyleSet);
+                $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM `bcoem_shared_styles` WHERE brewStyleVersion='%s'", $prefsStyleSet);
                 $styles_default = mysqli_query($connection,$query_styles_default);
                 $row_styles_default = mysqli_fetch_assoc($styles_default);
 
@@ -675,7 +680,8 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
                             'brewStyle' => $row_styles_default['brewStyle'],
                             'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
                             'brewStyleNum' => $row_styles_default['brewStyleNum'],
-                            'brewStyleVersion' => $row_styles_default['brewStyleVersion']
+                            'brewStyleVersion' => $row_styles_default['brewStyleVersion'],
+                            'brewStyleType' => $row_styles_default['brewStyleType']
                         );
 
                     } while($row_styles_default = mysqli_fetch_assoc($styles_default));
@@ -683,7 +689,7 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
                         
                 }
                 
-                $query_styles_custom = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleOwn='custom'", $prefix."styles");
+                $query_styles_custom = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE brewStyleOwn='custom'", $prefix."styles");
                 $styles_custom = mysqli_query($connection,$query_styles_custom);
                 $row_styles_custom = mysqli_fetch_assoc($styles_custom);
 
@@ -695,7 +701,8 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
                             'brewStyle' => sterilize($row_styles_custom['brewStyle']),
                             'brewStyleGroup' => sterilize($row_styles_custom['brewStyleGroup']),
                             'brewStyleNum' => sterilize($row_styles_custom['brewStyleNum']),
-                            'brewStyleVersion' => sterilize($row_styles_custom['brewStyleVersion'])
+                            'brewStyleVersion' => sterilize($row_styles_custom['brewStyleVersion']),
+                            'brewStyleType' => $row_styles_default['brewStyleType']
                         );
 
                     } while($row_styles_custom = mysqli_fetch_assoc($styles_custom));
@@ -707,7 +714,7 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
                 
             else {
 
-                $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleVersion='%s'", $prefix."styles", $prefsStyleSet);
+                $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE brewStyleVersion='%s'", $prefix."styles", $prefsStyleSet);
                 $styles_default = mysqli_query($connection,$query_styles_default);
                 $row_styles_default = mysqli_fetch_assoc($styles_default);
 
@@ -717,7 +724,8 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
                             'brewStyle' => sterilize($row_styles_default['brewStyle']),
                             'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
                             'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
-                            'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion'])
+                            'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion']),
+                            'brewStyleType' => $row_styles_default['brewStyleType']
                         );
                     } while($row_styles_default = mysqli_fetch_assoc($styles_default));
                 }
@@ -786,16 +794,10 @@ if ($row_contest_dates) {
 
 }
 
-$mail_use_smtp = FALSE;
-if (HOSTED) $mail_use_smtp = TRUE;
-elseif (isset($_SESSION['prefsEmailSMTP'])) { 
-    if (
-        ($_SESSION['prefsEmailSMTP'] == 1) && 
-        (!empty($_SESSION['prefsEmailHost'])) && 
-        (!empty($_SESSION['prefsEmailFrom'])) && 
-        (!empty($_SESSION['prefsEmailUsername'])) && 
-        (!empty($_SESSION['prefsEmailPassword'])) && 
-        (!empty($_SESSION['prefsEmailPort']))
-    ) $mail_use_smtp = TRUE;
-}
+/**
+ * ---------------------------- Check SMTP Status --------------------------------
+ * Now housed in language.lang.php file for use in language scripts
+ * 
+ */
+
 ?>

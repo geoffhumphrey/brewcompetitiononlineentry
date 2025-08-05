@@ -361,14 +361,24 @@ if ($setup_success) {
 	$php_version = phpversion();
 
 	$ajax_url = $base_url."ajax/";
+	//$ajax_url = $base_url."includes/";
 	$css_url = $base_url."css/";
 	$images_url = $base_url."images/";
 	$js_url = $base_url."js_includes/";
 	
 	if (HOSTED) {
+
+		$css_url = $base_url_hosted."_3.X_shared/css/";
+		$images_url = $base_url_hosted."_3.X_shared/images/";
+		$js_url = $base_url_hosted."_3.X_shared/js_includes/";
+		// $ajax_url = $base_url_hosted."_3.X_shared/ajax/";
+
+		/*
 		$css_url = $base_url_hosted."_bcoem_shared/css/";
 		$images_url = $base_url_hosted."_bcoem_shared/images/";
 		$js_url = $base_url_hosted."_bcoem_shared/js_includes/";
+		*/
+	
 	}
 
 	$js_app_url = $js_url."app.min.js";

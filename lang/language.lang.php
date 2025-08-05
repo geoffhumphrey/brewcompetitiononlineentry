@@ -11,6 +11,19 @@
  *   -- Be sure to also update function in common.lib.php.
  */
 
+$mail_use_smtp = FALSE;
+if (HOSTED) $mail_use_smtp = TRUE;
+elseif ((!HOSTED) && (isset($_SESSION['prefsEmailSMTP']))) { 
+    if (
+        ($_SESSION['prefsEmailSMTP'] == 1) && 
+        (!empty($_SESSION['prefsEmailHost'])) && 
+        (!empty($_SESSION['prefsEmailFrom'])) && 
+        (!empty($_SESSION['prefsEmailUsername'])) && 
+        (!empty($_SESSION['prefsEmailPassword'])) && 
+        (!empty($_SESSION['prefsEmailPort']))
+    ) $mail_use_smtp = TRUE;
+}
+
 // Default to US English language if prefs not defined.
 $prefsLanguage = "en-US";
 $prefsLanguageFolder = "en";

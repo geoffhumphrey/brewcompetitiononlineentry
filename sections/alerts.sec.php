@@ -178,7 +178,7 @@ if ($msg != "default") {
       </div>
     <?php } ?>
 
-    <?php if (($totalRows_dropoff == "0") && ($go == "default")) { ?>
+    <?php if (($totalRows_dropoff == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0)) { ?>
       <!-- No Drop-off Dates -->
       <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -186,7 +186,7 @@ if ($msg != "default") {
       </div>
     <?php } ?>
 
-    <?php if (($totalRows_judging == "0") && ($go == "default")) { ?>
+    <?php if (($totalRows_judging == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0)) { ?>
       <!-- No judging dates -->
       <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -194,7 +194,7 @@ if ($msg != "default") {
       </div>
     <?php } ?>
 
-    <?php if (($totalRows_contact == "0") && ($go == "default")) { ?>
+    <?php if (($totalRows_contact == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0)) { ?>
       <!-- No competition dontacts -->
       <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -225,7 +225,7 @@ if ($msg != "default") {
           <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_022; ?>
         </div>
     <?php } ?>
-  <?php  if ((($section == "step7") || (($section == "admin") && ($go == "dropoff"))) && ($msg == "11")) { ?>
+  <?php  if ((($section == "step7") || (($section == "admin") && ($go == "dropoff"))) && ($msg == "11") && ($_SESSION['userLevel'] == 0)) { ?>
     <!-- Setup Add More Dropoffs? -->
     <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

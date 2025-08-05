@@ -1,6 +1,6 @@
 <script>
-  var ajax_url = "<?php echo $ajax_url; ?>";
   var base_url = "<?php echo $base_url; ?>";
+  var ajax_url = "<?php echo $ajax_url; ?>";
   var section = "<?php echo $section; ?>";
   var go = "<?php echo $go; ?>";
 </script>
@@ -13,19 +13,19 @@ if (($section == "admin") && (($go == "default") || ($go == "judging_tables"))) 
   $import_scores_display .= "<p id=\"import-scores-status-dashboard\"><i id=\"import-scores-status-icon\" class=\"\"></i> <span id=\"import-scores-status\"></span></p>";
   $import_scores_display .= "<p id=\"import-status-discrepency-dashboard\"><i id=\"import-status-discrepency-icon\" class=\"\"></i> <span id=\"import-status-discrepency\"></span></p>";
 } else { 
-if ($section == "evaluation") { ?>
+
+?>
 <div class="bcoem-admin-element hidden-print">
-  <div class="btn-group hidden-print" role="group">
-  <a class="btn btn-block btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores"><span class="fa fa-chevron-circle-left"></span> Manage Scores</a>
-  </div>
-</div>
-<?php } ?>
-<div class="bcoem-admin-element hidden-print">
-		<div class="row">
-      <div class="col col-sm-12">
-        <p><button class="btn btn-primary" data-toggle="modal" data-target="#eval-import-modal"><?php echo $import_button_text; ?></button> <a href="#" data-toggle="popover" title="Importing Judges' Consensus Scores" data-content="<p>Judge evaluation scores <strong>are not official</strong> until an Administrator imports <strong>matching consensus scores entered by two or more judges</strong> into the scores database. Access Admin Dashboard > Scoring > Manage Scores to view, edit, and/or delete official consensus scores." data-trigger="hover" data-placement="right" data-html="true"><i class="fa fa-lg fa-question-circle"></i></a></p>
+  <?php if (($section == "admin") && ($go == "evaluation")) { ?>
+		<div style="margin-bottom: 15px;" class="row">
+      <div class="col col-sm-2">
+        <a class="btn btn-block btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores"><span class="fa fa-chevron-circle-left"></span> Manage Scores</a>
+      </div>
+      <div class="col col-sm-10">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#eval-import-modal"><?php echo $import_button_text; ?></button> <a href="#" data-toggle="popover" title="Importing Judges' Consensus Scores" data-content="<p>Judge evaluation scores <strong>are not official</strong> until an Administrator imports <strong>matching consensus scores entered by two or more judges</strong> into the scores database. Access Admin Dashboard > Scoring > Manage Scores to view, edit, and/or delete official consensus scores." data-trigger="hover" data-placement="right" data-html="true"><i class="fa fa-lg fa-question-circle"></i></a>
       </div>
     </div>
+  <?php } ?>
     <div class="row">
       <div class="col col-sm-12">
         <div id="import-scores-status-div" class="alert alert-grey">

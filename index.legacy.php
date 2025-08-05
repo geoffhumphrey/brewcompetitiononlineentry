@@ -311,8 +311,7 @@ var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?sec
 <?php //} ?>
 
 <?php 
-//if (($_SESSION['prefsEval'] == 1) && ($section == "admin") && ($go == "evaluation")) 
-include (EVALS.'warnings.eval.php'); 
+if (($_SESSION['prefsEval'] == 1) && ($section == "admin") && ($go == "evaluation")) include (EVALS.'warnings.eval.php'); 
 ?>
 
 <?php 

@@ -16,7 +16,6 @@ $glance_closed_color = "danger";
 $glance_disabled_color = "secondary";
 $glance_status_color = "primary";
 
-
 $entry_status_body_content = "<ul class=\"list-unstyled\">";
 $entry_status_body_content .= "<li>";
 $entry_status_body_content .= sprintf("<strong>%s</strong> &ndash; <span id=\"entry-total-count\" class=\"entry-total-count\">%s</span>",$label_total, $total_entries);
@@ -367,17 +366,14 @@ if (!empty($date_arr)) {
 
 }
 
-
-
 if ($section == "list") {
 
 	$glance_cards = array();
 
-	$glance_cards[$label_entries] = $glance_entry_status;
-	$glance_cards[$label_entry_registration] = $glance_entry_reg;
-	if (!empty($dropoff_open_sidebar)) $glance_cards[$label_entry_drop_off] = $glance_drop_off;
-	if (!empty($shipping_open_sidebar)) $glance_cards[$label_entry_shipping] = $glance_shipping;
-	$glance_cards[$label_judging] = $glance_judging;
+	if (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y")) $glance_cards[$label_judging] = $glance_judging;
+	if ($at_a_glance_entry_info) $glance_cards[$label_entry_registration] = $glance_entry_reg;
+	if ((!empty($dropoff_open_sidebar)) && ($at_a_glance_entry_info)) $glance_cards[$label_entry_drop_off] = $glance_drop_off;
+	if ((!empty($shipping_open_sidebar)) && ($at_a_glance_entry_info)) $glance_cards[$label_entry_shipping] = $glance_shipping;
 
 	$row_class = "row row-cols-1 g-4 justify-content-center";
 

@@ -122,13 +122,13 @@ if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE;
 else $us_phone = FALSE;
 
 if (!empty($_SESSION['brewerPhone1'])) {
-	if ($us_phone) $phone .= format_phone_us($_SESSION['brewerPhone1'])." (1)";
-	else $phone .= $_SESSION['brewerPhone1']." (1)";
+	if ($us_phone) $phone .= format_phone_us($_SESSION['brewerPhone1']);
+	else $phone .= $_SESSION['brewerPhone1'];
 }
 
 if (!empty($_SESSION['brewerPhone2'])) {
-	if ($us_phone) $phone .= "<br>".format_phone_us($_SESSION['brewerPhone2'])." (2)";
-	else $phone .= "<br>".$_SESSION['brewerPhone2']." (2)";
+	if ($us_phone) $phone .= "<br>".format_phone_us($_SESSION['brewerPhone2'])." (alt)";
+	else $phone .= "<br>".$_SESSION['brewerPhone2']." (alt)";
 }
 
 if (!empty($_SESSION['brewerClubs'])) $club = $_SESSION['brewerClubs']; 
@@ -258,7 +258,6 @@ if ($_SESSION['brewerJudgeLikes'] != "") {
 	$exploder_likes = explode("|",$judgeLikes);
 	$judgeLikesDisplay = $exploder_likes[0];
 	$judgeLikesModals = $exploder_likes[1];
-
 }
 else $judgeLikesDisplay = "N/A";
 
@@ -267,7 +266,6 @@ if ($_SESSION['brewerJudgeDislikes'] != "") {
 	$exploder_dislikes = explode("|",$judgeDislikes);
 	$judgeDislikesDisplay = $exploder_dislikes[0];
 	$judgeDislikesModals = $exploder_dislikes[1];
-
 }
 else $judgeDislikesDisplay = "N/A";
 
@@ -350,10 +348,12 @@ if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields) && (emp
 
 if ($_SESSION['prefsProEdition'] == 0) {
 
-	$account_display .= "<div class=\"row bcoem-account-info\">";
-	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong> <span style=\"color: #F2D06C; background-color: #000;\" class=\"badge\">MHP</span></div>",$label_mhp_number);
-	$account_display .= sprintf("<div class=\"".$display_right_cols."\"><a class=\"hide-loader\" href=\"https://www.masterhomebrewerprogram.com\" target=\"_blank\" data-toggle=\"tooltip\" title=\"%s\" data-placement=\"right\">".$mhp_number."</a></div>",$brewer_text_053);
-	$account_display .= "</div>";
+	if ($_SESSION['prefsMHPDisplay'] == 1) {
+		$account_display .= "<div class=\"row bcoem-account-info\">";
+		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong> <span style=\"color: #F2D06C; background-color: #000;\" class=\"badge\">MHP</span></div>",$label_mhp_number);
+		$account_display .= sprintf("<div class=\"".$display_right_cols."\"><a class=\"hide-loader\" href=\"https://www.masterhomebrewerprogram.com\" target=\"_blank\" data-toggle=\"tooltip\" title=\"%s\" data-placement=\"right\">".$mhp_number."</a></div>",$brewer_text_053);
+		$account_display .= "</div>";
+	}
 
 	if ($show_judge_steward_fields) {
 		$account_display .= "<div class=\"row bcoem-account-info\">";

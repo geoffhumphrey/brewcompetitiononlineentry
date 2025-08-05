@@ -1,8 +1,4 @@
-<?php 
-
-if ($_SESSION['prefsProEdition'] == 0) { 
-
-?>
+<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 <!-- Not a Brewery; clubs, Pro-Am, AHA, Staff -->
 <section id="participant-clubs">
     <div class="mb-3 row">
@@ -63,6 +59,7 @@ if ($_SESSION['prefsProEdition'] == 0) {
         </div>
     </div>
 </section>
+<?php if ($_SESSION['prefsMHPDisplay'] == 1) { ?>
 <section id="mhp-number">
     <div class="mb-3 row">
         <label for="brewerMHP" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_mhp_number; ?></strong></label>
@@ -72,6 +69,7 @@ if ($_SESSION['prefsProEdition'] == 0) {
         </div>
     </div>
 </section>
+<?php } ?>
 <?php } else { ?>
     <input type="hidden" name="brewerProAm" value="0">
     <input type="hidden" name="brewerMHP" value="0">

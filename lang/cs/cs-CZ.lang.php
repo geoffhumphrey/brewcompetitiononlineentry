@@ -1163,7 +1163,7 @@ $header_text_113 = "Můžete upravovat údaje pouze svého účtu.";
 $header_text_114 = "Jako správce můžete upravit údaje uživatelských účtů přes nabídku Admin &quot; Účastníci a vzorky &quot; Správa účastníků.";
 $header_text_115 = "Výsledky byly zveřejněny.";
 $header_text_116 = "Pokud v rozumném čase nedostanete email, kontaktujte představitele soutěže nebo správce webu aby vám obnovil heslo.";
-
+if (!$mail_use_smtp) $header_text_116 .= " <strong>Informujte soutěžního komisaře, že odesílání e-mailů přes SMTP není povoleno a/nebo nefunguje správně.</strong>";
 $alert_text_082 = "Jelikož jste se zaregistrovali jako degustátor nebo obsluha, nemáte dovoleno vkládat do vašeho účtu vzorky. Toto mohou činit pouze představitelé organizací.";
 $alert_text_083 = "Přidávání nebo úprava vzorků nejsou k dispozici.";
 $alert_text_084 = "Jako správce můžete přidat vzorky k účtu organizace pomocí položky &quot;Přidat vzorek pro...&quot; z rozbalovacího menu na stránce správy Vzorky a účastníci &gt; Správa vzorků.";

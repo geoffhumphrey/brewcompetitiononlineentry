@@ -230,10 +230,10 @@ if (($action == "default") && ($filter == "default")) {
                 
 
             $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
-                if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
+                if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
             
             $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
-                if ($dbTable == "default") $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
+                if ($dbTable == "default") $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
 
             if ($dbTable == "default") {
                 if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
@@ -604,7 +604,7 @@ $(document).ready(function(){
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
         </div>
         </div>
     </div>
@@ -621,7 +621,7 @@ $(document).ready(function(){
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
         </div>
         </div>
     </div>

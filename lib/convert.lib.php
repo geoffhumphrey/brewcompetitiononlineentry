@@ -714,7 +714,7 @@ function bjcp_map_2021_2025($style, $method, $prefix, $id) {
         break;
 
         case "C1E":
-            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C4","C4","B","Common Perry",$id);
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C4","C4","B","Heirloom Perry",$id);
             if ($method == 1) $return = "C4B";
             if ($method == 2) $return = "C4-B";
         break;
@@ -747,6 +747,87 @@ function bjcp_map_2021_2025($style, $method, $prefix, $id) {
             if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C3","C3","C","Experimental Cider",$id);
             if ($method == 1) $return = "C3C";
             if ($method == 2) $return = "C3-C";
+        break;
+
+    }
+
+    if (($method == 1) && (empty($return))) $return = $style;
+    return ($return);
+
+}
+
+function aabc_map_2022_2025($style, $method, $prefix, $id) {
+
+	// July 31, 2025 update was cider only.
+
+    $return = "";
+
+    switch($style) {
+
+        case "20-01":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","01","Common Cider [BJCP C1A]",$id);
+            if ($method == 1) $return = "20-01";
+            if ($method == 2) $return = "20-01";
+        break;
+
+        case "20-02":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","02","English Cider [BJCP C1C]",$id);
+            if ($method == 1) $return = "20-02";
+            if ($method == 2) $return = "20-02";
+        break;
+
+        case "20-03":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","03","French Cider [BJCP C1D]",$id);
+            if ($method == 1) $return = "20-03";
+            if ($method == 2) $return = "20-03";
+        break;
+
+        case "20-04":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","13","Common Perry [BJCP C4A]",$id);
+            if ($method == 1) $return = "20-13";
+            if ($method == 2) $return = "20-13";
+        break;
+
+        case "20-05":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","14","Heirloom Perry [BJCP C4A]",$id);
+            if ($method == 1) $return = "20-14";
+            if ($method == 2) $return = "20-14";
+        break;
+
+        case "20-06":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","06","New England Cider [BJCP C2A]",$id);
+            if ($method == 1) $return = "20-06";
+            if ($method == 2) $return = "20-06";
+        break;
+
+        case "20-07":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","10","Fruit Cider [BJCP C3A]",$id);
+            if ($method == 1) $return = "20-10";
+            if ($method == 2) $return = "20-10";
+        break;
+
+        case "20-08":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","07","Applewine [BJCP C2B]",$id);
+            if ($method == 1) $return = "20-07";
+            if ($method == 2) $return = "20-07";
+        break;
+
+        case "20-09":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","09","Ice Cider [BJCP C2C]",$id);
+            if ($method == 1) $return = "20-08";
+            if ($method == 2) $return = "20-08";
+        break;
+
+        case "20-10":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","10","Spiced Cider [BJCP C3B]",$id);
+            if ($method == 1) $return = "20-11";
+            if ($method == 2) $return = "20-11";
+        break;
+
+        case "20-11":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","11","Experimental Perry [BJCP C4D]",$id);
+            if ($method == 1) $return = "20-11";
+            if ($method == 2) $return = "20-11";
         break;
 
     }

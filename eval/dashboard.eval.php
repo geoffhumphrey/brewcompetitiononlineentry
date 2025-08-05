@@ -49,6 +49,10 @@ $date_updated = array();
 $diff = 600; // Differential of seconds (10 minutes)
 $admin_add_eval = "";
 
+$count_none = "";
+$count_total = "";
+$count_unique = "";
+
 function find_next($arr,$needle,$diff) {
 	$last = 0;
 	foreach ($arr as $key => $value) {
@@ -96,7 +100,6 @@ if ($admin) include(DB.'admin_common.db.php');
 
 // If viewing in admin mode, present a quick form for Admins to add an
 // evaluation on behalf of a judge.
-$admin_add_eval .= "<button style=\"margin-top:0px\" class=\"btn btn-primary\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapse-add-eval\" aria-expanded=\"false\" aria-controls=\"collapse-add-eval\">Add an Evaluation on Behalf of Judge</button>";
 $admin_add_eval .= "<section style=\"margin-top:15px\" id=\"collapse-add-eval\" class=\"collapse bcoem-admin-element\">";
 $admin_add_eval .= "<h3>Add an Evaluation</h3>";
 $admin_add_eval .= "<p>To add an evaluation on behalf of a judge, choose the judge and input the entry number.</p>";
@@ -860,9 +863,9 @@ if ($totalRows_table_assignments > 0) {
 		//$top_alert .= sprintf("<i style=\"padding-right: 5px;\" class=\"fa fa-comments-o\"></i><strong>%s</strong> %s %s %s, %s.", $totalRows_eval_sub, $evaluation_info_031, strtolower($reg_closed_text_005), $current_time, $current_date_display);
 		
 		if (($judging_open && (time() > $two_days)) && ($count_none > 0)) {
-			if ($count_none == 1) $top_alert .= sprintf(" <button type=\"button\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entry_without_eval);
-			else $top_alert .= sprintf(" <button type=\"button\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entries_without_eval);
-			$top_alert .= "<section style=\"margin-top: 15px;\" class=\"collapse small\" id=\"no-eval\">";
+			if ($count_none == 1) $top_alert .= sprintf(" <button type=\"button\" style=\"margin-bottom: 15px;\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entry_without_eval);
+			else $top_alert .= sprintf(" <button type=\"button\" style=\"margin-bottom: 15px;\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entries_without_eval);
+			$top_alert .= "<section style=\"margin-bottom: 15px;\" class=\"collapse small\" id=\"no-eval\">";
 			$top_alert .= sprintf("<p>%s:</p>",$evaluation_info_049);
 			$top_alert .= "<ul class=\"list-inline\">";
 			asort($eval_no_evaluations);
@@ -950,9 +953,56 @@ if ($totalRows_table_assignments > 0) {
 <?php
 } // end if ($totalRows_table_assignments > 0)
 
+$columns = array_column($date_submitted, "date_submitted");
+array_multisort($columns, SORT_DESC, $date_submitted);
+$date_submitted = array_unique($date_submitted, SORT_REGULAR);
+$show_submitted = 0;
+$latest_submitted_accordion = "";
+
+foreach ($date_submitted as $key => $value) {
+	$show_submitted += 1;
+	if ($show_submitted <=20) {
+		$submitted_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_submitted'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+		$latest_submitted_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s) - Score: %s</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$submitted_date,$value['consensus_score']);
+	}
+}
+
+$columns = array_column($date_submitted, "date_updated");
+array_multisort($columns, SORT_DESC, $date_submitted);
+$date_submitted = array_unique($date_submitted, SORT_REGULAR);
+$show_updated = 0;
+$latest_updated_accordion = "";
+foreach ($date_submitted as $key => $value) {
+	$show_updated += 1;
+	if ($show_updated <=20) {
+		$updated_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_updated'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
+		$latest_updated_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s) - Score: %s</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$updated_date,$value['consensus_score']);
+	}
+}
+
+if (!$admin) {
+	echo $header;
+	if (($judging_open) && (empty($table_assign_judge))) echo sprintf("<p>%s</p>",$evaluation_info_009);
+}
+
+$show_alerts = TRUE;
+if ((empty($total_evals_alert)) && (empty($places_alert)) && (empty($judge_score_disparity)) && (empty($assign_score_mismatch)) && (empty($dup_judge_evals_alert)) && (empty($single_evaluation)) && (empty($mini_bos_mismatch_alert))) $show_alerts = FALSE;
 
 // Counts Sidebar
 $status_sidebar = "";
+
+$status_sidebar .= "<div class=\"bcoem-admin-element\">";
+$status_sidebar .= "<button class=\"btn btn-dark btn-sm btn-block\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapse-add-eval\" aria-expanded=\"false\" aria-controls=\"collapse-add-eval\">Add an Evaluation on Behalf of Judge</button>";
+
+if ($show_alerts) $status_sidebar .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#all-alerts\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-chevron-down\"></i>Expand/Collapse Alerts</a>";
+
+if ((!empty($latest_submitted_accordion)) || (!empty($latest_updated_accordion))) {
+	if (!empty($latest_submitted_accordion)) $status_sidebar .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-submitted\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>Expand/Collapse 20 Latest Submitted</a>";
+	if (!empty($latest_updated_accordion)) $status_sidebar .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-updated\" aria-expanded=\"false\" aria-controls=\"latest-updated\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>Expand/Collapse 20 Latest Updated</a>";
+}
+
+$status_sidebar .= "</div>";
+
 $status_sidebar .= "<div class=\"panel panel-info\">";
 $status_sidebar .= "<div class=\"panel-heading\">";
 
@@ -960,7 +1010,7 @@ $status_sidebar .= "<h4 style=\"margin: 0px; padding-bottom: 5px;\">Status<span 
 
 $status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted\"><span class=\"small\">Updated <span class=\"total-evaluations-unique-updated\">".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></span></p>";
 
-$status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-indicators\"><span class=\"small\" id=\"count-two-minute-info\"></span></p>";
+$status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-indicators\"><span class=\"small\" id=\"count-two-minute-info\">".$brew_text_061."</span></p>";
 
 $status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-indicators\">";
 $status_sidebar .= "<span class=\"small\"><a href=\"#\" onClick=\"window.location.reload()\">Refresh this page</a> to review updated evaluations and/or consensus scores.</span></span>";
@@ -994,65 +1044,25 @@ $status_sidebar .= "<section style=\"margin: 15px 0 8px 0;\" class=\"bcoem-sideb
 $status_sidebar .= "<strong class=\"text-info\">Entries with Evaluations by Table</strong>";
 $status_sidebar .= "<span class=\"pull-right\">Count / Total</span>";
 $status_sidebar .= "</section>";
-
+$status_sidebar .= "<div class=\"small\">";
 $status_sidebar .= $status_sidebar_table_info;
-
+$status_sidebar .= "</div>";
 $status_sidebar .= "</div>"; // end panel-body
 $status_sidebar .= "</div>"; // end panel panel-info
 
-$columns = array_column($date_submitted, "date_submitted");
-array_multisort($columns, SORT_DESC, $date_submitted);
-$date_submitted = array_unique($date_submitted, SORT_REGULAR);
-$show_submitted = 0;
-$latest_submitted_accordion = "";
-
-foreach ($date_submitted as $key => $value) {
-	$show_submitted += 1;
-	if ($show_submitted <=20) {
-		$submitted_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_submitted'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-		$latest_submitted_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s) - Score: %s</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$submitted_date,$value['consensus_score']);
-	}
-}
-
-$columns = array_column($date_submitted, "date_updated");
-array_multisort($columns, SORT_DESC, $date_submitted);
-$date_submitted = array_unique($date_submitted, SORT_REGULAR);
-$show_updated = 0;
-$latest_updated_accordion = "";
-foreach ($date_submitted as $key => $value) {
-	$show_updated += 1;
-	if ($show_updated <=20) {
-		$updated_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_updated'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
-		$latest_updated_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s) - Score: %s</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$updated_date,$value['consensus_score']);
-	}
-}
-
-if (!$admin) {
-	echo $header;
-	if (($judging_open) && (empty($table_assign_judge))) echo sprintf("<p>%s</p>",$evaluation_info_009);
-}
-
 $left_side = "";
 
-if ((!empty($latest_submitted_accordion)) || (!empty($latest_updated_accordion))) {
-	
-	$left_side .= "<div class=\"bcoem-admin-element\">";
-	$left_side .= "<a style=\"margin:0 10px 0 0;\" class=\"btn btn-default\" role=\"button\" data-toggle=\"collapse\" href=\"#all-alerts\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-chevron-down\"></i>Expand/Collapse Alerts</a>";
-	if (!empty($latest_submitted_accordion)) $left_side .= "<a style=\"margin:0 10px 0 0;\" class=\"btn btn-default\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-submitted\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>Expand/Collapse 20 Latest Submitted</a>";
-	if (!empty($latest_updated_accordion)) $left_side .= "<a style=\"margin:0 10px 0 0;\" class=\"btn btn-default\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-updated\" aria-expanded=\"false\" aria-controls=\"latest-updated\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>Expand/Collapse 20 Latest Updated</a>";
+if ($show_alerts) {
+	$left_side .= "<div id=\"all-alerts\" class=\"collapse in\">";
+	if (!empty($total_evals_alert)) $left_side .= $total_evals_alert;
+	if (!empty($places_alert)) $left_side .= $places_alert;
+	if (!empty($judge_score_disparity)) $left_side .= $jscore_disparity;
+	if (!empty($assign_score_mismatch)) $left_side .= $assign_score_mismatch;
+	if (!empty($dup_judge_evals_alert)) $left_side .= $dup_judge_evals_alert;
+	if (!empty($single_evaluation)) $left_side .= $single_eval;
+	if (!empty($mini_bos_mismatch_alert)) $left_side .= $mini_bos_mismatch_alert;
 	$left_side .= "</div>";
-
 }
-
-$left_side .= "<div id=\"all-alerts\" class=\"collapse in\">";
-if (!empty($total_evals_alert)) $left_side .= $total_evals_alert;
-if (!empty($places_alert)) $left_side .= $places_alert;
-if (!empty($judge_score_disparity)) $left_side .= $jscore_disparity;
-if (!empty($assign_score_mismatch)) $left_side .= $assign_score_mismatch;
-if (!empty($dup_judge_evals_alert)) $left_side .= $dup_judge_evals_alert;
-if (!empty($single_evaluation)) $left_side .= $single_eval;
-if (!empty($mini_bos_mismatch_alert)) $left_side .= $mini_bos_mismatch_alert;
-$left_side .= "</div>";
 
 if (!empty($latest_submitted_accordion)) {
 	$left_side .= "<div id=\"latest-submitted\" class=\"collapse alert alert-teal\">";
@@ -1080,8 +1090,8 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
 <div class="row">
 	<div class="col-xs-12 col-sm-6 col-md-9">
 		<?php 
-		echo $left_side;
 		include (EVALS.'import_scores.eval.php');
+		echo $left_side;
 		echo $admin_add_eval;
 		echo $table_assignment_entries;
 		?>
@@ -1142,7 +1152,8 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
     var count_paused_text = "<?php echo $brew_text_062; ?>";
     var count_paused_manually_text = "<?php echo $brew_text_064; ?>";
     var base_url = "<?php echo $base_url; ?>";
-    var judging_started = "<?php if ($judging_started) echo "1"; else echo "0"; ?>";;
+	var ajax_url = "<?php echo $ajax_url; ?>";
+	var judging_started = "<?php if ($judging_started) echo "1"; else echo "0"; ?>";;
 	var results_published = "<?php if ($show_presentation) echo "1"; else echo "0"; ?>";
 
 	$("#resume-updates").hide();

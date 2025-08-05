@@ -133,7 +133,7 @@ if ($count_evals > 0) {
 	$eval_place_actions .= "</div>";
 	$eval_place_actions .= "<div class=\"col col-lg-6 col-md-5 col-sm-12\">";
 	$eval_place_actions .= "<div style=\"margin-bottom:5px;\" id=\"eval-place-ajax-".$row_entries['id']."-evalPlace-form-group\">";
-	$eval_place_actions .= "<select class=\"selectpicker eval-place-choose-".$tbl_id."\" data-dropdown-align-right=\"auto\" id=\"eval-place-ajax-".$row_entries['id']."\" name=\"evalPlace".$row_entries['id']."\" title=\"".$label_place_awarded."\" data-width=\"100%\" onchange=\"update_place_display('".$number."','eval-place-ajax-".$row_entries['id']."','".$tbl_id."');select_place_multi('".$base_url."','evalPlace','evaluation','".$row_entries['id']."','eval-place-choose-".$tbl_id."','','','','eval-place-ajax-".$row_entries['id']."');\">";
+	$eval_place_actions .= "<select class=\"selectpicker eval-place-choose-".$tbl_id."\" data-dropdown-align-right=\"auto\" id=\"eval-place-ajax-".$row_entries['id']."\" name=\"evalPlace".$row_entries['id']."\" title=\"".$label_place_awarded."\" data-width=\"100%\" onchange=\"update_place_display('".$number."','eval-place-ajax-".$row_entries['id']."','".$tbl_id."');select_place_multi('".$ajax_url."','evalPlace','evaluation','".$row_entries['id']."','eval-place-choose-".$tbl_id."','','','','eval-place-ajax-".$row_entries['id']."');\">";
 
 	$eval_place_actions .= "<option value=\"\"";
 	if (($eval_place == "") || ($eval_place == "0")) $eval_place_actions .= " SELECTED";
@@ -168,10 +168,10 @@ if ($count_evals > 0) {
 	$eval_place_actions .= "<div style=\"margin-bottom:5px;\" class=\"col col-lg-6 col-md-5 col-sm-12\">";
 	$eval_place_actions .= "<div class=\"input-group\">";
 	$eval_place_actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
-	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"1\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','1','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_yes.">Yes";
+	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"1\" onclick=\"save_column('".$ajax_url."','evalMiniBOS','evaluation','".$row_entries['id']."','1','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_yes.">Yes";
 	$eval_place_actions .= "</label>";
 	$eval_place_actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
-	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"0\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','0','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_no.">No";
+	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"0\" onclick=\"save_column('".$ajax_url."','evalMiniBOS','evaluation','".$row_entries['id']."','0','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_no.">No";
 	$eval_place_actions .= "</label>";
 	$eval_place_actions .= "</div>";
 	$eval_place_actions .= "<br><span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status\"></span> ";

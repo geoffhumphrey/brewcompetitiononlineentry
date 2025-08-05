@@ -1,15 +1,8 @@
 <?php
 
-/**
- * File: account_checks.ajax.php
- * Description: Check if user name is already in DB
- *              Check if email address supplied is valid
- */
-
 ob_start();
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '0');
-
 require('../paths.php');
 require_once (CONFIG.'bootstrap.php');
 
@@ -50,11 +43,11 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 						$display_security_question .= "<div class=\"help-block mt-1 mb-3 small\">";
 						$display_security_question .= $pwd_email_reset_text_002;
 						$display_security_question .= "</div>";
-						$display_security_question .= "<div class=\"d-grid mx-auto\"><button class=\"btn btn-lg btn-primary mb-2\" id=\"forgot-password-security-question-button\" onclick=\"check_security_question_answer('".$base_url."','security-question-answer','security-question-response-status')\" disabled>".$label_submit."</button></div>";
+						$display_security_question .= "<div class=\"d-grid mx-auto\"><button class=\"btn btn-lg btn-primary mb-2\" id=\"forgot-password-security-question-button\" onclick=\"check_security_question_answer('".$ajax_url."','security-question-answer','security-question-response-status')\" disabled>".$label_submit."</button></div>";
 						$display_security_question .= "</div>";
 					}
 
-					else $display_security_question = "Email provided is not valid. Please check it and try again.";
+					else $display_security_question = $login_text_030;
 					
 					echo sprintf("<p class=\"text-success\"><i class=\"fas fa-check-circle pe-2\"></i><strong>%s</strong>. %s</p><p class=\"alert alert-primary\">%s</p>",$label_verified,$login_text_011,$display_security_question);
 				}

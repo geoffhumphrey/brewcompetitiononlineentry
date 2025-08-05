@@ -251,7 +251,7 @@ else {
 			$page_info4 .= "</div>";
 			$page_info4 .= "</div>";
 
-		} // end if (($_SESSION['prefsPaypal'] == "Y") || ($_SESSION['prefsGoogle'] == "Y"))
+		} // end if ($_SESSION['prefsPaypal'] == "Y")
 
 	}
 

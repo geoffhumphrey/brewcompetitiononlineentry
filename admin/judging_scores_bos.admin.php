@@ -272,7 +272,7 @@ $(document).ready(function(){
         <td><?php echo $style_name; ?></td>
     	<td>
             <div class="form-group" id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-form-group">
-            <input class="form-control" id="score-entry-bos-ajax-<?php echo $eid; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php echo $bos_entry_info[11]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-entry-bos-ajax-<?php echo $eid; ?>','value')"  />
+            <input class="form-control" id="score-entry-bos-ajax-<?php echo $eid; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php echo $bos_entry_info[11]; ?>" onblur="save_column('<?php echo $ajax_url; ?>','scoreEntry','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-entry-bos-ajax-<?php echo $eid; ?>','value')"  />
             </div>
             <span id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-status"></span>
             <span id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-status-msg"></span>
@@ -282,7 +282,7 @@ $(document).ready(function(){
             <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
             <select class="form-control" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>')">
             <?php } else { ?>
-            <select class="form-control" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>','value')">    
+            <select class="form-control" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $ajax_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>','value')">    
             <?php } ?>
                 <option value=""></option>
                 <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>

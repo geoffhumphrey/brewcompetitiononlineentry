@@ -6,6 +6,7 @@
  *
  */
 
+
 $page_info_reg_open = "";
 
 // Judge/Steward Registration Info

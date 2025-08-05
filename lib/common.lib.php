@@ -1584,7 +1584,8 @@ function style_convert($number,$type,$base_url="",$archive="") {
 			$row_style = mysqli_fetch_assoc($style);
 			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
 
-			if ($row_style['brewStyleOwn'] == "custom") $styleSet = "Custom"; else $styleSet = $_SESSION['style_set_short_name'];
+			if ($row_style['brewStyleOwn'] == "custom") $styleSet = "Custom"; 
+			else $styleSet = $_SESSION['style_set_short_name'];
 
 			$info = str_replace($replacement1,$replacement2,"<p>".$row_style['brewStyleInfo']."</p>");
 
@@ -1638,14 +1639,21 @@ function style_convert($number,$type,$base_url="",$archive="") {
 			</table>";
 
 			if ($archive == "v3-public") {
-				$style_convert_1[] = "\n<span title=\"".$row_style['brewStyle']."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$trimmed.$row_style['brewStyleNum']."</a></span>";
+				if ($style_set == "BA") {
+					$style_convert_1[] = "\n<span title=\"".$label_info.": ".$row_style['brewStyle']."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$row_style['brewStyle']."</a></span>";
+					$modal_title = $styleSet.": ".$row_style['brewStyle'];
+				}
+				else {
+					$style_convert_1[] = "\n<span title=\"".$row_style['brewStyle']."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$trimmed.$row_style['brewStyleNum']."</a></span>";
+					$modal_title = $styleSet." ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle'];
+				}
 				$style_modal[] = "
 				<!-- Modal -->
 				<div class=\"modal fade\" id=\"s-".$value."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$value."Label\">
 				  <div class=\"modal-dialog modal-lg\">
 					<div class=\"modal-content\">
 					  <div class=\"modal-header\">
-						<h4 class=\"modal-title\" id=\"".$value."Label\">".$styleSet." ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</h4>
+						<h4 class=\"modal-title\" id=\"".$value."Label\">".$modal_title."</h4>
 						<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"".$label_close."\"></button>
 					  </div>
 					  <div class=\"modal-body\">".$info."</div>

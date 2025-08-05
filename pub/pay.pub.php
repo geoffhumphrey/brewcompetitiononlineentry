@@ -256,7 +256,7 @@ else {
 
 			*/
 
-		} // end if (($_SESSION['prefsPaypal'] == "Y") || ($_SESSION['prefsGoogle'] == "Y"))
+		} // end if ($_SESSION['prefsPaypal'] == "Y")
 
 	}
 

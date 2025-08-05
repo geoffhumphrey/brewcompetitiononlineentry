@@ -1286,6 +1286,7 @@ $header_text_113 = "Solo puedes editar la información de tu propia cuenta.";
 $header_text_114 = "Como administrador, puedes cambiar la información de la cuenta de un usuario a través de Administrador > Inscripciones y Participantes > Gestionar Participantes.";
 $header_text_115 = "Los resultados han sido publicados.";
 $header_text_116 = "Si no recibes el correo electrónico dentro de un período de tiempo razonable, comunícate con un organizador de la competencia o un administrador del sitio para restablecer tu contraseña.";
+if (!$mail_use_smtp) $header_text_116 .= " <strong>Informa al responsable de la competición de que el envío de correos electrónicos SMTP no está habilitado o no funciona correctamente.</strong>";
 $alert_text_082 = "Dado que te registraste como juez o steward, no se te permite agregar inscripciones a tu cuenta. Solo los representantes de una organización pueden agregar inscripciones a sus cuentas.";
 $alert_text_083 = "La adición y edición de inscripciones no están disponibles.";
 $alert_text_084 = "Como administrador, puedes agregar una inscripción a la cuenta de una organización utilizando el menú desplegable \"Agregar Inscripción Para...\" en la página Administrador > Inscripciones y Participantes > Gestionar Inscripciones.";

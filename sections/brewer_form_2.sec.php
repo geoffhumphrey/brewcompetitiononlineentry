@@ -1,35 +1,32 @@
 <?php
-if ($_SESSION['prefsProEdition'] == 1) $participant_orgs_label = $label_industry_affiliations;
-else $participant_orgs_label = $label_brewing_partners;
 
 $show_partners_orgs = FALSE;
 
-// User is already assigned to a table. Contact organizer.
-if (($table_assignment) && ($go == "account") && (!$entrant_type_brewery)) { ?>
+if ($_SESSION['prefsProEdition'] == 1) {
+    
+    $participant_orgs_label = $label_industry_affiliations;
+    $show_partners_orgs = TRUE;
 
-    <div class="form-group">
-        <label for="brewerJudge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging."/".$label_stewarding; ?></label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <div class="input-group">
-                <div class="alert alert-warning"><?php echo $brewer_info_020; ?></div>
-            </div>
-        </div>
-    </div>
+    $org_array_lower = array();
+    foreach ($org_array as $value) {
+        $org_array_lower[] = strtolower($value);
+    }
+    $org_array = implode(",",$org_array_lower);
 
-<?php } 
+}
 
-if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
+else $participant_orgs_label = $label_brewing_partners;
 
-    if ((!empty($judge_location_avail)) && (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account"))))) { 
-
-        $show_partners_orgs = TRUE;
-        $judge_checked = FALSE;
-        if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
-        if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
+if (!$entrant_type_brewery) { 
+        
+    $judge_checked = FALSE;
+    if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
+    if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
 
 ?>
 
-<a name="judging"></a><section id="judge-preferences">
+<a name="judging"></a>
+<section id="judge-preferences">
     <div class="form-group">
         <label for="brewerJudge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -44,7 +41,6 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             <span class="help-block"><?php echo $brewer_text_006; ?></span>
         </div>
     </div>
-
     <div id="bjcp-id" class="form-group">
         <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -52,18 +48,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
         </div>
     </div>
-
-    <?php 
-    $org_array_lower = array();
-    foreach ($org_array as $value) {
-        $org_array_lower[] = strtolower($value);
-    }
-    $org_array = implode(",",$org_array_lower);
-
-    ?>
-
     <div id="brewerJudgeFields">
-
         <?php if (($totalRows_judging > 0) || (($go == "admin") && ($filter != "default"))) { ?>
         <div class="form-group <?php if (($view == "all-availability") || ($view == "judging-availability")) echo "text-warning"; ?>">
             <?php if (!empty($judge_location_avail)) { ?>
@@ -74,7 +59,6 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             <?php } // end if (!empty($judge_location_avail))?>
         </div>
         <?php } // end if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) } ?>
-
         <div class="form-group">
             <label for="brewerJudgeMead" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_mead; ?></label>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -89,7 +73,6 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 <span class="help-block"><?php echo $brewer_text_007; ?></span>
             </div>
         </div>
-
         <div class="form-group">
             <label for="brewerJudgeMead" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_cider; ?></label>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -104,7 +87,6 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 <span class="help-block"><?php echo $brewer_text_035; ?></span>
             </div>
         </div>
-
         <?php $judge_array = explode(",",$row_brewer['brewerJudgeRank']); ?>
         <div class="form-group"><!-- Form Group Radio STACKED -->
             <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_rank; ?></label>
@@ -168,12 +150,10 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 </span>
             </div>
         </div>
-
         <div class="form-group">
             <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_designations; ?></label>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group">
-                    
                     <div class="checkbox">
                         <label>
                              <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>> Judge with Sensory Training
@@ -214,8 +194,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 <span class="help-block"><?php echo $brewer_text_010; ?></span>
             </div>
         </div>
-
-         <div class="form-group">
+        <div class="form-group">
             <label for="brewerJudgeExp" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_comps; ?></label>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             
@@ -228,7 +207,6 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             <span class="help-block"><?php echo $brewer_text_011; ?></span>
             </div>
         </div>
-
         <div class="form-group">
             <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -236,31 +214,31 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 <span class="help-block"><?php echo $brewer_text_017; ?></span>
             </div>
         </div>
-
         <div class="collapse" id="collapsePref">
             <div class="form-group"><!-- Form Group Checkbox  -->
                 <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_preferred; ?></label>
                 <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <p><strong class="text-danger"><?php echo $brewer_text_012; ?></strong></p>
-                    <?php do {
+                    <?php 
+                    $styles_selected = array();
+                    $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
+                    if ($_SESSION['prefsStyleSet'] == "BA") array_multisort(array_column($styles_selected, 'brewStyleType'), SORT_ASC, array_column($styles_selected, 'brewStyle'), SORT_ASC, $styles_selected);
+                    else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
+                    foreach ($styles_selected as $key => $value) {
+                        $style_id = $value['id'];
                         $style_display = "";
-                        if ($_SESSION['prefsStyleSet'] == "BA") {
-                            if ($row_styles['brewStyleOwn'] == "bcoe") $style_display .= $row_styles['brewStyleCategory'].": ".$row_styles['brewStyle'];
-                            elseif ($row_styles['brewStyleOwn'] == "custom") $style_display .= "Custom: ".$row_styles['brewStyle'];
-                            else $style_display .= $row_styles['brewStyle'];
-                        }
-                        else $style_display .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle'];
-                        ?>
+                        if ($_SESSION['prefsStyleSet'] == "BA") $style_display .= $value['brewStyle'];
+                        else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
+                    ?>
                         <div class="checkbox">
                             <label>
-                                <input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php if (isset($row_brewer['brewerJudgeLikes'])) { $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php echo $style_display; ?>
+                                <input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $style_id; ?>" <?php if (isset($row_brewer['brewerJudgeLikes'])) { $a = explode(",", $row_brewer['brewerJudgeLikes']); foreach ($a as $v) { if ($v == $style_id) echo "CHECKED"; } } ?>> <?php echo $style_display; ?>
                             </label>
                         </div>
-                    <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
+                    <?php }  ?>
                 </div>
             </div>
         </div>
-
         <div class="form-group">
         <label for="brewerJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
                 <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -268,44 +246,38 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                     <span class="help-block"><?php echo $brewer_text_013; ?></span>
                 </div>
         </div>
-
         <div class="collapse" id="collapseNonPref">
             <div class="form-group"><!-- Form Group Checkbox  -->
                 <label for="brewJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_non_preferred; ?></label>
                 <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                     <p><strong class="text-danger"><?php echo $brewer_text_014; ?></strong></p>
                     <!-- <div class="row"> -->
-                    <?php do {
+                    <?php 
+                    $styles_selected = array();
+                    $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
+                    if ($_SESSION['prefsStyleSet'] == "BA") array_multisort(array_column($styles_selected, 'brewStyleType'), SORT_ASC, array_column($styles_selected, 'brewStyle'), SORT_ASC, $styles_selected);
+                    else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
+                    foreach ($styles_selected as $key => $value) {
+                        $style_id = $value['id'];          
                         $style_display = "";
-                        if ($_SESSION['prefsStyleSet'] == "BA") {
-                            if ($row_styles2['brewStyleOwn'] == "bcoe") $style_display .= $row_styles2['brewStyleCategory'].": ".$row_styles2['brewStyle'];
-                            elseif ($row_styles2['brewStyleOwn'] == "custom") $style_display .= "Custom: ".$row_styles2['brewStyle'];
-                            else $style_display .= $row_styles2['brewStyle'];
-                        }
-                        else $style_display .= ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle'];
-                        ?>
-                    
+                        if ($_SESSION['prefsStyleSet'] == "BA") $style_display .= $value['brewStyle'];
+                        else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
+                    ?>
                         <div class="checkbox">
                             <label>
-                                <input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php if (isset($row_brewer['brewerJudgeDislikes'])) { $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php echo $style_display; ?>
+                                <input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $style_id; ?>" <?php if (isset($row_brewer['brewerJudgeDislikes'])) { $a = explode(",", $row_brewer['brewerJudgeDislikes']); foreach ($a as $v) { if ($v == $style_id) echo "CHECKED"; } } ?>> <?php echo $style_display; ?>
                             </label>
                         </div>
-                    <?php } while ($row_styles2 = mysqli_fetch_assoc($styles2)); ?>
+                    <?php }  ?>
                     <!-- </div> -->
                 </div>
             </div>
         </div>
-
     </div><!-- ./ brewerJudgeFields -->
 </section><!-- ./ judge-preferences -->
-<?php } // end if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
 
-<?php 
-
-if ((!empty($steward_location_avail)) && (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account"))))) { 
-        $show_partners_orgs = TRUE;
-?>
-<a name="stewarding"></a><section id="steward-preferences">
+<a name="stewarding"></a>
+<section id="steward-preferences">
     <div class="form-group">
         <label for="brewerSteward" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -321,12 +293,9 @@ if ((!empty($steward_location_avail)) && (((!$steward_limit) && ($go == "account
             <span class="help-block"><?php echo $brewer_text_015; ?></span>
         </div>
     </div>
-
     <?php if (($totalRows_judging == 1) && (($go != "admin") && ($filter == "default"))) {?>
     <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-    <?php } ?>
-
-    <?php if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) { ?>
+    <?php } if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) { ?>
     <div id="brewerStewardFields">
         <?php if (!empty($steward_location_avail)) { ?>
         <div class="form-group <?php if (($view == "all-availability") || ($view == "stewarding-availability")) echo "text-warning"; ?>"><!-- Form Group NOT REQUIRED Select -->
@@ -338,12 +307,8 @@ if ((!empty($steward_location_avail)) && (((!$steward_limit) && ($go == "account
         <?php } ?>
     </div>
     <?php } // end if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) ?>
-
 </section><!-- ./ steward-preferences -->
-<?php } // end if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) 
-
-if ($show_partners_orgs) { ?>
-
+<?php if ($show_partners_orgs) { ?>
 <section id="participant-orgs">
     <div class="form-group">
         <label for="brewerAssignment" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label; ?></label>
@@ -365,7 +330,6 @@ if ($show_partners_orgs) { ?>
         </div>
     </div>
 </section>
-
 <section id="judge-steward-waiver">
     <div id="judge-waiver" class="form-group">
         <label for="brewerJudgeWaiver" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_waiver; ?></label>
@@ -384,11 +348,10 @@ if ($show_partners_orgs) { ?>
     <div class="form-group">
         <label for="brewerJudgeNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_org_notes; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            
             <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeNotes']; ?>" placeholder="">
             <span class="help-block"><?php echo $brewer_text_004; ?></span>
         </div>
     </div>
 </section>
-<?php } ?>
-<?php } // end if ((!$table_assignment) || ($go == "admin")) ?>
+<?php } // end if ($show_partners_orgs) ?>
+<?php } // end if (!$entrant_type_brewery) ?>

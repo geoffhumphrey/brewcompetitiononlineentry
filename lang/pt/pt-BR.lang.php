@@ -1280,6 +1280,7 @@ $header_text_113 = "Você pode editar apenas as informações da sua conta.";
 $header_text_114 = "Como administrador, você pode alterar as informações da conta de um usuário via Admin> Entradas e Participantes> Gerenciar Participantes.";
 $header_text_115 = "Resultados foram publicados.";
 $header_text_116 = "Se você não receber o email dentro de um prazo razoável, entre em contato com um oficial da competição ou administrador do site para redefinir sua senha para você.";
+if (!$mail_use_smtp) $header_text_116 .= " <strong>Informe ao responsável pela competição que o envio de e-mails SMTP não está habilitado e/ou não está funcionando corretamente.</strong>";
 $alert_text_082 = "Desde que você se inscreveu como juiz ou assistente, você não tem permissão para adicionar amostras à sua conta. Apenas representantes de uma organização podem adicionar amostras às suas contas.";
 $alert_text_083 = "Adicionar e editar amostras não está disponível.";
 $alert_text_084 = "Como dministrador, você pode adicionar uma amostra à conta de uma organização usando o menu suspenso & quot; Adicionar amostra para ...&quot; na página Administração &gt; Entradas e participantes &gt; Gerenciar inscrições.";

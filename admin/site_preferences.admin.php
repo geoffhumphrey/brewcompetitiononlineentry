@@ -52,7 +52,9 @@ if (($action == "default") || ($action == "entries")) {
         // Reset vars
         $style_set_selected = "";
         $all_exceptions_USCLEx = "";
+        $custom_exceptions_USCLEx = "";
         $hide_other_js = "";
+        $row_styles_all = "";
         
         // Build style set drop-down
         if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet']))  $style_set_selected = "SELECTED";
@@ -64,10 +66,11 @@ if (($action == "default") || ($action == "entries")) {
         $styles_db_table = $prefix."styles";
 
         if ($style_set['style_set_name'] == "BJCP2025") $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
-
+        elseif ($style_set['style_set_name'] == "AABC2025") $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
         else $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
         
         if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleType,brewStyleGroup,brewStyle ASC";
+        elseif (strpos($style_set['style_set_name'],"AABC") !== false) $query_styles_all .= " ORDER BY brewStyleGroup,brewStyleNum,brewStyle ASC";
         else $query_styles_all .= " ORDER BY brewStyleType,brewStyleGroup,brewStyleNum,brewStyle ASC";
         
         $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
@@ -77,6 +80,7 @@ if (($action == "default") || ($action == "entries")) {
         else $method = 0;
 
         if ($row_styles_all) {
+
             do {
                 
                 $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
@@ -85,6 +89,7 @@ if (($action == "default") || ($action == "entries")) {
                 else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
                 
             } while($row_styles_all = mysqli_fetch_assoc($styles_all));
+        
         }
 
         $all_exceptions .= "<div class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."\">\n";
@@ -390,6 +395,19 @@ $(document).ready(function(){
         }
         else {
             $("#reCAPTCHA-keys").hide("fast");
+        }
+    });
+
+    <?php if ($row_prefs['prefsProEdition'] == "1") { ?>
+    $("#mhp-display").hide("fast");
+    <?php } ?>
+
+    $("input[name$='prefsProEdition']").click(function() {
+        if ($(this).val() == "1") {
+            $("#mhp-display").hide("fast");
+        }
+        else {
+            $("#mhp-display").show("fast");
         }
     });
     
@@ -839,6 +857,20 @@ $(document).ready(function(){
             </label>
         </div>
         <span class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
+    </div>
+</div>
+<div class="form-group" id="mhp-display">
+    <label for="prefsMHPDisplay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Master Homebrewer Program (MHP) Fields and Display</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsMHPDisplay" value="1" id="prefsMHPDisplay_0"  <?php if ($row_prefs['prefsMHPDisplay'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsMHPDisplay" value="0" id="prefsMHPDisplay_1" <?php if ($row_prefs['prefsMHPDisplay'] == "0") echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <div class="help-block">Enable or disable the ability for entrants to enter their Master Homebrewer Program (MHP) number when adding or editing their account information. When they do so, if this function is enabled, a tag will display beside their name if one or more of their entries place. This will also enable the Winners: Master Homebrewer Program Member Data CSV download available from the Data Exports section of the Administration Dashboard.</div>
     </div>
 </div>
 <div class="form-group">
@@ -1328,10 +1360,18 @@ $(document).ready(function(){
     </div>
     <div class="form-group">
         <label for="prefsEmailPort" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Port</label>
-        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">        
-                <input class="form-control" id="prefsEmailPort" name="prefsEmailPort" type="number" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailPort']))) echo $row_prefs['prefsEmailPort']; ?>" data-error="The port required. Ports will vary depending upon the encryption protocol." placeholder="">
+        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailPort" value="25" id="prefsEmailPort_25" <?php if (($section != "step3") && (!empty($row_prefs['prefsEmailPort'])) && ($row_prefs['prefsEmailPort'] == "25")) echo "CHECKED"; ?> /> 25
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailPort" value="465" id="prefsEmailPort_465" <?php if (($section != "step3") && (!empty($row_prefs['prefsEmailPort'])) && ($row_prefs['prefsEmailPort'] == "465")) echo "CHECKED"; ?> /> 465
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailPort" value="587" id="prefsEmailPort_587" <?php if (($section != "step3") && (!empty($row_prefs['prefsEmailPort'])) && ($row_prefs['prefsEmailPort'] == "587")) echo "CHECKED"; ?>/> 587
+                </label>  
             <div class="help-block with-errors"></div>
-            <div class="help-block">As outlined in your webhost's or email service's documentation. Port numbers will vary depending upon the encryption protocol, but are likely to be 25, 465, or 587.</div>
+            <div class="help-block">As outlined in your webhost's or email service's documentation. Port numbers will vary depending upon the encryption protocol - generally 25, 465, or 587.</div>
         </div>
     </div>
 <?php } // End if (!HOSTED); ?>
@@ -1630,7 +1670,7 @@ include (DB.'entry_info.db.php');
         <?php echo $style_set_dropdown; ?>
         </select>
         <div id="helpBlock3-BA" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available in this application.</div>
-        <div id="helpBlock4-AABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="http://www.aabc.org.au/" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
+        <div id="helpBlock4-AABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="https://aabc.asn.au" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
     </div>
 </div>
 <div class="form-group">

@@ -52,7 +52,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ((strlen($row_prefs['prefsStyleLimits']) > 1) && (json_last_error() === JSON_ERROR_NONE)) $current_limits_by_style = TRUE;
 		if ((strlen($row_prefs['prefsStyleLimits']) == 1) && (is_numeric($row_prefs['prefsStyleLimits']))) $current_limits_by_table = TRUE;
 	}
-	
 
 	$update_table = $prefix."preferences";
 
@@ -166,7 +165,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	}
 
-	if (($section == "setup") && ($action == "add")) { }
+	if (($section == "setup") && ($action == "add")) { 
+
+	}
 
 	if ((($section == "admin") || ($section == "setup")) && ($action == "edit")) {
 
@@ -179,6 +180,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if (($go == "default") || ($go == "setup")) {
 
+			if ($_POST['prefsProEdition'] == 1) $prefsMHPDisplay = 0;
+			else $prefsMHPDisplay = sterilize($_POST['prefsMHPDisplay']);
+
 			// CAPTCHA uses prefsGoogleAccount column
 			if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1']))) $prefsGoogleAccount = $_POST['prefsGoogleAccount0']."|".$_POST['prefsGoogleAccount1'];
 			if (HOSTED) $prefsCAPTCHA = 1;
@@ -190,6 +194,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$data_1 = array(
 
 				'prefsProEdition' => sterilize($_POST['prefsProEdition']),
+				'prefsMHPDisplay' => $prefsMHPDisplay,
 				'prefsDisplayWinners' => sterilize($_POST['prefsDisplayWinners']),
 				'prefsWinnerDelay' => $prefsWinnerDelay,
 				'prefsWinnerMethod' => sterilize($_POST['prefsWinnerMethod']),
@@ -206,7 +211,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'prefsTimeZone' => sterilize($_POST['prefsTimeZone']),
 				'prefsTimeFormat' => sterilize($_POST['prefsTimeFormat']),
 				'prefsSponsors' => sterilize($_POST['prefsSponsors']),
-				'prefsSponsorLogos' => sterilize($_POST['prefsSponsorLogos']),
+				'prefsSponsorLogos' => sterilize($_POST['prefsSponsorLogos'])
+
 			);
 
 		}
@@ -685,6 +691,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				if ($row_check_entry_styles['count'] > 0) {
 					include (INCLUDES.'convert/convert_bjcp_2025.inc.php');
+				}
+
+			}
+
+			if ($prefsStyleSet == "AABC2025") {
+
+				include (LIB.'convert.lib.php');
+				
+				if ($_SESSION['prefsStyleSet'] == "AABC2022") {
+					include (INCLUDES.'convert/convert_aabc_2025.inc.php');
+				}
+
+				$query_check_entry_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='New World Perry [BJCP C1D]' OR brewStyle='Traditional Perry [BJCP C1E]' OR brewStyle='Specialty Cider/Perry [BJCP C2F]' OR brewStyle='Cider with Herbs/Spices' OR brewStyle='Cider with Herbs/Spices [BJCP C2E]' OR brewStyle='New World Cider [BJCP C1A]'", $prefix."brewing");
+				$check_entry_styles = mysqli_query($connection,$query_check_entry_styles) or die (mysqli_error($connection));
+				$row_check_entry_styles = mysqli_fetch_assoc($check_entry_styles);
+
+				if ($row_check_entry_styles['count'] > 0) {
+					include (INCLUDES.'convert/convert_aabc_2025.inc.php');
 				}
 
 			}

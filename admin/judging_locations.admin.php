@@ -9,7 +9,7 @@
  */
 
 // Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 1))) {
     $redirect = "../../403.php";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
