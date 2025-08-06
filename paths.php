@@ -157,9 +157,8 @@ function is_https() {
 }
 
 /**
- * General sanitization function.
- * Needs to be top-level due to use in 
- * url_variables.inc.php file.
+ * General sanitization function. Needs to be top-level due to its 
+ * use in the url_variables.inc.php file.
  */
 
 function sterilize($sterilize = NULL) {
@@ -181,9 +180,31 @@ function sterilize($sterilize = NULL) {
 }
 
 if (HOSTED) {
+    
     $installation_id = md5(__FILE__);
     $session_expire_after = 60;
-    $base_url_hosted = "https://brewingcompetitions.com/";
+
+    /**
+     * Parse the hosted URL (hosted URLs are all single subdomains
+     * like xxx.brewingcompetitions.com). Parse by exploding by the
+     * "dots" in the URL and reconstructing a base_url_hosted variable.
+     * 
+     * This approach works around hard-coding a URL in a variable, which
+     * can be false-flagged by webhost security packages like Immunify.
+     * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1609
+     */
+    
+    $current_url_to_parse = 'http://';
+    if (is_https()) $current_url_to_parse = 'https://';  
+    $current_url_to_parse .= $_SERVER['SERVER_NAME'];
+    
+    $current_parsed_url = parse_url($current_url_to_parse);
+    $current_parsed_host = explode('.', $current_parsed_url['host']);
+    
+    $base_url_hosted = 'http://';
+    if (is_https()) $base_url_hosted = 'https://';
+    $base_url_hosted .= $current_parsed_host[1].".".$current_parsed_host[2];
+
 }
 
 /** 
@@ -215,7 +236,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 /**
- * Load DB connection and configuration files
+ * Load DB connection and configuration files.
  */
 
 require_once (CONFIG.'config.php');

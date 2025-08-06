@@ -24,7 +24,7 @@
         $actual_styles_types[] = 0;
 
         foreach ($a as $key => $value) {
-            $actual_styles_types[] = $value['brewStyleType'];
+            if (isset($value['brewStyleType'])) $actual_styles_types[] = $value['brewStyleType'];
         }
 
         $_SESSION['bg_hero_image_types'] = array_unique($actual_styles_types);

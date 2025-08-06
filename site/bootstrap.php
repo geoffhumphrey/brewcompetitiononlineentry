@@ -356,12 +356,11 @@ if ($setup_success) {
 	if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0);
 	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
 
-	// ---------------------------- Globals ------------------------------------------------
+	// ---------------------------- Globals -----------------------------------------
 
 	$php_version = phpversion();
 
 	$ajax_url = $base_url."ajax/";
-	//$ajax_url = $base_url."includes/";
 	$css_url = $base_url."css/";
 	$images_url = $base_url."images/";
 	$js_url = $base_url."js_includes/";
@@ -371,7 +370,6 @@ if ($setup_success) {
 		$css_url = $base_url_hosted."_3.X_shared/css/";
 		$images_url = $base_url_hosted."_3.X_shared/images/";
 		$js_url = $base_url_hosted."_3.X_shared/js_includes/";
-		// $ajax_url = $base_url_hosted."_3.X_shared/ajax/";
 
 		/*
 		$css_url = $base_url_hosted."_bcoem_shared/css/";

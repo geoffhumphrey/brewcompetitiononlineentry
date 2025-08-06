@@ -1,11 +1,9 @@
 <?php
+
 /**
  * Module:      index.php
  * Description: This module is the delivery vehicle for all modules.
  *
- */
-
-/**
  * ------------------------------
  * Load Config Scripts
  * ------------------------------
@@ -18,11 +16,13 @@ require_once (DB.'mods.db.php');
 $account_pages = array("list","pay","brewer","user","brew","pay","evaluation");
 
 if ((!$logged_in) && (in_array($section,$account_pages))) {
+    
     $redirect = $base_url."index.php?msg=99";
     $redirect = prep_redirect_link($redirect);
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
     exit();
+
 }
 
 if (MAINT) {
@@ -109,6 +109,7 @@ $pay_modal .= "</div>";
 $pay_modal .= "</div>";
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
