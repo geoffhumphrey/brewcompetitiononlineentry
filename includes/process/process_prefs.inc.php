@@ -695,6 +695,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			}
 
+			/**
+			 * If the style set has changed from AABC 2022 to AABC 2025, map
+			 * 2022 styles to updated 2025 styles in brewing DB.
+			 *
+			 * As a safeguard to make sure the brewing table data is updated, 
+			 * perform a query for any old styles whose names have changed and/or
+			 * whose category has changed.
+			 */
+
 			if ($prefsStyleSet == "AABC2025") {
 
 				include (LIB.'convert.lib.php');

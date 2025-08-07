@@ -203,7 +203,7 @@ if (HOSTED) {
     
     $base_url_hosted = 'http://';
     if (is_https()) $base_url_hosted = 'https://';
-    $base_url_hosted .= $current_parsed_host[1].".".$current_parsed_host[2];
+    $base_url_hosted .= $current_parsed_host[1].".".$current_parsed_host[2]."/";
 
 }
 

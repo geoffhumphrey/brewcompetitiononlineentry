@@ -370,12 +370,6 @@ if ($setup_success) {
 		$css_url = $base_url_hosted."_3.X_shared/css/";
 		$images_url = $base_url_hosted."_3.X_shared/images/";
 		$js_url = $base_url_hosted."_3.X_shared/js_includes/";
-
-		/*
-		$css_url = $base_url_hosted."_bcoem_shared/css/";
-		$images_url = $base_url_hosted."_bcoem_shared/images/";
-		$js_url = $base_url_hosted."_bcoem_shared/js_includes/";
-		*/
 	
 	}
 

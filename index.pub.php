@@ -185,7 +185,7 @@
 <style>
 
     .layout-hero {
-        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url(../images/<?php echo $hero_background; ?>);
+        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('<?php echo $images_url.$hero_background; ?>');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center top;
