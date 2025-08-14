@@ -617,62 +617,97 @@ if ($logged_in) {
     </script>
 
 <?php } // end if ($section == "brewer") ?>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
     <script src="<?php echo $js_app_pub_url; ?>"></script> 
     <script src="<?php echo $js_invoke_url; ?>"></script> 
     <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (PUB.'eval_warnings.pub.php'); ?>
     <?php if ((($section == "default") || ($section == "list")) && ($entry_window_open == 1)) { ?>
+    
     <script type="text/javascript">
+
+        $("#resume-updates-button").hide();
 
         var count_update_text = "<?php echo $brew_text_061; ?>";
         var count_paused_text = "<?php echo $brew_text_062; ?>";
+        var count_timeout_text = "<?php echo $brew_text_065; ?>";
+        var interval_onfocus = null;
+        var interval_onload = null;
+        var interval_timeout = null;
+        
+        // Update all counters
+        function updateAllCounters(ajax_url) {
+            fetchRecordCount(ajax_url,'entry-total-count','1','brewing');
+            setTimeout(function() {
+                fetchRecordCount(ajax_url,'entry-paid-count','1','brewing','brewPaid','1');
+            }, 2000);
+        }
+
+        // Timeout function
+        function stopUpdates() {
+            clearInterval(interval_onload);
+            clearInterval(interval_onfocus);
+            clearInterval(interval_timeout);
+            $(".count-two-minute-info").text(count_timeout_text);
+            $("#resume-updates-button").fadeIn('fast');
+        }
+
+        function resumeUpdates() {
+            clearInterval(interval_onload);
+            clearInterval(interval_onfocus);
+            clearInterval(interval_timeout);
+            updateAllCounters(ajax_url);
+            interval_onfocus = setInterval(function() { 
+                updateAllCounters(ajax_url); 
+            }, 120000);
+            interval_timeout = setTimeout(function() {
+                stopUpdates();
+            }, 1200000);
+            $(".count-two-minute-info").text(count_update_text);
+            $("#resume-updates-button").fadeOut('fast');
+        }
         
         $(document).ready(function() {
 
+            
             $(".count-two-minute-info").html(count_update_text);
-            
-            // Function to update all counters
-            function updateAllCounters(ajax_url) {
-
-                // Initial counter call
-                fetchRecordCount(ajax_url,'entry-total-count','1','brewing');
-                
-                // Delay successive counter calls by 2 seconds.
-                setTimeout(function() {
-                    fetchRecordCount(ajax_url,'entry-paid-count','1','brewing','brewPaid','1');
-                }, 2000);
-            
-            }
-
-            var interval_onfocus = null;
-            var interval_onload = null;
 
             window.onload = function () {
                 interval_onload = setInterval(function() { 
                     updateAllCounters(ajax_url); 
                 }, 120000);
+                interval_timeout = setTimeout(function() {
+                    stopUpdates();
+                }, 1200000);
                 $(".count-two-minute-info").html(count_update_text);
             };
 
             window.onfocus = function () {
                 clearInterval(interval_onload);
                 clearInterval(interval_onfocus);
+                clearInterval(interval_timeout);
                 updateAllCounters(ajax_url);
                 interval_onfocus = setInterval(function() { 
                     updateAllCounters(ajax_url); 
                 }, 120000);
+                interval_timeout = setTimeout(function() {
+                    stopUpdates();
+                }, 1200000);
                 $(".count-two-minute-info").text(count_update_text);
+                $("#resume-updates-button").fadeOut('fast');
             };
 
             window.onblur = function () {
                 clearInterval(interval_onload);
                 clearInterval(interval_onfocus);
+                clearInterval(interval_timeout);
                 $(".count-two-minute-info").text(count_paused_text);
             };
   
         });
 
     </script>
+
     <?php } ?>
 </body>

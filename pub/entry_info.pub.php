@@ -235,7 +235,7 @@ if ($show_entries) {
 
 			}
 
-			if (!empty($row_limits['prefsUSCLExLimit'])) {
+			if ((!empty($row_limits['prefsUSCLExLimit'])) && (!empty($row_limits['prefsUSCLEx']))) {
 				
 				$excepted_styles = explode(",",$row_limits['prefsUSCLEx']);
 				
@@ -243,8 +243,7 @@ if ($show_entries) {
 				else $sub = $entry_info_text_028;
 				
 				$page_info5 .= "<dl class=\"row\">";
-				if (!empty($row_limits['prefsUSCLExLimit'])) $page_info5 .= sprintf("<dt class=\"col-7 col-md-4 col-lg-3\">%s:</dt><dd class=\"col-5 col-md-8 col-lg-9\">%s</dd>", $label_entry_limit_exception, $row_limits['prefsUSCLExLimit']);
-				
+				$page_info5 .= sprintf("<dt class=\"col-7 col-md-4 col-lg-3\">%s:</dt><dd class=\"col-5 col-md-8 col-lg-9\">%s</dd>", $label_entry_limit_exception, $row_limits['prefsUSCLExLimit']);
 				$page_info5 .= sprintf("<dt class=\"col-12 col-md-4 col-lg-3\">%s:</dt>",$label_style_excepted);
 				$page_info5 .= "<dd class=\"col-12 col-md-8 col-lg-9\">";	
 				$page_info5 .= style_convert($row_limits['prefsUSCLEx'],"7",$base_url,$filter);

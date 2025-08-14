@@ -34,10 +34,6 @@ if ($logged_in) {
 	elseif ($entry_window_open == 2) $entry_panel_display = "panel-danger";
 	else $entry_panel_display = "panel-default";
 
-	$update_text_id = "";
-	if ($entry_window_open == 1) $update_text_id = "admin-dashboard-entries-paid-received-count-updated";
-	if (($judging_started) && (!$show_presentation)) $update_text_id = "admin-dashboard-evaluation-count-total-updated";
-
 	// Buttons - above sidebar
 	$admin_sidebar_header .= "<div class=\"bcoem-admin-element\">"; 
 	$admin_sidebar_header .= "<button id=\"dashboard-tour-button\" onclick=\"driverObjDashTour.drive()\" class=\"btn btn-dark btn-sm btn-block\">Take a Tour of the Admin Dashboard <i class=\"fa fa-directions fa-lg\"></i></button>";
@@ -52,13 +48,19 @@ if ($logged_in) {
 	$admin_sidebar_header .= "<div class=\"panel-heading\">";
 
 	$admin_sidebar_header .= "<h4 style=\"margin: 0px; padding-bottom: 5px;\">Competition Status<span class=\"fa fa-2x fa-bar-chart text-info pull-right\"></span></h4>";
-	$admin_sidebar_header .= "<p class=\"small\" style=\"margin: 0px;\"><span class=\"small text-muted\">Updated <span id=\"".$update_text_id."\">".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></span></p>";
+	$admin_sidebar_header .= "<p class=\"small\" style=\"margin: 0px;\"><span class=\"small text-muted\">Updated <span id=\"admin-count-new-timestamp\">".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></span></p>";
 	
 	if ($entry_window_open == 1) {
 		$admin_sidebar_header .= "<p class=\"updates-indicators small\" style=\"margin: 0px;\"><small><i class=\"fa fa-xs fa-circle text-success\"></i></small> <span class=\"small text-muted\"><span id=\"count-two-minute-info\">".$brew_text_061."</span></span></p>";
 		$admin_sidebar_header .= "<div class=\"updates-indicators small\" style=\"margin-top: 5px;\">";
-		$admin_sidebar_header .= "<span class=\"small text-muted\" id=\"resume-updates\"><a href=\"#\" class=\"hide-loader\" onclick=\"resumeUpdates()\">Resume Updates</a></span>";
-		$admin_sidebar_header .= "<span class=\"small text-muted\" id=\"stop-updates\"><a href=\"#\" class=\"hide-loader\" onclick=\"stopUpdates()\">Pause Updates</a> <a href=\"#\" class=\"hide-loader pull-right\" onclick=\"resumeUpdates()\">Update Now</a></span></div>";
+		$admin_sidebar_header .= "<span class=\"small\" id=\"resume-updates\">";
+		$admin_sidebar_header .= "<button class=\"btn btn-primary btn-xs\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-play\" style=\"padding-right:5px;\"></i> Resume Updates</button>";
+		$admin_sidebar_header .= "</span>";
+		$admin_sidebar_header .= "<span class=\"small\" id=\"stop-updates\">";
+		$admin_sidebar_header .= "<button class=\"btn btn-primary btn-xs\" onclick=\"stopUpdates()\"><i class=\"fa fa-xs fa-pause\" style=\"padding-right:5px;\"></i> Pause Updates</button>";
+		$admin_sidebar_header .= "<button href=\"#\" class=\"btn btn-primary btn-xs pull-right\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-exchange\" style=\"padding-right:5px;\"></i> Update Now</button>";
+		$admin_sidebar_header .= "</span>";
+		$admin_sidebar_header .= "</div>";
 	}
 	
 	$admin_sidebar_header .= "</div>";
@@ -243,17 +245,23 @@ echo $admin_sidebar_body;
 	var interval_eval_onload = null;
 	var interval_entry_onfocus = null;
 	var interval_eval_onfocus = null;
+    var interval_timeout = null;
 
 	var base_url = "<?php echo $base_url; ?>";
 	var ajax_url = "<?php echo $ajax_url; ?>";
 	var count_update_text = "<?php echo $brew_text_061; ?>";
     var count_paused_text = "<?php echo $brew_text_062; ?>";
+    var count_timeout_text = "<?php echo $brew_text_065; ?>";
     var count_paused_manually_text = "<?php echo $brew_text_064; ?>";
     var entry_open = "<?php echo $entry_window_open; ?>";
 	var judging_started = "<?php if ($judging_started) echo "1"; else echo "0"; ?>";;
 	var results_published = "<?php if ($show_presentation) echo "1"; else echo "0"; ?>";
 
 	$("#resume-updates").hide();
+
+	function updateDateTime(ajax_url) {
+		fetchRecordCount(ajax_url,'admin-count-new-timestamp','0','updated-display');
+	}
 
     function updateEntryCounters(ajax_url) {
 
@@ -352,9 +360,10 @@ echo $admin_sidebar_body;
 		clearInterval(interval_eval_onload);
 		clearInterval(interval_entry_onfocus);
 		clearInterval(interval_eval_onfocus);
+		clearInterval(interval_timeout);
     	
-    	$("#stop-updates").hide();
-    	$("#resume-updates").show();
+    	$("#stop-updates").fadeOut('fast');
+    	$("#resume-updates").fadeIn('fast');
     	$("#count-two-minute-info").text(count_paused_manually_text);
     	$(".fa-sync").addClass('hidden');
 
@@ -365,18 +374,22 @@ echo $admin_sidebar_body;
         if (entry_open == 1) {        	
         	$(".eval-update-indicator").hide();        	
         	updateEntryCounters(ajax_url); 
-	        updateFees(ajax_url);        	
+	        updateFees(ajax_url);
+	        updateDateTime(ajax_url);     	
         	interval_entry_onfocus = setInterval(function() { 
 	            updateEntryCounters(ajax_url); 
 	            updateFees(ajax_url);
+	            updateDateTime(ajax_url);
 	        }, 120000);
 	    }
 
 		if ((judging_started == 1) && (results_published == 0)) {			
 			$(".entry-update-indicator").hide();			
-			updateEvalCounters(ajax_url); 	        
+			updateEvalCounters(ajax_url); 
+			updateDateTime(ajax_url);    
 	        interval_eval_onfocus = setInterval(function() { 
-	            updateEvalCounters(ajax_url); 
+	            updateEvalCounters(ajax_url);
+	            updateDateTime(ajax_url);
 	        }, 120000);
 	    }
 
@@ -401,7 +414,12 @@ echo $admin_sidebar_body;
 	        	interval_entry_onload = setInterval(function() { 
 		            updateEntryCounters(ajax_url); 
 		            updateFees(ajax_url);
+		            updateDateTime(ajax_url);
 		        }, 120000);
+		        interval_timeout = setTimeout(function() {
+                    stopUpdates();
+                    $("#count-two-minute-info").text(count_timeout_text);
+                }, 1200000);
 		        $("#count-two-minute-info").text(count_update_text);
 		    }
 
@@ -413,7 +431,12 @@ echo $admin_sidebar_body;
 				$(".entry-update-indicator").hide();
 		        interval_eval_onload = setInterval(function() { 
 		            updateEvalCounters(ajax_url); 
+		            updateDateTime(ajax_url);
 		        }, 120000);
+		        interval_timeout = setTimeout(function() {
+                    stopUpdates();
+                    $("#count-two-minute-info").text(count_timeout_text);
+                }, 1200000);
 		        $("#count-two-minute-info").text(count_update_text);
 		    }
 
@@ -428,11 +451,17 @@ echo $admin_sidebar_body;
 	        
 	        if (entry_open == 1) {	        	
 	        	updateEntryCounters(ajax_url);
-	        	updateFees(ajax_url);		        
+	        	updateFees(ajax_url);
+	        	updateDateTime(ajax_url); 	        
 		        interval_entry_onfocus = setInterval(function() { 
 		            updateEntryCounters(ajax_url); 
 		            updateFees(ajax_url);
+		            updateDateTime(ajax_url);
 		        }, 120000);
+		        interval_timeout = setTimeout(function() {
+                    stopUpdates();
+                    $("#count-two-minute-info").text(count_timeout_text);
+                }, 1200000);
 		        $("#count-two-minute-info").text(count_update_text);		    
 		    }
 
@@ -442,9 +471,15 @@ echo $admin_sidebar_body;
 
 		    if ((judging_started == 1) && (results_published == 0)) {	        	
 	        	updateEvalCounters(ajax_url);
+	        	updateDateTime(ajax_url);
 		        interval_eval_onfocus = setInterval(function() { 
-		            updateEvalCounters(ajax_url); 
+		            updateEvalCounters(ajax_url);
+		            updateDateTime(ajax_url); 
 		        }, 120000);
+		        interval_timeout = setTimeout(function() {
+                    stopUpdates();
+                    $("#count-two-minute-info").text(count_timeout_text);
+                }, 1200000);
 		        $("#count-two-minute-info").text(count_update_text);		  
 		    }
 
@@ -456,6 +491,7 @@ echo $admin_sidebar_body;
 	        clearInterval(interval_eval_onload);
 	        clearInterval(interval_entry_onfocus);
 	        clearInterval(interval_eval_onfocus);
+	        clearInterval(interval_timeout);
 	        $("#count-two-minute-info").text(count_paused_text);
 	            
 	    };

@@ -137,7 +137,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 				
 				if (HOSTED) {
 					include (CONFIG.'config.mail.php');
-					if ((!isset($mail_default_from)) || (trim($mail_default_from) === '')) $from_email = "noreply@".$url;
+					if ((!isset($mail_default_from)) || (trim($mail_default_from) === '')) $from_email = $_SESSION['prefsEmailFrom'];
 					else $from_email = $mail_default_from;
 				}
 

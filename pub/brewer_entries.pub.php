@@ -124,6 +124,9 @@ if ($_SESSION['prefsEval'] == 1) {
 		 
 }
 
+$disable_label_print = FALSE;
+$disable_label_print_count = 0;
+
 if ($totalRows_log > 0) {
 	
 	do {
@@ -415,6 +418,7 @@ if ($totalRows_log > 0) {
 
 
 			$multi_print_link = "";
+
 			if (($print_bottle_labels) && (!$judging_started)) {
 				$entry_output .= "<td class=\"d-print-none\">";
 				
@@ -422,7 +426,10 @@ if ($totalRows_log > 0) {
 					$multi_print_link .= "<input class=\"form-check-input entry-print\" name=\"id[]\" type=\"checkbox\" value=\"".$row_log['id']."\">";
 				}
 
-				else $multi_print_link .= "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" disabled>";
+				else {
+					$multi_print_link .= "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" disabled>";
+					$disable_label_print_count += 1;
+				}
 
 				$entry_output .= "<div class=\"form-check form-check-inline\">";
 				$entry_output .= $multi_print_link;
@@ -675,6 +682,8 @@ if ($totalRows_log > 0) {
 
 	} while ($row_log = mysqli_fetch_assoc($log));
 
+	if ($disable_label_print_count > 0) $disable_label_print = TRUE;
+
 } // end if ($totalRows_log > 0)
 
 // --------------------------------------------------------------
@@ -763,8 +772,8 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				  	<?php if ((!$show_scores) && ($print_bottle_labels)) { ?>
 				  	<?php if (!$judging_started) { ?>
 				    <th class="d-print-none" width="7%" nowrap>
-				    	<input class="form-check-input d-print-none" type="checkbox" id="select_all">
-				    	<a class="hide-loader d-print-none" style="cursor: pointer;" data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-content="<?php echo $brewer_entries_text_021; ?>"><i class="fa fa-question-circle hide-loader ms-1"></i></a>
+				    	<input class="form-check-input d-print-none" type="checkbox" id="select_all" <?php if ($disable_label_print) echo "disabled"; ?>>
+				    	<a class="hide-loader d-print-none" style="cursor: pointer;" data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-content="<?php echo $brewer_entries_text_021; if ($disable_label_print) echo " ".$alert_text_085; ?>"><i class="fa fa-question-circle hide-loader ms-1"></i></a>
 				    </th>
 				    <?php } ?>
 					<?php } ?>

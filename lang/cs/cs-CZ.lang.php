@@ -2048,6 +2048,107 @@ $brewer_info_019 = "<strong>Uvedli jste, že jste ochotni sloužit jako asistent
 $brewer_info_020 = "<strong>Již jste byli přiděleni ke stolu jako rozhodčí nebo steward.</strong> Pokud si přejete změnit svou dostupnost, kontaktujte prosím organizátora soutěže nebo koordinátora rozhodčích.";
 
 /**
+ * ------------------------------------------
+ * Version 3.0.0 Additions
+ * ------------------------------------------
+ */
+
+$label_not_started = "Nezačato";
+$label_in_progress = "Probíhá";
+$label_concluded = "Ukončeno";
+$label_start = "Začátek";
+$label_end = "Konec";
+$label_visit = "Navštívit";
+$label_no_website = "Žádné webové stránky";
+$label_register_as_judge = "Registrovat se jako porotce";
+$label_register_as_steward = "Registrovat se jako správce";
+$label_create_account = "Vytvořit účet";
+$label_log_in_to_enter = "Registrovat se nebo se přihlásit";
+$label_not_available = "Nedostupné";
+$label_fyi = "Pro vaši informaci";
+$label_results = "Výsledky";
+$label_entries_remaining = "Zbývající přihlášky do aktuálního limitu";
+$label_entry_limit_enforced = "Limit přihlášek platí do";
+$label_button_no_steward = "Nechci se dobrovolně hlásit jako správce";
+$label_button_no_judge = "Nechci se dobrovolně hlásit jako porotce";
+$label_staff_availability = "Dostupnost personálu";
+$label_original_gravity = "Původní hustota";
+$label_verified = "Ověřeno";
+$label_style_type = "Typ stylu";
+$label_entry_limit_style = "Limity přihlášek podle kategorie stylu";
+$label_current_count = "Aktuální počet";
+$label_scroll = "Posunout";
+$label_opt_out = "Odhlásit se";
+$label_opening = "Otevírání";
+$label_entry_limits = "Limity přihlášek";
+$label_entry_limit_participant = "Limit přihlášek na účastníka";
+$label_entry_limit_substyle = "Limit přihlášek na styl";
+$label_entry_limit_exception = "Limit výjimek na styl";
+$label_exceptions = "Výjimky";
+$label_style_excepted = "Výjimky stylu";
+$label_no_sessions = "Žádné relace nevybrány";
+$label_resume_updates = "Obnovit aktualizace";
+
+$brewer_text_056 = "Vyberte &quot;Odhlásit se&quot; výše, pokud se nechcete účastnit žádných Pro-Am příležitostí spojených s touto soutěží.";
+
+$brew_text_056 = "Prosím uveďte úroveň sycení přihlášky.";
+$brew_text_057 = "Prosím uveďte úroveň sladkosti přihlášky.";
+$brew_text_058 = "Prosím uveďte sílu přihlášky.";
+$brew_text_059 = "Prosím uveďte barvu přihlášky.";
+$brew_text_060 = "Prosím zadejte hustotu až na tisíciny (např. 1.120 nebo 1.014, atd.).";
+$brew_text_061 = "Počty se aktualizují každé dvě minuty.";
+$brew_text_062 = "Počty pozastaveny, dokud je okno neaktivní. Klikněte nebo klepněte pro reaktivaci.";
+$brew_text_063 = "Počty se aktualizují každou minutu.";
+$brew_text_064 = "Aktualizace počtů pozastavena.";
+$brew_text_065 = "Aktualizace počtů vypršela. Vyberte Obnovit aktualizace pro restart.";
+
+$bottle_labels_008 = "Ujistěte se, že nastavení tisku ve vašem prohlížeči je <strong>Na výška</strong> a <strong>100&#37; měřítko</strong>.";
+
+$contact_text_005 = "Vyberte nebo vyhledejte kontakt.";
+$contact_text_006 = "Prosím vyberte osobu.";
+$contact_text_007 = "Prosím uveďte své křestní jméno a příjmení.";
+$contact_text_008 = "Prosím uveďte platnou emailovou adresu.";
+$contact_text_009 = "Prosím uveďte předmět.";
+$contact_text_010 = "Prosím uveďte zprávu.";
+
+$contact_text_011 = "Vyberte emailovou adresu pro spuštění vaší nativní emailové aplikace. Zkopírujte adresu a vložte ji do nové zprávy, pokud používáte webové emailové služby jako Gmail, atd.";
+$contact_text_012 = "Prosím vezměte na vědomí: toto okno je výsledkem více opatření snažících se zmírnit vystavení emailové adresy spambotům. Pokud je chyba nebo emailová adresa kontaktu soutěže není dostupná výše, byla obfuskována z bezpečnostních důvodů. Pokud je tomu tak, kontaktujte tohoto oficiálního zástupce soutěže jinými způsoby (sociální média, webové stránky organizace, atd.).";
+
+$error_text_000 = "Prosím použijte hlavní navigaci výše pro přechod tam, kam chcete jít.";
+$error_text_001 = "Pokud odkazy výše nefungují, prosím kontaktujte zástupce stránky.";
+$error_text_400 = "Neplatný požadavek.";
+$error_text_401 = "Pro váš požadavek je potřeba oprávnění.";
+$error_text_403 = "Akce zakázána.";
+$error_text_404 = "Stránka nenalezena.";
+$error_text_500 = "Chybná konfigurace serveru.";
+
+$styles_entry_text_C1A_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti. Přihlašovatelé MOHOU specifikovat odrůdy jablek, zejména pokud tyto odrůdy přinášejí neobvyklé charakteristiky.";
+$styles_entry_text_C1B_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti. Přihlašovatelé MOHOU specifikovat použité odrůdy jablek; pokud jsou specifikovány, bude očekáván odrůdový charakter.";
+$styles_entry_text_C1C_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení. Přihlašovatelé MUSÍ specifikovat sladkost, omezenou na suché až polosladké. Přihlašovatelé MOHOU specifikovat použité odrůdy jablek; pokud jsou specifikovány, bude očekáván odrůdový charakter.";
+$styles_entry_text_C1D_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení. Přihlašovatelé MUSÍ specifikovat sladkost, omezenou na střední až sladké. Přihlašovatelé MOHOU specifikovat použité odrůdy jablek; pokud jsou specifikovány, bude očekáván odrůdový charakter.";
+$styles_entry_text_C1E_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení. Přihlašovatelé MUSÍ specifikovat sladkost, omezenou na suché až střední. Přihlašovatelé MOHOU specifikovat použité odrůdy jablek; pokud jsou specifikovány, bude očekáván odrůdový charakter.";
+$styles_entry_text_C2A_2025 = "Přihlašovatelé MUSÍ specifikovat, zda byl cider fermentován nebo vyzrál v sudech. Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti.";
+$styles_entry_text_C2B_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti.";
+$styles_entry_text_C2C_2025 = "Přihlašovatelé MUSÍ specifikovat počáteční hustotu, konečnou hustotu nebo zbytkový cukr a úroveň alkoholu. Přihlašovatelé MUSÍ specifikovat úroveň sycení.";
+$styles_entry_text_C2D_2025 = "Přihlašovatelé MUSÍ specifikovat počáteční hustotu, konečnou hustotu nebo zbytkový cukr a úroveň alkoholu. Přihlašovatelé MUSÍ specifikovat úroveň sycení.";
+$styles_entry_text_C3A_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti. Přihlašovatelé MUSÍ specifikovat veškeré přidané ovoce nebo ovocnou šťávu. Přihlašovatelé MOHOU specifikovat základní styl cideru. Přihlašovatelé MOHOU specifikovat barvu přidaného ovoce.";
+$styles_entry_text_C3B_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti. Přihlašovatelé MUSÍ specifikovat všechna přidaná koření. Pokud se používá chmel, přihlašovatel MUSÍ specifikovat odrůdy. Přihlašovatelé MOHOU specifikovat základní styl cideru.";
+$styles_entry_text_C3C_2025 = "Přihlašovatelé MUSÍ specifikovat přísady nebo procesy, které činí přihlášku experimentálním ciderem. Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti. Přihlašovatelé MOHOU specifikovat základní styl nebo poskytnout detailnější popis konceptu.";
+$styles_entry_text_C4A_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti.";
+$styles_entry_text_C4B_2025 = "Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti.";
+$styles_entry_text_C4C_2025 = "Přihlašovatelé MUSÍ specifikovat počáteční hustotu, konečnou hustotu nebo zbytkový cukr a úroveň alkoholu. Přihlašovatelé MUSÍ specifikovat úroveň sycení.";
+$styles_entry_text_C4D_2025 = "Přihlašovatelé MUSÍ specifikovat přísady nebo procesy, které činí přihlášku experimentálním perry. Přihlašovatelé MUSÍ specifikovat úroveň sycení i sladkosti. Přihlašovatelé MOHOU specifikovat základní styl nebo poskytnout detailnější popis konceptu.";
+
+$login_text_028 = "Zadané uživatelské jméno nebylo nalezeno. Prosím zkontrolujte ho a zkuste znovu.";
+$login_text_029 = "Pokud si nemůžete vzpomenout na své uživatelské jméno, kontaktujte administrátora této stránky.";
+$login_text_030 = "Poskytnutý email není platný. Prosím zkontrolujte ho a zkuste znovu.";
+
+$entry_info_text_056 = "Limit dosažen. Žádné další přihlášky nebudou přijaty.";
+$entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Označuje, že limit přihlášek pro styl byl dosažen a žádné další přihlášky tohoto stylu nebudou přijaty.";
+
+
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

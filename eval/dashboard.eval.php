@@ -599,13 +599,13 @@ if ($totalRows_table_assignments > 0) {
 				$status_sidebar_timing = $status_sidebar_js_timing += 2000;
 				$status_sidebar_js .= sprintf("
 					setTimeout(function() {
-						fetchRecordCount(base_url,'total-evaluations-table-%s','1','evaluation','eid','table','evalTable','%s');
+						fetchRecordCount(ajax_url,'total-evaluations-table-%s','1','evaluation','eid','table','evalTable','%s');
 						$('.refresh-link-table-%s').removeClass('hidden');
-			        	$('.refresh-link-table-%s').fadeIn();
+			        	$('.refresh-link-table-%s').fadeIn('fast');
 						$('.icon-sync-table-%s').removeClass('hidden');
-			        	$('.icon-sync-table-%s').fadeIn();
+			        	$('.icon-sync-table-%s').fadeIn('fast');
 			        	setInterval(function() { 
-			                $('.icon-sync-table-%s').fadeOut();
+			                $('.icon-sync-table-%s').fadeOut('fast');
 			            }, 10000);
 					}, %s);\n
 					",$tbl_id,$tbl_id,$tbl_id,$tbl_id,$tbl_id,$tbl_id,$tbl_id,$status_sidebar_timing);
@@ -1008,7 +1008,7 @@ $status_sidebar .= "<div class=\"panel-heading\">";
 
 $status_sidebar .= "<h4 style=\"margin: 0px; padding-bottom: 5px;\">Status<span class=\"fa fa-2x fa-bar-chart text-info pull-right\"></span></h4>";
 
-$status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted\"><span class=\"small\">Updated <span class=\"total-evaluations-unique-updated\">".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></span></p>";
+$status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted\"><span class=\"small\">Updated <span id=\"eval-count-new-timestamp\">".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></span></p>";
 
 $status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-indicators\"><span class=\"small\" id=\"count-two-minute-info\">".$brew_text_061."</span></p>";
 
@@ -1016,10 +1016,22 @@ $status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-i
 $status_sidebar .= "<span class=\"small\"><a href=\"#\" onClick=\"window.location.reload()\">Refresh this page</a> to review updated evaluations and/or consensus scores.</span></span>";
 $status_sidebar .= "</p>";
 
+/*
 $status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-indicators\">";
 $status_sidebar .= "<span class=\"small\" id=\"resume-updates\"><a href=\"#\" class=\"hide-loader\" onclick=\"resumeUpdates()\">Resume Updates</a></span>";
 $status_sidebar .= "<span class=\"small\" id=\"stop-updates\"><a href=\"#\" class=\"hide-loader\" onclick=\"stopUpdates()\">Pause Updates</a> <a href=\"#\" class=\"hide-loader pull-right\" onclick=\"resumeUpdates()\">Update Now</a></span>";
 $status_sidebar .= "</p>";
+*/
+
+$status_sidebar .= "<div class=\"updates-indicators small\" style=\"margin-top: 5px;\">";
+$status_sidebar .= "<span class=\"small\" id=\"resume-updates\">";
+$status_sidebar .= "<button class=\"btn btn-primary btn-xs\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-play\" style=\"padding-right:5px;\"></i> Resume Updates</button>";
+$status_sidebar .= "</span>";
+$status_sidebar .= "<span class=\"small\" id=\"stop-updates\">";
+$status_sidebar .= "<button class=\"btn btn-primary btn-xs\" onclick=\"stopUpdates()\"><i class=\"fa fa-xs fa-pause\" style=\"padding-right:5px;\"></i> Pause Updates</button>";
+$status_sidebar .= "<button href=\"#\" class=\"btn btn-primary btn-xs pull-right\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-exchange\" style=\"padding-right:5px;\"></i> Update Now</button>";
+$status_sidebar .= "</span>";
+$status_sidebar .= "</div>";
 
 $status_sidebar .= "</div>"; // end panel-heading
 
@@ -1148,9 +1160,13 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
 
 	var interval_onload = null;
     var interval_onfocus = null;
-    var count_update_text = "<?php echo $brew_text_061; ?>";
+    var interval_timeout = null;
+
+    var count_update_text = "Counts are updated every five minutes.";
     var count_paused_text = "<?php echo $brew_text_062; ?>";
     var count_paused_manually_text = "<?php echo $brew_text_064; ?>";
+    var count_timeout_text = "<?php echo $brew_text_065; ?>";
+
     var base_url = "<?php echo $base_url; ?>";
 	var ajax_url = "<?php echo $ajax_url; ?>";
 	var judging_started = "<?php if ($judging_started) echo "1"; else echo "0"; ?>";;
@@ -1167,33 +1183,32 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
 	}
     
     // Function to update all counters
-    function updateAllCounters(base_url) {
-
+    function updateAllCounters(ajax_url) {
+	
         // Initial counter call
-        fetchRecordCount(base_url,'total-evaluations','0','evaluation');
+        fetchRecordCount(ajax_url,'total-evaluations','0','evaluation');
         $('#icon-sync-total-evaluations').removeClass('hidden');
-    	$('#icon-sync-total-evaluations').fadeIn();
+    	$('#icon-sync-total-evaluations').fadeIn('fast');
     	setInterval(function() { 
-            $('#icon-sync-total-evaluations').fadeOut();  
+            $('#icon-sync-total-evaluations').fadeOut('fast');  
         }, 10000);
 
         setTimeout(function() {
             
-            fetchRecordCount(base_url,'total-evaluations-unique','1','evaluation','eid','default');
+            fetchRecordCount(ajax_url,'total-evaluations-unique','1','evaluation','eid','default');
 	        $('#icon-sync-total-evaluations-unique').removeClass('hidden');
-	    	$('#icon-sync-total-evaluations-unique').fadeIn();
+	    	$('#icon-sync-total-evaluations-unique').fadeIn('fast');
 	    	setInterval(function() { 
-	            $('#icon-sync-total-evaluations-unique').fadeOut();  
+	            $('#icon-sync-total-evaluations-unique').fadeOut('fast');  
 	        }, 10000);
 
         }, 1000);
-
 
     }
 
     // Function to update all counters
     // JS dynamically generated in PHP loop
-    function updateAllTableCounters(base_url) {
+    function updateAllTableCounters(ajax_url) {
 
         <?php echo $status_sidebar_js; ?>
 
@@ -1205,7 +1220,7 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
     	$("#stop-updates").hide();
     	$("#resume-updates").show();
     	$("#count-two-minute-info").text(count_paused_manually_text);
-    	$(".refresh-link").fadeOut();
+    	$(".refresh-link").fadeOut('fast');
     	$(".refresh-link").addClass('hidden');
     	$(".fa-sync").addClass('hidden');
     }
@@ -1213,19 +1228,25 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
     function resumeUpdates() {
     	clearInterval(interval_onload);
         clearInterval(interval_onfocus);
-        updateAllCounters(base_url);
+        updateAllCounters(ajax_url);
+        updateDateTime(ajax_url);  
         setTimeout(function() {
-        	updateAllTableCounters(base_url);
+        	updateAllTableCounters(ajax_url);
         }, 5000);
     	interval_onfocus = setInterval(function() { 
-            updateAllCounters(base_url);
+            updateAllCounters(ajax_url);
+            updateDateTime(ajax_url);  
             setTimeout(function() {
-            	updateAllTableCounters(base_url);
+            	updateAllTableCounters(ajax_url);
             }, 5000);
-        }, 120000);
+        }, 300000);
     	$("#stop-updates").show();
     	$("#resume-updates").hide();
     	$("#count-two-minute-info").text(count_update_text);
+    }
+
+    function updateDateTime(ajax_url) {
+    	fetchRecordCount(ajax_url,'eval-count-new-timestamp','0','updated-display');
     }
     
     $(document).ready(function() {
@@ -1233,12 +1254,17 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
         window.onload = function () {
         	if ((judging_started == 1) && (results_published == 0)) {
         		$(".refresh-link").addClass('hidden');
-	            interval_onload = setInterval(function() { 
-	                updateAllCounters(base_url);
+	            interval_onload = setInterval(function() {
+	            	updateDateTime(ajax_url); 
+	                updateAllCounters(ajax_url);
 	                setTimeout(function() {
-	                	updateAllTableCounters(base_url);
+	                	updateAllTableCounters(ajax_url);
 	                }, 5000);
-	            }, 120000);
+	            }, 300000);
+	            interval_timeout = setTimeout(function() {
+                    stopUpdates();
+                    $("#count-two-minute-info").text(count_timeout_text);
+                }, 1200000);
 	            $("#count-two-minute-info").text(count_update_text);
 	        }
         };
@@ -1247,16 +1273,22 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
             clearInterval(interval_onload);
             clearInterval(interval_onfocus);
             if ((judging_started == 1) && (results_published == 0)) {
-	            updateAllCounters(base_url);
+	            updateDateTime(ajax_url);
+	            updateAllCounters(ajax_url);  
 	            setTimeout(function() {
-                	updateAllTableCounters(base_url);
+                	updateAllTableCounters(ajax_url);
                 }, 5000);
 	            interval_onfocus = setInterval(function() { 
-	                updateAllCounters(base_url);
+	                updateDateTime(ajax_url);  
+	                updateAllCounters(ajax_url);
 	                setTimeout(function() {
-	                	updateAllTableCounters(base_url);
+	                	updateAllTableCounters(ajax_url);
 	                }, 5000);
-	            }, 120000);
+	            }, 300000);
+	            interval_timeout = setTimeout(function() {
+                    stopUpdates();
+                    $("#count-two-minute-info").text(count_timeout_text);
+                }, 1200000);
 	            $("#count-two-minute-info").text(count_update_text);
 	            $("#stop-updates").show();
 	    		$("#resume-updates").hide();
@@ -1266,6 +1298,7 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
         window.onblur = function () {
             clearInterval(interval_onload);
             clearInterval(interval_onfocus);
+            clearInterval(interval_timeout);
             if ((judging_started == 1) && (results_published == 0)) $("#count-two-minute-info").text(count_paused_text);
         };
 

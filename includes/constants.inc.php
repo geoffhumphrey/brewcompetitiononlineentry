@@ -14,6 +14,7 @@
 $languages = array(
     "pt-BR" => "Brazilian Portuguese",
     "cs-CZ" => "Czech",
+    "en-GB" => "English (GB)",
     "en-US" => "English (US)",
     "fr-FR" => "French",
     "es-419" => "Spanish (Latin America)"

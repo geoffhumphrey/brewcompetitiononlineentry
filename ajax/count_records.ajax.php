@@ -86,6 +86,13 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && ($section != "default"
 
         }
 
+        elseif ($section == "updated-display") {
+
+            $do_query = FALSE;
+            $no_query_value = sprintf("%s %s", $current_date_display_short, $current_time);
+            
+        }
+
         else {
 
             $query_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$db_table);
@@ -138,7 +145,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && ($section != "default"
             }
 
         }
-
     
     } catch (Exception $e) {
         

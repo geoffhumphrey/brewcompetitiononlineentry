@@ -16,6 +16,8 @@ $glance_closed_color = "danger";
 $glance_disabled_color = "secondary";
 $glance_status_color = "primary";
 
+$entry_status_resume_button = array();
+
 $entry_status_body_content = "<ul class=\"list-unstyled\">";
 $entry_status_body_content .= "<li>";
 $entry_status_body_content .= sprintf("<strong>%s</strong> &ndash; <span id=\"entry-total-count\" class=\"entry-total-count\">%s</span>",$label_total, $total_entries);
@@ -25,20 +27,28 @@ $entry_status_body_content .= "<li>";
 $entry_status_body_content .= sprintf("<strong>%s</strong> &ndash; <span id=\"entry-paid-count\" class=\"entry-paid-count\">%s</span>", $label_paid, $total_paid, $row_limits['prefsEntryLimitPaid']);
 if ((isset($row_limits['prefsEntryLimitPaid'])) && (!empty($row_limits['prefsEntryLimitPaid']))) $entry_status_body_content .= sprintf(" / %s", $row_limits['prefsEntryLimitPaid']);
 $entry_status_body_content .= "</li>";
-if ($entry_window_open == 0) $entry_status_body_content .= sprintf("<li class=\"small text-muted lh-1 pb-1 pt-1\">%s %s</li>", $label_opening, $entry_open_sidebar);
+
+if ($entry_window_open == 0) {
+	$entry_status_body_content .= sprintf("<li class=\"small text-muted lh-1 pb-1 pt-1\">%s %s</li>", $label_opening, $entry_open_sidebar);
+}
+
 if ($entry_window_open == 1) {
 	$entry_status_body_content .= sprintf("<li class=\"small text-muted lh-1 pt-1\">%s <span id=\"entry-paid-count-updated\" class=\"entry-paid-count-updated\">%s %s</span></li>", $label_updated, $current_date_display_short, $current_time);
 	$entry_status_body_content .= "<li class=\"text-muted lh-1 pt-1\"><small class=\"count-two-minute-info\" id=\"count-two-minute-info\"></small></li>";
+	$entry_status_resume_button = "<div class=\"d-grid\"><button id=\"resume-updates-button\" class=\"hide-loader btn btn-primary\" onclick=\"resumeUpdates()\">".$label_resume_updates."</button></div>";
 }
-if ($entry_window_open == 2) $entry_status_body_content .= sprintf("<li class=\"small text-muted lh-1 pt-1\">%s %s</li>", $label_closed, $entry_closed_sidebar);
-$entry_status_body_content .= "</ul>";
 
+if ($entry_window_open == 2) {
+	$entry_status_body_content .= sprintf("<li class=\"small text-muted lh-1 pt-1\">%s %s</li>", $label_closed, $entry_closed_sidebar);
+}
+
+$entry_status_body_content .= "</ul>";
 
 $glance_entry_status = array(
 	"color" => $glance_status_color,
 	"status" => $glance_pill_status_text,
 	"body-content" => $entry_status_body_content,
-	"button1" => array(),
+	"button1" => $entry_status_resume_button,
 	"button2" => array(),
 	"button-color" => $glance_status_color
 );
@@ -410,11 +420,23 @@ else {
 			$button1 = "";
 			$button2 = "";
 
-			if ((!empty($card_state['button1'])) && (!empty($card_state['button1']['link']))) $button1 = sprintf("<div class=\"d-grid\"><a href=\"%s\" class=\"btn btn-%s\">%s</a></div>",$card_state['button1']['link'],$card_state['button-color'],$card_state['button1']['text']);
-			if ((!empty($card_state['button1'])) && (empty($card_state['button1']['link']))) $button1 = sprintf("<div class=\"d-grid\"><button class=\"btn btn-%s disabled\">%s</button></div>",$card_state['button-color'],$card_state['button1']['text']);
+			if (is_array($card_state['button1'])) {
+				if ((!empty($card_state['button1'])) && (!empty($card_state['button1']['link']))) $button1 = sprintf("<div class=\"d-grid\"><a href=\"%s\" class=\"btn btn-%s\">%s</a></div>",$card_state['button1']['link'],$card_state['button-color'],$card_state['button1']['text']);
+				if ((!empty($card_state['button1'])) && (empty($card_state['button1']['link']))) $button1 = sprintf("<div class=\"d-grid\"><button class=\"btn btn-%s disabled\">%s</button></div>",$card_state['button-color'],$card_state['button1']['text']);
+			}
 
-			if ((!empty($card_state['button2'])) && (!empty($card_state['button2']['link']))) $button2 = sprintf("<div class=\"d-grid\"><a href=\"%s\" class=\"btn btn-%s\">%s</a></div>",$card_state['button1']['link'],$card_state['button-color'],$card_state['button1']['text']);
-			if ((!empty($card_state['button2'])) && (empty($card_state['button2']['link']))) $button2 = sprintf("<div class=\"d-grid\"><button class=\"btn btn-%s disabled\">%s</button></div>",$card_state['button-color'],$card_state['button2']['text']);
+			else {
+				$button1 = $card_state['button1'];
+			}
+
+			if (is_array($card_state['button2'])) {
+				if ((!empty($card_state['button2'])) && (!empty($card_state['button2']['link']))) $button2 = sprintf("<div class=\"d-grid\"><a href=\"%s\" class=\"btn btn-%s\">%s</a></div>",$card_state['button1']['link'],$card_state['button-color'],$card_state['button1']['text']);
+				if ((!empty($card_state['button2'])) && (empty($card_state['button2']['link']))) $button2 = sprintf("<div class=\"d-grid\"><button class=\"btn btn-%s disabled\">%s</button></div>",$card_state['button-color'],$card_state['button2']['text']);
+			}
+
+			else {
+				$button1 = $card_state['button2'];
+			}
 
 ?>
 	<div class="col">

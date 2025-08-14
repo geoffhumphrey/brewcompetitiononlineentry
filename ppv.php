@@ -62,7 +62,7 @@ $url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
 if (HOSTED) {
 	include (CONFIG.'config.mail.php');
-	if ((!isset($mail_default_from)) || (trim($mail_default_from) === '')) $from_email = "noreply@".$url;
+	if ((!isset($mail_default_from)) || (trim($mail_default_from) === '')) $from_email = $_SESSION['prefsEmailFrom'];
 	else $from_email = $mail_default_from;
 }
 

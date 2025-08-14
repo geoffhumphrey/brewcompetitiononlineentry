@@ -293,8 +293,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if ((HOSTED) && ($mail_use_smtp)) {
 
-				$server = "brewingcompetitions.com";
-
 				$to_email = $default_to."@brewingcompetitions.com";
 				$to_email = mb_convert_encoding($to_email, "UTF-8");
 				$to_email_formatted = "BCOEM Admin <".$to_email.">";
@@ -310,13 +308,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				$headers  = "MIME-Version: 1.0"."\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-				$headers .= "From: BCOEM Server <noreply@".$server.">"."\r\n";
+				$headers .= "From: BCOEM Server <".$_SESSION['prefsEmailFrom'].">"."\r\n";
 					
 				$mail = new PHPMailer(true);
 				$mail->CharSet = 'UTF-8';
 				$mail->Encoding = 'base64';
 				$mail->addAddress($to_email, "BCOEM Admin");
-				$mail->setFrom("noreply@".$server, "BCOEM Server");
+				$mail->setFrom($_SESSION['prefsEmailFrom'], "BCOEM Server");
 				$mail->Subject = $subject;
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);				

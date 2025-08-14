@@ -1256,7 +1256,7 @@ $(document).ready(function(){
         <?php } ?>
         <div class="help-block">
         <?php if (HOSTED) { ?>
-            <p>If enabled, emails sent from your installation will originate from the noreply@brewingcompetitions.com address. This address is not monitored and all emails generated will contain a discslaimer stating as such.</p>
+            <p>If enabled, emails sent from your hosted installation will originate from the <?php echo $_SESSION['prefsEmailFrom']; ?> address. This address is not monitored and all emails generated will contain a disclaimer stating as such.</p>
         <?php } else { ?>
             <p><strong>If enabled, you will need to provide a valid email address and associated information to send emails via the Simple Mail Transfer Protocol (SMTP).</strong></p>
             <p>See your webhost's or email service's documentation for the necessary settings to set up sending emails using SMTP. If you would like to use a Gmail email address, you'll need to set up Gmail SMTP. <a href="https://mailtrap.io/blog/gmail-smtp/#Step-1-Enabling-SMTP-in-Gmail-settings" target="_blank">This guide</a> will help you get the necessary settings.</p>
@@ -1264,6 +1264,7 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
+<?php if (!HOSTED) { ?>
 <section id="sending-email-options">
     <div id="send-test-email-show-button" class="row">
         <label for="prefsEmailSMTP-port" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Settings Test</label>
@@ -1286,7 +1287,6 @@ $(document).ready(function(){
             <?php } ?>
         </div>
     </div>
-<?php if (!HOSTED) { ?>
     <div class="form-group">
         <label for="prefsEmailFrom" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Originating Email Address</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
@@ -1467,6 +1467,7 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
+    <?php if (!HOSTED) { ?>
     <section id="send-test-email-show" class="row">
         <label for="prefsEmailSMTP-port" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Settings Test</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12"> 
@@ -1481,6 +1482,7 @@ $(document).ready(function(){
             <div class="help-block">After setting preferences, send a test email to <?php echo $_SESSION['user_name']; ?> using the settings input above.</div>
         </div>
     </section>
+    <?php } ?>
 </section>
 <?php } // end if ($action == "email") { ?>
 
@@ -1935,8 +1937,8 @@ if (isset($row_contest_info['contestEntryFeePassword'])) $contestEntryFeePasswor
     </div>
 </div>
 <?php
-$st_arr = array();
-if (strpos($section, "step") === FALSE) {
+if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
+    $st_arr = array();
     $st_count = 0;
     do {
         $st_arr[] = $row_style_type['id'];
