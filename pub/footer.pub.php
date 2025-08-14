@@ -1,25 +1,13 @@
 <?php 
 /**
- * Module:      footer.sec.php 
+ * Module:      footer.pub.php 
  * Description: This module houses the footer displayed on all pages. 
  * 
  */
 
-/*
-// Redirect if directly accessed
-if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
-    $redirect = "../../index.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-*/
-
-$footer = "";
-
 if ((!empty($current_version_display_append)) && (strpos($current_version_display, $current_version_display_append) !== false)) {
 	$new_version_display = str_replace($current_version_display_append, "", $current_version_display);
-	$current_version_display = $new_version_display."<small>".$current_version_display_append."</small>";
+	$current_version_display = $new_version_display."<small style=\"font-variant: small-caps;\">".$current_version_display_append."</small>";
 }
 
 if(!empty($_SESSION['contestName'])) $footer .= "<span class=\"d-none d-lg-inline\">".$_SESSION['contestName']." &ndash; </span>";
