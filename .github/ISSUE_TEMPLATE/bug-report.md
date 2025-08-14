@@ -21,7 +21,7 @@ Reviewed the Good To Know Issue Reports? Yes or No
 
 *Please review the Issue reports that are labeled Good to Know. Find one and click on the label to view them all.*
 
-**Your Intallation's BCOE&M Info**
+**Your Installation's BCOE&M Info**
 - Version: 
 - Installation URL: 
 - Hosted Installation? Yes or No
