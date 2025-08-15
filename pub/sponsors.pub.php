@@ -22,6 +22,8 @@
 			$sponsor_logo .= sprintf("\" border=\"0\" alt=\"".$row_sponsors['sponsorName']."\" title=\"".$row_sponsors['sponsorName']."\"  />");
 		}
 
+		if ($row_sponsors['sponsorEnable'] == "1") {
+
 ?>
 	<div class="col">
 		<div class="card h-100 sponsor-card-bg reveal-element">
@@ -45,6 +47,7 @@
 		</div>
 	</div>
 
-<?php } while ($row_sponsors = mysqli_fetch_assoc($sponsors)); ?>
+<?php }
+} while ($row_sponsors = mysqli_fetch_assoc($sponsors)); ?>
 
 </div>
