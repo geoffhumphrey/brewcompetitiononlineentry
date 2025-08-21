@@ -17,7 +17,7 @@ $server_environ_0 = "<p><strong>Reporting an issue?</strong> Here's your server 
 $server_environ_1 = "<ul>";
 $server_environ_3 = "<ul class=\"list-inline\">";
 $server_environ_3 .= "<li>Environment Info:</li>";
-$server_environ_2 = "<li>PHP Version &ndash; ".$php_version.";</li>";
+$server_environ_2 = "<li>PHP Version &ndash; ".$php_version."</li>";
 
 if (!empty($db_version)) {
     if ($db_maria) $server_environ_2 .= "<li>MariaDB Version &ndash; ".$db_version."</li>";
@@ -204,31 +204,286 @@ if ($totalRows_tables > 0) {
 
 }
 
+if ($row_prefs['prefsEmailSMTP'] == 3) echo "<div class=\"alert alert-warning\"><p><i class=\"fa fa-lg fa-exclamation-circle\"></i> <strong>As of version 3.0.0, a valid email address and SMTP credentials are required to send emails via the BCOE&amp;M application.</strong> To keep the email sending functionality employed by this installation previously, expand the Preferences section below and select Email Sending to enable the associated functions by providing the necessary credentials. This message will appear here until the email sending functionality has been enabled or disabled.</p></div>";
+
 ?>
+
+<script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css"/>
+
 <style>
     .row {
         padding-bottom: 8px;
     }
 </style>
+
 <script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
+
+<script type="text/javascript">
+
+var admin_function = "<?php echo $go; ?>";
+var prefs_planning = "<?php echo $_SESSION['jPrefsTablePlanning']; ?>";
+var ajax_url = "<?php echo $ajax_url; ?>";
+
+$(document).ready(function(){
+
+    $("#tables-competition-button").hide();
+    $("#table-planning-button").hide();
+    
+    if (prefs_planning == 0) {
+
+        $("#tables-mode-indicator").removeClass("text-primary");
+        $("#tables-mode-indicator").removeClass("text-success");
+        $("#tables-mode-indicator").addClass("text-primary");
+        $("#tables-mode-indicator").html("*** Tables Competition Mode ***");
+        $("#table-planning-button").show();
+        $("#tables-planning-mode-help").show();
+        $("#tables-competition-mode-help").hide();
+
+        $("#tables-mode-indicator-sidebar").removeClass("text-success");
+        $("#tables-mode-indicator-sidebar").removeClass("text-danger");
+        $("#tables-mode-indicator-sidebar").addClass("text-danger");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-icon").addClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-text").html("Disabled");
+
+    }
+
+    if (prefs_planning == 1) {
+        $("#tables-mode-indicator").removeClass("text-primary");
+        $("#tables-mode-indicator").removeClass("text-success");
+        $("#tables-mode-indicator").addClass("text-success");
+        $("#tables-mode-indicator").html("*** Tables Planning Mode ***");
+        $("#tables-competition-button").show();
+        $("#tables-planning-mode-help").hide(); 
+        $("#tables-competition-mode-help").show();
+
+        $("#tables-mode-indicator-sidebar").removeClass("text-success");
+        $("#tables-mode-indicator-sidebar").removeClass("text-danger");
+        $("#tables-mode-indicator-sidebar").addClass("text-success");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-icon").addClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-text").html("Enabled"); 
+    
+    }
+
+    $("#table-planning-button").click(function(){ 
+        
+        enable_planning_mode(ajax_url,admin_function);
+        
+        $("#table-planning-button").hide();
+        $("#tables-competition-button").show();
+        $("#tables-mode-indicator").removeClass("text-primary");
+        $("#tables-mode-indicator").removeClass("text-success");
+        $("#tables-mode-indicator").addClass("text-success");
+        $("#tables-mode-indicator").html("*** Tables Planning Mode ***");
+        $("#tables-planning-mode-help").hide();
+        $("#tables-competition-mode-help").show();
+
+        $("#tables-mode-indicator-sidebar").removeClass("text-success");
+        $("#tables-mode-indicator-sidebar").removeClass("text-danger");
+        $("#tables-mode-indicator-sidebar").addClass("text-success");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-icon").addClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-text").html("Enabled"); 
+
+    });
+
+    $("#tables-competition-button").click(function(){
+        $('#tables-competition-mode-modal').modal('show');       
+    });
+
+    $("#tables-competition-button-yes").click(function(){
+        
+        enable_competition_mode(ajax_url,admin_function);
+        
+        $('#tables-competition-mode-modal').modal('hide');
+        $("#tables-competition-button").hide();
+        $("#table-planning-button").show();
+        $("#tables-mode-indicator").removeClass("text-primary");
+        $("#tables-mode-indicator").removeClass("text-success");
+        $("#tables-mode-indicator").addClass("text-primary");
+        $("#tables-mode-indicator").html("*** Tables Competition Mode ***");
+        $("#table-planning-button").show();
+        $("#tables-planning-mode-help").show();
+        $("#tables-competition-mode-help").hide();
+
+        $("#tables-mode-indicator-sidebar").removeClass("text-success");
+        $("#tables-mode-indicator-sidebar").removeClass("text-danger");
+        $("#tables-mode-indicator-sidebar").addClass("text-danger");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-check-circle");
+        $("#tables-mode-indicator-sidebar-icon").removeClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-icon").addClass("fa fa-sm fa-times-circle");
+        $("#tables-mode-indicator-sidebar-text").html("Disabled");
+
+    });
+
+});
+
+const driver = window.driver.js.driver;
+const driverObjDashTour = driver({
+    popoverClass: 'driverjs-theme',
+    showProgress: false,
+    showButtons: ['next', 'previous', 'close'],
+    nextBtnText: 'Next —›',
+    prevBtnText: '‹— Previous',
+    doneBtnText: 'Close ✕',
+    steps: [
+
+        {   
+            popover: { 
+                title: 'Admin Dashboard Tour', 
+                description: 'The Admin Dashboard is organized into buckets of tasks and functions that are associated with the particular stages of a competition &ndash; pre-competition functions, pre-sort tasks, post-sort events, competition day functions, reporting, exporting, and data management.' , 
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        <?php if ($_SESSION['userLevel'] == 0) { ?>
+        
+        {   
+            element: '#dashboard-competition-preparation', 
+            popover: { 
+                title: 'Competition Preparation', 
+                description: 'Your competition\'s vital information is managed and maintained here. Manage all dates, contacts, custom categories, drop-off locations, judging and non-judging sessions, sponsors, and accepted styles and style types.' , 
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        <?php } ?>
+        
+        {   
+            element: '#dashboard-entries-participants', 
+            popover: { 
+                title: 'Entries and Participants',
+                <?php if ($_SESSION['userLevel'] == 0) { ?> 
+                description: 'Everything to manage your competition entries and associated participants. Add, edit, or delete user accounts, register, designate, and assign judges, stewards, and staff.', 
+                <?php } else { ?>
+                description: 'Everything to manage your competition entries and associated participants. Register, designate, and assign judges, stewards, and staff.', 
+                <?php } ?>
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        {   
+            element: '#dashboard-entry-sorting', 
+            popover: { 
+                title: 'Entry Sorting', 
+                <?php if ($_SESSION['userLevel'] == 0) { ?> 
+                description: 'Everything you need to help you with sorting received entries from participants. Regenerate judging numbers and check-in entries. Print sorting sheets, box labels, and bottle labels in various sizes.',
+                <?php } else { ?>
+                description: 'Everything you need to help you with sorting received entries from participants. Check-in entries and print sorting sheets.', 
+                <?php } ?>
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        {   
+            element: '#dashboard-organizing', 
+            popover: { 
+                title: 'Organizing', 
+                description: 'Post-sort vital functions like assigning personnel as judges, stewards, and/or staff, defining table/medal group configurations, assigning judges and stewards to tables/medal groups, and designating best of show judges.', 
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        {   
+            element: '#dashboard-scoring', 
+            popover: { 
+                title: 'Scoring',
+                <?php if ($_SESSION['userLevel'] == 0) { ?>
+                description: 'Manage all functions related to evaluating and scoring participant entries for all stages of judging. Add, edit, or manage scores from paper-based scoresheet judging or import scores from the Electronic Scoresheet functions. Add, edit, or manage custom categories (useful if your competition features unique “best of show” categories, such as Pro-Am opportunities, Stewards’ Choice, Best Name, etc.).',
+                <?php } else { ?>
+                description: 'Upload and manage scoresheets.',
+                <?php } ?>
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        {   
+            element: '#dashboard-reports', 
+            popover: { 
+                title: 'Reports', 
+                description: 'A wide range of reports is available for all stages of your competition – before, during, and after your designated judging sessions. Print or download pullsheets, judge/steward/staff assignments, table cards, cup mats, and results (among many others).', 
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        {   
+            element: '#dashboard-data-exports', 
+            popover: { 
+                title: 'Data Exports', 
+                description: 'Export participant and entry data collected by your installation to CSV files, including contact info of participants in addition to entry data in various configurations.', 
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        <?php if ($_SESSION['userLevel'] == 0) { ?>
+
+        {   
+            element: '#dashboard-data-management', 
+            popover: { 
+                title: 'Data Management', 
+                description: 'Actions to help maintain the data collected by your installation including various archive and purge functions.', 
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        {   
+            element: '#dashboard-preferences', 
+            popover: { 
+                title: 'Preferences<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>/Customization<?php } ?>', 
+                description: 'Define site-wide preferences for entries, email sending, currency and payment, best brewer, and judging/competition organization.<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?> Add, edit, and delete any custom modules.<?php } ?>', 
+                side: "right", 
+                align: 'start' 
+            }
+        },
+
+        <?php } ?>
+
+        {   
+            element: '#dashboard-help', 
+            popover: { 
+                title: 'Help', 
+                description: 'Get help with navigating the Administration functions at every stage of your competition. There are links to various guides housed on brewingcompetitions.com, strategies on how to customize your installation, and various “how do I do that” information.', 
+                side: "right", 
+                align: 'start' 
+            }
+        }
+    ]
+});
+
+</script>
+
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available to you in each category.<?php if ($_SESSION['userLevel'] == 1) echo " Your user level features limited access to Administration functions."; ?></span></p>
 <div class="row bcoem-admin-element">
     <?php if ($hosted_setup) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/customize-comp-info" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to customize your hosted BCOE&amp;M installation including defining registration dates, judging sessions, drop-off window and locations, shipping window and locations, sponsors, styles accepted, etc.">Customize Competition Info <span class="fa fa-info-circle"></span></a>
+        <a class="btn btn-info btn-sm btn-block hide-loader" href="http://brewingcompetitions.com/customize-comp-info" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to customize your hosted BCOE&amp;M installation including defining registration dates, judging sessions, drop-off window and locations, shipping window and locations, sponsors, styles accepted, etc.">Customize Competition Info <span class="fa fa-lg fa-info-circle"></span></a>
     </div>
     <?php } elseif ($_SESSION['userLevel'] == 0) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
+        <a class="btn btn-info btn-sm btn-block hide-loader" href="http://brewingcompetitions.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-lg fa-info-circle"></span></a>
     </div>
     <?php } ?>
     <?php if (($judging_started) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() < $_SESSION['prefsWinnerDelay']))) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-bullhorn"></span></a>
+        <a class="btn btn-info btn-sm btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-lg fa-bullhorn"></span></a>
     </div>
     <?php } elseif (($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']))) { ?>
         <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="#" data-toggle="modal" data-target="#post-comp">Post-Competition Tasks <span class="fa fa-clipboard-list"></span></a>
+        <a class="btn btn-info btn-sm btn-block hide-loader" href="#" data-toggle="modal" data-target="#post-comp">Post-Competition Tasks <span class="fa fa-lg fa-clipboard-list"></span></a>
     </div>
     <div class="modal fade" id="post-comp" tabindex="-1" role="dialog" aria-labelledby="post-compLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -260,7 +515,7 @@ if ($totalRows_tables > 0) {
         if ($_SESSION['prefsWinnerMethod'] == "0") { 
     ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block" href="#" data-toggle="modal" data-target="#presentationLaunch"><?php echo $label_launch_pres; ?> <span class="fa fa-award"></span></a>
+        <a class="btn btn-info btn-sm btn-block" href="#" data-toggle="modal" data-target="#presentationLaunch"><?php echo $label_launch_pres; ?> <span class="fa fa-lg fa-award"></span></a>
     </div>
     <div class="modal fade" id="presentationLaunch" tabindex="-1" role="dialog" aria-labelledby="presentationLaunchLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -285,12 +540,12 @@ if ($totalRows_tables > 0) {
     </div>
     <?php } else { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block" href="<?php echo $base_url; ?>awards.php" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Awards Presentation" data-html="true" data-content="<p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p><p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>"><?php echo $label_launch_pres; ?> <i class="fa fa-award"></i></span></a>
+        <a class="btn btn-info btn-sm btn-block" href="<?php echo $base_url; ?>awards.php" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Awards Presentation" data-html="true" data-content="<p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p><p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>"><?php echo $label_launch_pres; ?> <i class="fa fa-lg fa-award"></i></span></a>
     </div>
     <?php } ?>
     <?php } if ($show_best) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#previewBest">Best Brewer/Best Club Results <span class="fa fa-trophy"></span></button>
+        <button type="button" class="btn btn-info btn-sm btn-block" data-toggle="modal" data-target="#previewBest">Best Brewer/Best Club Results <span class="fa fa-lg fa-trophy"></span></button>
     </div>
     <div class="modal fade" id="previewBest" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -311,7 +566,7 @@ if ($totalRows_tables > 0) {
 
 if ($recently_updated) { 
     
-    $summary_button_style = "btn btn-primary btn-block";
+    $summary_button_style = "btn btn-dark btn-block";
     $summary_button_icon = "fa fa-code";
     $summary_button_errors = "";
     if (strpos($row_system['update_summary'], 'Warning: Errors') !== false)  {
@@ -319,23 +574,30 @@ if ($recently_updated) {
         $summary_button_icon = "fa fa-exclamation-circle";
         $summary_button_errors = " (Errors Present)";
     }
-
-if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) { ?>
-<div class="row bcoem-admin-element">
-    <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <button type="button" class="<?php echo $summary_button_style; ?>" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary<?php echo $summary_button_errors; ?> <span class="<?php echo $summary_button_icon; ?>"></span></button>
-    </div>
-</div>
-<?php } 
-}
 ?>
+<!--
+<div class="row bcoem-admin-element">
+
+    <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <button id="dashboard-tour-button" onclick="driverObjDashTour.drive()" class="btn btn-dark btn-block">Take a Tour of the Admin Dashboard <i class="fa fa-directions"></i></button>
+    </div>
+
+    <?php if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) { ?>
+    <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <button type="button" class="<?php echo $summary_button_style; ?>" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary<?php echo $summary_button_errors; ?> <i class="<?php echo $summary_button_icon; ?>"></i></button>
+    </div>
+    <?php } ?>
+</div>
+-->
+<?php } ?>
+
 <div class="bcoem-admin-dashboard-accordion">
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion">
                 <?php if ($_SESSION['userLevel'] == "0") { ?>  
                 <!-- Preparing Panel -->
-                <div class="panel panel-default">
+                <div id="dashboard-competition-preparation" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapsePrep">Competition Preparation<span class="fa fa-wrench pull-right"></span></a>
@@ -344,28 +606,31 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                     <div id="collapsePrep" class="panel-collapse collapse">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <div id="edit-all-comp-dates" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>All Competition Dates</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dates" data-toggle="tooltip" data-placement="top" title="Edit all competition-related dates in one location.">Edit</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                                <!--
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 hidden-xs"><button id="comp-org-tour-button" class="btn btn-sm btn-dark btn-block"><i class="fa fa-lg fa-directions"></i> Tour This Section</button></div>
+                                -->
+                            </div>
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <div id="edit-comp-info" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Competition Info</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit</a></li>
-                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload your logo before editing your Competition Information">Upload Logo</a></li>
+                                        <li id="upload-comp-logo"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload your logo before editing your Competition Information">Upload Logo</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
-                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                               <div id="manage-contacts" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Contacts</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -374,9 +639,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
-                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                               <div id="manage-custom-cats" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Custom Categories</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -385,9 +650,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
-                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                               <div id="manage-drop-offs" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Drop-Off Locations</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -396,9 +661,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
-                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                               <div id="manage-judging-sessions" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Judging Sessions</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -407,9 +672,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
-                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                               <div id="manage-non-judging-sessions" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Non-Judging Sessions</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -418,10 +683,10 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=non-judging&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
-                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                               <div id="manage-sponsors" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Sponsors</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -431,9 +696,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload" data-toggle="tooltip" data-placement="top" title="Upload sponsor logo images BEFORE adding sponsor information">Upload Logos</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
-                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                               <div id="manage-styles-accepted" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Styles Accepted</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -442,9 +707,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
-                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                               <div id="manage-style-types" class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Style Types</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -453,14 +718,14 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } // end if ($_SESSION['userLevel'] == "0") ?>
                         </div>
                     </div>
                 </div><!-- ./ Preparing Panel -->
                 <?php } ?>
-                <!-- Entry and Data Gathering Panel -->
-                <div class="panel panel-default">
+                <!-- Entries and Participants Panel -->
+                <div id="dashboard-entries-participants" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseEntry">Entries<?php if ($_SESSION['prefsPaypalIPN'] == 1) echo ", Payments,";?> and Participants<span class="fa fa-beer pull-right"></span></a>
@@ -477,7 +742,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manage</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if ($_SESSION['prefsPaypalIPN'] == 1) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -488,7 +753,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=payments">Manage</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -506,7 +771,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <?php } ?>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Register</strong>
@@ -524,12 +789,12 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register" data-toggle="tooltip" title="Add a steward inputting all registration data">A Steward (Standard)</a><li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                         </div>
                     </div>
                 </div><!-- ./ Entry and Data Gathering Panel -->
                 <!-- Sorting Panel -->
-                <div class="panel panel-default">
+                <div id="dashboard-entry-sorting" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseSorting">Entry Sorting<span class="fa fa-exchange pull-right"></span></a>
@@ -537,7 +802,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                     </div>
                     <div id="collapseSorting" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Regenerate</strong>
@@ -567,7 +832,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -578,9 +843,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a class="hide-loader" href="http://brewingcompetitions.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels <span class="fa fa-sm fa-external-link"></span></a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
-                            <?php } ?>
-                            <?php } ?>
+                            </div>
+                            <?php } // end if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) ?>
+                        <?php } // end if ($_SESSION['userAdminObfuscate'] == 0) ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Entry Check-In</strong>
@@ -588,7 +853,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
-                                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+                                    <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                                         <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                                         <li><a class="hide-loader" href="<?php echo $base_url; ?>qr.php" target="_blank">Via Mobile Devices <span class="fa fa-sm fa-external-link"></span></a></li>
                                         <?php } ?>
@@ -597,7 +862,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <?php } ?>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Sorting Sheets</strong>
@@ -612,7 +877,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <?php } ?>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Sorting Into Tables</strong>
@@ -623,80 +888,13 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables">Tables and Associated Styles Placards</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
-                            <div class="row" style="padding: 25px 0px 15px 0px;">
-                                <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <strong>Print Box Labels (PDF)</strong>
-                                </div>
-                            </div><!-- ./row -->
-                            <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 small">
-                                    <strong><a class="hide-loader" href="https://www.avery.com/products/labels/5160" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160">Letter <span class="fa fa-sm fa-external-link"></span></a></strong>
-                                </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8 small">
-                                    <ul class="list-unstyled">
-                                        <li>Box Labels (by Table)
-                                            <div class="dropdown bcoem-admin-dashboard-select">
-                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Table <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
-                                                    <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                                                    <?php } ?>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>Virtual Judging Box Labels (by Judge Name)
-                                            <div class="dropdown bcoem-admin-dashboard-select">
-                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Judge <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
-                                                    <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;filter=judges&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                                                    <?php } ?>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div><!-- ./row -->
-                            <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 small">
-                                    <strong><a class="hide-loader" href="https://www.avery.fi/product/multipurpose-labels-ultragrip-3422" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422">A4 <span class="fa fa-sm fa-external-link"></span></a></strong>
-                                </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8 small">
-                                    <ul class="list-unstyled">
-                                        <li>Box Labels (by Table)
-                                            <div class="dropdown bcoem-admin-dashboard-select">
-                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Table <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
-                                                    <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                                                    <?php } ?>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>Virtual Judging Box Labels (by Judge Name)
-                                            <div class="dropdown bcoem-admin-dashboard-select">
-                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Judge <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
-                                                    <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;filter=judges&amp;psort=3422&amp;&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                                                    <?php } ?>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div><!-- ./row -->
-                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+                            </div>
+                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                             <div class="row" style="padding: 25px 0px 15px 0px;">
                                 <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <strong>Print Bottle Labels (PDF)</strong>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="https://www.avery.com/products/labels/5167" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5167"><strong>Letter <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -766,7 +964,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                             </div><!-- ./row -->
+                             </div>
                              <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="https://www.avery.fi/product/multipurpose-labels-ultragrip-3422" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422"><strong>A4 <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -825,7 +1023,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                             </div><!-- ./row -->
+                             </div>
                              <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank" data-toggle="tooltip" data-placement="auto" title="Online Lables OL32"><strong>0.50 in/13 mm Round <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -878,7 +1076,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank" data-toggle="tooltip" data-placement="auto" title="Online Lables OL5275WR"><strong>0.75 in/19 mm Round <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -931,14 +1129,81 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
-                        <?php } ?>
+                            </div>
+                            <div class="row" style="padding: 25px 0px 15px 0px;">
+                                <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <strong>Print Box Labels (PDF)</strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 small">
+                                    <strong><a class="hide-loader" href="https://www.avery.com/products/labels/5160" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160">Letter <span class="fa fa-sm fa-external-link"></span></a></strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8 small">
+                                    <ul class="list-unstyled">
+                                        <li>Box Labels (by Table)
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Table <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
+                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>Virtual Judging Box Labels (by Judge Name)
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Judge <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
+                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;filter=judges&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 small">
+                                    <strong><a class="hide-loader" href="https://www.avery.fi/product/multipurpose-labels-ultragrip-3422" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422">A4 <span class="fa fa-sm fa-external-link"></span></a></strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8 small">
+                                    <ul class="list-unstyled">
+                                        <li>Box Labels (by Table)
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Table <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
+                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>Virtual Judging Box Labels (by Judge Name)
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Judge <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
+                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;filter=judges&amp;psort=3422&amp;&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        <?php } // end if ($_SESSION['userAdminObfuscate'] == 0) ?>
                         </div>
                     </div>
                 </div>
                 <!-- ./ Sorting Panel -->
                 <!-- Organizing Panel -->
-                <div class="panel panel-default">
+                <div id="dashboard-organizing" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOrg">Organizing<span class="fa fa-tasks pull-right"></span></a>
@@ -957,15 +1222,12 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff">Staff</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Tables</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                    <ul class="list-inline">
-                                        <li><strong><?php if ($_SESSION['jPrefsTablePlanning'] == 1) echo "<span class=\"text-purple\">** Tables Planning Mode **</span>"; else echo "<span class=\"text-teal\">** Tables Competition Mode **</span>"; ?></strong></li>
-                                    </ul>
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add">Add</a></li>
@@ -973,8 +1235,15 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=assign">Assign Judges/Stewards</a></li>
                                         <?php } ?>
                                     </ul>
+                                    <ul class="list-inline">
+                                        <li><strong><span id="tables-mode-indicator" class=""></span></strong></li>
+                                        <li><button id="tables-competition-button" class="btn btn-xs btn-success">Switch to Tables <strong>Competition</strong> Mode</button>
+                                            <a id="tables-competition-mode-help" href="#" data-toggle="popover" title="Tables Competition Mode" data-content="<p>When the Tables Competition Mode function is enabled by an admin, it indicates to the system that the planning stage is over and <strong>all applicable entries have been marked as <u>received</u></strong>.</p><p>Table configurations and assignments can still be changed as necessary while in Competition Mode. Pullsheets will be available.</p>" data-trigger="hover click" data-placement="right" data-html="true" data-container="body"><i style="margin-left: 5px" class="fa fa-lg fa-question-circle"></i></a></li>
+                                        <li><button id="table-planning-button" class="btn btn-xs btn-primary">Switch to Tables <strong>Planning</strong> Mode</button>
+                                            <a id="tables-planning-mode-help" class="padding-left: 5px;" href="#" data-toggle="popover" title="Tables Planning Mode" data-content="<p>When the Tables Planning Mode function is enabled, Admins can define tables, flights, rounds, judge/steward assignments, and, as of version 3.0.0, associated entry limits <strong>prior</strong> to entries being marked as paid and/or received (i.e., prior to sorting).</p><p>Any table configurations and associated assignments <strong>will not be official</strong> until an Admin returns to Tables Competition Mode after entries have been sorted and marked as received in the system. Pullsheets will <strong>not</strong> be available.</p>" data-trigger="hover click" data-placement="right" data-html="true" data-container="body"><i style="margin-left: 5px" class="fa fa-lg fa-question-circle"></i></a></li> 
+                                    </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -986,7 +1255,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <?php if ($totalRows_tables > 1) { ?>
                             <div class="row">
@@ -998,13 +1267,13 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Add</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                         </div>
                     </div>
                 </div><!-- ./ Organizing Panel -->
                 <!-- Scoring Panel -->
-                <div class="panel panel-default">
+                <div id="dashboard-scoring" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseScoring">Scoring<span class="fa fa-trophy pull-right"></span></a>
@@ -1023,7 +1292,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload scoresheets for judged entries">Upload Individually</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php if (($_SESSION['prefsEval'] == 1) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1031,10 +1300,10 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage</a></li>
                                     </ul> 
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                             <div class="row">
@@ -1056,7 +1325,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </ul>
                                     </div>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>BOS Entries and Places</strong>
@@ -1066,7 +1335,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage</a></li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
@@ -1086,1042 +1355,1034 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         </ul>
                                     </div>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <?php } ?>
                         </div>
                     </div>
                 </div><!-- ./ Scoring Panel -->
             </div><!-- ./ panel-group -->
         </div><!-- ./left column -->
-        
-
-
 
         <!-- BEGIN Right column accordions -->
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion2">
-            <!-- Reports Panel -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseReports">Reports<span class="fa fa-file pull-right"></span></a>
-                    </h4>
-                </div>
-                <div id="collapseReports" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="row" style="padding: 0px 0px 15px 0px;">
-                            <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <strong>Before Judging</strong>
+                <!-- Reports Panel -->
+                <div id="dashboard-reports" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseReports">Reports<span class="fa fa-file pull-right"></span></a>
+                        </h4>
+                    </div>
+                    <div id="collapseReports" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row" style="padding: 0px 0px 15px 0px;">
+                                <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <strong>Before Judging</strong>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Staff Availability</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Last Name</a></li>
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Non-Judging Session</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Notes</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer">Notes to Organizer</a></li>
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=admin" data-toggle="tooltip" data-placement="top" title="Notes attached to individual entries for Admin and Staff use.">Admin and Staff Notes</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Allergens</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Drop-Off and Shipping</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff" data-toggle="tooltip" data-placement="top" title="Print Entry Totals for Each Drop-Off Location and Shipping Location">Entry Totals</a></li>
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff&amp;go=check" data-toggle="tooltip" data-placement="top" title="Print Entries By Drop-Off Location and Shipping Location">List of Entries</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
-                        <div class="row">
-                            <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong><?php echo $label_additional_info; ?></strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Entry Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="additionalInfoMenu0">
-                                        <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"entry","includes/output.inc.php","thickbox"); ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Staff Availability</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Last Name</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Non-Judging Session</a></li>
                                     </ul>
                                 </div>
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Judging Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="additionalInfoMenu1">
-                                        <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"default","includes/output.inc.php","thickbox"); ?>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Notes</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer">Notes to Organizer</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=admin" data-toggle="tooltip" data-placement="top" title="Notes attached to individual entries for Admin and Staff use.">Admin and Staff Notes</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Allergens</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <?php } ?>
-                            <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Pullsheets</strong>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Drop-Off and Shipping</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff" data-toggle="tooltip" data-placement="top" title="Print Entry Totals for Each Drop-Off Location and Shipping Location">Entry Totals</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff&amp;go=check" data-toggle="tooltip" data-placement="top" title="Print Entries By Drop-Off Location and Shipping Location">List of Entries</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,$filter,"entry","includes/output.inc.php","thickbox"); ?>
+                            <?php if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
+                            <div class="row">
+                                <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong><?php echo $label_additional_info; ?></strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Entry Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="additionalInfoMenu0">
+                                            <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"entry","includes/output.inc.php","thickbox"); ?>
+                                        </ul>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Judging Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="additionalInfoMenu1">
+                                            <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"default","includes/output.inc.php","thickbox"); ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Pullsheets</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
+                                            <?php echo table_choose("pullsheets","judging_tables",$action,$filter,"entry","includes/output.inc.php","thickbox"); ?>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                            <?php if (!empty($ps_loc_entry)) echo $ps_loc_entry; ?>
+                                        </ul>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
+                                            <?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"includes/output.inc.php","thickbox"); ?>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
+                                            <?php if (!empty($ps_loc_judging)) echo $ps_loc_judging; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Judge Inventories</strong> <a class="hide-loader" href="#" data-toggle="modal" data-target="#judgeInventoryModal"><i class="fa fa-question-circle"></i></a>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="judging-inv-ent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session...<span class="caret"></span>
+                                        </button>
+                                    <ul class="dropdown-menu" aria-labelledby="judging-inv-ent">
+                                        <?php if (!empty($ji_loc_entry)) echo $ji_loc_entry; ?>
+                                    </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="judging-inv-jnum" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
+                                        </button>
+                                    <ul class="dropdown-menu" aria-labelledby="judging-inv-jnum">
+                                        <?php if (!empty($ji_loc_judging)) echo $ji_loc_judging; ?>
+                                    </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php } // end if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Table Cards</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Table Cards">All Tables</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="cardsMenu1">
+                                            <?php echo table_choose("table-cards","judging_tables",$action,$filter,$view,"includes/output.inc.php","thickbox"); ?>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Session... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="cardsMenu2">
+                                            <?php if (!empty($cards_loc_rnd)) echo $cards_loc_rnd; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>    
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Sign In Sheets</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
                                     </ul>
                                 </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <?php if (!empty($ps_loc_entry)) echo $ps_loc_entry; ?>
+                            </div>
+                            <?php if ($totalRows_tables > 0) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Assignments</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Name">All Judges By Last Name</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Table">All Judges By Table</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Session">All Judges By Session</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Name">All Stewards Last Name</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Table">All Stewards By Table</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Session">All Stewards By Session</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="judgeAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judges for Session... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="judgeAssignMenuLoc">
+                                            <?php foreach($judge_assign_links as $key => $value) { ?>
+                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
+                                            <?php } ?>
+                                            <li role="separator" class="divider"></li>
+                                            <?php foreach($judge_assign_links as $key => $value) { ?>
+                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
+                                            <?php } ?>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="stewardAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Stewards for Session... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="stewardAssignMenuLoc">
+                                            <?php foreach($steward_assign_links as $key => $value) { ?>
+                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
+                                            <?php } ?>
+                                            <li role="separator" class="divider"></li>
+                                            <?php foreach($steward_assign_links as $key => $value) { ?>
+                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
+                                            <?php } ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php } ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Judge Scoresheet Labels</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                     </ul>
                                 </div>
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"includes/output.inc.php","thickbox"); ?>
-                                    </ul>
+                            </div>
+                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Entry Required Info Scoresheet Labels (Received Entries Only)</strong>
                                 </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
-                                        <?php if (!empty($ps_loc_judging)) echo $ps_loc_judging; ?>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li>Letter - Entry Numbers by Style
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="reqLablesMenu1">
+                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>Letter - Judging Numbers by Style
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="reqLablesMenu2">
+                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+
+                                        <li>A4 - Entry Numbers by Style
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu3reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="reqLablesMenu3reqLablesMenu4">
+                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>A4 - Judging Numbers by Style
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="reqLablesMenu4">
+                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <?php $table_choose_info_labels = table_choose($section,$go,$action,$filter,$view,"none","form_select"); ?>
+                                        <li><a id="label-table-letter-link" role="button" data-toggle="collapse" href="#label-table-collapse-letter" aria-expanded="false" aria-controls="label-table-collapse-letter">Letter - By Table <i id="label-table-letter-link-icon" class="fa fa-sm fa-chevron-down"></i></a>
+                                            <section style="margin: 10px 0 10px 0; padding:0 0 0 15px;" id="label-table-collapse-letter" class="collapse">
+                                                <form id="label-table-letter" name="label-table-letter" class="form-horizontal hide-loader-form-submit">
+                                                    <div class="form-group">
+                                                        <select class="selectpicker" title="For Table..." id="location-letter" name="location" data-with="fit" data-size="10">
+                                                            <?php echo $table_choose_info_labels; ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="selectpicker" title="Number of Labels per Entry" id="sort-letter" name="sort" data-with="fit" data-size="10">
+                                                            <?php for($i=1; $i<=8; $i++) { ?>
+                                                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="selectpicker" title="Entry or Judging Numbers" id="action-letter" name="action" data-with="fit" data-size="10">
+                                                            <option value="bottle-entry">Entry Numbers</option>
+                                                            <option value="bottle-judging">Judging Numbers</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button name="submit" type="submit" class="btn btn-sm btn-primary">Generate</button>
+                                                        <div style="padding-top:10px" id="label-letter-msg" class="text-danger"></div>
+                                                    </div>
+                                                </form>
+                                            </section>
+                                        </li>
+                                        <li><a id="label-table-a4-link" role="button" data-toggle="collapse" href="#label-table-collapse-a4" aria-expanded="false" aria-controls="label-table-collapse-a4">A4 - By Table <i id="label-table-a4-link-icon" class="fa fa-sm fa-chevron-down"></i></a>
+                                            <section style="margin: 10px 0 10px 0; padding:0 0 0 15px;" id="label-table-collapse-a4" class="collapse">
+                                                <form id="label-table-a4" name="label-table-a4" class="form-horizontal hide-loader-form-submit" action="">
+                                                    <div class="form-group">
+                                                        <select class="selectpicker" title="For Table..." id="location-a4" name="location" data-with="fit" data-size="10">
+                                                            <?php echo $table_choose_info_labels; ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="selectpicker" title="Number of Labels per Entry" id="sort-a4" name="sort" data-with="fit" data-size="10">
+                                                            <?php for($i=1; $i<=8; $i++) { ?>
+                                                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="selectpicker" title="Entry or Judging Numbers" id="action-a4" name="action" data-with="fit" data-size="10">
+                                                            <option value="bottle-entry">Entry Numbers</option>
+                                                            <option value="bottle-judging">Judging Numbers</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button name="submit" type="submit" class="btn btn-sm btn-primary">Generate</button>
+                                                        <div style="padding-top:10px" id="label-a4-msg" class="text-danger"></div>
+                                                    </div>
+                                                    
+                                                </form>
+                                            </section>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                             <?php } ?>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Judge Inventories</strong> <a class="hide-loader" href="#" data-toggle="modal" data-target="#judgeInventoryModal"><i class="fa fa-question-circle"></i></a>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="judging-inv-ent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session...<span class="caret"></span>
-                                    </button>
-                                <ul class="dropdown-menu" aria-labelledby="judging-inv-ent">
-                                    <?php if (!empty($ji_loc_entry)) echo $ji_loc_entry; ?>
-                                </ul>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Name Tags</strong>
                                 </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="judging-inv-jnum" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
-                                    </button>
-                                <ul class="dropdown-menu" aria-labelledby="judging-inv-jnum">
-                                    <?php if (!empty($ji_loc_judging)) echo $ji_loc_judging; ?>
-                                </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <?php } // end if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Table Cards</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Table Cards">All Tables</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="cardsMenu1">
-                                        <?php echo table_choose("table-cards","judging_tables",$action,$filter,$view,"includes/output.inc.php","thickbox"); ?>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Session... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="cardsMenu2">
-                                        <?php if (!empty($cards_loc_rnd)) echo $cards_loc_rnd; ?>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
                                     </ul>
                                 </div>
                             </div>
-                        </div><!-- ./row -->    
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Sign In Sheets</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php if ($totalRows_tables > 0) { ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Assignments</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Name">All Judges By Last Name</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Table">All Judges By Table</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Session">All Judges By Session</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Name">All Stewards Last Name</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Table">All Stewards By Table</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Session">All Stewards By Session</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="judgeAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judges for Session... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="judgeAssignMenuLoc">
-                                        <?php foreach($judge_assign_links as $key => $value) { ?>
-                                            <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
-                                        <?php } ?>
-                                        <li role="separator" class="divider"></li>
-                                        <?php foreach($judge_assign_links as $key => $value) { ?>
-                                            <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
-                                        <?php } ?>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="stewardAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Stewards for Session... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="stewardAssignMenuLoc">
-                                        <?php foreach($steward_assign_links as $key => $value) { ?>
-                                            <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
-                                        <?php } ?>
-                                        <li role="separator" class="divider"></li>
-                                        <?php foreach($steward_assign_links as $key => $value) { ?>
-                                            <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
-                                        <?php } ?>
-                                    </ul>
+                            
+                            <?php if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
+                            <div class="row" style="padding: 25px 0px 15px 0px;">
+                                <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <hr style="margin-bottom: 10px;">
+                                    <strong>During Judging</strong>
                                 </div>
                             </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Judge Scoresheet Labels</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Entry Required Info Scoresheet Labels (Received Entries Only)</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li>Letter - Entry Numbers by Style
-                                        <div class="dropdown bcoem-admin-dashboard-select">
-                                            <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="reqLablesMenu1">
-                                                <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
-                                                <?php } ?>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li>Letter - Judging Numbers by Style
-                                        <div class="dropdown bcoem-admin-dashboard-select">
-                                            <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="reqLablesMenu2">
-                                                <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
-                                                <?php } ?>
-                                            </ul>
-                                        </div>
-                                    </li>
 
-                                    <li>A4 - Entry Numbers by Style
-                                        <div class="dropdown bcoem-admin-dashboard-select">
-                                            <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu3reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="reqLablesMenu3reqLablesMenu4">
-                                                <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
-                                                <?php } ?>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li>A4 - Judging Numbers by Style
-                                        <div class="dropdown bcoem-admin-dashboard-select">
-                                            <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="reqLablesMenu4">
-                                                <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
-                                                <?php } ?>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <?php $table_choose_info_labels = table_choose($section,$go,$action,$filter,$view,"none","form_select"); ?>
-                                    <li><a id="label-table-letter-link" role="button" data-toggle="collapse" href="#label-table-collapse-letter" aria-expanded="false" aria-controls="label-table-collapse-letter">Letter - By Table <i id="label-table-letter-link-icon" class="fa fa-sm fa-chevron-down"></i></a>
-                                        <section style="margin: 10px 0 10px 0; padding:0 0 0 15px;" id="label-table-collapse-letter" class="collapse">
-                                            <form id="label-table-letter" name="label-table-letter" class="form-horizontal hide-loader-form-submit">
-                                                <div class="form-group">
-                                                    <select class="selectpicker" title="For Table..." id="location-letter" name="location" data-with="fit" data-size="10">
-                                                        <?php echo $table_choose_info_labels; ?>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="selectpicker" title="Number of Labels per Entry" id="sort-letter" name="sort" data-with="fit" data-size="10">
-                                                        <?php for($i=1; $i<=8; $i++) { ?>
-                                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="selectpicker" title="Entry or Judging Numbers" id="action-letter" name="action" data-with="fit" data-size="10">
-                                                        <option value="bottle-entry">Entry Numbers</option>
-                                                        <option value="bottle-judging">Judging Numbers</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <button name="submit" type="submit" class="btn btn-sm btn-primary">Generate</button>
-                                                    <div style="padding-top:10px" id="label-letter-msg" class="text-danger"></div>
-                                                </div>
-                                            </form>
-                                        </section>
-                                    </li>
-                                    <li><a id="label-table-a4-link" role="button" data-toggle="collapse" href="#label-table-collapse-a4" aria-expanded="false" aria-controls="label-table-collapse-a4">A4 - By Table <i id="label-table-a4-link-icon" class="fa fa-sm fa-chevron-down"></i></a>
-                                        <section style="margin: 10px 0 10px 0; padding:0 0 0 15px;" id="label-table-collapse-a4" class="collapse">
-                                            <form id="label-table-a4" name="label-table-a4" class="form-horizontal hide-loader-form-submit" action="">
-                                                <div class="form-group">
-                                                    <select class="selectpicker" title="For Table..." id="location-a4" name="location" data-with="fit" data-size="10">
-                                                        <?php echo $table_choose_info_labels; ?>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="selectpicker" title="Number of Labels per Entry" id="sort-a4" name="sort" data-with="fit" data-size="10">
-                                                        <?php for($i=1; $i<=8; $i++) { ?>
-                                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="selectpicker" title="Entry or Judging Numbers" id="action-a4" name="action" data-with="fit" data-size="10">
-                                                        <option value="bottle-entry">Entry Numbers</option>
-                                                        <option value="bottle-judging">Judging Numbers</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <button name="submit" type="submit" class="btn btn-sm btn-primary">Generate</button>
-                                                    <div style="padding-top:10px" id="label-a4-msg" class="text-danger"></div>
-                                                </div>
-                                                
-                                            </form>
-                                        </section>
-                                    </li>
-                                </ul>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Mini-BOS Pullsheets</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Entry Numbers</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
+                                            <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos","entry","includes/output.inc.php","thickbox"); ?>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                            <?php if (!empty($ps_loc_entry_mbos)) echo $ps_loc_entry_mbos; ?>
+                                        </ul>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Judging Numbers</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
+                                            <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos",$view,"includes/output.inc.php","thickbox"); ?>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
+                                            <?php if (!empty($ps_loc_judging_mbos)) echo $ps_loc_judging_mbos; ?>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Name Tags</strong>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Mini-BOS Cup Mats</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=mini-bos" data-toggle="tooltip" data-placement="top" title="Print blank Mini-BOS Cup Mats">Blank</a></li>
+                                    </ul>
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with entry numbers only">All Tables - Entry Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $mini_bos_cup_mat_st_entry; ?>
+                                        </ul>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with judging numbers only">All Tables - Judging Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $mini_bos_cup_mat_st_judging; ?>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
-                                </ul>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>BOS Pullsheets</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $bos_pull_st_entry; ?>
+                                        </ul>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $bos_pull_st_judging; ?>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
-                        
-                        <?php if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
-                        <div class="row" style="padding: 25px 0px 15px 0px;">
-                            <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <hr style="margin-bottom: 10px;">
-                                <strong>During Judging</strong>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>BOS Cup Mats</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank" data-toggle="tooltip" data-placement="top" title="Print blank BOS Cup Mats">Blank</a></li>
+                                    </ul>
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $bos_cup_mat_st_entry; ?>
+                                        </ul>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
+                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $bos_cup_mat_st_judging; ?>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Pro-Am/Scale-Up Pullsheets</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $bos_pull_pro_am_st_entry; ?>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $bos_pull_pro_am_st_judging; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Mini-BOS Pullsheets</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Entry Numbers</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos","entry","includes/output.inc.php","thickbox"); ?>
-                                    </ul>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Pro-Am/Scale-Up Cup Mats</strong>
                                 </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <?php if (!empty($ps_loc_entry_mbos)) echo $ps_loc_entry_mbos; ?>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=pro-am" data-toggle="tooltip" data-placement="top" title="Print blank Pro-Am/Scale-Up Cup Mats">Blank</a></li>
                                     </ul>
-                                </div>
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Judging Numbers</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos",$view,"includes/output.inc.php","thickbox"); ?>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
-                                        <?php if (!empty($ps_loc_judging_mbos)) echo $ps_loc_judging_mbos; ?>
-                                    </ul>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $bos_cup_mat_pro_am_st_entry; ?>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown bcoem-admin-dashboard-select">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                            <?php echo $bos_cup_mat_pro_am_st_judging; ?>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Mini-BOS Cup Mats</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=mini-bos" data-toggle="tooltip" data-placement="top" title="Print blank Mini-BOS Cup Mats">Blank</a></li>
-                                </ul>
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with entry numbers only">All Tables - Entry Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $mini_bos_cup_mat_st_entry; ?>
-                                    </ul>
-                                </div>
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with judging numbers only">All Tables - Judging Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $mini_bos_cup_mat_st_judging; ?>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>BOS Pullsheets</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_pull_st_entry; ?>
-                                    </ul>
-                                </div>
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_pull_st_judging; ?>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>BOS Cup Mats</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank" data-toggle="tooltip" data-placement="top" title="Print blank BOS Cup Mats">Blank</a></li>
-                                </ul>
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_cup_mat_st_entry; ?>
-                                    </ul>
-                                </div>
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_cup_mat_st_judging; ?>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Pro-Am/Scale-Up Pullsheets</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_pull_pro_am_st_entry; ?>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_pull_pro_am_st_judging; ?>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Pro-Am/Scale-Up Cup Mats</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=pro-am" data-toggle="tooltip" data-placement="top" title="Print blank Pro-Am/Scale-Up Cup Mats">Blank</a></li>
-                                </ul>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_cup_mat_pro_am_st_entry; ?>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_cup_mat_pro_am_st_judging; ?>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
-
-                <?php if ($judging_started) { ?>
-                        <!-- After Judging -->
-                        <div class="row" style="padding: 25px 0px 15px 0px;">
-                            <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <hr style="margin-bottom: 10px;">
-                                <strong>After Judging</strong>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php if ($totalRows_tables > 0) { ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>BOS Results</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) { ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Best Brewer and/or Club</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?>)</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                            <?php if ($_SESSION['prefsWinnerMethod'] == 0) { ?>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All with Scores...<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only with Scores...<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All without Scores...<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default">By Table Number</a></li>
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only without Scores...<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners">By Table Number</a></li>
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
-                                    </ul>
-                                </div>
-                            <?php } else { ?>
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
-                                </ul>
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
-                                </ul>
                             <?php } ?>
-                                <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
-                                </ul>
+
+                    <?php if ($judging_started) { ?>
+                            <!-- After Judging -->
+                            <div class="row" style="padding: 25px 0px 15px 0px;">
+                                <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <hr style="margin-bottom: 10px;">
+                                    <strong>After Judging</strong>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>All Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?> - Single Report)</strong>
+                            <?php if ($totalRows_tables > 0) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>BOS Results</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                            <?php if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Best Brewer and/or Club</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php } ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?>)</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <?php if ($_SESSION['prefsWinnerMethod'] == 0) { ?>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All with Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only with Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All without Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default">By Table Number</a></li>
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default">By Table Number</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only without Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners">By Table Number</a></li>
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners">By Table Number</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                 <?php } else { ?>
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
-                                </ul>
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
-                                </ul>
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                    </ul>
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                    </ul>
                                 <?php } ?>
+                                    <ul class="list-inline">
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>BJCP Points</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
-                                    <li><a href="#" data-toggle="modal" data-target="#BJCPCompIDModal" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        
-                        <?php if ($totalRows_tables > 0) { ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Award Labels</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Medal Labels (Round)</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=5293" data-toggle="tooltip" data-placement="top" title="1 2/3 inch Round Avery 5293">Letter</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <?php } ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Address Labels</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li>All Participants</li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
-                                </ul>
-                                <ul class="list-inline">
-                                    <li>All Participants with Entries
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Summaries</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=summary" data-toggle="tooltip" data-placement="top" title="Print participant summaries - each on a separate sheet of paper. Useful as a cover sheet for mailing entry scoresheets to participants.">All Participants with Entries</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all participants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Inventory</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory&amp;go=scores" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - with scores">With Scores</a></li>
-                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - without scores">Without Scores</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                    <?php } ?>
-                    </div>
-                </div>
-            </div>
-            <!-- ./ Reports Panel -->
-            <!-- Data Exports Panel -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseExports">Data Exports<span class="fa fa-download pull-right"></span></a>
-                    </h4>
-                </div>
-                <div id="collapseExports" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Email Addresses and Associated Contact Data (CSV)</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails">All Participants</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=avail_judges&amp;action=email">Available Judges</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=avail_stewards&amp;action=email">Available Stewards</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=staff&amp;action=email">Available and Assigned Staff</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Participant Data (CSV)</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-participants&amp;go=csv">All Participants</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=winners">Winners: Limited Data</a></li>
-                                    <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit&amp;filter=mhp">Master Homebrewer Program: Member Results</a></li>
-                                    <?php } ?>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Entries and Associated Data (CSV)</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv">All Entries: Limited Data</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid&amp;view=all">Paid Entries</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid">Paid &amp; Received Entries</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid&amp;view=not_received">Paid Entries Not Received</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=nopay&amp;view=all">Non-Paid Entries</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=nopay">Non-Paid &amp; Received Entries</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;action=required&amp;tb=required">Entries with Required &amp; Optional Info</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
-                        <!--
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Promo Materials</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=html&amp;action=html">HTML</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=word&amp;action=word">Word</a></li>
-                                    <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-promo&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        -->
-                    </div>
-                </div>
-            </div>
-            <!-- ./ Data Exports Panel -->
-            <?php if ($_SESSION['userLevel'] == "0") { ?>
-            <!-- Database Maintenance Panel -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseMaint">Data Management<span class="fa fa-archive pull-right"></span></a>
-                    </h4>
-                </div>
-                <div id="collapseMaint" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Integrity</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#cleanUp">Clean-Up Data</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="clean-up-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="clean-up-status-msg"></span>
-                                    </div>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Entries</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#confirmAll">Confirm All Unconfirmed</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="conf-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="conf-status-msg"></span>
-                                    </div>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeUnconfirmed">Purge All Unconfirmed</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-un-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-un-status-msg"></span>
-                                    </div>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeUnpaid">Purge All Unpaid</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-unpaid-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-unpaid-status-msg"></span>
-                                    </div>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                        <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                            <strong>Purge</strong>
-                        </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-unstyled">
-                                    <li><a href="#" data-toggle="modal" data-target="#purgeEntries">Entries</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-ent-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-ent-status-msg"></span>
-                                    </div>
-                                    <?php if (check_setup($prefix."payments",$database)) { ?>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgePayments">Payments</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-pay-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-pay-status-msg"></span>
-                                    </div>
-                                    <?php } ?> 
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeParticipants">Participants</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status-msg"></span>
-                                    </div>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeTables">Judging Tables</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status-msg"></span>
-                                    </div>                            
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScores">Scores</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-score-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-score-status-msg"></span>
-                                    </div>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeCustom">Custom Categories</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-cust-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-cust-status-msg"></span>
-                                    </div>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeAvailabilty">Entrant Availability</a></li>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status-msg"></span>
-                                    </div>
-                                    <?php if ($_SESSION['prefsEval'] == 1) { ?>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Entry Evaluations</a></li>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>All Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?> - Single Report)</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <?php if ($_SESSION['prefsWinnerMethod'] == 0) { ?>
+                                        <div class="dropdown bcoem-admin-dashboard-select">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All with Scores...<span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown bcoem-admin-dashboard-select">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only with Scores...<span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown bcoem-admin-dashboard-select">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All without Scores...<span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default">By Table Number</a></li>
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown bcoem-admin-dashboard-select">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only without Scores...<span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners">By Table Number</a></li>
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                                <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            </ul>
+                                        </div>
                                     <?php } else { ?>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Uploaded Scoresheets</a></li>
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                    </ul>
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                    </ul>
                                     <?php } ?>
-                                    <div>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-sheets-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-sheets-status-msg"></span>
-                                    </div>
-                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeAll">All Purge Functions</a> <span class="fa fa-hand-o-up small"></span></li>
-                                    <div>
-                                        <span class="hidden" id="purge-total-status"></span>
-                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-total-status-msg"></span>
-                                    </div>
-                                </ul>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
-                        <?php if ($_SESSION['userLevel'] == "0") { ?>
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Archives</strong>
+                            <?php } ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>BJCP Points</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
+                                        <li><a href="#" data-toggle="modal" data-target="#BJCPCompIDModal" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Manage</a></li>
-                                    <?php if (!HOSTED) { ?>
-                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive&amp;action=add">Archive Current Data</a></li>
-                                    <?php } ?>
-                                </ul>
+                            <!-- 
+                            
+                            <?php if ($totalRows_tables > 0) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Award Labels</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Medal Labels (Round)</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=5293" data-toggle="tooltip" data-placement="top" title="1 2/3 inch Round Avery 5293">Letter</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php } ?>
+
+                            -->
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Address Labels</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li>All Participants</li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    </ul>
+                                    <ul class="list-inline">
+                                        <li>All Participants with Entries
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Summaries</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=summary" data-toggle="tooltip" data-placement="top" title="Print participant summaries - each on a separate sheet of paper. Useful as a cover sheet for mailing entry scoresheets to participants.">All Participants with Entries</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all participants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Inventory</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory&amp;go=scores" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - with scores">With Scores</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - without scores">Without Scores</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         <?php } ?>
+                        </div>
                     </div>
                 </div>
-            </div><!-- ./ Database Maintenance Panel -->
-            <!-- Preferences Panel -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapsePrefs">Preferences<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>/Customization<?php } ?><span class="fa fa-cog pull-right"></span></a>
-                    </h4>
-                </div>
-                <div id="collapsePrefs" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="row">
-                        <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                            <strong>Preferences</strong>
-                        </div>
-                        <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                            <ul class="list-inline">
-                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Website</a></li>
-                                <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization</a></li>
-                            </ul>
-                        </div>
-                        </div><!-- ./row -->
-                        <?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>
-                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Custom Modules</strong>
+                <!-- ./ Reports Panel -->
+                <!-- Data Exports Panel -->
+                <div id="dashboard-data-exports" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseExports">Data Exports<span class="fa fa-download pull-right"></span></a>
+                        </h4>
+                    </div>
+                    <div id="collapseExports" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Email Addresses and Associated Contact Data (CSV)</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails">All Participants</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=avail_judges&amp;action=email">Available Judges</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=avail_stewards&amp;action=email">Available Stewards</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-emails&amp;go=csv&amp;filter=staff&amp;action=email">Available and Assigned Staff</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                <ul class="list-inline">
-                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods">Manage</a></li>
-                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add">Add</a></li>
-                                </ul>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Participant Data (CSV)</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-participants&amp;go=csv">All Participants</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=winners">Winners: Limited Data</a> <em class="small text-muted">for generating award labels, etc.</em></li>
+                                        <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a> <em class="small text-muted">suitable for local/regional circuits</em></li>
+                                        <?php if ($row_prefs['prefsMHPDisplay'] == 1) { ?>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit&amp;filter=mhp">Winners: Master Homebrewer Program Member Data</a></li>
+                                        <?php } ?>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
                             </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
+                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Entries and Associated Data (CSV)</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv">All Entries: Limited Data</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid&amp;view=all">Paid Entries</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid">Paid &amp; Received Entries</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid&amp;view=not_received">Paid Entries Not Received</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=nopay&amp;view=all">Non-Paid Entries</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=nopay">Non-Paid &amp; Received Entries</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;action=required&amp;tb=required">Entries with Required &amp; Optional Info</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php } ?>
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- ./ Preferences Panel -->
-            <?php } ?>
-            <!-- Help Panel -->
-                <div class="panel panel-default">
+                <!-- ./ Data Exports Panel -->
+                <?php if ($_SESSION['userLevel'] == "0") { ?>
+                <!-- Data Management Panel -->
+                <div id="dashboard-data-management" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseMaint">Data Management<span class="fa fa-archive pull-right"></span></a>
+                        </h4>
+                    </div>
+                    <div id="collapseMaint" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Integrity</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#cleanUp">Clean-Up Data</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="clean-up-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="clean-up-status-msg"></span>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Entries</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#confirmAll">Confirm All Unconfirmed</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="conf-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="conf-status-msg"></span>
+                                        </div>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeUnconfirmed">Purge All Unconfirmed</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-un-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-un-status-msg"></span>
+                                        </div>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeUnpaid">Purge All Unpaid</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-unpaid-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-unpaid-status-msg"></span>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Purge</strong>
+                            </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a href="#" data-toggle="modal" data-target="#purgeEntries">Entries</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-ent-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-ent-status-msg"></span>
+                                        </div>
+                                        <?php if (check_setup($prefix."payments",$database)) { ?>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgePayments">Payments</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-pay-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-pay-status-msg"></span>
+                                        </div>
+                                        <?php } ?> 
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeParticipants">Participants</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status-msg"></span>
+                                        </div>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeTables">Judging Tables</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status-msg"></span>
+                                        </div>                            
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScores">Scores</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-score-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-score-status-msg"></span>
+                                        </div>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeCustom">Custom Categories</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-cust-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-cust-status-msg"></span>
+                                        </div>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeAvailabilty">Entrant Availability</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status-msg"></span>
+                                        </div>
+                                        <?php if ($_SESSION['prefsEval'] == 1) { ?>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Entry Evaluations</a></li>
+                                        <?php } else { ?>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Uploaded Scoresheets</a></li>
+                                        <?php } ?>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-sheets-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-sheets-status-msg"></span>
+                                        </div>
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeAll">All Purge Functions</a> <span class="fa fa-hand-o-up small"></span></li>
+                                        <div>
+                                            <span class="hidden" id="purge-total-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-total-status-msg"></span>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php if ($_SESSION['userLevel'] == "0") { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Archives</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Manage</a></li>
+                                        <?php if (!HOSTED) { ?>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive&amp;action=add">Archive Current Data</a></li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div><!-- ./ Database Maintenance Panel -->
+                <!-- Preferences Panel -->
+                <div id="dashboard-preferences" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapsePrefs">Preferences<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>/Customization<?php } ?><span class="fa fa-cog pull-right"></span></a>
+                        </h4>
+                    </div>
+                    <div id="collapsePrefs" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Preferences</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <ul class="list-unstyled">
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">General</a></li>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries">Entry</a></li>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email">Email Sending</a></li>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment">Currency and Payment</a></li>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best">Best Brewer and/or Club</a></li>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Judging/Competition Organization</a></li>
+                                </ul>
+                            </div>
+                            </div>
+                            <?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>
+                             <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Custom Modules</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods">Manage</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add">Add</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./ Preferences Panel -->
+                <?php } ?>
+                <!-- Help Panel -->
+                <div id="dashboard-help" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion2" href="#collapseHelp">Help<span class="fa fa-question-circle pull-right"></span></a>
@@ -2219,7 +2480,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <?php } ?>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>How Do I...</strong>
@@ -2248,7 +2509,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <?php echo $server_environ; ?>
                                     </div>
                                 </div>
-                            </div><!-- ./row -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2334,7 +2595,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','cleanup','cleanup','admin-dashboard','clean-up');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','cleanup','cleanup','admin-dashboard','clean-up');">Yes</button>
         </div>
         </div>
     </div>
@@ -2351,7 +2612,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','confirmed','confirmed','admin-dashboard','conf');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','confirmed','confirmed','admin-dashboard','conf');">Yes</button>
         </div>
         </div>
     </div>
@@ -2368,7 +2629,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','purge','unpaid','admin-dashboard','purge-unpaid');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','purge','unpaid','admin-dashboard','purge-unpaid');">Yes</button>
         </div>
         </div>
     </div>
@@ -2385,7 +2646,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','unconfirmed','admin-dashboard','purge-un');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','unconfirmed','admin-dashboard','purge-un');">Yes</button>
         </div>
         </div>
     </div>
@@ -2407,7 +2668,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','participants','admin-dashboard','purge-part');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','participants','admin-dashboard','purge-part');">Yes</button>
         </div>
         </div>
     </div>
@@ -2429,7 +2690,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','payments','admin-dashboard','purge-pay');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','payments','admin-dashboard','purge-pay');">Yes</button>
         </div>
         </div>
     </div>
@@ -2451,7 +2712,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','entries','admin-dashboard','purge-ent');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','entries','admin-dashboard','purge-ent');">Yes</button>
         </div>
         </div>
     </div>
@@ -2475,9 +2736,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             <?php if ($_SESSION['prefsEval'] == 1) { ?>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','evaluation','admin-dashboard','purge-sheets');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','evaluation','admin-dashboard','purge-sheets');">Yes</button>
             <?php } else { ?>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','scoresheets','admin-dashboard','purge-sheets');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','scoresheets','admin-dashboard','purge-sheets');">Yes</button>
             <?php } ?>
         </div>
         </div>
@@ -2497,7 +2758,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','availability','admin-dashboard','purge-avail');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','availability','admin-dashboard','purge-avail');">Yes</button>
         </div>
         </div>
     </div>
@@ -2514,7 +2775,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','custom','admin-dashboard','purge-cust');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','custom','admin-dashboard','purge-cust');">Yes</button>
         </div>
         </div>
     </div>
@@ -2531,7 +2792,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','scores','admin-dashboard','purge-score');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','scores','admin-dashboard','purge-score');">Yes</button>
         </div>
         </div>
     </div>
@@ -2548,7 +2809,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
         </div>
         </div>
     </div>
@@ -2566,7 +2827,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','purge-all','admin-dashboard','purge-total');">Yes</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','purge-all','admin-dashboard','purge-total');">Yes</button>
         </div>
         </div>
     </div>
@@ -2586,8 +2847,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                 <p>The process may take a while depending upon the number of entires in your database.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $base_url; ?>','identical','admin-dashboard','jn-entry');">Yes</button>
+                <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $ajax_url; ?>','identical','admin-dashboard','jn-entry');">Yes</button>
             </div>
         </div>
     </div>
@@ -2606,8 +2867,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                 <p>The process may take a while depending upon the number of entires in your database.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $base_url; ?>','legacy','admin-dashboard','jn-style');">Yes</button>
+                <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $ajax_url; ?>','legacy','admin-dashboard','jn-style');">Yes</button>
             </div>
         </div>
     </div>
@@ -2626,8 +2887,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                 <p>The process may take a while depending upon the number of entires in your database.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $base_url; ?>','default','admin-dashboard','jn-random');">Yes</button>
+                <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $ajax_url; ?>','default','admin-dashboard','jn-random');">Yes</button>
             </div>
         </div>
     </div>
@@ -2665,6 +2926,32 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
         </div>
     </div>
 </div><!-- ./modal -->
+
+<div class="modal fade" id="tables-competition-mode-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Please Confirm</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to switch to Tables Competition Mode? This should only be done after <strong>all</strong> entries have been sorted and those present are <strong>marked as <u>received</u> in the system</strong>.</p>
+                <p>Before you do, take note that, after switching to Tables Competition Mode:</p>
+                <ul>
+                    <li>Table entry counts will only reflect entries marked as <strong>received</strong>.</li>
+                    <li>Non-received entries' flight designations will be reset to 1 (default) should any be marked as received after switching to Competition Mode. Flight positions and associated rounds should be reviewed prior to judging.</li>
+                    <li>If there are no entries marked as received for a particular sub-style, the <strong>sub-style will be removed</strong> from the table's styles list.</li>
+                    <li>If there are no entries marked as received for <strong>all</strong> sub-styles defined for a table, <strong>that table will be deleted</strong>.</li>
+                    <li>Judges and stewards that have entries at a table where they are assigned will be un-assigned from that table as a failsafe.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="tables-competition-button-yes" type="button" class="btn btn-success">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php 
 

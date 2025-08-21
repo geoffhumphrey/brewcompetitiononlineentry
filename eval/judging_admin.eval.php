@@ -34,6 +34,8 @@ foreach ($eval_scores as $key => $value) {
 		$eval_all_judges[] = $value['judge_id'];
 		$latest_submitted[$value['eid']] = $value['date_added'];
 		$latest_updated[$value['eid']] = $value['date_updated'];
+		if (!empty($value['consensus_score'])) $latest_consensus[$value['eid']] = $value['consensus_score'];
+		else $latest_consensus[$value['eid']] = "";
 		$table_judges[] = array(
 			"tj_first_name" => $eval_judge[0],
 			"tj_last_name" => $eval_judge[1],
@@ -47,8 +49,9 @@ foreach ($eval_scores as $key => $value) {
 
 		$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id']."&amp;tb=1";
 		$print_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id'];
+		// $edit_link = $base_url."index.php?section=admin&amp;go=evaluation&amp;action=edit&amp;filter=".$tbl_id."&amp;bid=".$value['judge_id']."&amp;view=admin&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
 		$edit_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=edit&amp;filter=".$tbl_id."&amp;bid=".$value['judge_id']."&amp;view=admin&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
-		$delete_link = $base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$prefix."evaluation&amp;action=delete&amp;id=".$value['id'];
+		$delete_link = $base_url."includes/process.inc.php?section=evaluation&amp;go=default&amp;filter=".$filter."&amp;dbTable=".$prefix."evaluation&amp;action=delete&amp;id=".$value['id'];
 
 		$actions .= "<div style=\"margin-bottom:5px;\" class=\"row\">";
 		$actions .= "<div class=\"col col-lg-6 col-md-7 col-sm-12\">";
@@ -59,10 +62,10 @@ foreach ($eval_scores as $key => $value) {
 		if ($value['date_added'] != $value['date_updated']) $actions .= "<br><small><span class\"text-muted\">".$label_updated.": ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_updated'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></small>";
 		$actions .= "</div>";
 		$actions .= "<div class=\"col col-lg-6 col-md-5 col-sm-12\">";
-		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" title=\"View the generated scoresheet from the evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></a> ";
-		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" title=\"Print the generated scoresheet from the evaluation  completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
-		$actions .= "<a href=\"".$edit_link."\" data-toggle=\"tooltip\" data-toggle=\"tooltip\" title=\"Edit this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-lg fa-pencil\"></i></a> ";
-		$actions .= "<a class=\"hide-loader\" href=\"".$delete_link."\" data-toggle=\"tooltip\" title=\"Delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\" data-confirm=\"Are you sure you want to delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1]."? This cannot be undone.\"><i class=\"fa fa-lg fa-trash-o\"></i></a> ";
+		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" title=\"View the generated scoresheet from the evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><span class=\"fa-stack\"><i class=\"fa fa-fw fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></a> ";
+		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" title=\"Print the generated scoresheet from the evaluation  completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-fw fa-lg fa-file-text\"></i></a> ";
+		$actions .= "<a href=\"".$edit_link."\" data-toggle=\"tooltip\" data-toggle=\"tooltip\" title=\"Edit this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-fw fa-lg fa-pencil\"></i></a> ";
+		$actions .= "<a class=\"hide-loader\" href=\"".$delete_link."\" data-toggle=\"tooltip\" title=\"Delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\" data-confirm=\"Are you sure you want to delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1]."? This cannot be undone.\"><i class=\"fa fa-fw fa-lg fa-trash-o\"></i></a> ";
 		$actions .= "</div>";
 		$actions .= "</div>";
 		
@@ -130,7 +133,7 @@ if ($count_evals > 0) {
 	$eval_place_actions .= "</div>";
 	$eval_place_actions .= "<div class=\"col col-lg-6 col-md-5 col-sm-12\">";
 	$eval_place_actions .= "<div style=\"margin-bottom:5px;\" id=\"eval-place-ajax-".$row_entries['id']."-evalPlace-form-group\">";
-	$eval_place_actions .= "<select class=\"selectpicker eval-place-choose-".$tbl_id."\" data-dropdown-align-right=\"auto\" id=\"eval-place-ajax-".$row_entries['id']."\" name=\"evalPlace".$row_entries['id']."\" title=\"".$label_place_awarded."\" data-width=\"100%\" onchange=\"update_place_display('".$number."','eval-place-ajax-".$row_entries['id']."','".$tbl_id."');select_place_multi('".$base_url."','evalPlace','evaluation','".$row_entries['id']."','eval-place-choose-".$tbl_id."','','','','eval-place-ajax-".$row_entries['id']."');\">";
+	$eval_place_actions .= "<select class=\"selectpicker eval-place-choose-".$tbl_id."\" data-dropdown-align-right=\"auto\" id=\"eval-place-ajax-".$row_entries['id']."\" name=\"evalPlace".$row_entries['id']."\" title=\"".$label_place_awarded."\" data-width=\"100%\" onchange=\"update_place_display('".$number."','eval-place-ajax-".$row_entries['id']."','".$tbl_id."');select_place_multi('".$ajax_url."','evalPlace','evaluation','".$row_entries['id']."','eval-place-choose-".$tbl_id."','','','','eval-place-ajax-".$row_entries['id']."');\">";
 
 	$eval_place_actions .= "<option value=\"\"";
 	if (($eval_place == "") || ($eval_place == "0")) $eval_place_actions .= " SELECTED";
@@ -165,10 +168,10 @@ if ($count_evals > 0) {
 	$eval_place_actions .= "<div style=\"margin-bottom:5px;\" class=\"col col-lg-6 col-md-5 col-sm-12\">";
 	$eval_place_actions .= "<div class=\"input-group\">";
 	$eval_place_actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
-	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"1\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','1','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_yes.">Yes";
+	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"1\" onclick=\"save_column('".$ajax_url."','evalMiniBOS','evaluation','".$row_entries['id']."','1','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_yes.">Yes";
 	$eval_place_actions .= "</label>";
 	$eval_place_actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
-	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"0\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','0','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_no.">No";
+	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"0\" onclick=\"save_column('".$ajax_url."','evalMiniBOS','evaluation','".$row_entries['id']."','0','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_no.">No";
 	$eval_place_actions .= "</label>";
 	$eval_place_actions .= "</div>";
 	$eval_place_actions .= "<br><span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status\"></span> ";
@@ -210,7 +213,8 @@ if ($count_evals > 0) {
 		"brewJudgingNumber" => $number,
 		"brewCategorySort" => $row_entries['brewCategorySort'],
 		"brewSubCategory" => $row_entries['brewSubCategory'],
-		"brewStyle" => $row_entries['brewStyle']
+		"brewStyle" => $row_entries['brewStyle'],
+		"consensus_score" => $latest_consensus[$row_entries['id']]
 	);
 
 	if (!empty($score_entry_data[3])) {

@@ -20,6 +20,101 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	include (DB.'entries.db.php');
 	include (INCLUDES.'constants.inc.php');
 
+	function table_limit($style_id,$planning) {
+
+		// If in planning mode, query to see if the style's id is in a  
+		// table's defined styles and whether that table is limiting entries.
+		if ($planning == 1) {
+
+			require (CONFIG.'config.php');
+
+			// Define Vars
+			$db_conn = new MysqliDb($connection);
+			$table_id = "";
+			$table_limit = "";
+			$table_style_ids = "";
+			$result = 0;
+
+			$query_table_entry_limits = sprintf("SELECT id,tableStyles,tableEntryLimit FROM `%s` WHERE tableEntryLimit IS NOT NULL",$prefix."judging_tables");
+			$table_entry_limits = mysqli_query($connection,$query_table_entry_limits) or die (mysqli_error($connection));
+			$row_table_entry_limits = mysqli_fetch_assoc($table_entry_limits);
+
+			// Loop through each table's defined styles and look for
+			// the chosen style's ID as defined in the function params.
+			// If found, define the necessary vars.
+			do {
+
+				$exploder = explode(",",$row_table_entry_limits['tableStyles']);
+				if (in_array($style_id, $exploder)) {
+					$table_id = $row_table_entry_limits['id'];
+					$table_limit = $row_table_entry_limits['tableEntryLimit'];
+					$table_style_ids = $row_table_entry_limits['tableStyles'];
+				}
+
+			} while($row_table_entry_limits = mysqli_fetch_assoc($table_entry_limits));
+
+			// If found and vars are not empty, get the total entries logged
+			// for all styles defined in the table, if the total is equal to
+			// the limit, mark all associated styles as "at limit."
+			if ((!empty($table_id)) && (!empty($table_limit)) && (!empty($table_style_ids))) {
+
+				// Call established function to get total entry count of the 
+				// table's defined styles.
+				$total_table_entries = get_table_info("1","count_total",$table_id,"default","default");
+
+				// If the total entries for that table are at or beyond limit,
+				// designate each style at the table as "at limit" (true) in the styles
+				// DB table.
+				if ($total_table_entries >= $table_limit) {
+
+					$exploder = explode(",",$table_style_ids);
+
+					foreach (array_unique($exploder) as $value) {
+
+						$update_table = $prefix."styles";
+						$data = array(
+							'brewStyleAtLimit' => 1
+						);
+						$db_conn->where ('id', $value);
+						$result = $db_conn->update ($update_table, $data);
+						if ($result) $return += 1;
+
+					} // end foreach
+				
+				} // end if ($row_table_entry_limits['tableEntryLimit'] >= $total_table_entries)
+
+				// If the total entries for that table is BELOW the limit,
+				// designate each style at the table as "available" (false) 
+				// in the styles DB table.
+				if ($total_table_entries < $table_limit) {
+
+					$exploder = explode(",",$table_style_ids);
+
+					foreach (array_unique($exploder) as $value) {
+
+						$update_table = $prefix."styles";
+						$data = array(
+							'brewStyleAtLimit' => 0
+						);
+						$db_conn->where ('id', $value);
+						$result = $db_conn->update ($update_table, $data);
+						if ($result) $return += 1;
+
+					} // end foreach
+				
+				} // end if ($row_table_entry_limits['tableEntryLimit'] < $total_table_entries)
+
+			} // end if ((!empty($table_id)) && (!empty($table_limit)) && (!empty($table_style_ids)))
+
+			if ($return > 0) return TRUE;
+			else return FALSE;
+			
+		} // end if ($planning == 1)
+
+		else return FALSE;
+	
+	} // end function
+
 	$query_user = sprintf("SELECT id,userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
@@ -93,6 +188,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	include (CLASSES.'capitalize_name/parser.php');
 	$name_parser = new FullNameParser();
 
+	// Do not rely on session var to determine if in tables planning mode
+	$query_table_planning = sprintf("SELECT jPrefsTablePlanning FROM `%s` WHERE id='1'",$prefix."judging_preferences");
+	$table_planning = mysqli_query($connection,$query_table_planning);
+	$row_table_planning = mysqli_fetch_assoc($table_planning);
+
 	if (($action == "add") || ($action == "edit")) {
 
 		if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
@@ -103,7 +203,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewCoBrewer = "";
 		$styleBreak = $purifier->purify(sterilize($_POST['brewStyle']));
 		$styleName = "";
-		$brewName = capitalize($purifier->purify(sterilize($_POST['brewName'])));
+		$brewName = $purifier->purify(sterilize($_POST['brewName']));
 		$brewInfo = "";
 		$brewInfoOptional = "";
 		$index = ""; // Defined with Style
@@ -121,7 +221,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewSweetnessLevel = "";
 		$brewJuiceSource = "";
 		$brewPouring = "";
+		$brewPackaging = "";
 		$brewStyleType = "";
+		$brewOriginalGravity = "";
+		$brewFinalGravity = "";
 
 		// Comments
 		if ((isset($_POST['brewComments'])) && (!empty($_POST['brewComments']))) {
@@ -180,7 +283,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewABV = $purifier->purify(sterilize($_POST['brewABV']));
 		}
 
-		// Sweetness Level (Specific Gravity)
+		if ((isset($_POST['brewOriginalGravity'])) && (!empty($_POST['brewOriginalGravity']))) {
+			$brewOriginalGravity = $purifier->purify(sterilize($_POST['brewOriginalGravity']));
+			$brewOriginalGravity = number_format($brewOriginalGravity,3);
+		}
+
+		if ((isset($_POST['brewFinalGravity'])) && (!empty($_POST['brewFinalGravity']))) {
+			$brewFinalGravity = $purifier->purify(sterilize($_POST['brewFinalGravity']));
+			$brewFinalGravity = number_format($brewFinalGravity,3);
+		}
+
+		if ((!empty($brewOriginalGravity)) || (!empty($brewFinalGravity))) {
+			$brewSweetnessLevel = array();
+			$brewSweetnessLevel['OG'] = $brewOriginalGravity;
+			$brewSweetnessLevel['FG'] = $brewFinalGravity;
+			$brewSweetnessLevel = json_encode($brewSweetnessLevel);
+		}
+
+		// Sweetness Level (Specific Gravity - POST var is only for NW Cider Cup styles)
 		if ((isset($_POST['brewSweetnessLevel'])) && (!empty($_POST['brewSweetnessLevel']))) {
 			$brewSweetnessLevel = $purifier->purify(sterilize($_POST['brewSweetnessLevel']));
 			$brewSweetnessLevel = number_format($brewSweetnessLevel,3);
@@ -226,6 +346,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$brewPouring = json_encode($pouring_instructions);
 
+		if (isset($_POST['brewPackaging'])) $brewPackaging = sterilize($_POST['brewPackaging']);
+
 		// Record Paid and Received
 		if ($action == "add") {
 
@@ -244,9 +366,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($action == "edit") {
 
 			if (($_SESSION['userLevel'] <= 1) && (isset($_POST['brewPaid']))) $brewPaid = $_POST['brewPaid'];
-
 			if (($_SESSION['userLevel'] <= 1) && (isset($_POST['brewReceived']))) $brewReceived = $_POST['brewReceived'];
-
 			if (($_SESSION['userLevel'] > 1) || ((!isset($_POST['brewPaid'])) || (!isset($_POST['brewReceived'])))) {
 
 				$query_entry_status = sprintf("SELECT brewPaid,brewReceived FROM %s WHERE id='%s'", $prefix."brewing",$id);
@@ -270,12 +390,53 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		else $styleFix = $style[0];
 		$styleID = $style[1];
 
+		// Array from constants.inc.php
+		// Check to see if there are any style limits
+		// If so, check if the 
+		if ((is_array($style_limit_entry_count_display)) && (!empty($style_limit_entry_count_display))) {
+
+			if ($_SESSION['sprefsStyleSet'] == "BJCP2025") {
+				$first_character = mb_substr($key, 0, 1);
+				if ($first_character == "C") $chosen_style_set = "BJCP2025";
+				else $chosen_style_set = "BJCP2021";
+			}
+
+			else $chosen_style_set = $_SESSION['sprefsStyleSet'];
+
+			$all_style_limits = json_decode($_SESSION['prefsStyleLimits'],true);
+			
+			if ((isset($all_style_limits[$style[0]])) && ($all_style_limits[$style[0]] >= $style_limit_entry_count_display[$style[0]])) {
+
+				$update_table_styles = $prefix."styles";
+				$data = array('brewStyleAtLimit' => 1);
+				$db_conn->where ('brewStyleGroup', $style[0]);
+				$db_conn->where ('brewStyleVersion', $chosen_style_set);
+				$result = $db_conn->update ($update_table_styles, $data);
+				
+			}
+
+			if ((isset($all_style_limits[$style[0]])) && ($all_style_limits[$style[0]] < $style_limit_entry_count_display[$style[0]])) {
+
+				$update_table_styles = $prefix."styles";
+				$data = array('brewStyleAtLimit' => 0);
+				$db_conn->where ('brewStyleGroup', $style[0]);
+				$db_conn->where ('brewStyleVersion', $chosen_style_set);
+				$result = $db_conn->update ($update_table_styles, $data);
+
+			}
+
+		}
+
 		// Style Name
-		/*
-		if (HOSTED) $query_style_name = sprintf("SELECT brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $styleFix, $style[1], "bcoem_shared_styles", $_SESSION['prefsStyleSet'], $styleFix, $style[1]);
-		else 
-		*/
-		$query_style_name = sprintf("SELECT brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $styleFix, $style[1]);
+
+		// Determine if the style chosen is a cider - if so, run a different query
+		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+			$first_character = mb_substr($styleFix, 0, 1);
+			if ($first_character == "C") $query_style_name = sprintf("SELECT id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $styleFix, $style[1]);
+			else $query_style_name = sprintf("SELECT id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $styleFix, $style[1]);
+		}
+
+		else $query_style_name = sprintf("SELECT id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $styleFix, $style[1]);
 		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 		$row_style_name = mysqli_fetch_assoc($style_name);
 		
@@ -293,10 +454,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewInfoOptional = $purifier->purify(sterilize($_POST['brewInfoOptional']));		
 		}
 
-		// For BJCP 2015/2021, process addtional info
-		if (($_SESSION['prefsStyleSet'] == "BJCP2015") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
+		// For BJCP 2025/2021, process addtional info
+		if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
 
-			// If BJCP 2021 and 2A, add optional regional variation if present
+			// If BJCP 2021 (beer) and 2A, add optional regional variation if present
 			if (($index == "02-A") && ($_SESSION['prefsStyleSet'] == "BJCP2021") && (!empty($_POST['regionalVar']))) {
 				$brewInfo = $purifier->purify(sterilize($_POST['regionalVar']));
 			}
@@ -368,7 +529,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-
 		$files = array_slice(scandir(USER_DOCS), 2);
 		$judging_number_looper = TRUE;
 
@@ -419,11 +579,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
 			'brewPouring' => blank_to_null($brewPouring),
 			'brewStyleType' => blank_to_null($row_style_name['brewStyleType']),
-			'brewPackaging' => blank_to_null(sterilize($_POST['brewPackaging']))
+			'brewPackaging' => blank_to_null(sterilize($brewPackaging))
 		);
 
 		$result = $db_conn->insert ($update_table, $data);
-		if (!$result) {
+
+		// If inserted, use the table_limit function to check
+		// if there's an entry limit imposed on the table.
+		if ($result) {
+			if ($row_table_planning['jPrefsTablePlanning'] == 1) table_limit($row_style_name['id'],1);
+		}
+
+		else {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
@@ -439,18 +606,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($section == "admin") {
 
-			if ($_POST['brewStyle'] == "0-A") $insertGoTo = $base_url."index.php?section=brew&go=entries&action=edit&filter=".$brewBrewerID."&id=".$id."&view=0-A&msg=4";
+			if ($_POST['brewStyle'] == "0-A") $insertGoTo = $base_url."index.php?section=admin&go=entries&action=edit&filter=".$brewBrewerID."&id=".$id."&view=0-A&msg=4";
 			else {
-				if ((isset($_POST['return-to-add'])) && ($_POST['return-to-add'] == 1)) $insertGoTo = $base_url."index.php?section=brew&go=entries&action=add&filter=admin&msg=1";
+				if ((isset($_POST['return-to-add'])) && ($_POST['return-to-add'] == 1)) $insertGoTo = $base_url."index.php?section=admin&go=entries&action=add&filter=admin&msg=1";
 				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
 			}
 
 		}
 
 		elseif (($section != "admin") && ($_POST['brewStyle'] == "0-A")) {
-
 			$insertGoTo = $base_url."index.php?section=brew&action=edit&id=".$id."&view=0-A&msg=4";
-
 		}
 
 		else {
@@ -617,6 +782,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "edit") {
 
+		// Before processing the edit, determine the style of the entry
+		// as stored in the DB
+		$query_current_style = sprintf("SELECT brewCategorySort, brewSubCategory FROM %s WHERE id = '%s'", $prefix."brewing",$id);
+		$current_style = mysqli_query($connection,$query_current_style) or die (mysqli_error($connection));
+		$row_current_style = mysqli_fetch_assoc($current_style);
+
+		// Determine if the style chosen is a cider - if so, run a different query
+		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+			$first_character = mb_substr($row_current_style['brewCategorySort'], 0, 1);
+			if ($first_character == "C") $query_current_style_id = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']);
+			else $query_current_style_id = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']);
+		}
+
+		else $query_current_style_id = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']);
+		$current_style_id = mysqli_query($connection,$query_current_style_id) or die (mysqli_error($connection));
+		$row_current_style_id = mysqli_fetch_assoc($current_style_id);
+
 		if ($row_user['userLevel'] <= 1) {
 
 			$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", sterilize($_POST['brewBrewerID']));
@@ -672,9 +854,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewStyleType' => blank_to_null($row_style_name['brewStyleType']),
 			'brewPackaging' => blank_to_null(sterilize($_POST['brewPackaging']))
 		);
+		
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
-		if (!$result) {
+		
+		// When updated, use the table_limit function to check
+		// if there's an entry limit imposed on the table for the
+		// previous style and the current style. If so, adjust
+		// each accordingly.
+		if ($result) {
+			if ($row_table_planning['jPrefsTablePlanning'] == 1) {
+				table_limit($row_current_style_id['id'],1);
+				table_limit($row_style_name['id'],1);
+			}
+		}
+
+		else {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}

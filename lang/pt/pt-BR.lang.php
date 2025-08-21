@@ -645,7 +645,7 @@ $alert_text_050 = "O limite de ".$row_limits ['prefsEntryLimit']. " amostras foi
 $alert_text_052 = "O limite de amostras pagas foi atingido.";
 $alert_text_053 = "O limite de ".$row_limits ['prefsEntryLimitPaid']. " amostras <em>pagas</em> foi atingido. Nenhuma outra amostra será aceita.";
 $alert_text_055 = "O registro está fechado.";
-$alert_text_056 = "Se você já registrou uma conta,";
+$alert_text_056 = "Se você já registrou uma conta, faça login.";
 $alert_text_057 = "faça o login aqui"; // letras minúsculas e falta de pontuação intencional
 $alert_text_059 = "O registro da inscrição está fechado.";
 $alert_text_060 = "Um total de ". $total_entries. " amostras foram adicionadas ao sistema.";
@@ -712,7 +712,7 @@ $brew_text_005 = "Força necessária"; // falta de pontuação intencional
 $brew_text_006 = "Nível de carbonatação necessário"; // falta de pontuação intencional
 $brew_text_007 = "Nível de doçura necessário"; // falta de pontuação intencional
 $brew_text_008 = "Este estilo requer que você forneça informações específicas para a amostra.";
-$brew_text_009 = "Requisitos para"; // falta de pontuação intencional
+$brew_text_009 = "Requisitos:"; // falta de pontuação intencional
 $brew_text_010 = "Este estilo requer mais informações. Por favor, entre na área fornecida.";
 $brew_text_011 = "O nome da amostra é obrigatório.";
 $brew_text_012 = "*** NÃO REQUERIDO *** Forneça APENAS se você deseja que os juízes considerem completamente o que você escreve aqui ao avaliar e pontuar sua inscrição. Use para registrar detalhes que você gostaria que os juízes considerassem ao avaliar sua inscrição que você NÃO ESPECIFICAR em outros campos (por exemplo, técnica de mostura, variedade de lúpulo, variedade de mel, variedade de uva, variedade de pêra, etc.). ";
@@ -1280,6 +1280,7 @@ $header_text_113 = "Você pode editar apenas as informações da sua conta.";
 $header_text_114 = "Como administrador, você pode alterar as informações da conta de um usuário via Admin> Entradas e Participantes> Gerenciar Participantes.";
 $header_text_115 = "Resultados foram publicados.";
 $header_text_116 = "Se você não receber o email dentro de um prazo razoável, entre em contato com um oficial da competição ou administrador do site para redefinir sua senha para você.";
+if (!$mail_use_smtp) $header_text_116 .= " <strong>Informe ao responsável pela competição que o envio de e-mails SMTP não está habilitado e/ou não está funcionando corretamente.</strong>";
 $alert_text_082 = "Desde que você se inscreveu como juiz ou assistente, você não tem permissão para adicionar amostras à sua conta. Apenas representantes de uma organização podem adicionar amostras às suas contas.";
 $alert_text_083 = "Adicionar e editar amostras não está disponível.";
 $alert_text_084 = "Como dministrador, você pode adicionar uma amostra à conta de uma organização usando o menu suspenso & quot; Adicionar amostra para ...&quot; na página Administração &gt; Entradas e participantes &gt; Gerenciar inscrições.";
@@ -1379,7 +1380,7 @@ $pwd_email_reset_text_004 = "website. Se você não iniciou isto, não se preocu
 $pwd_email_reset_text_005 = "Para redefinir sua senha, clique no link abaixo ou copie / cole no seu navegador.";
 $best_brewer_text_000 = "cervejeiros participantes";
 $best_brewer_text_001 = "HM";
-$best_brewer_text_002 = "Os desempatadores foram aplicados de acordo com a <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\"> metodologia de pontuação </a>. ";
+$best_brewer_text_002 = "Os desempatadores foram aplicados de acordo com a <a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#scoreMethod\"> metodologia de pontuação </a>. ";
 $best_brewer_text_003 = "Metodologia de pontuação";
 $best_brewer_text_004 = "Cada amostra de colocação recebe os seguintes pontos:";
 $best_brewer_text_005 = "Os seguintes desempatadores foram aplicados, em ordem de prioridade:";
@@ -1900,7 +1901,8 @@ $evaluation_info_077 = "Comente sobre cor, clareza e cabeça (retenção, cor e 
 $evaluation_info_078 = "Comente sobre malte, lúpulo, características de fermentação, equilíbrio, acabamento/sabor, e outras características de sabor.";
 $evaluation_info_079 = "Comentário sobre o corpo, carbonação, calor, cremosidade, adstringência e outras sensações palatinas.";
 $evaluation_info_080 = "Comente sobre o prazer geral de beber associado à entrada, dê sugestões para melhorias.";
-if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+
+if ((isset($_SESSION['prefsStyleSet'])) && (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025"))) {
     $styles_entry_text_21B = "O participante DEVE especificar uma força (sessão, padrão, duplo); se nenhuma força for especificada, o padrão será assumido. O participante DEVE especificar o tipo específico de Especialidade IPA da lista de Tipos Definidos Atualmente identificados nas Diretrizes de Estilo, ou conforme emendado pelos Estilos Provisórios no site do BJCP; OU o participante DEVE descrever o tipo de Especialidade IPA e suas principais características em forma de comentários para que os juízes saibam o que esperar. Os participantes PODEM especificar as variedades específicas de lúpulo utilizadas, se os participantes acharem que os juízes podem não reconhecer as características varietais dos lúpulos mais recentes. Os participantes PODEM especificar uma combinação de tipos IPA definidos (por exemplo, IPA Centeio Negro) sem fornecer descrições adicionais.";
     $styles_entry_text_24C = "O participante DEVE especificar a Bière de Garde loira, âmbar ou marrom.";
     $styles_entry_text_25B = "O participante DEVE especificar a força (tabela, padrão, super) e a cor (pálido, escuro). O participante PODE identificar os grãos de caráter utilizados.";
@@ -2111,6 +2113,105 @@ $brewer_info_017 = "<p>Parece que você se inscreveu para servir como assistente
 $brewer_info_018 = "<strong>Você indicou que está disposto a servir como juiz, mas não indicou que está disponível para nenhuma sessão de julgamento listada.</strong> Por favor, edite as informações da sua conta e selecione \"Sim\" para uma ou mais sessões de julgamento.";
 $brewer_info_019 = "<strong>Você indicou que está disposto a servir como assistente, mas não indicou que está disponível para nenhuma sessão de assistência listada.</strong> Por favor, edite as informações da sua conta e selecione \"Sim\" para uma ou mais sessões de assistência.";
 $brewer_info_020 = "<strong>Você já foi designado para uma mesa como juiz ou steward.</strong> Se desejar alterar sua disponibilidade, entre em contato com o organizador da competição ou com o coordenador de juízes.";
+
+/**
+ * ------------------------------------------
+ * Version 3.0.0 Additions
+ * ------------------------------------------
+ */
+
+$label_not_started = "Não iniciado";
+$label_in_progress = "Em andamento";
+$label_concluded = "Concluído";
+$label_start = "Início";
+$label_end = "Fim";
+$label_visit = "Visitar";
+$label_no_website = "Nenhum website";
+$label_register_as_judge = "Registrar-se como juiz";
+$label_register_as_steward = "Registrar-se como steward";
+$label_create_account = "Criar sua conta";
+$label_log_in_to_enter = "Registrar-se ou fazer login para participar";
+$label_not_available = "Não disponível";
+$label_fyi = "Para sua informação";
+$label_results = "Resultados";
+$label_entries_remaining = "Inscrições restantes até o limite atual";
+$label_entry_limit_enforced = "Limite de inscrições aplicado até";
+$label_button_no_steward = "Não desejo me voluntariar como steward";
+$label_button_no_judge = "Não desejo me voluntariar como juiz";
+$label_staff_availability = "Disponibilidade da equipe";
+$label_original_gravity = "Densidade original";
+$label_verified = "Verificado";
+$label_style_type = "Tipo de estilo";
+$label_entry_limit_style = "Limites de inscrição por categoria de estilo";
+$label_current_count = "Contagem atual";
+$label_scroll = "Rolar";
+$label_opt_out = "Cancelar inscrição";
+$label_opening = "Abertura";
+$label_entry_limits = "Limites de inscrição";
+$label_entry_limit_participant = "Limite de inscrição por participante";
+$label_entry_limit_substyle = "Limite de inscrição por estilo";
+$label_entry_limit_exception = "Limite de exceções por estilo";
+$label_exceptions = "Exceções";
+$label_style_excepted = "Exceções de estilo";
+$label_no_sessions = "Nenhuma sessão selecionada";
+$label_resume_updates = "Retomar atualizações";
+
+$brewer_text_056 = "Selecione &quot;Cancelar inscrição&quot; acima se você não desejar participar de nenhuma oportunidade Pro-Am associada a esta competição.";
+
+$brew_text_056 = "Por favor forneça o nível de carbonatação da inscrição.";
+$brew_text_057 = "Por favor forneça o nível de doçura da inscrição.";
+$brew_text_058 = "Por favor forneça a força da inscrição.";
+$brew_text_059 = "Por favor forneça a cor da inscrição.";
+$brew_text_060 = "Por favor insira a densidade até a terceira casa decimal (ex., 1.120 ou 1.014, etc.).";
+$brew_text_061 = "As contagens são atualizadas a cada dois minutos.";
+$brew_text_062 = "Contagens pausadas enquanto a janela estiver inativa. Clique ou toque para reativar.";
+$brew_text_063 = "As contagens são atualizadas a cada minuto.";
+$brew_text_064 = "Atualizações de contagem pausadas.";
+$brew_text_065 = "Atualizações de contagem expiraram. Selecione Retomar Atualizações para reiniciar.";
+
+$bottle_labels_008 = "Certifique-se de que as configurações de impressão do seu navegador estejam em <strong>Layout retrato</strong> e <strong>Escala 100&#37;</strong>.";
+
+$contact_text_005 = "Selecione ou busque um contato.";
+$contact_text_006 = "Por favor selecione uma pessoa.";
+$contact_text_007 = "Por favor forneça seu nome e sobrenome.";
+$contact_text_008 = "Por favor forneça um endereço de e-mail válido.";
+$contact_text_009 = "Por favor forneça um assunto.";
+$contact_text_010 = "Por favor forneça uma mensagem.";
+
+$contact_text_011 = "Selecione o endereço de e-mail para abrir seu aplicativo de e-mail nativo. Copie o endereço e cole em uma nova mensagem se estiver usando serviços de e-mail baseados na web como Gmail, etc.";
+$contact_text_012 = "Por favor note: esta janela é resultado de múltiplas medidas tentando mitigar a exposição de endereços de e-mail a robôs de spam. Se houver um erro ou o endereço de e-mail do contato da competição não estiver disponível acima, ele foi ofuscado por razões de segurança. Se este for o caso, entre em contato com este oficial da competição por outros meios (redes sociais, website da organização, etc.).";
+
+$error_text_000 = "Por favor use a navegação principal acima para ir onde você quer ir.";
+$error_text_001 = "Se os links acima não estiverem funcionando, por favor entre em contato com um representante do site.";
+$error_text_400 = "Solicitação inválida.";
+$error_text_401 = "Permissão necessária para sua solicitação.";
+$error_text_403 = "Ação proibida.";
+$error_text_404 = "Página não encontrada.";
+$error_text_500 = "Configuração incorreta do servidor.";
+
+$styles_entry_text_C1A_2025 = "Os participantes DEVEM especificar os níveis de carbonatação e doçura. Os participantes PODEM especificar variedades de maçã, particularmente se essas variedades introduzirem características incomuns.";
+$styles_entry_text_C1B_2025 = "Os participantes DEVEM especificar os níveis de carbonatação e doçura. Os participantes PODEM especificar variedades de maçã utilizadas; se especificadas, será esperado um caráter varietal.";
+$styles_entry_text_C1C_2025 = "Os participantes DEVEM especificar o nível de carbonatação. Os participantes DEVEM especificar a doçura, restrita de seco a meio-doce. Os participantes PODEM especificar variedades de maçã utilizadas; se especificadas, será esperado um caráter varietal.";
+$styles_entry_text_C1D_2025 = "Os participantes DEVEM especificar o nível de carbonatação. Os participantes DEVEM especificar a doçura, restrita de meio a doce. Os participantes PODEM especificar variedades de maçã utilizadas; se especificadas, será esperado um caráter varietal.";
+$styles_entry_text_C1E_2025 = "Os participantes DEVEM especificar o nível de carbonatação. Os participantes DEVEM especificar a doçura, restrita de seco a meio. Os participantes PODEM especificar variedades de maçã utilizadas; se especificadas, será esperado um caráter varietal.";
+$styles_entry_text_C2A_2025 = "Os participantes DEVEM especificar se a sidra foi fermentada ou envelhecida em barril. Os participantes DEVEM especificar os níveis de carbonatação e doçura.";
+$styles_entry_text_C2B_2025 = "Os participantes DEVEM especificar os níveis de carbonatação e doçura.";
+$styles_entry_text_C2C_2025 = "Os participantes DEVEM especificar a densidade inicial, densidade final ou açúcar residual, e nível de álcool. Os participantes DEVEM especificar o nível de carbonatação.";
+$styles_entry_text_C2D_2025 = "Os participantes DEVEM especificar a densidade inicial, densidade final ou açúcar residual, e nível de álcool. Os participantes DEVEM especificar o nível de carbonatação.";
+$styles_entry_text_C3A_2025 = "Os participantes DEVEM especificar os níveis de carbonatação e doçura. Os participantes DEVEM especificar todas as frutas ou sucos de fruta adicionados. Os participantes PODEM especificar um estilo base de sidra. Os participantes PODEM especificar a cor da fruta adicionada.";
+$styles_entry_text_C3B_2025 = "Os participantes DEVEM especificar os níveis de carbonatação e doçura. Os participantes DEVEM especificar todas as especiarias adicionadas. Se lúpulo for usado, o participante DEVE especificar as variedades. Os participantes PODEM especificar um estilo base de sidra.";
+$styles_entry_text_C3C_2025 = "Os participantes DEVEM especificar os ingredientes ou processos que tornam a inscrição uma sidra experimental. Os participantes DEVEM especificar os níveis de carbonatação e doçura. Os participantes PODEM especificar um estilo base, ou fornecer uma descrição mais detalhada do conceito.";
+$styles_entry_text_C4A_2025 = "Os participantes DEVEM especificar os níveis de carbonatação e doçura.";
+$styles_entry_text_C4B_2025 = "Os participantes DEVEM especificar os níveis de carbonatação e doçura.";
+$styles_entry_text_C4C_2025 = "Os participantes DEVEM especificar a densidade inicial, densidade final ou açúcar residual, e nível de álcool. Os participantes DEVEM especificar o nível de carbonatação.";
+$styles_entry_text_C4D_2025 = "Os participantes DEVEM especificar os ingredientes ou processos que tornam a inscrição um perry experimental. Os participantes DEVEM especificar os níveis de carbonatação e doçura. Os participantes PODEM especificar um estilo base, ou fornecer uma descrição mais detalhada do conceito.";
+
+$login_text_028 = "O nome de usuário que você inseriu não foi encontrado. Por favor verifique e tente novamente.";
+$login_text_029 = "Se você não consegue lembrar do seu nome de usuário, entre em contato com um administrador deste site.";
+$login_text_030 = "E-mail fornecido não é válido. Por favor verifique e tente novamente.";
+
+$entry_info_text_056 = "Limite atingido. Não serão aceitas mais inscrições.";
+$entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indica que o limite de inscrições do estilo foi atingido e não serão aceitas mais inscrições deste estilo.";
 
 /**
  * ----------------------------------------------------------------------------------

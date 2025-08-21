@@ -31,8 +31,17 @@ if (($section == "admin") || ($view == "admin")) {
 }
 
 else {
-    $container_main = "container";
-    $nav_container = "navbar-default";
+
+    if (V3) {
+        $container_main = "container-xxl";
+        $nav_container = "navbar-dark";
+    }
+
+    else {
+        $container_main = "container";
+        $nav_container = "navbar-default";
+    }
+    
 }
 
 $security_question = array($label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27);

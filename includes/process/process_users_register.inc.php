@@ -15,41 +15,16 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$errors = FALSE;
 	$error_output = array();
 	$_SESSION['error_output'] = "";
-	
 	$captcha_success = FALSE;
+	$no_register = FALSE;
 
 	require(PROCESS.'process_brewer_info.inc.php');
 
 	$username = filter_var(strtolower($_POST['user_name']),FILTER_SANITIZE_EMAIL);
-	$username2 = filter_var(strtolower($_POST['user_name2']),FILTER_SANITIZE_EMAIL);
+	// $username2 = filter_var(strtolower($_POST['user_name2']),FILTER_SANITIZE_EMAIL);
 	$userQuestionAnswer = $purifier->purify(sterilize($_POST['userQuestionAnswer']));
 	$hasher_question = new PasswordHash(8, false);
 	$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
-
-	setcookie("userQuestion", sterilize($_POST['userQuestion']), 0, "/");
-	setcookie("userQuestionAnswer", $userQuestionAnswer, 0, "/");
-	setcookie("brewerFirstName", $first_name, 0, "/");
-	setcookie("brewerLastName", $last_name, 0, "/");
-	setcookie("brewerAddress", $address, 0, "/");
-	setcookie("brewerCity", $city, 0, "/");
-	setcookie("brewerState", sterilize($state_province), 0, "/");
-	setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
-	setcookie("brewerCountry", sterilize($_POST['brewerCountry']), 0, "/");
-	setcookie("brewerPhone1", $brewerPhone1, 0, "/");
-	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-	setcookie("brewerClubs", $brewerClubs, 0, "/");
-	setcookie("brewerAHA", $brewerAHA, 0, "/");
-	setcookie("brewerMHP", $brewerMHP, 0, "/");
-	setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
-	setcookie("brewerSteward", $brewerSteward, 0, "/");
-	setcookie("brewerJudge", $brewerJudge, 0, "/");
-	setcookie("brewerDropOff", $brewerDropOff, 0, "/");
-	setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
-	setcookie("brewerStewardLocation", $location_pref2, 0, "/");
-	setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
-	setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/"); // $brewerBreweryTTB var is incoprorated into $brewerBreweryInfo array.
-	setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
-	setcookie("brewerProAm", $brewerProAm, 0, "/");
 
 	if ($filter != "admin") {
 
@@ -73,13 +48,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	if (($view == "default") && ($filter != "admin") && (!$captcha_success)) {
 
+		$no_register = TRUE;
 		$redirect = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
-		header($redirect_go_to);
-		exit();
 
 	} // end if (($view == "default") && ($filter != "admin") && (!$captcha_success))
+
+	/*
 
 	elseif (($view == "default") && ($username != $username2)) {
 
@@ -90,11 +66,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		header($redirect_go_to);
 		exit();
 
-	} 
+	}
+
+	*/
 
 	else {
 
-		// Check to see if email address is already in the system. If so, redirect.
+		// Failsafe. Check to see if email address is already in the system. If so, redirect.		
 		if (strstr($username,'@'))  {
 
 			// Sanity check from AJAX widget
@@ -105,7 +83,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			if ($totalRows_userCheck > 0) {
 
-				if ($section == "admin") $msg = "10"; else $msg = "2";
+				if ($section == "admin") $msg = "10"; 
+				else $msg = "2";
 				$redirect = $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg;
 				$redirect = prep_redirect_link($redirect);
 				$redirect_go_to = sprintf("Location: %s", $redirect);
@@ -113,9 +92,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			} else {
 
 				// Add the user's creds to the "users" table			
+				$entered_password = md5($_POST['password']);
 				$hasher = new PasswordHash(8, false);
-				$password = md5($_POST['password']);
-				$hash = $hasher->HashPassword($password);
+				$hash = $hasher->HashPassword($entered_password);
 				$hasher_question = new PasswordHash(8, false);
 				$hash_question = $hasher_question->HashPassword(sterilize($userQuestionAnswer));
 
@@ -132,7 +111,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'userCreated' =>  date('Y-m-d H:i:s', time()),
 					'userAdminObfuscate' => $userAdminObfuscate
 				);
-				//print_r($data);
+				
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -152,10 +131,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'brewerAddress' => blank_to_null($address),
 					'brewerCity' => blank_to_null($city),
 					'brewerState' => blank_to_null($state_province),
-					'brewerZip' => blank_to_null($purifier->purify($_POST['brewerZip'])),
-					'brewerCountry' => blank_to_null($purifier->purify($_POST['brewerCountry'])),
+					'brewerZip' => blank_to_null(sterilize($_POST['brewerZip'])),
+					'brewerCountry' => blank_to_null(sterilize($_POST['brewerCountry'])),
 					'brewerPhone1' => blank_to_null($brewerPhone1),
-					'brewerPhone2' => blank_to_null($brewerPhone2),
 					'brewerClubs' => blank_to_null($brewerClubs),
 					'brewerEmail' => blank_to_null($username),
 					'brewerStaff' => blank_to_null($brewerStaff),
@@ -164,9 +142,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'brewerJudgeID' => blank_to_null($brewerJudgeID),
 					'brewerJudgeMead' => blank_to_null($brewerJudgeMead),
 					'brewerJudgeCider' => blank_to_null($brewerJudgeCider),
-					'brewerJudgeRank' => blank_to_null($brewerJudgeRank),
+					'brewerJudgeRank' => blank_to_null($rank),
+					'brewerJudgeLikes' => blank_to_null($likes),
+					'brewerJudgeDislikes' => blank_to_null($dislikes),
 					'brewerJudgeLocation' => blank_to_null($location_pref1),
 					'brewerStewardLocation' => blank_to_null($location_pref2),
+					'brewerJudgeExp' => blank_to_null($brewerJudgeExp),
+					'brewerJudgeNotes' => blank_to_null($brewerJudgeNotes),
 					'brewerJudgeWaiver' => blank_to_null($brewerJudgeWaiver),
 					'brewerAHA' => blank_to_null($brewerAHA),
 					'brewerMHP' => blank_to_null($brewerMHP),
@@ -270,7 +252,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	 			} // end elseif ($row_stray['count'] == 1)
 
 				// If email registration info option is yes, email registrant their info...
-				if ($_SESSION['prefsEmailRegConfirm'] == 1) {
+				if (($_SESSION['prefsEmailRegConfirm'] == 1) && ($mail_use_smtp)) {
 
 					$show_entrant_fields = TRUE;
 
@@ -328,7 +310,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						if ($brewerJudge == "Y") $brewerJudge1 = $label_yes; else $brewerJudge1 = $label_no;
 						if ($brewerSteward == "Y") $brewerSteward1 = $label_yes; else $brewerSteward1 = $label_no;
 						if ($brewerStaff == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
-						if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; else $brewerProAm1 = $label_no;
+						if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; 
+						elseif ($_POST['brewerProAm'] == 2) $brewerProAm1 = $label_opt_out;  
+						else $brewerProAm1 = $label_no;
 
 						if (!empty($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
 						if (!empty($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);
@@ -351,19 +335,15 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$headers .= "From: ".$from_name." <".$from_email.">"."\r\n";
 					$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
 
-					if ($mail_use_smtp) {
-						$mail = new PHPMailer(true);
-						$mail->CharSet = 'UTF-8';
-						$mail->Encoding = 'base64';
-						$mail->addAddress($to_email, $to_name);
-						$mail->setFrom($from_email, $from_name);
-						$mail->Subject = $subject;
-						$mail->Body = $message;
-						sendPHPMailerMessage($mail);
-					} else {
-						mail($to_email_formatted, $subject, $message, $headers);
-					}
-
+					$mail = new PHPMailer(true);
+					$mail->CharSet = 'UTF-8';
+					$mail->Encoding = 'base64';
+					$mail->addAddress($to_email, $to_name);
+					$mail->setFrom($from_email, $from_name);
+					$mail->Subject = $subject;
+					$mail->Body = $message;
+					sendPHPMailerMessage($mail);
+					
 					/*
 					echo $url;
 					echo $headers."<br>";
@@ -378,31 +358,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					
 					unset($_SESSION['user_info'.$prefix_session]);
 					$_SESSION['loginUsername'] = $username;
-
-					// Redirect to Judge Info section if willing to judge
-					if ($brewerJudge == "Y") {
-
-						$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
-						$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-						$row_brewer = mysqli_fetch_assoc($brewer);
-
-						$redirect = $base_url."index.php?section=brewer&action=edit&go=account&psort=judge&id=".$row_brewer['id'];
-						$redirect = prep_redirect_link($redirect);
-						$redirect_go_to = sprintf("Location: %s", $redirect);			
-						header($redirect_go_to);
-						exit();
-
-					} // end if ($brewerJudge == "Y")
-
-					else {
-
-						$redirect = $base_url."index.php?section=list&msg=7";
-						$redirect = prep_redirect_link($redirect);
-						$redirect_go_to = sprintf("Location: %s", $redirect);			
-						header($redirect_go_to);
-						exit();
-
-					}
+					$redirect = $base_url."index.php?section=list&msg=7";
+					$redirect = prep_redirect_link($redirect);
+					$redirect_go_to = sprintf("Location: %s", $redirect);			
 
 				} // end if ($filter == "default")
 
@@ -429,8 +387,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 						$insertGoTo = prep_redirect_link($insertGoTo);
 						$redirect_go_to = sprintf("Location: %s", $insertGoTo);
-						header($redirect_go_to);
-						exit();
 
 					} // end if ($brewerJudge == "Y")
 
@@ -442,18 +398,59 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=3";
 						$insertGoTo = prep_redirect_link($insertGoTo);
 						$redirect_go_to = sprintf("Location: %s", $insertGoTo);
-						header($redirect_go_to);
-						exit();
 
 					} // end else
 
 				} // end if ($filter == "admin")
 
-			} // end if ($totalRows_userCheck > 0) else
+			} // end if ($totalRows_userCheck > 0)
 
 		} // if (strstr($username,'@'))
 
+		else {
+
+			$no_register = TRUE;
+			if ($filter == "admin") $redirect =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
+			else $redirect = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+		
+		}
+
 	} // end else (CAPCHA check OK)
+
+	if ($no_register) {
+
+		setcookie("userQuestion", sterilize($_POST['userQuestion']), 0, "/");
+		setcookie("userQuestionAnswer", $userQuestionAnswer, 0, "/");
+		setcookie("brewerFirstName", $first_name, 0, "/");
+		setcookie("brewerLastName", $last_name, 0, "/");
+		setcookie("brewerAddress", $address, 0, "/");
+		setcookie("brewerCity", $city, 0, "/");
+		setcookie("brewerState", sterilize($state_province), 0, "/");
+		setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
+		setcookie("brewerCountry", sterilize($_POST['brewerCountry']), 0, "/");
+		setcookie("brewerPhone1", $brewerPhone1, 0, "/");
+		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+		setcookie("brewerClubs", $brewerClubs, 0, "/");
+		setcookie("brewerAHA", $brewerAHA, 0, "/");
+		setcookie("brewerMHP", $brewerMHP, 0, "/");
+		setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
+		setcookie("brewerSteward", $brewerSteward, 0, "/");
+		setcookie("brewerJudge", $brewerJudge, 0, "/");
+		setcookie("brewerDropOff", $brewerDropOff, 0, "/");
+		setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
+		setcookie("brewerStewardLocation", $location_pref2, 0, "/");
+		setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
+		setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/"); // $brewerBreweryTTB var is incoprorated into $brewerBreweryInfo array.
+		setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
+		setcookie("brewerProAm", $brewerProAm, 0, "/");
+
+	}
+
+	header($redirect_go_to);
+	exit();
+
 
 } else {
 

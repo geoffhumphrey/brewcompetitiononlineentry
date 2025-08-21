@@ -651,7 +651,7 @@ $alert_text_050 = "Se ha alcanzado el límite de ".$row_limits['prefsEntryLimit'
 $alert_text_052 = "Se ha alcanzado el límite de inscripción de pagos.";
 $alert_text_053 = "Se ha alcanzado el límite de ".$row_limits['prefsEntryLimitPaid']." entradas <em>pagadas</em>. No se aceptarán más entradas.";
 $alert_text_055 = "La inscripción está cerrada.";
-$alert_text_056 = "Si ya registraste una cuenta,";
+$alert_text_056 = "Si ya registraste una cuenta, inicie sesión.";
 $alert_text_057 = "inicia sesión aquí"; // Minúsculas y falta de puntuación a propósito
 $alert_text_059 = "La inscripción de entradas está cerrada.";
 $alert_text_060 = "Se han agregado un total de ".$total_entries." entradas al sistema.";
@@ -718,7 +718,7 @@ $brew_text_005 = "Fortaleza requerida (solo para hidromieles)"; // Falta de punt
 $brew_text_006 = "Nivel de carbonatación requerido (solo para hidromieles y sidras)"; // Falta de puntuación a propósito
 $brew_text_007 = "Nivel de dulzura requerido (solo para hidromieles y sidras)"; // Falta de puntuación a propósito
 $brew_text_008 = "Este estilo requiere que proporciones información específica para la entrada.";
-$brew_text_009 = "Requisitos para"; // Falta de puntuación a propósito
+$brew_text_009 = "Requisitos:"; // Falta de puntuación a propósito
 $brew_text_010 = "Este estilo requiere más información. Por favor, introdúcela en el área proporcionada.";
 $brew_text_011 = "Se requiere el nombre de la entrada.";
 $brew_text_012 = "***NO REQUERIDO*** Proporciona SOLO si deseas que los jueces consideren completamente lo que escribas aquí al evaluar y puntuar tu entrada. Úsalo para registrar detalles que te gustaría que los jueces consideren al evaluar tu entrada y que NO HAYAS ESPECIFICADO en otros campos (por ejemplo, técnica de maceración, variedad de lúpulo, variedad de miel, variedad de uva, variedad de pera, etc.).";
@@ -1286,6 +1286,7 @@ $header_text_113 = "Solo puedes editar la información de tu propia cuenta.";
 $header_text_114 = "Como administrador, puedes cambiar la información de la cuenta de un usuario a través de Administrador > Inscripciones y Participantes > Gestionar Participantes.";
 $header_text_115 = "Los resultados han sido publicados.";
 $header_text_116 = "Si no recibes el correo electrónico dentro de un período de tiempo razonable, comunícate con un organizador de la competencia o un administrador del sitio para restablecer tu contraseña.";
+if (!$mail_use_smtp) $header_text_116 .= " <strong>Informa al responsable de la competición de que el envío de correos electrónicos SMTP no está habilitado o no funciona correctamente.</strong>";
 $alert_text_082 = "Dado que te registraste como juez o steward, no se te permite agregar inscripciones a tu cuenta. Solo los representantes de una organización pueden agregar inscripciones a sus cuentas.";
 $alert_text_083 = "La adición y edición de inscripciones no están disponibles.";
 $alert_text_084 = "Como administrador, puedes agregar una inscripción a la cuenta de una organización utilizando el menú desplegable \"Agregar Inscripción Para...\" en la página Administrador > Inscripciones y Participantes > Gestionar Inscripciones.";
@@ -1385,7 +1386,7 @@ $pwd_email_reset_text_004 = "sitio web. Si no lo inició, no se preocupe. Su con
 $pwd_email_reset_text_005 = "Para restablecer su contraseña, haga clic en el enlace de abajo o cópielo/pegúelo en su navegador.";
 $best_brewer_text_000 = "cerveceros participantes";
 $best_brewer_text_001 = "MH"; // ¿Qué significa "HM" en este contexto?
-$best_brewer_text_002 = "Se han aplicado puntuaciones y desempates de acuerdo con la <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">metodología de puntuación</a>. Los números reflejados están redondeados a la centésima. Coloque el cursor sobre el icono de interrogación (<span class=\"fa fa-question-circle\"></span>) para ver el valor calculado real.";
+$best_brewer_text_002 = "Se han aplicado puntuaciones y desempates de acuerdo con la <a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#scoreMethod\">metodología de puntuación</a>. Los números reflejados están redondeados a la centésima. Coloque el cursor sobre el icono de interrogación (<span class=\"fa fa-question-circle\"></span>) para ver el valor calculado real.";
 $best_brewer_text_003 = "Metodología de Puntuación";
 $best_brewer_text_004 = "A cada entrada que se coloca se le asigna la siguiente cantidad de puntos:";
 $best_brewer_text_005 = "Se han aplicado los siguientes desempates, en orden de prioridad:";
@@ -1903,7 +1904,7 @@ $evaluation_info_078 = "Comentario sobre malta, lúpulo, características de fer
 $evaluation_info_079 = "Comentario sobre cuerpo, carbonatación, calidez, cremosidad, astringencia y otras sensaciones en el paladar.";
 $evaluation_info_080 = "Comentario sobre el placer general de beber la entrada, da sugerencias para mejorar.";
 
-if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
+if ((isset($_SESSION['prefsStyleSet'])) && (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025"))) {
     $styles_entry_text_21B = "El participante DEBE especificar una fuerza (session, estándar, doble); si no se especifica una fuerza, se asumirá la estándar. El participante DEBE especificar el tipo específico de IPA Especial de la lista de Tipos Actualmente Definidos identificados en las Pautas de Estilo, o según enmiendas de Estilos Provisionales en el sitio web de BJCP; O el participante DEBE describir el tipo de IPA Especial y sus características clave en forma de comentario para que los jueces sepan qué esperar. Los participantes PUEDEN especificar variedades de lúpulo específicas utilizadas, si los participantes creen que los jueces pueden no reconocer las características varietales de lúpulos más nuevos. Los participantes PUEDEN especificar una combinación de tipos de IPA definidos (por ejemplo, IPA Negra de Centeno) sin proporcionar descripciones adicionales.";
     $styles_entry_text_24C = "El participante DEBE especificar si es rubia, ámbar o marrón Bière de Garde.";
     $styles_entry_text_25B = "El participante DEBE especificar la fuerza (mesa, estándar, súper) y el color (pálido, oscuro). El participante PUEDE identificar granos característicos utilizados.";
@@ -2124,6 +2125,105 @@ $brewer_info_017 = "<p>Parece que te has registrado para servir como asistente, 
 $brewer_info_018 = "<strong>Has indicado que estás dispuesto a servir como juez, pero no has indicado que estés disponible para ninguna sesión de evaluación listada.</strong> Por favor, edita la información de tu cuenta y selecciona \"Sí\" para una o más sesiones de evaluación.";
 $brewer_info_019 = "<strong>Has indicado que estás dispuesto a servir como asistente, pero no has indicado que estés disponible para ninguna sesión de asistencia listada.</strong> Por favor, edita la información de tu cuenta y selecciona \"Sí\" para una o más sesiones de asistencia.";
 $brewer_info_020 = "<strong>Ya se le ha asignado una mesa como juez o comisario.</strong> Si desea cambiar su disponibilidad, póngase en contacto con el organizador de la competición o con el coordinador de jueces.";
+
+/**
+ * ------------------------------------------
+ * Version 3.0.0 Additions
+ * ------------------------------------------
+ */
+
+$label_not_started = "No iniciado";
+$label_in_progress = "En progreso";
+$label_concluded = "Concluido";
+$label_start = "Inicio";
+$label_end = "Fin";
+$label_visit = "Visitar";
+$label_no_website = "Sin sitio web";
+$label_register_as_judge = "Registrarse como juez";
+$label_register_as_steward = "Registrarse como steward";
+$label_create_account = "Crear su cuenta";
+$label_log_in_to_enter = "Registrarse o iniciar sesión para participar";
+$label_not_available = "No disponible";
+$label_fyi = "Para su información";
+$label_results = "Resultados";
+$label_entries_remaining = "Inscripciones restantes hasta el límite actual";
+$label_entry_limit_enforced = "Límite de inscripciones aplicado hasta";
+$label_button_no_steward = "No deseo ofrecerme como voluntario como steward";
+$label_button_no_judge = "No deseo ofrecerme como voluntario como juez";
+$label_staff_availability = "Disponibilidad del personal";
+$label_original_gravity = "Gravedad original";
+$label_verified = "Verificado";
+$label_style_type = "Tipo de estilo";
+$label_entry_limit_style = "Límites de inscripción por categoría de estilo";
+$label_current_count = "Conteo actual";
+$label_scroll = "Desplazar";
+$label_opt_out = "Darse de baja";
+$label_opening = "Apertura";
+$label_entry_limits = "Límites de inscripción";
+$label_entry_limit_participant = "Límite de inscripción por participante";
+$label_entry_limit_substyle = "Límite de inscripción por estilo";
+$label_entry_limit_exception = "Límite de excepciones por estilo";
+$label_exceptions = "Excepciones";
+$label_style_excepted = "Excepciones de estilo";
+$label_no_sessions = "Ninguna sesión seleccionada";
+$label_resume_updates = "Reanudar actualizaciones";
+
+$brewer_text_056 = "Seleccione &quot;Darse de baja&quot; arriba si no desea participar en ninguna oportunidad Pro-Am asociada con esta competencia.";
+
+$brew_text_056 = "Por favor proporcione el nivel de carbonatación de la inscripción.";
+$brew_text_057 = "Por favor proporcione el nivel de dulzura de la inscripción.";
+$brew_text_058 = "Por favor proporcione la fuerza de la inscripción.";
+$brew_text_059 = "Por favor proporcione el color de la inscripción.";
+$brew_text_060 = "Por favor ingrese la gravedad hasta el milésimo lugar (ej., 1.120 o 1.014, etc.).";
+$brew_text_061 = "Los conteos se actualizan cada dos minutos.";
+$brew_text_062 = "Conteos pausados mientras la ventana esté inactiva. Haga clic o toque para reactivar.";
+$brew_text_063 = "Los conteos se actualizan cada minuto.";
+$brew_text_064 = "Actualizaciones de conteo pausadas.";
+$brew_text_065 = "Las actualizaciones de conteo expiraron. Seleccione Reanudar actualizaciones para reiniciar.";
+
+$bottle_labels_008 = "Asegúrese de que la configuración de impresión de su navegador sea <strong>Diseño vertical</strong> y <strong>Escala 100&#37;</strong>.";
+
+$contact_text_005 = "Seleccione o busque un contacto.";
+$contact_text_006 = "Por favor seleccione una persona.";
+$contact_text_007 = "Por favor proporcione su nombre y apellido.";
+$contact_text_008 = "Por favor proporcione una dirección de correo electrónico válida.";
+$contact_text_009 = "Por favor proporcione un asunto.";
+$contact_text_010 = "Por favor proporcione un mensaje.";
+
+$contact_text_011 = "Seleccione la dirección de correo electrónico para abrir su aplicación de correo nativa. Copie la dirección y péguela en un nuevo mensaje si utiliza servicios de correo web como Gmail, etc.";
+$contact_text_012 = "Por favor note: esta ventana es resultado de múltiples medidas que intentan mitigar la exposición de direcciones de correo electrónico a robots de spam. Si hay un error o la dirección de correo del contacto de la competencia no está disponible arriba, ha sido ofuscada por razones de seguridad. Si este es el caso, contacte a este oficial de la competencia por otros medios (redes sociales, sitio web de la organización, etc.).";
+
+$error_text_000 = "Por favor use la navegación principal arriba para ir a donde quiere ir.";
+$error_text_001 = "Si los enlaces arriba no funcionan, por favor contacte a un representante del sitio.";
+$error_text_400 = "Solicitud inválida.";
+$error_text_401 = "Se necesita permiso para su solicitud.";
+$error_text_403 = "Acción prohibida.";
+$error_text_404 = "Página no encontrada.";
+$error_text_500 = "Configuración errónea del servidor.";
+
+$styles_entry_text_C1A_2025 = "Los participantes DEBEN especificar los niveles de carbonatación y dulzura. Los participantes PUEDEN especificar variedades de manzanas, particularmente si esas variedades introducen características inusuales.";
+$styles_entry_text_C1B_2025 = "Los participantes DEBEN especificar los niveles de carbonatación y dulzura. Los participantes PUEDEN especificar variedades de manzanas utilizadas; si se especifican, se esperará un carácter varietal.";
+$styles_entry_text_C1C_2025 = "Los participantes DEBEN especificar el nivel de carbonatación. Los participantes DEBEN especificar la dulzura, restringida de seco a semi-dulce. Los participantes PUEDEN especificar variedades de manzanas utilizadas; si se especifican, se esperará un carácter varietal.";
+$styles_entry_text_C1D_2025 = "Los participantes DEBEN especificar el nivel de carbonatación. Los participantes DEBEN especificar la dulzura, restringida de medio a dulce. Los participantes PUEDEN especificar variedades de manzanas utilizadas; si se especifican, se esperará un carácter varietal.";
+$styles_entry_text_C1E_2025 = "Los participantes DEBEN especificar el nivel de carbonatación. Los participantes DEBEN especificar la dulzura, restringida de seco a medio. Los participantes PUEDEN especificar variedades de manzanas utilizadas; si se especifican, se esperará un carácter varietal.";
+$styles_entry_text_C2A_2025 = "Los participantes DEBEN especificar si la sidra fue fermentada o envejecida en barril. Los participantes DEBEN especificar los niveles de carbonatación y dulzura.";
+$styles_entry_text_C2B_2025 = "Los participantes DEBEN especificar los niveles de carbonatación y dulzura.";
+$styles_entry_text_C2C_2025 = "Los participantes DEBEN especificar la gravedad inicial, gravedad final o azúcar residual, y nivel de alcohol. Los participantes DEBEN especificar el nivel de carbonatación.";
+$styles_entry_text_C2D_2025 = "Los participantes DEBEN especificar la gravedad inicial, gravedad final o azúcar residual, y nivel de alcohol. Los participantes DEBEN especificar el nivel de carbonatación.";
+$styles_entry_text_C3A_2025 = "Los participantes DEBEN especificar los niveles de carbonatación y dulzura. Los participantes DEBEN especificar toda fruta o jugo de fruta agregado. Los participantes PUEDEN especificar un estilo base de sidra. Los participantes PUEDEN especificar el color de la fruta agregada.";
+$styles_entry_text_C3B_2025 = "Los participantes DEBEN especificar los niveles de carbonatación y dulzura. Los participantes DEBEN especificar todas las especias agregadas. Si se usa lúpulo, el participante DEBE especificar las variedades. Los participantes PUEDEN especificar un estilo base de sidra.";
+$styles_entry_text_C3C_2025 = "Los participantes DEBEN especificar los ingredientes o procesos que hacen que la inscripción sea una sidra experimental. Los participantes DEBEN especificar los niveles de carbonatación y dulzura. Los participantes PUEDEN especificar un estilo base, o proporcionar una descripción más detallada del concepto.";
+$styles_entry_text_C4A_2025 = "Los participantes DEBEN especificar los niveles de carbonatación y dulzura.";
+$styles_entry_text_C4B_2025 = "Los participantes DEBEN especificar los niveles de carbonatación y dulzura.";
+$styles_entry_text_C4C_2025 = "Los participantes DEBEN especificar la gravedad inicial, gravedad final o azúcar residual, y nivel de alcohol. Los participantes DEBEN especificar el nivel de carbonatación.";
+$styles_entry_text_C4D_2025 = "Los participantes DEBEN especificar los ingredientes o procesos que hacen que la inscripción sea un perada experimental. Los participantes DEBEN especificar los niveles de carbonatación y dulzura. Los participantes PUEDEN especificar un estilo base, o proporcionar una descripción más detallada del concepto.";
+
+$login_text_028 = "El nombre de usuario que ingresó no fue encontrado. Por favor verifíquelo e intente nuevamente.";
+$login_text_029 = "Si no puede recordar su nombre de usuario, contacte a un administrador de este sitio.";
+$login_text_030 = "El correo electrónico proporcionado no es válido. Por favor verifíquelo e intente nuevamente.";
+
+$entry_info_text_056 = "Límite alcanzado. No se aceptan más inscripciones.";
+$entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indica que el límite de inscripciones del estilo ha sido alcanzado y no se aceptarán más inscripciones de ese estilo.";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -64,10 +64,45 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	}
 
 	// Judging Open
-	$jPrefsJudgingOpen = "";
-	$jPrefsJudgingClosed = "";
-	if (isset($_POST['jPrefsJudgingOpen'])) $jPrefsJudgingOpen = strtotime(sterilize($_POST['jPrefsJudgingOpen']));
-	if (isset($_POST['jPrefsJudgingClosed'])) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingClosed']));
+	
+	$judging_dates = array();
+	$judging_earliest_date = "";
+	$judging_latest_date = "";
+	
+    // Check whether any judging sessions have been defined. 
+    // If so, loop through and find the earliest and the latest dates.
+    $query_judging_locations = sprintf("SELECT id, judgingDate, judgingDateEnd FROM %s WHERE judgingLocType <= '1';", $prefix."judging_locations");
+    $judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
+    $row_judging_locations = mysqli_fetch_assoc($judging_locations);
+    $totalRows_judging_locations = mysqli_num_rows($judging_locations);
+
+    if ($totalRows_judging_locations > 0) {
+
+        do {
+
+            if (!empty($row_judging_locations['judgingDate'])) $judging_dates[] = $row_judging_locations['judgingDate'];
+            if (!empty($row_judging_locations['judgingDateEnd'])) $judging_dates[] = $row_judging_locations['judgingDateEnd'];
+
+        } while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+
+        $judging_earliest_date = min($judging_dates);
+        $judging_latest_date = max($judging_dates);
+
+    }
+
+	if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) $jPrefsJudgingOpen = strtotime(sterilize($_POST['jPrefsJudgingOpen']));
+	elseif ((isset($_POST['jPrefsJudgingOpen'])) && (empty($_POST['jPrefsJudgingOpen'])) && (!empty($judging_earliest_date))) $jPrefsJudgingOpen = sterilize($judging_earliest_date);
+	else $jPrefsJudgingOpen = "";
+
+	if ((isset($_POST['jPrefsJudgingClosed'])) && (!empty($_POST['jPrefsJudgingClosed']))) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingClosed']));
+	elseif ((isset($_POST['jPrefsJudgingClosed'])) && (empty($_POST['jPrefsJudgingClosed']))) {
+	    if (!empty($judging_latest_date)) $jPrefsJudgingClosed = sterilize($judging_latest_date);
+	    else {
+	    	if ((empty($judging_latest_date)) && (!empty($judging_earliest_date))) $jPrefsJudgingClosed = sterilize($judging_earliest_date+1209600);
+	    	else $jPrefsJudgingClosed = "";
+	    }
+	}
+	else $jPrefsJudgingClosed = "";
 
 	$update_table = $prefix."judging_preferences";
 	$data = array(

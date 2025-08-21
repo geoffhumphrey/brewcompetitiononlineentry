@@ -143,8 +143,7 @@ if ($action == "default") {
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestEntryFee2" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    	<div class="input-group">
-        	
+    	<div class="input-group">	
         	<input class="form-control" id="styleTypeEntryLimit" name="styleTypeEntryLimit" type="number" min="0" value="<?php if ($action == "edit") echo $row_style_type['styleTypeEntryLimit']; ?>" placeholder="">
         	<span class="input-group-addon" id="styleTypeEntryLimit-addon2"><span class="fa fa-hashtag"></span></span>
         </div>
@@ -160,7 +159,6 @@ if ($action == "default") {
 	<label for="brewStyleReqSpec" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BOS for Style Type</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
-			<!-- Input Here -->
 			<label class="radio-inline">
 				<input type="radio" name="styleTypeBOS" value="Y" id="styleTypeBOS_0" <?php if (($action == "edit") && ($row_style_type['styleTypeBOS'] == "Y")) echo "checked"; if ($action == "add") echo "checked"; ?> /> Yes
 			</label>
@@ -170,12 +168,11 @@ if ($action == "default") {
 		</div>
 		<div class="help-block with-errors"><p>Indicate whether there will be a Best of Show round for this style type.</p></div>
 	</div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group Radio STACKED -->
-	<label for="styleTypeBOSMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12  control-label">BOS Pull Method</label>
+</div>
+<div class="form-group">
+	<label for="styleTypeBOSMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BOS Pull Method</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
-			<!-- Input Here -->
 			<div class="radio">
 				<label>
 					<input type="radio" name="styleTypeBOSMethod" value="1" id="styleTypeBOSMethod_0" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "1")) echo "checked"; if ($action == "add") echo "checked"; ?> />1st place only
@@ -191,17 +188,10 @@ if ($action == "default") {
 					<input type="radio" name="styleTypeBOSMethod" value="3" id="styleTypeBOSMethod_2" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "3")) echo "checked"; ?> />1st, 2nd, and 3rd places
 				</label>
 			</div>
-			<!--
-			<div class="radio">
-				<label>
-					<input type="radio" name="styleTypeBOSMethod" value="4" id="styleTypeBOSMethod_3" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "4")) echo "checked"; ?> />1st, 2nd, and 3rd places with Honorable Mention
-				</label>
-			</div>
-			-->
 		</div>
 		<div class="help-block with-errors"><p>Determine how many placing entries from each medal category should be pulled for this style type in the Best of Show round.</p></div>
 	</div>
-</div><!-- ./Form Group -->
+</div>
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">

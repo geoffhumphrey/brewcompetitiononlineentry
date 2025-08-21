@@ -16,8 +16,8 @@ if ($_SESSION['prefsProEdition'] == 0) {
 <!-- Not a Brewery; clubs, Pro-Am, AHA, Staff -->
 <section id="participant-clubs">
     <div class="form-group">
-        <label for="brewerClubs" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club; ?></label>
-        <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">
+        <label for="brewerClubs" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
         <select class="selectpicker" name="brewerClubs" id="brewerClubs" data-live-search-normalize="true" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_club; ?>" title="<?php echo $label_select_club; ?>">
             <option value="" <?php if (($action == "edit") && (empty($row_brewer['brewerClubs']))) echo "SELECTED"; ?>>None</option>
@@ -30,8 +30,8 @@ if ($_SESSION['prefsProEdition'] == 0) {
         </div>
     </div>
     <div id="brewerClubsOther" class="form-group">
-        <label for="brewerClubsOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club_enter; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerClubsOther" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club_enter; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="" pattern="[^%&\x22\x27]+">
             <div class="help-block">
                 <p><?php echo $brewer_text_046; ?></p>
@@ -41,8 +41,8 @@ if ($_SESSION['prefsProEdition'] == 0) {
 </section>
 <section id="proAm">
     <div class="form-group">
-        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 <label class="radio-inline">
                     <input type="radio" name="brewerProAm" value="1" id="brewerProAm_1" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "1")) echo "CHECKED"; ?> /> <?php echo $label_yes; ?>
@@ -50,28 +50,32 @@ if ($_SESSION['prefsProEdition'] == 0) {
                 <label class="radio-inline">
                     <input type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "0") || (empty($row_brewer['brewerProAm']))) echo "CHECKED"; ?> /> <?php echo $label_no; ?>
                 </label>
+                <label class="radio-inline">
+                    <input type="radio" name="brewerProAm" value="2" id="brewerProAm_2" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "2")) echo "CHECKED"; ?> /> <?php echo $label_opt_out; ?>
+                </label>
             </div>
             <div class="help-block">
                 <p><?php echo $brewer_text_041; ?></p>
                 <p><?php echo $brewer_text_043; ?></p>
                 <p><?php echo $brewer_text_042; ?></p>
+                <p><?php echo $brewer_text_056; ?></p>
             </div>
         </div>
     </div>
 </section>
 <section id="aha-number">
     <div class="form-group">
-        <label for="brewerAHA" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_aha_number; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerAHA" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_aha_number; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" name="brewerAHA" id="brewerAHA" type="text" pattern="[A-Za-z0-9]+" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" placeholder="">
-            <span id="ahaProAmText" class="help-block"><?php echo $brewer_text_003; ?></span>
+            <span class="help-block" id="ahaProAmText"><?php echo $brewer_text_003; ?></span>
         </div>
     </div>
 </section>
 <section id="mhp-number">
     <div class="form-group">
-        <label for="brewerMHP" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_mhp_number; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerMHP" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_mhp_number; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" name="brewerMHP" id="brewerMHP" type="text" pattern="\d*" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if ($action == "edit") echo $row_brewer['brewerMHP']; ?>" placeholder="">
             <span class="help-block"><?php echo $brewer_text_053; ?></span>
         </div>
@@ -83,8 +87,8 @@ if ($_SESSION['prefsProEdition'] == 0) {
 <?php } ?>
 <section id="staff-preferences">
     <div class="form-group">
-        <label for="brewerStaff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <label for="brewerStaff" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 
                 <label class="radio-inline">
@@ -100,8 +104,8 @@ if ($_SESSION['prefsProEdition'] == 0) {
     <?php if (!empty($staff_location_avail)) { ?>
     <div id="brewerStaffFields">
         <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-            <label for="brewerStaffLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo "Staff Availability"; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <label for="brewerStaffLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo "Staff Availability"; ?></label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <?php echo $staff_location_avail; ?>
             </div>
         </div>

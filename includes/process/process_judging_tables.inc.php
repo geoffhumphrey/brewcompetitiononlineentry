@@ -39,6 +39,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	$tableNumber = sterilize($_POST['tableNumber']);
 	$tableLocation = sterilize($_POST['tableLocation']);
+	$tableEntryLimit = sterilize($_POST['tableEntryLimit']);
 
 	if ($action == "add") {
 
@@ -47,15 +48,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'tableName' => blank_to_null($tableName),
 			'tableStyles' => blank_to_null($tableStyles),
 			'tableNumber' => blank_to_null($tableNumber),
-			'tableLocation' => blank_to_null($tableLocation)
+			'tableLocation' => blank_to_null($tableLocation),
+			'tableEntryLimit' => blank_to_null($tableEntryLimit)
 		);
+
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		$query_table = "SELECT id,tableLocation FROM $judging_tables_db_table ORDER BY id DESC LIMIT 1";
+		$query_table = "SELECT id,tableLocation,tableEntryLimit FROM $judging_tables_db_table ORDER BY id DESC LIMIT 1";
 		$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 		$row_table = mysqli_fetch_assoc($table);
 
@@ -66,14 +69,61 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$a = explode(",",$tableStyles);
 
+		if ((!empty($tableEntryLimit)) && (!empty($tableStyles))) {
+
+			// Call established function to get total entry count of the 
+			// table's defined styles.
+			$total_table_entries = get_table_info(1,"count_total",$id,"current","default",$base_url);
+
+			// If the total entries for that table are at or beyond limit,
+			// designate each style at the table as "at limit" (true) in the styles
+			// DB table.
+			if ($total_table_entries >= $tableEntryLimit) {
+
+				foreach (array_unique($a) as $value) {
+
+					$update_table = $prefix."styles";
+					$data = array(
+						'brewStyleAtLimit' => 1
+					);
+					$db_conn->where ('id', $value);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				} // end foreach
+			
+			} // end if ($row_table_entry_limits['tableEntryLimit'] >= $total_table_entries)
+
+			// If the total entries for that table is BELOW the limit,
+			// designate each style at the table as "available" (false) 
+			// in the styles DB table.
+			if ($total_table_entries < $tableEntryLimit) {
+
+				foreach (array_unique($a) as $value) {
+
+					$update_table = $prefix."styles";
+					$data = array(
+						'brewStyleAtLimit' => 0
+					);
+					$db_conn->where ('id', $value);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				} // end foreach
+			
+			} // end if ($row_table_entry_limits['tableEntryLimit'] < $total_table_entries)
+
+		} // end if (!empty($tableEntryLimit))
+
 		foreach (array_unique($a) as $value) {
 
 			if ($_SESSION['prefsStyleSet'] != "BA") {
-				
-				/*
-				if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s';", $styles_db_table, $value, $prefix."styles", $value);
-				else 
-				*/
 				$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s';", $styles_db_table, $value);
 				$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 				$row_styles = mysqli_fetch_assoc($styles);
@@ -160,9 +210,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		if ($_POST['tableStyles'] != "") $insertGoTo = $insertGoTo;
-		else $insertGoTo = $insertGoTo = $_POST['relocate']."&msg=13";
+		if (empty($_POST['tableStyles'])) $insertGoTo = $insertGoTo;
+		elseif (($_POST['return-to-add-table'] == 1) && (!empty($_POST['tableStyles']))) $insertGoTo = $base_url."index.php?section=admin&go=judging_tables&action=add&msg=1";
+		elseif (($_POST['return-to-add-table'] == 0) && (!empty($_POST['tableStyles']))) $insertGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=1";
+		else $insertGoTo = $_POST['relocate']."&msg=13";
 		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
+
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 
@@ -174,6 +227,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$query_table = sprintf("SELECT id,tableStyles FROM %s WHERE id='%s'", $judging_tables_db_table, $id);
 		$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 		$row_table = mysqli_fetch_assoc($table);
+
+		$a = explode(",",$tableStyles);
 
 		// If so...
 		if ($tableStyles != $row_table['tableStyles']) {
@@ -208,16 +263,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$row_table_rounds = mysqli_fetch_assoc($table_rounds);
 			if ($row_table_rounds['judgingRounds'] == 1) $rounds = "1"; else $rounds = "";
 
-			$a = explode(",",$tableStyles);
-
 			foreach (array_unique($a) as $value) {
 
 				if ($_SESSION['prefsStyleSet'] != "BA") {
 					
-					/*
-					if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value);
-					else 
-					*/
 					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
@@ -293,13 +342,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		} // End if ($tableStyles != $row_table['tableStyles'])
 
-
 		$update_table = $prefix."judging_tables";
 		$data = array(
 			'tableName' => blank_to_null($tableName),
 			'tableStyles' => blank_to_null($tableStyles),
 			'tableNumber' => blank_to_null($tableNumber),
-			'tableLocation' => blank_to_null($tableLocation)
+			'tableLocation' => blank_to_null($tableLocation),
+			'tableEntryLimit' => blank_to_null($tableEntryLimit)
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
@@ -308,8 +357,59 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$errors = TRUE;
 		}
 
-		// Check rows for "blank" flightTables in the judging_flights table
+		if ((!empty($tableEntryLimit)) && (!empty($tableStyles))) {
 
+			// Call established function to get total entry count of the 
+			// table's defined styles.
+			$total_table_entries = get_table_info(1,"count_total",$id,"current","default",$base_url);
+
+			// If the total entries for that table are at or beyond limit,
+			// designate each style at the table as "at limit" (true) in the styles
+			// DB table.
+			if ($total_table_entries >= $tableEntryLimit) {
+
+				foreach (array_unique($a) as $value) {
+
+					$update_table = $prefix."styles";
+					$data = array(
+						'brewStyleAtLimit' => 1
+					);
+					$db_conn->where ('id', $value);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				} // end foreach
+			
+			} // end if ($row_table_entry_limits['tableEntryLimit'] >= $total_table_entries)
+
+			// If the total entries for that table is BELOW the limit,
+			// designate each style at the table as "available" (false) 
+			// in the styles DB table.
+			if ($total_table_entries < $tableEntryLimit) {
+
+				foreach (array_unique($a) as $value) {
+
+					$update_table = $prefix."styles";
+					$data = array(
+						'brewStyleAtLimit' => 0
+					);
+					$db_conn->where ('id', $value);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				} // end foreach
+			
+			} // end if ($row_table_entry_limits['tableEntryLimit'] < $total_table_entries)
+
+		} // end if (!empty($tableEntryLimit))
+
+		// Check rows for "blank" flightTables in the judging_flights table
 		$query_empty_count = "SELECT flightEntryID FROM $judging_flights_db_table WHERE flightTable='' OR flightTable IS NULL";
 		$empty_count = mysqli_query($connection,$query_empty_count) or die (mysqli_error($connection));
 		$row_empty_count = mysqli_fetch_assoc($empty_count);

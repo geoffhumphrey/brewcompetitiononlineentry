@@ -462,3 +462,159 @@ table.dataTable thead th.sorting:after {
 #help-enable {
     display: none;
 }
+
+.btn-dark {
+  color: #ffffff !important;
+  background-color: #262626;
+  border-color: #212121;
+}
+
+.btn-dark:focus,
+.btn-dark.focus {
+  color: #ffffff;
+  background-color: #424242;
+  border-color: #212121;
+}
+
+.btn-dark:hover {
+  color: #ffffff;
+  background-color: #424242;
+  border-color: #212121;
+}
+
+.btn-dark:active,
+.btn-dark.active,
+.open > .dropdown-toggle.btn-dark {
+  color: #ffffff;
+  background-color: #424242;
+  border-color: #212121;
+}
+
+.btn-dark:active:hover,
+.btn-dark.active:hover,
+.open > .dropdown-toggle.btn-dark:hover,
+.btn-dark:active:focus,
+.btn-dark.active:focus,
+.open > .dropdown-toggle.btn-dark:focus,
+.btn-dark:active.focus,
+.btn-dark.active.focus,
+.open > .dropdown-toggle.btn-dark.focus {
+  color: #fffff;
+  background-color: #616161;
+  border-color: #212121;
+}
+
+.btn-dark:active,
+.btn-dark.active,
+.open > .dropdown-toggle.btn-dark {
+  background-image: none;
+}
+
+.btn-dark.disabled,
+.btn-dark[disabled],
+fieldset[disabled] .btn-dark,
+.btn-dark.disabled:hover,
+.btn-dark[disabled]:hover,
+fieldset[disabled] .btn-dark:hover,
+.btn-dark.disabled:focus,
+.btn-dark[disabled]:focus,
+fieldset[disabled] .btn-dark:focus,
+.btn-dark.disabled.focus,
+.btn-dark[disabled].focus,
+fieldset[disabled] .btn-dark.focus,
+.btn-dark.disabled:active,
+.btn-dark[disabled]:active,
+fieldset[disabled] .btn-dark:active,
+.btn-dark.disabled.active,
+.btn-dark[disabled].active,
+fieldset[disabled] .btn-dark.active {
+    color: #000000;
+  background-color: #F5F5F5;
+  border-color: #E0E0E0;
+}
+
+.btn-dark .badge {
+  color: #000000;
+  background-color: #ffffff;
+}
+
+/** driver.js Overrides **/
+.driver-popover.driverjs-theme {
+    background-color: #212121;
+    color: #fff;
+    min-width: 400px;
+    min-height: 300px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title,
+.driver-popover.driverjs-theme .driver-popover-description,
+.driver-popover.driverjs-theme .driver-popover-progress-text {
+  color: #fff;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+    font-size: 1.3em;
+    padding-bottom: .4em;
+    border-bottom: 1px solid #757575;
+}
+
+.driver-popover.driverjs-theme .driver-popover-description {
+    padding-top: .4em;
+}
+
+.driver-popover.driverjs-theme button {
+    text-align: center;
+    padding: 5px 8px;
+    border-radius: 3px;
+}
+
+.driver-popover-navigation-btns {
+    max-width: 380px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+.driver-popover-navigation-btns button {
+    background-color: #BDBDBD;
+    color: #212121;
+    font-size: .8em;
+}
+
+.driver-popover-navigation-btns button:hover {
+    color: #000;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns {
+    justify-content: space-between;
+    gap: 3px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn {
+    color: #fff;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-left.driver-popover-arrow {   
+    border-left-color: #212121;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-right.driver-popover-arrow {
+    border-right-color: #212121;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-left.driver-popover-arrow {
+    border-left-color: #212121;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-right.driver-popover-arrow {
+    border-right-color: #212121;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-top.driver-popover-arrow {
+    border-top-color: #212121;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-bottom.driver-popover-arrow {
+    border-bottom-color: #212121;
+}

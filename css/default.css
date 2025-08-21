@@ -1426,3 +1426,20 @@ table.dataTable thead th.sorting:after {
 	background-color: #F5F5F5;
 	border: 1px solid #E0E0E0;
 }
+
+/** driver.js Overrides **/
+.driver-popover * {
+    font-family: "Source Sans Pro", Arial, sans-serif;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+    font-family: "Raleway", Georgia, serif;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns button {
+    font-family: "Source Sans Pro", Arial, sans-serif;
+}
+
+.driver-popover.driverjs-theme .driver-popover-description {
+    font-family: "Source Sans Pro", Arial, sans-serif;
+}

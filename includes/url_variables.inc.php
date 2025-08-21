@@ -31,6 +31,7 @@ $sort = "default";
 $pg = "default";
 $dir = "ASC";
 $inserted = "default";
+$admin = "default";
 
 if (isset($_GET['id'])) $id = sterilize($_GET['id']);
 if (isset($_GET['uid'])) $uid = sterilize($_GET['uid']);
@@ -39,6 +40,7 @@ if (isset($_GET['section'])) $section = sterilize($_GET['section']);
 if (isset($_GET['action'])) $action = sterilize($_GET['action']);
 if (isset($_GET['msg'])) $msg = sterilize($_GET['msg']);
 if (isset($_GET['go'])) $go = sterilize($_GET['go']);
+if (isset($_GET['admin'])) $admin = sterilize($_GET['admin']);
 if (isset($_GET['username'])) $username = sterilize($_GET['username']);
 if (isset($_GET['dbTable'])) $dbTable = sterilize($_GET['dbTable']);
 if (isset($_GET['filter'])) $filter = sterilize($_GET['filter']);

@@ -1,0 +1,644 @@
+<?php
+
+$northwest = FALSE;
+if (($_SESSION['jPrefsScoresheet'] == 4) || ($sort == 4)) $northwest = TRUE;
+
+if ($beer) {
+	$aroma_ticks = $aroma_ticks_beer;
+	$flavor_ticks = $flavor_ticks_beer;
+	$mouthfeel_ticks = $mouthfeel_ticks_beer;
+	$flaws = $flaws_structured_beer;
+}
+
+if ($mead) {
+	$aroma_ticks = $aroma_ticks_mead;
+	$flavor_ticks = $flavor_ticks_mead;
+	$flaws = $flaws_structured_mead;
+}
+
+if ($cider) {
+	$aroma_ticks = $aroma_ticks_cider;
+	$flavor_ticks = $flavor_ticks_cider;
+	$flaws = $flaws_structured_cider;
+}
+
+asort($flaws);
+
+if ($action == "edit") {
+	$aroma_data = json_decode($row_eval['evalAromaChecklist'], true);
+	$appearance_data = json_decode($row_eval['evalAppearanceChecklist'], true);
+	$flavor_data = json_decode($row_eval['evalFlavorChecklist'], true);
+	$mouthfeel_data = json_decode($row_eval['evalMouthfeelChecklist'], true);
+}
+
+if (($cider) && ($northwest)) include (PUB.'eval_scoresheet_structured_nw_cider.pub.php');
+
+else {
+?>
+
+<!-- Structured Evaluation Form -->
+<input type="hidden" name="evalFormType" value="3">
+
+<!-- Aroma -->
+<h3 class="section-heading mt-4 pt-4"><?php if ($cider || $mead) echo $label_bouquet."/"; echo $label_aroma; ?> <a role="button" id="show-hide-aroma-btn" data-bs-toggle="collapse" href="#scoresheet-aroma" aria-expanded="true" aria-controls="scoresheet-aroma"><i id="toggle-icon-aroma" class="fa fa-chevron-circle-up"></i></a> <i id="score-icon-aroma" class="fa fa-check-circle text-success"></i></h3>
+<!-- Aroma Score -->
+<div class="mb-3">
+	<div class="row">
+		<div class="col-12 col-sm-12 col-md-3">
+    		<label class="form-label" for="evalAromaScore"><strong><?php echo $label_score; ?></strong> (<?php echo $aroma_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
+    	</div>
+    	<div class="col-12 col-sm-12 col-md-9">
+	        <select class="form-select bootstrap-select score-choose" name="evalAromaScore" id="evalAromaScore" data-size="10" required>
+	        <option value=""></option>
+	        <?php 
+	        for($i=$aroma_points; $i>=1; $i--) {
+	          if (($action == "edit") && ($i == $row_eval['evalAromaScore'])) $selected = "selected";
+	          else $selected = "";
+			?>
+	        <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+	        <?php } ?>
+	    	</select>
+	    	<div class="help-block small invalid-feedback"></div>
+	    </div>
+    </div>
+</div>
+<section class="collapse show" id="scoresheet-aroma">
+	<?php foreach ($aroma_ticks as $key => $value) { ?>
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="<?php echo $value; ?>"><strong><?php echo $key; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="<?php echo $value; ?>" name="<?php echo $value; ?>" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_none; ?>", "", "<?php echo $label_low; ?>", "", "", "<?php echo $label_med; ?>", "", "", "", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $aroma_data[$value]; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-12 col-sm-12 col-md-2 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="<?php echo $value; ?>Inappr" id="<?php echo $value; ?>Inappr" value="1" <?php if ($action == "edit") { if ((isset($aroma_data[$value.'Inappr'])) && ($aroma_data[$value.'Inappr'] == "1")) echo "checked"; } ?>> 
+            	<label class="form-check-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-12 col-sm-12 col-md-4">
+			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($aroma_data[$value.'Comments'])) echo htmlentities($aroma_data[$value.'Comments']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php } ?>
+	<!-- Aroma: Other -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAromaOther"><strong><?php echo $label_other; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-9">
+			<input class="form-control" type="text" id="evalAromaOther" name="evalAromaOther" placeholder="" value="<?php if ($action == "edit") { if (isset($aroma_data['evalAromaOther'])) echo htmlentities($aroma_data['evalAromaOther']); } ?>">
+			<div class="help-block small"><?php echo $evaluation_info_034; ?></div>
+		</div>	
+	</div>
+</section>
+
+<!-- Appearance -->
+<h3 class="section-heading mt-4 pt-4"><?php echo $label_appearance; ?> <a role="button" id="show-hide-appearance-btn" data-bs-toggle="collapse" href="#scoresheet-appearance" aria-expanded="true" aria-controls="scoresheet-appearance"><i id="toggle-icon-appearance" class="fa fa-chevron-circle-up"></i></a> <i id="score-icon-appearance" class="fa fa-check-circle text-success"></i></h3>
+<!-- Appearance Score -->
+<div class="mb-3 row">
+	<div class="col-12 col-sm-12 col-md-3">
+		<label class="form-label" for="evalAppearanceScore"><strong><?php echo $label_score; ?></strong> (<?php echo $appearance_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
+	</div>
+	<div class="col-12 col-sm-12 col-md-9">
+    <select class="form-select bootstrap-select score-choose" name="evalAppearanceScore" id="evalAppearanceScore" data-size="10" required>
+        <option value=""></option>
+        <?php for($i=$appearance_points; $i>=1; $i--) {
+      			if (($action == "edit") && ($i == $row_eval['evalAppearanceScore'])) $selected = "selected";
+      			else $selected = "";
+      		?>
+        <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+        <?php } ?>
+    </select>
+    <div class="help-block small invalid-feedback"></div>
+	</div>
+</div>
+<section class="collapse show" id="scoresheet-appearance">
+	<?php if ($beer) { ?>
+	<!-- Appearance: Beer Color -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceColor"><strong><?php echo $label_color; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceColor" name="evalAppearanceColor" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_yellow; ?>", "", "", "", "", "<?php echo $label_amber; ?>", "", "", "", "", "<?php echo $label_black; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceColor']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-12 col-sm-12 col-md-2 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceColorInappr" id="evalAppearanceColorInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceColorInappr'])) && ($appearance_data['evalAppearanceColorInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-12 col-sm-12 col-md-4">
+			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo htmlentities($appearance_data['evalAppearanceColorOther']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php } // end if ($beer)  ?>
+	<?php if ($mead) { ?>
+	<!-- Appearance: Mead Color -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceColor"><strong><?php echo $label_color; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceColor" name="evalAppearanceColor" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_white; ?>", "", "<?php echo $label_yellow; ?>", "", "", "<?php echo $label_gold; ?>", "", "<?php echo $label_amber; ?>", "", "", "<?php echo $label_brown; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceColor']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceColorInappr" id="evalAppearanceColorInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceColorInappr'])) && ($appearance_data['evalAppearanceColorInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-md-4 col-sm-12 col-xs-12">
+			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>"value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo htmlentities($appearance_data['evalAppearanceColorOther']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php } // end if ($mead)  ?>
+	<?php if ($cider) { ?>
+	<!-- Appearance: Cider Color -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceColor"><strong><?php echo $label_color; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceColor" name="evalAppearanceColor" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_pale; ?>", "", "<?php echo $label_yellow; ?>", "", "", "<?php echo $label_gold; ?>", "", "<?php echo $label_amber; ?>", "", "", "<?php echo $label_brown; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceColor']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceColorInappr" id="evalAppearanceColorInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceColorInappr'])) && ($appearance_data['evalAppearanceColorInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-md-4 col-sm-12 col-xs-12">
+			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo htmlentities($appearance_data['evalAppearanceColorOther']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php } // end if ($cider) ?>
+	<!-- Appearace: Clarity (All Style Types) -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceClarity"><strong><?php echo $label_clarity; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceClarity" name="evalAppearanceClarity" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_opaque; ?>", "", "", "", "", "<?php echo $label_hazy; ?>", "", "", "", "", "<?php echo $label_brilliant; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceClarity']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceClarityInappr" id="evalAppearanceClarityInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceClarityInappr'])) && ($appearance_data['evalAppearanceClarityInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+	<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php if ($beer) { ?>
+	<!-- Appearance: Other (Beer) -->
+	<div class="mb-3 row">
+		<div class="col-md-3 col-sm-3 col-xs-12">
+			<label class="form-label" for="evalAppearanceOther"><strong><?php echo $label_other; ?></strong></label>
+		</div>
+		<div class="col-md-9 col-sm-9 col-xs-12">
+			<input class="form-control" type="text" id="evalAppearanceOther" name="evalAppearanceOther" placeholder="" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceOther'])) echo htmlentities($appearance_data['evalAppearanceOther']); } ?>">
+			<div class="help-block small"><?php echo $label_legs." ".$label_lacing." ".$label_particulate; ?></div>
+		</div>	
+	</div>
+	<!-- Appearance: Beer Head  -->
+	<h4><?php echo $label_head; ?></h4>
+	<!-- Appearance: Beer Head Size -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceHeadSize"><strong><?php echo $label_size; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceHeadSize" name="evalAppearanceHeadSize" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_none; ?>", "", "<?php echo $label_small; ?>", "", "", "<?php echo $label_med; ?>", "", "", "", "", "<?php echo $label_large; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceHeadSize']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceHeadSizeInappr" id="evalAppearanceHeadSizeInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceHeadSizeInappr'])) && ($appearance_data['evalAppearanceHeadSizeInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Appearance: Beer Head Retention -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceHeadReten"><strong><?php echo $label_retention; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceHeadReten" name="evalAppearanceHeadReten" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_quick; ?>", "", "", "", "", "", "", "", "<?php echo $label_long_lasting; ?>", "", ""]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceHeadReten']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceHeadRetenInappr" id="evalAppearanceHeadRetenInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceHeadRetenInappr'])) && ($appearance_data['evalAppearanceHeadRetenInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Appearance: Beer Head Color -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceHeadColor"><strong><?php echo $label_color; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceHeadColor" name="evalAppearanceHeadColor" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_white; ?>", "", "", "<?php echo $label_ivory; ?>", "", "", "", "<?php echo $label_beige; ?>", "", "", "<?php echo $label_tan; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceHeadColor']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceHeadColorInappr" id="evalAppearanceHeadColorInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceHeadColorInappr'])) && ($appearance_data['evalAppearanceHeadColorInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php } ?>
+	<?php if (($cider) || ($mead)) { ?>
+	<!-- Appearance: Legs (Mead and Cider) -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceLegs"><strong><?php echo $label_legs; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceLegs" name="evalAppearanceLegs" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_none; ?>", "", "<?php echo $label_thin; ?>", "", "", "<?php echo $label_med; ?>", "", "", "", "", "<?php echo $label_viscous; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceLegs']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceLegsInappr" id="evalAppearanceLegsInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceLegsInappr'])) && ($appearance_data['evalAppearanceLegsInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Appearance: Carbonation (Mead and Cider) -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalAppearanceCarb"><strong><?php echo $label_carbonation; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalAppearanceCarb" name="evalAppearanceCarb" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_none; ?>", "", "<?php echo $label_low; ?>", "", "", "<?php echo $label_med; ?>", "", "", "", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceCarb']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalAppearanceCarbInappr" id="evalAppearanceCarbInappr" value="1" <?php if ($action == "edit") { if ((isset($appearance_data['evalAppearanceCarbInappr'])) && ($appearance_data['evalAppearanceCarbInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Appearance: Other (Mead and Cider) -->
+	<div class="mb-3 row">
+		<div class="col-md-3 col-sm-3 col-xs-12">
+			<label class="form-label" for="evalAppearanceOther"><strong><?php echo $label_other; ?></strong></label>
+		</div>
+		<div class="col-md-9 col-sm-9 col-xs-12">
+			<input class="form-control" type="text" id="evalAppearanceOther" name="evalAppearanceOther" placeholder="" >
+			<div class="help-block small"><?php echo $evaluation_info_034; ?></div>
+		</div>
+	</div>
+	<?php } // end if (($cider) || ($mead)) ?>
+</section>
+
+<!-- Flavor -->
+<h3 class="section-heading mt-4 pt-4"><?php echo $label_flavor; ?> <a role="button" id="show-hide-flavor-btn" data-bs-toggle="collapse" href="#scoresheet-flavor" aria-expanded="true" aria-controls="scoresheet-flavor"><i id="toggle-icon-flavor" class="fa fa-chevron-circle-up"></i></a> <i id="score-icon-flavor" class="fa fa-check-circle text-success"></i></h3>
+<!-- Flavor Score -->
+<div class="mb-3">
+	<div class="row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalFlavorScore"><strong><?php echo $label_score; ?></strong> (<?php echo $flavor_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-9">
+			<select class="form-select bootstrap-select score-choose" name="evalFlavorScore" id="evalFlavorScore" data-size="10" required>
+		        <option value=""></option>
+		        <?php for($i=$flavor_points; $i>=1; $i--) {
+		    			if (($action == "edit") && ($i == $row_eval['evalFlavorScore'])) $selected = "selected";
+		    			else $selected = "";
+		    		?>
+		        <option value="<?php echo $i;?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+		        <?php } ?>
+		    </select>
+	    	<div class="help-block small invalid-feedback"></div>
+		</div>
+	</div> 
+</div>
+<section class="collapse show" id="scoresheet-flavor">
+	<?php foreach ($flavor_ticks as $key => $value) { ?>
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="<?php echo $value; ?>"><strong><?php echo $key; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="<?php echo $value; ?>" name="<?php echo $value; ?>" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_none; ?>", "", "<?php echo $label_low; ?>", "", "", "<?php echo $label_med; ?>", "", "", "", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $flavor_data[$value]; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="<?php echo $value; ?>Inappr" id="<?php echo $value; ?>Inappr" value="1" <?php if ($action == "edit") { if ((isset($flavor_data[$value.'Inappr'])) && ($flavor_data[$value.'Inappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-md-4 col-sm-12 col-xs-12">
+			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data[$value.'Comments'])) echo htmlentities($flavor_data[$value.'Comments']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php } ?>
+	<?php if ($beer) { ?>
+	<!-- Flavor: Balance (Beer) -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalFlavorBalance"><strong><?php echo $label_balance; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalFlavorBalance" name="evalFlavorBalance" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_hoppy; ?>", "", "", "", "", "", "", "", "", "", "<?php echo $label_malty; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $flavor_data['evalFlavorBalance']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalFlavorBalanceInappr" id="evalFlavorBalanceInappr" value="1" <?php if ($action == "edit") { if ((isset($flavor_data['evalFlavorBalanceInappr'])) && ($flavor_data['evalFlavorBalanceInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-md-4 col-sm-12 col-xs-12">
+			<input class="form-control" type="text" id="evalFlavorBalanceComments" name="evalFlavorBalanceComments" placeholder="<?php echo $label_comments; ?>"  value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorBalanceComments'])) echo htmlentities($flavor_data['evalFlavorBalanceComments']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Flavor: Aftertaste (Beer) -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="<?php echo $value; ?>"><strong><?php echo $label_finish_aftertaste; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalFlavorFinish" name="evalFlavorFinish" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_dry; ?>", "", "", "", "", "", "", "", "", "", "<?php echo $label_sweet; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $flavor_data['evalFlavorFinish']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalFlavorFinishInappr" id="evalFlavorFinishInappr" value="1" <?php if ($action == "edit") { if ((isset($flavor_data['evalFlavorFinishInappr'])) && ($flavor_data['evalFlavorFinishInappr'] == "1")) echo "checked"; } ?>>
+            <label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-md-4 col-sm-12 col-xs-12">
+			<input class="form-control" type="text" id="evalFlavorFinishComments" name="evalFlavorFinishComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorFinishComments'])) echo htmlentities($flavor_data['evalFlavorFinishComments']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php } // end if ($beer) ?>
+
+	<?php if (($mead) || ($cider)) { ?>
+	<!-- Flavor: Body (Mead and Cider) -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalFlavorBody"><strong><?php echo $label_body; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalFlavorBody" name="evalFlavorBody" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_thin; ?>", "", "", "", "", "", "", "", "", "", "<?php echo $label_full; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $flavor_data['evalFlavorBody']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalFlavorBodyInappr" id="evalFlavorBodyInappr" value="1" <?php if ($action == "edit") { if ((isset($flavor_data['evalFlavorBodyInappr'])) && ($flavor_data['evalFlavorBodyInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-md-4 col-sm-12 col-xs-12">
+			<input class="form-control" type="text" id="evalFlavorBodyComments" name="evalFlavorBodyComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorBodyComments'])) echo htmlentities($flavor_data['evalFlavorBodyComments']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Flavor: Aftertaste (Mead and Cider) -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalFlavorFinish"><strong><?php echo $label_finish_aftertaste; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="evalFlavorFinish" name="evalFlavorFinish" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_quick; ?>", "", "", "", "", "", "", "", "<?php echo $label_long_lasting; ?>", "", ""]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $flavor_data['evalFlavorFinish']; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="evalFlavorFinishInappr" id="evalFlavorFinishInappr" value="1" <?php if ($action == "edit") { if ((isset($flavor_data['evalFlavorFinishInappr'])) && ($flavor_data['evalFlavorFinishInappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-md-4 col-sm-12 col-xs-12">
+			<input class="form-control" type="text" id="evalFlavorFinishComments" name="evalFlavorFinishComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorFinishComments'])) echo htmlentities($flavor_data['evalFlavorFinishComments']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Flavor: Balance (Mead and Cider) -->
+	<div class="mb-3 row">
+		<div class="col-md-3 col-sm-3 col-xs-12">
+			<label class="form-label" for="evalFlavorBalance"><strong><?php echo $label_balance; ?></strong></label>
+		</div>
+		<div class="col-md-9 col-sm-9 col-xs-12">
+			<input class="form-control" type="text" id="evalFlavorBalance" name="evalFlavorBalance" placeholder="" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorBalance'])) echo $flavor_data['evalFlavorBalance']; } ?>">
+		</div>	
+	</div>
+	<?php } // end if (($mead) || ($cider))  ?>
+	<!-- Flavor: Other -->
+	<div class="mb-3 row">
+		<div class="col-md-3 col-sm-3 col-xs-12">
+			<label class="form-label" for="evalFlavorOther"><strong><?php echo $label_other; ?></strong></label>
+		</div>
+		<div class="col-md-9 col-sm-9 col-xs-12">
+			<input class="form-control" type="text" id="evalFlavorOther" name="evalFlavorOther" placeholder="" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorOther'])) echo htmlentities($flavor_data['evalFlavorOther']); } ?>">
+			<div class="help-block small"><?php echo $evaluation_info_034; ?></div>
+		</div>	
+	</div>
+</section>
+
+<?php if ($beer) { // Mouthfeel for Beer only ?>
+<!-- Mouthfeel -->
+<h3 class="section-heading mt-4 pt-4"><?php echo $label_mouthfeel; ?> <a role="button" id="show-hide-mouthfeel-btn" data-bs-toggle="collapse" href="#scoresheet-mouthfeel" aria-expanded="true" aria-controls="scoresheet-mouthfeel"><i id="toggle-icon-mouthfeel" class="fa fa-chevron-circle-up"></i></a> <i id="score-icon-mouthfeel" class="fa fa-check-circle text-success"></i></h3>
+<!-- Mouthfeel Score -->
+<div class="mb-3">
+	<div class="row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalMouthfeelScore"><?php echo $label_score; ?> (<?php echo $mouthfeel_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-9">
+			<select class="form-select bootstrap-select score-choose" name="evalMouthfeelScore" id="evalMouthfeelScore" data-size="10" required>
+		        <option value=""></option>
+		        <?php for($i=$mouthfeel_points; $i>=1; $i--) {
+		    			if (($action == "edit") && ($i == $row_eval['evalMouthfeelScore'])) $selected = "selected";
+		    			else $selected = "";
+		    		?>
+		        <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+		        <?php } ?>
+		    </select>
+		    <div class="help-block small invalid-feedback"></div>
+		</div>
+	</div>
+</div>
+<section class="collapse show" id="scoresheet-mouthfeel">
+	<?php foreach ($mouthfeel_ticks as $key => $value) { ?>
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="<?php echo $value; ?>"><strong><?php echo $key; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 small">
+			<div class="ms-2 small">
+				<input class="form-control" type="text" id="<?php echo $value; ?>" name="<?php echo $value; ?>" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php if (strpos($key, $label_body) !== false) echo $label_thin; else echo $label_none; ?>", "", "<?php if (strpos($key, $label_body) === false) echo $label_low; ?>", "", "", "<?php echo $label_med; ?>", "", "", "", "", "<?php if (strpos($key, $label_body) !== false) echo $label_full; else echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data[$value]; ?>" data-slider-tooltip="hide" required>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12 col-xs-12 small">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="<?php echo $value; ?>Inappr" id="<?php echo $value; ?>Inappr" value="1" <?php if ($action == "edit") { if ((isset($mouthfeel_data[$value.'Inappr'])) && ($mouthfeel_data[$value.'Inappr'] == "1")) echo "checked"; } ?>>
+            	<label class="form-label"><?php echo $label_inappropriate; ?></label>
+            </div>
+		</div>
+		<div class="col-md-4 col-sm-12 col-xs-12">
+			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($mouthfeel_data[$value.'Comments'])) echo htmlentities($mouthfeel_data[$value.'Comments']); } ?>"> 
+		</div>
+		<div class="help-block small invalid-feedback"></div>
+	</div>
+	<?php } ?>
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalMouthfeelOther"><strong><?php echo $label_other; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-9">
+			<input class="form-control" type="text" id="evalMouthfeelOther" name="evalMouthfeelOther" placeholder="" value="<?php if ($action == "edit") { if (isset($mouthfeel_data['evalMouthfeelOther'])) echo htmlentities($mouthfeel_data['evalMouthfeelOther']); } ?>">
+			<div class="help-block small"><?php echo $evaluation_info_034; ?></div>
+		</div>	
+	</div>
+</section>
+<?php } // end if ($beer) ?>
+
+<!-- Overall Impression -->
+<h3 class="section-heading mt-4 pt-4"><?php echo $label_overall_impression; ?> <a role="button" id="show-hide-overall-btn" data-bs-toggle="collapse" href="#scoresheet-overall" aria-expanded="true" aria-controls="scoresheet-overall"><i id="toggle-icon-overall" class="fa fa-chevron-circle-up"></i></a> <i id="score-icon-overall" class="fa fa-check-circle text-success"></i></h3>
+<div class="mb-3 row">
+	<div class="col-12 col-sm-12 col-md-3">
+		<label class="form-label" for="evalOverallScore"><strong><?php echo $label_score; ?></strong> (<?php echo $overall_points; ?> <?php echo strtolower($label_possible_points); ?>)</label>
+	</div>
+	<div class="col-12 col-sm-12 col-md-9">
+		<select class="form-select bootstrap-select score-choose" name="evalOverallScore" id="evalOverallScore" data-size="10" required>
+	        <option value=""></option>
+	        <?php for($i=$overall_points; $i>=1; $i--) {
+	    			if (($action == "edit") && ($i == $row_eval['evalOverallScore'])) $selected = "selected";
+	    			else $selected = "";
+	    		?>
+	        <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+	        <?php } ?>
+	    </select>
+	    <div class="help-block small invalid-feedback"></div>
+	</div>
+</div>
+<section class="collapse show" id="scoresheet-overall">
+	<!-- Style Accuracy -->
+	<div class="mb-3 row">
+	    <div class="col-12 col-sm-12 col-md-3">
+	    	<label class="form-label" for="evalStyleAccuracy"><strong><?php echo $label_style_accuracy; ?></strong></label>
+	    </div>
+	    <div class="col-12 col-sm-12 col-md-9 small">
+	      	<div class="ms-2 small">
+		        <input class="form-control" type="text" name="evalStyleAccuracy" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_not_style; ?>", "", "", "", "", "", "", "", "", "", "<?php echo $label_classic_example; ?>"]' data-slider-min="0" data-slider-max="7" data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $row_eval['evalStyleAccuracy']; ?>" data-slider-tooltip="hide">
+		    </div>
+	    </div>
+	    <div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Technical Merit -->
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalTechMerit"><strong><?php echo $label_tech_merit; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-9 small">
+			<div class="ms-2 small">
+		    <input class="form-control" type="text" name="evalTechMerit" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_significant_flaws; ?>", "", "", "", "", "", "", "", "", "", "<?php echo $label_flawless; ?>"]' data-slider-min="0" data-slider-max="7" data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $row_eval['evalTechMerit']; ?>" data-slider-tooltip="hide">
+			</div>
+		</div>
+	    <div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Intangibles -->
+	<div class="mb-3 row">
+	    <div class="col-12 col-sm-12 col-md-3">
+	        <label class="form-label" for="evalIntangibles"><strong><?php echo $label_intangibles; ?></strong></label>
+	    </div>
+	    <div class="col-12 col-sm-12 col-md-9 small">
+	      	<div class="ms-2 small">
+		        <input class="form-control" type="text" name="evalIntangibles" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php echo $label_lifeless; ?>", "", "", "", "", "", "", "", "", "", "<?php echo $label_wonderful; ?>"]' data-slider-min="0" data-slider-max="7" data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $row_eval['evalIntangibles']; ?>" data-slider-tooltip="hide">
+		    </div>
+	    </div>
+	    <div class="help-block small invalid-feedback"></div>
+	</div>
+	<!-- Overall Feedback -->
+	<div class="mb-3">
+	    <label class="form-label" for="evalOverallComments"><strong><?php echo $label_feedback; ?></strong></label>
+	    <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
+	    <div class="help-block small"><?php echo $evaluation_info_035; ?></div>
+	    <div class="help-block small invalid-feedback"><?php echo $evaluation_info_061; ?></div>
+	    <div class="help-block small" id="evalOverallComments-words"></div>
+	</div>
+</section>
+<!-- Flaws -->
+<h3 class="section-heading mt-4 pt-4"><?php echo $label_flaws; ?> <a role="button" id="show-hide-flaws-btn" data-bs-toggle="collapse" href="#scoresheet-flaws" aria-expanded="true" aria-controls="scoresheet-flaws"><i id="toggle-icon-flaws" class="fa fa-chevron-circle-up"></i></a></h3>
+<section class="collapse show" id="scoresheet-flaws">
+	<?php foreach ($flaws as $flaw) {
+		$flaw_none = FALSE;
+		$flaw_low = FALSE;
+		$flaw_med = FALSE;
+		$flaw_high = FALSE;
+		if ($action == "edit") { 
+			if (strpos($row_eval['evalFlaws'],$flaw." Low") !== false) $flaw_low = TRUE;
+			elseif (strpos($row_eval['evalFlaws'],$flaw." Medium") !== false) $flaw_med = TRUE;
+			elseif (strpos($row_eval['evalFlaws'],$flaw." High") !== false) $flaw_high = TRUE;
+			else $flaw_none = TRUE;
+		}
+	?>
+	<div class="mb-3 row">
+		<div class="col-12 col-sm-12 col-md-3">
+			<label class="form-label" for="evalFlaws"><strong><?php echo $flaw; ?></strong></label>
+		</div>
+		<div class="col-12 col-sm-12 col-md-9 small">
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="evalFlaws<?php echo $flaw; ?>" value="" <?php if (($action == "add") || ($flaw_none)) echo "checked"; ?>>
+				<label class="form-check-label"><?php echo $label_na; ?></label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="evalFlaws<?php echo $flaw; ?>" value="<?php echo $flaw; ?> Low" <?php if ($flaw_low) echo "checked"; ?>>
+				<label class="form-check-label"><?php echo $label_low; ?></label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="evalFlaws<?php echo $flaw; ?>" value="<?php echo $flaw; ?> Medium" <?php if ($flaw_med) echo "checked"; ?>>
+				<label class="form-check-label"><?php echo $label_med; ?></label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="evalFlaws<?php echo $flaw; ?>" value="<?php echo $flaw; ?> High" <?php if ($flaw_high) echo "checked"; ?>>
+				<label class="form-check-label"><?php echo $label_high; ?></label>
+			</div>
+		</div>
+	</div>
+	<?php } ?>
+</section>
+<?php } // end else ?>

@@ -58,15 +58,15 @@ if ($action == "username") {
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <input name="user_name_old" type="hidden" value="<?php if ($filter == "admin") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>">
 <input type="hidden" name="userEdit" value="<?php echo $edit_user_enable; ?>">
-<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
+<?php if ($section == "admin") { ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=participants","default","$msg",$id); ?>">
 <?php } else { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
 <?php } ?>
 <?php if ($action == "username") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="user_name" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_new." ".$label_email; ?></label>
-        <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="user_name-addon1"><span class="fa fa-envelope"></span></span>
@@ -81,7 +81,7 @@ if ($action == "username") {
 
 	<div class="form-group"><!-- Form Group Checkbox INLINE -->
         <label for="sure" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sure; ?></label>
-        <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="checkbox-inline">
@@ -93,7 +93,7 @@ if ($action == "username") {
     </div><!-- ./Form Group -->
 
 	<div class="form-group">
-		<div class="col-sm-offset-2 col-lg-10 col-md-6 col-sm-9 col-xs-12">
+		<div class="col-sm-offset-2 col-lg-6 col-md-6 col-sm-8 col-xs-12">
 			<!-- Input Here -->
 			<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary" ><?php echo $label_change_email; ?></button>
 		</div>
@@ -131,7 +131,7 @@ if ($action == "username") {
 </script>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="passwordOld" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_old." ".$label_password; ?></label>
-        <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="passwordOld-addon1"><span class="fa fa-key"></span></span>
@@ -144,7 +144,7 @@ if ($action == "username") {
 
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="password" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_new." ".$label_password; ?></label>
-        <div class="col-lg-10 col-md-6 col-sm-9 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
@@ -164,7 +164,7 @@ if ($action == "username") {
 	</div>
 
 	<div class="form-group">
-		<div class="col-sm-offset-2 col-lg-10 col-md-6 col-sm-9 col-xs-12">
+		<div class="col-sm-offset-2 col-lg-6 col-md-6 col-sm-8 col-xs-12">
 			<!-- Input Here -->
 			<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary" ><?php echo $label_change_password; ?></button>
 		</div>

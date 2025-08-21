@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ---------------------------------------------
  * TODO - convert the following for translation:
@@ -9,6 +10,30 @@
  * - Conversion scripts for brewStyleEntry field (Entry Requirements).
  *   -- Be sure to also update function in common.lib.php.
  */
+
+// Moved the Use SMTP flag to this file to make
+// sure it's able to be used by any translation file
+$mail_use_smtp = FALSE;
+
+if (HOSTED) {
+  
+  $mail_use_smtp = TRUE;
+  
+  if (!isset($current_parsed_host)) {
+    $current_url_to_parse = 'http://';
+    if (is_https()) $current_url_to_parse = 'https://';  
+    $current_url_to_parse .= $_SERVER['SERVER_NAME'];
+    $current_parsed_url = parse_url($current_url_to_parse);
+    $current_parsed_host = explode('.', $current_parsed_url['host']);
+  }
+
+  if (!isset($_SESSION['prefsEmailFrom'])) $_SESSION['prefsEmailFrom'] = "noreply@".$current_parsed_host[1].".".$current_parsed_host[2];
+  
+}
+
+elseif ((!HOSTED) && (isset($_SESSION['prefsEmailSMTP']))) { 
+  if (($_SESSION['prefsEmailSMTP'] == 1) && (!empty($_SESSION['prefsEmailHost'])) && (!empty($_SESSION['prefsEmailFrom'])) && (!empty($_SESSION['prefsEmailUsername'])) && (!empty($_SESSION['prefsEmailPassword'])) && (!empty($_SESSION['prefsEmailPort']))) $mail_use_smtp = TRUE;
+}
 
 // Default to US English language if prefs not defined.
 $prefsLanguage = "en-US";

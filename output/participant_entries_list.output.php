@@ -10,6 +10,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 
 $section = "participant_entry_list";
 include (DB.'brewer.db.php');
+include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
 
 $table_body = "";

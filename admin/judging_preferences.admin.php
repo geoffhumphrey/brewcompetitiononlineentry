@@ -17,31 +17,177 @@ $suggested_close = FALSE;
 $judging_open_date = "";
 $judging_close_date = "";
 
-if ($_SESSION['prefsEval'] == 1) {
+if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
 
-    if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
+    $judging_dates = array();
+    $judging_earliest_date = "";
+    $judging_latest_date = "";
+
+    // Check whether any judging sessions have been defined. 
+    // If so, loop through and find the earliest and the latest dates.
+    $query_judging_locations = sprintf("SELECT id, judgingDate, judgingDateEnd FROM %s WHERE judgingLocType <= '1';", $prefix."judging_locations");
+    $judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
+    $row_judging_locations = mysqli_fetch_assoc($judging_locations);
+    $totalRows_judging_locations = mysqli_num_rows($judging_locations);
+
+    if ($totalRows_judging_locations > 0) {
+
+        do {
+
+            if (!empty($row_judging_locations['judgingDate'])) $judging_dates[] = $row_judging_locations['judgingDate'];
+            if (!empty($row_judging_locations['judgingDateEnd'])) $judging_dates[] = $row_judging_locations['judgingDateEnd'];
+
+
+        } while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+
+        $judging_earliest_date = min($judging_dates);
+        if ((max($judging_dates) > $judging_earliest_date)) $judging_latest_date = max($judging_dates);
+
+    }
+
+    // If no session vars exist for open and/or closed dates, generate
+
+    if (!isset($_SESSION['jPrefsJudgingOpen'])) {
+
+        if (empty($judging_earliest_date)) $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+        else $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_earliest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+
+    }
+
+    if (!isset($_SESSION['jPrefsJudgingClosed'])) {
+
+        if (empty($judging_latest_date)) $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], (time()+86400), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); // Close one day after today
+        else $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_latest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+
+    }
+
+    // Get or generate open date
+
+    if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) {
+
+        $j_open_date = $_SESSION['jPrefsJudgingOpen'];
+        if ((!empty($judging_earliest_date)) && ($judging_earliest_date < $_SESSION['jPrefsJudgingOpen'])) $j_open_date = $judging_earliest_date;
+        $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $j_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+    
+    }
+
     else {
+
+        if (!empty($judging_earliest_date)) $suggested_open_date = $judging_earliest_date;
+        else $suggested_open_date = time();
+
         $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
         $suggested_open = TRUE;
+
     }
-    if ((isset($_SESSION['jPrefsJudgingClosed'])) && (!empty($_SESSION['jPrefsJudgingClosed']))) $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
+    
+
+    if ((isset($_SESSION['jPrefsJudgingClosed'])) && (!empty($_SESSION['jPrefsJudgingClosed']))) {
+    
+        // If the opening date is defined...
+        if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) {
+
+
+            // Make sure the closing date is after the opening date
+            if ($_SESSION['jPrefsJudgingClosed'] > $_SESSION['jPrefsJudgingOpen']) {
+
+                $j_closed_date = $_SESSION['jPrefsJudgingClosed'];
+                if ((!empty($judging_latest_date)) && ($judging_latest_date > $_SESSION['jPrefsJudgingClosed'])) $j_closed_date = $judging_latest_date;
+
+            }
+            
+            else {
+
+                if (empty($judging_earliest_date)) $j_closed_date = $_SESSION['jPrefsJudgingOpen'] + 86400; // open plus 1 day
+
+                else {
+
+                    if ($_SESSION['jPrefsJudgingOpen'] >= $judging_earliest_date) $j_closed_date = $_SESSION['jPrefsJudgingOpen'] + 86400;
+                    else $j_closed_date = $judging_earliest_date + 86400;
+
+                }
+
+            }
+
+        }
+           
+        // If not...
+        else {
+
+            if (empty($judging_latest_date)) {
+                if (empty($judging_earliest_date)) $j_closed_date = $judging_earliest_date + 86400;
+                else $j_closed_date = time() + 86400;
+            }
+
+            else $j_closed_date = $judging_latest_date;
+                
+        }
+
+        $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $j_closed_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
+
+    }
+
     else {
+
+        if (!empty($judging_latest_date)) $suggested_close_date = $judging_latest_date;
+        else {
+            if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) $suggested_close_date = $_SESSION['jPrefsJudgingOpen'] + 86400;
+            elseif (!empty($judging_earliest_date))   $suggested_close_date = $judging_earliest_date + 86400;
+            else $suggested_close_date = time() + 86400;
+        }
+
         $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
         $suggested_close = TRUE;
+    
     }
+
+    /*
+    echo "Judging Earliest Date: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_earliest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>";
+    echo "Judging Open Date Session Var: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
+    echo "Open Date to Display: ".$judging_open_date."<br>";
+    echo "---------<br>";
+    if (!empty($judging_latest_date)) echo "Judging Latest Date: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_latest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
+    else echo "No Judging Latest Date<br>";
+    echo "Judging Closed Date Session Var: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
+    echo "Closed Date to Display: ".$judging_close_date."<br>";
+    */
 
 }
 
 ?>
+<script>
+$(document).ready(function() {
+
+    var electronic_scoresheets_show = "<?php echo $_SESSION['prefsEval']; ?>";
+
+    $("#electronic-scoresheets-show").hide();
+    if (electronic_scoresheets_show == 1) $("#electronic-scoresheets-show").show();
+
+    $("input[name$='prefsEval']").click(function() {
+        if ($(this).val() == "1") {
+            $("#electronic-scoresheets-show").show("fast");
+        }
+        else {
+            $("#electronic-scoresheets-show").hide("fast");
+        }
+    });
+
+});
+
+</script>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step8") echo "setup"; else echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php if ($section != "step8") { ?>
-<p class="lead"><?php echo $_SESSION['contestName'].": Set Judging/Competition Organization Preferences"; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName'].": Set Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
-	<div class="btn-group" role="group" aria-label="...">
-		<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> Website Preferences</a>
-	</div><!-- ./button group -->
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> General Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries"><span class="fa fa-beer"></span> Entry Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email"><span class="fa fa-envelope"></span> Email Sending Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment"><span class="fa fa-money"></span> Currency and Payment Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best"><span class="fa fa-trophy"></span> Best Brewer and/or Club Preferences</a>
+    <a class="btn btn-primary disabled"  style="margin: 5px 5px 5px 0"  href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-cog"></span> Judging/Competition Organization Preferences</a>
 </div>
+<h3>Judging/Competition Organization</h3>
 <?php } ?>
 <div class="form-group">
     <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
@@ -95,7 +241,63 @@ if ($_SESSION['prefsEval'] == 1) {
         </div>
     </div>
 </div><!-- ./modal -->
-<?php if ($_SESSION['prefsEval'] == 1) { ?>
+<div class="form-group">
+    <label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Unique Identifier</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsDisplaySpecial" value="J" id="prefsDisplaySpecial_0" <?php if (($section == "step3") || ($_SESSION['prefsDisplaySpecial'] == "J")) echo "CHECKED"; ?>> 6-Character Judging Number
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsDisplaySpecial" value="E" id="prefsDisplaySpecial_1" <?php if ($_SESSION['prefsDisplaySpecial'] == "E") echo "CHECKED"; ?>> 6-Digit Entry Number
+            </label>
+        </div>
+        <div id="helpBlock" class="help-block">
+            <p>How entries are identified to judges when evaluating. If uploading scoresheet PDF files, the PDFs for each entry should be named according to the exact 6-character number for use by the system. <span class="text-primary"><strong>Using the random, system-generated <u>Judging Numbers</u> ensures unique file names for live and archived entry data.</strong></span></p>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsEval" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Electronic Scoresheets</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsEval" value="1" id="prefsEval_1"  <?php if ($_SESSION['prefsEval'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsEval" value="0" id="prefsEval_0" <?php if ($_SESSION['prefsEval'] == "0") echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">
+        <div class="btn-group" role="group" aria-label="prefsEvalModal">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsEvalModal">
+                   Electronic Scoresheets Info
+                </button>
+            </div>
+        </div>
+        </span>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="prefsEvalModal" tabindex="-1" role="dialog" aria-labelledby="prefsEvalModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="prefsEvalModalLabel">Electronic Scoresheets Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enable or disable the Electronic Scoresheets function. If enabled, Admins have the option to accept judges' entry evaluations via fully electronic, web-based scoresheets built to emulate BJCP official and quasi-official paper-based forms.</p>
+                <p>If enabling Electronic Scoresheets and associated functions, Admins should also make sure to set up their installation to take full advantage of them by following the steps outlined in the <a href="https://brewingcompetitions.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&amp;M Electronic Scoresheets</a> help article. Admins or competition officials should also direct all judges who will be using Electronic Scoresheets to review the <a href="https://brewingcompetitions.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&amp;M Electronic Scoresheets</a> primer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="electronic-scoresheets-show">
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="jPrefsScoresheet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Evaluation Scoresheet</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -114,13 +316,11 @@ if ($_SESSION['prefsEval'] == 1) {
                 <input type="radio" name="jPrefsScoresheet" value="3" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "3") echo "CHECKED"; ?>/> BJCP Structured Scoresheet (Beer, Mead, and Cider Only)
             </label>
         </div>
-
         <div class="radio">
             <label>
                 <input type="radio" name="jPrefsScoresheet" value="4" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "4") echo "CHECKED"; ?>/> NW Cider Cup Structured Scoresheet (Cider Only)
             </label>
         </div>
-
         <span id="helpBlock" class="help-block">
         <div class="btn-group" role="group" aria-label="queuedModal">
             <div class="btn-group" role="group">
@@ -154,7 +354,6 @@ if ($_SESSION['prefsEval'] == 1) {
         </div>
     </div>
 </div><!-- ./modal -->
-
 <div class="form-group">
     <label for="jPrefsMinWords" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Minimum Words for Scoresheet Comment/Feedback Fields</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -162,7 +361,6 @@ if ($_SESSION['prefsEval'] == 1) {
         <span id="helpBlock" class="help-block"><p>The minimum number of words judges must use when providing comments. Will be enforced for <strong>all comment fields</strong> on the Classic Scoresheet and Checklist Scoresheet, as well as the <strong>Overall Impression comment/feedback field</strong> on all Structured Scoresheets.</p><p>Leave blank or enter zero for no enforced minimum.</p></span>
     </div>
 </div>
-
 <div class="form-group">
     <label for="jPrefsScoreDispMax" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Difference for Consensus Scores</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -203,28 +401,30 @@ if ($_SESSION['prefsEval'] == 1) {
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div class="form-group">
     <label for="jPrefsJudgingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Open Date and Time</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control date-time-picker-system" id="jPrefsJudgingOpen" name="jPrefsJudgingOpen" type="text" value="<?php echo $judging_open_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
+        <input class="form-control date-time-picker-system" id="jPrefsJudgingOpen" name="jPrefsJudgingOpen" type="text" value="<?php echo $judging_open_date; ?>" placeholder="" required>
         <div id="helpBlock" class="help-block">Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations.  Typically, the open date begins the day and time the first judging session begins.
-            <?php if ($suggested_open) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the the earliest judging session's start time.</span>";  ?>
+        <?php if ($suggested_open) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested. It is the the earliest start day/time for any judging session, if present. Otherwise, the current date and time is shown.</span>"; ?>
         </div>
     </div>
 </div>
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+<div class="form-group">
     <label for="jPrefsJudgingClosed" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Close Date and Time</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control date-time-picker-system" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        <div id="helpBlock" class="help-block">The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.
-            <?php if ($suggested_close) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
-            <div style="margin-top: 5px;" class="btn-group" role="group" aria-label="judgingWindowModal">
+        <div id="helpBlock" class="help-block">
+            <p>The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.
+            <?php if ($suggested_close) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested. It is the latest recorded end date/time for a judging session OR the last judging session's start time + 8 hours.</span>"; ?>
+            </p>
+            <div style="margin-top:5px" class="bcoem-admin-element" role="group" aria-label="judgingWindowModal">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">
                        Judging Open/Close Dates and Times Info
                     </button>
                 </div>
-            </div>  
+            </div> 
         </div>
     </div>
 </div>
@@ -250,7 +450,7 @@ if ($_SESSION['prefsEval'] == 1) {
         </div>
     </div>
 </div><!-- ./modal -->
-<?php } ?>
+</section>
 <div class="form-group">
     <label for="jPrefsCapJudges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judge Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -305,7 +505,7 @@ if ($_SESSION['prefsEval'] == 1) {
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input type="submit" name="Submit" id="setJudgingPrefs" class="btn btn-primary" aria-describedby="helpBlock" value="Set Judging/Competition Organization Preferences" />
+			<input type="submit" name="Submit" id="setJudgingPrefs" class="btn btn-primary" aria-describedby="helpBlock" value="Set Preferences" />
 		</div>
 	</div>
 </div>

@@ -5,174 +5,157 @@
  *
  */
 
-/*
-// Redirect if directly accessed
-if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {
-    $redirect = "../../index.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-*/
-
-$add_entry_link_show = FALSE;
-$show_entries = TRUE;
-$nav_register_entrant_show = TRUE;
-
-if ($comp_entry_limit) $nav_register_entrant_show = FALSE;
-if ($comp_paid_entry_limit) $nav_register_entrant_show = FALSE;
-if (($remaining_entries > 0) && ($entry_window_open == 1)) $add_entry_link_show = TRUE;
-
+if (empty($base_url)) $link_home= "index.php";
+else $link_home = $base_url;
+$link_list = build_public_url("list","default","default","default",$sef,$base_url,"default");
+$admin_link = $base_url."index.php?section=admin";
+$admin_tooltip = "Admin Dashboard";
 $active_class = " class=\"active\"";
-
-if ($section == "asdfasdfasdfasdfasd") {
-	$admin_link = "#";
-	$admin_tooltip = "Admin Menu";
-}
-
-else {
-	$admin_link = $base_url."index.php?section=admin";
-	$admin_tooltip = "Admin Dashboard";
-}
-
 $print_icon = FALSE;
-
-if (isset($_SESSION['loginUsername']))  {
-    $paid_icon = "";
-    $paid_icon .= " <small class=\"text-muted\">".$currency_symbol.number_format($total_to_pay,2)."</small>";
-    if ($total_to_pay > 0) $paid_icon .= " <span class=\"fa fa-lg fa-exclamation-circle text-danger\" aria-hidden=\"true\" data-toggle=\"tooltip\" title=\"".$pay_text_033."\" data-placement=\"auto top\" data-container=\"body\"></span>";
-    else $paid_icon .= " <span class=\"fa fa-lg fa-check-circle text-success\" aria-hidden=\"true\" data-toggle=\"tooltip\" title=\"".$pay_text_024."\" data-placement=\"auto top\" data-container=\"body\"></span>";
-}
-
-$help = bcoem_help($section,$go,$action,$filter);
-if (!empty($help)) $help_icon = TRUE;
-else $help_icon = FALSE;
-
-// Set up general nav link variables
-if ($section == "default") {
-	$link_home= "#";
-	$print_icon = TRUE;
-	$active_class = " class=\"active\"";
-	}
-else {
-	if (empty($base_url)) $link_home= "index.php";
-	else $link_home = $base_url;
-}
-
-if ($section == "rules") {
-	$link_rules = "#";
-	$print_icon = TRUE;
-}
-else $link_rules = build_public_url("rules","default","default","default",$sef,$base_url,"default");
-
-if ($section == "entry") {
-	$link_entry_info = "#";
-	$print_icon = TRUE;
-}
-else $link_entry_info = build_public_url("entry","default","default","default",$sef,$base_url,"default");
-
-if ($section == "volunteers") { $link_volunteer_info = "#";  $print_icon = TRUE; }
-else $link_volunteer_info = build_public_url("volunteers","default","default","default",$sef,$base_url,"default");
-
-if (($_SESSION['prefsSponsors'] == "Y") && ($_SESSION['sponsorCount'] > 0)) {
-	if ($section == "sponsors") {
-		$link_sponsors = "#";
-		$print_icon = TRUE;
-	}
-	else $link_sponsors = build_public_url("sponsors","default","default","default",$sef,$base_url,"default");
-	$sponsors = TRUE;
-}
-else $sponsors = FALSE;
-
-if ($section == "contact") $link_contacts = "#";
-else $link_contacts = build_public_url("contact","default","default","default",$sef,$base_url,"default");
-
-if ($section == "register") $link_register = "#";
-elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url,"default");
-elseif (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url,"default");
-elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url,"default");
-else $link_register = build_public_url("register","default","default","default",$sef,$base_url,"default");
-
-if ($section == "login") $link_login = "#";
-else $link_login = build_public_url("login","default","default","default",$sef,$base_url,"default");
-
-if ($section == "logout") $link_logout = "#";
-else $link_logout = build_public_url("logout","default","default","default",$sef,$base_url,"default");
-
+$help_icon = FALSE;
+$add_entry_link_show = FALSE;
 $qr_enable = FALSE;
-$link_qr = "";
-if (!empty($row_contest_dates['contestCheckInPassword'])) {
-	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2) && ($judging_past > 0) && (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array))) $qr_enable = TRUE;
-	$link_qr .= build_public_url("qr","default","default","default",$sef,$base_url,"default");
-}
 
-// Session specific
+if (!V3) {
 
-$show_judge_steward_fields = TRUE;
+	$show_entries = TRUE;
+	$nav_register_entrant_show = TRUE;
+	$show_judge_steward_fields = TRUE;
 
-if ($logged_in)  {
+	if ($comp_entry_limit) $nav_register_entrant_show = FALSE;
+	if ($comp_paid_entry_limit) $nav_register_entrant_show = FALSE;
+	if (($remaining_entries > 0) && ($entry_window_open == 1)) $add_entry_link_show = TRUE;
 
-	if ($_SESSION['prefsProEdition'] == 1) {
-
-		if (isset($_SESSION['brewerBreweryName'])) {
-			// If registered as a brewery, will not be a judge/stewards/staff and may have entries
-			// Only individuals can be judges, stewards, or staff; individuals will not have entries
-			$show_judge_steward_fields = FALSE;
-			$show_entries = TRUE;
-		}
-
-		else {
-			$show_entries = FALSE;
-		}
-
+	if (isset($_SESSION['loginUsername']))  {
+	    $paid_icon = "";
+	    $paid_icon .= " <small class=\"text-muted\">".$currency_symbol.number_format($total_to_pay,2)."</small>";
+	    if ($total_to_pay > 0) $paid_icon .= " <span class=\"fa fa-lg fa-exclamation-circle text-danger\" aria-hidden=\"true\" data-toggle=\"tooltip\" title=\"".$pay_text_033."\" data-placement=\"auto top\" data-container=\"body\"></span>";
+	    else $paid_icon .= " <span class=\"fa fa-lg fa-check-circle text-success\" aria-hidden=\"true\" data-toggle=\"tooltip\" title=\"".$pay_text_024."\" data-placement=\"auto top\" data-container=\"body\"></span>";
 	}
 
-	if ($admin_user) {
-		$link_admin = $base_url."index.php?section=admin";
+	$help = bcoem_help($section,$go,$action,$filter);
+	if (!empty($help)) $help_icon = TRUE;
+
+	// Set up general nav link variables
+	if ($section == "default") {
+		$link_home= "#";
+		$print_icon = TRUE;
+		$active_class = " class=\"active\"";
+	}
+
+	if ($section == "rules") {
+		$link_rules = "#";
 		$print_icon = TRUE;
 	}
+	
+	else $link_rules = build_public_url("rules","default","default","default",$sef,$base_url,"default");
 
-	// Build Pay Link
-	if ($section == "pay") {
-		$link_pay = "#";
-		if ($msg != "default") $print_icon = TRUE;
-		}
-	else $link_pay = build_public_url("pay","default","default","default",$sef,$base_url,"default");
-
-	// Build My Account Link
-	if ($section == "list") {
-		$link_list = "#";
+	if ($section == "entry") {
+		$link_entry_info = "#";
 		$print_icon = TRUE;
 	}
-	else $link_list = build_public_url("list","default","default","default",$sef,$base_url,"default");
+	
+	else $link_entry_info = build_public_url("entry","default","default","default",$sef,$base_url,"default");
 
-	// Build My Entries Link
-	$link_user_entries = build_public_url("list","default","default","default",$sef,$base_url,"default")."#entries";
+	if ($section == "volunteers") { 
+		$link_volunteer_info = "#";
+		$print_icon = TRUE; 
+	}
+	
+	else $link_volunteer_info = build_public_url("volunteers","default","default","default",$sef,$base_url,"default");
 
-	// Build Edit My Info link
-    $edit_user_info_link = "";
-	if ($_SESSION['brewerID'] != "") $edit_user_info_link .= build_public_url("brewer","account","edit",$_SESSION['brewerID'],$sef,$base_url,"default");
+	if (($_SESSION['prefsSponsors'] == "Y") && ($_SESSION['sponsorCount'] > 0)) {
+		if ($section == "sponsors") {
+			$link_sponsors = "#";
+			$print_icon = TRUE;
+		}
+		else $link_sponsors = build_public_url("sponsors","default","default","default",$sef,$base_url,"default");
+		$sponsors = TRUE;
+	}
+	
+	else $sponsors = FALSE;
 
-	/*
-	$edit_user_info_link = $base_url."index.php?";
-	if ($_SESSION['brewerID'] != "") $edit_user_info_link .= "section=brewer&amp;action=edit&amp;id=".$_SESSION['brewerID'];
-	else $edit_user_info_link .= "action=add&amp;section=brewer&amp;go=judge";
-	*/
+	if ($section == "contact") $link_contacts = "#";
+	else $link_contacts = build_public_url("contact","default","default","default",$sef,$base_url,"default");
 
-	// Build Change My Email Address link
-	$edit_user_email_link = build_public_url("user","account","username",$_SESSION['user_id'],$sef,$base_url,"default");
-	//$edit_user_email_link = $base_url."index.php?section=user&amp;action=username&amp;id=".$_SESSION['brewerID'];
+	if ($section == "register") $link_register = "#";
+	elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url,"default");
+	elseif (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url,"default");
+	elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url,"default");
+	else $link_register = build_public_url("register","default","default","default",$sef,$base_url,"default");
 
-	// Build Change My Email Address link
-	$edit_user_password_link = build_public_url("user","account","password",$_SESSION['user_id'],$sef,$base_url,"default");
-	//$edit_user_password_link = $base_url."index.php?section=user&amp;action=password&amp;id=".$_SESSION['brewerID'];
+	if ($section == "login") $link_login = "#";
+	else $link_login = build_public_url("login","default","default","default",$sef,$base_url,"default");
 
-	// Build Add Entry Link
-	$add_entry_link = "";
-	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= $base_url."index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
-	else $add_entry_link .= build_public_url("brew","entry","add","default",$sef,$base_url,"default");
+	if ($section == "logout") $link_logout = "#";
+	else $link_logout = build_public_url("logout","default","default","default",$sef,$base_url,"default");
+	
+	$link_qr = "";
+	if (!empty($row_contest_dates['contestCheckInPassword'])) {
+		if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2) && ($judging_past > 0) && (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array))) $qr_enable = TRUE;
+		$link_qr .= build_public_url("qr","default","default","default",$sef,$base_url,"default");
+	}
+
+	// Session specific
+	if ($logged_in)  {
+
+		if ($_SESSION['prefsProEdition'] == 1) {
+
+			if (isset($_SESSION['brewerBreweryName'])) {
+				// If registered as a brewery, will not be a judge/stewards/staff and may have entries
+				// Only individuals can be judges, stewards, or staff; individuals will not have entries
+				$show_judge_steward_fields = FALSE;
+				$show_entries = TRUE;
+			}
+
+			else {
+				$show_entries = FALSE;
+			}
+
+		}
+
+		if ($admin_user) {
+			$link_admin = $base_url."index.php?section=admin";
+			$print_icon = TRUE;
+		}
+
+		// Build Pay Link
+		if ($section == "pay") {
+			$link_pay = "#";
+			if ($msg != "default") $print_icon = TRUE;
+			}
+		else $link_pay = build_public_url("pay","default","default","default",$sef,$base_url,"default");
+
+		// Build My Account Link
+		if ($section == "list") {
+			$link_list = "#";
+			$print_icon = TRUE;
+		}
+
+		// Build My Entries Link
+		$link_user_entries = build_public_url("list","default","default","default",$sef,$base_url,"default")."#entries";
+
+		// Build Edit My Info link
+	    $edit_user_info_link = "";
+		if ($_SESSION['brewerID'] != "") $edit_user_info_link .= build_public_url("brewer","account","edit",$_SESSION['brewerID'],$sef,$base_url,"default");
+
+		// Build Change My Email Address link
+		$edit_user_email_link = build_public_url("user","account","username",$_SESSION['user_id'],$sef,$base_url,"default");
+		//$edit_user_email_link = $base_url."index.php?section=user&amp;action=username&amp;id=".$_SESSION['brewerID'];
+
+		// Build Change My Email Address link
+		$edit_user_password_link = build_public_url("user","account","password",$_SESSION['user_id'],$sef,$base_url,"default");
+		//$edit_user_password_link = $base_url."index.php?section=user&amp;action=password&amp;id=".$_SESSION['brewerID'];
+
+		// Build Add Entry Link
+		$add_entry_link = "";
+		if ($_SESSION['userLevel'] <= "1") $add_entry_link .= $base_url."index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
+		else $add_entry_link .= build_public_url("brew","entry","add","default",$sef,$base_url,"default");
+
+	}
 
 }
+
 if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
 <!-- Admin Push Menu -->
 <div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas admin-nav-off-canvas">
@@ -239,7 +222,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <ul class="dropdown-menu navmenu-nav">
                 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets">Upload Scoresheets</a></li>
                 <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
-                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin">Manage Entry Evaluations</a></li>
+                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin">Manage Entry Evaluations</a></li>
                 	<?php } ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage Scores</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage BOS Entries and Places</a></li>
@@ -276,7 +259,11 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Preferences <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Website</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">General</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries">Entry</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email">Email Sending</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment">Currency and Payment</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best">Best Brewer and/or Club</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Judging/Competition Organization</a></li>
                 </ul>
             </li>
@@ -355,6 +342,7 @@ $(document).ready(function(){
 	</div>
 </div>
 <?php } ?>
+
 	<!-- Fixed navbar -->
     <div class="navbar <?php echo $nav_container; ?> navbar-fixed-top">
       <div class="<?php echo $container_main; ?>">
@@ -369,6 +357,7 @@ $(document).ready(function(){
         <div class="collapse navbar-collapse" id="bcoem-navbar-collapse">
               <ul class="nav navbar-nav">
                 <li<?php if ($section == "default") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_home; ?>"><?php echo $label_home; ?></a></li>
+            <?php if (!V3) { ?>
                 <li<?php if ($section == "entry") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_entry_info; ?>"><?php echo $label_info; ?></a></li>
                 <li<?php if ($section == "volunteers") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_volunteer_info; ?>"><?php echo $label_volunteers; ?></a></li>
                 <?php if ($sponsors) { ?>
@@ -395,6 +384,7 @@ $(document).ready(function(){
                 <?php if ($qr_enable) { ?>
                 <li><a class="hide-loader" href="<?php echo $link_qr; ?>" target="_blank"><?php echo $label_entry_check_in; ?></a></li>
                 <?php } ?>
+            <?php } // end if (!V3) ?>
               </ul>
           <ul class="nav navbar-nav navbar-right">
           	<?php if ($help_icon) { ?>
@@ -410,6 +400,7 @@ $(document).ready(function(){
                 	<li class="dropdown-header"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && (!empty($_SESSION['brewerBreweryName']))) echo $_SESSION['brewerBreweryName']; else echo $_SESSION['loginUsername']; ?></strong></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>
+                    <?php if (!V3) { ?>
                     <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1"><?php echo $label_edit_account; ?></a></li>
                     <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1"><?php echo $label_change_email; ?></a></li>
                     <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1"><?php echo $label_change_password; ?></a></li>
@@ -432,12 +423,14 @@ $(document).ready(function(){
                         <?php } ?>
                     <?php } ?>
                     <li role="separator" class="divider"></li>
+                    <?php } // end <?php if (!V3) { ?>
                     <li><a href="<?php echo $base_url; ?>includes/process.inc.php?section=logout&amp;action=logout"><?php echo $label_log_out; ?></a></li>
                     <?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
                     <li class="dropdown-header"><small><?php echo $label_auto_log_out; ?> <span id="session-end"></span></small></li>
                 	<?php } ?>
                 </ul>
             </li>
+            
             <li id="user-menu-disable"><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>
             <li id="logout-disable"><a href="<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout"><?php echo $label_log_out; ?></a></li>  
             <?php if ($admin_user) { ?>

@@ -539,142 +539,298 @@ function bjcp_map_2015_2021($style, $method, $prefix, $id) {
 
     switch($style) {
 
-            // Märzen has umlaut
-            case "06A":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","6","06","A","Märzen",$id);
-                if ($method == 1) $return = "06A";
-                if ($method == 2) $return = "06-A";
-            break;
+        // Märzen has umlaut
+        case "06A":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","6","06","A","Märzen",$id);
+            if ($method == 1) $return = "06A";
+            if ($method == 2) $return = "06-A";
+        break;
 
-            // Kellerbier now part of Historical Beer
-            case "07C":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A1","Kellerbier",$id);
-                if ($method == 1) $return = "27A1";
-                if ($method == 2) $return = "27-A1";
-            break;
+        // Kellerbier now part of Historical Beer
+        case "07C":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A1","Kellerbier",$id);
+            if ($method == 1) $return = "27A1";
+            if ($method == 2) $return = "27-A1";
+        break;
 
-            // English Barley Wine (2021 splits into two words)
-            case "17D":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","17","17","D","English Barley Wine",$id);
-                if ($method == 1) $return = "17D";
-                if ($method == 2) $return = "17-D";
-            break;
+        // English Barley Wine (2021 splits into two words)
+        case "17D":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","17","17","D","English Barley Wine",$id);
+            if ($method == 1) $return = "17D";
+            if ($method == 2) $return = "17-D";
+        break;
 
-            // New England IPA changed to Hazy IPA
-            // Now part of IPA category
-            case "21B7":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","21","21","C","Hazy IPA",$id);
-                if ($method == 1) $return = "21C";
-                if ($method == 2) $return = "21-C";
-            break;
+        // New England IPA changed to Hazy IPA
+        // Now part of IPA category
+        case "21B7":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","21","21","C","Hazy IPA",$id);
+            if ($method == 1) $return = "21C";
+            if ($method == 2) $return = "21-C";
+        break;
 
-            // Add accent for Bière de Garde
-            case "24C":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","24","24","C","Bière de Garde",$id);
-                if ($method == 1) $return = "24C";
-                if ($method == 2) $return = "24-C";
-            break;
+        // Add accent for Bière de Garde
+        case "24C":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","24","24","C","Bière de Garde",$id);
+            if ($method == 1) $return = "24C";
+            if ($method == 2) $return = "24-C";
+        break;
 
-            // Trappist Ale now Monastic Ale
-            // Trappist Single now Belgian Single
-            case "26A":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","26","26","A","Belgian Single",$id);
-                if ($method == 1) $return = "26A";
-                if ($method == 2) $return = "26-A";
-            break;
+        // Trappist Ale now Monastic Ale
+        // Trappist Single now Belgian Single
+        case "26A":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","26","26","A","Belgian Single",$id);
+            if ($method == 1) $return = "26A";
+            if ($method == 2) $return = "26-A";
+        break;
 
-            // Clone Beer is now Commercial Specialty Beer
-            case "34A":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","34","34","A","Commercial Specialty Beer",$id);
-                if ($method == 1) $return = "34A";
-                if ($method == 2) $return = "34-A";
-            break;
+        // Clone Beer is now Commercial Specialty Beer
+        case "34A":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","34","34","A","Commercial Specialty Beer",$id);
+            if ($method == 1) $return = "34A";
+            if ($method == 2) $return = "34-A";
+        break;
 
-            // Provisional Styles prefix now LS for Local Styles
-            case "PRX1":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X1","Dorada Pampeana",$id);
-                if ($method == 1) $return = "LSX1";
-                if ($method == 2) $return = "LS-X1";
-            break;
+        // Provisional Styles prefix now LS for Local Styles
+        case "PRX1":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X1","Dorada Pampeana",$id);
+            if ($method == 1) $return = "LSX1";
+            if ($method == 2) $return = "LS-X1";
+        break;
 
-            case "PRX2":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X2","IPA Argenta",$id);
-                if ($method == 1) $return = "LSX2";
-                if ($method == 2) $return = "LS-X2";
-            break;
+        case "PRX2":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X2","IPA Argenta",$id);
+            if ($method == 1) $return = "LSX2";
+            if ($method == 2) $return = "LS-X2";
+        break;
 
-            case "PRX3":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X3","Italian Grape Ale",$id);
-                if ($method == 1) $return = "LSX3";
-                if ($method == 2) $return = "LS-X3";
-            break;
+        case "PRX3":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X3","Italian Grape Ale",$id);
+            if ($method == 1) $return = "LSX3";
+            if ($method == 2) $return = "LS-X3";
+        break;
 
-            case "PRX4":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X4","Catharina Sour",$id);
-                if ($method == 1) $return = "LSX4";
-                if ($method == 2) $return = "LS-X4";
-            break;
+        case "PRX4":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X4","Catharina Sour",$id);
+            if ($method == 1) $return = "LSX4";
+            if ($method == 2) $return = "LS-X4";
+        break;
 
-            case "PRX5":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X5","New Zealand Pilsner",$id);
-                if ($method == 1) $return = "LSX5";
-                if ($method == 2) $return = "LS-X5";
-            break;
+        case "PRX5":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X5","New Zealand Pilsner",$id);
+            if ($method == 1) $return = "LSX5";
+            if ($method == 2) $return = "LS-X5";
+        break;
 
-            // Historical styles have been shuffled
+        // Historical styles have been shuffled
 
-            // Gose moved to European Sour Ale
-            case "27A1":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","23","23","G","Gose",$id);
-                if ($method == 1) $return = "23G";
-                if ($method == 2) $return = "23-G";
-            break;
+        // Gose moved to European Sour Ale
+        case "27A1":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","23","23","G","Gose",$id);
+            if ($method == 1) $return = "23G";
+            if ($method == 2) $return = "23-G";
+        break;
 
-            case "27A2":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A5","Piwo Grodziskie",$id);
-                if ($method == 1) $return = "27A5";
-                if ($method == 2) $return = "27-A5";
-            break;
+        case "27A2":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A5","Piwo Grodziskie",$id);
+            if ($method == 1) $return = "27A5";
+            if ($method == 2) $return = "27-A5";
+        break;
 
-            // 27A3 (Lichenhainer) is the same
+        // 27A3 (Lichenhainer) is the same
 
-            case "27A4":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A8","Roggenbier",$id);
-                if ($method == 1) $return = "27A8";
-                if ($method == 2) $return = "27-A8";
-            break;
+        case "27A4":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A8","Roggenbier",$id);
+            if ($method == 1) $return = "27A8";
+            if ($method == 2) $return = "27-A8";
+        break;
 
-            case "27A5":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A9","Sahti",$id);
-                if ($method == 1) $return = "27A9";
-                if ($method == 2) $return = "27-A9";
-            break;
+        case "27A5":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A9","Sahti",$id);
+            if ($method == 1) $return = "27A9";
+            if ($method == 2) $return = "27-A9";
+        break;
 
-            case "27A6":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A2","Kentucky Common",$id);
-                if ($method == 1) $return = "27A2";
-                if ($method == 2) $return = "27-A2";
-            break;
+        case "27A6":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A2","Kentucky Common",$id);
+            if ($method == 1) $return = "27A2";
+            if ($method == 2) $return = "27-A2";
+        break;
 
-            case "27A7":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A6","Pre-Prohibition Lager",$id);
-                if ($method == 1) $return = "27A6";
-                if ($method == 2) $return = "27-A6";
-            break;
+        case "27A7":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A6","Pre-Prohibition Lager",$id);
+            if ($method == 1) $return = "27A6";
+            if ($method == 2) $return = "27-A6";
+        break;
 
-            case "27A8":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A7","Pre-Prohibition Porter",$id);
-                if ($method == 1) $return = "27A7";
-                if ($method == 2) $return = "27-A7";
-            break;
+        case "27A8":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A7","Pre-Prohibition Porter",$id);
+            if ($method == 1) $return = "27A7";
+            if ($method == 2) $return = "27-A7";
+        break;
 
-            case "27A9":
-                if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A4","London Brown Ale",$id);
-                if ($method == 1) $return = "27A4";
-                if ($method == 2) $return = "27-A4";
-            break;
+        case "27A9":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A4","London Brown Ale",$id);
+            if ($method == 1) $return = "27A4";
+            if ($method == 2) $return = "27-A4";
+        break;
 
-        }
+    }
+
+    if (($method == 1) && (empty($return))) $return = $style;
+    return ($return);
+
+}
+
+function bjcp_map_2021_2025($style, $method, $prefix, $id) {
+
+	// January 15, 2025 update was cider only.
+
+    $return = "";
+
+    switch($style) {
+
+        case "C1A":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C1","C1","A","Common Cider",$id);
+            if ($method == 1) $return = "C1A";
+            if ($method == 2) $return = "C1-A";
+        break;
+
+        case "C1B":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C1","C1","C","English Cider",$id);
+            if ($method == 1) $return = "C1C";
+            if ($method == 2) $return = "C1-C";
+        break;
+
+        case "C1C":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C1","C1","D","French Cider",$id);
+            if ($method == 1) $return = "C1D";
+            if ($method == 2) $return = "C1-D";
+        break;
+
+        case "C1D":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C4","C4","A","Common Perry",$id);
+            if ($method == 1) $return = "C4A";
+            if ($method == 2) $return = "C4-A";
+        break;
+
+        case "C1E":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C4","C4","B","Heirloom Perry",$id);
+            if ($method == 1) $return = "C4B";
+            if ($method == 2) $return = "C4-B";
+        break;
+
+        case "C2B":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C3","C3","A","Fruit Cider",$id);
+            if ($method == 1) $return = "C3A";
+            if ($method == 2) $return = "C3-A";
+        break;
+
+        case "C2C":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C2","C2","B","Applewine",$id);
+            if ($method == 1) $return = "C2B";
+            if ($method == 2) $return = "C2-B";
+        break;
+
+        case "C2D":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C2","C2","C","Ice Cider",$id);
+            if ($method == 1) $return = "C2C";
+            if ($method == 2) $return = "C2-C";
+        break;
+
+        case "C2E":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C3","C3","B","Spiced Cider",$id);
+            if ($method == 1) $return = "C3B";
+            if ($method == 2) $return = "C3-B";
+        break;
+
+        case "C2F":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","C3","C3","C","Experimental Cider",$id);
+            if ($method == 1) $return = "C3C";
+            if ($method == 2) $return = "C3-C";
+        break;
+
+    }
+
+    if (($method == 1) && (empty($return))) $return = $style;
+    return ($return);
+
+}
+
+function aabc_map_2022_2025($style, $method, $prefix, $id) {
+
+	// July 31, 2025 update was cider only.
+
+    $return = "";
+
+    switch($style) {
+
+        case "20-01":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","01","Common Cider [BJCP C1A]",$id);
+            if ($method == 1) $return = "20-01";
+            if ($method == 2) $return = "20-01";
+        break;
+
+        case "20-02":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","02","English Cider [BJCP C1C]",$id);
+            if ($method == 1) $return = "20-02";
+            if ($method == 2) $return = "20-02";
+        break;
+
+        case "20-03":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","03","French Cider [BJCP C1D]",$id);
+            if ($method == 1) $return = "20-03";
+            if ($method == 2) $return = "20-03";
+        break;
+
+        case "20-04":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","13","Common Perry [BJCP C4A]",$id);
+            if ($method == 1) $return = "20-13";
+            if ($method == 2) $return = "20-13";
+        break;
+
+        case "20-05":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","14","Heirloom Perry [BJCP C4A]",$id);
+            if ($method == 1) $return = "20-14";
+            if ($method == 2) $return = "20-14";
+        break;
+
+        case "20-06":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","06","New England Cider [BJCP C2A]",$id);
+            if ($method == 1) $return = "20-06";
+            if ($method == 2) $return = "20-06";
+        break;
+
+        case "20-07":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","10","Fruit Cider [BJCP C3A]",$id);
+            if ($method == 1) $return = "20-10";
+            if ($method == 2) $return = "20-10";
+        break;
+
+        case "20-08":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","07","Applewine [BJCP C2B]",$id);
+            if ($method == 1) $return = "20-07";
+            if ($method == 2) $return = "20-07";
+        break;
+
+        case "20-09":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","09","Ice Cider [BJCP C2C]",$id);
+            if ($method == 1) $return = "20-08";
+            if ($method == 2) $return = "20-08";
+        break;
+
+        case "20-10":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","10","Spiced Cider [BJCP C3B]",$id);
+            if ($method == 1) $return = "20-11";
+            if ($method == 2) $return = "20-11";
+        break;
+
+        case "20-11":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","20","20","11","Experimental Perry [BJCP C4D]",$id);
+            if ($method == 1) $return = "20-11";
+            if ($method == 2) $return = "20-11";
+        break;
+
+    }
 
     if (($method == 1) && (empty($return))) $return = $style;
     return ($return);

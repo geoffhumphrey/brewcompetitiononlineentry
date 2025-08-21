@@ -24,11 +24,6 @@
  * $smtp_port = 465;
  */
 
-// Do not change the following. 
-// Enable this module in /paths.php by setting the ENABLE MAILER variable to TRUE.
-if (ENABLE_MAILER) $mail_use_smtp = TRUE;
-else $mail_use_smtp = FALSE;
-
 // This is generally the same originating SMTP email address.
 // If blank, a default address (e.g., 'noreply@[website.domain]') will be used. 
 // However, without this variable set, the script is not guaranteed to work as expected.

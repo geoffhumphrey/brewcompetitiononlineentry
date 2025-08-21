@@ -739,9 +739,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         $brewer_info = array();
                         $brewer_club = "";
 
-                        if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-
-                        
+                        if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));  
                         if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = convert_to_entities($row_sql['brewBrewerFirstName']);
                         if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = convert_to_entities($row_sql['brewBrewerLastName']);
                         if (isset($row_sql['brewName'])) $brewName = convert_to_entities($row_sql['brewName']);
@@ -889,18 +887,23 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                         if (($go == "csv") && ($action == "required") && ($tb == "required")) {
 
-                            $a[] = array($entryNo,
-                                $judgingNo,
-                                convert_to_entities($row_sql['brewCategory']),
-                                convert_to_entities($row_sql['brewSubCategory']),
-                                convert_to_entities($row_sql['brewStyle']),
-                                $brewName,
-                                $brewInfo,
-                                $brewSpecifics,
-                                convert_to_entities($row_sql['brewMead1']),
-                                convert_to_entities($row_sql['brewMead2']),
-                                convert_to_entities($row_sql['brewMead3'])
-                            );
+                            if ((!empty($row_sql['brewInfo'])) || (!empty($row_sql['brewInfoOptional']))) {
+                                
+                                $a[] = array(
+                                    $entryNo,
+                                    $judgingNo,
+                                    convert_to_entities($row_sql['brewCategory']),
+                                    convert_to_entities($row_sql['brewSubCategory']),
+                                    convert_to_entities($row_sql['brewStyle']),
+                                    $brewInfo,
+                                    $brewInfoOptional,
+                                    $brewSpecifics,
+                                    convert_to_entities($row_sql['brewMead1']),
+                                    convert_to_entities($row_sql['brewMead2']),
+                                    convert_to_entities($row_sql['brewMead3'])
+                                );
+                            
+                            }
 
                         }
 
@@ -2787,6 +2790,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
              */
 
             if ($view == "xml") {
+
+                $xml_output_message = "";
 
                 $filename = "";
                 if (!empty($_SESSION['contestID'])) $filename .= $_SESSION['contestID']."_";

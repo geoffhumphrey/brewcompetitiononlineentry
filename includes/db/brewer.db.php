@@ -8,6 +8,15 @@ if (isset($_SESSION['user_id'])) {
 
 	include (DB.'admin_participants.db.php');
 
+	if (($section == "admin") && (($go == "brewer") || ($go == "user"))) {
+
+		$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE id = '%s'",  $id);
+		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+		$row_brewer = mysqli_fetch_assoc($brewer);
+		$totalRows_brewer = mysqli_num_rows($brewer);
+
+	}
+
 	if (NHC) {
 		// Custom code for AHA - possiblity of inclusion in a future version
 		$query_clubs = "SELECT * FROM nhcclubs ORDER BY IDClub ASC";

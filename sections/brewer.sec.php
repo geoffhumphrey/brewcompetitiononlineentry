@@ -241,7 +241,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $staff_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
             $staff_avail_option .= "</select>";
 
-            if ((time() < $row_judging3['judgingDate']) || (($go == "admin") && ($filter != "default"))) {
+            if ((time() < $row_judging3['judgingDate']) || (($section == "admin") && ($filter != "default"))) {
                 $staff_location_avail .= $staff_avail_info;
                 $staff_location_avail .= $staff_avail_option;
             }
@@ -257,7 +257,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
             $judge_avail_option .= "</select>";
             
-            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+            if ((time() < $row_judging3['judgingDate'])  || (($section == "admin") && ($filter != "default"))) {
                 $judge_location_avail .= $judge_avail_info;
                 $judge_location_avail .= $judge_avail_option;
             }
@@ -269,7 +269,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_yes,$label_yes);
             $steward_avail_option .= "</select>";
 
-            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+            if ((time() < $row_judging3['judgingDate'])  || (($section == "admin") && ($filter != "default"))) {
                 $steward_location_avail .= $steward_avail_info;
                 $steward_location_avail .= $steward_avail_option;
             }
@@ -280,7 +280,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
 }
 
-if (($_SESSION['prefsProEdition'] == 1) && ((!$show_judge_steward_fields) || ($go == "admin"))) $pro_entrant = TRUE;
+if (($_SESSION['prefsProEdition'] == 1) && ((!$show_judge_steward_fields) || ($section == "admin"))) $pro_entrant = TRUE;
 
 // Build drop-off select element
 $dropoff_select = "";
@@ -307,13 +307,22 @@ else {
     $submit_text = $label_add_admin;
 }
 
-if ($go != "admin") echo $info_msg;
+if ($section == "admin") {
+    echo "
+    <style>
+    .help-block {
+        display:none;
+    }
+    </style>
+    ";
+}
+else echo $info_msg;
 ?>
 <form id="submit-form" class="form-horizontal hide-loader-form-submit" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="form-group">
-    <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12"></label>
-    <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12"></label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <p class="bcoem-form-info text-warning"><i class="fa fa-star"></i> <strong>= <?php echo $label_required_info; ?></strong></p>
     </div>
 </div>
@@ -337,7 +346,7 @@ if (($go != "entrant") && ($section != "step2")) include (SECTIONS.'brewer_form_
     <?php }
 } ?>
 
-<?php if ($go == "admin") { ?>
+<?php if ($section == "admin") { ?>
     <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
     <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
     <?php } else { ?>

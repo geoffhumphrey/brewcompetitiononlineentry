@@ -1,86 +1,4 @@
 <?php
-
-/*
-// Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-*/
-
-?>
-
-<script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable_judge').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-
-		$('#judge_assignments').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-
-		$('#sortable_steward').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-
-		$('#sortable_staff').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[1,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-
-		$('#steward_assignments').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
-			"aoColumns": [
-				null,
-				null,
-				null
-				]
-			} );
-		} );
-</script>
-<?php
 /**
  * Module:      brewer_info.sec.php
  * Description: This module displays user-related data including personal information,
@@ -175,7 +93,7 @@ if (($totalRows_log > 0) && ($show_entries)) {
 }
 */
 
-if ($_SESSION['prefsEval'] == 1) include (EVALS.'my_account.eval.php');
+
 
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
 $user_edit_links .= sprintf("<a class=\"btn btn-info\" href=\"%s\"><span class=\"fa fa-user\"></span> %s</a>",$edit_user_info_link,$label_edit_account);
@@ -195,6 +113,8 @@ if (($totalRows_log > 0) && ($show_entries)) {
 	$user_edit_links .= "<a class=\"btn btn-primary\" href=\"#entries\"><i class=\"fa fa-fw fa-list\"></i> ".$label_entries."</a>";
 
 }
+
+if ($_SESSION['prefsEval'] == 1) include (EVALS.'my_account.eval.php');
 
 $user_edit_links .= "</div><!-- ./button group -->";
 
@@ -865,3 +785,74 @@ if (($judge_no_availability) || ($steward_no_availability)) {
   </div>
 </div>
 <?php } ?>
+<script type="text/javascript" language="javascript">
+	 
+	 $(document).ready(function() {
+		
+		$('#sortable_judge').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[1,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+
+		$('#judge_assignments').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+
+		$('#sortable_steward').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[1,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+
+		$('#sortable_staff').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[1,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+
+		$('#steward_assignments').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"aoColumns": [
+				null,
+				null,
+				null
+			]
+		});
+		
+	});
+</script>

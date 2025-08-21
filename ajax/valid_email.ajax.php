@@ -1,20 +1,19 @@
-<?php 
+<?php
+
 ob_start();
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
+if (session_status() === PHP_SESSION_NONE) session_start();
+ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
+ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
+error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
 if ($section == "setup") {
 	$alert_email_valid = "Email format is valid!";
 	$alert_email_not_valid = "Email format is not valid.";
 }
 
-else {
-	require(CONFIG.'bootstrap.php');
-}
-
-ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
-ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
-error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
+else require(CONFIG.'bootstrap.php');
 
 if (isset($_SESSION['session_set_'.$prefix_session])) {
 
@@ -26,7 +25,8 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 } 
 
-else $status = 9; // Session expired, not enabled, etc.
+// Session expired, not enabled, etc.
+else $status = 9;
 
 if ($action == "json") {
 

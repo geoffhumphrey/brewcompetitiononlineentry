@@ -24,8 +24,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		require(CLASSES.'phpass/PasswordHash.php');
 		$hasher = new PasswordHash(8, false);
-		$password = md5($_POST['password']);
-		$hash = $hasher->HashPassword($password);
+		$entered_password = md5($_POST['password']);
+		$hash = $hasher->HashPassword($entered_password);
 		$hasher_question = new PasswordHash(8, false);
 		$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
 

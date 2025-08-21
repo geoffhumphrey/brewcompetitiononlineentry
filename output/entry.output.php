@@ -92,7 +92,7 @@ if ($brewing_info['brewCategory'] < $category_end) {
 
 else $brewing_info['styleName'] = $brewing_info['brewStyle'];
 
-if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($brewing_info['brewCategorySort'] == "02") && ($brewing_info['brewSubCategory'] == "A")) $label_required_info = $label_regional_variation;
+if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($brewing_info['brewCategorySort'] == "02") && ($brewing_info['brewSubCategory'] == "A")) $label_required_info = $label_regional_variation;
 
 $TBS = new clsTinyButStrong;
 $TBS->SetOption('noerr',TRUE);

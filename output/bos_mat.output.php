@@ -16,8 +16,9 @@ if ((session_status() == PHP_SESSION_NONE) || ((isset($_SESSION['loginUsername']
 */
 
 $go = "output";
-require(DB.'admin_common.db.php');
-require(LIB.'output.lib.php');
+require (DB.'admin_common.db.php');
+require (LIB.'admin.lib.php');
+require (LIB.'output.lib.php');
 if ($_SESSION['prefsStyleSet'] == "BA") include(INCLUDES.'ba_constants.inc.php');
 
 function check_table_name($id,$judging_tables_db_table) {

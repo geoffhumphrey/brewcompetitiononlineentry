@@ -56,11 +56,20 @@ $user_info = mysqli_query($connection,$query_user_info) or die (mysqli_error($co
 $row_user_info = mysqli_fetch_assoc($user_info);
 $totalRows_user_info = mysqli_num_rows($user_info);
 
-$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-
 $paypal_email_address = filter_var($row_prefs['prefsPayPalAccount'],FILTER_SANITIZE_EMAIL);
 
-$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+
+if (HOSTED) {
+	include (CONFIG.'config.mail.php');
+	if ((!isset($mail_default_from)) || (trim($mail_default_from) === '')) $from_email = $_SESSION['prefsEmailFrom'];
+	else $from_email = $mail_default_from;
+}
+
+else {
+	if ($mail_use_smtp) $from_email = $_SESSION['prefsEmailFrom'];
+	else $from_email = "noreply@".$url;
+}
 
 $confirm_to_email_address = "PayPal IPN Confirmation <".$paypal_email_address.">";
 $confirm_to_email_address = mb_convert_encoding($confirm_to_email_address, "UTF-8");
@@ -150,65 +159,66 @@ if ($verified) {
 
 		}
 
-		$display_entry_numbers = implode(", ", $display_entry_no);
-		$display_entry_numbers = rtrim($display_entry_numbers, ", ");
-
-		$to_recipient = $row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'];
-		$to_recipient = html_entity_decode($to_recipient);
-		$to_recipient = mb_convert_encoding($to_recipient, "UTF-8");
-
-		$to_email = filter_var($row_user_info['brewerEmail'],FILTER_SANITIZE_EMAIL);
-		$to_email = mb_convert_encoding($to_email, "UTF-8");
-		$to_email_formatted .= $to_recipient." <".$to_email.">";
-
-		$from_email = filter_var($from_email,FILTER_SANITIZE_EMAIL);
-		$from_email = mb_convert_encoding($from_email, "UTF-8");
-		
-		$cc_recipient = $data['first_name']." ".$data['last_name'];
-		$cc_recipient = html_entity_decode($cc_recipient);
-		$cc_recipient = mb_convert_encoding($cc_recipient, "UTF-8");
-
-		$cc_email = mb_convert_encoding($data['payer_email'], "UTF-8");
-
-		$headers  = "MIME-Version: 1.0"."\r\n";
-		$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-		$headers .= "From: ".html_entity_decode($row_logo['contestName'])." Server <".$from_email.">"."\r\n";
-		$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
-		$headers .= "Bcc: ".$cc_recipient. " <".$cc_email.">"."\r\n";
-
-		$message_top = "";
-		$message_body = "";
-		$message_bottom = "";
-
-		$message_top .= "<body>";
-		$message_top .= "<html>";
-		if ((isset($row_logo['contestLogo'])) && (file_exists(USER_IMAGES.$row_logo['contestLogo']))) $message_body .= "<p><img src='".$base_url."/user_images/".$row_logo['contestLogo']."' height='150'></p>";
-		
-		$message_body .= "<p>".mb_convert_encoding($row_user_info['brewerFirstName'], "UTF-8").",</p>";
-		$message_body .= sprintf("<p>%s</p>",mb_convert_encoding($paypal_response_text_000, "UTF-8"));
-		$message_body .= sprintf("<p><strong>%s</strong></p>",mb_convert_encoding($paypal_response_text_001, "UTF-8"));
-		
-		$message_body .= "<table cellpadding=\"5\" cellspacing=\"0\">";
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".$to_recipient."<td></tr>",$label_payer,$label_name);
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".mb_convert_encoding($data['payer_email'], "UTF-8")."<td></tr>",mb_convert_encoding($label_payer, "UTF-8"),mb_convert_encoding($label_email, "UTF-8"));
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".mb_convert_encoding($data['payment_status'], "UTF-8")."<td></tr>",mb_convert_encoding($label_status, "UTF-8"));
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".mb_convert_encoding($data['payment_amount']." ".$data['payment_currency'], "UTF-8")."<td></tr>",mb_convert_encoding($label_amount, "UTF-8"));
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".mb_convert_encoding($data['txn_id'], "UTF-8")."<td></tr>",mb_convert_encoding($label_transaction_id, "UTF-8"));
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".mb_convert_encoding($display_entry_numbers, "UTF-8")."<td></tr>",mb_convert_encoding($label_entry_numbers, "UTF-8"));
-		$message_body .= "</table>";
-		
-		$message_body .= sprintf("<p>%s</p>",mb_convert_encoding($paypal_response_text_002, "UTF-8"));
-		$message_body .= sprintf("<p><small>%s</small></p>",mb_convert_encoding($paypal_response_text_003, "UTF-8"));
-		
-		$message_bottom .= "</body>";
-		$message_bottom .= "</html>";
-
-		$message_all = $message_top.$message_body.$message_bottom;
-
-		// Send the email message
-		$subject = mb_convert_encoding($test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009), "UTF-8");
-
 		if ($mail_use_smtp) {
+
+			$display_entry_numbers = implode(", ", $display_entry_no);
+			$display_entry_numbers = rtrim($display_entry_numbers, ", ");
+
+			$to_recipient = $row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'];
+			$to_recipient = html_entity_decode($to_recipient);
+			$to_recipient = mb_convert_encoding($to_recipient, "UTF-8");
+
+			$to_email = filter_var($row_user_info['brewerEmail'],FILTER_SANITIZE_EMAIL);
+			$to_email = mb_convert_encoding($to_email, "UTF-8");
+			$to_email_formatted .= $to_recipient." <".$to_email.">";
+
+			$from_email = filter_var($from_email,FILTER_SANITIZE_EMAIL);
+			$from_email = mb_convert_encoding($from_email, "UTF-8");
+			
+			$cc_recipient = $data['first_name']." ".$data['last_name'];
+			$cc_recipient = html_entity_decode($cc_recipient);
+			$cc_recipient = mb_convert_encoding($cc_recipient, "UTF-8");
+
+			$cc_email = mb_convert_encoding($data['payer_email'], "UTF-8");
+
+			$headers  = "MIME-Version: 1.0"."\r\n";
+			$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
+			$headers .= "From: ".html_entity_decode($row_logo['contestName'])." Server <".$from_email.">"."\r\n";
+			$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
+			$headers .= "Bcc: ".$cc_recipient. " <".$cc_email.">"."\r\n";
+
+			$message_top = "";
+			$message_body = "";
+			$message_bottom = "";
+
+			$message_top .= "<body>";
+			$message_top .= "<html>";
+			if ((isset($row_logo['contestLogo'])) && (file_exists(USER_IMAGES.$row_logo['contestLogo']))) $message_body .= "<p><img src='".$base_url."/user_images/".$row_logo['contestLogo']."' height='150'></p>";
+			
+			$message_body .= "<p>".mb_convert_encoding($row_user_info['brewerFirstName'], "UTF-8").",</p>";
+			$message_body .= sprintf("<p>%s</p>",mb_convert_encoding($paypal_response_text_000, "UTF-8"));
+			$message_body .= sprintf("<p><strong>%s</strong></p>",mb_convert_encoding($paypal_response_text_001, "UTF-8"));
+			
+			$message_body .= "<table cellpadding=\"5\" cellspacing=\"0\">";
+			$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".$to_recipient."<td></tr>",$label_payer,$label_name);
+			$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".mb_convert_encoding($data['payer_email'], "UTF-8")."<td></tr>",mb_convert_encoding($label_payer, "UTF-8"),mb_convert_encoding($label_email, "UTF-8"));
+			$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".mb_convert_encoding($data['payment_status'], "UTF-8")."<td></tr>",mb_convert_encoding($label_status, "UTF-8"));
+			$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".mb_convert_encoding($data['payment_amount']." ".$data['payment_currency'], "UTF-8")."<td></tr>",mb_convert_encoding($label_amount, "UTF-8"));
+			$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".mb_convert_encoding($data['txn_id'], "UTF-8")."<td></tr>",mb_convert_encoding($label_transaction_id, "UTF-8"));
+			$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".mb_convert_encoding($display_entry_numbers, "UTF-8")."<td></tr>",mb_convert_encoding($label_entry_numbers, "UTF-8"));
+			$message_body .= "</table>";
+			
+			$message_body .= sprintf("<p>%s</p>",mb_convert_encoding($paypal_response_text_002, "UTF-8"));
+			$message_body .= sprintf("<p><small>%s</small></p>",mb_convert_encoding($paypal_response_text_003, "UTF-8"));
+			
+			$message_bottom .= "</body>";
+			$message_bottom .= "</html>";
+
+			$message_all = $message_top.$message_body.$message_bottom;
+
+			// Send the email message
+			$subject = mb_convert_encoding($test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009), "UTF-8");
+
 			$mail = new PHPMailer(true);
 			$mail->CharSet = 'UTF-8';
 			$mail->Encoding = 'base64';
@@ -218,8 +228,7 @@ if ($verified) {
 			$mail->Subject = $subject;
 			$mail->Body = $message_all;
 			sendPHPMailerMessage($mail);
-		} else {
-			mail($to_email_formatted, $subject, $message_all, $headers);
+		
 		}
 
     }
@@ -253,7 +262,7 @@ if ($save_log_file) {
 
 }
 
-if ($send_confirmation_email) {
+if (($send_confirmation_email) && ($mail_use_smtp)) {
 
 	// Send confirmation email
 
@@ -287,19 +296,16 @@ if ($send_confirmation_email) {
 	$message_bottom_confirm .= "</html>";
 
 	$message_all_confirm = $message_top_confirm.$message_body_confirm.$message_bottom_confirm;
+	
+	$mail = new PHPMailer(true);
+	$mail->CharSet = 'UTF-8';
+	$mail->Encoding = 'base64';
+	$mail->addAddress($paypal_email_address, "PayPal IPN Confirmation");
+	$mail->setFrom($from_email, $row_logo['contestName']." Server");
+	$mail->Subject = $subject_confirm;
+	$mail->Body = $message_all_confirm;
+	sendPHPMailerMessage($mail);
 
-	if ($mail_use_smtp) {
-		$mail = new PHPMailer(true);
-		$mail->CharSet = 'UTF-8';
-		$mail->Encoding = 'base64';
-		$mail->addAddress($paypal_email_address, "PayPal IPN Confirmation");
-		$mail->setFrom($from_email, $row_logo['contestName']." Server");
-		$mail->Subject = $subject_confirm;
-		$mail->Body = $message_all_confirm;
-		sendPHPMailerMessage($mail);
-	} else {
-		mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
-	}
 }
 
 // Reply with an empty 200 response to indicate to paypal the IPN was received correctly

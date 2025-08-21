@@ -17,7 +17,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 2)) {
 
 		// Check whether user is "authorized" to edit the entry in DB
-		$query_brewer_id = sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);
+		$query_brewer_id = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerEmail FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);
 		$brewer_id = mysqli_query($connection,$query_brewer_id) or die (mysqli_error($connection));
 		$row_brewer_id = mysqli_fetch_assoc($brewer_id);
 
@@ -643,6 +643,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$update_table = $prefix."brewer";
+
+		if (($filter == "quick-no-judge") || ($filter == "quick-no-steward")){
+
+			$id = sterilize($_POST['id']);
+			$data = array(
+				'uid' => $uid, 
+				'brewerSteward' => blank_to_null($brewerSteward), 
+				'brewerJudge' => blank_to_null($brewerJudge)
+			);
+		} 
+			
+		
+		else 
 		$data = array(
 			'uid' => $uid,
 			'brewerFirstName' => blank_to_null($first_name),
@@ -724,7 +737,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if ($totalRows_security_resp > 0) $check = $hasher_question->CheckPassword($userQuestionAnswer, $stored_hash);
 
 			if ($check == 0) {
-				// New  Store unhashed response for email confirmation
+				// Store unhashed response for email confirmation
 				$userQuestion_change = TRUE;
 				$userQuestionAnswer_email = $userQuestionAnswer;
 			}
@@ -762,6 +775,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($go == "register") $updateGoTo = $base_url."index.php?section=brew&msg=2";
 		elseif (($go == "judge") && ($filter == "default")) $updateGoTo = $base_url."index.php?section=list&go=".$go."&filter=default&msg=7";
 		elseif (($go == "judge") && ($filter != "default")) $updateGoTo = $base_url."index.php?section=admin&go=participants&msg=2";
+		elseif (($go == "account") && ($filter != "default")) $updateGoTo = $base_url."index.php?section=list&msg=2";
 		elseif ($go == "default") $updateGoTo = $base_url."index.php?section=list&go=".$go."&filter=default&msg=2";
 		else $updateGoTo = $updateGoTo;
 
@@ -771,16 +785,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$updateGoTo = prep_redirect_link($updateGoTo);
 		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 
-		if ($userQuestion_change) {
+		if (($userQuestion_change) && ($mail_use_smtp)) {
 
 			// Build vars
 			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+			$first_name = $row_brewer_id['brewerFirstName'];
+			$last_name = $row_brewer_id['brewerLastName'];
 			
 			$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 			if (strpos($url, 'brewingcompetitions.com') !== false) $from_email = $default_from."@brewingcompetitions.com";
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$contestName = $_SESSION['contestName'];
+			$from_name = $_SESSION['contestName']." Server";
 			$from_name = html_entity_decode($from_name);
 			$from_name = mb_convert_encoding($contestName, "UTF-8");
 
@@ -828,18 +845,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			exit();
 			*/
 
-			if ($mail_use_smtp) {
-				$mail = new PHPMailer(true);
-				$mail->CharSet = 'UTF-8';
-				$mail->Encoding = 'base64';
-				$mail->addAddress($to_email, $to_name);
-				$mail->setFrom($from_email, $from_name);
-				$mail->Subject = $subject;
-				$mail->Body = $message;
-				sendPHPMailerMessage($mail);
-			} else {
-				mail($to_email_formatted, $subject, $message, $headers);
-			}
+			$mail = new PHPMailer(true);
+			$mail->CharSet = 'UTF-8';
+			$mail->Encoding = 'base64';
+			$mail->addAddress($to_email, $to_name);
+			$mail->setFrom($from_email, $from_name);
+			$mail->Subject = $subject;
+			$mail->Body = $message;
+			sendPHPMailerMessage($mail);
 
 		}
 

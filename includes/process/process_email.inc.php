@@ -3,7 +3,6 @@
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
 
-
 if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
@@ -69,11 +68,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$mail->Subject = $subject;
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
-		} else {
-			mail($to_email_formatted, $subject, $message, $headers);
+			$redirect = $base_url."index.php?section=admin&go=preferences&msg=32";
 		}
 
-		$redirect = $base_url."index.php?section=admin&go=preferences&msg=32";
+		else {
+			$redirect = $base_url."index.php?section=admin&go=preferences&msg=3";
+		}
+
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
 
@@ -81,76 +82,77 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	if ($filter == "table-assignments") {
 
-		$query_brewer = "SELECT a.id,a.uid,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,a.brewerEmail,b.uid,b.staff_judge,b.staff_steward FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND (b.staff_steward='1' OR b.staff_judge='1') ORDER BY brewerLastName ASC";
-		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-		$row_brewer = mysqli_fetch_assoc($brewer);
-		$totalRows_brewer = mysqli_num_rows($brewer);
+		if ($mail_use_smtp) {
 
-		$query_organizer = "SELECT a.brewerFirstName,a.brewerLastName FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND staff_organizer='1'";
-		$organizer = mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
-		$row_organizer = mysqli_fetch_assoc($organizer);
-		$totalRows_organizer = mysqli_num_rows($organizer);
+			$query_brewer = "SELECT a.id,a.uid,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,a.brewerEmail,b.uid,b.staff_judge,b.staff_steward FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND (b.staff_steward='1' OR b.staff_judge='1') ORDER BY brewerLastName ASC";
+			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+			$row_brewer = mysqli_fetch_assoc($brewer);
+			$totalRows_brewer = mysqli_num_rows($brewer);
 
-		do {
+			$query_organizer = "SELECT a.brewerFirstName,a.brewerLastName FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND staff_organizer='1'";
+			$organizer = mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
+			$row_organizer = mysqli_fetch_assoc($organizer);
+			$totalRows_organizer = mysqli_num_rows($organizer);
 
-			$message = "";
-			$table_assignments = "";
+			do {
 
-			if ($row_brewer['staff_judge'] == 1) $table_assignments = table_assignments($row_brewer['uid'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
-			if ($row_brewer['staff_steward'] == 1) $table_assignments = table_assignments($row_brewer['uid'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+				$message = "";
+				$table_assignments = "";
 
-			if (!empty($table_assignments)) {
+				if ($row_brewer['staff_judge'] == 1) $table_assignments = table_assignments($row_brewer['uid'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+				if ($row_brewer['staff_steward'] == 1) $table_assignments = table_assignments($row_brewer['uid'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
 
-				$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
-				$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
+				if (!empty($table_assignments)) {
 
-				$to_name = $first_name." ".$last_name;
-				$to_name = mb_convert_encoding($to_name, "UTF-8");
-				
-				$to_email = strtolower($row_brewer['brewerEmail']);
-				$to_email = mb_convert_encoding($to_email, "UTF-8");
-				$to_email_formatted .= $to_name." <".$to_email.">";
-				
-				if ($row_brewer['staff_judge'] == 1) $subject = $_SESSION['contestName']." - Your Judging Assignments";
-				if ($row_brewer['staff_steward'] == 1) $subject = $_SESSION['contestName']." - Your Stewarding Assignments";
-				$subject = mb_convert_encoding($subject, "UTF-8");
+					$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
+					$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
 
-				$message = "<html>" . "\r\n";
-				$message .= "<body>" . "\r\n";
-				if (isset($_SESSION['contestLogo'])) $message .= "<p align='center'><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
-				$message .= "<p>".$first_name.",</p>";
-				$message .= "<p>Thank you for volunteering to be a ";
-				if ($row_brewer['staff_judge'] == 1) $message .= "judge ";
-				if ($row_brewer['staff_steward'] == 1) $message .= "steward ";
-				$message .= "in the ".$_SESSION['contestName'].". Your assignment(s) are detailed below.</p>";
+					$to_name = $first_name." ".$last_name;
+					$to_name = mb_convert_encoding($to_name, "UTF-8");
+					
+					$to_email = strtolower($row_brewer['brewerEmail']);
+					$to_email = mb_convert_encoding($to_email, "UTF-8");
+					$to_email_formatted .= $to_name." <".$to_email.">";
+					
+					if ($row_brewer['staff_judge'] == 1) $subject = $_SESSION['contestName']." - Your Judging Assignments";
+					if ($row_brewer['staff_steward'] == 1) $subject = $_SESSION['contestName']." - Your Stewarding Assignments";
+					$subject = mb_convert_encoding($subject, "UTF-8");
 
-				$message .= "<table cellpadding='5' border='0' cellspacing='0'>";
-				$message .= "<thead>";
-				$message .= "<tr>";
-				$message .= "<th align='left'>Location</th>";
-				$message .= "<th align='left'>Date/Time</th>";
-				$message .= "<th align='left'>Table</th>";
-				$message .= "</tr>";
-				$message .= "</thead>";
-				$message .= "<tbody>";
-				$message .= $table_assignments;
-				$message .= "</tbody>";
-				$message .= "</table>";
-				$message .= sprintf("<p>If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">please contact</a> the appropriate competition official.</p>",$base_url."index.php?section=contact");
-				$message .= "<p>Cheers,</p>";
-				$message .= "<p>".$row_organizer['brewerFirstName']." ".$row_organizer['brewerLastName'].", Organizer";
-				$message .= sprintf("<br><a href=\"%s\">%s</a></p>",$base_url,$_SESSION['contestName']);
-				$message .= "<p><small>".$paypal_response_text_003."</small></p>";
-				if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
-				$message .= "</body>" . "\r\n";
-				$message .= "</html>";
+					$message = "<html>" . "\r\n";
+					$message .= "<body>" . "\r\n";
+					if (isset($_SESSION['contestLogo'])) $message .= "<p align='center'><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+					$message .= "<p>".$first_name.",</p>";
+					$message .= "<p>Thank you for volunteering to be a ";
+					if ($row_brewer['staff_judge'] == 1) $message .= "judge ";
+					if ($row_brewer['staff_steward'] == 1) $message .= "steward ";
+					$message .= "in the ".$_SESSION['contestName'].". Your assignment(s) are detailed below.</p>";
 
-				$headers  = "MIME-Version: 1.0"."\r\n";
-				$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-				$headers .= "From: ".$from_name." <".$from_email.">"."\r\n";
-				$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
+					$message .= "<table cellpadding='5' border='0' cellspacing='0'>";
+					$message .= "<thead>";
+					$message .= "<tr>";
+					$message .= "<th align='left'>Location</th>";
+					$message .= "<th align='left'>Date/Time</th>";
+					$message .= "<th align='left'>Table</th>";
+					$message .= "</tr>";
+					$message .= "</thead>";
+					$message .= "<tbody>";
+					$message .= $table_assignments;
+					$message .= "</tbody>";
+					$message .= "</table>";
+					$message .= sprintf("<p>If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">please contact</a> the appropriate competition official.</p>",$base_url."index.php?section=contact");
+					$message .= "<p>Cheers,</p>";
+					$message .= "<p>".$row_organizer['brewerFirstName']." ".$row_organizer['brewerLastName'].", Organizer";
+					$message .= sprintf("<br><a href=\"%s\">%s</a></p>",$base_url,$_SESSION['contestName']);
+					$message .= "<p><small>".$paypal_response_text_003."</small></p>";
+					if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+					$message .= "</body>" . "\r\n";
+					$message .= "</html>";
 
-				if ($mail_use_smtp) {
+					$headers  = "MIME-Version: 1.0"."\r\n";
+					$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
+					$headers .= "From: ".$from_name." <".$from_email.">"."\r\n";
+					$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
+
 					$mail = new PHPMailer(true);
 					$mail->CharSet = 'UTF-8';
 					$mail->Encoding = 'base64';
@@ -159,13 +161,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$mail->Subject = $subject;
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);
-				} else {
-					mail($to_email_formatted, $subject, $message, $headers);
+				
 				}
 
-			}
+			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 
-		} while ($row_brewer = mysqli_fetch_assoc($brewer));
+		}
 
 	}
 

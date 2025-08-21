@@ -1440,3 +1440,20 @@ table.dataTable thead th.sorting:after {
 	background-color: #DFE4EC;
 	border: 1px solid #acc0c7;
 }
+
+/** driver.js Overrides **/
+.driver-popover * {
+    font-family: "Droid Sans", Arial, sans-serif;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+    font-family: "Merriweather", Georgia, serif;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns button {
+    font-family: "Droid Sans", Arial, sans-serif;
+}
+
+.driver-popover.driverjs-theme .driver-popover-description {
+    font-family: "Droid Sans", Arial, sans-serif;
+}

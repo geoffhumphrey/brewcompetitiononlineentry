@@ -83,7 +83,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$row_user = mysqli_fetch_assoc($user);
 
 			$user_name = sterilize($row_user['user_name']);
-			$password = $row_user['password'];
+			$user_password = $row_user['password'];
 			$userLevel = $row_user['userLevel'];
 			$userQuestion = $purifier->purify($row_user['userQuestion']);
 			$userQuestionAnswer = $purifier->purify($row_user['userQuestionAnswer']);
@@ -294,7 +294,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$data = array(
 				'id' => 1, 
 				'user_name' => $user_name, 
-				'password' => $password,	
+				'password' => $user_password,	
 				'userLevel' => $userLevel, 
 				'userQuestion' => $userQuestion, 
 				'userQuestionAnswer' => $userQuestionAnswer, 
@@ -372,23 +372,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// If participants were kept, no need to kill session and re-login - just redirect
 		if ($keep_participants) {
 
-			// First, clear judging preferences
-			if (!SINGLE) {
-
-				$update_table = $prefix."brewer";
-				$data = array(
-					'brewerJudge' => 'N',
-					'brewerSteward' => 'N',
-					'brewerJudgeLocation' => NULL,
-					'brewerStewardLocation' => NULL,
-					'brewerDropOff' => '999'
-				);
-				$result = $db_conn->update ($update_table, $data);
-				if (!$result) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
-
+			// First, clear judging preferences and discounts
+			$update_table = $prefix."brewer";
+			$data = array(
+				'brewerJudge' => 'N',
+				'brewerSteward' => 'N',
+				'brewerJudgeLocation' => NULL,
+				'brewerStewardLocation' => NULL,
+				'brewerDropOff' => '999',
+				'brewerDiscount' => NULL
+			);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7");
@@ -397,26 +394,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// If no participants were kept except admin users, log the user in and redirect
 		else {
 
-			// First, clear judging preferences for remaining users
-			if (!SINGLE) {
+			// First, clear judging preferences and discounts for remaining users
 				
-				$update_table = $prefix."brewer";
-				$data = array(
-					'brewerJudge' => 'N',
-					'brewerSteward' => 'N',
-					'brewerJudgeLocation' => NULL,
-					'brewerStewardLocation' => NULL,
-					'brewerDropOff' => '999'
-				);
-				$result = $db_conn->update ($update_table, $data);
-				if (!$result) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
-
+			$update_table = $prefix."brewer";
+			$data = array(
+				'brewerJudge' => 'N',
+				'brewerSteward' => 'N',
+				'brewerJudgeLocation' => NULL,
+				'brewerStewardLocation' => NULL,
+				'brewerDropOff' => '999',
+				'brewerDiscount' => NULL
+			);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
-			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
+			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$user_password'";
 			$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
 			$row_login = mysqli_fetch_assoc($login);
 
@@ -570,7 +565,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 				
 				// If the username/password combo is incorrect or not found, relocate to the login error page
-				$redirect = $base_url."index.php?section=login&msg=1";
+				$redirect = $base_url."index.php?msg=1";
 				$redirect = prep_redirect_link($redirect);
 				$redirect_go_to = sprintf("Location: %s", $redirect);
 				

@@ -44,13 +44,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	}
 
 	// Reset judge, steward, and staff interest and availability
+	// Clear out any discounts
 	$update_table = $prefix."brewer";
 	$data = array(
 		'brewerJudge' => 'N',
 		'brewerSteward' => 'N',
 		'brewerJudgeLocation' => NULL,
 		'brewerStewardLocation' => NULL,
-		'brewerDropOff' => '999'
+		'brewerDropOff' => '999',
+		'brewerDiscount' => NULL
 	);
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) {

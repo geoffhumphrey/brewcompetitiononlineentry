@@ -34,6 +34,7 @@ define('USER_TEMP',ROOT.'user_temp'.DIRECTORY_SEPARATOR);
 define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
 define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARATOR);
 define('AJAX',ROOT.'ajax'.DIRECTORY_SEPARATOR);
+define('PUB',ROOT.'pub'.DIRECTORY_SEPARATOR);
 
 /**
  * --------------------------------------------------------
@@ -50,6 +51,7 @@ define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
 define('EVALUATION', TRUE);
+define('V3', TRUE);
 
 /**
  * Enable to following to put your installation into
@@ -126,7 +128,7 @@ define('ENABLE_MARKDOWN', FALSE);
  * emails instead of using PHP's native mail() function,
  * which may be disabled on certain web hosts.
  * Requires configuration in the /site/config.mail.php file
- * Default is FALSE.
+ * Deprecated as of 3.0.0.
  */
 
 define('ENABLE_MAILER', FALSE);
@@ -155,9 +157,8 @@ function is_https() {
 }
 
 /**
- * General sanitization function.
- * Needs to be top-level due to use in 
- * url_variables.inc.php file.
+ * General sanitization function. Needs to be top-level due to its 
+ * use in the url_variables.inc.php file.
  */
 
 function sterilize($sterilize = NULL) {
@@ -179,8 +180,31 @@ function sterilize($sterilize = NULL) {
 }
 
 if (HOSTED) {
+    
     $installation_id = md5(__FILE__);
     $session_expire_after = 60;
+
+    /**
+     * Parse the hosted URL (hosted URLs are all single subdomains
+     * like xxx.brewingcompetitions.com). Parse by exploding by the
+     * "dots" in the URL and reconstructing a base_url_hosted variable.
+     * 
+     * This approach works around hard-coding a URL in a variable, which
+     * can be false-flagged by webhost security packages like Immunify.
+     * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1609
+     */
+    
+    $current_url_to_parse = 'http://';
+    if (is_https()) $current_url_to_parse = 'https://';  
+    $current_url_to_parse .= $_SERVER['SERVER_NAME'];
+    
+    $current_parsed_url = parse_url($current_url_to_parse);
+    $current_parsed_host = explode('.', $current_parsed_url['host']);
+    
+    $base_url_hosted = 'http://';
+    if (is_https()) $base_url_hosted = 'https://';
+    $base_url_hosted .= $current_parsed_host[1].".".$current_parsed_host[2]."/";
+
 }
 
 /** 
@@ -212,14 +236,13 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 /**
- * Load DB connection and configuration files
+ * Load DB connection and configuration files.
  */
 
 require_once (CONFIG.'config.php');
 require_once (CONFIG.'MysqliDb.php');
 $db_conn = new MysqliDb($connection);
 
-if (ENABLE_MAILER) require_once (CONFIG.'config.mail.php');
 require_once (INCLUDES.'current_version.inc.php');
 
 if (isset($_SESSION['last_action'])) {
@@ -235,25 +258,27 @@ $_SESSION['last_action'] = time();
 
 /**
  * RECAPTCHA Keys
- * One set is for hosted installations, the other is for outside use.
- * Per Google guidelines, all keys validate the domain from
+ * 
+ * Per Google guidelines, all keys must validate the domain from
  * which it was generated:
  * @see https://developers.google.com/recaptcha/docs/domain_validation
- * You may need to change the second set with your own API keys if
- * reCAPTCHA is not functioning on your self-hosted installation.
+ * 
+ * Custom keys are defined in site preferences. The other set is for 
+ * hosted installations.
+ * 
+ * As a fallback, you may need to define your own API keys using the first 
+ * set of variables below if reCAPTCHA is not functioning on your 
+ * self-hosted installation.
  * @see https://developers.google.com/recaptcha/
- * These are the fallback default. Custom keys must be defined in site 
- * preferences.
+ * 
  */
 
-if (HOSTED) {
-	$public_captcha_key = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
-	$private_captcha_key = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
-}
+$public_captcha_key = "";
+$private_captcha_key = "";
 
-else {
-    $public_captcha_key = "";
-    $private_captcha_key = "";
+if (HOSTED) {
+    $public_captcha_key = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
+    $private_captcha_key = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
 }
 
 /** 
@@ -283,5 +308,6 @@ echo USER_DOCS."<br>";
 echo USER_TEMP."<br>";
 echo LANG."<br>";
 echo DEBUGGING."<br>";
+exit();
 */
 ?>

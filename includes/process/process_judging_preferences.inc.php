@@ -47,7 +47,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		if ($_SESSION['prefsEval'] == 1) {
+		$update_table = $prefix."preferences";
+		$data = array(
+			'prefsEval' => sterilize($_POST['prefsEval']),
+			'prefsDisplaySpecial' => sterilize($_POST['prefsDisplaySpecial']),
+		);
+		$db_conn->where ('id', 1);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+		if ($_POST['prefsEval'] == 1) {
 
 			if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
 
@@ -65,9 +77,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if (!check_update("jPrefsJudgingOpen", $prefix."judging_preferences")) {
 
-				$sql = sprintf("ALTER TABLE `%s` 
-				ADD `jPrefsJudgingOpen` int(15) NULL DEFAULT NULL AFTER `jPrefsMinWords`;
-				", $prefix."judging_preferences");
+				$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsJudgingOpen` int(15) NULL DEFAULT NULL AFTER `jPrefsMinWords`;", $prefix."judging_preferences");
 				
 				$db_conn->rawQuery($sql);
 				if ($db_conn->getLastErrno() !== 0) {
@@ -79,9 +89,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if (!check_update("jPrefsJudgingClosed", $prefix."judging_preferences")) {
 
-				$sql = sprintf("ALTER TABLE `%s` 
-				ADD `jPrefsJudgingClosed` int(15) NULL DEFAULT NULL AFTER `jPrefsJudgingOpen`;
-				", $prefix."judging_preferences");
+				$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsJudgingClosed` int(15) NULL DEFAULT NULL AFTER `jPrefsJudgingOpen`;", $prefix."judging_preferences");
 				
 				$db_conn->rawQuery($sql);
 				if ($db_conn->getLastErrno() !== 0) {
@@ -93,9 +101,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if (!check_update("jPrefsScoresheet", $prefix."judging_preferences")) {
 
-				$sql = sprintf("ALTER TABLE `%s` 
-				ADD `jPrefsScoresheet` tinyint(2) NULL DEFAULT NULL AFTER `jPrefsJudgingClosed`;
-				", $prefix."judging_preferences");
+				$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsScoresheet` tinyint(2) NULL DEFAULT NULL AFTER `jPrefsJudgingClosed`;", $prefix."judging_preferences");
 				
 				$db_conn->rawQuery($sql);
 				if ($db_conn->getLastErrno() !== 0) {
@@ -107,8 +113,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if (!check_update("jPrefsScoreDispMax", $prefix."judging_preferences")) {
 
-				$sql = sprintf("ALTER TABLE `%s` 
-				ADD `jPrefsScoreDispMax` tinyint(2) NULL DEFAULT NULL COMMENT 'Maximum disparity of entry scores between judges' AFTER `jPrefsScoresheet`;
+				$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsScoreDispMax` tinyint(2) NULL DEFAULT NULL COMMENT 'Maximum disparity of entry scores between judges' AFTER `jPrefsScoresheet`;
 				", $prefix."judging_preferences");
 				
 				$db_conn->rawQuery($sql);
@@ -119,18 +124,120 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			}
 
+			$judging_dates = array();
+			$judging_earliest_date = "";
+			$judging_latest_date = "";
+			$jPrefsJudgingOpen = "";
+			$jPrefsJudgingClosed = "";
+			
+		    // Check whether any judging sessions have been defined. 
+		    // If so, loop through and find the earliest and the latest dates.
+		    $query_judging_locations = sprintf("SELECT id, judgingDate, judgingDateEnd FROM %s WHERE judgingLocType <= '1';", $prefix."judging_locations");
+		    $judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
+		    $row_judging_locations = mysqli_fetch_assoc($judging_locations);
+		    $totalRows_judging_locations = mysqli_num_rows($judging_locations);
+
+		    if ($totalRows_judging_locations > 0) {
+
+		        do {
+
+		            if (!empty($row_judging_locations['judgingDate'])) $judging_dates[] = $row_judging_locations['judgingDate'];
+		            if (!empty($row_judging_locations['judgingDateEnd'])) $judging_dates[] = $row_judging_locations['judgingDateEnd'];
+
+
+		        } while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+
+		        $judging_earliest_date = min($judging_dates);
+		        if ((max($judging_dates) > $judging_earliest_date)) $judging_latest_date = max($judging_dates);
+
+		    }
+
+		    // If an opening date is posted
+		    if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) {
+
+		    	// If no defined earliest judging session date, use the posted date
+		    	if (empty($judging_earliest_date)) $jPrefsJudgingOpen = strtotime(sterilize($_POST['jPrefsJudgingOpen']));
+		    	
+		    	// Otherwise...
+		    	else {
+
+		    		// If the earliest judging session date defined is after the posted date, use the posted date
+		    		if ($judging_earliest_date > $_POST['jPrefsJudgingOpen']) $jPrefsJudgingOpen = strtotime(sterilize($_POST['jPrefsJudgingOpen']));
+
+		    		// Otherwise, use the earliest defined judging session date
+		    		else $jPrefsJudgingOpen = $judging_earliest_date;
+
+		    	}	    	
+
+		    }
+
+		    // If no opening date is posted
+		    else {
+
+		    	// If no defined earliest judging session date, default to today at midnight
+		    	if (empty($judging_earliest_date)) {
+		    		$date = new DateTime('today 00:00:00', new DateTimeZone($timezone_prefs));
+			    	$jPrefsJudgingOpen = $date->getTimestamp();
+		    	}
+
+		    	// Otherwise, use the earliest defined judging session date
+		    	else $jPrefsJudgingOpen = $judging_earliest_date;
+
+		    }
+
+		    // If a closing date is posted
+		    if ((isset($_POST['jPrefsJudgingClosed'])) && (!empty($_POST['jPrefsJudgingClosed']))) {
+
+		    	// If no defined earlies judging session date, use the posted date
+		    	if (empty($judging_latest_date)) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingClosed']));
+		    	
+		    	// Otherwise...
+		    	else {
+
+		    		// If the latest judging session date defined is prior to the posted date, use the posted date
+		    		if ($judging_latest_date < $_POST['jPrefsJudgingClosed']) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingClosed']));
+
+		    		// Otherwise, use the latest defined judging session date
+		    		else $jPrefsJudgingClosed = $judging_latest_date;
+
+		    	}
+
+		    }
+
+		    // If no closing date is posted
+		    else {
+
+		    	// No defined latest judging session date
+		    	if (empty($judging_latest_date)) {
+		    		
+		    		// If open dated posted, add 1 day to it
+		    		if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingOpen'])) + 86400;
+
+		    		// If not, and the earliest judging date is defined, add one day to it
+		    		elseif (!empty($judging_earliest_date)) $jPrefsJudgingClosed = $judging_earliest_date + 86400;
+		    		
+		    		// If no dates are defined, fall back to tomorrow at midnight
+		    		else {
+		    			$date = new DateTime('tomorrow 00:00:00', new DateTimeZone($timezone_prefs));
+		    			$jPrefsJudgingClosed = $date->getTimestamp();
+		    		}
+		    		
+		    	}
+
+		    	else $jPrefsJudgingClosed = $judging_latest_date;
+		    	
+		    }
+
 			$jPrefsScoresheet = blank_to_null(sterilize($_POST['jPrefsScoresheet']));
-			$jPrefsMinWords = blank_to_null(sterilize($_POST['jPrefsMinWords']));
-			$jPrefsJudgingOpen = blank_to_null(strtotime(sterilize($_POST['jPrefsJudgingOpen'])));
-			$jPrefsJudgingClosed = blank_to_null(strtotime(sterilize($_POST['jPrefsJudgingClosed'])));
+			$jPrefsMinWords = blank_to_null(sterilize($_POST['jPrefsMinWords']));			
 			$jPrefsScoreDispMax = blank_to_null(sterilize($_POST['jPrefsScoreDispMax']));
 			
 			$update_table = $prefix."judging_preferences";
 			$data = array(
 				'jPrefsScoresheet' => $jPrefsScoresheet,
 				'jPrefsMinWords' => $jPrefsMinWords,
-				'jPrefsJudgingOpen' => $jPrefsJudgingOpen,
-				'jPrefsJudgingClosed' => $jPrefsJudgingClosed,
+				'jPrefsJudgingOpen' => blank_to_null($jPrefsJudgingOpen),
+				'jPrefsJudgingClosed' => blank_to_null($jPrefsJudgingClosed),
 				'jPrefsScoreDispMax' => $jPrefsScoreDispMax
 			);
 			$db_conn->where ('id', $id);
@@ -184,9 +291,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$errors = TRUE;
 			}
 
-			if (HOSTED) {
-
-				$server = "brewingcompetitions.com";
+			if ((HOSTED) && ($mail_use_smtp)) {
 
 				$to_email = $default_to."@brewingcompetitions.com";
 				$to_email = mb_convert_encoding($to_email, "UTF-8");
@@ -203,22 +308,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				$headers  = "MIME-Version: 1.0"."\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-				$headers .= "From: BCOEM Server <noreply@".$server.">"."\r\n";
-				
-				if ($mail_use_smtp) {
+				$headers .= "From: BCOEM Server <".$_SESSION['prefsEmailFrom'].">"."\r\n";
 					
-					$mail = new PHPMailer(true);
-					$mail->CharSet = 'UTF-8';
-					$mail->Encoding = 'base64';
-					$mail->addAddress($to_email, "BCOEM Admin");
-					$mail->setFrom("noreply@".$server, "BCOEM Server");
-					$mail->Subject = $subject;
-					$mail->Body = $message;
-					sendPHPMailerMessage($mail);
-
-				} else {
-					mail($to_email_formatted, $subject, $message, $headers);
-				}
+				$mail = new PHPMailer(true);
+				$mail->CharSet = 'UTF-8';
+				$mail->Encoding = 'base64';
+				$mail->addAddress($to_email, "BCOEM Admin");
+				$mail->setFrom($_SESSION['prefsEmailFrom'], "BCOEM Server");
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				sendPHPMailerMessage($mail);				
 			
 			} // end if (HOSTED)
 
@@ -231,6 +330,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		else {
 			if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+			else $updateGoTo = $base_url."index.php?section=admin&msg=2";
 			$updateGoTo = prep_redirect_link($updateGoTo);
 			$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 		}

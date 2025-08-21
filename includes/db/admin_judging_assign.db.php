@@ -21,4 +21,5 @@ $query_assignments = sprintf("SELECT * FROM $judging_assignments_db_table WHERE 
 $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 $row_assignments = mysqli_fetch_assoc($assignments);
 $totalRows_assignments = mysqli_num_rows($assignments);
+
 ?>

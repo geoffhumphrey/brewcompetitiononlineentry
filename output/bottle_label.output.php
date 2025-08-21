@@ -94,7 +94,7 @@ if (isset($_SESSION['loginUsername'])) {
         $bottle_label_height = 200;
       }
      
-      $page_info0 = sprintf("%s <strong>%s</strong>", $bottle_labels_003, strtoupper($bottle_labels_001));
+      $page_info0 = sprintf("<strong>%s</strong> %s", strtoupper($bottle_labels_001), $bottle_labels_008);
     }
 
     if ($brewerCountry == "United States") $phone = format_phone_us($brewerPhone1);
@@ -162,7 +162,7 @@ if (isset($_SESSION['loginUsername'])) {
               }
               
               if (!empty($brewInfo)) {
-                if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $page_info1 .= "<strong>".$label_regional_variation.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
+                if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $page_info1 .= "<strong>".$label_regional_variation.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
                 else $page_info1 .= "<strong>".$label_required_info.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
               }
             
@@ -322,7 +322,7 @@ else {
 </head>
 <body>
 <div class="container-fluid">
-  <p style="font-size: 1.3em;"><?php echo $page_info0; ?></p>
+  <p style="font-size: 1.1em;"><?php echo $page_info0; ?></p>
   <?php echo $page_info1; ?>
 </div><!-- end container -->
 </body>

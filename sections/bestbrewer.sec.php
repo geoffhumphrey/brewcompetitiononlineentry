@@ -541,7 +541,7 @@ if ($tb == "default") {
 		<?php if ($_SESSION['userLevel'] == 0) { ?>
 		<div class="col col-md-4 col-sm-12">
 			<div class="bcoem-admin-element">
-					<a class="btn btn-info btn-block" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences"; ?>">Edit Settings</a>
+					<a class="btn btn-info btn-block" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences&action=best"; ?>">Edit Settings</a>
 			</div>
 		</div>
 		<?php } ?>

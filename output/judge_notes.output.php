@@ -10,6 +10,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 
 if ($go == "org_notes") include (DB.'brewer.db.php');
 if (($go == "allergens") || ($go == "admin")) include (DB.'entries.db.php');
+include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
 
 if ($go == "org_notes") {
