@@ -6,6 +6,7 @@ DirectoryIndex index.php
 
 RewriteEngine on
 RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^localhost [NC]
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # If storing your installation in a sub-folder, uncomment the following line (remove the # symbol) and replace [subfolder] with the name of your subfolder
