@@ -42,9 +42,9 @@ $data = array(
 
 $update_table = $prefix."styles";
 $result = $db_conn->insertMulti($update_table, $data);
-if ($result) $v3000_update .= "<li>Added BJCP 2025 Cider Styles to styles table.</li>"; 
+if ($result) $v3000_update .= "<li>Added AABC 2025 Cider Styles to styles table.</li>"; 
 else {
-  $v3000_update .= "<li>Addition of BJCP 2025 Cider Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
+  $v3000_update .= "<li>Addition of AABC 2025 Cider Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
   $error_count += 1;
 }
 

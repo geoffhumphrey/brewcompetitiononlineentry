@@ -12,7 +12,7 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "pdf-download")) {
 }
 
 // Upload Function
-elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") && ($section == "default")) {
+elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0) && ($section == "default")) {
 	
 	// Define variables directory to upload to
 	$ds = DIRECTORY_SEPARATOR; // Directory separator
@@ -21,8 +21,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	else $target_path = USER_DOCS;
 	
 	// Limit size of upload
-	if (HOSTED) $max_size = 10000000;
-	else $max_size = 15000000;
+	$max_size = 20000000;
 
 	// Allowable file mime types and extensions for images
 	if (($action == "default") || ($action == "html")) {	
