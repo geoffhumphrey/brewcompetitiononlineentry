@@ -150,7 +150,7 @@ if ($setup_free_access == TRUE) {
 			`brewerJudgeNotes` mediumtext COLLATE utf8mb4_unicode_ci,
 			`brewerAssignment` TEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerJudgeWaiver` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-			`brewerAHA` int(11) DEFAULT NULL,
+			`brewerAHA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerDiscount` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerJudgeBOS` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerDropOff` int(4) DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table',
