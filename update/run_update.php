@@ -3453,7 +3453,7 @@ if ($row_current_styleset) {
 		$style_number = mysqli_query($connection,$query_style_number) or die (mysqli_error($connection));
 		$row_style_number = mysqli_fetch_assoc($style_number);
 		
-		$sub_style_id = $row_style_number['brewStyleNum'] + 1;
+		if (is_numeric($row_style_number['brewStyleNum'])) $sub_style_id = $row_style_number['brewStyleNum'] + 1;
 
 	}
 

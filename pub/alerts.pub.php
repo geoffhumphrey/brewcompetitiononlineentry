@@ -413,7 +413,8 @@ if (($registration_open == 1) && (!$ua) && (($section == "default") || ($section
 }
 
 if ((MAINT) && ($logged_in) && ($_SESSION['userLevel'] == 0)) {
-  $alert_text_999999 = "<strong>Your installation is in Maintenance Mode.</strong> As a Top-level Admin, you are able perform all administration functions as normal. All others who attempt to access the site will see the <a href=\"".$base_url."maintenance.php\">Maintenance page</a>.";
+  $alert_text_999999 = "<strong>Your installation is in Maintenance Mode.</strong>";
+  if ($section != "maintenance") $alert_text_999999 .= " As a Top-level Admin, you are able perform all administration functions as normal. All others who attempt to access the site will see the <a href=\"".$base_url."index.php?section=maintenance\">Maintenance page</a>.";
     echo create_bs_alert("alert-auto-dismiss","warning","",$alert_text_999999,"fa-exclamation-circle","",FALSE);
 }
 

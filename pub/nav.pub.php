@@ -88,6 +88,17 @@ if ($logged_in) {
 	        <section class="collapse navbar-collapse" id="nav-toggler">
 	            
 	            <div class="navbar-nav ms-auto">
+
+	            <?php if ($section == "maintenance") { ?>
+
+	            	<?php if ($logged_in) { ?>
+	            	<a class="nav-item nav-link" href="<?php echo $base_url."/includes/process.inc.php?section=logout&action=logout"; ?>"><i class="fa fa-lg fa-fw fa-sign-out-alt"></i></a>
+	            	<?php } else { ?>
+	            	<a class="nav-item nav-link hide-loader" data-bs-toggle="modal" data-bs-target="#login-modal" href=""><?php echo $label_log_in; ?></a>
+	            	<?php } ?>
+
+	            <?php } else { ?>
+
 	            	<?php if (!$judging_started) { ?>
 	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#rules"><?php echo $label_rules; ?></a>
 	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#entry-info"><?php echo $label_entry_info; ?></a>
@@ -134,10 +145,15 @@ if ($logged_in) {
 							<li class="small" style="font-size: .75em;"><span class="dropdown-item-text text-body-secondary"><?php echo $label_auto_log_out; ?> <span id="session-end"></span></span></li>
 						</ul>
             	    </li>
-                	<a class="nav-item nav-link" href="<?php echo $base_url."/includes/process.inc.php?section=logout&action=logout"; ?>"><i class="fa fa-lg fa-fw fa-sign-out-alt"></i></a>	
+
+                	<a class="nav-item nav-link" href="<?php echo $base_url."/includes/process.inc.php?section=logout&action=logout"; ?>"><i class="fa fa-lg fa-fw fa-sign-out-alt"></i></a>
+                	
                 	<?php } else { ?>
                 	<a class="nav-item nav-link hide-loader" data-bs-toggle="modal" data-bs-target="#login-modal" href=""><?php echo $label_log_in; ?></a>
                 	<?php } ?>
+
+                <?php } //end else ?>
+
 	            </div>
 	        </section>
 	    </div>

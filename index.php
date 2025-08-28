@@ -28,7 +28,23 @@ if ((!$logged_in) && (in_array($section,$account_pages))) {
 if (MAINT) {
 
     if ((!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] > 0))) {
-        $redirect = $base_url."maintenance.php";
+
+        if ($section != "maintenance") {
+            $redirect = $base_url."index.php?section=maintenance";
+            $redirect = prep_redirect_link($redirect);
+            $redirect_go_to = sprintf("Location: %s", $redirect);
+            header($redirect_go_to);
+            exit();
+        }
+        
+    }
+
+}
+
+else {
+
+    if ($section == "maintenance") {
+        $redirect = $base_url;
         $redirect = prep_redirect_link($redirect);
         $redirect_go_to = sprintf("Location: %s", $redirect);
         header($redirect_go_to);

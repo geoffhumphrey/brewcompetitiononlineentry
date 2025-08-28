@@ -53,12 +53,12 @@
     } 
 
     $salutation = "";
-    if (($section != "default") && (!is_numeric($section))) {
+    if (($section != "default") && ($section != "maintenance") && (!is_numeric($section))) {
         $salutation .= "<h1 class='fw-bold animate__animated animate__fadeInDown'>".$_SESSION['contestName']."</h1>";
         if ($logged_in) $salutation .= sprintf("<p class='landing-page-salutation animate__animated animate__fadeInUp animate__delay-3s'><small>%s %s!</small></p>",$default_page_text_006,$_SESSION['brewerFirstName']);
     }
     
-    if (($section == "default") || (is_numeric($section))) {
+    if (($section == "default") || ($section == "maintenance") || (is_numeric($section))) {
 
         if (is_numeric($section)) {
             if ($section == "400") $error_header = sprintf("<strong>%s %s.</strong> <small class=\"text-secondary\">%s</small>", $section, ucfirst($label_error), $error_text_400);
@@ -227,7 +227,7 @@
     
     <?php 
 
-    if (($section == "default") || (is_numeric($section))) {
+    if (($section == "default") || ($section == "maintenance") || (is_numeric($section))) {
 
         $hero_inner = "";
 
@@ -429,6 +429,17 @@ if (ENABLE_MARKDOWN) {
 
     <?php } ?>
 
+    <?php if ($section == "maintenance") { ?>
+
+        <!-- Error Pages -->
+        <section id="maintenance" class="landing-page-section mt-4 mb-3">
+            <h1><?php echo $label_maintenance; ?></h1>
+            <p class="lead"><?php echo $maintenance_text_000; ?></p>
+            <p><?php echo $label_cheers; ?>!</p>
+        </section>
+    
+    <?php } ?>
+
     <?php if (is_numeric($section)) { ?>
 
         <!-- Error Pages -->
@@ -458,7 +469,10 @@ if (ENABLE_MARKDOWN) {
               <button id="login-button" class="btn btn-lg btn-success" type="submit"><?php echo $label_log_in; ?><i class="fas fa-sign-in-alt ps-2"></i></button>
             </div>
         </form>
-        <?php echo sprintf("<div class=\"d-grid gap-2 col-5 mx-auto text-center\">%s<br><button class=\"btn btn-sm btn-primary mt-1\" data-bs-target=\"#forgot-modal\" data-bs-toggle=\"modal\">%s</button></div>",$login_text_004,ucwords($login_text_005)); ?>
+        <?php 
+        if ($section != "maintenance") echo sprintf("<div class=\"d-grid gap-2 col-5 mx-auto text-center\">%s<br><button class=\"btn btn-sm btn-primary mt-1\" data-bs-target=\"#forgot-modal\" data-bs-toggle=\"modal\">%s</button></div>",$login_text_004,ucwords($login_text_005));
+        else echo sprintf("<p>%s</p>",$maintenance_text_002);
+        ?>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="forgot_password_clear_all()"><?php echo $label_close; ?></button>

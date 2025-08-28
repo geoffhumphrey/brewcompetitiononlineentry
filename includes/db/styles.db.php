@@ -47,20 +47,6 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 
 }
 
-/*
-if (HOSTED) {
-	
-	$query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet, $prefix."styles", $styleSet);
-
-	// Exceptions
-	if (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) {
-		$query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $styleSet);
-		$query_styles .= " AND id='$id'";
-	}
-
-}
-*/
-
 if ($styleSet == "BJCP2025") $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table);
 elseif ($styleSet == "AABC2025") $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table);
 else $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
@@ -71,6 +57,7 @@ if ($section == "admin") {
 	elseif ((($action == "edit") || ($action == "add")) && ($go == "judging_tables"))  $styles_query_add = "";
 	elseif ((($action == "default") || ($action == "add"))&& ($go == "styles")) $styles_query_add = "";
 	elseif ((($action == "entries")) && ($go == "preferences")) $styles_query_add = "";
+	elseif (($go == "count_by_style") || ($go == "count_by_substyle")) $styles_query_add = "";
 	else $styles_query_add = " AND id='$id'";
 
 	$query_styles .= $styles_query_add;
