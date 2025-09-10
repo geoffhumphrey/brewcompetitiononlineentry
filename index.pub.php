@@ -517,92 +517,76 @@ if ($logged_in) {
     if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 ?>
 
-    <!-- Session Timer Displays and Auto Logout -->
-    <?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
-    
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
-    <script>
-        var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
-        var session_end_min = "<?php echo $session_expire_after; ?>";
-        var session_end_seconds = "<?php echo $session_end_seconds; ?>";
-        var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout";
-    </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
-    <script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
+<!-- Session Timer Displays and Auto Logout -->
+<?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
+<script>
+    var session_end = moment.tz("<?php echo $session_end; ?>",current_timezone);
+    var session_end_min = "<?php echo $session_expire_after; ?>";
+    var session_end_seconds = "<?php echo $session_end_seconds; ?>";
+    var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout";
+</script>
+<script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
 
-    <!-- Session Expiring Modal: 2 Minute Warning -->
-    <div class="modal fade" id="session-expire-warning" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-label">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="session-expire-warning-label"><?php echo $label_session_expire; ?></h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p><?php echo $alert_text_090; ?></p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-dark" data-bs-dismiss="modal"><?php echo $label_stay_here; ?></button>
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
-          </div>
-        </div>
+<!-- Session Expiring Modal: 2 Minute Warning -->
+<div class="modal fade" id="session-expire-warning" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-label">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="session-expire-warning-label"><?php echo $label_session_expire; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><?php echo $alert_text_090; ?></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal"><?php echo $label_stay_here; ?></button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Session Expiring Modal: 30 Second Warning -->
-    <div class="modal fade" id="session-expire-warning-30" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-30-label">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="session-expire-warning-30-label"><?php echo $label_session_expire; ?></h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p><?php echo $alert_text_091; ?></p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
-          </div>
-        </div>
+<!-- Session Expiring Modal: 30 Second Warning -->
+<div class="modal fade" id="session-expire-warning-30" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-30-label">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="session-expire-warning-30-label"><?php echo $label_session_expire; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><?php echo $alert_text_091; ?></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
       </div>
     </div>
+  </div>
+</div>
 
-    <?php } ?>
+<?php } ?>
 
 <?php } // end if ($logged_in) ?>
 
-    <!-- Required Info Missing Modal -->
-    <div class="modal modal-lg fade" id="form-submit-button-disabled-msg-required" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="form-submit-button-disabled-msg-required-label" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h1 class="modal-title fs-5" id="form-submit-button-disabled-msg-required-label"><?php echo $label_required_info; ?></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <?php echo sprintf("<p><strong>%s</strong></p><p>%s</p>",$form_required_fields_00,$form_required_fields_01); ?>
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><?php echo $label_understand; ?></button>
-                </div>
+<!-- Required Info Missing Modal -->
+<div class="modal modal-lg fade" id="form-submit-button-disabled-msg-required" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="form-submit-button-disabled-msg-required-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="form-submit-button-disabled-msg-required-label"><?php echo $label_required_info; ?></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <?php echo sprintf("<p><strong>%s</strong></p><p>%s</p>",$form_required_fields_00,$form_required_fields_01); ?>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><?php echo $label_understand; ?></button>
             </div>
         </div>
     </div>
-
-    <script type="text/javascript">
-        var base_url = "<?php echo $base_url; ?>";
-        var ajax_url = "<?php echo $ajax_url; ?>";
-        var section = "<?php echo $section; ?>";
-        var action = "<?php echo $action; ?>";
-        var go = "<?php echo $go; ?>";
-        if (section != "brew") var edit_style = "<?php echo $action; ?>";
-        else edit_style = edit_style;
-        var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
-        var label_length = "<?php echo $label_length; ?>";
-        var label_score = "<?php echo $label_score; ?>";
-    </script>
+</div>
 
 <?php if ($section == "brewer") {
     $brewery_ttb = "false";
@@ -632,14 +616,238 @@ if ($logged_in) {
 
 <?php } // end if ($section == "brewer") ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-    <script src="<?php echo $js_app_pub_url; ?>"></script> 
-    <script src="<?php echo $js_invoke_url; ?>"></script> 
-    <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (PUB.'eval_warnings.pub.php'); ?>
-    <?php if ((($section == "default") || ($section == "list")) && ($entry_window_open == 1)) { ?>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<script src="<?php echo $js_app_pub_url; ?>"></script> 
+<script src="<?php echo $js_invoke_url; ?>"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
+<script>
     
-    <script type="text/javascript">
+    var date_time_now = new Date();
+    var date_time_now = date_time_now.getTime();
+    var base_url = "<?php echo $base_url; ?>";
+    var ajax_url = "<?php echo $ajax_url; ?>";
+    var section = "<?php echo $section; ?>";
+    var action = "<?php echo $action; ?>";
+    var go = "<?php echo $go; ?>";
+    if (section != "brew") var edit_style = "<?php echo $action; ?>";
+    else edit_style = edit_style;
+    var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
+    var label_length = "<?php echo $label_length; ?>";
+    var label_score = "<?php echo $label_score; ?>";
+    var entry_window_open = "<?php echo $entry_window_open; ?>";
+    var current_timezone = "<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>";
+    var label_weeks = "<?php echo strtolower($label_weeks); ?>";
+    var label_days = "<?php echo strtolower($label_days); ?>";
+    var label_hours = "<?php echo strtolower($label_hours); ?>"; 
+    var awards_open = "<?php echo $awards_date; ?>";
+    var judging_open = "<?php echo $judge_open_date; ?>";
+    var judging_close = "<?php echo $judge_close_date; ?>";
+    var entry_open = "<?php echo $entry_open_date; ?>";
+    var entry_close = "<?php echo $entry_close_date; ?>";
+    var account_open = "<?php echo $account_open_date; ?>";
+    var account_close = "<?php echo $account_close_date; ?>";
+    var judge_steward_open = "<?php echo $judge_steward_open_date; ?>";
+    var judge_steward_close = "<?php echo $judge_steward_close_date; ?>";
+    var shipping_open = "<?php echo $shipping_open_date; ?>";
+    var shipping_close = "<?php echo $shipping_close_date; ?>";
+    var dropoff_open = "<?php echo $dropoff_open_date; ?>";
+    var dropoff_close = "<?php echo $dropoff_close_date; ?>";
+    var awards_date = "";
+    var judging_open_date = "";
+    var judging_close_date = "";
+    var entry_open_date = "";
+    var entry_close_date = "";
+    var account_open_date = "";
+    var account_close_date = "";
+    var judge_steward_open_date = "";
+    var judge_steward_close_date = "";
+    var shipping_open_date = "";
+    var shipping_close_date = "";
+    var dropoff_open_date = "";
+    var dropoff_close_date = "";
+
+    if (awards_open) var awards_date = moment.tz(awards_open,current_timezone);    
+    if (judging_open) var judging_open_date = moment.tz(judging_open,current_timezone);
+    if (judging_close) var judging_close_date = moment.tz(judging_close,current_timezone);
+    if (entry_open) var entry_open_date = moment.tz(entry_open,current_timezone);    
+    if (entry_close) var entry_close_date = moment.tz(entry_close,current_timezone);    
+    if (account_open) var account_open_date = moment.tz(account_open,current_timezone);    
+    if (account_close) var account_close_date = moment.tz(account_close,current_timezone);    
+    if (judge_steward_open) var judge_steward_open_date = moment.tz(judge_steward_open,current_timezone);    
+    if (judge_steward_close) var judge_steward_close_date = moment.tz(judge_steward_close,current_timezone);    
+    if (shipping_open) var shipping_open_date = moment.tz(shipping_open,current_timezone);    
+    if (shipping_close) var shipping_close_date = moment.tz(shipping_close,current_timezone);    
+    if (dropoff_open) var dropoff_open_date = moment.tz(dropoff_open,current_timezone);    
+    if (dropoff_close) var dropoff_close_date = moment.tz(dropoff_close,current_timezone);
+
+    $(document).ready(function() {
+        
+        if (awards_date) {
+            
+            $("#awards-date").countdown(awards_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+
+            var date_compare = new Date(judging_close_date);
+            var date_close = date_compare.getTime();
+            var date_close_minus_1_day = date_compare.getTime() - 86400000;
+            
+            if (date_time_now > date_close_minus_1_day) {
+                $("#awards-date").attr("class", "fw-bold");
+                $("#awards-date-item").attr("class", "text-danger-emphasis");
+            }
+
+        }
+            
+        if (judging_open_date) {
+            $("#judging-open-date").countdown(judging_open_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+        }
+            
+        if (judging_close_date) {
+            
+            $("#judging-close-date").countdown(judging_close_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+
+            var date_compare = new Date(judging_close_date);
+            var date_close = date_compare.getTime();
+            var date_close_minus_1_day = date_compare.getTime() - 86400000;
+            
+            if (date_time_now > date_close_minus_1_day) {
+                $("#judging-close-date").attr("class", "fw-bold");
+                $("#judging-close-date-item").attr("class", "text-danger-emphasis");
+            }
+        }
+            
+        if (entry_open_date) {
+            $("#entry-open-date").countdown(entry_open_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+        }
+
+        if (entry_close_date) {
+            
+            $("#entry-close-date").countdown(entry_close_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+
+            var date_compare = new Date(entry_close_date);
+            var date_close = date_compare.getTime();
+            var date_close_minus_1_day = date_compare.getTime() - 86400000;
+            
+            if (date_time_now > date_close_minus_1_day) {
+                $("#entry-close-date").attr("class", "fw-bold");
+                $("#entry-close-date-item").attr("class", "text-danger-emphasis");
+            }
+
+        }   
+
+        if (account_open_date) {
+            $("#account-open-date").countdown(account_open_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+        }
+
+        if (account_close_date) {
+            
+            $("#account-close-date").countdown(account_close_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+
+            var date_compare = new Date(account_close_date);
+            var date_close = date_compare.getTime();
+            var date_close_minus_1_day = date_compare.getTime() - 86400000;
+
+            if (date_time_now > date_close_minus_1_day) {
+                $("#account-close-date").attr("class", "fw-bold");
+                $("#account-close-date-item").attr("class", "text-danger-emphasis");
+            }
+        
+        }
+
+        if (judge_steward_open_date) {
+            $("#judge-open-date").countdown(judge_steward_open_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+            $("#steward-open-date").countdown(judge_steward_open_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+        }
+            
+        if (judge_steward_close_date) {
+            
+            $("#judge-close-date").countdown(judge_steward_close_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+            $("#steward-close-date").countdown(judge_steward_close_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+
+            var date_compare = new Date(judge_steward_close_date);
+            var date_close = date_compare.getTime();
+            var date_close_minus_1_day = date_compare.getTime() - 86400000;
+            
+            if (date_time_now > date_close_minus_1_day) {
+                $("#judge-close-date").attr("class", "fw-bold");
+                $("#judge-close-date-item").attr("class", "text-danger-emphasis");
+                $("#steward-close-date").attr("class", "fw-bold");
+                $("#steward-close-date-item").attr("class", "text-danger-emphasis");
+            }
+        }
+
+        if (shipping_open_date) {
+            $("#shipping-open-date").countdown(shipping_open_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+        }
+            
+        if (shipping_close_date) {
+            
+            $("#shipping-close-date").countdown(shipping_close_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+
+            var date_compare = new Date(shipping_close_date);
+            var date_close = date_compare.getTime();
+            var date_close_minus_1_day = date_compare.getTime() - 86400000;
+            
+            if (date_time_now > date_close_minus_1_day) {
+                $("#shipping-close-date").attr("class", "fw-bold");
+                $("#shipping-close-date-item").attr("class", "text-danger-emphasis");
+            }
+        
+        }
+
+        if (dropoff_open_date) {
+            $("#dropoff-open-date").countdown(dropoff_open_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+        }
+            
+        if (dropoff_close_date) {
+            
+            $("#dropoff-close-date").countdown(dropoff_close_date.toDate(), function(event) {
+                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+            });
+
+            var date_compare = new Date(dropoff_close_date);
+            var date_close = date_compare.getTime();
+            var date_close_minus_1_day = date_compare.getTime() - 86400000;
+            
+            if (date_time_now > date_close_minus_1_day) {
+                $("#dropoff-close-date").attr("class", "fw-bold");
+                $("#dropoff-close-date-item").attr("class", "text-danger-emphasis");
+            }
+
+        }
+
+    });
+
+    if (((section == "default") || (section == "list")) && (entry_window_open == 1)) {
 
         $("#resume-updates-button").hide();
 
@@ -683,7 +891,6 @@ if ($logged_in) {
         }
         
         $(document).ready(function() {
-
             
             $(".count-two-minute-info").html(count_update_text);
 
@@ -718,10 +925,13 @@ if ($logged_in) {
                 clearInterval(interval_timeout);
                 $(".count-two-minute-info").text(count_paused_text);
             };
-  
+
         });
 
-    </script>
+    }
 
-    <?php } ?>
+</script>
+
+<?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (PUB.'eval_warnings.pub.php'); ?>
+
 </body>

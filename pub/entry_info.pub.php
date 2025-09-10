@@ -254,7 +254,7 @@ if ($show_entries) {
 
 		}
 
-		if ($_SESSION['contestEntryFee'] > 0) {
+		if (($_SESSION['contestEntryFee'] > 0) && (($_SESSION['prefsCash'] == "Y") || ($_SESSION['prefsCheck'] == "Y") || ($_SESSION['prefsPaypal'] == "Y"))) {
 
 			// Payment
 			$anchor_links[] = $label_pay;

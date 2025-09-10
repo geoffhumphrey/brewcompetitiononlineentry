@@ -1,12 +1,38 @@
 <?php
 
-//$registration_open = 1;
-//$entry_window_open = 1;
-//$judge_window_open = 1;
-//$logged_in = TRUE;
+// $registration_open = 1;
+// $entry_window_open = 1;
+// $judge_window_open = 1;
+// $logged_in = TRUE;
 
 // Button 1 is for use when the user is NOT logged in
 // Button 2 is for use when the user IS logged in
+
+$judge_open_date = "";
+$judge_close_date = "";
+$entry_open_date = "";
+$entry_close_date = "";
+$account_open_date = "";
+$account_close_date = "";
+$judge_steward_open_date = "";
+$judge_steward_close_date = "";
+$dropoff_open_date = "";
+$dropoff_close_date = "";
+$shipping_open_date = "";
+$shipping_close_date = "";
+$awards_date = "";
+
+if (!empty($row_contest_dates['contestEntryOpen'])) $entry_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestEntryDeadline'])) $entry_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestRegistrationOpen'])) $account_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestRegistrationDeadline'])) $account_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestJudgeOpen'])) $judge_steward_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestJudgeDeadline'])) $judge_steward_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestDropoffOpen'])) $dropoff_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestDropoffDeadline'])) $dropoff_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestShippingOpen'])) $shipping_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestShippingDeadline'])) $shipping_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+if (!empty($row_contest_dates['contestAwardsLocTime'])) $awards_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestAwardsLocTime'], "999", $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
 
 $glance_pill_open_text = "<i class=\"fa fa-circle-check pe-2\"></i>".$label_open;
 $glance_pill_closed_text = "<i class=\"fa fa-circle-exclamation pe-2\"></i>".$label_closed;
@@ -56,7 +82,11 @@ $glance_entry_status = array(
 // Account Registration Card
 if ($registration_open == 1) {
 
-	$body_content = "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$reg_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$reg_closed_sidebar."</li></ul>";
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$reg_open_sidebar."</li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$reg_closed_sidebar."</li>";
+	$body_content .= "<li id=\"account-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"account-close-date\"></span></li>";
+	$body_content .= "</ul>";
 	
 	$button1 = array();
 	$button2 = array();
@@ -84,7 +114,11 @@ if ($registration_open == 1) {
 
 else {
 
-	$body_content = "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$reg_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$reg_closed_sidebar."</li></ul>";
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$reg_open_sidebar."</li>";
+	if ($registration_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"account-open-date\"></span></li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$reg_closed_sidebar."</li>";
+	$body_content .= "</ul>";
 	
 	$glance_account_reg = array(
 		"color" => $glance_closed_color,
@@ -102,6 +136,12 @@ if ($entry_window_open == 1) {
 
 	$button1 = array();
 	$button2 = array();
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$entry_open_sidebar."</li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$entry_closed_sidebar."</li>";
+	$body_content .= "<li id=\"entry-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"entry-close-date\"></span></li>";
+	$body_content .= "</ul>";
+
 	if ($logged_in) {
 
 		if ($section == "list") {
@@ -123,7 +163,7 @@ if ($entry_window_open == 1) {
 	$glance_entry_reg = array(
 		"color" => $glance_open_color,
 		"status" => $glance_pill_open_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$entry_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$entry_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => $button1,
 		"button2" => $button2,
 		"button-color" => $glance_open_color,
@@ -132,11 +172,17 @@ if ($entry_window_open == 1) {
 }
 
 else {
+
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$entry_open_sidebar."</li>";
+	if ($entry_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"entry-open-date\"></span></li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$entry_closed_sidebar."</li>";
+	$body_content .= "</ul>";
 	
 	$glance_entry_reg = array(
 		"color" => $glance_closed_color,
 		"status" => $glance_pill_closed_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$entry_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$entry_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => array(),
 		"button2" => array(),
 		"button-color" => $glance_disabled_color,
@@ -145,13 +191,18 @@ else {
 }
 
 // Drop-Off Card
-
 if ($dropoff_window_open == 1) {
+
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$dropoff_open_sidebar."</li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$dropoff_closed_sidebar."</li>";
+	$body_content .= "<li id=\"dropoff-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"dropoff-close-date\"></span></li>";
+	$body_content .= "</ul>";
 	
 	$glance_drop_off = array(
 		"color" => $glance_open_color,
 		"status" => $glance_pill_open_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$dropoff_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$dropoff_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => array(),
 		"button2" => array(),
 		"button-color" => $glance_open_color,
@@ -160,11 +211,17 @@ if ($dropoff_window_open == 1) {
 }
 
 else {
+
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$dropoff_open_sidebar."</li>";
+	if ($dropoff_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"dropoff-open-date\"></span></li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$dropoff_closed_sidebar."</li>";
+	$body_content .= "</ul>";
 	
 	$glance_drop_off = array(
 		"color" => $glance_closed_color,
 		"status" => $glance_pill_closed_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$dropoff_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$dropoff_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => array(),
 		"button2" => array(),
 		"button-color" => $glance_disabled_color,
@@ -175,10 +232,16 @@ else {
 // Shipping Card
 if ($shipping_window_open == 1) {
 
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$shipping_open_sidebar."</li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$shipping_closed_sidebar."</li>";
+	$body_content .= "<li id=\"shipping-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"shipping-close-date\"></span></li>";
+	$body_content .= "</ul>";
+
 	$glance_shipping = array(
 		"color" => $glance_open_color,
 		"status" => $glance_pill_open_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$shipping_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$shipping_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => array(),
 		"button2" => array(),
 		"button-color" => $glance_open_color,
@@ -187,11 +250,17 @@ if ($shipping_window_open == 1) {
 }
 
 else {
+
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$shipping_open_sidebar."</li>";
+	if ($shipping_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"shipping-open-date\"></span></li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$shipping_closed_sidebar."</li>";
+	$body_content .= "</ul>";
 	
 	$glance_shipping = array(
 		"color" => $glance_closed_color,
 		"status" => $glance_pill_closed_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$shipping_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$shipping_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => array(),
 		"button2" => array(),
 		"button-color" => $glance_disabled_color,
@@ -204,6 +273,11 @@ if ($judge_window_open == 1) {
 
 	$button1 = array();
 	$button2 = array();
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$judge_open_sidebar."</li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li>";
+	$body_content .= "<li id=\"judge-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"judge-close-date\"></span></li>";
+	$body_content .= "</ul>";
 	
 	if ($logged_in) {
 		$link = build_public_url("brewer","account","edit","default",$sef,$base_url,"default");
@@ -218,7 +292,7 @@ if ($judge_window_open == 1) {
 	$glance_judge_reg = array(
 		"color" => $glance_open_color,
 		"status" => $glance_pill_open_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$judge_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => $button1,
 		"button2" => array(),
 		"button-color" => $glance_open_color,
@@ -228,10 +302,16 @@ if ($judge_window_open == 1) {
 
 else {
 
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$judge_open_sidebar."</li>";
+	if ($judge_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"judge-open-date\"></span></li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li>";
+	$body_content .= "</ul>";
+
 	$glance_judge_reg = array(
 		"color" => $glance_closed_color,
 		"status" => $glance_pill_closed_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$judge_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => array(),
 		"button2" => array(),
 		"button-color" => $glance_disabled_color,
@@ -244,6 +324,11 @@ if ($judge_window_open == 1) {
 
 	$button1 = array();
 	$button2 = array();
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$judge_open_sidebar."</li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li>";
+	$body_content .= "<li id=\"steward-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"steward-close-date\"></span></li>";
+	$body_content .= "</ul>";
 	
 	if ($logged_in) {
 		$link = build_public_url("brewer","account","edit","default",$sef,$base_url,"default");
@@ -258,7 +343,7 @@ if ($judge_window_open == 1) {
 	$glance_steward_reg = array(
 		"color" => $glance_open_color,
 		"status" => $glance_pill_open_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$judge_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => $button1,
 		"button2" => array(),
 		"button-color" => $glance_open_color,
@@ -268,10 +353,16 @@ if ($judge_window_open == 1) {
 
 else {
 
+	$body_content = "<ul class=\"list-unstyled\">";
+	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$judge_open_sidebar."</li>";
+	if ($judge_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"steward-open-date\"></span></li>";
+	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li>";
+	$body_content .= "</ul>";
+
 	$glance_steward_reg = array(
 		"color" => $glance_closed_color,
 		"status" => $glance_pill_closed_text,
-		"body-content" => "<ul class=\"list-unstyled\"><li><strong>".$label_open."</strong> &ndash; ".$judge_open_sidebar."</li><li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li></ul>",
+		"body-content" => $body_content,
 		"button1" => array(),
 		"button2" => array(),
 		"button-color" => $glance_disabled_color,
@@ -286,6 +377,9 @@ else {
 
 $judging_start = 0;
 $glance_judging = "";
+$glance_awards = "";
+$judging_open_date = "";
+$judging_close_date = "";
 
 if (!empty($date_arr)) {
 
@@ -323,13 +417,21 @@ if (!empty($date_arr)) {
 	}
 
 	$judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $first_judging_date, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
-	if (!empty($last_judging_date)) $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $last_judging_date, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
-	else $judging_close_date = "";
+	$judge_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $first_judging_date, "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+
+	if (!empty($last_judging_date)) {
+		$judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $last_judging_date, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
+		$judge_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $last_judging_date, "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+	}
 
 	if ($judging_start == 0) {
 
-		$body_content = "<ul class=\"list-unstyled\"><li><strong>".$label_start."</strong> &ndash; ".$judging_open_date."</li>";
-		if (!empty($judging_close_date)) $body_content .= "<li><strong>".$label_end."</strong> &ndash; ".$judging_close_date."</li></ul>";
+		$body_content = "<ul class=\"list-unstyled\">";
+		$body_content .= "<li><strong>".$label_start."</strong> &ndash; ".$judging_open_date."</li>";
+		$body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"judging-open-date\"></span></li>";
+		if (!empty($judging_close_date)) $body_content .= "<li><strong>".$label_end."</strong> &ndash; ".$judging_close_date."</li>";
+		// $body_content .= "<li id=\"judging-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"judging-close-date\"></span></li>";
+		$body_content .= "</ul>";
 
 		$glance_judging = array(
 			"color" => $glance_disabled_color,
@@ -344,8 +446,11 @@ if (!empty($date_arr)) {
 
 	if ($judging_start == 1) {
 
-		$body_content = "<ul class=\"list-unstyled\"><li><strong>".$label_start."</strong> &ndash; ".$judging_open_date."</li>";
-		if (!empty($judging_close_date)) $body_content .= "<li><strong>".$label_end."</strong> &ndash; ".$judging_close_date."</li></ul>";
+		$body_content = "<ul class=\"list-unstyled\">";
+		$body_content .= "<li><strong>".$label_start."</strong> &ndash; ".$judging_open_date."</li>";
+		if (!empty($judging_close_date)) $body_content .= "<li><strong>".$label_end."</strong> &ndash; ".$judging_close_date."</li>";
+		$body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"judging-close-date\"></span></li>";
+		$body_content .= "</ul>";
 
 		$glance_judging = array(
 			"color" => "primary",
@@ -360,8 +465,10 @@ if (!empty($date_arr)) {
 
 	if ($judging_start == 2) {
 
-		$body_content = "<ul class=\"list-unstyled\"><li><strong>".$label_start."</strong> &ndash; ".$judging_open_date."</li>";
-		if (!empty($judging_close_date)) $body_content .= "<li><strong>".$label_end."</strong> &ndash; ".$judging_close_date."</li></ul>";
+		$body_content = "<ul class=\"list-unstyled\">";
+		$body_content .= "<li><strong>".$label_start."</strong> &ndash; ".$judging_open_date."</li>";
+		if (!empty($judging_close_date)) $body_content .= "<li><strong>".$label_end."</strong> &ndash; ".$judging_close_date."</li>";
+		$body_content .= "</ul>";
 
 		$glance_judging = array(
 			"color" => "success",
@@ -372,6 +479,33 @@ if (!empty($date_arr)) {
 			"button-color" => $glance_disabled_color,
 		);
 
+	}
+
+	if (($judging_start > 0) && (isset($_SESSION['contestAwardsLocName'])) && (!empty($_SESSION['contestAwardsLocName']))) {
+
+		$body_content = "<ul class=\"list-unstyled\">";
+		if (empty($_SESSION['contestAwardsLocation'])) $body_content .= sprintf("<li><strong>%s</strong> &ndash; %s</li>",$label_location,$_SESSION['contestAwardsLocName']);
+		else {
+			$address = rtrim($_SESSION['contestAwardsLocation'],"&amp;KeepThis=true");
+			$address = str_replace(' ', '+', $address);
+			$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+			$body_content .= sprintf("<li><strong>%s</strong> &ndash; %s<a class=\"hide-loader\" href=\"%s\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Map to %s\" target=\"_blank\"><i class=\"fa fa-lg fa-map-marker ms-1\"></i></a></li>",$label_location,$_SESSION['contestAwardsLocName'],$location_link,$_SESSION['contestAwardsLocName']);
+		}
+		if (!empty($_SESSION['contestAwardsLocTime'])) {
+			$body_content .= sprintf("<li><strong>%s</strong> &ndash; %s",$label_date,getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+			if (time() < $_SESSION['contestAwardsLocTime']) $body_content .= "<li id=\"awards-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"awards-date\"></span></li>";
+		}
+		$body_content .= "</ul>";
+
+		$glance_awards = array(
+			"color" => $glance_status_color,
+			"status" => "<i class=\"fa fa-circle-info pe-2\"></i>".$label_info,
+			"body-content" => $body_content,
+			"button1" => array(),
+			"button2" => array(),
+			"button-color" => $glance_disabled_color,
+		);
+	
 	}
 
 }
@@ -394,16 +528,16 @@ else {
 	$glance_cards = array();
 
 	$glance_cards[$label_entries] = $glance_entry_status;
-	if (!empty($dropoff_open_sidebar)) $glance_cards[$label_entry_drop_off] = $glance_drop_off;
-	if (!empty($shipping_open_sidebar)) $glance_cards[$label_entry_shipping] = $glance_shipping;
-	$glance_cards[$label_judging] = $glance_judging;
+	if (!empty($glance_awards)) $glance_cards[$label_awards] = $glance_awards;
+	$glance_cards[$label_judging] = $glance_judging;	
 	$glance_cards[$label_entry_registration] = $glance_entry_reg;
 	$glance_cards[$label_account_registration] = $glance_account_reg;
 	$glance_cards[$label_judge_reg] = $glance_judge_reg;
 	$glance_cards[$label_steward_reg] = $glance_steward_reg;
-	$glance_cards[$label_awards] = array();
+	if (!empty($dropoff_open_sidebar)) $glance_cards[$label_entry_drop_off] = $glance_drop_off;
+	if (!empty($shipping_open_sidebar)) $glance_cards[$label_entry_shipping] = $glance_shipping;
 
-	$row_class = "row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 justify-content-center mt-1";
+	$row_class = "row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 g-4 justify-content-center mt-1";
 
 }
 

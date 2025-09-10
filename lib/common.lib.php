@@ -3162,8 +3162,6 @@ function judge_assignment($uid, $loc_id) {
 	return $row_judge_assignment;
 }
 
-
-
 function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2,$label_table="Table") {
 	
 	// Gather and output the judging or stewarding assignments for a user
@@ -3188,23 +3186,24 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			$location = "";
 			if (isset($table_info[2])) $location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
 
-			if (!empty($location)) {
+			// Make sure the location name is available.
+			if ((!empty($location)) && (isset($location[2]))) {
 
 				if (!empty($row_table_assignments['assignRoles'])) {
-					$hj = "<span class=\"small text-teal\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span><br>";
-					$lj = "<span class=\"small text-teal\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span><br>";
-					$mbos = "<span class=\"small text-teal\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span><br>";
+					$hj = "<span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
+					$lj = "<span class=\"text-purple\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
+					$mbos = "<span class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
 					$role_replace1 = array("HJ","LJ","MBOS",", ");
-					$role_replace2 = array($hj,$lj,$mbos,"");
+					$role_replace2 = array($hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;");
 					$role = str_replace($role_replace1,$role_replace2,$row_table_assignments['assignRoles']);
 				}
 
 				if ($method2 == 0) {
-					$output .= "\t\t<tr>\n";
+				    $output .= "\t\t<tr>\n";
 					$output .= "\t\t\t<td>".$location[2];
 					if (!empty($location[3]) && ($location[4] == "1")) $output .= "<br><em><small>".$location[3]."</small></em>";
 					$output .= "\t\t\t</td>";
-					$output .= sprintf("\t\t\t<td><span class=\"visually-hidden invisible hidden\">%s</span>",$location[0]);
+					$output .= "\t\t\t<td>";
 					$output .= getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "short", "date-time");
 					if (!empty($location[1])) $output .= " - ".getTimeZoneDateTime($time_zone, $location[1], $date_format,  $time_format, "short", "date-time");
 					$output .= "</td>\n";
@@ -3214,9 +3213,6 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 						$output .= "<br>".$label_round." ".$row_table_assignments['assignFlight'].", ".$label_flight." ".$row_table_assignments['assignFlight'];
 					}
 					if (!empty($row_table_assignments['assignRoles'])) $output .= "<br>".$role;
-					$output .= "</td>\n";
-					$output .= "\t\t\t<td>";
-					$output .= $location[5];
 					$output .= "</td>\n";
 					$output .= "\t\t</tr>\n";
 				}
@@ -3262,8 +3258,6 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 				}
 
 			}
-
-			
 
 		} while ($row_table_assignments = mysqli_fetch_assoc($table_assignments));
 
