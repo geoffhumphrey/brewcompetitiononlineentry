@@ -29,36 +29,22 @@ $subcats = array();
 do {
 
 	if (array_key_exists($row_styles['id'], $styles_selected)) {
-		$subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']."|".$row_styles['brewStyleActive'];
+		$subcats[] = array($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$row_styles['brewStyle'],$row_styles['brewStyleCategory'],$row_styles['brewStyleActive']);
 	}
 	
 } while ($row_styles = mysqli_fetch_assoc($styles));
 
-sort($subcats);
+foreach ($subcats as $key => $value) {
 
-foreach ($subcats as $subcat) {
+	$substyle = $value;
 
-	$substyle = explode("|",$subcat);
-
-	if (SINGLE) $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
+	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0]);
 	else $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0],$substyle[1]);
 
-	if (SINGLE) $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
+	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing",$substyle[0],$substyle[1]);
 	else $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1'",$prefix."brewing",$substyle[0],$substyle[1]);
 
 	include (DB.'entries_by_substyle.db.php');
-
-	// ------ DEBUG ------
-	//print_r($subcats);
-	//echo "<br>";
-	//echo $query_substyle_count."<br>";
-	//echo $query_substyle_count_logged."<br>";
-	//echo $substyle[2]." --------- Paid/Received: ".$row_substyle_count['count']." Logged: ".$row_substyle_count_logged['count']."<br>";
-	//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
-	//echo $row_style_type['brewStyleType']."<br>";
-	//echo $style_type."<br>";
-	//echo $source."<br>";
-
 
 	if (!empty($substyle)) {
 
@@ -70,7 +56,7 @@ foreach ($subcats as $subcat) {
 			if ($filter == "no_zeros") $html .= "<tr class=\"hidden\">";
 			else $html .= "<tr>";
 		}
-		if ($substyle[3] != "") $substyle_cat = $substyle[3];
+		if (!empty($substyle[3])) $substyle_cat = $substyle[3];
 		else $substyle_cat = "Custom";
 
 		$html .= "<td>";

@@ -342,17 +342,20 @@ if ($totalRows_log > 0) {
 		$entry_output .= "<td>";
 		$entry_output .= "<div class=\"mb-2\">";
 		$entry_output .= $entry_name;
+		
 
 		if (!empty($required_info)) {
 			$entry_output .= " <a class=\"hide-loader d-print-none\" role=\"button\" data-bs-toggle=\"collapse\" href=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-info-circle\"></span></a> ";
-			$entry_output .= "<div class=\"mt-2 collapse d-print-none\" id=\"collapseEntryInfo".$row_log['id']."\">";
-			$entry_output .= "<div class=\"small border-info bg-info-subtle text-info-emphasis card card-body\">";
-			$entry_output .= "<ul class='list-unstyled pb-0'>";
+			$entry_output .= "<div class=\"mt-2 mb-0 collapse d-print-none\" id=\"collapseEntryInfo".$row_log['id']."\">";
+			$entry_output .= "<div class=\"small border-info bg-info-subtle text-info-emphasis card card-body pb-0 mb-0\">";
+			$entry_output .= "<ul class='list-unstyled'>";
 	    	$entry_output .= $required_info;
 	    	$entry_output .= "</ul>";
 	    	$entry_output .= "</div>";
 	    	$entry_output .= "</div>";
 		}
+
+		if (!empty($row_log['brewCoBrewer'])) $entry_output .= sprintf("<div class=\"m-0 p-0\"><em class=\"small\">%s: %s</em></div>",$label_cobrewer,$row_log['brewCoBrewer']);
 
 		$entry_output .= "</div>";
 
@@ -361,8 +364,6 @@ if ($totalRows_log > 0) {
 			$entry_output .= $allergen_info;
 	    	$entry_output .= "</div>";
 		}
-
-		if (!empty($row_log['brewCoBrewer'])) $entry_output .= sprintf("<br><em class=\"small\">%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
 
 		$entry_output .= "<div class=\" d-lg-none card card-body mt-2 d-print-none\">";
 		$entry_output .= "<p class=\"small\">";
@@ -617,6 +618,7 @@ if ($totalRows_log > 0) {
 		$entry_output_cards .= "<small>";
 		$entry_output_cards .= "<ul class=\"list-unstyled\">";
 		$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>", $label_entry_number, $entry_number);
+		if (!empty($row_log['brewCoBrewer'])) $entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_cobrewer,$row_log['brewCoBrewer']);
 
 		if ($show_scores) {
 			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_judging_number, $judging_number);

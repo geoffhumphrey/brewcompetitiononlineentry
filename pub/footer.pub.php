@@ -5,6 +5,8 @@
  * 
  */
 
+$footer = "";
+
 if ((!empty($current_version_display_append)) && (strpos($current_version_display, $current_version_display_append) !== false)) {
 	$new_version_display = str_replace($current_version_display_append, "", $current_version_display);
 	$current_version_display = $new_version_display."<small style=\"font-variant: small-caps;\">".$current_version_display_append."</small>";

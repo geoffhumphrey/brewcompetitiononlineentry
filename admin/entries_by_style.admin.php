@@ -23,6 +23,7 @@ $style_mead_cider_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
 $style_other_count_logged[] = 0;
 
+
 include (DB.'styles.db.php');
 
 do {
@@ -39,12 +40,18 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 	include (INCLUDES.'ba_constants.inc.php');
 
 	foreach ($style_sets as $style_set_data) {
+		
 		if ($style_set_data['style_set_name'] === "BA") {
+			
 			$style_set_cat = $style_set_data['style_set_categories'];
+			
 			// print_r($style_set_cat);
 			
 			foreach ($style_set_cat as $key => $value) {
+				
 				include (DB.'entries_by_style.db.php');
+
+				// echo $query_style_count_logged."<br>";
 
 				if ($row_style_count_logged['count'] > 0) {
 					if ($filter == "default") $html .= "<tr class=\"success text-success\">";
@@ -60,22 +67,51 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 				$html .= "<td>".$row_style_count['count']."</td>";
 				$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
 				$html .= "</tr>";
+
 			}
 			
 		}
+	
+	}
+
+	// Custom Styles - All are category 50+
+	foreach ($total_cat as $key => $value) {
+		
+		if ((is_numeric($value)) && ($value >= 50)) {
+			$key = $value;
+			include (DB.'entries_by_style.db.php');
+			if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
+			else $html .= "<tr>";
+			$html .= "<td>";
+			$html .= $row_style_type['brewStyle']." <em><small>Custom</small></em>";
+			$html .= "</td>";
+			$html .= "<td>".$row_style_count_logged['count']."</td>";
+			$html .= "<td>".$row_style_count['count']."</td>";
+			$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
+			$html .= "</tr>";
+		}
+
 	}
 
 }
 
 else {
+	
 	foreach ($style_sets as $style_set_data) {
+
+		// echo $style_set_data['style_set_name']."<br>";
+		
 		if ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet']) {
+			
 			$style_set_cat = $style_set_data['style_set_categories'];
-			//print_r($style_set_cat);
+			
+			// print_r($style_set_cat);
 			
 			foreach ($style_set_cat as $key => $value) {
 				
 				include (DB.'entries_by_style.db.php');
+
+				// echo $query_style_count_logged."<br>";
 				
 				if ($row_style_count_logged['count'] > 0) {
 					if ($filter == "default") $html .= "<tr class=\"success text-success\">";
@@ -98,37 +134,29 @@ else {
 			}
 			
 		}
-	}
-}
 
-foreach ($total_cat as $key) {
-
-	if ($key >= 35) {
-		include (DB.'entries_by_style.db.php');
-		if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
-		else $html .= "<tr>";
-		$html .= "<td>";
-		$html .= $cat_name;
-		$html .= "</td>";
-		$html .= "<td>".$row_style_count_logged['count']."</td>";
-		$html .= "<td>".$row_style_count['count']."</td>";
-		$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
-		$html .= "</tr>";
 	}
 
-	// ------ DEBUG ------
+	// Custom Styles - All are category 50+
+	foreach ($total_cat as $key => $value) {
+		
+		if ((is_numeric($value)) && ($value >= 50)) {
+			$key = $value;
+			include (DB.'entries_by_style.db.php');
+			if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
+			else $html .= "<tr>";
+			$html .= "<td>";
+			$html .= $row_style_type['brewStyle']." <em><small>Custom</small></em>";
+			$html .= "</td>";
+			$html .= "<td>".$row_style_count_logged['count']."</td>";
+			$html .= "<td>".$row_style_count['count']."</td>";
+			$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
+			$html .= "</tr>";
+		}
 
-	//echo "<br>";
-	//echo $query_style_count."<br>";
-	//echo $query_style_count_logged."<br>";
-	//echo $cat_convert." ".$cat_name." Paid/Received: ".$row_style_count['count']." Logged: ".$row_style_count_logged['count']."<br>";
-	//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
-	//echo $row_style_type['brewStyleType']."<br>";
-	//echo $style_type."<br>";
-	//echo $source."<br>";
+	}
 
 }
-
 
 $mead_total = array_sum($style_mead_count);
 $mead_total_logged = array_sum($style_mead_count_logged);
@@ -144,22 +172,6 @@ $beer_total_logged = array_sum($style_beer_count_logged);
 
 $other_total = array_sum($style_other_count);
 $other_total_logged = array_sum($style_other_count_logged);
-
-/*
-// ------ DEBUG ------
-print_r($style_type_array);
-echo "<br>";
-echo "Beer Total: ".$beer_total."<br>";
-echo "Mead Total: ".$mead_total."<br>";
-echo "Cider Total: ".$cider_total."<br>";
-echo "Other Total: ".$other_total."<br>";
-print_r($style_beer_count);
-echo "<br>";
-print_r($style_mead_count);
-echo "<br>";
-print_r($style_cider_count);
-echo "<br>";
-*/
 
 $html_count = "";
 

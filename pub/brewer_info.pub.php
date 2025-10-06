@@ -736,7 +736,6 @@ echo $primary_page_info;
 
 echo "<section class=\"mb-3 d-block d-sm-block d-md-none\">";
 echo $user_edit_links; // defined in list.pub.php
-include (PUB.'at-a-glance.pub.php');
 echo "</section>"; 
 
 echo $header1_1;

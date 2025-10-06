@@ -458,7 +458,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
 
 			// If BJCP 2021/5 and 2A, add optional regional variation if present
-			if (($index == "02-A") && (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) && (!empty($_POST['regionalVar']))) {
+			if (($index == "02-A") && (!empty($_POST['regionalVar']))) {
 				$brewInfo = $purifier->purify(sterilize($_POST['regionalVar']));
 			}
 

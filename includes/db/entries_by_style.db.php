@@ -13,7 +13,7 @@ $cat_name = style_convert($key,1,$base_url);
 if (HOSTED) $styles_db_table = "bcoem_shared_styles";
 else
 */
-$styles_db_table = $prefix."styles";
+$styles_db_table = $prefix."styles"; 
 
 // Perform query in appropriate db table rows
 $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'",$prefix."brewing",$cat);
@@ -30,7 +30,7 @@ $row_style_count_logged['count'] = $totalRows_style_count_logged;
 if (HOSTED) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s' UNION ALL SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$styles_db_table,$cat,$prefix."styles",$cat);
 else
 */
-$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'", $styles_db_table, $cat);
+$query_style_type = sprintf("SELECT brewStyle,brewStyleType,brewStyleCategory FROM %s WHERE brewStyleGroup='%s'", $styles_db_table, $cat);
 $style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 $row_style_type = mysqli_fetch_assoc($style_type);
 
