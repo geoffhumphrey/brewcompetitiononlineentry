@@ -26,6 +26,10 @@ $style_other_count_logged[] = 0;
 
 include (DB.'styles.db.php');
 
+// print_r($styles_selected);
+
+$accepted_categories = array();
+
 do {
 	if (array_key_exists($row_styles['id'], $styles_selected)) {
 		$accepted_categories[] = $row_styles['brewStyleGroup'];
@@ -62,7 +66,7 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 					else $html .= "<tr>";
 				}
 
-				$html .= "<td>".$value."</td>";
+				$html .= "<td>".$key." - ".$value."</td>";
 				$html .= "<td>".$row_style_count_logged['count']."</td>";
 				$html .= "<td>".$row_style_count['count']."</td>";
 				$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
@@ -83,7 +87,7 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 			if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
 			else $html .= "<tr>";
 			$html .= "<td>";
-			$html .= $row_style_type['brewStyle']." <em><small>Custom</small></em>";
+			$html .= $value." - Custom Category";
 			$html .= "</td>";
 			$html .= "<td>".$row_style_count_logged['count']."</td>";
 			$html .= "<td>".$row_style_count['count']."</td>";
@@ -146,7 +150,7 @@ else {
 			if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
 			else $html .= "<tr>";
 			$html .= "<td>";
-			$html .= $row_style_type['brewStyle']." <em><small>Custom</small></em>";
+			$html .= $value." - Custom Category";
 			$html .= "</td>";
 			$html .= "<td>".$row_style_count_logged['count']."</td>";
 			$html .= "<td>".$row_style_count['count']."</td>";
@@ -309,10 +313,10 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) { ?>
 	$(document).ready(function() {
 		$('#sortable2').dataTable( {
 			"bPaginate" : false,
-			"sDom": 'rt',
+			"sDom": 'fprtp',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
+			"aaSorting": [[4,'asc'],[0,'asc']],
 			"aoColumns": [
 				null,
 				null,

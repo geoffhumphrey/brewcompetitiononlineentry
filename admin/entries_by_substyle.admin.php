@@ -57,7 +57,7 @@ foreach ($subcats as $key => $value) {
 			else $html .= "<tr>";
 		}
 		if (!empty($substyle[3])) $substyle_cat = $substyle[3];
-		else $substyle_cat = "Custom";
+		else $substyle_cat = "Custom Category";
 
 		$html .= "<td>";
 		$html .= "<span class=\"hidden\">".$substyle[0]."</span>";
@@ -236,11 +236,11 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) { ?>
 	$(document).ready(function() {
 		$('#sortable6').dataTable( {
 			"bPaginate" : false,
-			"sDom": 'rt',
+			"sDom": 'fprtp',
 			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php if ($_SESSION['prefsStyleSet'] == "BA") { ?>"aaSorting": [[1,'asc'],[0,'asc']],
-			<?php } else { ?>"aaSorting": [[0,'asc']],<?php } ?>
+			<?php } else { ?>"aaSorting": [[4,'asc'],[0,'asc']],<?php } ?>
 			"aoColumns": [
 				null,
 				null,
