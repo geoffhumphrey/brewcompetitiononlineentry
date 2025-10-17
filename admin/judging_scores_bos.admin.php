@@ -212,7 +212,7 @@ include (DB.'admin_judging_scores_bos.db.php');
 ?>
 <?php if ($totalRows_enter_bos > 0) { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_bos_db_table; ?>">
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
     $('#sortable').dataTable({

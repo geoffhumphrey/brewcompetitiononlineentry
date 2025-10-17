@@ -298,7 +298,7 @@ function validate_bjcp_id($input) {
 function total_points($total_entries,$method) {
 
 	// Get the maximum allowable points for all roles
-	// According to the Maximum Points Earned (Table 1) table - https://dev.bjcp.org/about/reference/experience-point-award-schedule/
+	// According to the Maximum Points Earned (Table 1) table - https://bjcp.org/about/reference/experience-point-award-schedule/
 
 	$points = 0;
 

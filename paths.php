@@ -51,7 +51,6 @@ define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
 define('EVALUATION', TRUE);
-define('V3', TRUE);
 
 /**
  * Enable to following to put your installation into
@@ -128,7 +127,7 @@ define('ENABLE_MARKDOWN', FALSE);
  * emails instead of using PHP's native mail() function,
  * which may be disabled on certain web hosts.
  * Requires configuration in the /site/config.mail.php file
- * Deprecated as of 3.0.0.
+ * Deprecated as of 3.0.0. Will be removed in a later release.
  */
 
 define('ENABLE_MAILER', FALSE);
@@ -257,29 +256,12 @@ if (isset($_SESSION['last_action'])) {
 $_SESSION['last_action'] = time();
 
 /**
- * RECAPTCHA Keys
- * 
- * Per Google guidelines, all keys must validate the domain from
- * which it was generated:
- * @see https://developers.google.com/recaptcha/docs/domain_validation
- * 
- * Custom keys are defined in site preferences. The other set is for 
- * hosted installations.
- * 
- * As a fallback, you may need to define your own API keys using the first 
- * set of variables below if reCAPTCHA is not functioning on your 
- * self-hosted installation.
- * @see https://developers.google.com/recaptcha/
- * 
+ * CAPTCHA Keys
+ * Relocated to storage in the DB.
  */
 
 $public_captcha_key = "";
 $private_captcha_key = "";
-
-if (HOSTED) {
-    $public_captcha_key = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
-    $private_captcha_key = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
-}
 
 /** 
  * Uncomment to display paths. 

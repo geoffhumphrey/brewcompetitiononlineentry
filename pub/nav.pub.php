@@ -160,32 +160,3 @@ if ($logged_in) {
 	</nav>
 
 	<?php if (($judging_past != 0) && ($registration_open < 2) && ($entry_window_open < 2) && (!empty($archive_alert_display))) echo $archive_alert_display; ?>
-
-	<!--
-<li class="dropdown-header"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && (!empty($_SESSION['brewerBreweryName']))) echo $_SESSION['brewerBreweryName']; else echo $_SESSION['loginUsername']; ?></strong></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>
-                    <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1"><?php echo $label_edit_account; ?></a></li>
-                    <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1"><?php echo $label_change_email; ?></a></li>
-                    <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1"><?php echo $label_change_password; ?></a></li>
-                    <?php if ($show_entries) { ?>
-                    <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1"><?php echo $label_entries; ?></a></li>
-                    <?php if ($add_entry_link_show) { ?>
-                    <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1"><?php echo $label_add_entry; ?></a></li>
-                    <?php } ?>
-                    <?php } if ($_SESSION['prefsEval'] == 1) { 
-                    	$brewer_assignment = brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable,$filter);
-						$assignment_array = str_replace(", ",",",$brewer_assignment);
-						$assignment_array = explode(",", $assignment_array);
-						if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (judging_winner_display($row_judging_prefs['jPrefsJudgingOpen']))) { 
-                   	?>
-					<li><a href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url,"default"); ?>" tabindex="-1"><?php echo $label_judging_dashboard; ?></a></li>
-                    <?php }
-                    } if ((!$disable_pay) && ($show_entries)) { ?>
-                        <?php if (!$comp_paid_entry_limit) { ?>
-                            <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay.$paid_icon; ?></a></li>
-                        <?php } ?>
-                    <?php } ?>
-
-
-	-->

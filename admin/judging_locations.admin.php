@@ -62,7 +62,7 @@ if ($section != "step5") {
 // Build Secondary Page Info
 
 if ($filter == "judges") {
-	$secondary_page_info .= "<p>According to <a class='hide-loader' href='http://www.bjcp.org/rules.php' target='_blank'>BJCP rules</a>, &quot;Judges earn points at a rate of 0.5 judging points per session, but the following limitations apply:</p>";
+	$secondary_page_info .= "<p>According to <a class='hide-loader' href='https://www.bjcp.org/competitions/rules-regulations/' target='_blank'>BJCP rules</a>, &quot;Judges earn points at a rate of 0.5 judging points per session, but the following limitations apply:</p>";
 	$secondary_page_info .= "<ul>";
   	$secondary_page_info .= "<li>Judges earn a minimum of 1.0 point per competition.</li>";
   	$secondary_page_info .= "<li>Judges earn a maximum of 1.5 points per day.</li>";
@@ -71,23 +71,23 @@ if ($filter == "judges") {
 }
 
 if ($filter == "stewards") {
-	$secondary_page_info .= "<p>According to <a class='hide-loader' href='http://www.bjcp.org/rules.php' target='_blank'>BJCP rules</a>, &quot;Stewards receive 0.5 non-judging points per day with a maximum of 1.0 points per competition. Participants <em>may not</em> earn both Judge and Steward points in a single competition. Steward points are awarded separately from Staff points and do not come from the Staff point pool. A program participant may earn both Steward and Staff points.&quot;</p>";
+	$secondary_page_info .= "<p>According to <a class='hide-loader' href='https://www.bjcp.org/competitions/rules-regulations/' target='_blank'>BJCP rules</a>, &quot;Stewards receive 0.5 non-judging points per day with a maximum of 1.0 points per competition. Participants <em>may not</em> earn both Judge and Steward points in a single competition. Steward points are awarded separately from Staff points and do not come from the Staff point pool. A program participant may earn both Steward and Staff points.&quot;</p>";
 }
 
 if ($filter == "staff") {
 
 	$secondary_page_info .= "<h5>Staff</h5>";
-	$secondary_page_info .= "<p>According to <a class='hide-loader' href='http://www.bjcp.org/rules.php' target='_blank'>BJCP rules</a>, staff members are &quot;...program participants who, under the direction of the Organizer, perform an active role in support of the competition other than as a Judge, Steward, or BOS Judge.&quot;";
+	$secondary_page_info .= "<p>According to <a class='hide-loader' href='https://www.bjcp.org/competitions/rules-regulations/' target='_blank'>BJCP rules</a>, staff members are &quot;...program participants who, under the direction of the Organizer, perform an active role in support of the competition other than as a Judge, Steward, or BOS Judge.&quot;";
 	$secondary_page_info .= "<p>If a staff member is not on this list, <a href='".$base_url."index.php?section=admin&go=participants&action=add'>add them to the database</a>.</p>";
 
 	$secondary_page_info .= "<h5>Organizer</h5>";
-	$secondary_page_info .= "<p>According to <a class='hide-loader' href='http://www.bjcp.org/rules.php' target='_blank'>BJCP rules</a>, the Organizer is &quot;...the single program participant who completes and signs the application to register or sanction a competition and who in all ways assumes responsibility for the direction of that competition.&quot;</p>";
+	$secondary_page_info .= "<p>According to <a class='hide-loader' href='https://www.bjcp.org/competitions/rules-regulations/' target='_blank'>BJCP rules</a>, the Organizer is &quot;...the single program participant who completes and signs the application to register or sanction a competition and who in all ways assumes responsibility for the direction of that competition.&quot;</p>";
 	$secondary_page_info .= "<p>If the organizer is not on this list, <a href='".$base_url."index.php?section=admin&go=participants&action=add'>add them to the database</a>.</p>";
 
 }
 
 if ($filter == "bos") {
-	$secondary_page_info .= "<p>According to <a class='hide-loader' href='http://www.bjcp.org/rules.php' target='_blank'>BJCP rules</a>, &quot;Best-of-Show (BOS) Judges&nbsp;are eligible to receive a 0.5 judging point bonus if they judge in any BOS panel in a competition. The BOS bonus is in addition to any other judging and non-judging points earned in the competition, and may only be awarded to a single judge once per competition. BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories.</p>";
+	$secondary_page_info .= "<p>According to <a class='hide-loader' href='https://www.bjcp.org/competitions/rules-regulations/' target='_blank'>BJCP rules</a>, &quot;Best-of-Show (BOS) Judges&nbsp;are eligible to receive a 0.5 judging point bonus if they judge in any BOS panel in a competition. The BOS bonus is in addition to any other judging and non-judging points earned in the competition, and may only be awarded to a single judge once per competition. BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories.</p>";
 	$secondary_page_info .= "<p>&quot;The number of judges eligible to receive the BOS bonus is correlated to the number of entries in each BOS panel as follows:</p>";
 	$secondary_page_info .= "<ul>";
 	$secondary_page_info .= "<li>5-14 BOS entries, including beer = 3 BOS Judges</li>";
@@ -447,7 +447,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 ?>
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
 
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <?php if ($section != "step5") { ?><p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p><?php } ?>
 <?php if (($filter == "default") && ($msg == "9"))  {
 	if ($section == "step5") $judge_loc_url_yes .= "setup.php?section=step5";

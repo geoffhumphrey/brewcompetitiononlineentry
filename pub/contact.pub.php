@@ -16,11 +16,6 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 
 include (DB.'contacts.db.php');
 
-if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
-    $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
-    $public_captcha_key = $recaptcha_key[0];
-}
-
 if ($_SESSION['prefsContact'] == "N") {
 
 	$page_info = "";
@@ -88,14 +83,16 @@ if ($_SESSION['prefsContact'] == "Y") {
     	if ($msg != "1") {
 
     	echo $primary_page_info;
-?>
+
+        ?>
+
         <form id="contact-form" class="justify-content-center hide-loader-form-submit needs-validation" name="contact-form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" novalidate>
 
-            <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+            <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
             <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
             <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
             <?php } else { ?>
-            <input type="hidden" name="relocate" value="<?php echo relocate($base_url,"default",$msg,$id); ?>">
+            <input type="hidden" name="relocate" value="<?php echo $base_url."#contact"; ?>">
             <?php } ?>
 
             <div class="row mb-3">
@@ -142,9 +139,9 @@ if ($_SESSION['prefsContact'] == "Y") {
             </div>
 
             <div class="row mb-3">
-                <label for="" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong>CAPTCHA</strong></label>
+                <label for="" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $login_text_007; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <div class="g-recaptcha mb-3" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
+                    <div class="<?php echo $captcha_widget_class; ?> mb-3" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
                 </div>
             </div>
 
@@ -158,7 +155,9 @@ if ($_SESSION['prefsContact'] == "Y") {
             </div>
             
         </form>
-<script src="https://www.google.com/recaptcha/api.js"></script>
+
+    <script src="<?php echo $captcha_url; ?>"></script>
+
 <?php } // end if ($msg != 1);
     
     } // end if ($totalRows_contact > 0)

@@ -184,7 +184,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			else $prefsMHPDisplay = sterilize($_POST['prefsMHPDisplay']);
 
 			// CAPTCHA uses prefsGoogleAccount column
-			if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1']))) $prefsGoogleAccount = $_POST['prefsGoogleAccount0']."|".$_POST['prefsGoogleAccount1'];
+			if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1'])) && (isset($_POST['prefsGoogleAccount2']))) $prefsGoogleAccount = sterilize($_POST['prefsGoogleAccount0'])."|".sterilize($_POST['prefsGoogleAccount1'])."|".sterilize($_POST['prefsGoogleAccount2']);
 			if (HOSTED) $prefsCAPTCHA = 1;
 			else $prefsCAPTCHA = sterilize($_POST['prefsCAPTCHA']);
 

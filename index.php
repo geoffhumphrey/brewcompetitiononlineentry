@@ -128,7 +128,9 @@ $pay_modal .= "</div>";
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    
     <meta charset="utf-8">
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -137,20 +139,16 @@ $pay_modal .= "</div>";
 
 <?php
     
-    if (CDN) {
+if (CDN) {
+    if ($section == "admin") include (INCLUDES.'load_cdn_libraries_admin.inc.php');
+    else include (INCLUDES.'load_cdn_libraries_public.inc.php');
+}
 
-        if (V3) {
+else {
+    if ($section == "admin") include (INCLUDES.'load_local_libraries_admin.inc.php');
+    else include (INCLUDES.'load_local_libraries_public.inc.php');
+}
 
-            if ($section == "admin") include (INCLUDES.'load_cdn_libraries_admin.inc.php');
-            else include (INCLUDES.'load_cdn_libraries_public.inc.php');
-
-        }
-        
-        else include (INCLUDES.'load_cdn_libraries.inc.php');
-
-    }
-    
-    else include (INCLUDES.'load_local_libraries.inc.php');
 ?>
 
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
@@ -176,17 +174,9 @@ $pay_modal .= "</div>";
 </head>
 
 <?php
-
-if (V3) {
-
-    if (($section == "admin") || ($admin != "default")) require ('index.legacy.php');
-    else require ('index.pub.php');
-    if ($section == "list") echo $pay_modal;
-
-}
-
-else require ('index.legacy.php');
-
+if (($section == "admin") || ($admin != "default")) require ('index.legacy.php');
+else require ('index.pub.php');
+if ($section == "list") echo $pay_modal;
 ?>
 
 </html>

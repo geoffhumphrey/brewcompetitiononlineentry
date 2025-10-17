@@ -840,7 +840,7 @@ $(document).ready(function(){
 <?php } ?>
 <style>h4 { margin-top: 25px; }</style>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=edit&amp;go=<?php if ($section == "step3") echo "setup"; else echo $action; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 
 <?php if ((($section == "admin") && ($go == "preferences") && ($action == "default")) || ($section == "step3")) { ?>
@@ -1008,9 +1008,9 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
-<h4>reCAPTCHA</h4>
+<h4>CAPTCHA</h4>
 <div class="form-group">
-    <label for="prefsCAPTCHA" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Enable reCAPTCHA</label>
+    <label for="prefsCAPTCHA" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Enable CAPTCHA</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
             <label class="radio-inline">
@@ -1025,16 +1025,31 @@ $(document).ready(function(){
 </div>
 <div id="reCAPTCHA-keys">
     <div class="form-group">
-        <label for="prefsGoogleAccount0" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">reCAPTCHA Site Key</label>
+        <label for="prefsCAPTCHA" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">CAPTCHA Challenge Type</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" id="prefsGoogleAccount0" name="prefsGoogleAccount0" type="text" value="<?php if (isset($recaptcha_key[0])) echo $recaptcha_key[0]; ?>" placeholder="**OPTIONAL** reCAPTCHA Site Key (Public)">
+            <div class="input-group">
+                <label class="radio-inline">
+                    <input type="radio" name="prefsGoogleAccount2" value="1" id="prefsGoogleAccount2_1" <?php if ((isset($recaptcha_key[2])) && ($recaptcha_key[2] == 1)) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; if (!isset($recaptcha_key[2])) echo "CHECKED"; ?>/> Google reCAPTCHA
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsGoogleAccount2" value="2" id="prefsGoogleAccount2_2"  <?php if ((isset($recaptcha_key[2])) && ($recaptcha_key[2] == 2)) echo "CHECKED";  ?> /> hCAPTCHA
+                </label>
+            </div>
+            <div class="help-block">reCAPTCHA is provided by Google. <strong>To get reCAPTCHA API keys, you will need a Google account.</strong> You can obtain keys on Google's <a class="hide-loader" href="https://www.google.com/recaptcha/admin" target="_blank">reCAPTCHA dashboard</a>. Follow all instructions there or unexpected functionality will occur.</div>
+            <div class="help-block">hCAPTCHA is a widely used alternative to reCAPTCHA. <strong>To get hCAPTCHA keys, you will need a to create an <a href="https://www.hcaptcha.com/" target="_blank">hCAPTCHA account</a>.</strong> After signing up, follow all instructions to create a site and generate your site key and secret key.</div>
         </div>
     </div>
     <div class="form-group">
-        <label for="prefsGoogleAccount1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">reCAPTCHA Secret Key</label>
+        <label for="prefsGoogleAccount0" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Key</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" id="prefsGoogleAccount1" name="prefsGoogleAccount1" type="text" value="<?php if (isset($recaptcha_key[1])) echo $recaptcha_key[1]; ?>" placeholder="**OPTIONAL** reCAPTCHA Secret Key (Private)">
-            <div class="help-block"><strong>To get reCAPTCHA API keys, you will need a Google account.</strong> You can obtain keys on Google's <a class="hide-loader" href="https://www.google.com/recaptcha/admin" target="_blank">reCAPTCHA dashboard</a>. Follow all instructions there or unexpected functionality will occur.</div>
+            <input class="form-control" id="prefsGoogleAccount0" name="prefsGoogleAccount0" type="text" value="<?php if (isset($recaptcha_key[0])) echo $recaptcha_key[0]; ?>" placeholder="CAPTCHA Site Key (Public)">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="prefsGoogleAccount1" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Secret Key</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <input class="form-control" id="prefsGoogleAccount1" name="prefsGoogleAccount1" type="text" value="<?php if (isset($recaptcha_key[1])) echo $recaptcha_key[1]; ?>" placeholder="CAPTCHA Secret Key (Private)">
+            <div class="help-block"></div>
         </div>
     </div>
 </div>

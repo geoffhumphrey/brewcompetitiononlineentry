@@ -14,7 +14,7 @@ if ($filter != "default") {
 	$style_types_db_table = $prefix."style_types_".$filter;
 }
 
-if (!empty($type)) {
+if ((!empty($type)) && (is_numeric($type))) {
 
 	$query_style_type_1 = sprintf("SELECT * FROM %s WHERE id='%s'",$style_types_db_table,$type);
 	$style_type_1 = mysqli_query($connection,$query_style_type_1) or die (mysqli_error($connection));

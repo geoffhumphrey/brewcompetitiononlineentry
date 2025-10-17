@@ -21,17 +21,59 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	if ($action == "email") {
 
-		if (($_SESSION['prefsCAPTCHA'] == 1) && (isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
+		if ($_SESSION['prefsCAPTCHA'] == 1) {
 
-			if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
-				$recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
-				$private_captcha_key = $recaptcha_key[1];
+			$captcha_response = FALSE;
+
+			if ((isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) $captcha_response = TRUE;
+			if ((isset($_POST['h-captcha-response'])) && (!empty($_POST['h-captcha-response']))) $captcha_response = TRUE;
+
+			if ($captcha_response) {
+
+				if (HOSTED) $captcha_type = 2;
+
+				else {
+
+					if (!empty($_SESSION['prefsGoogleAccount'])) {
+						$captcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
+						$private_captcha_key = $captcha_key[1];
+						if (isset($captcha_key[2])) $captcha_type = $captcha_key[2];
+						else $captcha_type = 1; // default to reCAPTCHA
+					}
+
+				}
+
+				// Verify reCAPTCHA response
+				if ($captcha_type == 1) {
+
+					$response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
+					$response_data = json_decode($response);
+					if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
+					
+				}
+
+				// Verify hCAPTCHA response
+				if ($captcha_type == 2) {
+
+					$hCAPTCHA_data = array(
+						'secret' => $private_captcha_key,
+						'response' => $_POST['h-captcha-response']
+					);
+					
+					$verify = curl_init();
+					curl_setopt($verify, CURLOPT_URL, "https://hcaptcha.com/siteverify");
+					curl_setopt($verify, CURLOPT_POST, true);
+					curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($hCAPTCHA_data));
+					curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+					
+					$response = curl_exec($verify);
+					$response_data = json_decode($response);
+					
+					if ($response_data->success) $captcha_success = TRUE;
+				
+				}
+
 			}
-
-			$verify_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
-			$response_data = json_decode($verify_response);
-
-			if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
 
 		}
 

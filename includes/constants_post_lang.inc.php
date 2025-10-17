@@ -20,9 +20,17 @@ if (DEBUG) include (DEBUGGING.'query_count_begin.debug.php');
  * If that's not available, default to openssl_random_pseudo_bytes.
  */
 
-if (function_exists('random_bytes')) $_SESSION['token'] = bin2hex(random_bytes(32));
-elseif (function_exists('mcrypt_create_iv')) $_SESSION['token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
-else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+unset($_SESSION['user_session_token']);
+if (function_exists('random_bytes')) $_SESSION['user_session_token'] = bin2hex(random_bytes(32));
+elseif (function_exists('mcrypt_create_iv')) $_SESSION['user_session_token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+else $_SESSION['user_session_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+
+/*
+if (function_exists('random_bytes')) $cookie_token = bin2hex(random_bytes(32));
+elseif (function_exists('mcrypt_create_iv')) $cookie_token = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+else $cookie_token = bin2hex(openssl_random_pseudo_bytes(32));
+setcookie('user_csrf_token', $cookie_token, time() + (86400 * 30), '/');
+*/
 
 // Bootstrap layout containers
 if (($section == "admin") || ($view == "admin")) {
@@ -31,17 +39,8 @@ if (($section == "admin") || ($view == "admin")) {
 }
 
 else {
-
-    if (V3) {
-        $container_main = "container-xxl";
-        $nav_container = "navbar-dark";
-    }
-
-    else {
-        $container_main = "container";
-        $nav_container = "navbar-default";
-    }
-    
+    $container_main = "container-xxl";
+    $nav_container = "navbar-dark"; 
 }
 
 $security_question = array($label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27);

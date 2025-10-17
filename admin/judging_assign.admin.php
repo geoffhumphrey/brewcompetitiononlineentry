@@ -763,7 +763,7 @@ $(document).ready(function() {
 <?php } ?>
 
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $_SESSION['jPrefsQueued']; ?>&amp;id=<?php echo $row_tables_edit['id']; ?>">
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
 <script type='text/javascript'>
 var hj_id = <?php if (!empty($head_judge_id)) echo max($head_judge_id); else echo "''"; ?>;

@@ -1,5 +1,19 @@
 <?php if ($section != "admin") {
 
+    $judge_open_date = "";
+    $judge_close_date = "";
+    $entry_open_date = "";
+    $entry_close_date = "";
+    $account_open_date = "";
+    $account_close_date = "";
+    $judge_steward_open_date = "";
+    $judge_steward_close_date = "";
+    $dropoff_open_date = "";
+    $dropoff_close_date = "";
+    $shipping_open_date = "";
+    $shipping_close_date = "";
+    $awards_date = "";
+
     $bg_hero_images = array(
         "0-a" => "misc-cropped-bottles_3000x500.jpg",
         "0-b" => "misc-brussels-bottles_3000x500.jpg",
@@ -179,11 +193,27 @@
     $forgot_password_card_footer .= "<button id=\"forgot-user-name-clear-button\" class=\"btn btn-block btn-lg btn-secondary\" onclick=\"forgot_password_clear_all()\">".$label_clear."<i class=\"fas fa-eraser ps-2\"></i></button>";
     $forgot_password_card_footer .= "</div>";
 
+    $brewery_ttb = "false";
+    $brewery_prod = "false";
+
+    if ($section == "brewer") {
+        
+        if (isset($row_brewer['brewerBreweryInfo'])) { 
+            $brewery_info = json_decode($row_brewer['brewerBreweryInfo'],true); 
+            if (isset($brewery_info['TTB'])) $brewery_ttb = "true";
+            if (isset($brewery_info['Production'])) $brewery_prod = "true";
+        }
+
+    } // end if ($section == "brewer") 
+
 ?>
 
 <body data-bs-spy="scroll" data-bs-target="#site-nav">
+
 <style>
 
+    /* Hero background (random via php script) */
+    
     .layout-hero {
         background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('<?php echo $images_url.$hero_background; ?>');
         background-repeat: no-repeat;
@@ -405,7 +435,18 @@ if (ENABLE_MARKDOWN) {
             <header class="landing-page-section-header py-2">
                 <h1><?php echo $header_output; ?></h1>
             </header>
-            <?php include (PUB.'register.pub.php'); ?>
+            <?php
+            if (($go == "judge") || ($go == "steward")) {
+                if ($judge_window_open == 0) echo sprintf("<p class=\"lead\">%s</p><p>%s</p>",$alert_text_033,$alert_text_034);
+                elseif ($judge_window_open == 1) include (PUB.'register.pub.php'); 
+                else echo sprintf("<p class=\"lead\">%s</p><p>%s</p>",$register_text_002,$register_text_003);
+            }
+            else {
+                if ($registration_open == 0) echo sprintf("<p class=\"lead\">%s</p><p>%s</p>",$alert_text_033,$alert_text_034);
+                elseif ($registration_open == 1) include (PUB.'register.pub.php'); 
+                else echo sprintf("<p class=\"lead\">%s</p><p>%s</p>",$register_text_002,$register_text_003);
+            }
+            ?>
         </section>
     <?php } ?>
 
@@ -588,18 +629,37 @@ if ($logged_in) {
     </div>
 </div>
 
-<?php if ($section == "brewer") {
-    $brewery_ttb = "false";
-    $brewery_prod = "false";
-    if (isset($row_brewer['brewerBreweryInfo'])) { 
-        $brewery_info = json_decode($row_brewer['brewerBreweryInfo'],true); 
-        if (isset($brewery_info['TTB'])) $brewery_ttb = "true";
-        if (isset($brewery_info['Production'])) $brewery_prod = "true";
-    }
-?> 
+<?php if (CDN) { ?>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 
-    <script type='text/javascript'>
-        var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
+<?php } else { ?>
+<script src="<?php echo $base_url; ?>libraries/public/popperjs/popper.min.js"></script>
+<script src="<?php echo $base_url; ?>libraries/public/bootstrap/bootstrap.min.js"></script>
+<?php } ?>
+
+<script src="<?php echo $js_app_pub_url; ?>"></script> 
+<script src="<?php echo $js_invoke_url; ?>"></script>
+<script>
+    var date_time_now = new Date();
+    var date_time_now = date_time_now.getTime();
+    var base_url = "<?php echo $base_url; ?>";
+    var ajax_url = "<?php echo $ajax_url; ?>";
+    var section = "<?php echo $section; ?>";
+    var action = "<?php echo $action; ?>";
+    var go = "<?php echo $go; ?>";
+    var edition = "<?php echo $_SESSION['prefsProEdition'];?>";
+    var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
+    var label_length = "<?php echo $label_length; ?>";
+    var label_score = "<?php echo $label_score; ?>";
+    var entry_window_open = "<?php if (isset($entry_window_open)) echo $entry_window_open; ?>";
+    var current_timezone = "<?php if (isset($_SESSION['prefsTimeZone'])) echo get_timezone($_SESSION['prefsTimeZone']); ?>";
+    var label_weeks = "<?php echo strtolower($label_weeks); ?>";
+    var label_days = "<?php echo strtolower($label_days); ?>";
+    var label_hours = "<?php echo strtolower($label_hours); ?>"; 
+    
+    if (section == "brewer") {
+        var club_other = <?php if ((isset($club_other)) && ($club_other)) echo "true"; else echo "false"; ?>;
         var brewer_judge = "N";
         var brewer_steward = "N";
         var brewer_staff = "N";
@@ -611,241 +671,225 @@ if ($logged_in) {
             var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
             var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
             var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
-        }
-    </script>
+        }        
+    }
 
-<?php } // end if ($section == "brewer") ?>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-<script src="<?php echo $js_app_pub_url; ?>"></script> 
-<script src="<?php echo $js_invoke_url; ?>"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
-<script>
-    
-    var date_time_now = new Date();
-    var date_time_now = date_time_now.getTime();
-    var base_url = "<?php echo $base_url; ?>";
-    var ajax_url = "<?php echo $ajax_url; ?>";
-    var section = "<?php echo $section; ?>";
-    var action = "<?php echo $action; ?>";
-    var go = "<?php echo $go; ?>";
     if (section != "brew") var edit_style = "<?php echo $action; ?>";
     else edit_style = edit_style;
-    var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
-    var label_length = "<?php echo $label_length; ?>";
-    var label_score = "<?php echo $label_score; ?>";
-    var entry_window_open = "<?php echo $entry_window_open; ?>";
-    var current_timezone = "<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>";
-    var label_weeks = "<?php echo strtolower($label_weeks); ?>";
-    var label_days = "<?php echo strtolower($label_days); ?>";
-    var label_hours = "<?php echo strtolower($label_hours); ?>"; 
-    var awards_open = "<?php echo $awards_date; ?>";
-    var judging_open = "<?php echo $judge_open_date; ?>";
-    var judging_close = "<?php echo $judge_close_date; ?>";
-    var entry_open = "<?php echo $entry_open_date; ?>";
-    var entry_close = "<?php echo $entry_close_date; ?>";
-    var account_open = "<?php echo $account_open_date; ?>";
-    var account_close = "<?php echo $account_close_date; ?>";
-    var judge_steward_open = "<?php echo $judge_steward_open_date; ?>";
-    var judge_steward_close = "<?php echo $judge_steward_close_date; ?>";
-    var shipping_open = "<?php echo $shipping_open_date; ?>";
-    var shipping_close = "<?php echo $shipping_close_date; ?>";
-    var dropoff_open = "<?php echo $dropoff_open_date; ?>";
-    var dropoff_close = "<?php echo $dropoff_close_date; ?>";
-    var awards_date = "";
-    var judging_open_date = "";
-    var judging_close_date = "";
-    var entry_open_date = "";
-    var entry_close_date = "";
-    var account_open_date = "";
-    var account_close_date = "";
-    var judge_steward_open_date = "";
-    var judge_steward_close_date = "";
-    var shipping_open_date = "";
-    var shipping_close_date = "";
-    var dropoff_open_date = "";
-    var dropoff_close_date = "";
 
-    if (awards_open) var awards_date = moment.tz(awards_open,current_timezone);    
-    if (judging_open) var judging_open_date = moment.tz(judging_open,current_timezone);
-    if (judging_close) var judging_close_date = moment.tz(judging_close,current_timezone);
-    if (entry_open) var entry_open_date = moment.tz(entry_open,current_timezone);    
-    if (entry_close) var entry_close_date = moment.tz(entry_close,current_timezone);    
-    if (account_open) var account_open_date = moment.tz(account_open,current_timezone);    
-    if (account_close) var account_close_date = moment.tz(account_close,current_timezone);    
-    if (judge_steward_open) var judge_steward_open_date = moment.tz(judge_steward_open,current_timezone);    
-    if (judge_steward_close) var judge_steward_close_date = moment.tz(judge_steward_close,current_timezone);    
-    if (shipping_open) var shipping_open_date = moment.tz(shipping_open,current_timezone);    
-    if (shipping_close) var shipping_close_date = moment.tz(shipping_close,current_timezone);    
-    if (dropoff_open) var dropoff_open_date = moment.tz(dropoff_open,current_timezone);    
-    if (dropoff_close) var dropoff_close_date = moment.tz(dropoff_close,current_timezone);
+    // Only execute countdowns for at-a-glance cards 
+    // if on the home page or the user's account page
 
-    $(document).ready(function() {
-        
-        if (awards_date) {
-            
-            $("#awards-date").countdown(awards_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
+    if ((section == "default") || (section == "list")) {
 
-            var date_compare = new Date(judging_close_date);
-            var date_close = date_compare.getTime();
-            var date_close_minus_1_day = date_compare.getTime() - 86400000;
-            
-            if (date_time_now > date_close_minus_1_day) {
-                $("#awards-date").attr("class", "fw-bold");
-                $("#awards-date-item").attr("class", "text-danger-emphasis");
+        var awards_open = "<?php if (isset($awards_date)) echo $awards_date; ?>";
+        var judging_open = "<?php if (isset($judge_open_date)) echo $judge_open_date; ?>";
+        var judging_close = "<?php if (isset($judge_close_date)) echo $judge_close_date; ?>";
+        var entry_open = "<?php if (isset($entry_open_date)) echo $entry_open_date; ?>";
+        var entry_close = "<?php if (isset($entry_close_date)) echo $entry_close_date; ?>";
+        var account_open = "<?php if (isset($account_open_date)) echo $account_open_date; ?>";
+        var account_close = "<?php if (isset($account_close_date)) echo $account_close_date; ?>";
+        var judge_steward_open = "<?php if (isset($judge_steward_open_date)) echo $judge_steward_open_date; ?>";
+        var judge_steward_close = "<?php if (isset($judge_steward_close_date)) echo $judge_steward_close_date; ?>";
+        var shipping_open = "<?php if (isset($shipping_open_date)) echo $shipping_open_date; ?>";
+        var shipping_close = "<?php if (isset($shipping_close_date)) echo $shipping_close_date; ?>";
+        var dropoff_open = "<?php if (isset($dropoff_open_date)) echo $dropoff_open_date; ?>";
+        var dropoff_close = "<?php if (isset($dropoff_close_date)) echo $dropoff_close_date; ?>";
+
+        var awards_date = "";
+        var judging_open_date = "";
+        var judging_close_date = "";
+        var entry_open_date = "";
+        var entry_close_date = "";
+        var account_open_date = "";
+        var account_close_date = "";
+        var judge_steward_open_date = "";
+        var judge_steward_close_date = "";
+        var shipping_open_date = "";
+        var shipping_close_date = "";
+        var dropoff_open_date = "";
+        var dropoff_close_date = "";
+
+        if (awards_open) var awards_date = moment.tz(awards_open,current_timezone);    
+        if (judging_open) var judging_open_date = moment.tz(judging_open,current_timezone);
+        if (judging_close) var judging_close_date = moment.tz(judging_close,current_timezone);
+        if (entry_open) var entry_open_date = moment.tz(entry_open,current_timezone);    
+        if (entry_close) var entry_close_date = moment.tz(entry_close,current_timezone);    
+        if (account_open) var account_open_date = moment.tz(account_open,current_timezone);    
+        if (account_close) var account_close_date = moment.tz(account_close,current_timezone);    
+        if (judge_steward_open) var judge_steward_open_date = moment.tz(judge_steward_open,current_timezone);    
+        if (judge_steward_close) var judge_steward_close_date = moment.tz(judge_steward_close,current_timezone);    
+        if (shipping_open) var shipping_open_date = moment.tz(shipping_open,current_timezone);    
+        if (shipping_close) var shipping_close_date = moment.tz(shipping_close,current_timezone);    
+        if (dropoff_open) var dropoff_open_date = moment.tz(dropoff_open,current_timezone);    
+        if (dropoff_close) var dropoff_close_date = moment.tz(dropoff_close,current_timezone);
+
+        $(document).ready(function() {
+
+            if (awards_date) {
+                
+                $("#awards-date").countdown(awards_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+
+                var date_compare = new Date(judging_close_date);
+                var date_close = date_compare.getTime();
+                var date_close_minus_1_day = date_compare.getTime() - 86400000;
+                
+                if (date_time_now > date_close_minus_1_day) {
+                    $("#awards-date").attr("class", "fw-bold");
+                    $("#awards-date-item").attr("class", "text-danger-emphasis");
+                }
+
+            }
+                
+            if (judging_open_date) {
+                $("#judging-open-date").countdown(judging_open_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+            }
+                
+            if (judging_close_date) {
+                
+                $("#judging-close-date").countdown(judging_close_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+
+                var date_compare = new Date(judging_close_date);
+                var date_close = date_compare.getTime();
+                var date_close_minus_1_day = date_compare.getTime() - 86400000;
+                
+                if (date_time_now > date_close_minus_1_day) {
+                    $("#judging-close-date").attr("class", "fw-bold");
+                    $("#judging-close-date-item").attr("class", "text-danger-emphasis");
+                }
+            }
+                
+            if (entry_open_date) {
+                $("#entry-open-date").countdown(entry_open_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
             }
 
-        }
-            
-        if (judging_open_date) {
-            $("#judging-open-date").countdown(judging_open_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-        }
-            
-        if (judging_close_date) {
-            
-            $("#judging-close-date").countdown(judging_close_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
+            if (entry_close_date) {
+                
+                $("#entry-close-date").countdown(entry_close_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
 
-            var date_compare = new Date(judging_close_date);
-            var date_close = date_compare.getTime();
-            var date_close_minus_1_day = date_compare.getTime() - 86400000;
-            
-            if (date_time_now > date_close_minus_1_day) {
-                $("#judging-close-date").attr("class", "fw-bold");
-                $("#judging-close-date-item").attr("class", "text-danger-emphasis");
-            }
-        }
-            
-        if (entry_open_date) {
-            $("#entry-open-date").countdown(entry_open_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-        }
+                var date_compare = new Date(entry_close_date);
+                var date_close = date_compare.getTime();
+                var date_close_minus_1_day = date_compare.getTime() - 86400000;
+                
+                if (date_time_now > date_close_minus_1_day) {
+                    $("#entry-close-date").attr("class", "fw-bold");
+                    $("#entry-close-date-item").attr("class", "text-danger-emphasis");
+                }
 
-        if (entry_close_date) {
-            
-            $("#entry-close-date").countdown(entry_close_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
+            }   
 
-            var date_compare = new Date(entry_close_date);
-            var date_close = date_compare.getTime();
-            var date_close_minus_1_day = date_compare.getTime() - 86400000;
-            
-            if (date_time_now > date_close_minus_1_day) {
-                $("#entry-close-date").attr("class", "fw-bold");
-                $("#entry-close-date-item").attr("class", "text-danger-emphasis");
+            if (account_open_date) {
+                $("#account-open-date").countdown(account_open_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
             }
 
-        }   
+            if (account_close_date) {
+                
+                $("#account-close-date").countdown(account_close_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
 
-        if (account_open_date) {
-            $("#account-open-date").countdown(account_open_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-        }
+                var date_compare = new Date(account_close_date);
+                var date_close = date_compare.getTime();
+                var date_close_minus_1_day = date_compare.getTime() - 86400000;
 
-        if (account_close_date) {
+                if (date_time_now > date_close_minus_1_day) {
+                    $("#account-close-date").attr("class", "fw-bold");
+                    $("#account-close-date-item").attr("class", "text-danger-emphasis");
+                }
             
-            $("#account-close-date").countdown(account_close_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-
-            var date_compare = new Date(account_close_date);
-            var date_close = date_compare.getTime();
-            var date_close_minus_1_day = date_compare.getTime() - 86400000;
-
-            if (date_time_now > date_close_minus_1_day) {
-                $("#account-close-date").attr("class", "fw-bold");
-                $("#account-close-date-item").attr("class", "text-danger-emphasis");
-            }
-        
-        }
-
-        if (judge_steward_open_date) {
-            $("#judge-open-date").countdown(judge_steward_open_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-            $("#steward-open-date").countdown(judge_steward_open_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-        }
-            
-        if (judge_steward_close_date) {
-            
-            $("#judge-close-date").countdown(judge_steward_close_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-            $("#steward-close-date").countdown(judge_steward_close_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-
-            var date_compare = new Date(judge_steward_close_date);
-            var date_close = date_compare.getTime();
-            var date_close_minus_1_day = date_compare.getTime() - 86400000;
-            
-            if (date_time_now > date_close_minus_1_day) {
-                $("#judge-close-date").attr("class", "fw-bold");
-                $("#judge-close-date-item").attr("class", "text-danger-emphasis");
-                $("#steward-close-date").attr("class", "fw-bold");
-                $("#steward-close-date-item").attr("class", "text-danger-emphasis");
-            }
-        }
-
-        if (shipping_open_date) {
-            $("#shipping-open-date").countdown(shipping_open_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-        }
-            
-        if (shipping_close_date) {
-            
-            $("#shipping-close-date").countdown(shipping_close_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-
-            var date_compare = new Date(shipping_close_date);
-            var date_close = date_compare.getTime();
-            var date_close_minus_1_day = date_compare.getTime() - 86400000;
-            
-            if (date_time_now > date_close_minus_1_day) {
-                $("#shipping-close-date").attr("class", "fw-bold");
-                $("#shipping-close-date-item").attr("class", "text-danger-emphasis");
-            }
-        
-        }
-
-        if (dropoff_open_date) {
-            $("#dropoff-open-date").countdown(dropoff_open_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-        }
-            
-        if (dropoff_close_date) {
-            
-            $("#dropoff-close-date").countdown(dropoff_close_date.toDate(), function(event) {
-                $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
-            });
-
-            var date_compare = new Date(dropoff_close_date);
-            var date_close = date_compare.getTime();
-            var date_close_minus_1_day = date_compare.getTime() - 86400000;
-            
-            if (date_time_now > date_close_minus_1_day) {
-                $("#dropoff-close-date").attr("class", "fw-bold");
-                $("#dropoff-close-date-item").attr("class", "text-danger-emphasis");
             }
 
-        }
+            if (judge_steward_open_date) {
+                $("#judge-open-date").countdown(judge_steward_open_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+                $("#steward-open-date").countdown(judge_steward_open_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+            }
+                
+            if (judge_steward_close_date) {
+                
+                $("#judge-close-date").countdown(judge_steward_close_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+                $("#steward-close-date").countdown(judge_steward_close_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
 
-    });
+                var date_compare = new Date(judge_steward_close_date);
+                var date_close = date_compare.getTime();
+                var date_close_minus_1_day = date_compare.getTime() - 86400000;
+                
+                if (date_time_now > date_close_minus_1_day) {
+                    $("#judge-close-date").attr("class", "fw-bold");
+                    $("#judge-close-date-item").attr("class", "text-danger-emphasis");
+                    $("#steward-close-date").attr("class", "fw-bold");
+                    $("#steward-close-date-item").attr("class", "text-danger-emphasis");
+                }
+            }
+
+            if (shipping_open_date) {
+                $("#shipping-open-date").countdown(shipping_open_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+            }
+                
+            if (shipping_close_date) {
+                
+                $("#shipping-close-date").countdown(shipping_close_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+
+                var date_compare = new Date(shipping_close_date);
+                var date_close = date_compare.getTime();
+                var date_close_minus_1_day = date_compare.getTime() - 86400000;
+                
+                if (date_time_now > date_close_minus_1_day) {
+                    $("#shipping-close-date").attr("class", "fw-bold");
+                    $("#shipping-close-date-item").attr("class", "text-danger-emphasis");
+                }
+            
+            }
+
+            if (dropoff_open_date) {
+                $("#dropoff-open-date").countdown(dropoff_open_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+            }
+                
+            if (dropoff_close_date) {
+                
+                $("#dropoff-close-date").countdown(dropoff_close_date.toDate(), function(event) {
+                    $(this).text(event.strftime('%-D '+label_days+' %-H:%M:%S '+label_hours));
+                });
+
+                var date_compare = new Date(dropoff_close_date);
+                var date_close = date_compare.getTime();
+                var date_close_minus_1_day = date_compare.getTime() - 86400000;
+                
+                if (date_time_now > date_close_minus_1_day) {
+                    $("#dropoff-close-date").attr("class", "fw-bold");
+                    $("#dropoff-close-date-item").attr("class", "text-danger-emphasis");
+                }
+
+            }
+
+        });
+
+    }
 
     if (((section == "default") || (section == "list")) && (entry_window_open == 1)) {
 

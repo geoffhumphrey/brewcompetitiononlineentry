@@ -21,9 +21,9 @@ $totalRows_prefs = mysqli_num_rows($prefs);
 $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
 
 if (($action != "update") && ($action != "password-check")) {
-	if (function_exists('random_bytes')) $_SESSION['token'] = bin2hex(random_bytes(32));
-	elseif (function_exists('mcrypt_create_iv')) $_SESSION['token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
-	else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+	if (function_exists('random_bytes')) $_SESSION['user_session_token'] = bin2hex(random_bytes(32));
+	elseif (function_exists('mcrypt_create_iv')) $_SESSION['user_session_token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+	else $_SESSION['user_session_token'] = bin2hex(openssl_random_pseudo_bytes(32));
 }
 
 // Check if variation used (demarked with a dash)
@@ -157,8 +157,8 @@ if (($go == "default") && ($id != "default") && ($process_allowed)) {
 			if ($request_method === "POST") {
 
 				$token_hash = FALSE;
-				$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
+				$token = filter_input(INPUT_POST,'user_session_token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				if (hash_equals($_SESSION['user_session_token'],$token)) $token_hash = TRUE;
 
 				if ((!$token) || (!$token_hash)) {
 					session_unset();
@@ -409,7 +409,7 @@ $_SESSION['last_action'] = time();
     <p class="lead text-primary"><strong><?php echo $qr_text_009; ?> <span class="badge"><?php echo sprintf("%06d",$id); ?></span></strong></p>
     <p class="lead text-danger"><small><strong><?php echo $qr_text_010; ?></strong></small></p>
     <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
-    <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+    <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
     	<div class="form-group">
             <label for="inputJudgingNumber"><?php echo $label_judging_number; ?></label>
             <input type="tel" pattern="[^^]+"  maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="<?php echo $qr_text_011; ?>" data-error="<?php echo $qr_text_013; ?>" autofocus>

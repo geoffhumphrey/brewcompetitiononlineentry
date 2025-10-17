@@ -1,5 +1,5 @@
 <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
-SetHandler application/x-lsphp80
+SetHandler application/x-lsphp74
 </FilesMatch>
 
 # No indexing
@@ -103,11 +103,11 @@ RewriteCond %{HTTP_USER_AGENT} ^Zeus
 RewriteRule ^.* - [F,L]
 
 # Custom error pages
-ErrorDocument 400     /index.php?section=400
-ErrorDocument 401     /index.php?section=401
-ErrorDocument 403     /index.php?section=403
-ErrorDocument 404     /index.php?section=404
-ErrorDocument 500     /index.php?section=500
+ErrorDocument 400     /400.php
+ErrorDocument 401     /401.php
+ErrorDocument 403     /403.php
+ErrorDocument 404     /404.php
+ErrorDocument 500     /500.php
 
 # Prevent viewing of .htaccess file
 <Files .htaccess>

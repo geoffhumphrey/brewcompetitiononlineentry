@@ -381,26 +381,15 @@ if ($setup_success) {
 	$js_user_url = $js_url."user.min.js";
 	$css_common_url = $css_url."common.min.css";
 
-	if (V3) {
-		
-		if ($section == "admin") {
-			if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
-			else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
-			$css_common_url = $css_common_url;
-		}
-		
-		else {
-			$theme = $css_url."default-3.min.css";
-			$css_common_url = $css_url."common-3.min.css";
-		}
-		
-	}
-
-	else {
-
+	if ($section == "admin") {
 		if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
 		else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
-		
+		$css_common_url = $css_common_url;
+	}
+	
+	else {
+		$theme = $css_url."default-3.min.css";
+		$css_common_url = $css_url."common-3.min.css";
 	}
 
 	if ((DEBUG) || (TESTING)) {

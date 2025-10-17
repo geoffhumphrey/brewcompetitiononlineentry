@@ -340,7 +340,7 @@ else {
 if ($go != "admin") echo $info_msg;
 ?>
 <form id="submit-form" role="form" class="form-horizontal hide-loader-form-submit needs-validation" action="<?php echo $form_action; ?>" method="POST" name="form1" novalidate>
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 
 <?php 
 include (PUB.'brewer_form_0.pub.php'); // Participant Info

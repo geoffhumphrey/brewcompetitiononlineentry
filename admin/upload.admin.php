@@ -14,7 +14,7 @@ if ($action == "html") {
 <p class="lead">If you want to upload mutiple images at once, use the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload">enhanced image upload function</a>.</p>
 <p class="bcoem-admin-element">Acceptable file types are .jpg, .jpeg, .png, .svg, .webp, or .gif. Maximum file size is <?php if (HOSTED) echo "4"; else echo "10"; ?> MB.</p>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html" ENCTYPE="multipart/form-data">
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-default btn-file"><span>Choose Image File</span><input type="file" name="file" /></span>
     <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
@@ -25,7 +25,7 @@ if ($action == "html") {
 <p class="lead">The <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html">single image upload function</a> is also available as an alternative to this multiple upload function.</p>
 <p class="bcoem-admin-element">Acceptable file types are .jpg, .jpeg, .png, .svg, .webp, or .gif. Maximum file size is <?php if (HOSTED) echo "4"; else echo "10"; ?> MB.</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php" class="dropzone">
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <div class="fallback">
     <input name="file" type="file" multiple />
 </div>

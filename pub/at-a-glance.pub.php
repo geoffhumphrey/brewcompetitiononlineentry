@@ -1,13 +1,7 @@
 <?php
 
-// $registration_open = 1;
-// $entry_window_open = 1;
-// $judge_window_open = 1;
-// $logged_in = TRUE;
-
-// Button 1 is for use when the user is NOT logged in
-// Button 2 is for use when the user IS logged in
-
+/*
+// Empty vars defined in index.pub.php
 $judge_open_date = "";
 $judge_close_date = "";
 $entry_open_date = "";
@@ -21,6 +15,7 @@ $dropoff_close_date = "";
 $shipping_open_date = "";
 $shipping_close_date = "";
 $awards_date = "";
+*/
 
 if (!empty($row_contest_dates['contestEntryOpen'])) $entry_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
 if (!empty($row_contest_dates['contestEntryDeadline'])) $entry_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");

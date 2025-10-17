@@ -95,14 +95,38 @@ $bypass_token = array("login","logout","forgot","reset","paypal");
 if (($request_method === "POST") && (!in_array($section,$bypass_token))) {
 
 	$token_hash = FALSE;
-	$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-	if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
+	$user_session_token = filter_var($_POST['user_session_token'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	if (hash_equals($_SESSION['user_session_token'],$user_session_token)) $token_hash = TRUE;
+	
+/*
+	// $user_session_token = filter_input(INPUT_POST,'user_session_token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	if (hash_equals($_SESSION['user_session_token'],$user_session_token)) $token_hash = TRUE;
 
-	if ((!$token) || (!$token_hash) || (!$process_allowed)) {
+	echo $_SESSION['user_session_token'];
+	echo "<br>";
+	echo $user_session_token;
+	echo "<br>";
+	if (hash_equals($_SESSION['user_session_token'],$user_session_token)) echo "YES"; else echo "NO";
+	exit();
+	
+	$user_token = filter_var($_POST['user_csrf_token'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	echo $user_token;
+	echo "<br>";
+	echo $_COOKIE['user_csrf_token'];
+	echo "<br>";
+	if (isset($_COOKIE['user_csrf_token'])) {
+		$csrf = $_COOKIE['user_csrf_token'];
+		if (hash_equals($csrf,$user_token)) echo "YES"; else echo "NO";
+	}
+	else echo "No cookie defined.";
+	exit();
+*/
+
+	if ((!$user_session_token) || (!$token_hash) || (!$process_allowed)) {
 		session_unset();
 		session_destroy();
 		session_write_close();
-		$redirect = $base_url."403.php";
+		$redirect = $base_url."index.php?section=403";
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
 		header($redirect_go_to);

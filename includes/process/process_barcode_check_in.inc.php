@@ -13,11 +13,11 @@ if ($request_method === "POST") {
 
 	$token_hash = FALSE;
 	$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
-	if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
+	if (hash_equals($_SESSION['user_session_token'],$token)) $token_hash = TRUE;
 
 	echo $request_method."<br>";
 	echo $token."<br>";
-	echo $_SESSION['token'];
+	echo $_SESSION['user_session_token'];
 
 	exit();
 
@@ -34,12 +34,9 @@ if ($request_method === "POST") {
 
 }
 
-
-
-
 echo $request_method."<br>";
 echo $token."<br>";
-echo $_SESSION['token'];
+echo $_SESSION['user_session_token'];
 exit();
 
 */

@@ -260,7 +260,7 @@ else {
 		$page_info7 .= sprintf("<p>%s</p>",$pay_text_023);
 		$page_info7 .= sprintf("<form class=\"form-inline\" action=\"%sincludes/process.inc.php?action=check_discount&amp;dbTable=%s&amp;id=%s\" method=\"POST\" name=\"form1\" id=\"form1\">",$base_url,$brewer_db_table,$row_brewer['uid']);
 		$page_info7 .= "<input type=\"hidden\" name=\"token\" value =\"";
-		if (isset($_SESSION['token'])) $page_info7 .= $_SESSION['token'];
+		if (isset($_SESSION['user_session_token'])) $page_info7 .= $_SESSION['user_session_token'];
 		$page_info7 .= "\">";
 		$page_info7 .= sprintf("<div class=\"form-group\"><label for=\"brewerDiscount\" class=\"sr-only\">%s</label><input class=\"form-control\" name=\"brewerDiscount\" type=\"text\" value=\"\" placeholder=\"\" autofocus></div>",$label_discount_code);
 		$page_info7 .= sprintf("<input type=\"submit\" class=\"btn btn-primary\" value=\"%s\">",$label_verify);

@@ -264,8 +264,8 @@ else {
 		$header1_7 .= sprintf("<a name=\"pay-verify\"></a><h3>%s</h3>",$label_fee_discount);
 		$page_info7 .= sprintf("<p>%s</p>",$pay_text_023);
 		$page_info7 .= sprintf("<form action=\"%sincludes/process.inc.php?action=check_discount&amp;dbTable=%s&amp;id=%s\" method=\"POST\" name=\"form1\" id=\"form1\">",$base_url,$brewer_db_table,$row_brewer['uid']);
-		$page_info7 .= "<input type=\"hidden\" name=\"token\" value =\"";
-		if (isset($_SESSION['token'])) $page_info7 .= $_SESSION['token'];
+		$page_info7 .= "<input type=\"hidden\" name=\"user_session_token\" value =\"";
+		if (isset($_SESSION['user_session_token'])) $page_info7 .= $_SESSION['user_session_token'];
 		$page_info7 .= "\">";
 		$page_info7 .= "<div class=\"row\">";
 		$page_info7 .= "<div class=\"col-sm-12 col-md-6\">";

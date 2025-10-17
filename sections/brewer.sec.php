@@ -319,7 +319,7 @@ if ($section == "admin") {
 else echo $info_msg;
 ?>
 <form id="submit-form" class="form-horizontal hide-loader-form-submit" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1">
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <div class="form-group">
     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12"></label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

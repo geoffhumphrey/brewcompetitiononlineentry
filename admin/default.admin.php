@@ -494,10 +494,10 @@ const driverObjDashTour = driver({
                     <p>Below is a list of common tasks that organizers typically complete after publishing competition results.</p>
                 </div>
                 <div class="modal-body">                  
-                    <p><strong>If this competition is BJCP sanctioned</strong>, send or complete the BJCP Organizer's Report within 21 days of the conclusion of judging.</p>
+                    <p><strong>If this competition is BJCP sanctioned</strong>, send or complete the BJCP Organizer's Report within 21 days of the conclusion of judging. You have two options when submitting your competition support to the BJCP:</p>
                         <ul>
-                            <li>Download the BJCP XML Points Report to send to the email address specified in your BJCP competition registration email. You can generate the report by expanding the Reports header on the Administration Dashboard and selecting the BJCP Points > XML link.</li>
-                            <li>Or, go to the BJCP's <a href="https://www.bjcp.org/competitions/reporting/" target="_blank">Reporting Portal</a> to submit your competition report.</li>
+                            <li><strong>Manual Data Entry</strong> &ndash; go to the BJCP's <a href="https://app.bjcp.org/competitions/report" target="_blank">Reporting Portal</a> to submit your competition report via their website's form.</li>
+                            <li><strong>XML Document Upload</strong> &ndash; download the BJCP XML Points Report and upload the file to the <a href="https://app.bjcp.org/competitions/report" target="_blank">BJCP Reporting Portal</a>. You can generate the report by expanding the Reports header on the Administration Dashboard and selecting the BJCP Points &gt; XML link.</li>
                         </ul>
                     <p><strong>If this competition has entrants that are members of the Master Homebrewer Program</strong>, download the <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit&amp;filter=mhp">MHP Member Results report</a> and send to the MHP Secretary at <a href="mailto:mhpsecretary@gmail.com">mhpsecretary@gmail.com</a>. You can find this report under the Data Exports header on the Administration Dashboard.</p>
                     <p><strong>If this competition is part of a regional circuit</strong>, download the <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a> report. You can find this report under the Data Exports header on the Administration Dashboard.</p>

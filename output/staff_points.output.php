@@ -3,13 +3,13 @@
 /**
  * Module:      staff_points.output.php
  * Description: This module calculates the BJCP points for staff, judges, and stewards
- *	            using the guidelines provided by the BJCP at https://dev.bjcp.org/about/reference/experience-point-award-schedule/.
+ *	            using the guidelines provided by the BJCP at https://bjcp.org/about/reference/experience-point-award-schedule/.
  * 
  * Revision History:
  * - fixed point output errors for judges and BOS judges
  * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, bos judge/staff, etc.)
  * - XML output is fully compliant with the BJCP Database Interface Specifications
- *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
+ *   -- http://bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
  * 
  * To figure out judge points, need to assess:
  * - Which sessions the judge was assigned to
@@ -307,7 +307,7 @@ if ($view == "default") {
 	<div class="page-header">
         	<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$output_text_024); ?> </h1>
     </div>
-    <p class="lead"><?php echo sprintf("%s %s.",$output_text_022,"http://www.bjcp.org/rules.php"); ?></p>
+    <p class="lead"><?php echo sprintf("%s %s.",$output_text_022,"https://www.bjcp.org/competitions/rules-regulations/"); ?></p>
     <ul class="list-unstyled">
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_comp_id,$_SESSION['contestID']); ?></li>
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_entries,$total_entries_received); ?></li>

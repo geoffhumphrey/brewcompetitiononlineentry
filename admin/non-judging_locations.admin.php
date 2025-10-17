@@ -56,7 +56,7 @@ if ($section != "step5") {
 // Build Secondary Page Info
 
 $secondary_page_info .= "<h5>Staff</h5>";
-$secondary_page_info .= "<p>According to <a class='hide-loader' href='http://www.bjcp.org/rules.php' target='_blank'>BJCP rules</a>, staff members are &quot;...program participants who, under the direction of the Organizer, perform an active role in support of the competition other than as a Judge, Steward, or BOS Judge.&quot;";
+$secondary_page_info .= "<p>According to <a class='hide-loader' href='https://www.bjcp.org/competitions/rules-regulations/' target='_blank'>BJCP rules</a>, staff members are &quot;...program participants who, under the direction of the Organizer, perform an active role in support of the competition other than as a Judge, Steward, or BOS Judge.&quot;";
 
 // Judging Locations & Dates List
 if ($section != "step5") {
@@ -200,7 +200,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	if (!empty($form_submit_url)) echo $form_submit_url; 
 ?>
 
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#judgingDate').datetimepicker({

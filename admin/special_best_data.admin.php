@@ -114,7 +114,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 }
 if (($action == "add") || ($action == "edit")) { ?>
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&id=<?php echo $id; ?>" name="form1">
-<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <?php
 if ($action == "add") {
 	if (empty($row_sbi['sbi_places'])) $sbi_places = 1; 

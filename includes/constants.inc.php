@@ -799,6 +799,48 @@ if ($row_contest_dates) {
  * ---------------------------- Check SMTP Status --------------------------------
  * Now housed in language.lang.php file for use in language scripts
  * 
+ * 
+ * ---------------------------- CAPTCHA Settings ---------------------------------
+ * As of v3.0, admins have a choice of using reCAPTCHA or hCAPTCHA.
+ * Hosted installations use the same hCAPTCHA site/private key combination.
  */
+
+$captcha_key = "";
+$captcha_url = "";
+$captcha_widget_class = "";
+
+if (HOSTED) {
+    $captcha_url = "https://js.hcaptcha.com/1/api.js";
+    $captcha_widget_class = "h-captcha";
+    $captcha_type = 2;
+}
+
+else {
+
+    if ((isset($_SESSION['prefsGoogleAccount'])) && (!empty($_SESSION['prefsGoogleAccount']))) {
+        
+        $captcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
+        $public_captcha_key = $captcha_key[0];
+        $private_captcha_key = $captcha_key[1];
+        if (isset($captcha_key[2])) $captcha_type = $captcha_key[2];
+        else $captcha_type = 1; // default to reCAPTCHA (only one available in previous versions)
+
+        // reCAPTCHA
+        if ($captcha_type == 1) {
+            $captcha_url = "https://www.google.com/recaptcha/api.js";
+            $captcha_widget_class = "g-recaptcha";
+        }
+
+        // hCAPTCHA 
+        if ($captcha_type == 2) {
+            $captcha_url = "https://js.hcaptcha.com/1/api.js";
+            $captcha_widget_class = "h-captcha";
+        }
+
+    }
+
+}
+
+
 
 ?>

@@ -24,11 +24,6 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
-if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
-    $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
-    $public_captcha_key = $recaptcha_key[0];
-}
-
 if ($section == "admin") $you_volunteer = $register_text_000;
 else $you_volunteer = $register_text_001;
 
@@ -362,34 +357,39 @@ if (($section != "admin") && ($action != "print")) {
     echo $warning0;
     echo $warning1;
 }
-if (NHC) echo $warning2;
+
 echo $header1_1;
 echo $page_info1;
+
 if ($go == "default") {  ?>
 <p class="lead"><?php echo $register_text_014; ?></p>
 <div class="row">
 	<?php if ($registration_open == 1) { ?>
-    <div class="col col-sm-4">
-        <a class="btn btn-primary btn-block" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant_reg; ?></a>
+    <div class="col col-xs-12 col-sm-12 col-md-4">
+        <div class="d-grid mb-2">
+        	<a class="btn btn-dark btn-lg" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant_reg; ?></a>
+        </div>
     </div>
 	<?php } ?>
 	<?php if ($judge_window_open == 1) {?>
-    <div class="col col-sm-4">
-        <a class="btn btn-warning btn-block" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge_reg; ?></a>
+    <div class="col col-xs-12 col-sm-12 col-md-4">
+    	<div class="d-grid mb-2">
+	        <a class="btn btn-dark btn-lg" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge_reg; ?></a>
+	    </div>
     </div>
-    <div class="col col-sm-4">
-        <a class="btn btn-info btn-block" href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward_reg; ?></a>
+    <div class="col col-xs-12 col-sm-12 col-md-4">
+    	<div class="d-grid mb-2">
+        	<a class="btn btn-dark btn-lg" href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward_reg; ?></a>
+        </div>
     </div>
     <?php } ?>
 </div>
-<input type="hidden" name="relocate" value="<?php echo relocate($relocate,"default",$msg,$id); ?>">
-</form>
 <?php } else { // THIS ELSE ENDS at the end of the script ?>
 
 <!-- Begin the Form -->
 	<form id="submit-form" role="form" class="form-horizontal needs-validation hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="register_form" novalidate>
 	<!-- Hidden Form Elements -->
-	<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+	<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 	<input type="hidden" name="userLevel" value="2" />
 	<?php if ($judge_hidden) { ?>
 	<input type="hidden" name="brewerJudge" value="N" />
@@ -789,7 +789,7 @@ if ($go == "default") {  ?>
 	        </div>
 	    </div>
 	</section>
-
+	<?php if ($_SESSION['prefsMHPDisplay'] == 1) { ?>
 	<section id="mhp-number">
 	    <div class="mb-3 row">
 	        <label for="brewerMHP" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_mhp_number; ?></strong></label>
@@ -799,7 +799,7 @@ if ($go == "default") {  ?>
 	        </div>
 	    </div>
 	</section>
-
+	<?php } ?>
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) ?>
     <?php } // END if ($view == "default") ?>
     <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward")))) { ?>
@@ -1197,12 +1197,12 @@ if ($go == "default") {  ?>
     <?php if ($_SESSION['prefsCAPTCHA'] == "1") { ?>
     <!-- CAPTCHA -->
 	<div class="row mb-3">
-	    <label for="reg-captcha" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong>CAPTCHA</strong></label>
+	    <label for="reg-captcha" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $login_text_007; ?></strong></label>
 	    <div class="col-sm-12 col-md-10">
-	        <div id="reg-captcha" class="g-recaptcha mb-3" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
+	        <div id="reg-captcha" class="<?php echo $captcha_widget_class; ?> mb-3" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
 	    </div>
 	</div>
-	<script src="https://www.google.com/recaptcha/api.js"></script>
+	<script src="<?php echo $captcha_url; ?>"></script>
     <?php } ?>
 	<!-- Register Button -->
 	<div class="row mb-3">

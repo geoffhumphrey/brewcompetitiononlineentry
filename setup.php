@@ -183,9 +183,9 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
  * If that's not available, default to openssl_random_pseudo_bytes.
  */
 
-if (function_exists('random_bytes')) $_SESSION['token'] = bin2hex(random_bytes(32));
-elseif (function_exists('mcrypt_create_iv')) $_SESSION['token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
-else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+if (function_exists('random_bytes')) $_SESSION['user_session_token'] = bin2hex(random_bytes(32));
+elseif (function_exists('mcrypt_create_iv')) $_SESSION['user_session_token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+else $_SESSION['user_session_token'] = bin2hex(openssl_random_pseudo_bytes(32));
 
 ?>
 <!DOCTYPE html>
