@@ -326,8 +326,8 @@ function purge_entries($type, $interval) {
 
 		*/
 
-		$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing", $styles_db_table, $_SESSION['prefsStyleSet']);
-
+		if ($_SESSION['prefsStyleSet'] == "BJCP2025") $query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND (b.brewStyleVersion = 'BJCP2021' OR b.brewStyleVersion = 'BJCP2025')", $prefix."brewing", $styles_db_table);
+		else $query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing", $styles_db_table, $_SESSION['prefsStyleSet']);
 		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 		$row_check = mysqli_fetch_assoc($check);
@@ -2737,15 +2737,19 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 
 			if ($method == "2") {  // Display by Sub-Category
 
-				$query_entry = sprintf("SELECT brewCategorySort,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+				$query_entry = sprintf("SELECT brewCategorySort,brewCategory,brewSubCategory FROM %s WHERE id='%s'", $brewing_db_table, $row_scores['eid']);
 				$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
 				$row_entry = mysqli_fetch_assoc($entry);
 
-				/*
-				if (HOSTED) $query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
-				else 
-				*/
-				$query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_entry['brewCategorySort'], $row_entry['brewSubCategory']);
+				if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+				    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
+				    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+				    else $chosen_style_set = "BJCP2021";
+				}
+
+				else $chosen_style_set = $_SESSION['prefsStyleSet'];
+
+				$query_style = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $chosen_style_set, $row_entry['brewCategorySort'], $row_entry['brewSubCategory']);
 				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 				$row_style = mysqli_fetch_assoc($style);
 
@@ -3569,15 +3573,19 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
 
 	// Check if first character is "C", "M", or "P" for ciders, meads, and provisional styles 
-    if (preg_match("/[C,M,P]/", $style_break[0])) $style_num = $style_break[0];
+    if (preg_match("/[C,M,P,L]/", $style_break[0])) $style_num = $style_break[0];
 	elseif ($style_break[0] <= 9) $style_num = sprintf('%02d',$style_break[0]);
 	else $style_num = $style_break[0];
 
-	/*
-	if (HOSTED) $query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $style_num, $style_break[1], $prefix."styles", $_SESSION['prefsStyleSet'], $style_num, $style_break[1]);
-	else 
-	*/
-	$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table, $_SESSION['prefsStyleSet'], $style_num, $style_break[1]);
+	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+	    $first_character = mb_substr($style_break[0], 0, 1);
+	    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    else $chosen_style_set = "BJCP2021";
+	}
+
+	else $chosen_style_set = $_SESSION['prefsStyleSet'];
+
+	$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table, $chosen_style_set, $style_num, $style_break[1]);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 
@@ -3810,13 +3818,8 @@ function styles_active($method,$archive="") {
 
 		$a = array();
 		
-		/*
-		if (HOSTED) {
-			$query_styles = sprintf("SELECT DISTINCT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT DISTINCT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_set, $prefix."styles", $style_set);
-		}
-		*/
-		
-		$query_styles = sprintf("SELECT DISTINCT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_set);
+		if ($style_set == "BJCP2025") $query_styles = sprintf("SELECT DISTINCT brewStyleGroup FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table, $style_set);
+		else $query_styles = sprintf("SELECT DISTINCT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_set);
 		if ((empty($archive)) || ($archive == "default")) $query_styles .= " AND brewStyleActive='Y'";
 		$query_styles .= " ORDER BY brewStyleGroup ASC";
 

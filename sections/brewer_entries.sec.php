@@ -261,12 +261,15 @@ if ($totalRows_log > 0) {
 						
 				if (in_array($row_log['id'], $evals)) {
 
-					/*
-					if (HOSTED) $query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'", "bcoem_shared_styles", $_SESSION['prefsStyleSet'], $row_log['brewCategorySort'], $row_log['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_log['brewCategorySort'], $row_log['brewSubCategory']);
-					else 
-					*/
-					$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_log['brewCategorySort'],$row_log['brewSubCategory']);
-					
+					if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+					    $first_character = mb_substr($row_log['brewCategorySort'], 0, 1);
+					    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+					    else $chosen_style_set = "BJCP2021";
+					}
+
+					else $chosen_style_set = $_SESSION['prefsStyleSet'];
+
+					$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$chosen_style_set,$row_log['brewCategorySort'],$row_log['brewSubCategory']);					
 					$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 					$row_style = mysqli_fetch_assoc($style);
 
@@ -274,6 +277,7 @@ if ($totalRows_log > 0) {
 					$scoresheet_es = TRUE;
 					$print_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
 					$scoresheet_link_eval = "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_025." &ndash; &ldquo;".$entry_name.".&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a>&nbsp;&nbsp;";
+				
 				}
 			
 			}

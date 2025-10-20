@@ -1020,7 +1020,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsCAPTCHA" value="0" id="prefsCAPTCHA_0"  <?php if (($section != "step3") && ($row_prefs['prefsCAPTCHA'] == "0")) echo "CHECKED";  ?> /> No
             </label>
         </div>
-        <div class="help-block">reCAPTCHA is enabled by default. If you are having trouble with it, disable it here. However, <strong class="text-danger">this is a great security risk</strong> - disabling reCAPTCHA may allow bots to register and/or spam contacts via your site.</div>
+        <div class="help-block">CAPTCHA is enabled by default. If you are having trouble with it, disable it here. However, <strong class="text-danger">this is a great security risk</strong> - disabling CAPTCHA may allow bots to register and/or spam contacts via your site.</div>
     </div>
 </div>
 <div id="reCAPTCHA-keys">

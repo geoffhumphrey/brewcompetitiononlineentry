@@ -465,10 +465,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 					$row_style_name = mysqli_fetch_assoc($style_name);
 
-					/*
-					if (HOSTED) $query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' UNION ALL SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $styles_db_table, $prefix."styles");
-					else 
-					*/
 					$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $styles_db_table);
 					$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
 					$row_style_num = mysqli_fetch_assoc($style_num);

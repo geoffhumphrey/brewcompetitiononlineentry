@@ -667,71 +667,21 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
             $update_selected_styles = array();
             $prefsStyleSet = $_SESSION['prefsStyleSet'];
 
-            if (HOSTED) {
-                
-                $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM `bcoem_shared_styles` WHERE brewStyleVersion='%s'", $prefsStyleSet);
-                $styles_default = mysqli_query($connection,$query_styles_default);
-                $row_styles_default = mysqli_fetch_assoc($styles_default);
+            if ($prefsStyleSet == "BJCP2025") $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2')", $prefix."styles");
+            else $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE brewStyleVersion='%s'", $prefix."styles", $prefsStyleSet);
+            $styles_default = mysqli_query($connection,$query_styles_default);
+            $row_styles_default = mysqli_fetch_assoc($styles_default);
 
-                if ($row_styles_default) {
-
-                    do {
-
-                        $update_selected_styles[$row_styles_default['id']] = array(
-                            'brewStyle' => $row_styles_default['brewStyle'],
-                            'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
-                            'brewStyleNum' => $row_styles_default['brewStyleNum'],
-                            'brewStyleVersion' => $row_styles_default['brewStyleVersion'],
-                            'brewStyleType' => $row_styles_default['brewStyleType']
-                        );
-
-                    } while($row_styles_default = mysqli_fetch_assoc($styles_default));
-
-                        
-                }
-                
-                $query_styles_custom = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE brewStyleOwn='custom'", $prefix."styles");
-                $styles_custom = mysqli_query($connection,$query_styles_custom);
-                $row_styles_custom = mysqli_fetch_assoc($styles_custom);
-
-                if ($row_styles_custom) {
-
-                    do {
-
-                        $update_selected_styles[$row_styles_custom['id']] = array(
-                            'brewStyle' => sterilize($row_styles_custom['brewStyle']),
-                            'brewStyleGroup' => sterilize($row_styles_custom['brewStyleGroup']),
-                            'brewStyleNum' => sterilize($row_styles_custom['brewStyleNum']),
-                            'brewStyleVersion' => sterilize($row_styles_custom['brewStyleVersion']),
-                            'brewStyleType' => $row_styles_default['brewStyleType']
-                        );
-
-                    } while($row_styles_custom = mysqli_fetch_assoc($styles_custom));
-
-                    
-                }
-            
-            } // end if (HOSTED)
-                
-            else {
-
-                $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE brewStyleVersion='%s'", $prefix."styles", $prefsStyleSet);
-                $styles_default = mysqli_query($connection,$query_styles_default);
-                $row_styles_default = mysqli_fetch_assoc($styles_default);
-
-                if ($row_styles_default) {
-                    do {
-                        $update_selected_styles[$row_styles_default['id']] = array(
-                            'brewStyle' => sterilize($row_styles_default['brewStyle']),
-                            'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
-                            'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
-                            'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion']),
-                            'brewStyleType' => $row_styles_default['brewStyleType']
-                        );
-                    } while($row_styles_default = mysqli_fetch_assoc($styles_default));
-                }
-
-            } // end else
+            if ($row_styles_default) {
+                do {
+                    $update_selected_styles[$row_styles_default['id']] = array(
+                        'brewStyle' => sterilize($row_styles_default['brewStyle']),
+                        'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
+                        'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
+                        'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion'])
+                    );
+                } while($row_styles_default = mysqli_fetch_assoc($styles_default));
+            }
 
             $update_selected_styles = json_encode($update_selected_styles);
 

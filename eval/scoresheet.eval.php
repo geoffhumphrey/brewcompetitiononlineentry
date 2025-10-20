@@ -179,12 +179,16 @@ if ($action == "add") {
   $totalRows_entry_info = mysqli_num_rows($entry_info);
 
   if ($totalRows_entry_info > 0) {
-    
-    /*
-    if (HOSTED) $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s' UNION ALL SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $styles_db_table, $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet'], $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
-    else
-    */
-    $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
+
+    if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+        $first_character = mb_substr($row_entry_info['brewCategorySort'], 0, 1);
+        if ($first_character == "C") $chosen_style_set = "BJCP2025";
+        else $chosen_style_set = "BJCP2021";
+    }
+
+    else $chosen_style_set = $_SESSION['prefsStyleSet'];     
+
+    $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $chosen_style_set);
   }
 
 }

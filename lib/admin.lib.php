@@ -894,11 +894,8 @@ function received_entries() {
 	
 	$style_array = array();
 
-	/*
-	if (HOSTED) $query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom');", $styles_db_table, $_SESSION['prefsStyleSet'], $prefix."styles", $_SESSION['prefsStyleSet']);
-	else 
-	*/
-	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom');", $prefix."styles",$_SESSION['prefsStyleSet']);
+	if ($_SESSION['prefsStyleSet'] == "BJCP2025") $query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom';", $prefix."styles");
+	else $query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom');", $prefix."styles",$_SESSION['prefsStyleSet']);
 	$styles = mysqli_query($connection,$query_styles);
 	$row_styles = mysqli_fetch_array($styles);
 

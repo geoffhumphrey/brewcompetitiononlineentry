@@ -44,11 +44,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (in_array($row_check_received['id'],$empty_array)) {
 
 				// First, get the id of the entry's style category/subcategory
-				/*
-				if (HOSTED) $query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
-				else 
-				*/
-				$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
+				if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+				    $first_character = mb_substr($row_check_received['brewCategorySort'], 0, 1);
+				    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+				    else $chosen_style_set = "BJCP2021";
+				}
+
+				else $chosen_style_set = $_SESSION['prefsStyleSet'];
+
+				$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
 				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 				$row_style = mysqli_fetch_assoc($style);
 
@@ -85,11 +89,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!in_array($row_check_received['id'],$flight_array)) {
 
 			// First, get the id of the entry's style category/subcategory
-			/*
-			if (HOSTED) $query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
-			else
-			*/
-			$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
+			if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+			    $first_character = mb_substr($row_check_received['brewCategorySort'], 0, 1);
+			    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+			    else $chosen_style_set = "BJCP2021";
+			}
+
+			else $chosen_style_set = $_SESSION['prefsStyleSet'];
+			
+			$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
 

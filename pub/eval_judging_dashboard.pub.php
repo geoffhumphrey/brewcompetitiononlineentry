@@ -14,7 +14,16 @@ elseif (is_array($user_submitted_eval)) $score_previous = TRUE;
 if (TESTING) {
 
 	$styles_db_table = $prefix."styles";
-	$query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
+
+	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+	    $first_character = mb_substr($row_entries['brewCategorySort'], 0, 1);
+	    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    else $chosen_style_set = "BJCP2021";
+	}
+
+	else $chosen_style_set = $_SESSION['prefsStyleSet'];
+
+	$query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$chosen_style_set,$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 	
