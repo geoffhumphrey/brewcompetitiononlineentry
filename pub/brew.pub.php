@@ -760,7 +760,7 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
             		<label class="form-check-label" for="brewMead3_1"><?php echo $label_standard; ?></label>
             	</div>
             	<div class="form-check form-check-inline">
-            		<input class="form-check-input" type="radio" name="brewMead3" value="Standard" id="brewMead3_2" <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED";  ?> />
+            		<input class="form-check-input" type="radio" name="brewMead3" value="Sack" id="brewMead3_2" <?php if (($action == "edit") && ($row_log['brewMead3'] == "Sack")) echo "CHECKED";  ?> />
             		<label class="form-check-label" for="brewMead3_2"><?php echo $label_sack; ?></label>
             	</div>
             	<div>
