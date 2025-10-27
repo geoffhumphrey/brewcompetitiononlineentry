@@ -74,7 +74,11 @@ p {
 }
 
 hr {
-	color: #ddd;
+	display: block;
+	margin: 8px 0 8px 0;
+	width: 100%;
+	height: 0;
+	border-bottom: 2px solid #ccc;
 }
 
 /** --------------------------------------------------- **/
@@ -241,8 +245,8 @@ hr {
 }
 
 .tick-table-sm {
-    min-width: 225px;
-    max-width: 225px;
+    min-width: 200px;
+    max-width: 200px;
     min-height: 10px;
     max-height: 10px;
     font-size: .9em;
@@ -257,7 +261,7 @@ hr {
 }
 
 .judge-score {
-	font-size: 1.3em;
+	font-size: 1.8em;
 }
 
 .tick-row {
@@ -276,14 +280,13 @@ hr {
 	margin-top: 10px;
 }
 
-.header-h5 h5 {
-    font-size: 1.3em;
-
+h5 {
+    font-size: 1.8em;
 }
 
 .header-bdr-bottom {
 	border-bottom: 2px solid #ccc; 
-	padding-bottom: 3px;
+	padding-bottom: 10px;
 }
 
 .no-break {

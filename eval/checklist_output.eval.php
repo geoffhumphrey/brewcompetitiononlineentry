@@ -1,33 +1,38 @@
 <!-- Aroma -->
-<h5>Aroma<span class="pull-right"><?php echo $row_eval['evalAromaScore']; ?>/12</span></h5>
+<h5>Aroma<span class="pull-right"><?php echo $row_eval['evalAromaScore']; ?> <small>/ 12</small></span></h5>
+<hr>
 <p><?php echo $row_eval['evalAromaChecklist']; ?></p>
 <?php if (!empty($row_eval['evalAromaChecklistDesc'])) { ?>
 <p><?php echo $row_eval['evalAromaChecklistDesc']; ?></p>
 <?php } ?>
 <p><?php echo $row_eval['evalAromaComments']; ?></p>
 <!-- Appearance -->
-<h5>Appearance<span class="pull-right"><?php echo $row_eval['evalAppearanceScore']; ?>/3</span></h5>
+<h5>Appearance<span class="pull-right"><?php echo $row_eval['evalAppearanceScore']; ?> <small>/ 3</small></span></h5>
+<hr>
 <p><?php echo $row_eval['evalAppearanceChecklist']; ?></p>
 <?php if (!empty($row_eval['evalAppearanceChecklistDesc'])) { ?>
 <p><?php echo $row_eval['evalAppearanceChecklistDesc']; ?></p>
 <?php } ?>
 <p><?php echo $row_eval['evalAppearanceComments']; ?></p>
 <!-- Flavor -->
-<h5>Flavor<span class="pull-right"><?php echo $row_eval['evalFlavorScore']; ?>/20</span></h5>
+<h5>Flavor<span class="pull-right"><?php echo $row_eval['evalFlavorScore']; ?> <small>/ 20</small></span></h5>
+<hr>
 <p><?php echo $row_eval['evalFlavorChecklist']; ?></p>
 <?php if (!empty($row_eval['evalFlavorChecklistDesc'])) { ?>
 <p><?php echo $row_eval['evalFlavorChecklistDesc']; ?></p>
 <?php } ?>
 <p><?php echo $row_eval['evalFlavorComments']; ?></p>
 <!-- Mouthfeel -->
-<h5>Mouthfeel<span class="pull-right"><?php echo $row_eval['evalMouthfeelScore']; ?>/5</span></h5>
+<h5>Mouthfeel<span class="pull-right"><?php echo $row_eval['evalMouthfeelScore']; ?> <small>/ 5</small></span></h5>
+<hr>
 <p><?php echo $row_eval['evalMouthfeelChecklist']; ?></p>
 <?php if (!empty($row_eval['evalMouthfeelChecklistDesc'])) { ?>
 <p><?php echo $row_eval['evalMouthfeelChecklistDesc']; ?></p>
 <?php } ?>
 <p><?php echo $row_eval['evalMouthfeelComments']; ?></p>
 <!-- Overall Impression -->
-<h5>Overall Impression<span class="pull-right"><?php echo $row_eval['evalOverallScore']; ?>/10</span></h5>
+<h5>Overall Impression<span class="pull-right"><?php echo $row_eval['evalOverallScore']; ?> <small>/ 10</small></span></h5>
+<hr>
 <p><?php echo $row_eval['evalOverallComments']; ?></p>
 <div class="row" style="padding: 20px 0 0 0;">
 	<div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -73,7 +78,7 @@
     </div>  
 </div><!-- ./box -->
 <!-- Total -->
-<h5><?php echo $label_total; ?><span class="pull-right"><?php echo $score; ?>/50</span></h5>
+<h5><?php echo $label_total; ?><span class="pull-right"><?php echo $score; ?> <small>/ 50</small></span></h5>
 <!-- Scoring Guide -->
 <div class="row footer-descriptor" style="padding: 20px 0 0 0;">
 	<div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">

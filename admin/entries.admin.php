@@ -989,7 +989,7 @@ $(document).ready(function () {
         <th nowrap>Entry</th>
         <th nowrap>Judging <?php if (($action != "print") && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided. Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="<?php echo $hidden_md; ?>">Name</th>
-        <th>Style <a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Judging Numbers" data-content="If there is a <span class='fa fa-info-circle'></span> icon next to the style name, the entrant provided required and/or optional information about their entry. Select the icon to review the information."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a></th>
+        <th>Style</th>
         <th class="<?php echo $hidden_sm; ?>"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>
         <?php if ($pro_edition == 0) { ?>
         <th class="<?php echo $hidden_md; ?> hidden-print">Club</th>

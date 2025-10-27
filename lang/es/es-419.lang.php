@@ -2167,6 +2167,7 @@ $label_exceptions = "Excepciones";
 $label_style_excepted = "Excepciones de estilo";
 $label_no_sessions = "Ninguna sesión seleccionada";
 $label_resume_updates = "Reanudar actualizaciones";
+$label_recorded = "Registrado";
 
 $brewer_text_056 = "Seleccione &quot;Darse de baja&quot; arriba si no desea participar en ninguna oportunidad Pro-Am asociada con esta competencia.";
 

@@ -2168,6 +2168,7 @@ $label_exceptions = "Exceptions";
 $label_style_excepted = "Exceptions de style";
 $label_no_sessions = "Aucune session sélectionnée";
 $label_resume_updates = "Reprendre les mises à jour";
+$label_recorded = "Enregistré";
 
 $brewer_text_056 = "Sélectionnez &quot;Se désinscrire&quot; ci-dessus si vous ne souhaitez pas participer aux opportunités Pro-Am associées à cette compétition.";
 

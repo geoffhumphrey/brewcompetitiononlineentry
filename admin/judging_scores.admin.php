@@ -522,7 +522,7 @@ $(document).ready(function() {
         <span class="hidden"><?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "1"))) echo $score_entry_data[4]; ?></span>
             <div class="form-group" id="score-place-ajax-<?php echo $saving_random_num; ?>-scorePlace-form-group">
             <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
-            <select class="form-control nodupe" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>')">
+            <select class="form-control nodupe" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $ajax_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>')">
             <?php } else { ?>
             <select class="form-control" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $ajax_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>','value')">    
             <?php } ?>

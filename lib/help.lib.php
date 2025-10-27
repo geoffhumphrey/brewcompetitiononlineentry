@@ -15,14 +15,15 @@ function bcoem_dashboard_help($content) {
 		$bcoem_dashboard_help_body .= "<p>The Competition Preparation category houses links to areas of your site that are intended to be completed before account or entry registration opens. Much of this information was completed during the set up process.</p>";
 		$bcoem_dashboard_help_body .= "<p>Expand the category by selecting the heading or icon. Once expanded, you are presented with several choices. You can:</p>";
 		$bcoem_dashboard_help_body .= "<ol>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=dates\">Edit</a> all entry-related, account-related, judging and non-judging session, results publication, and awards-related dates associated with the competition.";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=contest_info\">Edit</a> competition info including BJCP Competition ID (if applicable), registraion, entry, and drop-off windows, shipping location address, rules, awards, and other information.</a></li>";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=contacts\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=contacts&amp;action=add\">add</a> competition contacts.";
-  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=special_best\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">add</a> custom categories.";
-  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=dropoff\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=dropoff&amp;action=add\">add</a> drop-off locations.";
-  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=judging\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=add\">add</a> judging locations.";
+  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=special_best\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">add</a> custom categories &ndash; useful if the competition features unique “best of show” categories, such as Pro-Am opportunities, Stewards’ Choice, Best Name, etc.";
+  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=dropoff\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=dropoff&amp;action=add\">add</a> entry drop-off locations and associated information.";
+  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=judging\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=add\">add</a> judging locations and associated information.";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=sponsors\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=sponsors&amp;action=add\">add</a> sponsors.</li>";
-		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=styles\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=styles&amp;action=add\">add</a> accepted styles.</li>";
-  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=style_types\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=style_types&amp;action=add\">add</a> style types.</li>";
-  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=contest_info\">Edit</a> competition info.</a></li>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=styles\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=styles&amp;action=add\">add</a> accepted styles &ndash; these can also include any competition-specific styles.</li>";
+  		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=style_types\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=style_types&amp;action=add\">add</a> style types (e.g., beer, mead, cider, etc.). BCOE&M ships with eight pre-defined style types.</li>";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=upload\">Upload</a> a competition logo or sponsor logos.</li>";
 		$bcoem_dashboard_help_body .= "</ol>";
 		break;
@@ -43,47 +44,70 @@ function bcoem_dashboard_help($content) {
 
 		case "sorting":
 		$bcoem_dashboard_help_title .= "Entry Sorting Help";
-		$bcoem_dashboard_help_body .= "<p>Once the registration period and entry window for your competition passes, the next step in the process, after picking up entries from various drop off points, is to sort them. BCOE&amp;M provides tools to assist in sorting entries.</p>";
+		$bcoem_dashboard_help_body .= "<p>Once the registration period and entry window for your competition passes, the next step in the process, after picking up entries from various drop off points and the designated shipping location, is to sort them. BCOE&amp;M provides tools to assist in sorting entries.</p>";
 		$bcoem_dashboard_help_body .= "<p>Under the Entry Sorting heading, administrators are presented with some options specific to the task, namely:";
 		$bcoem_dashboard_help_body .= "<ul>";
+		if ($_SESSION['userAdminObfuscate'] == 0) $bcoem_dashboard_help_body .= "<li>Regenerating/replacing the system-assigned judging numbers. If your competition is not utilizing the barcode check-in feature, administrators can make extra sure that all entries in the database are assigned a unique judging number by activating this function. <strong>This should be done after the entry window has closed.</strong></li>";
 		$bcoem_dashboard_help_body .= "<li>Checking-in entries (marking them as paid and received) <a href=\"".$base_url."index.php?section=admin&amp;go=entries\">manually</a>";
 		if ($_SESSION['userAdminObfuscate'] == 0) $bcoem_dashboard_help_body .= " or, if enabled, <a href=\"".$base_url."index.php?section=admin&amp;go=checkin\">via barcode scanner</a>";
 		$bcoem_dashboard_help_body .= ".</li>";
 		$bcoem_dashboard_help_body .= "<li>Printing sorting sheets by entry numbers or judging numbers.</li>";
 		$bcoem_dashboard_help_body .= "<li>Printing entry number/judging number cheat sheets organized by style.</li>";
-		$bcoem_dashboard_help_body .= "<li>Printing labels for individual bottles with their unique entry or judging number. Available formats are letter (<a class=\"hide-loader\" href=\"http://www.avery.com/avery/en_us/Products/Labels/Addressing-Labels/Easy-Peel-White-Address-Labels_05160.htm\" target=\"_blank\">Avery 5160</a>) and A4 (<a class=\"hide-loader\" href=\"http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm\" target=\"_blank\">Avery 3422</a>) for rectangular labels, 0.50 inch/13mm round (<a class=\"hide-loader\" href=\"http://www.onlinelabels.com/Products/OL32.htm\" target=\"_blank\">Online Labels OL32</a>) or 0.75 inch/19 mm round (<a class=\"hide-loader\" href=\"http://www.onlinelabels.com/Products/OL5275WR.htm\" target=\"_blank\">Online Lables OL5275WR</a>).</li>";
+		$bcoem_dashboard_help_body .= "<li>Printing labels to attach to individual bottles with their unique entry or judging number.</li>";
+		$bcoem_dashboard_help_body .= "<li>Reports to help to sort entries into their associated tables (this requires the use of Tables Planning Mode &ndash; see the Organizing section to enable).</li>";
 		$bcoem_dashboard_help_body .= "</ul>";
-		if ($_SESSION['userAdminObfuscate'] == 0) $bcoem_dashboard_help_body .= "<p>Of note is the Regenerate Judging Numbers function. If your competition is not utilizing the barcode check-in feature, administrators can make extra sure that all entries in the database are assigned a unique judging number by activating this function.</p>";
 
 		break;
 
+		//<p>When the Tables Competition Mode function is enabled by an admin, it indicates to the system that the planning stage is over and <strong>all applicable entries have been marked as <u>received</u></strong>.</p><p>Table configurations and assignments can still be changed as necessary while in Competition Mode. Pullsheets will be available.</p>
+
 		case "organizing":
 		$bcoem_dashboard_help_title .= "Organizing Help";
-		$bcoem_dashboard_help_body .= "<p>After sorting has been accomplished, the next task for administrators is to organize the competition data in preparation for judging. Organization is really where the <em>M</em> in BCOE&amp;M shows its utility.</p>";
+		$bcoem_dashboard_help_body .= "<p>These functions help Admins to organize the competition data in preparation for judging. Organization is really where the <em>M</em> in BCOE&amp;M shows its utility.</p>";
 		$bcoem_dashboard_help_body .= "<p>Organization in BCOE&amp;M begins with assigning individual participants as a <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=staff\">staff</a> member and/or <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=judges\">judge</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=stewards\">steward</a>. This builds a pool of available participants to assign to various duties in the competition.</p>";
 		$bcoem_dashboard_help_body .= "<p>Once assignments have been given, the next steps are to:</p>";
 		$bcoem_dashboard_help_body .= "<ol>";
 		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=judging_tables\">Define tables</a> where specific sub-styles will be judged.</li>";
-		$bcoem_dashboard_help_body .= "<li>Verify that <a href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;filter=orphans\">all accepted style categories with entries are assigned to tables</a>.</li>";
+		// $bcoem_dashboard_help_body .= "<li>Verify that <a href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;filter=orphans\">all accepted style categories with entries are assigned to tables</a>.</li>";
 		$bcoem_dashboard_help_body .= "<li>Add flights to tables (if queued judging is disabled).</li>";
 		$bcoem_dashboard_help_body .= "<li>Assign <a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;action=assign&amp;filter=rounds\">tables to rounds</a>.</li>";
 		$bcoem_dashboard_help_body .= "<li>Assign judges and stewards to tables (and flights, if applicable).</li>";
 		$bcoem_dashboard_help_body .= "</ol>";
+
+		$bcoem_dashboard_help_body .= "<div class=\"alert alert-info\">";
+		$bcoem_dashboard_help_body .= "<h5 style='font-size: 1.1em;'>Tables Planning Mode vs. Tables Competition Mode</h5>";
+		$bcoem_dashboard_help_body .= "<p>When the <strong>Tables Planning Mode</strong> function is enabled, Admins can define tables, flights, rounds, judge/steward assignments, and associated entry limits (if enabled) <em>prior</em> to entries being marked as paid and/or received (i.e., prior to sorting). Any table configurations and associated assignments <em>will not be official</em> until an Admin returns to Tables Competition Mode after entries have been sorted and marked as received in the system. <em>Pullsheets will <u>not</u> be available</em>.</p>";
+		$bcoem_dashboard_help_body .= "<p>When the <strong>Tables Competition Mode</strong> function is enabled by an Admin, it indicates to the system that the planning stage is over and <em>all applicable entries have been marked as <u>received</u></em>. Table configurations and assignments can still be changed as necessary while in Competition Mode. Pullsheets will be available.</p>";
+		$bcoem_dashboard_help_body .= "</div>";
+
 		if ($_SESSION['userAdminObfuscate'] == 0) $bcoem_dashboard_help_body .= "<p>Once these tasks have been completed, you are ready to print reports you need prior to judging: pullsheets, table cards, assignment lists, sign-in sheets, scoresheet lables, and name tags. See the Reports section.</p>";
 		break;
 
 		case "scoring":
 		$bcoem_dashboard_help_title .= "Scoring Help";
-		$bcoem_dashboard_help_body .= "<p>During or after the initial round of judging, competition organizers can record the assigned score and place, if applicable, for each entry. From this pool of scores, BCOE&amp;M then determines which entry or entries move on to the Best of Show round by style type (see the competition&rsquo;s organization preferences).<p>";
-		$bcoem_dashboard_help_body .= "<p>For instance, administrators can designate that only the 1st place entries for the Beer style type may move to the BOS round, but the 1st, 2nd, and 3rd place from the Mead and Cider categories move on.";
+		$bcoem_dashboard_help_body .= "<p>During or after the initial round of judging, competition organizers manage the assigned score and place, if applicable, for each entry.</p>";
+		$bcoem_dashboard_help_body .= "<p>Scores can be recorded in one of two ways, depending upon whether Electronic Scoresheets are enabled and utilized by judges to record their evaluations of each entry.</p>";
+		$bcoem_dashboard_help_body .= "<ol>";
+		$bcoem_dashboard_help_body .= "<li>If Electronic Scoresheets are enabled, individual and consensus scores are recorded by judges with their evaluations. However, please note that <strong>scores and associated places are not official until an Admin imports the matching consensus scores into the scores database</strong>. This can be done via the <a href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\">Administration: Entry Evaluations</a> function.";
+		$bcoem_dashboard_help_body .= "<li>If not using Electronic Scoresheets, competition organizers can manually enter the assigned score and place, if applicable, for each entry.</li>";
+		$bcoem_dashboard_help_body .= "</ol>";
+		$bcoem_dashboard_help_body .= "<p>From this pool of scores, BCOE&amp;M then determines which entry or entries move on to the Best of Show round by style type (see the <a href=\"".$base_url."index.php?section=admin&amp;go=style_types\">Administration: Style Types</a> function to determine the BOS Pull Method for each).<p>";
+		$bcoem_dashboard_help_body .= "<p class=\"well\"><small>For example, administrators can designate that only the 1st place entries for the Beer style type may move to the BOS round, but the 1st, 2nd, and 3rd place from the Mead and Cider categories move on.</small></p>";
 		$bcoem_dashboard_help_body .= "<p>Once all scores and places have been recorded for the initial round of judging, Administrators can then view and print pullsheets for the Best of Show round.</p>";
-		$bcoem_dashboard_help_body .= "<p>After the BOS round has completed, administrators can then enter the BOS winners for each style type.</p>";
+		$bcoem_dashboard_help_body .= "<p>After the BOS round has completed, administrators can then enter the BOS winners for each style type in addition to any applicable custom category winners.</p>";
 		break;
 
 		case "preferences":
 		$bcoem_dashboard_help_title .= "Preferences Help";
-		$bcoem_dashboard_help_body .= "<p><a href=\"".$base_url."index.php?section=admin&amp;go=preferences\">Website Preferences</a> are those that affect the behavior of your BCOE&amp;M installation, such as the overall site theme, styleset to use, entry limit, per-participant entry limit, units of measurement, currency and localization, etc.</p>";
-		$bcoem_dashboard_help_body .= "<p><a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\">Judging/Competition Organization Preferences</a> are those affect how BCOE&amp;M behaves with regard to tables, flights, and best of show functions.</p>";
+		$bcoem_dashboard_help_body .= "<p>BCOE&amp;M offers several ways to customize the behavior of your BCOE&amp;M installation. Preferences are divided into six salient categories:</p>";
+		$bcoem_dashboard_help_body .= "<ol>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=preferences\">General Preferences</a> include the competition type (amateur or professional), admin theme, results date and time display, winner distribution method (by medal group, by style, or by sub-style), CAPTCHA, and localization.</p>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=preferences&amp;action=entries\">Entry Preferences</a> include style set, entry label options, entry fees and discounts, and any overall entry limits, per-style type and per-style limits.</p>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=preferences&amp;action=email\">Email Sending Preferences</a> are those that govern whether or not the BCOE&amp;M system can send emails. To enable the system to send emails, you will need to provide a valid email address and associated information to send emails via the Simple Mail Transfer Protocol (SMTP).</p>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=preferences&amp;action=payment\">Currency and Payment Preferences</a> allow for defining of accepted currency and the methods the competition will employ to collect fees (cash, check, PayPal).</p>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=preferences&amp;action=payment\">Best Brewer and/or Best Club Preferences</a> allows admins to define and display a list of best brewers and/or clubs according to defined points and tie break rules. Best Brewers and Best Clubs will be displayed with overall winners.</p>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\">Judging/Competition Organization Preferences</a> are those affect how BCOE&amp;M behaves with regard to tables, flights, and best of show functions.</p>";
+		$bcoem_dashboard_help_body .= "<ol>";
 		break;
 
 		case "reports":
@@ -119,12 +143,11 @@ function bcoem_dashboard_help($content) {
 
 		case "data-exports":
 		$bcoem_dashboard_help_title .= "Data Exports Help";
-		$bcoem_dashboard_help_body .= "<p>Under the Data Exports heading, BCOE&amp;M features exporting options intended to provide administrators competition related data in easy to use formats such as CSV, HTML, Word, BBC, and PDF.</p>";
+		$bcoem_dashboard_help_body .= "<p>Under the Data Exports heading, BCOE&amp;M features exporting options intended to provide administrators competition related data in CSV format &ndash; easily readable by spreadsheet programs such as Microsoft Excel, Google Sheets, or Open Office Calc.</p>";
+		$bcoem_dashboard_help_body .= "<p>Available exports include:</p>";
 		$bcoem_dashboard_help_body .= "<ul>";
-		$bcoem_dashboard_help_body .= "<li>CSV (comma separated value) files are easily read and manipulated by spreadsheet programs such as Microsoft Excel or Open Office Calc.</li>";
-		$bcoem_dashboard_help_body .= "<li>HTML files are useful for posting to another website or blog using standardized tags.</li>";
-		$bcoem_dashboard_help_body .= "<li>BBC (bulletin board code) files contain specialized markup for forum websites that utilize standardized bulletin board code. The <a class=\"hide-loader\" href=\"https://www.homebrewersassociation.org/forum/\" target=\"_blank\">AHA Forum</a> accepts BBC code for posts. This is useful if you want to announce your competition using the Promo Materials BBC export option.</li>";
-		$bcoem_dashboard_help_body .= "<li>Word files are downloads that are easily read and edited by word processing programs such as Microsoft Word or Open Office Writer.</li>";
+		$bcoem_dashboard_help_body .= "<li>Participant-related data, including contact information for judges, stewards, staff, and any winners (for awards or circuit reporting).</li>";
+		$bcoem_dashboard_help_body .= "<li>Entry-related data, including dumps of all associated data, paid, received, and non-paid entries, and entries associated with participants.</li>";
 		$bcoem_dashboard_help_body .= "</ul>";
 		break;
 
@@ -301,7 +324,7 @@ function bcoem_help($section,$go,$action,$filter) {
 	if ($section == "admin") {
 
 		if ($go == "contacts") {
-			$bcoem_help_title .= "Contract Help";
+			$bcoem_help_title .= "Contact Help";
 			$bcoem_help_body .= "<p>Define the contacts associated with the competition (e.g., the Competition Coordinator, Head Judge, Cellar Master, etc.). The names will be available via a drop-down list on the Contact page.</p>";
 			$content = TRUE;
 		}
@@ -428,8 +451,9 @@ function bcoem_help($section,$go,$action,$filter) {
 		}
 
 		if ($go == "preferences") {
-			$bcoem_help_title .= "Website Preferences Help";
-			$bcoem_help_body .= "<p>Here, site admins can customize the display and function of the competition site from pre-defined variables. More information about particular preferences can be accessed by selecting the &ldquo;Info&rdquo; buttons below the line items.</p>";
+			$bcoem_help_title .= "Preferences Help";
+			$bcoem_help_body .= "<p>Here, site admins can customize the display and function of the competition site from pre-defined variables. More information about particular preferences can be accessed by selecting the &ldquo;Info&rdquo; buttons below line items.</p>";
+			$bcoem_help_body .= "<p>Preferences are presented categorically depending upon their function and focus.</p>";
 			$content = TRUE;
 		}
 

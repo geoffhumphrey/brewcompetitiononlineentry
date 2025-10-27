@@ -325,6 +325,23 @@ if (ENABLE_MARKDOWN) {
     } catch (error) {
         console.error('Error checking user agent.', error)
     }
+
+    var date_time_now = new Date();
+    var date_time_now = date_time_now.getTime();
+    var base_url = "<?php echo $base_url; ?>";
+    var ajax_url = "<?php echo $ajax_url; ?>";
+    var section = "<?php echo $section; ?>";
+    var action = "<?php echo $action; ?>";
+    var go = "<?php echo $go; ?>";
+    var edition = "<?php echo $_SESSION['prefsProEdition'];?>";
+    var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
+    var label_length = "<?php echo $label_length; ?>";
+    var label_score = "<?php echo $label_score; ?>";
+    var entry_window_open = "<?php if (isset($entry_window_open)) echo $entry_window_open; ?>";
+    var current_timezone = "<?php if (isset($_SESSION['prefsTimeZone'])) echo get_timezone($_SESSION['prefsTimeZone']); ?>";
+    var label_weeks = "<?php echo strtolower($label_weeks); ?>";
+    var label_days = "<?php echo strtolower($label_days); ?>";
+    var label_hours = "<?php echo strtolower($label_hours); ?>";
 </script>
 
 <!-- Public Pages -->
@@ -641,23 +658,7 @@ if ($logged_in) {
 <script src="<?php echo $js_app_pub_url; ?>"></script> 
 <script src="<?php echo $js_invoke_url; ?>"></script>
 <script>
-    var date_time_now = new Date();
-    var date_time_now = date_time_now.getTime();
-    var base_url = "<?php echo $base_url; ?>";
-    var ajax_url = "<?php echo $ajax_url; ?>";
-    var section = "<?php echo $section; ?>";
-    var action = "<?php echo $action; ?>";
-    var go = "<?php echo $go; ?>";
-    var edition = "<?php echo $_SESSION['prefsProEdition'];?>";
-    var user_level = "<?php if ((isset($_SESSION['userLevel'])) && ($bid != "default")) echo $_SESSION['userLevel']; else echo "2"; ?>";
-    var label_length = "<?php echo $label_length; ?>";
-    var label_score = "<?php echo $label_score; ?>";
-    var entry_window_open = "<?php if (isset($entry_window_open)) echo $entry_window_open; ?>";
-    var current_timezone = "<?php if (isset($_SESSION['prefsTimeZone'])) echo get_timezone($_SESSION['prefsTimeZone']); ?>";
-    var label_weeks = "<?php echo strtolower($label_weeks); ?>";
-    var label_days = "<?php echo strtolower($label_days); ?>";
-    var label_hours = "<?php echo strtolower($label_hours); ?>"; 
-    
+
     if (section == "brewer") {
         var club_other = <?php if ((isset($club_other)) && ($club_other)) echo "true"; else echo "false"; ?>;
         var brewer_judge = "N";

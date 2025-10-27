@@ -2151,6 +2151,7 @@ $label_exceptions = "Exceptions";
 $label_style_excepted = "Style Exceptions";
 $label_no_sessions = "No Sessions Selected";
 $label_resume_updates = "Resume Updates";
+$label_recorded = "Recorded";
 
 $brewer_text_056 = "Select &quot;Opt Out&quot; above if you do not wish to participate in any Pro-Am opportunities associated with this competition.";
 

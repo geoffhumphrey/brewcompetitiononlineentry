@@ -189,7 +189,7 @@ if ($go == "all_entry_info") {
 												}
 												
 												else {
-													$table_flight_tbody .= "<strong>".$label_final_gravity.":</strong> ".;
+													$table_flight_tbody .= "<strong>".$label_final_gravity.":</strong> ";
 												}
 									
 											}
@@ -1918,7 +1918,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									}
 									
 									else {
-										$table_flight_tbody .= "<strong>".$label_final_gravity.":</strong> ".;
+										$table_flight_tbody .= "<strong>".$label_final_gravity.":</strong> ";
 									}
 								
 								}

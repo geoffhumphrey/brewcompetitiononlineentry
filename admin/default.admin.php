@@ -466,7 +466,7 @@ const driverObjDashTour = driver({
 
 </script>
 
-<p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available to you in each category.<?php if ($_SESSION['userLevel'] == 1) echo " Your user level features limited access to Administration functions."; ?></span></p>
+<p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available to you in each category.<?php if ($_SESSION['userLevel'] == 1) echo " Your user level features limited access to Administration functions."; ?> Help is available for each overall section by selecting the question mark icon.</span></p>
 <div class="row bcoem-admin-element">
     <?php if ($hosted_setup) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
@@ -600,7 +600,7 @@ if ($recently_updated) {
                 <div id="dashboard-competition-preparation" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapsePrep">Competition Preparation<span class="fa fa-wrench pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapsePrep">Competition Preparation <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-comp-prep"><span class="fa fa-sm fa-question-circle text-primary"></span></a><span class="fa fa-wrench pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapsePrep" class="panel-collapse collapse">
@@ -728,7 +728,7 @@ if ($recently_updated) {
                 <div id="dashboard-entries-participants" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseEntry">Entries<?php if ($_SESSION['prefsPaypalIPN'] == 1) echo ", Payments,";?> and Participants<span class="fa fa-beer pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseEntry">Entries<?php if ($_SESSION['prefsPaypalIPN'] == 1) echo ", Payments,";?> and Participants <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-entries-participants"><span class="fa fa-sm fa-question-circle text-primary"></span></a><span class="fa fa-beer pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseEntry" class="panel-collapse collapse">
@@ -797,7 +797,7 @@ if ($recently_updated) {
                 <div id="dashboard-entry-sorting" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSorting">Entry Sorting<span class="fa fa-exchange pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSorting">Entry Sorting <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-sorting"><span class="fa fa-sm fa-question-circle text-primary"></span></a><span class="fa fa-exchange pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseSorting" class="panel-collapse collapse">
@@ -1206,7 +1206,7 @@ if ($recently_updated) {
                 <div id="dashboard-organizing" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOrg">Organizing<span class="fa fa-tasks pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOrg">Organizing <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-organizing"><span class="fa fa-sm fa-question-circle text-primary"></span></a><span class="fa fa-tasks pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseOrg" class="panel-collapse collapse">
@@ -1276,7 +1276,7 @@ if ($recently_updated) {
                 <div id="dashboard-scoring" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseScoring">Scoring<span class="fa fa-trophy pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseScoring">Scoring <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-scoring"><span class="fa fa-sm fa-question-circle text-primary"></span></a><span class="fa fa-trophy pull-right"></span></a>
                         </h4>
                     </div>
 
@@ -1370,7 +1370,7 @@ if ($recently_updated) {
                 <div id="dashboard-reports" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseReports">Reports<span class="fa fa-file pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseReports">Reports <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-reports"><span class="fa fa-sm fa-question-circle text-primary"></span></a><span class="fa fa-file pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseReports" class="panel-collapse collapse">
@@ -2151,7 +2151,7 @@ if ($recently_updated) {
                 <div id="dashboard-data-exports" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseExports">Data Exports<span class="fa fa-download pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseExports">Data Exports <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-data-exports"><span class="fa fa-sm fa-question-circle text-primary"></span></a><span class="fa fa-download pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseExports" class="panel-collapse collapse">
@@ -2197,7 +2197,7 @@ if ($recently_updated) {
                                     <ul class="list-unstyled">
                                         <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
                                         <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv">All Entries: Limited Data</a></li>
-                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Participant Contact Info</a></li>
                                         <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid&amp;view=all">Paid Entries</a></li>
                                         <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid">Paid &amp; Received Entries</a></li>
                                         <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;tb=paid&amp;view=not_received">Paid Entries Not Received</a></li>
@@ -2218,7 +2218,7 @@ if ($recently_updated) {
                 <div id="dashboard-data-management" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseMaint">Data Management<span class="fa fa-archive pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseMaint">Data Management <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-data-mgmt"><span class="fa fa-sm fa-question-circle text-primary"></span></a><span class="fa fa-archive pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseMaint" class="panel-collapse collapse">
@@ -2267,57 +2267,69 @@ if ($recently_updated) {
                             </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
+                                        
                                         <li><a href="#" data-toggle="modal" data-target="#purgeEntries">Entries</a></li>
                                         <div>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-ent-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-ent-status-msg"></span>
                                         </div>
                                         <?php if (check_setup($prefix."payments",$database)) { ?>
+                                        
                                         <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgePayments">Payments</a></li>
                                         <div>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-pay-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-pay-status-msg"></span>
                                         </div>
                                         <?php } ?> 
+                                        
                                         <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeParticipants">Participants</a></li>
                                         <div>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status-msg"></span>
                                         </div>
+                                        
                                         <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeTables">Judging Tables</a></li>
                                         <div>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status-msg"></span>
                                         </div>                            
+                                        
                                         <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScores">Scores</a></li>
                                         <div>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-score-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-score-status-msg"></span>
                                         </div>
+                                        
                                         <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeCustom">Custom Categories</a></li>
                                         <div>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-cust-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-cust-status-msg"></span>
                                         </div>
+                                        
                                         <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeAvailabilty">Entrant Availability</a></li>
                                         <div>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status-msg"></span>
                                         </div>
-                                        <?php if ($_SESSION['prefsEval'] == 1) { ?>
+                                        
                                         <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Entry Evaluations</a></li>
-                                        <?php } else { ?>
-                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Uploaded Scoresheets</a></li>
-                                        <?php } ?>
                                         <div>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-sheets-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-sheets-status-msg"></span>
                                         </div>
+
+                                        <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeUploadedScoresheets">Uploaded Scoresheets</a></li>
+                                        <div>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-uploaded-sheets-status"></span>
+                                            <span style="margin-bottom: 10px;" class="hidden" id="purge-uploaded-sheets-status-msg"></span>
+                                        </div>
+                                        
                                         <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeAll">All Purge Functions</a> <span class="fa fa-hand-o-up small"></span></li>
                                         <div>
                                             <span class="hidden" id="purge-total-status"></span>
                                             <span style="margin-bottom: 10px;" class="hidden" id="purge-total-status-msg"></span>
                                         </div>
+
                                     </ul>
                                 </div>
                             </div>
@@ -2343,7 +2355,7 @@ if ($recently_updated) {
                 <div id="dashboard-preferences" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapsePrefs">Preferences<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>/Customization<?php } ?><span class="fa fa-cog pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapsePrefs">Preferences<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>/Customization<?php } ?> <a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-preferences"><span class="fa fa-sm fa-question-circle text-primary"></span></a> <span class="fa fa-cog pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapsePrefs" class="panel-collapse collapse">
@@ -2385,7 +2397,7 @@ if ($recently_updated) {
                 <div id="dashboard-help" class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseHelp">Help<span class="fa fa-question-circle pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseHelp">More Help<span class="fa fa-question-circle pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseHelp" class="panel-collapse collapse">
@@ -2505,7 +2517,7 @@ if ($recently_updated) {
                                         <?php } ?>
                                         <li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/new/choose" target="_blank">Report an Issue?</a></li>
                                     </ul>
-                                    <div class="alert alert-info">
+                                    <div class="alert alert-info small">
                                         <?php echo $server_environ; ?>
                                     </div>
                                 </div>
@@ -2725,21 +2737,30 @@ if ($recently_updated) {
             <h4 class="modal-title" id="purgeScoresheetsLabel">Please Confirm</h4>
         </div>
         <div class="modal-body">
-            <?php if ($_SESSION['prefsEval'] == 1) { ?>
             <p>Are you sure you want to delete all recorded entry evaluations? This cannot be undone. </p>
-            <p>Use the archive function if you wish to retain any evaluations recorded for past competition iterations.</p>
-            <?php } else { ?>
-            <p>Are you sure you want to delete all uploaded scoresheets in the root of the user_docs directory? This cannot be undone. </p>
-            <p>Use the archive function if you wish to retain any uploaded scoresheets contained in the user_docs directory.</p>
-            <?php } ?>
+            <?php if (!HOSTED) { ?><p>Use the archive function if you wish to retain any evaluations recorded for past competition iterations.</p><?php } ?> 
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            <?php if ($_SESSION['prefsEval'] == 1) { ?>
             <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','evaluation','admin-dashboard','purge-sheets');">Yes</button>
-            <?php } else { ?>
-            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','scoresheets','admin-dashboard','purge-sheets');">Yes</button>
-            <?php } ?>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="purgeUploadedScoresheets" tabindex="-1" role="dialog" aria-labelledby="purgeUploadedScoresheetsLabel">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="purgeUploadedScoresheetsLabel">Please Confirm</h4>
+        </div>
+        <div class="modal-body"> 
+            <p>Are you sure you want to delete all uploaded scoresheets in the root of the user_docs directory? This cannot be undone.</p>
+            <?php if (!HOSTED) { ?><p>Use the archive function if you wish to retain any uploaded scoresheets contained in the user_docs directory.</p><?php } ?> 
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $ajax_url; ?>','','scoresheets','admin-dashboard','purge-uploaded-sheets');">Yes</button>
         </div>
         </div>
     </div>

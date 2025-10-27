@@ -5,8 +5,8 @@
 	}
 </style>
 <!-- Appearance -->
-<h5 class="header-h5 header-bdr-bottom"><?php echo $label_appearance; ?></h5>
-
+<h5><?php echo $label_appearance; ?></h5>
+<hr>
 <?php if (isset($appearance_data['evalAppearanceColor'])) { ?>
 <div class="row tick-row no-break" style="margin-bottom: 10px;">
 	<div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
@@ -71,7 +71,8 @@
 </div><!-- ./row -->
 
 <!-- Aroma -->
-<h5 class="header-h5 header-bdr-bottom"><?php echo $label_aroma; ?></h5>
+<h5><?php echo $label_aroma; ?></h5>
+<hr>
 <div class="row tick-row no-break" style="margin-bottom: 10px;">
 	<div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
 	    <strong><?php echo $label_characteristics; ?></strong>
@@ -132,8 +133,8 @@
 </div><!-- ./row -->
 
 <!-- Palate -->
-<h5 class="header-h5 header-bdr-bottom"><?php echo $label_palate; ?></h5>
-
+<h5><?php echo $label_palate; ?></h5>
+<hr>
 <div class="row tick-row no-break" style="margin-bottom: 10px;">
 	<div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
 	    <strong><?php echo $label_characteristics; ?></strong>
@@ -356,9 +357,10 @@
 </div><!-- ./row -->
 
 <!-- Overall Impression -->
-<h5 class="header-h5 header-bdr-bottom"><?php echo $label_summary_overall_impression; ?></h5>
+<h5><?php echo $label_summary_overall_impression; ?></h5>
+<hr>
 <p class="tick-row"><?php echo htmlentities($row_eval['evalOverallComments']); ?></p>
-<h5 class="header-h5 header-bdr-bottom"><?php echo $label_judge. " ". $label_score; ?><span class="pull-right"><span class="judge-score"><?php echo $score; ?></span>/50</span></h5>
+<h5><?php echo $label_judge. " ". $label_score; ?><span class="pull-right"><?php echo $score; ?> <small>/ 50</small></span></h5>
 
 <!-- Scoring Guide -->
 <div class="row footer-descriptor no-break" style="padding: 20px 0;">
