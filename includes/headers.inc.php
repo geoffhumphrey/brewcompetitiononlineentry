@@ -101,7 +101,7 @@ switch($section) {
 		elseif ($go == "steward") $header_output = $label_steward_reg;
 		else $header_output = $label_reg;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong> %s",$header_text_017, $header_text_008);
-		elseif ($msg == "2") { $output = sprintf("<strong>%s</strong>",$header_text_018); $output_extend = sprintf("<p>%s <a href=\"index.php?section=login\">%s</a></p>",$header_text_019,$header_text_020); }
+		elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s",$header_text_018,$header_text_019); }
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_021, $header_text_022);
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_023, $header_text_008);
 		elseif ($msg == "5") $output = sprintf("<strong>%s</strong> %s",$header_text_024, $header_text_008);

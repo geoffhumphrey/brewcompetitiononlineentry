@@ -808,9 +808,10 @@ $(document).ready(function() {
 						<div id="collapseStep1" class="panel-collapse collapse">
 							<div class="panel-body">
 								<ul class="list-unstyled">
-                                	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign Judges</a></li>
-            						<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign Stewards</a></li>
+                                	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Assign/Unassign Judges</a></li>
+            						<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Assign/Unassign Stewards</a></li>
                                 </ul>
+                                <div class="alert alert-info small" style="margin-bottom: 0;">Note: As of version 3.0.0, judges and stewards are automatically assigned to their respective pools upon registration <strong>providing they registered as one or the other.</strong> Those who first signed up as participants, but then edited their accounts to indicate their availability to judge or steward are not automatically assigned.</div>
 							</div>
 						</div>
 					</div><!-- ./accordion -->

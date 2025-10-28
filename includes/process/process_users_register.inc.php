@@ -246,6 +246,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					if ($_POST['brewerStaff'] == "Y") $staff_staff = 1;
 				}
 
+				else {
+					if (($go == "judge") && ($brewerJudge == "Y")) $staff_judge = 1;
+					if (($go == "steward") && ($brewerSteward == "Y")) $staff_steward = 1;
+				}
+
 				/**
 				 * Check if UID is in staff table, if so (why is another matter, but hey),
 				 * clear out assignments and associate with the newly added staff member.

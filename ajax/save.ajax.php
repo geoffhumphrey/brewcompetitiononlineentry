@@ -167,6 +167,112 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		else $error_type = 3; // SQL error
 		
 	} // END if ($action == "sponsors")
+
+	if ($action == "judging_staff") {
+
+		$input = "";
+		$update_table = $prefix."staff";
+
+		if ($go == "staff_judge") $input = sterilize($_POST['staff_judge']);
+		if ($go == "staff_steward") $input = sterilize($_POST['staff_steward']);
+		if ($go == "staff_staff") $input = sterilize($_POST['staff_staff']);
+		if ($go == "staff_judge_bos") $input = sterilize($_POST['staff_judge_bos']);
+		
+		if ($go == "staff_organizer") {
+
+			$input = sterilize($_POST['staff_organizer']);
+			$uid = $input;
+
+			if (!empty($input)) {
+
+				$uid = $input;
+
+				// Clear organizer from the staff table
+				$data = array('staff_organizer' => 0);
+				$result = $db_conn->update ($update_table, $data);
+
+				$query_org = sprintf("SELECT uid FROM %s WHERE uid='%s'", $prefix."staff", $uid);
+				$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
+				$row_org = mysqli_fetch_assoc($org);
+				$totalRows_org = mysqli_num_rows($org);
+				
+				if ($totalRows_org == 0) {
+					$data = array(
+						'staff_organizer' => 1,
+						'staff_staff' => 0,
+						'staff_judge' => 0,
+						'staff_judge_bos' => 0,
+						'uid' => $uid
+					);
+					if ($db_conn->insert ($update_table, $data)) $status = 1;
+					else $error_type = 3; // SQL error
+				}
+
+				else {
+
+					if ($uid == $row_org['uid']) {
+
+						$data = array(
+							'staff_organizer' => 1,
+							'staff_staff' => 0,
+							'staff_judge' => 0,
+							'staff_judge_bos' => 0
+						);
+						$db_conn->where ('uid', $uid);
+						if ($db_conn->update ($update_table, $data)) $status = 1;
+						else $error_type = 3; // SQL error
+
+					}
+
+					else $error_type = 3; // SQL error
+					
+				}
+				
+
+			}
+
+			else $error_type = 3;
+			
+		}
+
+		else {
+
+			if ((empty($input)) || ($input == 0)) $data = array($go => 0);
+			else $data = array($go => $input);
+			$db_conn->where ('uid', $id);
+			if ($db_conn->update ($update_table, $data)) $status = 1;
+			else $error_type = 3; // SQL error
+			
+			if (($go == "staff_judge") || ($go == "staff_steward")) {
+
+				// Unassign from any tables
+				if ((empty($input)) || ($input == 0)) {
+
+					if ($go == "staff_judge") $query_table_assign = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$id);
+					if ($go == "staff_steward") $query_table_assign = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$id);
+					$table_assign = mysqli_query($connection,$query_table_assign) or die (mysqli_error($connection));
+					$row_table_assign = mysqli_fetch_assoc($table_assign);
+					$totalRows_table_assign = mysqli_num_rows($table_assign);
+
+					if ($totalRows_table_assign > 0) {
+
+						do {
+
+							$update_table = $prefix."judging_assignments";
+							$db_conn->where ('id', $row_table_assign['id']);
+							$result = $db_conn->delete($update_table);
+
+						} while ($row_table_assign = mysqli_fetch_assoc($table_assign));
+						
+					}
+
+				}
+			
+			}
+
+		}		
+
+	}
 	
 	// judging_scores DB Table
 	if (($action == "judging_scores") || ($action == "judging_scores_bos")) {

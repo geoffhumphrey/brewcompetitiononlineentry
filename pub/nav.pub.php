@@ -109,7 +109,7 @@ if ($logged_in) {
 	                <?php } ?>
 	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#contact"><?php echo $label_contact; ?></a>
 	                <?php if (($judging_past != 0) && ($registration_open < 2) && ($entry_window_open < 2) && (!empty($archive_alert_display) && ($section != "past-winners"))) { ?>
-	                <button class="nav-item nav-link" data-bs-toggle="offcanvas" data-bs-target="#archive-list" aria-controls="archive-list"><?php echo $label_past_winners; ?></button>
+	                <button class="nav-item nav-link text-start" data-bs-toggle="offcanvas" data-bs-target="#archive-list" aria-controls="archive-list"><?php echo $label_past_winners; ?></button>
 	                <?php } if ($admin_user) { ?>
 	                <a class="nav-item nav-link" href="<?php echo $base_url."index.php?section=admin"; ?>"><?php echo $label_admin_short; ?></a>
 	                <?php } ?>

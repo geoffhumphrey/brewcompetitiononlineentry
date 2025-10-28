@@ -55,7 +55,7 @@ if ($section != "step5") {
 	if ($action == "add") $subtitle .= ": Add a Judging Session";
 	elseif ($action == "edit") $subtitle .= ": Edit a Judging Session";
 	elseif ($action == "update") $subtitle .= ": Make Final ".$filter_readable." Assignments";
-	elseif ($action == "assign") $subtitle .= ": Assign Participants as ".$filter_readable;
+	elseif ($action == "assign") $subtitle .= ": Assign or Unassign Participants as ".$filter_readable;
 	else $subtitle .= ": Judging Sessions";
 }
 
@@ -161,18 +161,26 @@ if ($section != "step5") {
 
 		if ($filter == "staff") {
 
+			$organizer_assigned = FALSE;
+			$organizer_count = 0;
+
 			do {
 				$form_organizer_select .= "<option value=\"".$row_brewers['uid']."\"";
-				if (($totalRows_organizer > 0) && (($row_brewers['uid'] == $row_organizer['uid']))) $form_organizer_select .= " SELECTED";
+				if (($totalRows_organizer > 0) && (($row_brewers['uid'] == $row_organizer['uid']))) {
+					$form_organizer_select .= " SELECTED";
+					$organizer_count++;
+				}
 				$form_organizer_select .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName'];
 				if (($totalRows_organizer > 0) && (($row_brewers['uid'] == $row_organizer['uid']))) $form_organizer_select .= " (Selected Competition Organizer)";
 				$form_organizer_select .= "</option>";
 			} while ($row_brewers = mysqli_fetch_assoc($brewers));
 
+			if ($organizer_count > 0) $organizer_assigned = TRUE;
+
 		}
 
 		if ($action == "update") $form_submit_button .= "Assign to ".$row_judging['judgingLocName'];
-		elseif ($action == "assign") $form_submit_button .= "Assign as ".brewer_assignment($filter,"3",$id,"default",$filter);
+		elseif ($action == "assign") $form_submit_button .= "Assign/Unassign as ".brewer_assignment($filter,"3",$id,"default",$filter);
 		elseif ($action == "add") $form_submit_button .= "Add Judging Session";
 		elseif ($action == "edit") $form_submit_button .= "Edit Judging Session";
 		else $form_submit_button .= "Submit";
@@ -348,18 +356,31 @@ if ($section != "step5") {
 					if (strpos($brewer_assignment,'BOS') !== false) $output_datatables_body .= "<tr class=\"bg-info text-info\">";
 					else $output_datatables_body .= "<tr class=\"bg-success text-success\">";
 				}
-				else $output_datatables_body .= "<tr>";
+				else $output_datatables_body .= "<tr>\n";
 				$output_datatables_body .= "<td>";
 				$output_datatables_body .= "<input type=\"hidden\" name=\"uid[]\" value=\"".$row_brewer['uid']."\" />";
-				$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"".$staff_row_field.$row_brewer['uid']."\" type=\"checkbox\" value=\"1\" ".$checked;
-				if ((isset($totalRows_organizer)) && ($totalRows_organizer > 0) && (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid']))) $output_datatables_body .= " DISABLED";
-				if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $output_datatables_body .= " DISABLED";
-				if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $output_datatables_body .= " DISABLED";
-				$output_datatables_body .= " /></label></div>";
+
+				$checkbox_disabled = "";
+				
+				if ((isset($totalRows_organizer)) && ($totalRows_organizer > 0) && (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid']))) $checkbox_disabled .= " DISABLED";
+				if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $checkbox_disabled .= " DISABLED";
+				if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $checkbox_disabled .= " DISABLED";
+				
+				if ($filter == "judges") $staff_column = "staff_judge";
+				if ($filter == "stewards") $staff_column = "staff_steward"; 
+				if ($filter == "staff") $staff_column = "staff_staff";
+				if ($filter == "bos") $staff_column = "staff_judge_bos";
+
+				$output_datatables_body .= sprintf("\n<div class=\"checkbox\"><label><input name=\"%s%s\" type=\"checkbox\" value=\"1\" id=\"assigned-%s\" %s %s onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('%s','%s','judging_staff','%s','%s','default','default','default','assigned-%s','value')\" /></label></div>\n",$staff_row_field,$row_brewer['uid'],$row_brewer['uid'],$checked,$checkbox_disabled,$ajax_url,$staff_column,$row_brewer['id'],$row_brewer['uid'],$row_brewer['uid']);
+
 				$output_datatables_body .= "</td>";
 				$output_datatables_body .= "<td>";
 				$output_datatables_body .= $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
 				if (($filter == "staff") && ($row_brewer['brewerStaff'] == "Y")) $output_datatables_body .= " <a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff&amp;view=yes\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"".$row_brewer['brewerFirstName']." has expressed interest in being a staff member. Click to see only interested users.\"><span class=\"fa fa-star text-danger\"></span></a>";
+				$output_datatables_body .= "<div>";
+				$output_datatables_body .= "<span id=\"assigned-".$row_brewer['uid']."-".$staff_column."-status\"></span> ";
+				$output_datatables_body .= "<span id=\"assigned-".$row_brewer['uid']."-".$staff_column."-status-msg\"></span>";
+				$output_datatables_body .= "</div>\n";
 				$output_datatables_body .= "</td>";
 				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".ucwords($brewer_assignment)."</td>";
 
@@ -404,7 +425,7 @@ if ($section != "step5") {
 					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".judge_entries($row_brewer['uid'],1)."</td>";
 				}
 
-				$output_datatables_body .= "</tr>";
+				$output_datatables_body .= "</tr>\n";
 
 			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 
@@ -448,7 +469,10 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
 
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
-<?php if ($section != "step5") { ?><p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p><?php } ?>
+<?php if ($section != "step5") { ?>
+	<p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p>
+	<?php if (($action == "assign") && (($filter == "judges") || ($filter == "stewards"))) echo "<p><strong>".$filter_readable." are assigned to the ".rtrim(strtolower($filter_readable),"s")." pool automatically upon registration providing they registered as a ".rtrim(strtolower($filter_readable),"s").".</strong> Those who first signed up as participants, but then edited their accounts to indicate their availability to ".rtrim(strtolower($filter_readable),"s")." are not automatically assigned. You can assign ".strtolower($filter_readable)." to the pool by checking the box next to a name or uassign by unchecking the box.</p><p class=\"text-danger\" style=\"margin-bottom: 20px;\"><strong>Caution:</strong> ".strtolower($filter_readable)." who are unassigned will also be removed from all table assignments.</p>"; ?>
+<?php } ?>
 <?php if (($filter == "default") && ($msg == "9"))  {
 	if ($section == "step5") $judge_loc_url_yes .= "setup.php?section=step5";
 	else $judge_loc_url_yes .= "index.php?section=admin&amp;go=judging";
@@ -551,17 +575,6 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
     	<?php } ?>
     </div>
 	<?php } ?>
-
-	<?php if ($filter == "staff") { ?>
-    <div class="btn-group" role="group" aria-label="...">
-        <div class="btn-group" role="group">
-            <select class="selectpicker" name="Organizer" data-live-search="true" data-size="10" data-width="auto">
-            <option value="" selected disabled>Designate the Competition Organizer</option>
-            <?php echo $form_organizer_select; ?>
-            </select>
-        </div>
-    </div>
-    <?php } ?>
 
     <?php if ($filter == "judges") { ?>
     <div class="btn-group hidden-xs" role="group" aria-label="...">
@@ -669,6 +682,22 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	<?php } ?>
 	<?php } // end if (($section == "admin") && (($action == "update") || ($action == "assign"))) ?>
 </div><!-- ./bcoem-admin-element hidden-print -->
+
+<?php if ($filter == "staff") { ?>
+<div class="bcoem-admin-element hidden-print">
+    <div class="btn-group" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            <select class="selectpicker" id="staff-organizer-ajax" name="staff_organizer" data-live-search="true" data-size="10" data-width="auto" onchange="save_column('<?php echo $ajax_url; ?>','staff_organizer','judging_staff','default','default','default','default','default','staff-organizer-ajax')">
+            <option value="" <?php if (!$organizer_assigned) echo "selected disabled"; ?>>Designate the Competition Organizer</option>
+            <?php echo $form_organizer_select; ?>
+            </select>
+        </div>
+    </div>
+    <span id="staff-organizer-ajax-staff_organizer-status"></span> <span id="staff-organizer-ajax-staff_organizer-status-msg"></span>
+</div>
+<?php } ?>
+
+
 <?php } // end if ($section != "step5") ?>
 
 <?php if (!empty($output_datatables_body)) {
@@ -704,8 +733,14 @@ echo $output_assignment_modals;
 </table>
 <?php if (!empty($form_submit_url)) { ?>
 <div class="bcoem-admin-element hidden-print">
+	<?php if ($filter == "default") { ?>
 	<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" aria-describedby="helpBlock" value="<?php echo $form_submit_button; ?>" />
     <span id="helpBlock" class="help-block"><?php echo $form_submit_button_help; ?></span>
+	<?php } else { ?>
+	<input type="submit" name="Submit" id="staff-submit" class="btn btn-primary" value="<?php echo $form_submit_button; ?>" disabled />
+	<span id="staff-update-button-enabled" class="help-block">Select "<?php echo $form_submit_button; ?>" <em>before</em> paging through records.</span>
+	<span id="staff-update-button-disabled" class="help-block">The "<?php echo $form_submit_button; ?>" button has been disabled since data is being saved successfully as it is being entered.</span>
+	<?php } ?>
 </div>
 </form>
 <?php } ?>
@@ -871,3 +906,10 @@ if (($output_add_edit) && ($msg != 9)) {
 <input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin&amp;go=judging"; ?>">
 </form>
 <?php } ?>
+<script src="<?php echo $js_url."admin_ajax.min.js"; ?>"></script>
+
+<script>
+$(document).ready(function () {
+    disable_update_button('staff');
+});
+</script>

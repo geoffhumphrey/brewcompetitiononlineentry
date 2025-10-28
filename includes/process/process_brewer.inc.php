@@ -312,9 +312,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		} // end foreach($_POST['uid'] as $uid)
 
-		if (($filter == "staff") && ($_POST['Organizer'] != "")) {
+		if (($filter == "staff") && ($_POST['staff_organizer'] != "")) {
 
-			$uid = sterilize($_POST['Organizer']);
+			$uid = sterilize($_POST['staff_organizer']);
 
 			$query_org = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."staff", $uid);
 			$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
