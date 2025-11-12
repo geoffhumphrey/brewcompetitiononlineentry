@@ -129,7 +129,7 @@ if ($count_evals > 0) {
 	$eval_place_actions .= "<div class=\"row\">";
 	$eval_place_actions .= "<div class=\"col col-lg-6 col-md-7 col-sm-12\">";
 	$eval_place_actions .= $label_place_awarded;
-	$eval_place_actions .= "<span class=\"hidden-xs hidden-sm hidden-md\"> (".ucwords(str_replace(".", "", $evaluation_info_006)).")</span>";
+	// $eval_place_actions .= "<span class=\"hidden-xs hidden-sm hidden-md\"> (".ucwords(str_replace(".", "", $evaluation_info_006)).")</span>";
 	$eval_place_actions .= "</div>";
 	$eval_place_actions .= "<div class=\"col col-lg-6 col-md-5 col-sm-12\">";
 	$eval_place_actions .= "<div style=\"margin-bottom:5px;\" id=\"eval-place-ajax-".$row_entries['id']."-evalPlace-form-group\">";

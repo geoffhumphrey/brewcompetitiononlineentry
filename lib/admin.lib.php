@@ -1250,7 +1250,7 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 	$r = "";
 	$disabled = "";
 	if (entry_conflict($bid,$table_styles)) $disabled = "disabled"; 
-	if ($ind_aff_flag) $disabled = "disabled"; 
+	// if ($ind_aff_flag) $disabled = "disabled"; 
 	
 	if ($filter == "stewards") $role = "S"; else $role = "J";
 
@@ -1485,8 +1485,8 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 		if ($entry_conflict) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.</span>";
 
 		if ($ind_aff_flag) {
-			if ($_SESSION['prefsProEdition'] == 1) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has a reported organization affiliation at this table.</span>";
-			else $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has a reported brewing partner or team affiliation at this table.</span>";
+			if ($_SESSION['prefsProEdition'] == 1) $r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has a reported organization affiliation at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+			else $r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has a reported brewing partner or team affiliation at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
 		}
 		
 		if ((!$unavailable) && (!$entry_conflict) && (!$ind_aff_flag)) $r = like_dislike($likes,$dislikes,$table_styles);

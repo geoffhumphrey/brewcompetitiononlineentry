@@ -36,32 +36,17 @@ if (table_exists($style_types_db_table)) {
 }
 
 if (table_exists($judging_tables_db_table)) {
+	
 	if (($go == "default") || ($go == "participants") || ($go == "judging_scores") || ($go == "judging_tables") || ($go == "judging_flights") || ($go == "judging_tables") || ($go == "judging_locations")) {
 
+		$query_tables = sprintf("SELECT * FROM %s",$judging_tables_db_table);
+		// if (($go == "judging_tables") && ($action == "default") && ($filter == "default") && ($view != "default") && ($psort == "default")) $query_tables .= sprintf(" WHERE tableLocation='%s'",$view);
+		if (($go == "judging_tables") || ($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
+		if (($section == "table_cards") && ($go == "judging_locations")) $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);
 
-		if (SINGLE) {
-
-			$query_tables = sprintf("SELECT * FROM $judging_tables_db_table WHERE comp_id='%s'", $_SESSION['comp_id']);
-			if (($go == "judging_tables") || ($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
-			if (($section == "table_cards") && ($go == "judging_locations")) $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.comp_id = '%s' AND b.comp_id = '%s' AND a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $_SESSION['comp_id'], $_SESSION['comp_id'], $location, $round);
-
-			$query_tables_edit = sprintf("SELECT * FROM $judging_tables_db_table WHERE comp_id='%s'", $_SESSION['comp_id']);
-			if ($id != "default") $query_tables_edit .= " AND id='$id'";
-			if (($id == "default") || ($go == "judging_scores") || ($go == "judging_scores_bos") || ($go == "judging_flights"))  $query_tables_edit .= " ORDER BY tableNumber ASC";
-
-		}
-
-		else {
-
-			$query_tables = "SELECT * FROM $judging_tables_db_table";
-			if (($go == "judging_tables") || ($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
-			if (($section == "table_cards") && ($go == "judging_locations")) $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);
-
-			$query_tables_edit = "SELECT * FROM $judging_tables_db_table";
-			if ($id != "default") $query_tables_edit .= " WHERE id='$id'";
-			if (($id == "default") || ($go == "judging_scores") || ($go == "judging_scores_bos") || ($go == "judging_flights"))  $query_tables_edit .= " ORDER BY tableNumber ASC";
-
-		}
+		$query_tables_edit = sprintf("SELECT * FROM %s",$judging_tables_db_table);
+		if ($id != "default") $query_tables_edit .= sprintf(" WHERE id='%s'",$id);
+		if (($id == "default") || ($go == "judging_scores") || ($go == "judging_scores_bos") || ($go == "judging_flights"))  $query_tables_edit .= " ORDER BY tableNumber ASC";
 
 		$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 		$row_tables = mysqli_fetch_assoc($tables);

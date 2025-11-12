@@ -6,7 +6,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
     exit();
-}
+} 
 
 include (DB.'styles.db.php');
 include (DB.'admin_judging_tables.db.php');
@@ -87,7 +87,7 @@ if (($action == "default") && ($filter == "default")) {
 
     		$a[] = array();
     		$y[] = array();
-    		$z[] = 0;
+    		$z = 0;
 
     		do {
 
@@ -97,7 +97,7 @@ if (($action == "default") && ($filter == "default")) {
                         
                         if (!get_table_info($row_styles['id'],"styles","default","default","default")) {
                             $a[] = $row_styles['id'];
-                            $z[] = 1;
+                            $z++;
                             $orphan_modal_body_2 .= "<li>";
                             $orphan_modal_body_2 .= style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0).": ";
                             $orphan_modal_body_2 .= $row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)";
@@ -110,8 +110,7 @@ if (($action == "default") && ($filter == "default")) {
     			
     		} while ($row_styles = mysqli_fetch_assoc($styles));
 
-            $b = array_sum($z);
-            if ($b == 0) $orphan_modal_body_1 .= "<p>All styles with entries have been assigned to tables.</p>";
+            if ($z == 0) $orphan_modal_body_1 .= "<p>All styles with entries have been assigned to tables.</p>";
             else $orphan_modal_body_1 .= "<p>The following styles with entries have not been assigned to tables:</p>";
 
         }
@@ -186,6 +185,41 @@ if (($action == "default") && ($filter == "default")) {
 
     } while ($row_style_types = mysqli_fetch_assoc($style_types));
 
+    // Get judge availabilities
+    $query_judge_avail = sprintf("SELECT * FROM %s a, %s b WHERE a.brewerJudge='Y' AND b.staff_judge='1' AND a.uid = b.uid;",$prefix."brewer",$prefix."staff");
+    $judge_avail = mysqli_query($connection,$query_judge_avail);
+    $row_judge_avail = mysqli_fetch_array($judge_avail);
+
+    $judge_availability = array();
+
+    do {
+
+        $judge_availability[] = $row_judge_avail['brewerJudgeLocation'];
+
+    } while($row_judge_avail = mysqli_fetch_array($judge_avail));
+
+    $judge_availability = implode(",",$judge_availability);
+    $judge_availability = explode(",",$judge_availability);
+
+    $all_judge_loc_avail_assign_total = array();
+
+    $query_steward_avail = sprintf("SELECT * FROM %s a, %s b WHERE a.brewerSteward='Y' AND b.staff_steward='1' AND a.uid = b.uid;",$prefix."brewer",$prefix."staff");
+    $steward_avail = mysqli_query($connection,$query_steward_avail);
+    $row_steward_avail = mysqli_fetch_array($steward_avail);
+
+    $steward_availability = array();
+
+    do {
+
+        $steward_availability[] = $row_steward_avail['brewerStewardLocation'];
+
+    } while($row_steward_avail = mysqli_fetch_array($steward_avail));
+
+    $steward_availability = implode(",",$steward_availability);
+    $steward_availability = explode(",",$steward_availability);
+
+    $all_steward_loc_avail_assign_total = array();
+
     do {
 
         $loc_total = 0;
@@ -196,12 +230,37 @@ if (($action == "default") && ($filter == "default")) {
 
             $sidebar_assigned_entries_by_location .= "<div class=\"bcoem-sidebar-panel\">";
             $sidebar_assigned_entries_by_location .= "<strong class=\"text-info\">";
+            //if ($view != $row_judging['id']) $sidebar_assigned_entries_by_location .= sprintf("<a href=\"%sindex.php?section=admin&go=judging_tables&view=%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View only the tables assigned to %s.\">",$base_url,$row_judging['id'],$row_judging['judgingLocName']);
             if ($row_judging) $sidebar_assigned_entries_by_location .= $row_judging['judgingLocName'];
             $sidebar_assigned_entries_by_location .= "</strong>";
+            //if ($view != $row_judging['id']) $sidebar_assigned_entries_by_location .= "</a>";
             $sidebar_assigned_entries_by_location .= "<span class=\"pull-right\">";
             $sidebar_assigned_entries_by_location .= $loc_total;
             $sidebar_assigned_entries_by_location .= "</span>";
-            $sidebar_assigned_entries_by_location .= "</div>";  
+            $sidebar_assigned_entries_by_location .= "</div>";
+
+            $count_judge_yes = "Y-".$row_judging['id'];
+            $count_judge_avail = array_count_values($judge_availability);
+            $count_judge_avail = $count_judge_avail[$count_judge_yes];
+
+            $count_steward_yes = "Y-".$row_judging['id'];
+            $count_steward_avail = array_count_values($steward_availability);
+            $count_steward_avail = $count_steward_avail[$count_steward_yes];
+
+            $query_judge_loc_assign = sprintf("SELECT COUNT(*) AS count FROM %s WHERE assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$row_judging['id']);
+            $judge_loc_assign = mysqli_query($connection,$query_judge_loc_assign);
+            $row_judge_loc_assign = mysqli_fetch_array($judge_loc_assign);
+
+            $query_steward_loc_assign = sprintf("SELECT COUNT(*) AS count FROM %s WHERE assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$row_judging['id']);
+            $steward_loc_assign = mysqli_query($connection,$query_steward_loc_assign);
+            $row_steward_loc_assign = mysqli_fetch_array($steward_loc_assign);
+
+            $judge_difference = ($count_judge_avail - $row_judge_loc_assign['count']);
+            $steward_difference = ($count_steward_avail - $row_steward_loc_assign['count']);
+
+            $all_judge_loc_avail_assign_total[$row_judging['id']] = array('location_total_available' => $count_judge_avail,'location_total_assigned' => $row_judge_loc_assign['count'], "location_available" => $judge_difference);
+            $all_steward_loc_avail_assign_total[$row_judging['id']] = array('location_total_available' => $count_steward_avail,'location_total_assigned' => $row_steward_loc_assign['count'], "location_available" => $steward_difference);
+
         }
         
 
@@ -215,6 +274,11 @@ if (($action == "default") && ($filter == "default")) {
             $styles = display_array_content($a,1);
             $received = get_table_info("1","count_total",$row_tables['id'],$dbTable,"default");
             $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
+
+            $steward_avail = 0;
+            $judge_avail = 0;
+            if ($all_steward_loc_avail_assign_total[$row_tables['tableLocation']]['location_available'] > 0) $steward_avail = $all_steward_loc_avail_assign_total[$row_tables['tableLocation']]['location_available'];
+            if ($all_judge_loc_avail_assign_total[$row_tables['tableLocation']]['location_available'] > 0) $judge_avail = $all_judge_loc_avail_assign_total[$row_tables['tableLocation']]['location_available'];  
             
             if ($dbTable == "default") {
 
@@ -247,8 +311,8 @@ if (($action == "default") && ($filter == "default")) {
             $manage_tables_default_tbody .= "<td>".$received."</td>";
             if ($limits_by_table) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$row_tables['tableEntryLimit']."</td>";
             $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$scored."</td>";
-            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_judges."</td>";
-            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_stewards."</td>";
+            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_judges."<div class=\"text-muted small\">[".$judge_avail." available]</div></td>";
+            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_stewards."<div class=\"text-muted small\">[".$steward_avail." available]</div></td>";
             if (($totalRows_judging > 1) && ($dbTable == "default")) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</td>";
             
             if ($dbTable == "default") {
@@ -953,7 +1017,10 @@ $(document).ready(function() {
                     <hr>
                 </div>
                 <div class="bcoem-sidebar-panel">
-                	<strong class="text-info">All Judging Sessions</strong>
+                	<strong class="text-info">
+                        <?php if ($view != "default") echo sprintf("<a href=\"%sindex.php?section=admin&amp;go=judging_tables\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all tables.\">All Judging Sessions</a>",$base_url); else echo "All Judging Sessions"; ?>
+                    
+                    </strong>
                     <span class="pull-right"><?php echo array_sum($all_loc_total); if ($_SESSION['jPrefsTablePlanning'] == 0) { ?> of <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries" data-toggle="tooltip" data-placement="top" title="View all entries."><?php echo $row_entry_count['count']; ?></a><?php } ?></span>
                 </div>
                 <?php } ?>
@@ -1074,7 +1141,7 @@ if ($totalRows_tables > 0) { ?>
  $(document).ready(function() {
 	$('#judgingTables').dataTable( {
 		"bPaginate" : false,
-		"sDom": 'rst',
+		"sDom": 'fprtp',
 		"bStateSave" : false,
 		"bLengthChange" : false,
 		"aaSorting": [[0,'asc']],

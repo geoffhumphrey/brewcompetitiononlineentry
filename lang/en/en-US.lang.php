@@ -2153,6 +2153,14 @@ $label_no_sessions = "No Sessions Selected";
 $label_resume_updates = "Resume Updates";
 $label_recorded = "Recorded";
 
+/*
+$label_practice_session = "Practice Session";
+$label_practice_beer = "Practice Beer";
+$label_practice_cider = "Practice Cider";
+$label_practice_mead = "Practice Mead";
+$label_scoresheet_practice = "Scoresheet Practice";
+*/
+
 $brewer_text_056 = "Select &quot;Opt Out&quot; above if you do not wish to participate in any Pro-Am opportunities associated with this competition.";
 
 $brew_text_056 = "Please provide the entry's carbonation level.";

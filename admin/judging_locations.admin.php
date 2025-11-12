@@ -202,7 +202,7 @@ if ($section != "step5") {
 
 
 		$output_datatables_head .= "<tr>";
-		$output_datatables_head .= "<th width=\"1%\" nowrap><div class=\"checkbox\"><label><input type=\"checkbox\" name=\"all\" id=\"checkAll\" title=\"Check/Uncheck All\"></label></div></th>";
+		$output_datatables_head .= "<th width=\"1%\" nowrap></th>";
 		$output_datatables_head .= "<th>Name</th>";
 		$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Assigned As</th>";
 		if ($filter == "bos") $output_datatables_head .= "<th>Placing Entries</th>";

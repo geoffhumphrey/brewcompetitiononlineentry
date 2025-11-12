@@ -98,30 +98,6 @@ if (($request_method === "POST") && (!in_array($section,$bypass_token))) {
 	$user_session_token = filter_var($_POST['user_session_token'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	if (hash_equals($_SESSION['user_session_token'],$user_session_token)) $token_hash = TRUE;
 	
-/*
-	// $user_session_token = filter_input(INPUT_POST,'user_session_token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-	if (hash_equals($_SESSION['user_session_token'],$user_session_token)) $token_hash = TRUE;
-
-	echo $_SESSION['user_session_token'];
-	echo "<br>";
-	echo $user_session_token;
-	echo "<br>";
-	if (hash_equals($_SESSION['user_session_token'],$user_session_token)) echo "YES"; else echo "NO";
-	exit();
-	
-	$user_token = filter_var($_POST['user_csrf_token'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-	echo $user_token;
-	echo "<br>";
-	echo $_COOKIE['user_csrf_token'];
-	echo "<br>";
-	if (isset($_COOKIE['user_csrf_token'])) {
-		$csrf = $_COOKIE['user_csrf_token'];
-		if (hash_equals($csrf,$user_token)) echo "YES"; else echo "NO";
-	}
-	else echo "No cookie defined.";
-	exit();
-*/
-
 	if ((!$user_session_token) || (!$token_hash) || (!$process_allowed)) {
 		session_unset();
 		session_destroy();
@@ -197,7 +173,6 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	// --------------------------- Various Actions ------------------------------- //
 
-
 	// Log in, log out, forgot password
 	if ($action == "login") include (INCLUDES.'logincheck.inc.php');
 	elseif ($action == "logout") include (INCLUDES.'logout.inc.php');
@@ -205,6 +180,9 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	// Delete
 	elseif ($action == "delete") include (PROCESS.'process_delete.inc.php');
+
+	// Create a practice judging session
+	//elseif ($action == "practice_session") include (PROCESS.'process_judging_practice_session.inc.php');
 	
 	// Barcode check in
 	elseif ($action == "barcode_check_in") include (PROCESS.'process_barcode_check_in.inc.php');

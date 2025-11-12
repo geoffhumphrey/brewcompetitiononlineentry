@@ -170,22 +170,18 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
 	if ($action == "judging_staff") {
 
-		$input = "";
 		$update_table = $prefix."staff";
 
-		if ($go == "staff_judge") $input = sterilize($_POST['staff_judge']);
-		if ($go == "staff_steward") $input = sterilize($_POST['staff_steward']);
-		if ($go == "staff_staff") $input = sterilize($_POST['staff_staff']);
-		if ($go == "staff_judge_bos") $input = sterilize($_POST['staff_judge_bos']);
+		if ($go == "staff_judge") $post = sterilize($_POST['staff_judge']);
+		if ($go == "staff_steward") $post = sterilize($_POST['staff_steward']);
+		if ($go == "staff_staff") $post = sterilize($_POST['staff_staff']);
+		if ($go == "staff_judge_bos") $post = sterilize($_POST['staff_judge_bos']);
 		
 		if ($go == "staff_organizer") {
 
-			$input = sterilize($_POST['staff_organizer']);
-			$uid = $input;
+			$uid = sterilize($_POST['staff_organizer']);
 
-			if (!empty($input)) {
-
-				$uid = $input;
+			if (!empty($uid)) {
 
 				// Clear organizer from the staff table
 				$data = array('staff_organizer' => 0);
@@ -197,15 +193,18 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 				$totalRows_org = mysqli_num_rows($org);
 				
 				if ($totalRows_org == 0) {
+					
 					$data = array(
 						'staff_organizer' => 1,
 						'staff_staff' => 0,
 						'staff_judge' => 0,
 						'staff_judge_bos' => 0,
+						'staff_steward' => 0,
 						'uid' => $uid
 					);
 					if ($db_conn->insert ($update_table, $data)) $status = 1;
 					else $error_type = 3; // SQL error
+
 				}
 
 				else {
@@ -216,7 +215,8 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 							'staff_organizer' => 1,
 							'staff_staff' => 0,
 							'staff_judge' => 0,
-							'staff_judge_bos' => 0
+							'staff_judge_bos' => 0,
+							'staff_steward' => 0
 						);
 						$db_conn->where ('uid', $uid);
 						if ($db_conn->update ($update_table, $data)) $status = 1;
@@ -237,16 +237,52 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
 		else {
 
-			if ((empty($input)) || ($input == 0)) $data = array($go => 0);
-			else $data = array($go => $input);
-			$db_conn->where ('uid', $id);
-			if ($db_conn->update ($update_table, $data)) $status = 1;
-			else $error_type = 3; // SQL error
+			if ((empty($post)) || ($post == 0)) $post = 0;
+			else $post = 1;
+
+			$staff_organizer = 0;
+			$staff_staff = 0;
+			$staff_judge = 0;
+			$staff_judge_bos = 0;
+			$staff_steward = 0;
+
+			if ($go == "staff_staff") $staff_staff = $post;
+			if ($go == "staff_judge") $staff_judge = $post;
+			if ($go == "staff_steward") $staff_steward = $post;
+
+			$query_staff_assign = sprintf("SELECT uid FROM %s WHERE uid='%s'",$update_table,$id);
+			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
+			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
+			$totalRows_staff_assign = mysqli_num_rows($staff_assign);
+
+			if ($totalRows_staff_assign == 0) {
+
+				$data = array(
+					'staff_organizer' => $staff_organizer,
+					'staff_staff' => $staff_staff,
+					'staff_judge' => $staff_judge,
+					'staff_judge_bos' => $staff_judge_bos,
+					'staff_steward' => $staff_steward,
+					'uid' => $id
+				);
+				if ($db_conn->insert ($update_table, $data)) $status = 1;
+				else $error_type = 3; // SQL error
+
+			}
+
+			else {
+
+				$data = array($go => $post);
+				$db_conn->where ('uid', $id);
+				if ($db_conn->update ($update_table, $data)) $status = 1;
+				else $error_type = 3; // SQL error
+
+			}
 			
 			if (($go == "staff_judge") || ($go == "staff_steward")) {
 
 				// Unassign from any tables
-				if ((empty($input)) || ($input == 0)) {
+				if ((empty($post)) || ($post == 0)) {
 
 					if ($go == "staff_judge") $query_table_assign = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$id);
 					if ($go == "staff_steward") $query_table_assign = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$id);
@@ -263,7 +299,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 							$result = $db_conn->delete($update_table);
 
 						} while ($row_table_assign = mysqli_fetch_assoc($table_assign));
-						
 					}
 
 				}
@@ -346,8 +381,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 						'scoreMiniBOS' => $scoreMiniBOS
 					);
 
-					// $sql = sprintf("INSERT INTO %s (eid, bid, scoreTable, scoreEntry, scorePlace, scoreType, scoreMiniBOS)", $prefix.$action);
-
 					if ($process) {
 						if ($db_conn->insert ($update_table, $data)) $status = 1;
 					}
@@ -398,6 +431,7 @@ $return_json = array(
 	"query" => "$sql",
 	"post" => "$post",
 	"input" => "$input",
+	"id" => $id,
 	"error_type" => "$error_type"
 );
 

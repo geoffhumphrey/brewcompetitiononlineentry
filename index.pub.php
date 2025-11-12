@@ -892,7 +892,7 @@ if ($logged_in) {
 
     }
 
-    if (((section == "default") || (section == "list")) && (entry_window_open == 1)) {
+    if ((section == "default") && (entry_window_open == 1)) {
 
         $("#resume-updates-button").hide();
 

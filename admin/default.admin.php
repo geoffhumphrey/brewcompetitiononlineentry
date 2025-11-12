@@ -2921,21 +2921,27 @@ if ($recently_updated) {
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="BJCPCompIDModalLabel">BJCP Competition ID <?php if (empty($_SESSION['contestID'])) echo "Not Found"; ?></h4>
+                <h4 class="modal-title" id="BJCPCompIDModalLabel">Generate the BJCP XML Competition Report</h4>
             </div>
             <div class="modal-body">
                 <?php if (empty($_SESSION['contestID'])) { ?>
                     <p><strong>An XML Report cannot be generated at this time</strong> - a BJCP Competition ID has not been entered via the competition info screen.</p>
-                    <p>You should have received a competition ID from the BJCP when you <a class="hide-loader" href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>. If so, go to the Admin Dashboard > Competition Preparation > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a> function and enter it in the appropriate field. The BJCP will <em>not</em> accept an XML competition report without a competition ID.</p>
+                    <p>You should have received a competition ID from the BJCP when you <a class="hide-loader" href="https://app.bjcp.org/competitions/register" target="_blank">registered your competition</a>. If so, go to the Admin Dashboard > Competition Preparation > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a> function and enter it in the appropriate field. The BJCP will <em>not</em> accept an XML competition report without a competition ID.</p>
                 <?php } else { ?>
-                    <p>Before generating and submitting your XML Report, <strong>double-check that your BJCP Competition ID is correct, especially if you entered an ID for any previous competition iterations</strong>.</p>
-                    <p>You should have received a competition ID from the BJCP when you <a class="hide-loader" href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>.
+                    <div style="font-size:1.1em; margin-bottom: 10px;"><strong>Competition ID</strong></div>
+                    <p>Before generating your XML Report, <strong>double-check that your BJCP Competition ID is correct, <span class="text-primary">especially if you entered an ID for any previous competition iterations</span></strong>.</p>
+                    <p>You should have received a competition ID from the BJCP when you <a class="hide-loader" href="https://app.bjcp.org/competitions/register" target="_blank">registered your competition</a>.
                     <p><strong>The BJCP Competition ID that is currently entered is: <span class="text-danger"><?php echo $_SESSION['contestID']; ?></span>.</strong> If this is incorrect, go to the Admin Dashboard > Competition Preparation > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a> function and update the ID <strong>before</strong> generating the report.</p>
                 <?php } ?>
+                
                 <?php if (empty($organizer_assigned)) { ?>
+                    <div style="font-size:1.1em; margin-bottom: 10px;"><strong>Organizer</strong></div>
                     <p><strong>A competition organizer has not been designiated in the system.</strong> The report cannot be generated without one. Go to the Admin Dashboard > Entries and Participants > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=staff">Assign Staff</a> function and choose the Organizer's name from the drop-down list near the top of the screen. If the Organizer's name is not present in the drop-down, an account will need to be created for them.</p>
                 <?php } else { ?>
+                    <div style="font-size:1.1em; margin-bottom: 10px;"><strong>Organizer</strong></div>
                     <p><strong>The competition Organizer designated in the system is <span class="text-danger"><?php echo $organizer_assigned['first_name']."  ".$organizer_assigned['last_name']; ?></span>.</strong> If this is incorrect, go to the Admin Dashboard > Entries and Participants > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=staff">Assign Staff</a> function and choose the current Organizer's name from the drop-down list near the top of the screen. If the Organizer's name is not present in the drop-down, an account will need to be created for them.</p>
+                    <div style="font-size:1.1em; margin-bottom: 10px;"><strong>Submittal</strong></div>
+                    <p>Once your XML report is generated, you can submit it via the <a class="hide-loader" href="https://app.bjcp.org/competitions/report" target="_blank">BJCP's Competition Report site</a>.</p>
                 <?php } ?>
             </div>
             <div class="modal-footer">

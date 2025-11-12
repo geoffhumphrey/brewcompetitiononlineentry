@@ -255,303 +255,310 @@ if ($totalRows_table_assignments > 0) {
 			$table_assignment_pre = "";
 			$table_assignment_data = "";
 			$table_assignment_post = "";
-			
-			$table_assignment_pre .= "<table id=\"table-".$random."\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
-			$table_assignment_pre .= "<thead>";
-			$table_assignment_pre .= "<tr>";
-			$table_assignment_pre .= "<th width=\"5%\" nowrap>".$label_number."</th>";
-			$table_assignment_pre .= "<th width=\"20%\" class=\"hidden-xs\">".$label_style."</th>";
-			$table_assignment_pre .= "<th width=\"20%\">".$label_info."</th>";
-			$table_assignment_pre .= "<th width=\"25%\">".$label_notes."</th>";
-			$table_assignment_pre .= "<th>".$label_actions."</th>";
-			$table_assignment_pre .= "</tr>";
-			$table_assignment_pre .= "</thead>";
-			$table_assignment_pre .= "<tbody>";
 
-			$dt_js .= "
-			$('#table-".$random."').dataTable({
-				\"bPaginate\" : false,
-				\"sDom\": 'rt',
-				\"bStateSave\" : false,
-				\"bLengthChange\" : false,
-				\"aaSorting\": [[1,'asc'],[0,'asc']],
-				\"bProcessing\" : false,
-				\"aoColumns\": [
-					null,
-					null,
-					null,
-					null,
-					null
-					]
-				});
-			";
-			
-			if ($admin) {
-				$a = explode(",", $row_table_assignments['tableStyles']);
-			}
+			if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 0)) || (!isset($_SESSION['jPrefsTablePlanning']))) {
+				
+				$table_assignment_pre .= "<table id=\"table-".$random."\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
+				$table_assignment_pre .= "<thead>";
+				$table_assignment_pre .= "<tr>";
+				$table_assignment_pre .= "<th width=\"5%\" nowrap>".$label_number."</th>";
+				$table_assignment_pre .= "<th width=\"20%\" class=\"hidden-xs\">".$label_style."</th>";
+				$table_assignment_pre .= "<th width=\"20%\">".$label_info."</th>";
+				$table_assignment_pre .= "<th width=\"25%\">".$label_notes."</th>";
+				$table_assignment_pre .= "<th>".$label_actions."</th>";
+				$table_assignment_pre .= "</tr>";
+				$table_assignment_pre .= "</thead>";
+				$table_assignment_pre .= "<tbody>";
 
-			else {
-				$query_tables = sprintf("SELECT tableStyles FROM %s WHERE id='%s'",$prefix."judging_tables",$tbl_id);
-				$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-				$row_tables = mysqli_fetch_assoc($tables);
-				$totalRows_tables = mysqli_num_rows($tables);
-				$a = explode(",", $row_tables['tableStyles']);
-			}
-			
-			sort($a);
+				$dt_js .= "
+				$('#table-".$random."').dataTable({
+					\"bPaginate\" : false,
+					\"sDom\": 'rt',
+					\"bStateSave\" : false,
+					\"bLengthChange\" : false,
+					\"aaSorting\": [[1,'asc'],[0,'asc']],
+					\"bProcessing\" : false,
+					\"aoColumns\": [
+						null,
+						null,
+						null,
+						null,
+						null
+						]
+					});
+				";
+				
+				if ($admin) {
+					$a = explode(",", $row_table_assignments['tableStyles']);
+				}
 
-			foreach (array_unique($a) as $value) {
+				else {
+					$query_tables = sprintf("SELECT tableStyles FROM %s WHERE id='%s'",$prefix."judging_tables",$tbl_id);
+					$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
+					$row_tables = mysqli_fetch_assoc($tables);
+					$totalRows_tables = mysqli_num_rows($tables);
+					$a = explode(",", $row_tables['tableStyles']);
+				}
+				
+				sort($a);
 
-				$score_style_data = score_style_data($value);
+				foreach (array_unique($a) as $value) {
 
-				if (!empty($score_style_data)) {
+					$score_style_data = score_style_data($value);
 
-					$score_style_data = explode("^",$score_style_data);
-			        
-					$query_entries = sprintf("SELECT * FROM %s WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $prefix."brewing", $score_style_data[0], $score_style_data[1]);
-					//$query_entries .= " ORDER BY brewJudgingNumber, brewCategorySort, brewSubCategory ASC;";
-					$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-					$row_entries = mysqli_fetch_assoc($entries);
-					$totalRows_entries = mysqli_num_rows($entries);
+					if (!empty($score_style_data)) {
 
-			        if ($totalRows_entries > 0) {
+						$score_style_data = explode("^",$score_style_data);
+				        
+						$query_entries = sprintf("SELECT * FROM %s WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $prefix."brewing", $score_style_data[0], $score_style_data[1]);
+						//$query_entries .= " ORDER BY brewJudgingNumber, brewCategorySort, brewSubCategory ASC;";
+						$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
+						$row_entries = mysqli_fetch_assoc($entries);
+						$totalRows_entries = mysqli_num_rows($entries);
 
-			        	do {
+				        if ($totalRows_entries > 0) {
 
-			        		if ($_SESSION['prefsDisplaySpecial'] == "J") $number = sprintf("%06s",$row_entries['brewJudgingNumber']);
-				    		else $number = sprintf("%06s",$row_entries['id']);
+				        	do {
 
-				    		// Store total entry count in array for use later
-							$table_entries_count += 1;
+				        		if ($_SESSION['prefsDisplaySpecial'] == "J") $number = sprintf("%06s",$row_entries['brewJudgingNumber']);
+					    		else $number = sprintf("%06s",$row_entries['id']);
 
-			        		$notes = "";
-			        		$score = "";
-			        		$scored_by_user = FALSE;
-			        		$add_disabled = FALSE;
-			        		$score_previous = FALSE;
-			        		$score_previous_other = FALSE;
-			        		$actions = "";
-			        		$eval_place_actions = "";
-			        		$count_evals = 0;
-			        		$assigned_score = array();
-			        		$judge_score = array();
-							$eval_places = array();
-							$eval_place = "";
-							$score_entry_data = score_entry_data($row_entries['id']);
-							$score_entry_data = explode("^",$score_entry_data);
-							$eval_all_judges = array();
-							$ordinal_position = array();
-							$ord_position = "";
-							
-							// Classic
-							if ($row_judging_prefs['jPrefsScoresheet'] == 1) {
-								$output_form = "full-scoresheet";
-								$scoresheet_form = "full_scoresheet.eval.php";
-							}
+					    		// Store total entry count in array for use later
+								$table_entries_count += 1;
 
-							// Beer Checklist
-							if ($row_judging_prefs['jPrefsScoresheet'] == 2) {
-
-								if ($score_style_data[3] == 1) {
-									$output_form = "checklist-scoresheet";
-									$scoresheet_form = "checklist_scoresheet.eval.php";
-								}
-
-								else  {
+				        		$notes = "";
+				        		$score = "";
+				        		$scored_by_user = FALSE;
+				        		$add_disabled = FALSE;
+				        		$score_previous = FALSE;
+				        		$score_previous_other = FALSE;
+				        		$actions = "";
+				        		$eval_place_actions = "";
+				        		$count_evals = 0;
+				        		$assigned_score = array();
+				        		$judge_score = array();
+								$eval_places = array();
+								$eval_place = "";
+								$score_entry_data = score_entry_data($row_entries['id']);
+								$score_entry_data = explode("^",$score_entry_data);
+								$eval_all_judges = array();
+								$ordinal_position = array();
+								$ord_position = "";
+								
+								// Classic
+								if ($row_judging_prefs['jPrefsScoresheet'] == 1) {
 									$output_form = "full-scoresheet";
 									$scoresheet_form = "full_scoresheet.eval.php";
 								}
 
-							}
+								// Beer Checklist
+								if ($row_judging_prefs['jPrefsScoresheet'] == 2) {
 
-							// Structured (Includes NW Cider Cup)
-							if (($row_judging_prefs['jPrefsScoresheet'] == 3) || ($row_judging_prefs['jPrefsScoresheet'] == 4)) {
+									if ($score_style_data[3] == 1) {
+										$output_form = "checklist-scoresheet";
+										$scoresheet_form = "checklist_scoresheet.eval.php";
+									}
 
-								if ($score_style_data[3] <= 3) {
-									$output_form = "structured-scoresheet";
-									$scoresheet_form = "structured_scoresheet.eval.php";
+									else  {
+										$output_form = "full-scoresheet";
+										$scoresheet_form = "full_scoresheet.eval.php";
+									}
+
 								}
 
-								else {
-									$output_form = "full-scoresheet";
-									$scoresheet_form = "full_scoresheet.eval.php";
-								}
-								
-							}
-							
-			        		$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
-							$style_display = $style." ".$row_entries['brewStyle'];
+								// Structured (Includes NW Cider Cup)
+								if (($row_judging_prefs['jPrefsScoresheet'] == 3) || ($row_judging_prefs['jPrefsScoresheet'] == 4)) {
 
-							$info_display = "";
-							$allergen_display = "";
-							$abv_display = "";
-							$pouring_display = "";
-							$pouring_arr = "";
-							$juice_src_display = "";
-							$carb_display = "";
-							$sweetness_display = "";
-							$sweetness_level_display = "";
-							$strength_display = "";
-							$additional_info = 0;
-							
-							if (!empty($row_entries['brewInfo'])) {
-								$additional_info++;
-								if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= "<strong>".$label_regional_variation; 
-								else $info_display .= "<strong>".$label_required_info;
-								$info_display .= ":</strong> ".$row_entries['brewInfo'];
-							}
+									if ($score_style_data[3] <= 3) {
+										$output_form = "structured-scoresheet";
+										$scoresheet_form = "structured_scoresheet.eval.php";
+									}
 
-							if (!empty($row_entries['brewMead1'])) {
-								$additional_info++;
-								$carb_display .= "<strong>".$label_carbonation.":</strong> ".$row_entries['brewMead1'];
-							}
-
-							if (!empty($row_entries['brewMead2'])) {
-								$additional_info++;
-								$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2'];
-							}
-
-							if (!empty($row_entries['brewSweetnessLevel'])) {
-
-								$additional_info++;
-								$sweetness_json = json_decode($row_entries['brewSweetnessLevel'],true);
-								
-								if (json_last_error() === JSON_ERROR_NONE) {
-
-									if (!empty($sweetness_json['OG'])) $sweetness_level_display .= "<li><strong>".$label_original_gravity.":</strong> ".$sweetness_json['OG']."</li>";
-									if (!empty($sweetness_json['FG'])) $sweetness_level_display .= "<li><strong>".$label_final_gravity.":</strong> ".$sweetness_json['FG']."</li>";
-
+									else {
+										$output_form = "full-scoresheet";
+										$scoresheet_form = "full_scoresheet.eval.php";
+									}
+									
 								}
 								
-								else {
-									$sweetness_level_display .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
+				        		$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
+								$style_display = $style." ".$row_entries['brewStyle'];
+
+								$info_display = "";
+								$allergen_display = "";
+								$abv_display = "";
+								$pouring_display = "";
+								$pouring_arr = "";
+								$juice_src_display = "";
+								$carb_display = "";
+								$sweetness_display = "";
+								$sweetness_level_display = "";
+								$strength_display = "";
+								$additional_info = 0;
+								
+								if (!empty($row_entries['brewInfo'])) {
+									$additional_info++;
+									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= "<strong>".$label_regional_variation; 
+									else $info_display .= "<strong>".$label_required_info;
+									$info_display .= ":</strong> ".$row_entries['brewInfo'];
 								}
 
-							}
-
-							if (!empty($row_entries['brewMead3'])) {
-								$additional_info++;
-								$strength_display .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
-							}
-
-							if (!empty($row_entries['brewPossAllergens'])) {
-								$additional_info++;
-								$allergen_display .= "<strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens'];
-							}
-							
-							if (!empty($row_entries['brewABV'])) {
-								$additional_info++;
-								$abv_display .= "<strong>".$label_abv.":</strong> ".number_format($row_entries['brewABV'],1);
-							}
-
-							if (!empty($row_entries['brewPouring'])) {
-								$pouring_arr = json_decode($row_entries['brewPouring'],true);
-								$pouring_display .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
-								if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $pouring_display .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-								$pouring_display .= "<li><strong>".$label_rouse_yeast.":</strong> ".$pouring_arr['pouring_rouse']."</li>";
-								unset($pouring_arr);
-							}
-
-							if (($admin) && ($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewJuiceSource']))) {
-
-								$additional_info++;
-
-								$juice_src_arr = json_decode($row_entries['brewJuiceSource'],true);
-								$juice_src_disp = "";
-
-								if (is_array($juice_src_arr['juice_src'])) {
-									$juice_src_disp .= implode(", ",$juice_src_arr['juice_src']);
-									$juice_src_disp .= ", ";
+								if (!empty($row_entries['brewMead1'])) {
+									$additional_info++;
+									$carb_display .= "<strong>".$label_carbonation.":</strong> ".$row_entries['brewMead1'];
 								}
 
-								if ((isset($juice_src_arr['juice_src_other'])) && (is_array($juice_src_arr['juice_src_other']))) {
-									$juice_src_disp .= implode(", ",$juice_src_arr['juice_src_other']);
-									$juice_src_disp .= ", ";
+								if (!empty($row_entries['brewMead2'])) {
+									$additional_info++;
+									$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2'];
 								}
 
-								$juice_src_disp = rtrim($juice_src_disp,",");
-								$juice_src_disp = rtrim($juice_src_disp,", ");
+								if (!empty($row_entries['brewSweetnessLevel'])) {
 
-								$juice_src_display .= "<strong>".$label_juice_source.":</strong> ".$juice_src_disp;
-							
-							}
-							
-			        		// Admin: Entry Evaluations
-			        		if ($admin) {
-			        			$add_link = $base_url."index.php?section=admin&amp;go=evaluation&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
-			        			include (EVALS.'judging_admin.eval.php');
-			        		}
+									$additional_info++;
+									$sweetness_json = json_decode($row_entries['brewSweetnessLevel'],true);
+									
+									if (json_last_error() === JSON_ERROR_NONE) {
 
-			        		// Judging Dashboard
-			        		else {
-			        			$add_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
-			        			include (EVALS.'judging_dashboard.eval.php');
-			        		}
-				            
-				            // Build table data
-				            if (($judging_open) || ($admin) || ((!$judging_open) && ($scored_by_user))) {
-					            if ($add_disabled) $table_assignment_data .= "<tr class=\"text-muted\">";
-					            elseif ((!$queued) && (!$add_disabled) && (!$admin)) $table_assignment_data .= "<tr class=\"text-primary\">";
-					            else $table_assignment_data .= "<tr>";
-					        	$table_assignment_data .= "<td><a class=\"anchor\" name=\"".$number."\"></a>".$number."</td>";
-					        	$table_assignment_data .= "<td class=\"hidden-xs\">";
-					        	$table_assignment_data .= $style_display;
-					        	$table_assignment_data .= "</td>";
-					        	
-					        	$table_assignment_data .= "<td>";
-					        	if ($additional_info > 0) {
-					        		$table_assignment_data .= "<small><ul class=\"list-unstyled\">";
-					        		if (!empty($info_display)) $table_assignment_data .= "<li>".str_replace("^",", ",$info_display)."</li>";
-					        		if (!empty($carb_display)) $table_assignment_data .= "<li>".$carb_display."</li>";
-					        		if (!empty($sweetness_display)) $table_assignment_data .= "<li>".$sweetness_display."</li>";
-					        		if (!empty($sweetness_level_display)) $table_assignment_data .= "<li>".$sweetness_level_display."</li>";
-					        		if (!empty($allergen_display)) $table_assignment_data .= "<li>".$allergen_display."</li>";
-					        		if (!empty($abv_display)) $table_assignment_data .= "<li>".$abv_display."%</li>";
-					        		if (!empty($juice_src_display)) $table_assignment_data .= "<li>".$juice_src_display."</li>";
-					        		if (!empty($strength_display)) $table_assignment_data .= "<li>".$strength_display."</li>";
-					        		if (!empty($pouring_display)) $table_assignment_data .= $pouring_display;
-					        		$table_assignment_data .= "</ul></small>";
-					        	}
-					        	$table_assignment_data .= "</td>";
+										if (!empty($sweetness_json['OG'])) $sweetness_level_display .= "<li><strong>".$label_original_gravity.":</strong> ".$sweetness_json['OG']."</li>";
+										if (!empty($sweetness_json['FG'])) $sweetness_level_display .= "<li><strong>".$label_final_gravity.":</strong> ".$sweetness_json['FG']."</li>";
 
-					        	$table_assignment_data .= "<td>".$notes."</td>";
-					        	$table_assignment_data .= "<td>".$eval_place_actions.$actions."</td>";
-					            $table_assignment_data .= "</tr>";
-					        }
+									}
+									
+									else {
+										$sweetness_level_display .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
+									}
 
-					        // Check to see if any judges have more than one evaluation for this
-					        // entry. If so, add to duplicate judges alert array.
-					        if (!empty($eval_all_judges)) {
-					        	$all_judges_count = array_count_values($eval_all_judges);
-					        	foreach ($all_judges_count as $key => $value) {
-					        		if ($value > 1) {
-					        			$duplicate_judge_evals_alert[] = array(
-					        				"table_id" => $tbl_id,
-											"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
-											"id" => $row_entries['id'],
-											"brewJudgingNumber" => $number,
-											"brewCategorySort" => $row_entries['brewCategorySort'],
-											"brewSubCategory" => $row_entries['brewSubCategory'],
-											"brewStyle" => $row_entries['brewStyle']
-					        			);
-					        		}
-					        	}
-					        }
+								}
 
-				        } while ($row_entries = mysqli_fetch_assoc($entries));
+								if (!empty($row_entries['brewMead3'])) {
+									$additional_info++;
+									$strength_display .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+								}
 
-				    } // end if ($totalRows_entries > 0)
+								if (!empty($row_entries['brewPossAllergens'])) {
+									$additional_info++;
+									$allergen_display .= "<strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens'];
+								}
+								
+								if (!empty($row_entries['brewABV'])) {
+									$additional_info++;
+									$abv_display .= "<strong>".$label_abv.":</strong> ".number_format($row_entries['brewABV'],1);
+								}
 
-				} // end if (!empty($score_style_data)  
+								if (!empty($row_entries['brewPouring'])) {
+									$pouring_arr = json_decode($row_entries['brewPouring'],true);
+									$pouring_display .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
+									if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $pouring_display .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
+									$pouring_display .= "<li><strong>".$label_rouse_yeast.":</strong> ".$pouring_arr['pouring_rouse']."</li>";
+									unset($pouring_arr);
+								}
 
-			} // end foreach
+								if (($admin) && ($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewJuiceSource']))) {
 
-			if (empty($table_assignment_data)) $table_assignment_data .= "<tr><td colspan=\"4\">".$evaluation_info_016."</td></tr>";
+									$additional_info++;
+
+									$juice_src_arr = json_decode($row_entries['brewJuiceSource'],true);
+									$juice_src_disp = "";
+
+									if (is_array($juice_src_arr['juice_src'])) {
+										$juice_src_disp .= implode(", ",$juice_src_arr['juice_src']);
+										$juice_src_disp .= ", ";
+									}
+
+									if ((isset($juice_src_arr['juice_src_other'])) && (is_array($juice_src_arr['juice_src_other']))) {
+										$juice_src_disp .= implode(", ",$juice_src_arr['juice_src_other']);
+										$juice_src_disp .= ", ";
+									}
+
+									$juice_src_disp = rtrim($juice_src_disp,",");
+									$juice_src_disp = rtrim($juice_src_disp,", ");
+
+									$juice_src_display .= "<strong>".$label_juice_source.":</strong> ".$juice_src_disp;
+								
+								}
+								
+				        		// Admin: Entry Evaluations
+				        		if ($admin) {
+				        			$add_link = $base_url."index.php?section=admin&amp;go=evaluation&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
+				        			include (EVALS.'judging_admin.eval.php');
+				        		}
+
+				        		// Judging Dashboard
+				        		else {
+				        			$add_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
+				        			include (EVALS.'judging_dashboard.eval.php');
+				        		}
+					            
+					            // Build table data
+					            if (($judging_open) || ($admin) || ((!$judging_open) && ($scored_by_user))) {
+						            if ($add_disabled) $table_assignment_data .= "<tr class=\"text-muted\">";
+						            elseif ((!$queued) && (!$add_disabled) && (!$admin)) $table_assignment_data .= "<tr class=\"text-primary\">";
+						            else $table_assignment_data .= "<tr>";
+						        	$table_assignment_data .= "<td><a class=\"anchor\" name=\"".$number."\"></a>".$number."</td>";
+						        	$table_assignment_data .= "<td class=\"hidden-xs\">";
+						        	$table_assignment_data .= $style_display;
+						        	$table_assignment_data .= "</td>";
+						        	
+						        	$table_assignment_data .= "<td>";
+						        	if ($additional_info > 0) {
+						        		$table_assignment_data .= "<small><ul class=\"list-unstyled\">";
+						        		if (!empty($info_display)) $table_assignment_data .= "<li>".str_replace("^",", ",$info_display)."</li>";
+						        		if (!empty($carb_display)) $table_assignment_data .= "<li>".$carb_display."</li>";
+						        		if (!empty($sweetness_display)) $table_assignment_data .= "<li>".$sweetness_display."</li>";
+						        		if (!empty($sweetness_level_display)) $table_assignment_data .= "<li>".$sweetness_level_display."</li>";
+						        		if (!empty($allergen_display)) $table_assignment_data .= "<li>".$allergen_display."</li>";
+						        		if (!empty($abv_display)) $table_assignment_data .= "<li>".$abv_display."%</li>";
+						        		if (!empty($juice_src_display)) $table_assignment_data .= "<li>".$juice_src_display."</li>";
+						        		if (!empty($strength_display)) $table_assignment_data .= "<li>".$strength_display."</li>";
+						        		if (!empty($pouring_display)) $table_assignment_data .= $pouring_display;
+						        		$table_assignment_data .= "</ul></small>";
+						        	}
+						        	$table_assignment_data .= "</td>";
+
+						        	$table_assignment_data .= "<td>".$notes."</td>";
+						        	$table_assignment_data .= "<td>".$eval_place_actions.$actions."</td>";
+						            $table_assignment_data .= "</tr>";
+						        }
+
+						        // Check to see if any judges have more than one evaluation for this
+						        // entry. If so, add to duplicate judges alert array.
+						        if (!empty($eval_all_judges)) {
+						        	$all_judges_count = array_count_values($eval_all_judges);
+						        	foreach ($all_judges_count as $key => $value) {
+						        		if ($value > 1) {
+						        			$duplicate_judge_evals_alert[] = array(
+						        				"table_id" => $tbl_id,
+												"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
+												"id" => $row_entries['id'],
+												"brewJudgingNumber" => $number,
+												"brewCategorySort" => $row_entries['brewCategorySort'],
+												"brewSubCategory" => $row_entries['brewSubCategory'],
+												"brewStyle" => $row_entries['brewStyle']
+						        			);
+						        		}
+						        	}
+						        }
+
+					        } while ($row_entries = mysqli_fetch_assoc($entries));
+
+					    } // end if ($totalRows_entries > 0)
+
+					} // end if (!empty($score_style_data)  
+
+				} // end foreach
+
+				if (empty($table_assignment_data)) $table_assignment_data .= "<tr><td colspan=\"4\">".$evaluation_info_016."</td></tr>";
+				
+				$table_assignment_post .= "</tbody>";
+				$table_assignment_post .= "</table>";
+
+				$table_assignment_post .= "<p><small><a href=\"#top\"><i class=\"fa fa-sm fa-arrow-circle-up\"></i> Top</a></small></p>";
+			}
+
 			
-			$table_assignment_post .= "</tbody>";
-			$table_assignment_post .= "</table>";
-
-			$table_assignment_post .= "<p><small><a href=\"#top\"><i class=\"fa fa-sm fa-arrow-circle-up\"></i> Top</a></small></p>";
+			
+			
 
 			// If places have been awarded at the table, but there are duplicates, list them for admins
 			if (($admin) && (!empty($table_places))) {
@@ -625,10 +632,12 @@ if ($totalRows_table_assignments > 0) {
 				 * -------------------------------------------
 				 */
 
-				// s
 				if ($table_entries_count == $table_scored_entries_count) {
 					$table_assignment_stats .= "<div class=\"alert alert-success\">";
-					$table_assignment_stats .= sprintf("<i class=\"fa fa-lg fa-check-circle\"></i> <strong>%s</strong>",$evaluation_info_037);
+					if ((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) {
+						$table_assignment_stats .= "<i class=\"fa fa-lg fa-info-circle\"></i> <strong>Tables Planning Mode enabled.</strong> Tables Competition Mode must be enabled view or entry evaluations at this table.";
+					}
+					else $table_assignment_stats .= sprintf("<i class=\"fa fa-lg fa-check-circle\"></i> <strong>%s</strong>",$evaluation_info_037);
 					$table_assignment_stats .= "</div>";
 				}
 				
@@ -949,7 +958,7 @@ if ($totalRows_table_assignments > 0) {
 	});
 
 </script>
-<script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
+<script src="<?php if (TESTING) echo $base_url."js_source/admin_ajax.js?t=".time(); else echo $js_url."admin_ajax.min.js"; ?>"></script>
 <?php
 } // end if ($totalRows_table_assignments > 0)
 
@@ -1010,7 +1019,7 @@ $status_sidebar .= "<h4 style=\"margin: 0px; padding-bottom: 5px;\">Status<span 
 
 $status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted\"><span class=\"small\">Updated <span id=\"eval-count-new-timestamp\">".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></span></p>";
 
-$status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-indicators\"><span class=\"small\" id=\"count-two-minute-info\">".$brew_text_061."</span></p>";
+if (!HOSTED) $status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-indicators\"><span class=\"small\" id=\"count-two-minute-info\">".$brew_text_061."</span></p>";
 
 $status_sidebar .= "<p style=\"margin: 0px;\" class=\"small text-muted updates-indicators\">";
 $status_sidebar .= "<span class=\"small\"><a href=\"#\" onClick=\"window.location.reload()\">Refresh this page</a> to review updated evaluations and/or consensus scores.</span></span>";
@@ -1024,12 +1033,14 @@ $status_sidebar .= "</p>";
 */
 
 $status_sidebar .= "<div class=\"updates-indicators small\" style=\"margin-top: 5px;\">";
-$status_sidebar .= "<span class=\"small\" id=\"resume-updates\">";
-$status_sidebar .= "<button class=\"btn btn-primary btn-xs\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-play\" style=\"padding-right:5px;\"></i> Resume Updates</button>";
-$status_sidebar .= "</span>";
+if (!HOSTED) {
+	$status_sidebar .= "<span class=\"small\" id=\"resume-updates\">";
+	$status_sidebar .= "<button class=\"btn btn-primary btn-xs\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-play\" style=\"padding-right:5px;\"></i> Resume Updates</button>";
+	$status_sidebar .= "</span>";
+}
 $status_sidebar .= "<span class=\"small\" id=\"stop-updates\">";
-$status_sidebar .= "<button class=\"btn btn-primary btn-xs\" onclick=\"stopUpdates()\"><i class=\"fa fa-xs fa-pause\" style=\"padding-right:5px;\"></i> Pause Updates</button>";
-$status_sidebar .= "<button href=\"#\" class=\"btn btn-primary btn-xs pull-right\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-exchange\" style=\"padding-right:5px;\"></i> Update Now</button>";
+$status_sidebar .= "<button href=\"#\" class=\"btn btn-primary btn-xs\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-exchange\" style=\"padding-right:5px;\"></i> Update Status Now</button>";
+if (!HOSTED) $status_sidebar .= "<button class=\"btn btn-primary btn-xs pull-right\" onclick=\"stopUpdates()\"><i class=\"fa fa-xs fa-pause\" style=\"padding-right:5px;\"></i> Pause Updates</button>";
 $status_sidebar .= "</span>";
 $status_sidebar .= "</div>";
 
@@ -1052,9 +1063,8 @@ $status_sidebar .= "<strong class=\"text-teal\">Total Entries with Evaluations <
 $status_sidebar .= "<span class=\"pull-right total-evaluations-unique\" style=\"margin-left: 15px;\">".$count_unique."</span>";
 $status_sidebar .= "</section>";
 
-$status_sidebar .= "<section style=\"margin: 15px 0 8px 0;\" class=\"bcoem-sidebar-panel\">";
-$status_sidebar .= "<strong class=\"text-info\">Entries with Evaluations by Table</strong>";
-$status_sidebar .= "<span class=\"pull-right\">Count / Total</span>";
+$status_sidebar .= "<section style=\"margin: 15px 0 8px 0; border-bottom: 1px solid #dedede;\" class=\"bcoem-sidebar-panel\">";
+$status_sidebar .= "<small><strong class=\"text-info\">Evaluations</strong><span class=\"pull-right\">Count / Total</span></small>";
 $status_sidebar .= "</section>";
 $status_sidebar .= "<div class=\"small\">";
 $status_sidebar .= $status_sidebar_table_info;
@@ -1217,6 +1227,7 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
 	function stopUpdates() {
 		clearInterval(interval_onload);
         clearInterval(interval_onfocus);
+        clearInterval(interval_timeout);
     	$("#stop-updates").hide();
     	$("#resume-updates").show();
     	$("#count-two-minute-info").text(count_paused_manually_text);
@@ -1228,11 +1239,14 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
     function resumeUpdates() {
     	clearInterval(interval_onload);
         clearInterval(interval_onfocus);
+        clearInterval(interval_timeout);
         updateAllCounters(ajax_url);
-        updateDateTime(ajax_url);  
-        setTimeout(function() {
+        updateDateTime(ajax_url);
+        interval_timeout = setTimeout(function() {
         	updateAllTableCounters(ajax_url);
         }, 5000);
+        
+        <?php if (!HOSTED) { ?>
     	interval_onfocus = setInterval(function() { 
             updateAllCounters(ajax_url);
             updateDateTime(ajax_url);  
@@ -1240,18 +1254,24 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
             	updateAllTableCounters(ajax_url);
             }, 5000);
         }, 300000);
+        $("#resume-updates").hide();
+    	<?php } ?>
+    	
     	$("#stop-updates").show();
-    	$("#resume-updates").hide();
     	$("#count-two-minute-info").text(count_update_text);
     }
 
     function updateDateTime(ajax_url) {
     	fetchRecordCount(ajax_url,'eval-count-new-timestamp','0','updated-display');
     }
+
+    <?php if (!HOSTED) { ?>
     
     $(document).ready(function() {
 
         window.onload = function () {
+        	clearInterval(interval_onload);
+            clearInterval(interval_onfocus);
         	if ((judging_started == 1) && (results_published == 0)) {
         		$(".refresh-link").addClass('hidden');
 	            interval_onload = setInterval(function() {
@@ -1267,7 +1287,7 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
                 }, 1200000);
 	            $("#count-two-minute-info").text(count_update_text);
 	        }
-        };
+        }
 
         window.onfocus = function () {
             clearInterval(interval_onload);
@@ -1293,15 +1313,17 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
 	            $("#stop-updates").show();
 	    		$("#resume-updates").hide();
 	    	}
-        };
+        }
 
         window.onblur = function () {
             clearInterval(interval_onload);
             clearInterval(interval_onfocus);
             clearInterval(interval_timeout);
             if ((judging_started == 1) && (results_published == 0)) $("#count-two-minute-info").text(count_paused_text);
-        };
+        }
 
     });
+
+    <?php } ?>
 
 </script>

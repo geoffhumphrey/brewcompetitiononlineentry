@@ -44,6 +44,7 @@ if ((!empty($row_eval['evalMiniBOS'])) || (!empty($row_eval['scoreMiniBOS']))) $
 if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
 
 $show_rank = TRUE;
+
 $rank = str_replace(",", ", ", $row_judge['brewerJudgeRank']);
 if ($nw_cider) {
     $rank = str_replace("Non-BJCP,", "", $row_judge['brewerJudgeRank']);
@@ -51,6 +52,77 @@ if ($nw_cider) {
 }
 
 if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
+
+$rank = rtrim($rank,",");
+$rank = ltrim($rank,",");
+$rank = trim($rank);
+
+if ($row_judge['brewerJudgeMead'] == "Y") {
+    if (empty($rank)) $rank .= "Certified Mead Judge";
+    else $rank .= "<br>Certified Mead Judge";
+}
+
+if ($row_judge['brewerJudgeCider'] == "Y") {
+    if (empty($rank)) $rank .= "Certified Cider Judge";
+    else $rank .= "<br>Certified Cider Judge";
+}
+
+$mhp_qr_data = "";
+
+/**
+ * For MHP QR Code (see email from mhpsecretary@gmail.com - July 6, 2025)
+ * ---
+ * Entrant => entrant_name
+ * Co-entrant(s) => co_entrant
+ * Competition Name => competition_name
+ * Competition Year => competition_year
+ * Entry Style => style_id
+ *             => style_name
+ * Judge Name => judge_name
+ * Judge Rank => judge_rank
+ * Judge MHP => judge_mhp
+ * Score Sheet 1 Score => judge_score
+ * Consensus Score => consensus_score
+ * Competition Site (Location?) => competition_location
+ * Competition BJCP ID => competition_bjcp_id
+ * Competition Instance ID => ??
+ */
+
+/*
+$judge_mhp = "";
+if (!empty($row_judge['brewerMHP'])) $judge_mhp = $row_judge['brewerMHP'];
+
+$competition_bjcp_id = "";
+if (!empty($_SESSION['contestID'])) $competition_bjcp_id = $_SESSION['contestID'];
+
+$competition_location = "";
+if (!empty($_SESSION['contestHostLocation'])) $competition_location = $_SESSION['contestHostLocation'];
+
+$mhp_rank = explode(",",$row_judge['brewerJudgeRank']);
+
+$eval_entrant = brewer_info($row_entry_info['brewBrewerID']);
+$eval_entrant = explode("^",$eval_entrant);
+
+$mhp_qr_data = array(
+    "entrant_name" => $row_entry_info['brewBrewerFirstName']." ".$row_entry_info['brewBrewerLastName'],
+    "entrant_mhp" => $eval_entrant[5],
+    "co_entrant" => $row_entry_info['brewCoBrewer'],
+    "competition_name" => $_SESSION['contestName'],
+    "competition_year" => getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_eval['evalInitialDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "year"),
+    "style_id" => $row_style['brewStyleGroup'].$row_style['brewStyleNum'],
+    "style_name" => $row_style['brewStyle'],
+    "judge_name" => $row_judge['brewerFirstName']." ".$row_judge['brewerLastName'],
+    "judge_rank" => $mhp_rank[0],
+    "judge_mhp" => $judge_mhp,
+    "judge_score" => $score,
+    "consensus_score" => $row_eval['evalFinalScore'],
+    "competition_location" => $competition_location,
+    "competition_bjcp_id" => $competition_bjcp_id
+);
+
+$mhp_qr_data = json_encode($mhp_qr_data, JSON_NUMERIC_CHECK);
+*/
+
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>scoresheet_output.css">
@@ -116,20 +188,7 @@ if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
             <strong><?php if ($nw_cider) echo $label_designations; else echo $label_bjcp_rank; ?>:</strong>
             </div>
             <div class="col col-lg-7 col-md-8 col-sm-9 col-xs-9">
-            <?php 
-            $rank = rtrim($rank,",");
-            $rank = ltrim($rank,",");
-            $rank = trim($rank);
-            if ($row_judge['brewerJudgeMead'] == "Y") {
-                if (empty($rank)) $rank .= "Certified Mead Judge";
-                else $rank .= "<br>Certified Mead Judge";
-            }
-            if ($row_judge['brewerJudgeCider'] == "Y") {
-                if (empty($rank)) $rank .= "Certified Cider Judge";
-                else $rank .= "<br>Certified Cider Judge";
-            }
-            echo $rank;
-            ?>
+            <?php echo $rank; ?>
             </div>
         </div><!-- /row for judge rank -->
         <?php } ?>

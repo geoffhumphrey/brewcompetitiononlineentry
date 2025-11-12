@@ -125,18 +125,18 @@ function bcoem_dashboard_help($content) {
 		if ($_SESSION['userAdminObfuscate'] == 0) {
 			$bcoem_dashboard_help_body .= "<p><strong>During Judging</strong></p>";
 			$bcoem_dashboard_help_body .= "<ul>";
-			$bcoem_dashboard_help_body .= "<li>Best of Show (BOS) pullsheets for all designated style types.</li>";
-			$bcoem_dashboard_help_body .= "<li>Best of Show (BOS) cup mats for judges to use while judging the BOS round. These are inteneded to be printed in the landscape format.</li>";
+			$bcoem_dashboard_help_body .= "<li>Best of Show (BOS), Mini-BOS, and Pro-Am/Scale-Up pullsheets. These are inteneded to be printed in landscape format.</li>";
+			$bcoem_dashboard_help_body .= "<li>Best of Show (BOS), Mini-BOS, and Pro-Am/Scale-Up cup mats for judges to use while judging the their respective rounds. These are inteneded to be printed in landscape format.</li>";
 			$bcoem_dashboard_help_body .= "</ul>";
 		}
 		$bcoem_dashboard_help_body .= "<p><strong>After Judging</strong></p>";
 		$bcoem_dashboard_help_body .= "<ul>";
-		$bcoem_dashboard_help_body .= "<li>A results report, with and without scores - PDF or HTML.</li>";
-		$bcoem_dashboard_help_body .= "<li>A Best of Show (BOS) results report - PDF or HTML.</li>";
-		$bcoem_dashboard_help_body .= "<li>A BJCP points report in three formats - PDF, HTML, or XML.</li>";
-		$bcoem_dashboard_help_body .= "<li>Award lables to affix to ribbons, prizes, etc.</li>";
-		$bcoem_dashboard_help_body .= "<li>Participant address labels for mailing scoresheets.</li>";
-		$bcoem_dashboard_help_body .= "<li>Participant summaries - cover sheets to include with mailed scoresheets.</li>";
+		$bcoem_dashboard_help_body .= "<li>Results reports, with and without scores - print, PDF, or HTML.</li>";
+		$bcoem_dashboard_help_body .= "<li>A Best of Show (BOS) results report - print, PDF, or HTML.</li>";
+		$bcoem_dashboard_help_body .= "<li>A Best Brewer / Best Club results report (if applicable) - print only.</li>";
+		$bcoem_dashboard_help_body .= "<li>A BJCP points report in three formats - print, PDF, or XML.</li>";
+		$bcoem_dashboard_help_body .= "<li>Participant address labels for mailing scoresheets, medals, and/or prizes.</li>";
+		$bcoem_dashboard_help_body .= "<li>Participant summaries - cover sheets to include with mailed scoresheets or medals.</li>";
 		$bcoem_dashboard_help_body .= "<li>A post-judging inventory detailing possible leftover bottles and their corresponding entry number, judging number, and style.</li>";
 		$bcoem_dashboard_help_body .= "</ul>";
 		break;

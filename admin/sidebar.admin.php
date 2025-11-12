@@ -51,15 +51,24 @@ if ($logged_in) {
 	$admin_sidebar_header .= "<p class=\"small\" style=\"margin: 0px;\"><span class=\"small text-muted\">Updated <span id=\"admin-count-new-timestamp\">".getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time")."</span></span></p>";
 	
 	if ($entry_window_open == 1) {
-		$admin_sidebar_header .= "<p class=\"updates-indicators small\" style=\"margin: 0px;\"><small><i class=\"fa fa-xs fa-circle text-success\"></i></small> <span class=\"small text-muted\"><span id=\"count-two-minute-info\">".$brew_text_061."</span></span></p>";
+		
+		if (!HOSTED) $admin_sidebar_header .= "<p class=\"updates-indicators small\" style=\"margin: 0px;\"><small><i class=\"fa fa-xs fa-circle text-success\"></i></small> <span class=\"small text-muted\"><span id=\"count-two-minute-info\">".$brew_text_061."</span></span></p>";
+		
 		$admin_sidebar_header .= "<div class=\"updates-indicators small\" style=\"margin-top: 5px;\">";
-		$admin_sidebar_header .= "<span class=\"small\" id=\"resume-updates\">";
-		$admin_sidebar_header .= "<button class=\"btn btn-primary btn-xs\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-play\" style=\"padding-right:5px;\"></i> Resume Updates</button>";
-		$admin_sidebar_header .= "</span>";
+		
+		// Resume Update Button 
+		if (!HOSTED) {
+			$admin_sidebar_header .= "<span class=\"small\" id=\"resume-updates\">";
+			$admin_sidebar_header .= "<button class=\"btn btn-primary btn-xs\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-play\" style=\"padding-right:5px;\"></i> Resume Updates</button>";
+			$admin_sidebar_header .= "</span>";
+		}
+
+		// Stop and Update Now Buttons
 		$admin_sidebar_header .= "<span class=\"small\" id=\"stop-updates\">";
-		$admin_sidebar_header .= "<button class=\"btn btn-primary btn-xs\" onclick=\"stopUpdates()\"><i class=\"fa fa-xs fa-pause\" style=\"padding-right:5px;\"></i> Pause Updates</button>";
-		$admin_sidebar_header .= "<button href=\"#\" class=\"btn btn-primary btn-xs pull-right\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-exchange\" style=\"padding-right:5px;\"></i> Update Now</button>";
+		$admin_sidebar_header .= "<button href=\"#\" class=\"btn btn-primary btn-xs\" onclick=\"resumeUpdates()\"><i class=\"fa fa-xs fa-exchange\" style=\"padding-right:5px;\"></i> Update Status Now</button>";
+		if (!HOSTED) $admin_sidebar_header .= "<button class=\"btn btn-primary btn-xs pull-right\" onclick=\"stopUpdates()\"><i class=\"fa fa-xs fa-pause\" style=\"padding-right:5px;\"></i> Pause Updates</button>";
 		$admin_sidebar_header .= "</span>";
+		
 		$admin_sidebar_header .= "</div>";
 	}
 	
@@ -216,7 +225,7 @@ if ($logged_in) {
 	$admin_sidebar_body .= "</div>";
 
 	$admin_sidebar_body .= "<div class=\"bcoem-sidebar-panel\">";
-	$admin_sidebar_body .= "<strong class=\"text-info\">Judge Registration</strong>";
+	$admin_sidebar_body .= "<strong class=\"text-info\">Judge/Steward Registration</strong>";
 	if ($judge_window_open == 1) $admin_sidebar_body .= "<span class=\"pull-right text-success\"><span class=\"fa fa-lg fa-check\"></span> Open</span>";
 	else $admin_sidebar_body .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$admin_sidebar_body .= "</div>";
@@ -407,6 +416,8 @@ echo $admin_sidebar_body;
 			$(".updates-indicators").hide();
 		}
 	    
+	    <?php if (!HOSTED) { ?>
+	    
 	    window.onload = function () {
 	    	
 	        if (entry_open == 1) {
@@ -495,6 +506,8 @@ echo $admin_sidebar_body;
 	        $("#count-two-minute-info").text(count_paused_text);
 	            
 	    };
+
+		<?php } ?>
 	
 	});
 

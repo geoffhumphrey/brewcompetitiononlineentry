@@ -193,8 +193,10 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
         // Get all deadline dates
         $later_date_arr[] = $_SESSION['contestEntryDeadline'];
+        if (isset($_SESSION['jPrefsJudgingClosed'])) $later_date_arr[] = $_SESSION['jPrefsJudgingClosed'];
         if (isset($_SESSION['contestJudgeDeadline'])) $later_date_arr[] = $_SESSION['contestJudgeDeadline'];
         if (isset($_SESSION['contestAwardsLocDate'])) $later_date_arr[] = $_SESSION['contestAwardsLocDate'];
+
 
         // Get all judging session start and end dates
         if ((check_setup($prefix."judging_locations",$database)) && (check_update("judgingDateEnd", $prefix."judging_locations"))) {

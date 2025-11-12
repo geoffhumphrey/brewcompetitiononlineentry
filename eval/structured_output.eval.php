@@ -761,8 +761,22 @@ else {
 <?php } ?>
 
 <!-- Footer -->
-<?php if (!$nw_cider) { ?><p style="padding-top: 2em;"><small><em><?php echo sprintf("%s %s. &copy;%s Beer Judge Certification Program.",$evaluation_info_070,$scoresheet_type,date('Y')); ?></em></small></p><?php } ?>
-<?php if (!empty($row_eval['evalFinalScore'])) { ?>
-<p style="padding-top: 1em;"><small><em>** <?php echo $evaluation_info_069; ?></em></small></p>
-<?php } ?>
+<div class="row">
+    <div class="col col-xs-8">
+        <?php if (!$nw_cider) { ?><p style="padding-top: 2em;"><small><em><?php echo sprintf("%s %s. &copy;%s Beer Judge Certification Program.",$evaluation_info_070,$scoresheet_type,date('Y')); ?></em></small></p><?php } ?>
+        <?php if (!empty($row_eval['evalFinalScore'])) { ?>
+        <p style="padding-top: 1em;"><small><em>** <?php echo $evaluation_info_069; ?></em></small></p>
+        <?php } ?>
+    </div>
+    <div class="col col-xs-4">
+        <!--
+        <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
+        <div class="pull-right">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?data=<?php echo urlencode($mhp_qr_data); ?>&amp;size=150x150&amp;charset-source=UTF-8&amp;format=svg" />
+            <p><small><em>For MHP Use Only</em></small></p>
+        </div>
+        <?php } ?>
+        -->
+    </div>
+</div>
 <div style="page-break-after: always;"></div>

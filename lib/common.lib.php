@@ -2465,7 +2465,7 @@ function brewer_info($uid,$filter="default") {
 	}
 	else $r .= "Non-BJCP^"; 							// 3
 	if (isset($row_brewer_info['brewerJudgeID'])) $r .= $row_brewer_info['brewerJudgeID']."^"; else $r .= "&nbsp;^"; // 4
-	$r .= "&nbsp;^"; // 5 deprecated 2.1.14
+	$r .= $row_brewer_info['brewerMHP']."^"; // 5 deprecated 2.1.14; changed to MHP for 3.0.0
 	$r .= $row_brewer_info['brewerEmail']."^";			// 6
 	$r .= $row_brewer_info['uid']."^";					// 7
 	if (isset($row_brewer_info['brewerClubs'])) $r .= $row_brewer_info['brewerClubs']."^"; else $r .= "&nbsp;^"; // 8
