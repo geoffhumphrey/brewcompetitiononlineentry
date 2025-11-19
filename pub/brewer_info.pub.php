@@ -546,19 +546,19 @@ if ($show_judge_steward_fields) {
 			$account_display .= "<div class=\"".$display_right_cols."\">";
 			if (($assignment == "judge") || (empty($assignment))) {
 				if (empty($table_assign_judge)) {
-						$account_display .= "<table id=\"sortable_judge\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">";
-						$account_display .= "<thead class=\"table-dark\">";
-						$account_display .= "<tr>";
-						$account_display .= sprintf("<th width=\"10%%\">%s/%s</th>",$label_yes,$label_no);
-						$account_display .= sprintf("<th width=\"30%%\">%s</th>",$label_session);
-						$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_date);
-						$account_display .= sprintf("<th width=\"35%%\">%s</th>",$label_notes);
-						$account_display .= "</tr>";
-						$account_display .= "</thead>";
-						$account_display .= "<tbody>";
+						$account_display .= "\n\t<table id=\"sortable_judge\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">";
+						$account_display .= "\t<thead class=\"table-dark\">\n";
+						$account_display .= "\t\t<tr>\n";
+						$account_display .= sprintf("\t\t\t<th width=\"10%%\">%s/%s</th>\n",$label_yes,$label_no);
+						$account_display .= sprintf("\t\t\t<th width=\"30%%\">%s</th>\n",$label_session);
+						$account_display .= sprintf("\t\t\t<th width=\"25%%\">%s</th>\n",$label_date);
+						$account_display .= sprintf("\t\t\t<th width=\"35%%\">%s</th>\n",$label_notes);
+						$account_display .= "\t\t</tr>\n";
+						$account_display .= "\t</thead>\n";
+						$account_display .= "\t<tbody>\n";
 						$account_display .= $judge_info;
-						$account_display .= "</tbody>";
-						$account_display .= "</table>";
+						$account_display .= "\t</tbody>";
+						$account_display .= "\t</table>";
 				}
 			}
 
@@ -571,19 +571,19 @@ if ($show_judge_steward_fields) {
 				$account_display .= "<div class=\"row bcoem-account-info\">";
 				$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_assignment);
 				$account_display .= "<div class=\"".$display_right_cols."\">";
-					$account_display .= "<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">";
-					$account_display .= "<thead class=\"table-dark\">";
-					$account_display .= "<tr>";
-					$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_session);
-					$account_display .= sprintf("<th width=\"20%%\">%s</th>",$label_date);
-					$account_display .= sprintf("<th width=\"25%%\">%s</th>",$label_table);
-					$account_display .= sprintf("<th width=\"30%%\">%s</th>",$label_notes);
-					$account_display .= "</tr>";
-					$account_display .= "</thead>";
-					$account_display .= "<tbody>";
+					$account_display .= "\n\t<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">\n";
+					$account_display .= "\t<thead class=\"table-dark\">\n";
+					$account_display .= "\t\t<tr>\n";
+					$account_display .= sprintf("\t\t\t<th width=\"33%%\">%s</th>\n",$label_session);
+					$account_display .= sprintf("\t\t\t<th width=\"34%%\">%s</th>\n",$label_date);
+					$account_display .= sprintf("\t\t\t<th width=\"33%%\">%s</th>\n",$label_table);
+					//$account_display .= sprintf("\t\t\t<th width=\"30%%\">%s</th>\n",$label_notes);
+					$account_display .= "\t\t</tr>\n";
+					$account_display .= "\t</thead>\n";
+					$account_display .= "\t<tbody>\n";
 					$account_display .= $table_assign_judge;
-					$account_display .= "</tbody>";
-					$account_display .= "</table>";
+					$account_display .= "\t</tbody>\n";
+					$account_display .= "</table>\n"; 
 				$account_display .= "</div>";
 				$account_display .= "</div>";
 			} // end if ((!$judge_available_not_assigned) && (!empty($table_assign_judge)))

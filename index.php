@@ -137,18 +137,9 @@ $pay_modal .= "</div>";
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
 
-<?php
-    
-if (CDN) {
-    if ($section == "admin") include (INCLUDES.'load_cdn_libraries_admin.inc.php');
-    else include (INCLUDES.'load_cdn_libraries_public.inc.php');
-}
-
-else {
-    if ($section == "admin") include (INCLUDES.'load_local_libraries_admin.inc.php');
-    else include (INCLUDES.'load_local_libraries_public.inc.php');
-}
-
+<?php   
+if ($section == "admin") include (INCLUDES.'load_cdn_libraries_admin.inc.php');
+else include (INCLUDES.'load_cdn_libraries_public.inc.php');
 ?>
 
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->

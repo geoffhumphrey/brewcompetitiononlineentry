@@ -160,7 +160,7 @@ $(document).ready(function($){
 <script>
 $(document).ready(function(){
 
-    var clubs = <?php echo json_encode($club_array); ?>;
+    var clubs = <?php echo json_encode($_SESSION['club_array']); ?>;
     var last_added;
     var additional_clubs = '<?php echo $additional_clubs; ?>';
     

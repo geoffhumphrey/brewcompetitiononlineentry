@@ -500,7 +500,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) $error_output[] = $db_conn->getLastError();
 
-					$insertGoTo = $base_url."setup.php?section=step3";
+					$insertGoTo = $base_url."setup.php?section=step3&go=preferences";
 
 				}
 

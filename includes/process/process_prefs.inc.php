@@ -178,7 +178,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$data_5 = array();
 		$data_6 = array();
 
-		if (($go == "default") || ($go == "setup")) {
+		if ($go == "default") {
 
 			if ($_POST['prefsProEdition'] == 1) $prefsMHPDisplay = 0;
 			else $prefsMHPDisplay = sterilize($_POST['prefsMHPDisplay']);
@@ -218,7 +218,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		// Entry-related prefs
-		if (($go == "entries") || ($go == "setup")) {
+		if ($go == "entries") {
 
 			/**
 			 * Entry-related fees and discounts moved from Competition Info to 
@@ -331,7 +331,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		// Email sending prefs
-		if (($go == "email") || ($go == "setup")) {
+		if ($go == "email") {
 
 			$prefsEmailSMTP = sterilize($_POST['prefsEmailSMTP']);			
 			$prefsContact = sterilize($_POST['prefsContact']);
@@ -385,7 +385,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		// Currency and payment prefs
-		if (($go == "payment") || ($go == "setup")) {
+		if ($go == "payment") {
 
 			$data_4 = array(
 				'prefsCurrency' => sterilize($_POST['prefsCurrency']),
@@ -593,7 +593,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		if (($go == "payment") || ($go == "setup")) {
+		if ($go == "payment") {
 
 			if ($_POST['prefsPaypalIPN'] == 1) {
 
@@ -627,7 +627,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
-		if (($go == "entries") || ($go == "setup")) {
+		if ($go == "entries") {
 
 			
 			$db_conn->where ('id', $id);
@@ -834,7 +834,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$errors = TRUE;
 			}
 
-			$updateGoTo = $base_url."setup.php?section=step4";
+			if ($go == "default") $updateGoTo = $base_url."setup.php?section=step3&go=preferences&action=entries";
+			elseif ($go == "entries") $updateGoTo = $base_url."setup.php?section=step3&go=preferences&action=email";
+			elseif ($go == "email") $updateGoTo = $base_url."setup.php?section=step3&go=preferences&action=payment";
+			elseif ($go == "payment") $updateGoTo = $base_url."setup.php?section=step3&go=preferences&action=best";
+			else $updateGoTo = $base_url."setup.php?section=step4";
 
 		}
 

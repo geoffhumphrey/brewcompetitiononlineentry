@@ -71,6 +71,8 @@ $mhp_qr_data = "";
 
 /**
  * For MHP QR Code (see email from mhpsecretary@gmail.com - July 6, 2025)
+ * Use the QR Code API 
+ * @see https://goqr.me/api/doc/create-qr-code/
  * ---
  * Entrant => entrant_name
  * Co-entrant(s) => co_entrant
@@ -85,10 +87,11 @@ $mhp_qr_data = "";
  * Consensus Score => consensus_score
  * Competition Site (Location?) => competition_location
  * Competition BJCP ID => competition_bjcp_id
- * Competition Instance ID => ??
+ * Competition Instance ID => [maybe use $prefix_session defined in paths.php]
  */
 
 /*
+
 $judge_mhp = "";
 if (!empty($row_judge['brewerMHP'])) $judge_mhp = $row_judge['brewerMHP'];
 
@@ -117,10 +120,12 @@ $mhp_qr_data = array(
     "judge_score" => $score,
     "consensus_score" => $row_eval['evalFinalScore'],
     "competition_location" => $competition_location,
-    "competition_bjcp_id" => $competition_bjcp_id
+    "competition_bjcp_id" => $competition_bjcp_id,
+    "competition_instance_id" => $prefix_session
 );
 
 $mhp_qr_data = json_encode($mhp_qr_data, JSON_NUMERIC_CHECK);
+
 */
 
 ?>
@@ -213,7 +218,9 @@ $mhp_qr_data = json_encode($mhp_qr_data, JSON_NUMERIC_CHECK);
             <strong><?php echo $label_category; ?>:</strong>
             </div>
             <div class="col col-lg-7 col-md-8 col-sm-9 col-xs-9">
-            <?php echo $row_style['brewStyle']." (".style_number_const($row_style['brewStyleGroup'],$row_style['brewStyleNum'],$_SESSION['style_set_display_separator'],0).")"; ?>
+            <?php 
+            if ($dbTable == "default") echo $row_style['brewStyle']." (".style_number_const($row_style['brewStyleGroup'],$row_style['brewStyleNum'],$_SESSION['style_set_display_separator'],0).")";
+            else echo $row_entry_info['brewStyle']." (".style_number_const($row_entry_info['brewCategorySort'],$row_entry_info['brewSubCategory'],$_SESSION['style_set_display_separator'],0).")" ?>
             </div>
         </div>
         <?php if (!empty($evalSpecialIngredients)) { ?>

@@ -1526,7 +1526,8 @@ function judge_info($uid) {
 		."^".$row_brewer_info['brewerJudgeCider'];
 	}
 
-	$r .= "^".$row_brewer_info['brewerAssignment'];
+	if (isset($row_brewer_info['brewerAssignment'])) $r .= "^".$row_brewer_info['brewerAssignment'];
+	else $r .= "^";
 
 	if ($_SESSION['jPrefsQueued'] == "N") {
 		

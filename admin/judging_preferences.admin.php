@@ -74,7 +74,7 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
     else {
 
         if (!empty($judging_earliest_date)) $suggested_open_date = $judging_earliest_date;
-        else $suggested_open_date = time();
+        else $suggested_open_date = round(time() / (15 * 60)) * (15 * 60);
 
         $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
         $suggested_open = TRUE;
@@ -133,7 +133,8 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
         else {
             if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) $suggested_close_date = $_SESSION['jPrefsJudgingOpen'] + 86400;
             elseif (!empty($judging_earliest_date))   $suggested_close_date = $judging_earliest_date + 86400;
-            else $suggested_close_date = time() + 86400;
+            else $suggested_close_date = round((time() + 86400) / (15 * 60)) * (15 * 60);
+
         }
 
         $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
@@ -150,12 +151,14 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
     else echo "No Judging Latest Date<br>";
     echo "Judging Closed Date Session Var: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
     echo "Closed Date to Display: ".$judging_close_date."<br>";
+    $suggest = round((time() + 86400) / (15 * 60)) * (15 * 60); // round to the nearest quarter hour
+    echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggest, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>";
     */
-
 }
 
 ?>
 <script>
+
 $(document).ready(function() {
 
     var electronic_scoresheets_show = "<?php echo $_SESSION['prefsEval']; ?>";

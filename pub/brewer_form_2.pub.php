@@ -1,4 +1,6 @@
-<?php if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
+<?php
+
+if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
 
     if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { 
         $judge_checked = FALSE;
@@ -31,18 +33,6 @@
             <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
         </div>
     </div>
-
-    <?php 
-    $org_array_lower = array();
-    foreach ($org_array as $value) {
-        $org_array_lower[] = strtolower($value);
-    }
-    $org_array = implode(",",$org_array_lower);
-
-    if ($_SESSION['prefsProEdition'] == 1) $participant_orgs_label = $label_industry_affiliations;
-    else $participant_orgs_label = $label_brewing_partners;
-
-    ?>
 
     <div id="brewerJudgeFields">
 
@@ -297,28 +287,6 @@
 
 </section><!-- ./ steward-preferences -->
 <?php } // end if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
-
-<section id="participant-orgs">
-    <div class="mb-3 row">
-        <label for="brewerAssignment" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $participant_orgs_label; ?></strong></label>
-        <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">  
-        <select class="form-select mb-1 bootstrap-select" multiple name="brewerAssignment[]" id="brewerAssignment" placeholder="<?php echo $participant_orgs_label." - ".$label_select_below; ?>" title="<?php echo $participant_orgs_label." - ".$label_select_below; ?>">
-            <?php echo $org_options; ?>
-        </select>
-        <span class="help-block mt-1"><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_051; else echo $brewer_text_055; ?></span>
-        </div>
-    </div>
-    <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
-    <div id="brewerAssignmentOther" class="mb-3 row">
-        <label for="brewerAssignmentOther" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $participant_orgs_label." &ndash; ".$label_other; ?></strong></label>
-        <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%\x22]+">
-            <div class="help-block mt-1">
-                <p><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_052; else echo $brewer_text_054; ?></p>
-            </div>
-        </div>
-    </div>
-</section>
 
 <section id="judge-steward-waiver">
     <div id="judge-waiver" class="mb-3 row">

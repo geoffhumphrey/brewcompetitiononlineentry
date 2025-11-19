@@ -33,10 +33,7 @@ if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $label_maintenance." &ndash; ".ucwords($maintenance_text_001); ?></title>
 
-    <?php
-    if (CDN) include (INCLUDES.'load_cdn_libraries.inc.php');
-    else include (INCLUDES.'load_local_libraries.inc.php');
-    ?>
+    <?php include (INCLUDES.'load_cdn_libraries.inc.php'); ?>
 
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $css_url."common.min.css"; ?>" />

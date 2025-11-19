@@ -269,7 +269,7 @@ if (($section == "admin") && ($go == "preferences")) {
 
 <?php 
 
-if ((($section == "admin") && ($go == "preferences") && ($action == "email")) || ($section == "step3")) { 
+if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "email")) { 
 
 $email_disabled_all_creds = 0;
 $email_previous_no_creds = 0;
@@ -379,7 +379,7 @@ $(document).ready(function(){
 
 </script>
 
-<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "default")) || ($section == "step3")) { ?>
+<?php } if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "default")) { ?>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -413,7 +413,7 @@ $(document).ready(function(){
     
 });
 </script>
-<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "entries")) || ($section == "step3")) { 
+<?php } if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "entries")) { 
 ?>
 <script type="text/javascript">
 
@@ -659,7 +659,7 @@ $(document).ready(function(){
 
 </script>
 
-<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "payment")) || ($section == "step3")) { ?>
+<?php } if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "payment")) { ?>
 
 <script type="text/javascript">
     
@@ -718,7 +718,7 @@ $(document).ready(function(){
 
 </script>
 
-<?php } if ((($section == "admin") && ($go == "preferences") && ($action == "best")) || ($section == "step3")) { ?>
+<?php } if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "best")) { ?>
 
 <script type="text/javascript">
     
@@ -839,11 +839,11 @@ $(document).ready(function(){
 </div>
 <?php } ?>
 <style>h4 { margin-top: 25px; }</style>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=edit&amp;go=<?php if ($section == "step3") echo "setup"; else echo $action; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=edit&amp;go=<?php echo $action; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 
-<?php if ((($section == "admin") && ($go == "preferences") && ($action == "default")) || ($section == "step3")) { ?>
+<?php if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "default")) { ?>
 <h3>General</h3>
 <div class="form-group">
     <label for="prefsProEdition" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Type</label>
@@ -1105,7 +1105,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
-
 <h4>Localization</h4>
 <div class="form-group">
     <label for="prefsLanguage" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Language</label>
@@ -1253,7 +1252,7 @@ $(document).ready(function(){
 <?php } //end if ($action == "default") ?>
 
 
-<?php if ((($section == "admin") && ($go == "preferences") && ($action == "email")) || ($section == "step3")) { ?>
+<?php if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "email")) { ?>
 <h3>Email Sending</h3>
 <div class="form-group">
     <label for="prefsEmailSMTP" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Allow BCOE&amp;M to Send Emails</label>
@@ -1501,7 +1500,7 @@ $(document).ready(function(){
 </section>
 <?php } // end if ($action == "email") { ?>
 
-<?php if ((($section == "admin") && ($go == "preferences") && ($action == "best")) || ($section == "step3")) { ?>
+<?php if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "best")) { ?>
 <h3>Best Brewer<?php if ($_SESSION['prefsProEdition'] == 0) { ?> and/or Club<?php } ?></h3>
 <!-- BEST BREWER / BEST CLUB --->
 <div class="form-group">
@@ -1676,7 +1675,7 @@ $(document).ready(function(){
 <?php } // end if ($action == "best") ?>
 
 <?php 
-if ((($section == "admin") && ($go == "preferences") && ($action == "entries")) || ($section == "step3")) { 
+if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "entries")) { 
 include (DB.'entry_info.db.php');
 ?>
 <h3>Entries</h3>
@@ -1992,15 +1991,11 @@ if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
         </div>
     </div>
 </div>
+
 <section id="define-style-entry-limits">
 <?php echo $current_entry_limits_by_style; ?>
 <?php echo $entry_limit_by_style; ?>
 </section>
-
-
-
-
-
 
 <div class="form-group">
     <label for="prefsUserEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Overall Entry Limit per Participant</label>
@@ -2045,7 +2040,7 @@ if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
 <?php if ($i > 1) echo "<hr>"; ?>
 </section>
 <?php } ?>
-<?php if ($go == "preferences") { ?>
+<?php if (($section == "admin") && ($go == "preferences")) { ?>
 <div class="form-group">
     <label for="prefsUserSubCatLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Per Participant Sub-Style Entry Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -2119,7 +2114,7 @@ if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
 
 <?php } // end if ($action == "entries") ?>
 
-<?php if ((($section == "admin") && ($go == "preferences") && ($action == "payment")) || ($section == "step3")) { ?>
+<?php if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "payment")) { ?>
 <h3>Currency and Payment</h3>
 <div class="form-group">
     <label for="prefsCurrency" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Currency</label>

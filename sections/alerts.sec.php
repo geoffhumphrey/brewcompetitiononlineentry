@@ -464,7 +464,7 @@ if ($msg != "default") {
 <?php if ((MAINT) && ($logged_in) && ($_SESSION['userLevel'] == 0)) { ?>
   <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong>Your installation is in Maintenance Mode.</strong> As a Top-level Admin, you are able perform all administration functions as normal. All others who attempt to access the site will see the <a href="<?php echo $base_url; ?>maintenance.php">Maintenance page</a>.</p>
+      <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong>Your installation is in Maintenance Mode.</strong> As a Top-level Admin, you are able perform all administration functions as normal. All others who attempt to access the site will see the <a href="<?php echo $base_url; ?>index.php?section=maintenance">Maintenance page</a>.</p>
   </div>
 <?php } ?>
 

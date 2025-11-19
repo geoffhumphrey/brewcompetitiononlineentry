@@ -7,11 +7,13 @@ else
 $styles_db_table = $prefix."styles";
 
 if ($section == "step7") {
+	
 	$query_prefs_styleset = sprintf("SELECT prefsStyleSet FROM %s WHERE id='1'",$prefix."preferences");
 	$prefs_styleset = mysqli_query($connection,$query_prefs_styleset) or die (mysqli_error($connection));
 	$row_prefs_styleset = mysqli_fetch_assoc($prefs_styleset);
 	$styleSet = $row_prefs_styleset['prefsStyleSet'];
 	$_SESSION['prefsStyleSet'] = $row_prefs_styleset['prefsStyleSet'];
+
 }
 
 elseif (isset($_SESSION['prefsStyleSet'])) $styleSet = $_SESSION['prefsStyleSet'];
@@ -90,6 +92,10 @@ elseif ($section == "list") {
 elseif ($section == "styles") {
 	if ($filter == "default") $query_styles .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 	else $query_styles .= " AND brewStyleGroup='$filter' ORDER BY brewStyleGroup, brewStyleNum ASC";
+}
+
+elseif (($section == "default") || ($section == "step7")) {
+	$query_styles .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 }
 
 $styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));

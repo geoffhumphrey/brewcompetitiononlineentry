@@ -196,10 +196,7 @@ else $_SESSION['user_session_token'] = bin2hex(openssl_random_pseudo_bytes(32));
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Setup BCOE&amp;M <?php echo $current_version; ?></title>
 
-		<?php
-	    if (CDN) include (INCLUDES.'load_cdn_libraries.inc.php');
-	    else include (INCLUDES.'load_local_libraries.inc.php');
-	    ?>
+		<?php include (INCLUDES.'load_cdn_libraries_admin.inc.php'); ?>
 
         <!-- Load BCOE&M Custom CSS -->
         <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>common.min.css">

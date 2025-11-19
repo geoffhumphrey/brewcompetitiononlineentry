@@ -201,7 +201,7 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 	$club_options = "";
 	$club_other = FALSE;
 
-	foreach ($club_array as $club) {
+	foreach ($_SESSION['club_array'] as $club) {
 		$club_options .= "<option value=\"".$club."\">".$club."</option>\n";
 	}
 

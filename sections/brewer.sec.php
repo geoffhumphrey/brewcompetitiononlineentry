@@ -108,15 +108,15 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
     $club_alert = "";
 
     if ($section != "step2") {
-        if ((!empty($row_brewer['brewerClubs'])) && (!in_array($row_brewer['brewerClubs'],$club_array))) {
+        if ((!empty($row_brewer['brewerClubs'])) && (!in_array($row_brewer['brewerClubs'],$_SESSION['club_array']))) {
             $club_other = TRUE;
             $club_alert .= sprintf("<div id=\"clubOther\" class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_036,$brewer_text_037,$brewer_text_038);
         }
         // Fail safe from previous versions
-        if ((!$club_other) && (!in_array($row_brewer['brewerClubs'],$club_array)) && (!empty($row_brewer['brewerClubs']))) $club_alert .= sprintf("<div id=\"clubOther-warning\" class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_039,$brewer_text_040,$brewer_text_038);
+        if ((!$club_other) && (!in_array($row_brewer['brewerClubs'],$_SESSION['club_array'])) && (!empty($row_brewer['brewerClubs']))) $club_alert .= sprintf("<div id=\"clubOther-warning\" class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_039,$brewer_text_040,$brewer_text_038);
     }
 
-    foreach ($club_array as $club) {
+    foreach ($_SESSION['club_array'] as $club) {
         $club_selected = "";
         if ($section != "step2") {
             if ($club == $row_brewer['brewerClubs']) $club_selected = " SELECTED";

@@ -2743,7 +2743,7 @@ if (HOSTED) {
 	}
 }
 
-if (!check_new_style("28","D","Straight Sour Beer")) include (UPDATE.'styles_bjcp_2021_update.php');
+if (($section == "setup") || (!check_new_style("28","D","Straight Sour Beer"))) include (UPDATE.'styles_bjcp_2021_update.php');
 
 $sql = sprintf("ALTER TABLE `%s` MODIFY COLUMN `brewStyleGroup` VARCHAR(3) AFTER `id`;",$styles_db_table);
 mysqli_select_db($connection,$database);
@@ -4788,10 +4788,10 @@ if (!check_update("judgingLocNotes", $prefix."judging_locations")) {
 }
 
 // Add BJCP 2025 Cider Updates
-if (!check_new_style("C1","E","Spanish Cider")) include (UPDATE.'styles_bjcp_2025_update.php');
+if (($section == "setup") || (!check_new_style("C1","E","Spanish Cider"))) include (UPDATE.'styles_bjcp_2025_update.php');
 
 // Add AABC 2025 Cider Updates
-if (!check_new_style("20","05","Spanish Cider [BJCP C1E]")) include (UPDATE.'styles_aabc_2025_update.php');
+if (($section == "setup") || (!check_new_style("20","05","Spanish Cider [BJCP C1E]"))) include (UPDATE.'styles_aabc_2025_update.php');
 
 // Update NW Cider Cup Styles
 include (UPDATE.'styles_nw_cider_cup_2025.php');

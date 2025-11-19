@@ -645,16 +645,8 @@ if ($logged_in) {
         </div>
     </div>
 </div>
-
-<?php if (CDN) { ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-
-<?php } else { ?>
-<script src="<?php echo $base_url; ?>libraries/public/popperjs/popper.min.js"></script>
-<script src="<?php echo $base_url; ?>libraries/public/bootstrap/bootstrap.min.js"></script>
-<?php } ?>
-
 <script src="<?php echo $js_app_pub_url; ?>"></script> 
 <script src="<?php echo $js_invoke_url; ?>"></script>
 <script>

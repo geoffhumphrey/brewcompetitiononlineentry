@@ -3206,7 +3206,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 				    $output .= "\t\t<tr>\n";
 					$output .= "\t\t\t<td>".$location[2];
 					if (!empty($location[3]) && ($location[4] == "1")) $output .= "<br><em><small>".$location[3]."</small></em>";
-					$output .= "\t\t\t</td>";
+					$output .= "\t\t\t</td>\n";
 					$output .= "\t\t\t<td>";
 					$output .= getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "short", "date-time");
 					if (!empty($location[1])) $output .= " - ".getTimeZoneDateTime($time_zone, $location[1], $date_format,  $time_format, "short", "date-time");
@@ -3218,6 +3218,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 					}
 					if (!empty($row_table_assignments['assignRoles'])) $output .= "<br>".$role;
 					$output .= "</td>\n";
+					// $output .= "\t\t\t<td></td>\n";
 					$output .= "\t\t</tr>\n";
 				}
 
@@ -4254,6 +4255,7 @@ function remove_sensitive_data() {
 
 					$club_name = "";
 					if (!empty($row_check_brewer['brewerClubs'])) {
+						 $club_array = $_SESSION['club_array'];
 						 $club_name_key = (array_rand($club_array,1));
 						 $club_name = $club_array[$club_name_key];
 					}
