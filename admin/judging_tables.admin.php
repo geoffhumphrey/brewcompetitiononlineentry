@@ -58,6 +58,7 @@ $orphan_modal_body_2 = "";
 $style_assigned_this = "";
 $all_loc_total = array();
 $mode_alert_color = "alert-teal";
+$table_location_js_cookies = array();
 
 $sub_lead_text_comp_mode = "<div id=\"tables-competition-mode-text\"><strong>Your installation is currently in Tables Competition Mode </strong> &ndash; to ensure accuracy, verify that all paid and received entries have been marked as such via the <a href=\"".$base_url."index.php?section=admin&amp;go=entries\">Manage Entries</a> screen.</div>";
     
@@ -223,6 +224,8 @@ if (($action == "default") && ($filter == "default")) {
     do {
 
         $loc_total = 0;
+        $count_steward_avail = 0;
+        $count_judge_avail = 0;
 
         if (($row_judging) && ($row_judging['judgingLocType'] < 2)) {
             if ($row_judging) $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']);
@@ -241,12 +244,12 @@ if (($action == "default") && ($filter == "default")) {
 
             $count_judge_yes = "Y-".$row_judging['id'];
             $count_judge_avail = array_count_values($judge_availability);
-            $count_judge_avail = $count_judge_avail[$count_judge_yes];
-
+            if ((!empty($count_judge_avail)) && (array_key_exists($count_judge_yes,$count_judge_avail))) $count_judge_avail = $count_judge_avail[$count_judge_yes];
+            
             $count_steward_yes = "Y-".$row_judging['id'];
             $count_steward_avail = array_count_values($steward_availability);
-            $count_steward_avail = $count_steward_avail[$count_steward_yes];
-
+            if ((!empty($count_steward_avail)) && (array_key_exists($count_steward_yes,$count_steward_avail))) $count_steward_avail = $count_steward_avail[$count_steward_yes];
+            
             $query_judge_loc_assign = sprintf("SELECT COUNT(*) AS count FROM %s WHERE assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$row_judging['id']);
             $judge_loc_assign = mysqli_query($connection,$query_judge_loc_assign);
             $row_judge_loc_assign = mysqli_fetch_array($judge_loc_assign);
@@ -255,8 +258,8 @@ if (($action == "default") && ($filter == "default")) {
             $steward_loc_assign = mysqli_query($connection,$query_steward_loc_assign);
             $row_steward_loc_assign = mysqli_fetch_array($steward_loc_assign);
 
-            $judge_difference = ($count_judge_avail - $row_judge_loc_assign['count']);
-            $steward_difference = ($count_steward_avail - $row_steward_loc_assign['count']);
+            if ((is_numeric($count_judge_avail)) && ($count_judge_avail > 0)) $judge_difference = ($count_judge_avail - $row_judge_loc_assign['count']);
+            if ((is_numeric($count_steward_avail)) && ($count_steward_avail > 0)) $steward_difference = ($count_steward_avail - $row_steward_loc_assign['count']);
 
             $all_judge_loc_avail_assign_total[$row_judging['id']] = array('location_total_available' => $count_judge_avail,'location_total_assigned' => $row_judge_loc_assign['count'], "location_available" => $judge_difference);
             $all_steward_loc_avail_assign_total[$row_judging['id']] = array('location_total_available' => $count_steward_avail,'location_total_assigned' => $row_steward_loc_assign['count'], "location_available" => $steward_difference);
@@ -274,6 +277,11 @@ if (($action == "default") && ($filter == "default")) {
             $styles = display_array_content($a,1);
             $received = get_table_info("1","count_total",$row_tables['id'],$dbTable,"default");
             $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
+            $table_location = table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+
+            $table_location_class = strtolower($table_location);
+            $table_location_class = preg_replace('/[^a-zA-Z0-9\s]/', '', $table_location_class);
+            $table_location_class = str_replace([',','-',' ', ':', '*'], '-', $table_location_class);
 
             $steward_avail = 0;
             $judge_avail = 0;
@@ -294,15 +302,16 @@ if (($action == "default") && ($filter == "default")) {
                 
 
             $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
-                if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
+                if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."','delete-judges-".$table_location_class."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
             
             $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
-                if ($dbTable == "default") $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
+                if ($dbTable == "default") $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."','delete-stewards-".$table_location_class."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
 
             if ($dbTable == "default") {
                 if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
                 else $scoreAction = "add";
             }
+
 
             $manage_tables_default_tbody .= "<tr>";
             $manage_tables_default_tbody .= "<td>".$row_tables['tableNumber']."</td>";
@@ -311,10 +320,15 @@ if (($action == "default") && ($filter == "default")) {
             $manage_tables_default_tbody .= "<td>".$received."</td>";
             if ($limits_by_table) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$row_tables['tableEntryLimit']."</td>";
             $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$scored."</td>";
-            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_judges."<div class=\"text-muted small\">[".$judge_avail." available]</div></td>";
-            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_stewards."<div class=\"text-muted small\">[".$steward_avail." available]</div></td>";
-            if (($totalRows_judging > 1) && ($dbTable == "default")) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</td>";
+            $manage_tables_default_tbody .= "\n\n<td class=\"hidden-xs hidden-sm\">".$assigned_judges."<div class=\"text-muted small\">[<span id=\"delete-judges-".$row_tables['id']."-all-count\" class=\"delete-judges-".$table_location_class."\">".$judge_avail."</span> available]</div></td>";
+            $manage_tables_default_tbody .= "\n\n<td class=\"hidden-xs hidden-sm\">".$assigned_stewards."<div class=\"text-muted small\">[<span id=\"delete-stewards-".$row_tables['id']."-all-count\" class=\"delete-stewards-".$table_location_class."\">".$steward_avail."</span> available]</div></td>";
+            if (($totalRows_judging > 1) && ($dbTable == "default")) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$table_location."</td>";
             
+
+            // Set js cookies of initial judge / steward available counts for each location
+            $table_location_js_cookies[] .= "Cookies.set('delete-stewards-".$table_location_class."', '".$steward_avail."', { expires: 1 });";
+            $table_location_js_cookies[] .= "Cookies.set('delete-judges-".$table_location_class."', '".$judge_avail."', { expires: 1 });";
+
             if ($dbTable == "default") {
                 $manage_tables_default_tbody .= "<td nowrap class=\"hidden-print\">";
 
@@ -375,8 +389,6 @@ if (($action == "default") && ($filter == "default")) {
                 $manage_tables_default_tbody .= "</td>";
             }
 
-            $manage_tables_default_tbody .= "";
-            $manage_tables_default_tbody .= "";
             $manage_tables_default_tbody .= "</tr>";
 
         } while ($row_tables = mysqli_fetch_assoc($tables));
@@ -560,6 +572,14 @@ if (($action == "add") || ($action == "edit")) {
 if ($action == "default") {
 ?>
 <script type="text/javascript">
+
+<?php 
+$table_location_js_cookies = array_unique($table_location_js_cookies);
+foreach ($table_location_js_cookies as $value) {
+    echo $value;
+} 
+?>
+
 
 var admin_function = "<?php echo $go; ?>";
 var prefs_planning = "<?php echo $_SESSION['jPrefsTablePlanning']; ?>";
@@ -1543,5 +1563,5 @@ if (($action == "assign") && ($filter == "default")) { ?>
     </ul>
 </div>
 <?php } ?>
-<script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
+<script src="<?php if (TESTING) echo $base_url."js_source/admin_ajax.js?t=".time(); else echo $js_url."admin_ajax.min.js"; ?>"></script>
 <?php if (($action == "assign") && ($filter != "default") && ($id != "default")) include ('judging_assign.admin.php'); ?>

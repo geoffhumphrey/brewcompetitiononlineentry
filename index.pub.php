@@ -14,6 +14,38 @@
     $shipping_close_date = "";
     $awards_date = "";
 
+    /**
+     * Hero image array. 
+     * 
+     * If you would like to customize, simply add or 
+     * subtract from the images listed in the array below. 
+     * Or, provide your own images but name them in the 
+     * [root]/images folder as they appear below.
+     * 
+     * Please note that these are substantially wide and
+     * not very tall at a 6:1 ratio (3000x500) - optimized
+     * to serve as background images behind the name of
+     * the competition on the installation's home page
+     * up to very wide screen displays - they will scale
+     * down based upon the screen size.
+     * 
+     * The background image is randomly chosen from the
+     * array below. 
+     * 
+     * 0 is for misc (e.g., "0-a" or "0-b")
+     * 1 is for beer
+     * 2 is for cider
+     * 3 is for mead
+     * 
+     * If your competition accepts beer, mead, and cider,
+     * any image could be randomly accepted on each page
+     * load.
+     * 
+     * If your competition just accepts beer, only misc
+     * and beer images will be selected as a background,
+     * etc.
+     */
+
     $bg_hero_images = array(
         "0-a" => "misc-cropped-bottles_3000x500.jpg",
         "0-b" => "misc-brussels-bottles_3000x500.jpg",

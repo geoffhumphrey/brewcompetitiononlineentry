@@ -1,5 +1,10 @@
+# Declare PHP Version
+# Tested 7.4.X through 8.4.X
+# If experiencing issues, uncomment the second line
+# and comment out the first to switch to PHP 7.4
 <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
-SetHandler application/x-lsphp74
+SetHandler application/x-lsphp84
+# SetHandler application/x-lsphp74
 </FilesMatch>
 
 # No indexing

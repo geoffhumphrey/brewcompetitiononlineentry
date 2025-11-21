@@ -142,6 +142,8 @@ if ($section == "admin") include (INCLUDES.'load_cdn_libraries_admin.inc.php');
 else include (INCLUDES.'load_cdn_libraries_public.inc.php');
 ?>
 
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $css_common_url; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
