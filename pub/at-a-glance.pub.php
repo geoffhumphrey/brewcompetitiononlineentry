@@ -264,7 +264,7 @@ else {
 }
 
 // Judge Registration Card
-if ($judge_window_open == 1) {
+if (($judge_window_open == 1) && (!$judge_limit)) {
 
 	$button1 = array();
 	$button2 = array();
@@ -302,6 +302,7 @@ else {
 	if ($judge_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"judge-open-date\"></span></li>";
 	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li>";
 	$body_content .= "</ul>";
+	if ($judge_limit) $body_content .= "<p class=\"lh-1\"><small>".$alert_text_075."</small></p>";
 
 	$glance_judge_reg = array(
 		"color" => $glance_closed_color,
@@ -315,7 +316,7 @@ else {
 }
 
 // Steward Registration Card
-if ($judge_window_open == 1) {
+if (($judge_window_open == 1) && (!$steward_limit)) {
 
 	$button1 = array();
 	$button2 = array();
@@ -353,6 +354,7 @@ else {
 	if ($judge_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"steward-open-date\"></span></li>";
 	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$judge_closed_sidebar."</li>";
 	$body_content .= "</ul>";
+	if ($steward_limit) $body_content .= "<p class=\"lh-1\"><small>".$alert_text_079."</small></p>";
 
 	$glance_steward_reg = array(
 		"color" => $glance_closed_color,

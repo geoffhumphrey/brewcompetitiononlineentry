@@ -70,6 +70,9 @@ define('MAINT', FALSE);
  * PRIOR to proceeding through the setup process.
  * @see http://www.brewingcompetitions.com/local-load
  * Default is TRUE.
+ * 
+ * Support for local libraries deprecated as of 3.0.0
+ * No discernable reason to keep.
  */
 
 define('CDN', TRUE);
@@ -167,7 +170,10 @@ function sterilize($sterilize = NULL) {
         $sterilize = trim($sterilize);
         if (is_numeric($sterilize)) {
             if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-            if (is_int($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
+            if (is_int($sterilize)) {
+                if ($sterilize == 0) $sterilize = 0;
+                else $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
+            }            
         }
         else $sterilize = filter_var($sterilize,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $sterilize = strip_tags($sterilize);

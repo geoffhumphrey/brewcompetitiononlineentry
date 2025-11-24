@@ -376,11 +376,11 @@ else {
     $stacked_alert_msg_warning .= "<p class=\"mb-1\">".$alert_text_067."</p>";
   }
 
-  if (($judge_limit) && ($section == "register")) { 
+  if (($judge_limit) && ($section == "register") && ($go == "judge")) { 
     $stacked_alert_msg_warning .= "<p class=\"mb-1\">".$alert_text_075."</p>";
   }
 
-  if (($steward_limit) && ($section == "register")) { 
+  if (($steward_limit) && ($section == "register") && ($go == "steward")) { 
     $stacked_alert_msg_warning .= "<p class=\"mb-1\">".$alert_text_079."</p>";
   } 
 

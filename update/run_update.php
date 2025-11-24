@@ -4532,9 +4532,9 @@ if (!check_update("prefsMHPDisplay", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $v3000_update .= "<li>Enable/Disale MHP Display column added to preferences table.</li>";
+	if ($result) $v3000_update .= "<li>Enable/Disable MHP Display column added to preferences table.</li>";
 	else {
-		$v3000_update .= "<li>Enable/Disale MHP Display column NOT added to preferences table.</li>";
+		$v3000_update .= "<li>Enable/Disable MHP Display column NOT added to preferences table.</li>";
 		$error_count++;
 	}
 

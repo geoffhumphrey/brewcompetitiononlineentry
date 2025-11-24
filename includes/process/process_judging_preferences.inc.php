@@ -14,15 +14,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$_SESSION['error_output'] = "";
 
 	if (isset($_POST['jPrefsBottleNum'])) $jPrefsBottleNum = sterilize($_POST['jPrefsBottleNum']);
-	else $jPrefsBottleNum = "2";
+	else $jPrefsBottleNum = 2;
 
 	$jPrefsBottleNum = blank_to_null($jPrefsBottleNum);
 	$jPrefsQueued = blank_to_null(sterilize($_POST['jPrefsQueued']));
 	$jPrefsFlightEntries = blank_to_null(sterilize($_POST['jPrefsFlightEntries']));
 	$jPrefsMaxBOS = blank_to_null(sterilize($_POST['jPrefsMaxBOS']));
 	$jPrefsRounds = blank_to_null(sterilize($_POST['jPrefsRounds']));
-	$jPrefsCapStewards = blank_to_null(sterilize($_POST['jPrefsCapStewards']));
-	$jPrefsCapJudges = blank_to_null(sterilize($_POST['jPrefsCapJudges']));
+
+	// If do not want or need stewards or judges, allow for 0
+	// The sanitize functions scrub zeroes
+	if ($_POST['jPrefsCapStewards'] == 0) $jPrefsCapStewards = 0;
+	else $jPrefsCapStewards = blank_to_null(sterilize($_POST['jPrefsCapStewards']));
+	if ($_POST['jPrefsCapJudges'] == 0) $jPrefsCapJudges = 0;
+	else $jPrefsCapJudges = blank_to_null(sterilize($_POST['jPrefsCapJudges']));
 
 	if (($action == "edit") || ($section == "setup")) {
 

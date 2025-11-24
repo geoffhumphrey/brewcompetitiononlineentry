@@ -97,8 +97,14 @@ switch($section) {
 
 	case "register":
 		$header_output = $_SESSION['contestName'];
-		if ($go == "judge") $header_output = $label_judge_reg;
-		elseif ($go == "steward") $header_output = $label_steward_reg;
+		if ($go == "judge") {
+			if ($judge_limit) $header_output = $label_reg;
+			else $header_output = $label_judge_reg;
+		}
+		elseif ($go == "steward") {
+			if ($steward_limit) $header_output = $label_reg;
+			else $header_output = $label_steward_reg;
+		}
 		else $header_output = $label_reg;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong> %s",$header_text_017, $header_text_008);
 		elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s",$header_text_018,$header_text_019); }
