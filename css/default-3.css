@@ -480,3 +480,12 @@ a:active {
 .alert {
   font-family: var(--font-family-sans-serif);
 }
+
+/* Bot Honeypot form field */
+.pooh-bear {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}

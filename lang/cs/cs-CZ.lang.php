@@ -2114,6 +2114,7 @@ $contact_text_010 = "Prosím uveďte zprávu.";
 
 $contact_text_011 = "Vyberte emailovou adresu pro spuštění vaší nativní emailové aplikace. Zkopírujte adresu a vložte ji do nové zprávy, pokud používáte webové emailové služby jako Gmail, atd.";
 $contact_text_012 = "Prosím vezměte na vědomí: toto okno je výsledkem více opatření snažících se zmírnit vystavení emailové adresy spambotům. Pokud je chyba nebo emailová adresa kontaktu soutěže není dostupná výše, byla obfuskována z bezpečnostních důvodů. Pokud je tomu tak, kontaktujte tohoto oficiálního zástupce soutěže jinými způsoby (sociální média, webové stránky organizace, atd.).";
+$contact_text_013 = "<strong>Vkládání textu je zakázáno.</strong> Zadejte prosím své údaje.";
 
 $error_text_000 = "Prosím použijte hlavní navigaci výše pro přechod tam, kam chcete jít.";
 $error_text_001 = "Pokud odkazy výše nefungují, prosím kontaktujte zástupce stránky.";

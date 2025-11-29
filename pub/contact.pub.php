@@ -86,8 +86,13 @@ if ($_SESSION['prefsContact'] == "Y") {
 
         ?>
 
+        <div id="message-container"></div>
+
         <form id="contact-form" class="justify-content-center hide-loader-form-submit needs-validation" name="contact-form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" novalidate>
 
+            <input type="text" name="website" class="pooh-bear" tabindex="-1" autocomplete="off">
+            <input type="hidden" name="form_token" id="form_token" value="">
+            <input type="hidden" name="form_loaded_time" id="form_loaded_time" value="">
             <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
             <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
             <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
@@ -109,7 +114,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="row mb-3">
                 <label for="from-name" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label2; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <input id="from-name" class="form-control no-spam" name="from_name" type="text" size="35" placeholder="<?php echo $contact_text_007; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_name']))) echo $_COOKIE['from_name']; ?>" required>
+                    <input id="from-name" class="form-control no-spam" name="from_name" type="text" size="35" placeholder="<?php echo $contact_text_007; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_name']))) echo $_COOKIE['from_name']; ?>" autocomplete="off" required>
                     <div class="invalid-feedback"><?php echo $contact_text_007; ?></div>
                 </div>
             </div>
@@ -117,7 +122,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="row mb-3">
                 <label for="from-email" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label3; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" placeholder="<?php echo $contact_text_008; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo $_COOKIE['from_email']; ?>" required>
+                    <input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" placeholder="<?php echo $contact_text_008; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo $_COOKIE['from_email']; ?>" autocomplete="off" required>
                     <div class="invalid-feedback"><?php echo $contact_text_008; ?></div>
                 </div>
             </div>
@@ -125,7 +130,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="row mb-3">
                 <label for="subject" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label4; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <input id="subject" class="form-control no-spam" name="subject" type="text" placeholder="<?php echo $contact_text_009; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['subject']))) echo $_COOKIE['subject']; ?>" required> 
+                    <input id="subject" class="form-control no-spam" name="subject" type="text" placeholder="<?php echo $contact_text_009; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['subject']))) echo $_COOKIE['subject']; ?>" autocomplete="off" required> 
                     <div class="invalid-feedback"><?php echo $contact_text_009; ?></div> 
                 </div>
             </div>
@@ -157,6 +162,10 @@ if ($_SESSION['prefsContact'] == "Y") {
         </form>
 
     <script src="<?php echo $captcha_url; ?>"></script>
+    <script>
+        var no_paste_message = '<?php echo $contact_text_013; ?>';
+    </script>
+    <script src="<?php echo $js_url; ?>contact.min.js"></script>
 
 <?php } // end if ($msg != 1);
     

@@ -628,6 +628,9 @@ if ($totalRows_log > 0) {
 			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_judging_number, $judging_number);
 			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_score, $score);
 			if (minibos_check($row_log['id'],$judging_scores_db_table)) $entry_output_cards .= sprintf("<li><strong>%s:</strong> <i class=\"fa fa-sm fa-check text-success\"></i></li>",$label_mini_bos);
+			if (!empty($medal_winner)) $entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",str_replace("?", "", $label_winner), str_replace(":", " -", $medal_winner));
+			if ($scoresheet) $entry_output_cards .= sprintf("<li><strong>%s:</strong> %s%s %s</li>", $label_scoresheet, $scoresheet_link_eval, $scoresheet_link, $scoresheet_mixed);
+			// $entry_output_cards .= "<li><hr class=\"mt-1 mb-1\"></li>";
 		}
 
 		$entry_output_cards .= $required_info;
@@ -645,10 +648,6 @@ if ($totalRows_log > 0) {
 			}
 		}
 		
-		if ($scoresheet) {
-			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s%s %s</li>", $label_scoresheet, $scoresheet_link_eval, $scoresheet_link, $scoresheet_mixed);
-		}
-
 		$entry_output_cards .= "</ul>";
 		$entry_output_cards .= "</small>";
 
@@ -718,12 +717,13 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 		<div class="col-sm-12 col-md-3">
 			<div class="d-grid mb-1">
 				<?php 
+				
 				if (($show_scores) && ($totalRows_log > 0)) {
 					$link_results_export = $base_url."includes/output.inc.php?section=export-personal-results&amp;id=".$_SESSION['brewerID'];
 					echo sprintf("<a href=\"%s\" class=\"btn btn-success\" target=\"_blank\"><i class=\"fa fa-lg fa-file-csv me-2\"></i>%s</a>",$link_results_export, $label_results_export_personal);
-				} ?>
+				}  
 
-				<?php if (!$show_scores) { ?>
+				if (!$show_scores) { ?>
 				<a class="btn btn-primary <?php echo $add_entry_button_disable; ?>" href="<?php echo $add_entry_link; ?>"><i class="fa fa-plus-circle me-2"></i><?php echo $label_add_entry; ?></a>
 				<?php } ?>
 			</div>

@@ -2181,6 +2181,7 @@ $contact_text_010 = "Por favor forneça uma mensagem.";
 
 $contact_text_011 = "Selecione o endereço de e-mail para abrir seu aplicativo de e-mail nativo. Copie o endereço e cole em uma nova mensagem se estiver usando serviços de e-mail baseados na web como Gmail, etc.";
 $contact_text_012 = "Por favor note: esta janela é resultado de múltiplas medidas tentando mitigar a exposição de endereços de e-mail a robôs de spam. Se houver um erro ou o endereço de e-mail do contato da competição não estiver disponível acima, ele foi ofuscado por razões de segurança. Se este for o caso, entre em contato com este oficial da competição por outros meios (redes sociais, website da organização, etc.).";
+$contact_text_013 = "<strong>A colagem de texto está desativada.</strong> Digite suas informações.";
 
 $error_text_000 = "Por favor use a navegação principal acima para ir onde você quer ir.";
 $error_text_001 = "Se os links acima não estiverem funcionando, por favor entre em contato com um representante do site.";

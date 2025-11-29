@@ -2153,14 +2153,6 @@ $label_no_sessions = "No Sessions Selected";
 $label_resume_updates = "Resume Updates";
 $label_recorded = "Recorded";
 
-/*
-$label_practice_session = "Practice Session";
-$label_practice_beer = "Practice Beer";
-$label_practice_cider = "Practice Cider";
-$label_practice_mead = "Practice Mead";
-$label_scoresheet_practice = "Scoresheet Practice";
-*/
-
 $brewer_text_056 = "Select &quot;Opt Out&quot; above if you do not wish to participate in any Pro-Am opportunities associated with this competition.";
 
 $brew_text_056 = "Please provide the entry's carbonation level.";
@@ -2185,6 +2177,7 @@ $contact_text_010 = "Please provide a message.";
 
 $contact_text_011 = "Select the email address to launch your native email application. Copy the address and paste it into a new message if using a web-based email services such as Gmail, etc.";
 $contact_text_012 = "Please note: this window is a result of multiple measures attempting to mitigate email address exposure to spambot crawlers. If there is an error or the competition contact's email address is not available above, it has been obfuscated for security reasons. If this is the case, contact this competition official via other means (social media, organization website, etc.).";
+$contact_text_013 = "<strong>Pasting text is disabled.</strong> Please type your information.";
 
 $error_text_000 = "Please use the main navigation above to get where you want to go.";
 $error_text_001 = "If the links above aren't working, please contact a site representative.";
@@ -2217,6 +2210,14 @@ $login_text_030 = "Email provided is not valid. Please check it and try again.";
 
 $entry_info_text_056 = "Limit reached. No more entries accepted.";
 $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indicates that the style's entry limit has been reached and no more entries of that style will be accepted.";
+
+/*
+$label_practice_session = "Practice Session";
+$label_practice_beer = "Practice Beer";
+$label_practice_cider = "Practice Cider";
+$label_practice_mead = "Practice Mead";
+$label_scoresheet_practice = "Scoresheet Practice";
+*/
 
 /**
  * ------------------------------------------

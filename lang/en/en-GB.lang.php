@@ -2177,6 +2177,7 @@ $contact_text_010 = "Please provide a message.";
 
 $contact_text_011 = "Select the email address to launch your native email application. Copy the address and paste it into a new message if using a web-based email services such as Gmail, etc.";
 $contact_text_012 = "Please note: this window is a result of multiple measures attempting to mitigate email address exposure to spambot crawlers. If there is an error or the competition contact's email address is not available above, it has been obfuscated for security reasons. If this is the case, contact this competition official via other means (social media, organisation website, etc.).";
+$contact_text_013 = "<strong>Pasting text is disabled.</strong> Please type your information.";
 
 $error_text_000 = "Please use the main navigation above to get where you want to go.";
 $error_text_001 = "If the links above aren't working, please contact a site representative.";

@@ -13,6 +13,11 @@ $purifier = new HTMLPurifier($config_html_purifier);
 
 $captcha_success = FALSE;
 
+define('MIN_SUBMISSION_TIME', 5); // Minimum seconds to fill form (bots are faster)
+define('MAX_SUBMISSION_TIME', 1200); // Maximum seconds (20 minutes)
+define('MIN_MOUSE_MOVEMENTS', 5); // Minimum mouse movements expected
+define('MIN_KEY_PRESSES', 15); // Minimum key presses expected
+
 if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$errors = FALSE;
@@ -20,6 +25,95 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$_SESSION['error_output'] = "";
 
 	if ($action == "email") {
+
+		// Check if post, otherwise, redirect
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
+			$redirect = $base_url."index.php?msg=98";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+
+		}
+
+		$ip_address = $_SERVER['REMOTE_ADDR'];
+		$rate_limit_file = sys_get_temp_dir() . '/contact_form_' . md5($ip_address) . '.txt';
+
+		if (file_exists($rate_limit_file)) {
+		    $last_submission = file_get_contents($rate_limit_file);
+		    if (time() - $last_submission < 60) { // 60 seconds cooldown
+		        $redirect = $base_url."index.php?msg=98";
+		        $redirect = prep_redirect_link($redirect);
+		        $redirect_go_to = sprintf("Location: %s", $redirect);
+		    }
+		}
+
+		// Honeypot check - if filled, it's a bot (silently fail)
+		if (!empty($_POST['website'])) {
+		    $redirect = $base_url."index.php?view=your+mom&msg=19";
+		    $redirect = prep_redirect_link($redirect);
+		    $redirect_go_to = sprintf("Location: %s", $redirect);
+		}
+
+		// Timing analysis - check if form was filled too quickly or slowly
+		if (empty($_POST['form_loaded_time'])) {
+		    $redirect = $base_url."index.php?msg=98";
+		   	$redirect = prep_redirect_link($redirect);
+		    $redirect_go_to = sprintf("Location: %s", $redirect);
+		}
+
+		else {
+
+			$form_loaded_time = intval($_POST['form_loaded_time']) / 1000; // Convert to seconds
+			$current_time = time();
+			$time_taken = $current_time - $form_loaded_time;
+
+			// Too fast - likely a bot; silently fail
+			if ($time_taken < MIN_SUBMISSION_TIME) {
+			    $redirect = $base_url."index.php?view=your+mom&msg=19";
+			    $redirect = prep_redirect_link($redirect);
+			    $redirect_go_to = sprintf("Location: %s", $redirect);
+			}
+
+			if ($time_taken > MAX_SUBMISSION_TIME) {
+			    $redirect = $base_url."index.php?msg=3";
+			    $redirect = prep_redirect_link($redirect);
+			    $redirect_go_to = sprintf("Location: %s", $redirect);
+			}
+		
+		}
+
+		// Check for spam patterns
+		$spam_patterns = [
+		    '/\b(viagra|cialis|pharmacy|casino|poker|lottery)\b/i',
+		    '/(http|https|www\.)\S+\.(com|net|org|ru|cn)\S*/i', // Multiple URLs
+		    '/\b\d{10,}\b/', // Long number sequences
+		    '/[A-Z]{10,}/', // Excessive caps
+		];
+
+		$spam_count = 0;
+
+		foreach ($spam_patterns as $pattern) {
+		    if (preg_match($pattern, $_POST['message'])) {
+		        $spam_count++;
+		    }
+		}
+
+		if ($spam_count > 0) {
+			$redirect = $base_url."index.php?view=your+mom&msg=19";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+		}
+
+		// Human interaction checks
+		$mouse_movements = isset($_POST['mouse_movements']) ? intval($_POST['mouse_movements']) : 0;
+		$key_presses = isset($_POST['key_presses']) ? intval($_POST['key_presses']) : 0;
+
+		// Suspicious behavior - likely a bot
+		if ($mouse_movements < MIN_MOUSE_MOVEMENTS || $key_presses < MIN_KEY_PRESSES) {
+		    $redirect = $base_url."index.php?view=your+mom&msg=19";
+		    $redirect = prep_redirect_link($redirect);
+		    $redirect_go_to = sprintf("Location: %s", $redirect);
+		}
 
 		if ($_SESSION['prefsCAPTCHA'] == 1) {
 
@@ -45,11 +139,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				// Verify reCAPTCHA response
 				if ($captcha_type == 1) {
-
 					$response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
 					$response_data = json_decode($response);
-					if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
-					
+					if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;	
 				}
 
 				// Verify hCAPTCHA response
@@ -95,7 +187,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		if ($mail_use_smtp) {
 
-			$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", $_POST['to']);
+			$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", sterilize($_POST['to']));
 			$contact = mysqli_query($connection,$query_contact) or die (mysqli_error($connection));
 			$row_contact = mysqli_fetch_assoc($contact);
 

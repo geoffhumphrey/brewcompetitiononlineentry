@@ -2193,6 +2193,7 @@ $contact_text_010 = "Por favor proporcione un mensaje.";
 
 $contact_text_011 = "Seleccione la dirección de correo electrónico para abrir su aplicación de correo nativa. Copie la dirección y péguela en un nuevo mensaje si utiliza servicios de correo web como Gmail, etc.";
 $contact_text_012 = "Por favor note: esta ventana es resultado de múltiples medidas que intentan mitigar la exposición de direcciones de correo electrónico a robots de spam. Si hay un error o la dirección de correo del contacto de la competencia no está disponible arriba, ha sido ofuscada por razones de seguridad. Si este es el caso, contacte a este oficial de la competencia por otros medios (redes sociales, sitio web de la organización, etc.).";
+$contact_text_013 = "<strong>No se puede pegar texto.</strong> Escriba su información.";
 
 $error_text_000 = "Por favor use la navegación principal arriba para ir a donde quiere ir.";
 $error_text_001 = "Si los enlaces arriba no funcionan, por favor contacte a un representante del sitio.";
