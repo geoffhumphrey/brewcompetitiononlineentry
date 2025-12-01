@@ -41,6 +41,7 @@ function get_timezone($offset) {
         '9.500' => 'Australia/Darwin',
         '10.000' => 'Pacific/Guam',
 		'10.001' => 'Australia/Brisbane', // No DST for this part of Australia
+		'10.002' => 'Australia/Melbourne', // DST observed in this part of Australia
         '11.000' => 'Asia/Magadan',
         '12.000' => 'Asia/Kamchatka',
 		'13.000' => 'Pacific/Tongatapu',
