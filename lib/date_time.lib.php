@@ -10,17 +10,17 @@ function get_timezone($offset) {
         '-9.500' => 'Pacific/Marquesas',
         '-9.000' => 'America/Anchorage',
         '-8.000' => 'America/Los_Angeles',
-		'-7.000' => 'America/Denver',
+				'-7.000' => 'America/Denver',
         '-7.001' => 'America/Phoenix', // No DST for Arizona
         '-6.000' => 'America/Chicago',
-		'-6.001' => 'America/Hermosillo', // No DST in this area of Mexico
-		'-6.002' => 'America/Regina', // No DST in this area of Canada
+				'-6.001' => 'America/Hermosillo', // No DST in this area of Mexico
+				'-6.002' => 'America/Regina', // No DST in this area of Canada
         '-5.000' => 'America/New_York',
         '-4.000' => 'America/Virgin',
         '-4.001' => 'America/Asuncion', // DST observed in Paraguay
         '-3.500' => 'America/St_Johns',
         '-3.000' => 'America/Argentina/Buenos_Aires',
-		'-3.001' => 'America/Sao_Paulo', // No DST for region of Brazil
+				'-3.001' => 'America/Sao_Paulo', // No DST for region of Brazil
         '-2.000' => 'Atlantic/South_Georgia',
         '-1.000' => 'Atlantic/Azores',
         '0.000' => 'Europe/London',
@@ -32,19 +32,19 @@ function get_timezone($offset) {
         '4.500' => 'Asia/Kabul',
         '5.000' => 'Asia/Karachi',
         '5.500' => 'Asia/Calcutta',
-		'5.750' => 'Asia/Kathmandu',
+				'5.750' => 'Asia/Kathmandu',
         '6.000' => 'Asia/Colombo',
         '7.000' => 'Asia/Bangkok',
         '8.000' => 'Asia/Singapore',
-		'8.001' => 'Australia/Perth', // No DST for this part of Australia
+				'8.001' => 'Australia/Perth', // No DST for this part of Australia
         '9.000' => 'Asia/Tokyo',
         '9.500' => 'Australia/Darwin',
         '10.000' => 'Pacific/Guam',
-		'10.001' => 'Australia/Brisbane', // No DST for this part of Australia
-		'10.002' => 'Australia/Melbourne', // DST observed in this part of Australia
+				'10.001' => 'Australia/Brisbane', // No DST for this part of Australia
+				'10.002' => 'Australia/Melbourne', // DST observed in this part of Australia
         '11.000' => 'Asia/Magadan',
         '12.000' => 'Asia/Kamchatka',
-		'13.000' => 'Pacific/Tongatapu',
+				'13.000' => 'Pacific/Tongatapu',
     );
 
 	$timezone = $timezones[$offset];
@@ -89,7 +89,8 @@ function convert_timestamp($time_string, $timezone, $offset, $method) {
 function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_format, $display_format, $return_format) {
 
 	$tz = get_timezone($timezone_offset); // convert offset number to PHP timezone
-    date_default_timezone_set($tz);
+  
+  date_default_timezone_set($tz);
 
 	switch($display_format) {
 		
@@ -116,6 +117,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 		case "xml":
 			$date = date('l j F Y', $timestamp);
 		break;
+	
 	}
 
 	if ($time_format == "1") $time = date('H:i',$timestamp);
@@ -156,6 +158,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 	}
 
 	return $return;
+
 }
 
 function greaterDate($start_date, $end_date) {
