@@ -27,6 +27,21 @@ class ConverterExtra extends Converter
     protected $row = 0;
 
     /**
+     * @var string
+     */
+    private $tableLookaheadHeader = '';
+
+    /**
+     * @var string
+     */
+    private $tdSubstitute = '';
+
+    /**
+     * @var string
+     */
+    private $tableLookaheadBody = '';
+
+    /**
      * constructor, see Markdownify::Markdownify() for more information
      */
     public function __construct($linksAfterEachParagraph = self::LINK_AFTER_CONTENT, $bodyWidth = MDFY_BODYWIDTH, $keepHTML = MDFY_KEEPHTML)
