@@ -499,7 +499,7 @@ $(document).ready(function() {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <select class="selectpicker" name="jPrefsMaxBOS" id="jPrefsMaxBOS" data-size="10" data-width="auto">
             <?php for ($i=1; $i <= 4; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsMaxBOS'])) && ($_SESSION['jPrefsMaxBOS'] == $i)) echo "SELECTED"; else { if ($i == 3) echo "SELECTED"; }?>><?php echo $i; ?></option>
+            <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsMaxBOS'])) && ($_SESSION['jPrefsMaxBOS'] == $i)) echo "SELECTED"; else { if (!isset($_SESSION['jPrefsMaxBOS']) && $i == 3) echo "SELECTED"; }?>><?php echo $i; ?></option>
             <?php } ?>
         </select>
         <span id="helpBlock" class="help-block"><p>The maximum number of places available to award and display for each style type. Number does not include Honorable Mention. Of course, all places do not need to be awarded by BOS judges.</p><p>This is <strong>NOT</strong> the number of entries for staff to pull for the BOS round. That methodology is determined for each <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">style type</a> individually.</span>
