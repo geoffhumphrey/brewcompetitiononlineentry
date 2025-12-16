@@ -1858,7 +1858,7 @@ $evaluation_info_069 = "At least two judges from the flight in which your submis
 $evaluation_info_070 = "Based upon the BJCP scoresheet for";
 $evaluation_info_071 = "15+ minutes have elapsed.";
 $evaluation_info_072 = "By default, Auto Log Out is extended to 30 minutes for entry evaluations.";
-$alert_text_090 = "Your session will expire in two minutes. You can stay on the current page to finish your work before time expires, refresh this page to continue your current session (unsaved form data may be lost), or log out.";
+$alert_text_090 = "Your session will expire in two minutes. Stay on the current page to finish your work before time expires. Need more time? Refresh this page to continue your current session (unsaved form data may be lost). Or, simply log out.";
 $alert_text_091 = "Your session will expire in 30 seconds. You can refresh to continue your current session or log out.";
 $alert_text_092 = "At least one judging session must be defined to add a table.";
 
