@@ -2227,6 +2227,8 @@ $login_text_030 = "El correo electrónico proporcionado no es válido. Por favor
 $entry_info_text_056 = "Límite alcanzado. No se aceptan más inscripciones.";
 $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indica que el límite de inscripciones del estilo ha sido alcanzado y no se aceptarán más inscripciones de ese estilo.";
 
+$output_text_034 = "No se otorgaron puntos BOS Judge, ya que el número total de participantes evaluados fue inferior al mínimo establecido por el BJCP, que es de 30.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

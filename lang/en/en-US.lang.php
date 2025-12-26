@@ -2211,6 +2211,8 @@ $login_text_030 = "Email provided is not valid. Please check it and try again.";
 $entry_info_text_056 = "Limit reached. No more entries accepted.";
 $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indicates that the style's entry limit has been reached and no more entries of that style will be accepted.";
 
+$output_text_034 = "No BOS Judge points were be awarded since the total number of entries judged was less than the minimum threshold of 30 set by the BJCP.";
+
 /*
 $label_practice_session = "Practice Session";
 $label_practice_beer = "Practice Beer";

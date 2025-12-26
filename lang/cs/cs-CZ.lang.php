@@ -2148,7 +2148,7 @@ $login_text_030 = "Poskytnutý email není platný. Prosím zkontrolujte ho a zk
 $entry_info_text_056 = "Limit dosažen. Žádné další přihlášky nebudou přijaty.";
 $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Označuje, že limit přihlášek pro styl byl dosažen a žádné další přihlášky tohoto stylu nebudou přijaty.";
 
-
+$output_text_034 = "Nebyly uděleny žádné body BOS Judge, protože celkový počet hodnocených přihlášek byl nižší než minimální hranice 30 stanovená BJCP.";
 
 /**
  * ----------------------------------------------------------------------------------

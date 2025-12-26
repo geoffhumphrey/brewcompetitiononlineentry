@@ -114,6 +114,7 @@ if ($setup_free_access == TRUE) {
 			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> The <strong>Archive</strong> table was NOT installed successfully.</li>";
 		}
 		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Archive</strong> table was installed successfully.</li>";
+		
 		/**
 		 * --------------------------------------
 		 * Brewer Table
@@ -558,7 +559,7 @@ if ($setup_free_access == TRUE) {
 
 		/**
 		 * --------------------------------------
-		 * Judging Tables BOS Table
+		 * Judging Tables/Medal Groupings Table
 		 * --------------------------------------
 		 */
 
@@ -806,7 +807,7 @@ if ($setup_free_access == TRUE) {
 		// -------------------
 
 		$sql = sprintf("
-			CREATE TABLE IF NOT EXISTS `$special_best_info_db_table` (
+			CREATE TABLE IF NOT EXISTS `%s` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`sbi_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`sbi_description` mediumtext COLLATE utf8mb4_unicode_ci,

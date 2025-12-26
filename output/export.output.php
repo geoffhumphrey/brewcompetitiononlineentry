@@ -2406,53 +2406,47 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             include (DB.'admin_common.db.php');
             include (DB.'output_staff_points.db.php');
 
-            // Get total amount of paid and received entries
-            $total_entries = total_paid_received("judging_scores",0);
-            //$total_entries = 750;
+            /**
+             * Figure out whether BOS Judge Points are awarded or not
+             * "BOS points may only be awarded if a competition has at 
+             * least 30 entries in at least five beer and/or three 
+             * mead/cider categories."
+             * 
+             * Need to get the total number of entries judged. Presumably,
+             * that number is the same as the total number of entries
+             * marked as received.
+             * 
+             * $total_entries_received is defined in constants.
+             * 
+             * @see staff_points.output.php for non XML output.
+             * 
+             */
 
-            $st_running_total = array();
+            $total_entries_received = 18;
 
-            // Figure out whether BOS Judge Points are awarded or not
-            // "BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
-            $beer_styles = array();
-            $mead_styles = array();
-            $cider_styles = array();
-
-            $beer_styles[] = array();
-            $mead_styles[] = array();
-            $cider_styles[] = array();
+            $bos_alert = "";
+            $st_running_total = 0;
+            $beer_styles_total = 0;
+            $mead_styles_total = 0;
+            $cider_styles_total = 0;
 
             do {
-
-                if (($row_styles2['brewStyleType'] == "Cider") || ($row_styles2['brewStyleType'] == "2")) {
-                    $beer_styles[] = 0;
-                    $mead_styles[] = 0;
-                    $cider_styles[] = 1;
-                }
-
-                elseif (($row_styles2['brewStyleType'] == "Mead") || ($row_styles2['brewStyleType'] == "3")) {
-                    $beer_styles[] = 0;
-                    $mead_styles[] = 1;
-                    $cider_styles[] = 0;
-                }
-
-                else  {
-                    $beer_styles[] = 1;
-                    $mead_styles[] = 0;
-                    $cider_styles[] = 0;
-                }
-
+                if (($row_styles2['brewStyleType'] == "Cider") || ($row_styles2['brewStyleType'] == "2")) $cider_styles_total++;
+                elseif (($row_styles2['brewStyleType'] == "Mead") || ($row_styles2['brewStyleType'] == "3")) $mead_styles_total++;
+                else $beer_styles_total++;
             } while ($row_styles2 = mysqli_fetch_assoc($styles2));
-
-            $beer_styles_total = array_sum($beer_styles);
-            $mead_styles_total = array_sum($mead_styles);
-            $cider_styles_total = array_sum($cider_styles);
 
             $mead_cider_total = $mead_styles_total + $cider_styles_total;
             $all_styles_total = $beer_styles_total + $mead_styles_total + $cider_styles_total;
 
-            if (($total_entries >= 30) && (($beer_styles_total >= 5) || ($mead_cider_total >= 3))) $bos_judge_points = 0.5;
-            else $bos_judge_points = 0.0;
+            if ($total_entries_received >= 30) {
+                if (($beer_styles_total >= 5) || ($mead_cider_total >= 3)) $bos_judge_points = 0.5;
+            }
+
+            else {
+                $bos_judge_points = 0.0;
+                $bos_alert = $output_text_034;
+            }
 
             // Get the amount of days the competition took place
             $days = number_format(total_days(),1);
@@ -2522,10 +2516,20 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $title_table->easyCell($string);
                 $title_table->printRow();
 
+                /*
                 $string = sprintf("%s: %s (%s)",$label_flights,total_flights(),$output_text_023);
                 $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
                 $title_table->easyCell($string);
                 $title_table->printRow();
+                */
+
+                if (!empty($bos_alert)) {
+                    $string = sprintf("%s: %s",$label_please_note,$bos_alert);
+                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                    $title_table->easyCell($string);
+                    $title_table->printRow();
+                }
+
                 $title_table->endTable();
 
                 if ($totalRows_organizer > 0) {
@@ -3353,6 +3357,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $output .= "\t\tInstallation URL: ".$base_url."\n";
                     $output .= "\t\tSubmitter Name: ".$_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName']."\n";
                     $output .= "\t\tSubmitter Email: ".$_SESSION['user_name']."\n";
+                    if (!empty($bos_alert)) $output .= "\t\tNote: ".$bos_alert."\n";
                     $output .= "\t</Comments>\n";
                     $output .= "\t<SubmissionDate>".date('l j F Y h:i A')."</SubmissionDate>\n";
                     $output .= "</OrgReport>";

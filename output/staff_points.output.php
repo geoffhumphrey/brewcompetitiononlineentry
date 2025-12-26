@@ -7,9 +7,14 @@
  * 
  * Revision History:
  * - fixed point output errors for judges and BOS judges
- * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, bos judge/staff, etc.)
- * - XML output is fully compliant with the BJCP Database Interface Specifications
+ * - programming now accounts for multiple roles (e.g., judge/staff, 
+ *   steward/staff, bos judge/staff, etc.)
+ * - v3.0.0 XML output is fully compliant with the BJCP Database Interface 
+ *   Specifications
  *   -- http://bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
+ * - v3.0.0 flagged added to comments alerting users of the BJCP's 30 entry 
+ *   minimum to award BOS points (calculations already take this into account).
+ *   This is make sure that organizers do not add these points manually.
  * 
  * To figure out judge points, need to assess:
  * - Which sessions the judge was assigned to
@@ -43,58 +48,47 @@ include (DB.'styles.db.php');
 include (DB.'admin_common.db.php');
 include (DB.'output_staff_points.db.php');
 
-// Get total amount of paid and received entries
-$total_entries = total_paid_received("judging_scores",0);
-//$total_entries = 750;
-
-$st_running_total = array();
-
 /**
  * Figure out whether BOS Judge Points are awarded or not
  * "BOS points may only be awarded if a competition has at 
  * least 30 entries in at least five beer and/or three 
  * mead/cider categories."
+ * 
+ * Need to get the total number of entries judged. Presumably,
+ * that number is the same as the total number of entries
+ * marked as received.
+ * 
+ * $total_entries_received is defined in constants.
+ * 
+ * @see export.output.php for XML output.
+ * 
  */
 
-$beer_styles = array();
-$mead_styles = array();
-$cider_styles = array();
+$total_entries_received = 18;
 
-$beer_styles[] = array();
-$mead_styles[] = array();
-$cider_styles[] = array();
+$bos_alert = "";
+$st_running_total = 0;
+$beer_styles_total = 0;
+$mead_styles_total = 0;
+$cider_styles_total = 0;
 
 do {
-
-    if (($row_styles2['brewStyleType'] == "Cider") || ($row_styles2['brewStyleType'] == "2")) {
-        $beer_styles[] = 0;
-        $mead_styles[] = 0;
-        $cider_styles[] = 1;
-    }
-
-    elseif (($row_styles2['brewStyleType'] == "Mead") || ($row_styles2['brewStyleType'] == "3")) {
-        $beer_styles[] = 0;
-        $mead_styles[] = 1;
-        $cider_styles[] = 0;
-    }
-
-    else  {
-        $beer_styles[] = 1;
-        $mead_styles[] = 0;
-        $cider_styles[] = 0;
-    }
-
+    if (($row_styles2['brewStyleType'] == "Cider") || ($row_styles2['brewStyleType'] == "2")) $cider_styles_total++;
+    elseif (($row_styles2['brewStyleType'] == "Mead") || ($row_styles2['brewStyleType'] == "3")) $mead_styles_total++;
+    else $beer_styles_total++;
 } while ($row_styles2 = mysqli_fetch_assoc($styles2));
-
-$beer_styles_total = array_sum($beer_styles);
-$mead_styles_total = array_sum($mead_styles);
-$cider_styles_total = array_sum($cider_styles);
 
 $mead_cider_total = $mead_styles_total + $cider_styles_total;
 $all_styles_total = $beer_styles_total + $mead_styles_total + $cider_styles_total;
 
-if (($total_entries >= 30) && (($beer_styles_total >= 5) || ($mead_cider_total >= 3))) $bos_judge_points = 0.5;
-else $bos_judge_points = 0.0;
+if ($total_entries_received >= 30) {
+	if (($beer_styles_total >= 5) || ($mead_cider_total >= 3)) $bos_judge_points = 0.5;
+}
+
+else {
+	$bos_judge_points = 0.0;
+	$bos_alert = $output_text_034;
+}
 
 $days = number_format(total_days(),1);
 $sessions = number_format(total_sessions(),1);
@@ -314,6 +308,7 @@ if ($view == "default") {
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_days,total_days()); ?></li>
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_sessions,total_sessions()); ?></li>
         <li><?php echo sprintf("<strong>%s:</strong> %s (%s)",$label_flights,total_flights(),$output_text_023); ?></li>
+        <?php if (!empty($bos_alert)) echo sprintf("<li><strong>%s:</strong> %s</li>",$label_please_note,$bos_alert); ?>
     </ul>
     <?php if (!empty($output_organizer)) { ?>
     <h2><?php echo $label_organizer; ?></h2>

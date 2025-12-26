@@ -2228,6 +2228,8 @@ $login_text_030 = "L'e-mail fourni n'est pas valide. Veuillez le vérifier et r�
 $entry_info_text_056 = "Limite atteinte. Aucune inscription supplémentaire acceptée.";
 $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indique que la limite d'inscription du style a été atteinte et qu'aucune inscription supplémentaire de ce style ne sera acceptée.";
 
+$output_text_034 = "Aucun point BOS Judge n'a été attribué, car le nombre total d'inscriptions jugées était inférieur au seuil minimum de 30 fixé par le BJCP.";
+
 
 /**
  * ----------------------------------------------------------------------------------
