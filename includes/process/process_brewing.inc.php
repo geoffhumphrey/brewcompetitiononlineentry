@@ -579,7 +579,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
 			'brewPouring' => blank_to_null($brewPouring),
 			'brewStyleType' => blank_to_null($row_style_name['brewStyleType']),
-			'brewPackaging' => blank_to_null(sterilize($brewPackaging)
+			'brewPackaging' => blank_to_null(sterilize($brewPackaging))
 		);
 
 		$result = $db_conn->insert ($update_table, $data);
