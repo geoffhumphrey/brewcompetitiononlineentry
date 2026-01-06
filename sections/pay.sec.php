@@ -114,8 +114,8 @@ else {
 		$primary_page_info .= "</ol>";
 	}
 
-	if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1))  $return = $base_url."index.php?section=pay&msg=10";
-	else $return = $base_url."index.php?section=pay&msg=10&view=".rtrim($return_entries,'-');
+	if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1))  $return = $base_url."index.php?section=list&msg=10";
+	else $return = $base_url."index.php?section=list&msg=10&view=".rtrim($return_entries,'-');
 	if (($total_to_pay > 0) && ($view == "default")) {
 
 		// Cash Payment

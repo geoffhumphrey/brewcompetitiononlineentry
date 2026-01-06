@@ -2303,8 +2303,8 @@ if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
                 </div>
             </div>
             <div id="helpBlock-payPalIPN1" class="help-block">
-                <p>Your PayPal IPN Notification URL is: <strong><?php echo $base_url; ?>ppv.php</strong><br>Your PayPal IPN Auto Return URL is: <strong><?php echo $base_url; ?>index.php?section=pay&amp;msg=10</strong></p>
-                <p>The IPN Notification URL must be added in your <a href="https://www.paypal.com/merchantnotification/ipn/preference" target="_blank">PayPal IPN Settings</a> with the value: <strong><?php echo $base_url; ?>ppv.php</strong><br>The IPN Auto Return URL must be added in your <a href="https://www.paypal.com/businessmanage/preferences/website" target="_blank">PayPal Website payment preferences</a> with the value: <strong><?php echo $base_url; ?>index.php?section=pay&amp;msg=10</strong></p>
+                <p>Your PayPal IPN Notification URL is: <strong><?php echo $base_url; ?>ppv.php</strong><br>Your PayPal IPN Auto Return URL is: <strong><?php echo $base_url; ?>index.php?section=list&amp;msg=10</strong></p>
+                <p>The IPN Notification URL must be added in your <a href="https://www.paypal.com/merchantnotification/ipn/preference" target="_blank">PayPal IPN Settings</a> with the value: <strong><?php echo $base_url; ?>ppv.php</strong><br>The IPN Auto Return URL must be added in your <a href="https://www.paypal.com/businessmanage/preferences/website" target="_blank">PayPal Website payment preferences</a> with the value: <strong><?php echo $base_url; ?>index.php?section=list&amp;msg=10</strong></p>
                 <p>Be sure to select the <em>PayPal IPN Info and Setup</em> button above for requirements and further info.</p>
             </div>
         </div>

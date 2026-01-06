@@ -17,6 +17,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	$update_table = $prefix."mods";
 
+	unset($_SESSION['mods_display']);
+
 	if ($action == "update") {
 		
 		foreach($_POST['id'] as $id) {
@@ -111,6 +113,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 
 	}
+
+	$query_mods_display = sprintf("SELECT * FROM `%s`",$mods_db_table);
+	$mods_display = mysqli_query($connection,$query_mods_display) or die (mysqli_error($connection));
+	$row_mods_display = mysqli_fetch_assoc($mods_display);
+	$totalRows_mods_display = mysqli_num_rows($mods_display);
+
+	$mods_display_arr = array();
+
+	if ($totalRows_mods_display > 0) do { 
+		$mods_display_arr[] = array(
+			'id' => $row_mods_display['id'],
+			'mod_extend_function' => $row_mods_display['mod_extend_function'],
+			'mod_extend_function_admin' => $row_mods_display['mod_extend_function_admin'],
+			'mod_permission' => $row_mods_display['mod_permission'],
+			'mod_display_rank' => $row_mods_display['mod_display_rank'],
+			'mod_filename' => $row_mods_display['mod_filename'],
+			'mod_enable' => $row_mods_display['mod_enable'],
+			'mod_type' => $row_mods_display['mod_type']
+		);
+	} while ($row_mods_display = mysqli_fetch_assoc($mods_display));
+
+	$_SESSION['mods_display'] = $mods_display_arr;
 
 } else {
 	

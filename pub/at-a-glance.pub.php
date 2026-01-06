@@ -139,7 +139,7 @@ if ($entry_window_open == 1) {
 
 	if ($logged_in) {
 
-		if ($section == "list") {
+		if (($section == "list") || ($sectino == "pay")) {
 
 		}
 
@@ -507,7 +507,7 @@ if (!empty($date_arr)) {
 
 }
 
-if ($section == "list") {
+if (($section == "list") || ($section == "pay")) {
 
 	$glance_cards = array();
 

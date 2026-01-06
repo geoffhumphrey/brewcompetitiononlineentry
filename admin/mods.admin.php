@@ -20,7 +20,8 @@ function mod_info($info,$method) {
 	
 	if ($method == 1) {
 		switch($info) {
-			case "0": $output = "Informational (Basic HTML)"; break;
+			case "0": 
+			case "": $output = "Informational (Static HTML)"; break;
 			case "1": $output = "Report"; break;
 			case "2": $output = "Export"; break;
 			case "3": $output = "PHP Code or Function"; break;
@@ -29,15 +30,15 @@ function mod_info($info,$method) {
 
 	if ($method == 2) {
 		switch($info) {
-			case "0": $output = "All"; break;
-			case "1": $output = "Home Page"; break;
-			case "2": $output = "Rules"; break;
-			case "3": $output = "Volunteer Info"; break;
-			case "4": $output = "Sponsors"; break;
-			case "5": $output = "Contact"; break;
-			case "6": $output = "Registration"; break;
-			case "7": $output = "Payment"; break;
-			case "8": $output = "User's Account"; break;
+			case "0": $output = "All Public Pages"; break;
+			case "1": $output = "Public Home Page"; break;
+			//case "2": $output = "Rules"; break;
+			//case "3": $output = "Volunteer Info"; break;
+			//case "4": $output = "Sponsors"; break;
+			//case "5": $output = "Contact"; break;
+			case "6": $output = "Public Registration"; break;
+			//case "7": $output = "Payment"; break;
+			case "8": $output = "Public User's Account"; break;
 			case "9": $output = "Administration"; break;
 		}
 	}
@@ -78,7 +79,7 @@ function mod_info($info,$method) {
 <?php } ?>
 </div>
 <?php if ($action == "default") { ?>
-<form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $mods_db_table; ?>">
+<form id="submit-form" name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $mods_db_table; ?>">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 	<p>Custom modules are useful for competitions that wish to extend BCOE&amp;M's core functions. Provided in the program package are two sample HTML files to get you started, located in the &ldquo;Mods&rdquo; sub-folder. All mod files MUST have a .php extension (e.g., name_of_file.php - some servers running PHP are not configured to &quot;include&quot; files with other exensions).</p>
   	<p>For the program to use/display any custom module, its information MUST be added into the database. The corresponding file should be uploaded to the &ldquo;mods&rdquo; sub-folder via secure FTP.</p>
@@ -133,7 +134,7 @@ function mod_info($info,$method) {
       <td><?php echo mod_info($row_mods['mod_type'],1); ?></td>
       <td><?php echo mod_info($row_mods['mod_extend_function'],2); ?></td>
       <td><?php echo ucfirst(str_replace("_"," ",$row_mods['mod_extend_function_admin'])); ?></td>
-      <td><?php echo $row_mods['mod_filename']; ?></td>
+      <td><?php echo $row_mods['mod_filename']; if (!file_exists(MODS.$row_mods['mod_filename'])) echo "<br><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> file does not exist in mods directory</span>"; ?></td>
       <td><?php echo mod_info($row_mods['mod_permission'],3); ?></td>
       <td><?php echo mod_info($row_mods['mod_display_rank'],4); ?></td>
       <td><input id="mod_enable" type="checkbox" name="mod_enable<?php echo $row_mods['id']; ?>" value="1" <?php if ($row_mods['mod_enable'] == 1) echo 'checked="checked"'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_mods['id']; ?>" /></td>
@@ -159,7 +160,7 @@ function mod_info($info,$method) {
 }
 if (($action == "add") || ($action == "edit")) { ?>
 
-<form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+<form class="form-horizontal" method="post" data-toggle="validator"  action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -197,7 +198,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="mod_type" id="mod_type" data-width="auto">
-		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_type'] == "0")) echo " SELECTED"; ?>>Informational (Basic HTML)</option>
+		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_type'] == "0")) echo " SELECTED"; ?>>Informational (Static HTML)</option>
         <option value="1" <?php if (($action == "edit") && ($row_mods['mod_type'] == "1")) echo " SELECTED"; ?>>Report</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_type'] == "2")) echo " SELECTED"; ?>>Export</option>
         <option value="3" <?php if (($action == "edit") && ($row_mods['mod_type'] == "3")) echo " SELECTED"; ?>>PHP Code or Function</option>
@@ -223,24 +224,17 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="mod_extend_function" id="mod_extend_function" data-width="auto">
-		<option rel="none" value="0" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "0")) echo " SELECTED"; ?>>All</option>
-		<option rel="none" value="1" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "1")) echo " SELECTED"; ?>>Home Page</option>
-		<option rel="none" value="2" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "2")) echo " SELECTED"; ?>>Rules</option>
-		<option rel="none" value="3" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "3")) echo " SELECTED"; ?>>Volunteer Info</option>
-		<option rel="none" value="4" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "4")) echo " SELECTED"; ?>>Sponsors</option>
-		<option rel="none" value="5" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "5")) echo " SELECTED"; ?>>Contact</option>
-		<option rel="none" value="6" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "6")) echo " SELECTED"; ?>>Registration</option>
-		<option rel="none" value="7" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "7")) echo " SELECTED"; ?>>Payment</option>
-		<option rel="none" value="8" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "8")) echo " SELECTED"; ?>>User's Account</option>
-        <option rel="none" value="10" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "10")) echo " SELECTED"; ?>>Info</option>
-        <option rel="none" value="11" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "11")) echo " SELECTED"; ?>>Results</option>
+		<option rel="none" value="0" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "0")) echo " SELECTED"; ?>>All Public Pages</option>
+		<option rel="none" value="1" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "1")) echo " SELECTED"; ?>>Public Home Page Only</option>
+		<option rel="none" value="6" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "6")) echo " SELECTED"; ?>>Public Registration Page Only</option>
+		<option rel="none" value="8" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "8")) echo " SELECTED"; ?>>Public User's Account Page Only</option>
 		<option rel="admin" value="9" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "9")) echo " SELECTED"; ?>>Administration</option>
 	</select>
 	<span id="helpBlock" class="help-block">Where should the module be placed?</span>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+<div class="form-group" id="extend_admin"><!-- Form Group NOT REQUIRED Select -->
 	<label for="mod_extend_function_admin" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Extends Admin Function</label>
 	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
@@ -280,10 +274,12 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<!-- Input Here -->
 	<select class="selectpicker" name="mod_display_rank" id="mod_display_rank" data-width="auto">
 		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "0")) echo " SELECTED"; ?>>N/A (Stand Alone)</option>
-    	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "1")) echo " SELECTED"; ?>>Before Public Core Content</option>
-        <option value="2" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "2")) echo " SELECTED"; ?>>After Public Core Content</option>
+    	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "1")) echo " SELECTED"; ?>>Before Core Content</option>
+        <option value="2" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "2")) echo " SELECTED"; ?>>After Core Content</option>
+        <!--
         <option value="3" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "3")) echo " SELECTED"; ?>>Before Public Sidebar Content</option>
         <option value="4" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "4")) echo " SELECTED"; ?>>After Public Sidebar Content</option>
+        -->
 	</select>
 	<span id="helpBlock" class="help-block">If informational, where will the module's contents be displayed?</span>
 	</div>
@@ -307,10 +303,11 @@ if (($action == "add") || ($action == "edit")) { ?>
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-9">
-			<input type="submit" name="Submit" id="setCustomModule" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Custom Module" />
+			<input type="submit" name="Submit" id="form-submit-button" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Custom Module" />
 		</div>
 	</div>
 </div>
+
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 <?php } else { ?>
@@ -318,3 +315,43 @@ if (($action == "add") || ($action == "edit")) { ?>
 <?php } ?>
 </form>
 <?php } ?>
+
+<script>
+
+$("#extend_admin").hide();
+
+$(document).ready(function () {
+	
+	var admin_function = <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "9")) echo "true"; else echo "false"; ?>;
+	var admin_function_choice = "<?php if (($action == "edit") && (empty($row_mods['mod_extend_function_admin']))) echo "0"; else echo "1" ?>";
+	if (admin_function) {
+		$("#extend_admin").show();
+		$("#mod_extend_function_admin").prop("required", true);
+		if (admin_function_choice == "0") $("#form-submit-button").prop("disabled", true);
+	}
+
+	$("#mod_extend_function").change(function () {
+	    if ($("#mod_extend_function").val() == "9") {
+	        $("#extend_admin").show("fast");
+	        $("#mod_extend_function_admin").prop("required", true);
+	    } 
+	    else {
+	    	$("#extend_admin").hide("fast");
+	    	$("#mod_extend_function_admin").val('').trigger('change');
+	    	$("#mod_extend_function_admin").prop("required", false);
+	    	$("#form-submit-button").prop("disabled", false);
+	    }
+	});
+
+	$("#mod_extend_function_admin").change(function () {
+	    if ($("#mod_extend_function_admin").val() == "") {
+	        $("#form-submit-button").prop("disabled", true);
+	    } 
+	    else {
+	    	$("#form-submit-button").prop("disabled", false);
+	    }
+	});
+
+});
+
+</script>

@@ -46,7 +46,7 @@ switch($section) {
 		elseif ($msg == "7") $output = sprintf("<strong>%s</strong>",$alert_text_088);
 		elseif ($msg == "8") $output = sprintf("<strong>%s</strong>",$alert_text_089);
 		elseif ($msg == "9") $output = sprintf("<strong>%s</strong>",$header_text_066);
-
+		elseif ($msg == "10") $output = sprintf("<strong>%s</strong> %s",$header_text_026,$header_text_027);
 		// Login-related
 		elseif ($msg == "11") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; } // Problem with login (warning)
 	 	elseif ($msg == "12") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; } // Reset token sent (success)
@@ -116,7 +116,7 @@ switch($section) {
 	break;
 
 	case "pay":
-		$header_output = $_SESSION['contestName']." - ".$label_pay;
+		$header_output = $label_my_account;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);

@@ -6,7 +6,7 @@
  * 
  * To implement:
  * 
- * Users will need to enable Auto Return for Website Payments in PayPal to $base_url."index.php?section=pay&msg=10";
+ * Users will need to enable Auto Return for Website Payments in PayPal to $base_url."index.php?section=list&msg=10";
  *	-- Must have a business account
  *	-- Login > Profile > My Selling Tools > Website Preferences
  * 

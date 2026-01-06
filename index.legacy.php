@@ -82,7 +82,7 @@ include (SECTIONS.'alerts.sec.php');
 <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
 <!-- MODS TOP -->
 <div class="<?php echo $container_main; ?> hidden-print">
-<?php include (INCLUDES.'mods_top.inc.php'); ?>
+<?php if (!HOSTED) include (INCLUDES.'mods_top.inc.php'); ?>
 </div>
 <!-- ./MODS TOP -->
 <?php } ?>
@@ -240,7 +240,7 @@ echo $output_query_count;
 <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
 <!-- Mods Bottom -->
 <div class="<?php echo $container_main; ?> hidden-print">
-<?php include (INCLUDES.'mods_bottom.inc.php'); ?>
+<?php if (!HOSTED) include (INCLUDES.'mods_bottom.inc.php'); ?>
 </div>
 <!-- ./Mods Bottom -->
 <?php } ?>

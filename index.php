@@ -11,8 +11,9 @@
 
 require_once ('paths.php');
 require_once (CONFIG.'bootstrap.php');
-require_once (DB.'mods.db.php');
+if (!HOSTED) require_once (DB.'mods.db.php');
 
+// Good for 3.0.0+
 $account_pages = array("list","pay","brewer","user","brew","pay","evaluation");
 
 if ((!$logged_in) && (in_array($section,$account_pages))) {
@@ -102,27 +103,27 @@ require_once (INCLUDES.'constants_post_lang.inc.php');
 if (HOSTED) require_once (LIB.'hosted.lib.php');
 
 // Pay modal is defined here to make sure it's top-level
+// Otherwise, the modal does not render correctly.
 $pay_modal = "";
-$pay_modal .= "<!-- Form submit confirmation modal -->";
-$pay_modal .= "<!-- Refer to bcoem_custom.js for configuration -->";
-$pay_modal .= "<div class=\"modal modal-lg fade\" id=\"confirm-submit\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">";
-$pay_modal .= "<div class=\"modal-dialog\">";
-$pay_modal .= "<div class=\"modal-content\">";
-$pay_modal .= "<div class=\"modal-header\">";
-if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $pay_modal .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_031);
-else $pay_modal .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_022);
-$pay_modal .= "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>";
-$pay_modal .= "</div>";
-if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $pay_modal .= sprintf("<div class=\"modal-body\"><p>%s</p>",$pay_text_030);
-else $pay_modal .= sprintf("<div class=\"modal-body\"><p>%s</p>",$pay_text_021);
-$pay_modal .= "</div>";
-$pay_modal .= "<div class=\"modal-footer\">";
-$pay_modal .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">%s</button>",$label_cancel);
-$pay_modal .= sprintf("<a href=\"#\" id=\"submit\" class=\"btn btn-primary\">%s</a>",$label_understand);
-$pay_modal .= "</div>";
-$pay_modal .= "</div>";
-$pay_modal .= "</div>";
-$pay_modal .= "</div>";
+$pay_modal .= "\n<!-- PayPal Confirmation Modal -->\n";
+$pay_modal .= "<div class=\"modal modal-lg fade\" id=\"confirm-submit\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">\n";
+$pay_modal .= "\t<div class=\"modal-dialog\">\n";
+$pay_modal .= "\t\t<div class=\"modal-content\">\n";
+$pay_modal .= "\t\t\t<div class=\"modal-header\">\n";
+if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $pay_modal .= sprintf("\t\t\t\t<h4 class=\"modal-title\">%s</h4>\n",$pay_text_031);
+else $pay_modal .= sprintf("\t\t\t\t<h4 class=\"modal-title\">%s</h4>\n",$pay_text_022);
+$pay_modal .= "\t\t\t\t<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n";
+$pay_modal .= "\t\t\t</div>\n";
+if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $pay_modal .= sprintf("\t\t\t<div class=\"modal-body\">\n\t\t\t\t<p>%s</p>\n",$pay_text_030);
+else $pay_modal .= sprintf("\t\t\t<div class=\"modal-body\">\n\t\t\t\t<p>%s</p>\n",$pay_text_021);
+$pay_modal .= "\t\t\t</div>\n";
+$pay_modal .= "\t\t\t<div class=\"modal-footer\">\n";
+$pay_modal .= sprintf("\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">%s</button>\n",$label_cancel);
+$pay_modal .= sprintf("\t\t\t\t<a href=\"#\" id=\"submit\" class=\"btn btn-primary\">%s</a>\n",$label_understand);
+$pay_modal .= "\t\t\t</div>\n";
+$pay_modal .= "\t\t</div>\n";
+$pay_modal .= "\t</div>\n";
+$pay_modal .= "</div>\n";
 
 ?>
 
@@ -169,7 +170,7 @@ else include (INCLUDES.'load_cdn_libraries_public.inc.php');
 <?php
 if (($section == "admin") || ($admin != "default")) require ('index.legacy.php');
 else require ('index.pub.php');
-if ($section == "list") echo $pay_modal;
+if (($section == "list") || ($section == "pay")) echo $pay_modal;
 ?>
 
 </html>

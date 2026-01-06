@@ -59,6 +59,7 @@ $user_edit_links .= "</div>";
 if ($show_entries) include (PUB.'brewer_entries.pub.php'); 
 if (!$disable_pay) include (PUB.'pay.pub.php');
 ?>
+
 <script type="text/javascript" language="javascript">
 
 $("#entry-table").hide();

@@ -338,7 +338,7 @@
 // Top-of-screen items
 // include (PUB.'alerts.pub.php'); 
 // if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');
-if ($_SESSION['prefsUseMods'] == "Y") include (INCLUDES.'mods_top.inc.php');
+if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) include (INCLUDES.'mods_top.inc.php');
     
 if (ENABLE_MARKDOWN) {
     include (CLASSES.'parsedown/Parsedown.php');
@@ -439,7 +439,7 @@ if (ENABLE_MARKDOWN) {
         </section>
     <?php } ?>
 
-    <?php if ($section == "list") { ?>
+    <?php if (($section == "list") || ($section == "pay")) { ?>
         <a name="home"></a>
         <section id="list" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
@@ -591,7 +591,7 @@ if (ENABLE_MARKDOWN) {
 </div>
 
 <?php 
-if ($_SESSION['prefsUseMods'] == "Y") include (INCLUDES.'mods_bottom.inc.php');
+if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) include (INCLUDES.'mods_bottom.inc.php');
 ?>
 
 <!-- Footer -->

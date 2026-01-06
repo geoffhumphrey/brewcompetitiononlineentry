@@ -2,74 +2,125 @@
 /**
  * Module:      mods.db.php
  * Description: This module houses all custom module related queries
- *              0=none 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin
+ *              0=none 
+ * 				1=home 
+ * 				2=rules -- deprecated -- 
+ * 				3=volunteer -- deprecated -- 
+ * 				4=sponsors -- deprecated --  
+ * 				5=contact -- deprecated --
+ * 				6=register  
+ * 				7=pay -- deprecated --
+ * 				8=list  
+ * 				9=admin
  */
-		
-$query_mods = "SELECT * FROM $mods_db_table";
-if ($section == "default") 		$query_mods .= " WHERE (mod_extend_function='1' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif ($section == "rules") 	$query_mods .= " WHERE (mod_extend_function='2' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif ($section == "volunteer")$query_mods .= " WHERE (mod_extend_function='3' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif ($section == "sponsors") $query_mods .= " WHERE (mod_extend_function='4' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif ($section == "contact") 	$query_mods .= " WHERE (mod_extend_function='5' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif ($section == "register") $query_mods .= " WHERE (mod_extend_function='6' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif ($section == "pay") 		$query_mods .= " WHERE (mod_extend_function='7' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif ($section == "list") 	$query_mods .= " WHERE (mod_extend_function='8' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif (($section == "admin") && ($action == "default") && ($go != "mods")) $query_mods .= " WHERE (mod_extend_function='9' OR mod_extend_function='0') AND mod_enable='1' ORDER BY mod_rank ASC";
-elseif (($section == "admin") && ($action == "default") && ($go == "mods")) $query_mods .= " ORDER BY mod_name ASC";
-elseif (($section == "admin") && ($action == "edit") && ($go == "mods")) 	$query_mods .= sprintf(" WHERE id='%s'",$id);
 
-$mods = mysqli_query($connection,$query_mods) or die (mysqli_error($connection));
-$row_mods = mysqli_fetch_assoc($mods);
-$totalRows_mods = mysqli_num_rows($mods);
+if (($section == "admin") && ($go == "mods")) {
+	
+	$query_mods = sprintf("SELECT * FROM `%s`",$mods_db_table);
+	if ($action == "default") $query_mods .= " ORDER BY mod_name ASC";
+	elseif ($action == "edit") $query_mods .= sprintf(" WHERE id='%s'",$id);
+	$mods = mysqli_query($connection,$query_mods) or die (mysqli_error($connection));
+	$row_mods = mysqli_fetch_assoc($mods);
+	$totalRows_mods = mysqli_num_rows($mods);
 
-$mods_display = array();
-
-if ($go != "mods") {
-	if ($totalRows_mods > 0) do { 
-		$mods_display[] = $row_mods['id']; 
-	} while ($row_mods = mysqli_fetch_assoc($mods));
 }
 
-function mod_display($id,$section,$go,$user_level,$page_location) {
+if ((!isset($_SESSION['mods_display'])) || ((isset($_SESSION['mods_display'])) && (empty($_SESSION['mods_display'])))) {
+
+	$query_mods_display = sprintf("SELECT * FROM `%s`",$mods_db_table);
+	$mods_display = mysqli_query($connection,$query_mods_display) or die (mysqli_error($connection));
+	$row_mods_display = mysqli_fetch_assoc($mods_display);
+	$totalRows_mods_display = mysqli_num_rows($mods_display);
+
+	$mods_display_arr = array();
+
+	if ($totalRows_mods_display > 0) do { 
+		$mods_display_arr[] = array(
+			'id' => $row_mods_display['id'],
+			'mod_extend_function' => $row_mods_display['mod_extend_function'],
+			'mod_extend_function_admin' => $row_mods_display['mod_extend_function_admin'],
+			'mod_permission' => $row_mods_display['mod_permission'],
+			'mod_display_rank' => $row_mods_display['mod_display_rank'],
+			'mod_filename' => $row_mods_display['mod_filename'],
+			'mod_enable' => $row_mods_display['mod_enable'],
+			'mod_type' => $row_mods_display['mod_type']
+		);
+	} while ($row_mods_display = mysqli_fetch_assoc($mods_display));
+
+	$_SESSION['mods_display'] = $mods_display_arr;
+
+}
+
+function mod_display($row_mod_display,$section,$go,$user_level,$page_location) {
 	
-	require(CONFIG.'config.php');	
-	mysqli_select_db($connection,$database);
+	/**
+	 * @param $row_mod_display is an array of mod data from a single row in the DB.
+	 * @param $page_location can be 1 (before core) or 2 (after core)
+	 */
 	
-	$query_mod_display = sprintf("SELECT * FROM %s WHERE mod_enable='1' AND id='%s'",$prefix."mods",$id);
-	$mod_display = mysqli_query($connection,$query_mod_display) or die (mysqli_error($connection));
-	$row_mod_display = mysqli_fetch_assoc($mod_display);
-	
+	$file_not_found = 0;
+	$file_ok = 0;
 	$output = "";
 	
 	switch ($section) {
-		case "default": 	$display_section = 1; break;
-		case "rules": 		$display_section = 2; break;
-		case "volunteers": 	$display_section = 3; break;
-		case "sponsors": 	$display_section = 4; break;	
-		case "contact": 	$display_section = 5; break;
-		case "register": 	$display_section = 6; break;
-		case "pay": 		$display_section = 7; break;
-		case "list": 		$display_section = 8; break;
-		case "admin": 		$display_section = 9; break;
-		default: $display_section = 0; break;
+		
+		case "default": 	
+		case "rules": 		
+		case "volunteers": 	
+		case "sponsors": 		
+		case "contact": 
+		case "pay": $display_section = 1; 
+		break;
+
+		case "register": $display_section = 6; 
+		break;
+
+		case "list": $display_section = 8; 
+		break;
+
+		case "admin": $display_section = 9; 
+		break;
+
+		default: $display_section = 0; 
+		break;
+
 	}
 
 	if (!empty($row_mod_display)) {
 
-		if (($section != "admin") && (($display_section == $row_mod_display['mod_extend_function']) || ($row_mod_display['mod_extend_function'] == 0))) {
-			if (($row_mod_display['mod_display_rank'] == $page_location) && ($row_mod_display['mod_permission'] >= $user_level)) $output .= (MODS.$row_mod_display['mod_filename']);
-		}
-		
-		if ($section == "admin") {
-			if (($row_mod_display['mod_type'] == 0) || ($row_mod_display['mod_type'] == 3)) {
+		// Check if file exists and if it is enabled
+		if (file_exists(MODS.$row_mod_display['mod_filename'])) {
+
+			if (($section != "admin") && (($display_section == $row_mod_display['mod_extend_function']) || ($row_mod_display['mod_extend_function'] == 0))) {
 				if (($row_mod_display['mod_display_rank'] == $page_location) && ($row_mod_display['mod_permission'] >= $user_level)) {
-					if (($go == $row_mod_display['mod_extend_function_admin']) || ($row_mod_display['mod_extend_function'] == 0)) $output .= (MODS.$row_mod_display['mod_filename']);
+					$file_ok = 1;
 				}
 			}
+			
+			if ($section == "admin") {
+				//if (($row_mod_display['mod_type'] == 0) || ($row_mod_display['mod_type'] == 3)) {
+					if (($row_mod_display['mod_display_rank'] == $page_location) && ($row_mod_display['mod_permission'] >= $user_level)) {
+						if ($go == $row_mod_display['mod_extend_function_admin']) {
+							$file_ok = 1;
+						}
+					}
+				//}
+			}
+
+		}
+
+		else {
+			$file_not_found = 1;
+			$output = $row_mod_display['mod_filename'];
 		}
 
 	}
-	
-	return $output;
+
+	return array(
+		'file_not_found' => $file_not_found,
+		'file_ok' => $file_ok,
+		'output' => $output
+	);
+
 }
 ?>

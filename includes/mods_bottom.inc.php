@@ -1,10 +1,8 @@
 <?php
-if ($totalRows_mods > 0) {
-	if ($go != "mods") {
-		foreach ($mods_display as $mid) {
-			$mods1 = mod_display($mid,$section,$go,$user_level_mods,2);
-			if (!empty($mods1)) include($mods1);
-		} 
+if ((!empty($_SESSION['mods_display'])) && ($go != "mods")) {
+	foreach ($_SESSION['mods_display'] as $key => $value) {
+		$mods_bottom = mod_display($value,$section,$go,$user_level_mods,2);
+		if (($mods_bottom['file_ok'] == 1) && ($value['mod_enable'] == 1)) include (MODS.$value['mod_filename']);
 	}
-}
+} 
 ?>
