@@ -258,7 +258,7 @@ if ($totalRows_brewer > 0) {
             $assigned_at_this_table = TRUE;
             $assigned_at_table[] = $row_brewer['uid'];
             $assign_row_color = "bg-orange text-orange";
-            $assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table/flight.";
+            $assign_flag = "<div style=\"padding-bottom:15px;\"><span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table/flight.</div>";
             
             //$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
             if ($rank_number >= 2) $ranked += 1;

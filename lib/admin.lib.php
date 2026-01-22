@@ -1283,7 +1283,7 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 		// Check to see if the participant is already assigned to this round.
 		// If so (function returns a value greater than 0), display the following:
 		$r .= '<div class="form-inline">';
-		$r .= '<div class="checkbox">';
+		$r .= '<div class="checkbox" style="padding-bottom: 10px;">';
 		$r .= '<label for="unassign'.$random.'">';
 		$r .= '<input class="unassign-checkbox" type="checkbox" id="unassign'.$random.'" name="unassign'.$random.'" value="'.$unassign.'" '.$disabled.'>';
 		$r .= ' Unassign from their current assignment and...</label>';
@@ -1298,7 +1298,7 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 		
 		$r .= '<div class="form-inline">';
 		$r .= '<div class="form-group">';
-		$r .= '<div class="input-group">';
+		$r .= '<div class="input-group" style="padding-bottom: 10px;">';
 	    $r .= '<label class="radio-inline">';
 	    $r .= '<input type="radio" name="assignRound'.$random.'" value="'.$round.'" '.$selected.' '.$disabled.' /> Assign to this Table/Round';
 	    $r .= '</label>';
@@ -1480,16 +1480,26 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 		$entry_conflict = entry_conflict($bid,$table_styles);
 		$at_table = at_table($bid,$tid);
 		
-		if ($unavailable) $r = "bg-purple text-purple|<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Paricipant is assigned to another table in this round.</span>";
+		if ($unavailable) {
+		    
+		    $r = "bg-purple text-purple|";
+		    if ($ind_aff_flag) $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span><br><span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+		    else $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span>";
+		    
+		}
 		
 		if ($entry_conflict) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.</span>";
 
-		if ($ind_aff_flag) {
-			if ($_SESSION['prefsProEdition'] == 1) $r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has a reported organization affiliation at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
-			else $r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has a reported brewing partner or team affiliation at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+		if ((!$unavailable) && (!$entry_conflict)) {
+			
+			if ($ind_aff_flag) {
+				
+				$r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+
+			}
+			
+			$r = like_dislike($likes,$dislikes,$table_styles);
 		}
-		
-		if ((!$unavailable) && (!$entry_conflict) && (!$ind_aff_flag)) $r = like_dislike($likes,$dislikes,$table_styles);
 
 	}
 	

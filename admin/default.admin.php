@@ -921,7 +921,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu1">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -932,7 +932,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu2">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -945,7 +945,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu3">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -956,7 +956,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu4">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -980,7 +980,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu1">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -991,7 +991,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu2">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1004,7 +1004,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu3">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1015,7 +1015,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu4">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1035,7 +1035,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu5">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1046,7 +1046,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu6">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1057,7 +1057,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu7">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1068,7 +1068,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu8" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu8">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1088,7 +1088,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu9">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1099,7 +1099,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu10">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1110,7 +1110,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu11" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu11">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1121,7 +1121,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu12">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1146,7 +1146,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Table <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
-                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1157,7 +1157,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Judge <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
-                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;filter=judges&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1177,7 +1177,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Table <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
-                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1188,7 +1188,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Judge <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
-                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_tables&amp;filter=judges&amp;psort=3422&amp;&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1619,7 +1619,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="reqLablesMenu1">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1630,7 +1630,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="reqLablesMenu2">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1642,7 +1642,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu3reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="reqLablesMenu3reqLablesMenu4">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1653,7 +1653,7 @@ if ($recently_updated) {
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="reqLablesMenu4">
-                                                    <?php for($i=1; $i<=8; $i++) { ?>
+                                                    <?php for($i=1; $i<=12; $i++) { ?>
                                                     <li class="small"><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
@@ -1670,7 +1670,7 @@ if ($recently_updated) {
                                                     </div>
                                                     <div class="form-group">
                                                         <select class="selectpicker" title="Number of Labels per Entry" id="sort-letter" name="sort" data-with="fit" data-size="10">
-                                                            <?php for($i=1; $i<=8; $i++) { ?>
+                                                            <?php for($i=1; $i<=12; $i++) { ?>
                                                             <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                                             <?php } ?>
                                                         </select>
@@ -1698,7 +1698,7 @@ if ($recently_updated) {
                                                     </div>
                                                     <div class="form-group">
                                                         <select class="selectpicker" title="Number of Labels per Entry" id="sort-a4" name="sort" data-with="fit" data-size="10">
-                                                            <?php for($i=1; $i<=8; $i++) { ?>
+                                                            <?php for($i=1; $i<=12; $i++) { ?>
                                                             <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                                             <?php } ?>
                                                         </select>

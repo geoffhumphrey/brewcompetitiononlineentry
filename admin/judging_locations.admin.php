@@ -508,8 +508,9 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	    <p>BCOE&amp;M figures judge points according to the <a class="hide-loader" href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> as "...an uninterrupted time period when at least one panel of judges sits to judge one or more flights of entries." </p>
 	    <p>Thus, to correctly calculate BJCP experience points for program participants, it is suggested that each session you set up here follow that guideline (e.g., <em>Session 1: XXX Location - Early Morning</em>, <em>Session 2: XXX Location - Afternoon</em>, <em>Session 3: Distributed - Week of XXX</em>, etc.).</p>
 	    <p>A single judging session may consist of one or more flights and one or more rounds.</p>
-	    <h3>Distributed Judging</h3>
-	    <p>For distributed judging scenarios (e.g., when judge teams will not be in the same physical location, when judge teams are not judging concurrently, or when judge teams are not judging in a prescribed location, etc.), Administrators are required to define the start date/time and end date/time of the session. In this scenario, judging typically takes place over a period of days or weeks in a variety of locations. If a judging session is designated as <em>distributed</em>, it is required that Admins provide information on how judges will receive the entries they will be evaluating.</p>
+	    <h4>Distributed Judging</h4>
+	    <p>For distributed judging scenarios (e.g., when judge teams will not be in the same physical location, when judge teams are not judging concurrently, or when judge teams are not judging in a prescribed location, etc.), Administrators are required to define the start date/time and end date/time of the session. In this scenario, judging typically takes place over a period of days or weeks in a variety of locations.</p>
+	    <p>If a judging session is designated as <em>distributed</em>, it is required that Admins provide information on how judges will receive the entries they will be evaluating. For BJCP point award purposes, BCOE&amp;M considers each distributed session its own "day" since actual judging days and times are inherently variable.</p>
 	</div>
 	<?php } ?>
 
@@ -765,15 +766,18 @@ if (($output_add_edit) && ($msg != 9)) {
 		<?php if (((!empty($row_judging['judgingLocType'])) && ($row_judging['judgingLocType'] == "0")) || ($section == "step5")) { ?>
 		$('#judgingDateEndDiv').hide();
 		$('#helpBlockLocation2').hide();
+		$('#distributed-bjcp').hide();
 		$("#judgingLocationLabel").html("Session Address");
 		<?php } elseif ((!empty($row_judging['judgingLocType'])) && ($row_judging['judgingLocType'] == "1")) { ?>
 		$('#judgingDateEndDiv').show();
 		$('#helpBlockLocation1').hide();
 		$('#helpBlockLocation2').show();
+		$('#distributed-bjcp').show();
 		$("#judgingLocationLabel").html("Entry Distribution to Judges");
 		<?php } else { ?>
 		$('#judgingDateEndDiv').hide();
 		$('#helpBlockLocation2').hide();
+		$('#distributed-bjcp').hide();
 		$("#judgingLocationLabel").html("Session Address");
 		<?php } ?>
 		
@@ -790,6 +794,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	            $("#helpBlockLocation1").hide("fast");
 	            $("#judgingDateEndDiv").show("fast");
 	            $("#helpBlockLocation2").show("fast");
+	            $('#distributed-bjcp').show("fast");
 	            $("#judgingLocationLabel").html("Entry Distribution to Judges");
 	            $("#judgingDateEnd").prop("required",true);
 	        }
@@ -797,6 +802,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	            $("#judgingDateEndDiv").hide("fast");
 	            $("#helpBlockLocation2").hide("fast");
 	            $("#helpBlockLocation1").show("fast");
+	            $('#distributed-bjcp').hide("fast");
 	            $("#judgingLocationLabel").html("Session Address");
 	            $("#judgingDateEnd").prop("required",false);
 	            $("#judgingDateEnd").val("");
@@ -834,6 +840,7 @@ if (($output_add_edit) && ($msg != 9)) {
         </div>
         <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member's home.</span>
     	<span class="help-block">Traditional sessions only require a start time. Distributed sessions require a start AND end time.</span>
+    	<span id="distributed-bjcp" class="help-block">For BJCP point award purposes, <strong>the software considers each distributed session its own "day"</strong> since judging days and times are generally variable.</span>
     </div>
 </div>
 

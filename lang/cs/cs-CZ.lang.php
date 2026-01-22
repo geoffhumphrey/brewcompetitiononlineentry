@@ -2089,6 +2089,7 @@ $label_style_excepted = "Výjimky stylu";
 $label_no_sessions = "Žádné relace nevybrány";
 $label_resume_updates = "Obnovit aktualizace";
 $label_recorded = "Zaznamenaný";
+$label_other_info = "Další informace"; 
 
 $brewer_text_056 = "Vyberte &quot;Odhlásit se&quot; výše, pokud se nechcete účastnit žádných Pro-Am příležitostí spojených s touto soutěží.";
 

@@ -99,7 +99,7 @@
     } 
 
     $salutation = "";
-    if (($section != "default") && ($section != "maintenance") && (!is_numeric($section))) {
+    if (($section != "default") && ($section != "competition") && ($section != "maintenance") && (!is_numeric($section))) {
         $salutation .= "<h1 class='fw-bold animate__animated animate__fadeInDown'>".$_SESSION['contestName']."</h1>";
         if ($logged_in) $salutation .= sprintf("<p class='landing-page-salutation animate__animated animate__fadeInUp animate__delay-3s'><small>%s %s!</small></p>",$default_page_text_006,$_SESSION['brewerFirstName']);
     }
@@ -131,13 +131,26 @@
 
         }
 
-        
     }
 
     if ($section == "past-winners") {
+
         $salutation .= "<p class='lead landing-page-salutation fw-light animate__animated animate__fadeInUp animate__delay-5s'><small>";
         $salutation .= $label_past_winners." &ndash; ".$filter;
         $salutation .= "</small></p>";
+        
+    }
+
+    if ($section == "competition") {
+
+        if ($logged_in) {
+            $salutation .= sprintf("<p class='landing-page-salutation animate__animated animate__fadeInDown animate__delay-3s'>%s %s!</p>",$default_page_text_006,$_SESSION['brewerFirstName']); 
+        }
+
+        $salutation .= "<p class='lead landing-page-salutation fw-light animate__animated animate__fadeInUp animate__delay-5s'><small>";
+        $salutation .= $label_other_info;
+        $salutation .= "</small></p>";
+
     }
 
     $archive_alert_content = "";
@@ -287,9 +300,7 @@
         <?php include (PUB.'alerts.pub.php'); ?>
     </div>
     
-    <?php 
-
-    if (($section == "default") || ($section == "maintenance") || (is_numeric($section))) {
+    <?php if (($section == "default") || ($section == "maintenance") || (is_numeric($section)) || ($section == "competition")) {
 
         $hero_inner = "";
 
@@ -384,7 +395,13 @@ if (ENABLE_MARKDOWN) {
         <h1 class="fs-1 fw-bold"><?php echo $_SESSION['contestName'] ?></h1>
     </div>
 
-    <?php if ($section == "default") { ?>
+<?php if ($section == "competition") { ?>
+    <section id="custom-competition-info" class="landing-page-section pb-3">
+        <?php include (PUB.'custom_competition_info.pub.php'); ?>
+    </section>
+<?php } ?>
+
+<?php if ($section == "default") { ?>
 
     <section id="at-a-glance" class="landing-page-section pb-3">
         <?php include (PUB.'default.pub.php'); ?>
@@ -431,15 +448,15 @@ if (ENABLE_MARKDOWN) {
         <?php include (PUB.'contact.pub.php'); ?>
     </section>
     
-    <?php } // end if ($section == "default") ?>
+<?php } // end if ($section == "default") ?>
 
-    <?php if ($section == "past-winners") { ?>
+<?php if ($section == "past-winners") { ?>
         <section id="past-winners" class="landing-page-section pb-3">
             <?php include (PUB.'past_winners.pub.php'); ?>
         </section>
-    <?php } ?>
+<?php } ?>
 
-    <?php if (($section == "list") || ($section == "pay")) { ?>
+<?php if (($section == "list") || ($section == "pay")) { ?>
         <a name="home"></a>
         <section id="list" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
@@ -447,9 +464,9 @@ if (ENABLE_MARKDOWN) {
             </header>
             <?php include (PUB.'list.pub.php'); ?>
         </section>
-    <?php } ?>
+<?php } ?>
 
-    <?php if ($section == "brew") { ?>
+<?php if ($section == "brew") { ?>
         <a name="home"></a>
         <section id="brew" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
@@ -457,9 +474,9 @@ if (ENABLE_MARKDOWN) {
             </header>
             <?php include (PUB.'brew.pub.php'); ?>
         </section>
-    <?php } ?>
+<?php } ?>
 
-    <?php if ($section == "brewer") { ?>
+<?php if ($section == "brewer") { ?>
         <a name="home"></a>
         <section id="brewer" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
@@ -467,9 +484,9 @@ if (ENABLE_MARKDOWN) {
             </header>
             <?php include (PUB.'brewer.pub.php'); ?>
         </section>
-    <?php } ?>
+<?php } ?>
 
-    <?php if ($section == "user") { ?>
+<?php if ($section == "user") { ?>
         <a name="home"></a>
         <section id="user" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
@@ -477,9 +494,9 @@ if (ENABLE_MARKDOWN) {
             </header>
             <?php include (PUB.'user.pub.php'); ?>
         </section>
-    <?php } ?>
+<?php } ?>
 
-    <?php if ($section == "register") { ?>
+<?php if ($section == "register") { ?>
         <section id="login" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
                 <h1><?php echo $header_output; ?></h1>
@@ -497,18 +514,18 @@ if (ENABLE_MARKDOWN) {
             }
             ?>
         </section>
-    <?php } ?>
+<?php } ?>
 
-    <?php if ($section == "login") { ?>
+<?php if ($section == "login") { ?>
         <section id="login" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
                 <h1><?php echo $header_output; ?></h1>
             </header>
             <?php include (PUB.'login.pub.php'); ?>
         </section>
-    <?php } ?>
+<?php } ?>
 
-    <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($logged_in)) { ?>
+<?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($logged_in)) { ?>
 
         <section id="login" class="landing-page-section pb-3">
             <header class="landing-page-section-header py-2">
@@ -517,9 +534,9 @@ if (ENABLE_MARKDOWN) {
             <?php include (PUB.'electronic_scoresheets.pub.php'); ?>
         </section>
 
-    <?php } ?>
+<?php } ?>
 
-    <?php if ($section == "maintenance") { ?>
+<?php if ($section == "maintenance") { ?>
 
         <!-- Error Pages -->
         <section id="maintenance" class="landing-page-section mt-4 mb-3">
@@ -528,9 +545,9 @@ if (ENABLE_MARKDOWN) {
             <p><?php echo $label_cheers; ?>!</p>
         </section>
     
-    <?php } ?>
+<?php } ?>
 
-    <?php if (is_numeric($section)) { ?>
+<?php if (is_numeric($section)) { ?>
 
         <!-- Error Pages -->
         <section id="error-page" class="landing-page-section mt-4 mb-3">
@@ -540,7 +557,7 @@ if (ENABLE_MARKDOWN) {
             <p><?php echo $label_cheers; ?>!</p>
         </section>
     
-    <?php } ?>
+<?php } ?>
     
 </div>
 

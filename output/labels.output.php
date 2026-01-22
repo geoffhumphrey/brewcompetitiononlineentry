@@ -84,7 +84,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 			if ($filter == "judges") {
 
-				$query_brewer = sprintf("SELECT * FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
+				$query_brewer = sprintf("SELECT * FROM %s WHERE brewerJudge='Y' ORDER BY brewerLastName ASC",$prefix."brewer");
 				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 				$row_brewer = mysqli_fetch_assoc($brewer);
 				
@@ -148,7 +148,7 @@ if (isset($_SESSION['loginUsername'])) {
 									
 									if (in_array($v_loc['check'], $locations)) {
 										// Find which table this judge is assigned to for that location.
-										$assign = judge_assignment($brewer_info[7], $v_loc['id'] );
+										$assign = judge_assignment($brewer_info[7], $v_loc['id']);
 										//$assign = explode("^", $flight);
 										$table_flights[] = $assign['tableNumber'];
 									}
@@ -156,12 +156,26 @@ if (isset($_SESSION['loginUsername'])) {
 								}
 
 								// Display the assigned table number(s)
-								if (isset($table_flights[0])) {
+								if (!empty($table_flights)) {
 
-									$t_string = "Table(s)";
-									
-									$pdf->SetFont('Arial', 'B', 12);
-									$judge_flight = $t_string.": ". join(', ', $table_flights);
+									$pdf->SetFont('Arial', 'B', 12);									
+									$table_count = 0;
+									$judge_flight = "";
+
+									foreach ($table_flights as $key => $table_num) {
+
+										if (!empty($table_num)) {
+											$judge_flight .= $table_num.", ";
+											$table_count++;
+										}
+
+									}
+
+									if ($table_count > 1) $t_string = "Tables ";
+									else $t_string = "Table ";
+
+									$judge_flight = $t_string.$judge_flight;
+									$judge_flight = rtrim($judge_flight,", ");
 									$judge_flight = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_flight);
 									$pdf->Cell(66, 6, $judge_flight, 0, 2, 'C');
 								

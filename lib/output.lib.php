@@ -229,7 +229,7 @@ function total_days() {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_sessions = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
+	$query_sessions = sprintf("SELECT judgingDate FROM %s WHERE judgingLocType < 2", $prefix."judging_locations");
 	$sessions = mysqli_query($connection,$query_sessions) or die (mysqli_error($connection));
 	$row_sessions = mysqli_fetch_assoc($sessions);
 
@@ -390,7 +390,7 @@ function judge_points($user_id,$judge_max_points) {
 			// Get date and determine 24 hour window where it falls based upon the time zone
 			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
 			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
-			$possible_judging_days[] = $timestamp_curr_day_midnight;
+			$possible_judging_days[] = $timestamp_curr_day_midnight;	
 
 			/**
 			 * Edited the query below to only take into account Round 1 of the assignment. 
@@ -402,14 +402,15 @@ function judge_points($user_id,$judge_max_points) {
 			 */
 
 			$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J' AND assignRound <= '1'", $prefix."judging_assignments", $user_id, $row_judging['id']);
-	    $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-	    $row_assignments = mysqli_fetch_assoc($assignments);
+	        $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
+	        $row_assignments = mysqli_fetch_assoc($assignments);
 
-	    if ($row_assignments['count'] > 0) {
+	        if ($row_assignments['count'] > 0) {
 				
 				$days_judged[] = array (
 					"day_midnight" => $timestamp_curr_day_midnight,
 					"points" => $row_assignments['count'] * 0.5,
+					"distributed" => $row_judging['judgingLocType']
 				);
 
 			}
@@ -421,16 +422,34 @@ function judge_points($user_id,$judge_max_points) {
 	$possible_judging_days = array_unique($possible_judging_days);
 
 	if (!empty($days_judged)) {
+		
 		foreach ($possible_judging_days as $judging_day) {
+			
 			foreach ($days_judged as $day) {		
+				
 				$point_day = 0;
-				if ($day['day_midnight'] == $judging_day) {
+
+				// Treat each distributed session as it's own "day"
+				if ($day['distributed'] == 1) {
+
 					$point_day += $day['points'];
+					if ($point_day > 1.5) $points += 1.5;
+					else $points += $point_day;
+
 				}
-				if ($point_day > 1.5) $points += 1.5;
-				else $points += $point_day;
+
+				else {
+
+					if ($day['day_midnight'] == $judging_day) $point_day += $day['points'];
+					if ($point_day > 1.5) $points += 1.5;
+					else $points += $point_day;
+
+				}
+				
 			}
+		
 		}
+	
 	}
 
 	// Cannot exceed the maximum allowable points for judges for the competition

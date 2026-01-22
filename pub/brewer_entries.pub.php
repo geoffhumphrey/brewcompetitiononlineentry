@@ -35,7 +35,9 @@ $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entry_edit_dead
 if (((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserEntryLimitDates']))) && (!$comp_entry_limit) && (!$comp_paid_entry_limit) && (!$disable_pay)) {
 
 	if ($remaining_entries == 0) $page_info1 .= sprintf("<li><strong>%s:</strong> %s <div style=\"padding: .6em\" class=\"badge bg-warning text-dark fw-semibold lh-sm text-wrap\">%s</div></li>",$label_entries_remaining,$remaining_entries,$alert_text_031);
-	else $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entries_remaining,$remaining_entries);
+	else {
+		if ($remaining_entries_list_show) $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entries_remaining,$remaining_entries);
+	}
 
 	if ($incremental) {
 
@@ -56,7 +58,7 @@ if (((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsU
 			if ((time() > $limit_date_3) && (time() < $limit_date_4)) $enforce_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_4, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
 		}
 
-		$page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entry_limit_enforced,$enforce_date);
+		if ($remaining_entries_list_show) $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entry_limit_enforced,$enforce_date);
 		
 	}
 

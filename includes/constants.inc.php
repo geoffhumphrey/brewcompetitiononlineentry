@@ -20,10 +20,12 @@ $languages = array(
     "es-419" => "Spanish (Latin America)"
 );
 
-/** -------------------------- Theme File names and  Display Name -------------------------------
- * The first item is the the CSS file name (without .css)
- * The second item is the display name for use in Site Preferences
- * The file name will be stored in the preferences DB table row called prefsTheme and called by all pages
+/** -------------------------- Theme File Names and Display Name -------------------------------
+ * As of version 3.0.0, themes only apply to Admin functions.
+ * The first item is the the CSS file name (without .css).
+ * The second item is the display name for use in Site Preferences.
+ * The file name is be stored in the preferences DB table row called prefsTheme and 
+ * called by all Admin pages.
  */
 
 $theme_name = array(
@@ -364,7 +366,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
                         
                         if ($row_style_type_entry_limits['id'] <= 9) $style_type_limits_alert[$row_style_type_entry_limits['id']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
                         else $style_type_limits_alert[$row_style_type_entry_limits['styleTypeName']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
-                    
+                     
                     }
 
                 }
@@ -374,12 +376,19 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         }
 
         if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit'])) && ($style_type_running_count >= $row_limits['prefsEntryLimit'])) $comp_entry_limit = TRUE;
-
-        if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit']))) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
-        if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
+        
+        if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit']))) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); 
+        else $comp_entry_limit_near = "";
+        
+        if ((!empty($row_limits['prefsEntryLimit'])) && (is_numeric($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; 
+        else $comp_entry_limit_near_warning = FALSE;
 
         $remaining_entries = 0;
-        if ((($section == "brew") || ($section == "list") || ($section == "pay") || ($section == "default")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
+        $remaining_entries_list_show = FALSE;
+        if ((($section == "brew") || ($section == "list") || ($section == "pay") || ($section == "default")) && (!empty($row_limits['prefsUserEntryLimit']))) {
+            $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
+            if ($remaining_entries > 0) $remaining_entries_list_show = TRUE;
+        }
         else $remaining_entries = 1;
 
         if (isset($totalRows_entry_count)) {
