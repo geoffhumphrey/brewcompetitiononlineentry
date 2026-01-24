@@ -20,7 +20,7 @@
  * *** https://www.godaddy.com/help/viewing-your-database-details-with-shared-hosting-accounts-39
  */
 
-$hostname = 'localhost';
+$hostname = getenv('DB_HOST') ?: 'localhost';
 
 /**
  * Enter the username for your database (generally the same as your login code 
@@ -31,7 +31,7 @@ $hostname = 'localhost';
  */
 
 
-$username = '';
+$username = getenv('DB_USER') ?: '';
 
 
 /**
@@ -40,7 +40,7 @@ $username = '';
  * $password = 'flintsone'.
  */
 
-$password = '';
+$password = getenv('DB_PASSWORD') ?: '';
 
 /**
  * The following line is the name of your MySQL database you set up already.
@@ -48,7 +48,7 @@ $password = '';
  * http://brewingcompetitions.com/install-instructions for setup instructions.
  */
 
-$database = '';
+$database = getenv('DB_NAME') ?: '';
 
 
 /**
@@ -57,7 +57,7 @@ $database = '';
  * Example: $database_port = 3308;
  */
 
-$database_port = ini_get('mysqli.default_port');
+$database_port = getenv('DB_PORT') ?: ini_get('mysqli.default_port');
 
 /**
  * This line strings the information together and connects to MySQL.
