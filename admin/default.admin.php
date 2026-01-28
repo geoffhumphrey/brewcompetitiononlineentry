@@ -563,12 +563,13 @@ const driverObjDashTour = driver({
 </div>
 
 <?php 
+$summary_button_errors = "";
+$summary_button_icon = "";
 
 if ($recently_updated) { 
     
     $summary_button_style = "btn btn-dark btn-block";
     $summary_button_icon = "fa fa-code";
-    $summary_button_errors = "";
     if (strpos($row_system['update_summary'], 'Warning: Errors') !== false)  {
         $summary_button_style = "btn btn-danger btn-block";
         $summary_button_icon = "fa fa-exclamation-circle";
