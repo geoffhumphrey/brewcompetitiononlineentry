@@ -326,7 +326,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			
 			} // end if (HOSTED)
 
-			$redirect = $base_url."index.php?msg=16";
+			$redirect = $base_url."index.php?msg=22";
 			if ($errors) $redirect = $base_url."index.php?msg=3";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);

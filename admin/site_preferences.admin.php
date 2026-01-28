@@ -322,6 +322,10 @@ $(document).ready(function(){
    
     if ((email_previous_no_creds == 1) && (email_sending_enable == 0)) $("#setWebsitePrefs").prop("disabled", false);
 
+    <?php if (($section == "step3") && ($action == "email")) { ?>
+    $("#setWebsitePrefs").prop("disabled", false);
+    <?php } ?>
+
     $("input[name='prefsEmailSMTP']").click(function() {
         if ($(this).val() == "1") {
             $("#sending-email-options").show("fast");
