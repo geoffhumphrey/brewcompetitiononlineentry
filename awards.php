@@ -918,7 +918,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				if ($points != $bb_previouspoints) {
 					$bb_position = $bb_count;
 					$bb_previouspoints = $points;
-					$bb_display_position = display_place($bb_position,3);
+					$bb_display_position = display_place($bb_position,4);
 					$place_heirarchy = place_heirarchy($bb_count);
 				}
 
@@ -1037,7 +1037,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				if ($points_clubs != $bb_previouspoints_clubs) {
 					$bb_position_clubs = $bb_count_clubs;
 					$bb_previouspoints_clubs = $points_clubs;
-					$bb_display_position_clubs = display_place($bb_position_clubs,3);
+					$bb_display_position_clubs = display_place($bb_position_clubs,4);
 					$place_heirarchy = place_heirarchy($bb_count_clubs);
 				}
 

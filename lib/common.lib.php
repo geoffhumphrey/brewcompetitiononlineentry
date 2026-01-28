@@ -2631,9 +2631,20 @@ function display_place($place,$method) {
 			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
 			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
 			case "5":
-			case "HM":  $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> HM"; break;
-			default: $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place);
+			case "HM": $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> HM"; break;
+			default: $place = "<span class='fa fa-lg fa-trophy text-grey'></span> ".addOrdinalNumberSuffix($place);
 			}
+	}
+
+	if ($method == "4") {
+		switch($place){
+			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place); break;
+			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place); break;
+			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
+			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
+			case "4": $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place); break;
+			default: $place = "<span class='fa fa-lg fa-trophy text-grey'></span> ".addOrdinalNumberSuffix($place);
+		}
 	}
 
 	return $place;

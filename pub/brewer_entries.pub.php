@@ -102,7 +102,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div>",$brewer_entries_text_004,$brewer_entries_text_005);
 	}
 
-	if (($_SESSION['prefsPayToPrint'] == "Y") && ($judging_past > 0) && (!$disable_pay) && (!$comp_paid_entry_limit)) {
+	if (($_SESSION['prefsPayToPrint'] == "Y") && ($judging_past > 0) && ($registration_open < 2) && (!$disable_pay) && (!$comp_paid_entry_limit)) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s!</strong> %s</div>",$label_please_note, $alert_text_085);
 	}
 
@@ -778,7 +778,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				  	<th width="5%"><?php echo $label_winner; ?></th>
 				  	<?php } ?>
 				  	<?php if ((!$show_scores) && ($print_bottle_labels)) { ?>
-				  	<?php if (!$judging_started) { ?>
+				  	<?php if ((!$judging_started) && ($registration_open < 2)) { ?>
 				    <th class="d-print-none" width="7%" nowrap>
 				    	<input class="form-check-input d-print-none" type="checkbox" id="select_all" <?php if ($disable_label_print) echo "disabled"; ?>>
 				    	<a class="hide-loader d-print-none" style="cursor: pointer;" data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-content="<?php echo $brewer_entries_text_021; if ($disable_label_print) echo " ".$alert_text_085; ?>"><i class="fa fa-question-circle hide-loader ms-1"></i></a>

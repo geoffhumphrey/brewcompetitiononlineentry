@@ -109,7 +109,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div>",$brewer_entries_text_004,$brewer_entries_text_005);
 	}
 
-	if (($_SESSION['prefsPayToPrint'] == "Y") && ($judging_past > 0) && (!$disable_pay) && (!$comp_paid_entry_limit)) {
+	if (($_SESSION['prefsPayToPrint'] == "Y") && ($judging_past > 0) && ($registration_open < 2) && (!$disable_pay) && (!$comp_paid_entry_limit)) {
 		if ((!empty($row_contest_dates['contestEntryEditDeadline'])) && ($row_contest_dates['contestEntryEditDeadline'] >= time())) $warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s!</strong> %s</div>",$label_please_note, $alert_text_085);
 	}
 }
