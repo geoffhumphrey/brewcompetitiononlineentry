@@ -740,7 +740,7 @@ $(document).ready(function () {
 </script>
 <script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <?php if ($action != "print") { ?>
 <?php if ($dbTable != "default") { ?>
 <div class="btn-group" role="group" aria-label="...">

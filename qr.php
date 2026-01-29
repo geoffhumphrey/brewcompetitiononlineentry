@@ -409,7 +409,7 @@ $_SESSION['last_action'] = time();
     <p class="lead text-primary"><strong><?php echo $qr_text_009; ?> <span class="badge"><?php echo sprintf("%06d",$id); ?></span></strong></p>
     <p class="lead text-danger"><small><strong><?php echo $qr_text_010; ?></strong></small></p>
     <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
-    <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+    <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
     	<div class="form-group">
             <label for="inputJudgingNumber"><?php echo $label_judging_number; ?></label>
             <input type="tel" pattern="[^^]+"  maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="<?php echo $qr_text_011; ?>" data-error="<?php echo $qr_text_013; ?>" autofocus>

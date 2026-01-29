@@ -371,7 +371,8 @@ if ($totalRows_log > 0) {
 	    	$entry_output .= "</div>";
 		}
 
-		$entry_output .= "<div class=\" d-lg-none card card-body mt-2 d-print-none\">";
+		/*
+		$entry_output .= "<div class=\"d-lg-none card card-body mt-2 d-print-none\">";
 		$entry_output .= "<p class=\"small\">";
 		$entry_output .= $label_entry_number.": ".$entry_number."<br>";
 
@@ -392,6 +393,7 @@ if ($totalRows_log > 0) {
 		if (!empty($row_log['brewUpdated'])) $entry_output .= "<br>".$label_updated." ".$entry_update_date;
 		$entry_output .= "</p>";
 		$entry_output .= "</div>";
+		*/
 		$entry_output .= "</td>";
 
 		// Style

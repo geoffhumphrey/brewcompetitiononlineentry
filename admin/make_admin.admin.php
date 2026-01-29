@@ -17,7 +17,7 @@ else $edit_user_enable = 0;
 <p class="lead">Change User Level for <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?></p>
 
 <form class="form-hoizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;go=make_admin" name="form1" method="post">
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <p><strong>Top-level admins</strong> have full access to add, change, and delete all information in the database, including preferences, competition information, and archival data, so provide this level <span class="text-danger"><strong>with caution</strong>!</span></p>
 <p><strong>Admin users</strong> are able to add, change, and delete most information in the database, including participants, entries, tables, scores, etc.</p>
 <div class="bcoem-admin-element hidden-print">

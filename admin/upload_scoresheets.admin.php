@@ -31,7 +31,7 @@ if ($action == "html") {
 </ul>
 <?php if ($action == "html") { ?>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-default btn-file"><span>Choose PDF File</span><input type="file" name="file" /></span>
     <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
@@ -40,7 +40,7 @@ if ($action == "html") {
 </form>
 <?php } else { ?>
 <form style="min-height: 300px;" id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="fallback">
     <input name="file" type="file" multiple />
   </div>

@@ -792,7 +792,7 @@ if (($judge_no_availability) || ($steward_no_availability)) {
       <div class="modal-footer">
       	<?php if ($button_remove_from_steward_pool) { ?>
       	<form name="form-quick-no-steward" method="post" action="<?php echo $form_action; ?>">
-      		<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+      		<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
       		<input type="hidden" name="id" value="<?php echo $row_brewer['id']; ?>">
       		<input type="hidden" name="uid" value="<?php echo $row_brewer['uid']; ?>">
       		<input type="hidden" name="brewerJudge" value="<?php echo $row_brewer['brewerJudge']; ?>">
@@ -807,7 +807,7 @@ if (($judge_no_availability) || ($steward_no_availability)) {
       	<?php } ?>
       	<?php if ($button_remove_from_judge_pool) { ?>
       	<form name="form-quick-no-judge" method="post" action="<?php echo $form_action; ?>">
-      		<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+      		<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
       		<input type="hidden" name="id" value="<?php echo $row_brewer['id']; ?>">
       		<input type="hidden" name="uid" value="<?php echo $row_brewer['uid']; ?>">
       		<input type="hidden" name="brewerJudge" value="N">

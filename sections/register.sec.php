@@ -354,7 +354,7 @@ if ($go == "default") {  ?>
 <?php } ?>
 <!-- Begin the Form -->
 	<form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="register_form">
-	<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+	<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 	<!-- Hidden Form Elements -->
 	<!-- User Level is Always 2 -->
 	<input type="hidden" name="relocate" value="<?php echo relocate($relocate,"default",$msg,$id); ?>">

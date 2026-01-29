@@ -125,7 +125,7 @@ $(function() {
     </div>
 </div><!-- ./modal -->
 <form method="post" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;action=barcode_check_in<?php if ($filter != "default") echo "&amp;go=".$filter; ?>" id="form1" onsubmit = "return(p)">
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="form-inline">
 	<?php 
     for ($i=1; $i <= $fields; $i++) { 

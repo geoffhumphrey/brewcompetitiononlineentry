@@ -81,7 +81,7 @@ $form_url = $base_url."includes/process.inc.php?action=".$action."&amp;dbTable="
 if ($action == "edit") $form_url .= "&amp;id=".$id;
 ?>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $form_url; ?>" name="form1">
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="bcoem-admin-element hidden-print">
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 	<label for="contactFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>

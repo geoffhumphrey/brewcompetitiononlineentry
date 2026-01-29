@@ -93,7 +93,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <input type="text" name="website" class="pooh-bear" tabindex="-1" autocomplete="off">
             <input type="hidden" name="form_token" id="form_token" value="">
             <input type="hidden" name="form_loaded_time" id="form_loaded_time" value="">
-            <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+            <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
             <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
             <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
             <?php } else { ?>

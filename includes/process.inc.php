@@ -90,23 +90,45 @@ if ((isset($_SESSION['prefsSEF'])) && ($_SESSION['prefsSEF'] == "Y")) $sef = TRU
  */
 
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
-$bypass_token = array("login","logout","forgot","reset","paypal","register","contact-pub");
+$bypass_token = array("login","logout","forgot","reset","paypal");
+
+/*
+// Troubleshoot
+echo "GET session ID: ".$_POST['session-id']."<br>";
+echo "POST session ID: ".session_id()."<br>";
+echo "Posted CSRF: ".$_POST['user_session_token']."<br>";
+echo "Session CSRF: ".$_SESSION['user_session_token']."<br>";
+$error_log = "CSRF validate on " . $_SERVER['REQUEST_METHOD'] . " " . $_SERVER['REQUEST_URI'] .
+          " posted=" . ($_POST['user_session_token'] ?? '(missing)') .
+          " session=" . ($_SESSION['user_session_token'] ?? '(missing)');
+echo $error_log;
+error_log($error_log);
+exit();
+*/
 
 if (($request_method === "POST") && (!in_array($section,$bypass_token))) {
 
 	$token_hash = FALSE;
-	$user_session_token = filter_var($_POST['user_session_token'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-	if (hash_equals($_SESSION['user_session_token'],$user_session_token)) $token_hash = TRUE;
-	
-	if ((!$user_session_token) || (!$token_hash) || (!$process_allowed)) {
-		session_unset();
-		session_destroy();
-		session_write_close();
-		$redirect = $base_url."index.php?section=403";
-		$redirect = prep_redirect_link($redirect);
-		$redirect_go_to = sprintf("Location: %s", $redirect);
-		header($redirect_go_to);
-		exit();
+	$posted = filter_input(INPUT_POST, 'user_session_token', FILTER_UNSAFE_RAW);
+	$posted = is_string($posted) ? trim($posted) : '';
+	$session = $_SESSION['user_session_token'] ?? '';
+
+	// Validate shape first (example: 64 hex chars for 32 bytes)
+	$valid_shape = (bool) preg_match('/^[a-f0-9]{64}$/i', $posted);
+
+	if (($valid_shape) && ($session !== '') && (hash_equals($session, $posted))) {
+		$token_hash = TRUE;
+	}
+
+	if (($posted === '') || (!$token_hash) || (!$process_allowed)) {
+	    session_unset();
+	    session_destroy();
+	    session_write_close();
+	    $redirect = $base_url."index.php?section=403";
+	    $redirect = prep_redirect_link($redirect);
+	    $redirect_go_to = sprintf("Location: %s", $redirect);
+	    header($redirect_go_to);
+	    exit();
 	}
 
 }

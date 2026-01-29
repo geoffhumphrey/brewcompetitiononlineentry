@@ -20,7 +20,7 @@ include (DB.'brewer.db.php');
 include (DB.'styles.db.php'); 
 ?>
 <form id="submit-form" action="<?php echo $base_url; ?>includes/process.inc.php?action=edit&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1">
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <table class="dataTable">
 <?php include ('judge_info.sec.php'); ?>
 <tr>

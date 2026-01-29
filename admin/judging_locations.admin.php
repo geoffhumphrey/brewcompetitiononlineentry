@@ -468,7 +468,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 ?>
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
 
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <?php if ($section != "step5") { ?>
 	<p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p>
 	<?php if (($action == "assign") && (($filter == "judges") || ($filter == "stewards"))) echo "<p><strong>".$filter_readable." are assigned to the ".rtrim(strtolower($filter_readable),"s")." pool automatically upon registration providing they registered as a ".rtrim(strtolower($filter_readable),"s").".</strong> Those who first signed up as participants, but then edited their accounts to indicate their availability to ".rtrim(strtolower($filter_readable),"s")." are not automatically assigned. You can assign ".strtolower($filter_readable)." to the pool by checking the box next to a name or uassign by unchecking the box.</p><p class=\"text-danger\" style=\"margin-bottom: 20px;\"><strong>Caution:</strong> ".strtolower($filter_readable)." who are unassigned will also be removed from all table assignments.</p>"; ?>

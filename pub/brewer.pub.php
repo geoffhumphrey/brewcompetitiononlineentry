@@ -340,7 +340,7 @@ else {
 if ($go != "admin") echo $info_msg;
 ?>
 <form id="submit-form" role="form" class="form-horizontal hide-loader-form-submit needs-validation" action="<?php echo $form_action; ?>" method="POST" name="form1" novalidate>
-<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo $_SESSION['user_session_token']; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 
 <?php 
 include (PUB.'brewer_form_0.pub.php'); // Participant Info
@@ -376,7 +376,7 @@ if (($go != "entrant") && ($section != "step2")) include (PUB.'brewer_form_2.pub
     <div class="mb-3 mt-5 row">
         <div class="col-xs-12 col-sm-3 col-lg-2"></div>
         <div class="col-xs-12 col-sm-9 col-lg-10 d-grid">
-            <button name="submit" type="submit" class="btn btn-lg btn-primary <?php if ($disable_fields) echo "disabled"; ?>" ><?php echo $submit_text; ?><i class="ms-2 fa fa-fw fa-<?php echo $submit_icon; ?>"></i></button>
+            <button name="submit" type="submit" class="btn btn-lg btn-primary" ><?php echo $submit_text; ?><i class="ms-2 fa fa-fw fa-<?php echo $submit_icon; ?>"></i></button>
         </div>
     </div>
 </div>

@@ -25,13 +25,6 @@ if (function_exists('random_bytes')) $_SESSION['user_session_token'] = bin2hex(r
 elseif (function_exists('mcrypt_create_iv')) $_SESSION['user_session_token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
 else $_SESSION['user_session_token'] = bin2hex(openssl_random_pseudo_bytes(32));
 
-/*
-if (function_exists('random_bytes')) $cookie_token = bin2hex(random_bytes(32));
-elseif (function_exists('mcrypt_create_iv')) $cookie_token = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
-else $cookie_token = bin2hex(openssl_random_pseudo_bytes(32));
-setcookie('user_csrf_token', $cookie_token, time() + (86400 * 30), '/');
-*/
-
 // Bootstrap layout containers
 if (($section == "admin") || ($view == "admin")) {
     $container_main = "container-fluid";
