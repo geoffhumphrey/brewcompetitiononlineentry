@@ -88,7 +88,7 @@ if ($_SESSION['prefsContact'] == "Y") {
 
         <div id="message-container"></div>
 
-        <form id="contact-form" class="justify-content-center hide-loader-form-submit needs-validation" name="contact-form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" novalidate>
+        <form id="contact-form" class="justify-content-center hide-loader-form-submit needs-validation" name="contact-form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&section=contact-pub&action=email" novalidate>
 
             <input type="text" name="website" class="pooh-bear" tabindex="-1" autocomplete="off">
             <input type="hidden" name="form_token" id="form_token" value="">

@@ -49,6 +49,8 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
                 <input type="checkbox" name="brewerJudgeRank[]" value="Beer Sommelier" <?php if (($action == "edit") && in_array("Beer Sommelier",$judge_array)) echo "CHECKED"; ?>>Beer Sommelier<br />
                 <input type="checkbox" name="brewerJudgeRank[]" value="Certified Cicerone" <?php if (($action == "edit") && in_array("Certified Cicerone",$judge_array)) echo "CHECKED"; ?>>Certified Cicerone<br />
                 <input type="checkbox" name="brewerJudgeRank[]" value="Master Cicerone" <?php if (($action == "edit") && in_array("Master Cicerone",$judge_array)) echo "CHECKED"; ?>>Master Cicerone<br />
+                <input type="checkbox" name="brewerJudgeRank[]" value="Certified Cider Guide" <?php if (($action == "edit") && in_array("Certified Cider Guide",$judge_array)) echo "CHECKED"; ?>>Certified Cider Guide<br />
+                <input type="checkbox" name="brewerJudgeRank[]" value="Certified Pommelier" <?php if (($action == "edit") && in_array("Certified Pommelier",$judge_array)) echo "CHECKED"; ?>>Certified Pommelier<br />
                 <input type="checkbox" name="brewerJudgeRank[]" value="Judge with Sensory Training" <?php if (($action == "edit") && in_array("Judge with Sensory Training",$judge_array)) echo "CHECKED"; ?>>Judge with Sensory Training
 				<br /><em>* Only the first two checked will appear on your Judge Scoresheet Labels</em></td>
             </tr>

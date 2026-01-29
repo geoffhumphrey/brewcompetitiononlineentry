@@ -857,6 +857,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$rank = bjcp_rank($bjcp_rank[0],2);
 				if (((strpos($rank, "Non-BJCP Judge") !== false)) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $rank = "BJCP Cider or Mead Judge";
 				$mead = "";
+				$cider = "";
 				$pro = "";
 				$cert_cicerone = "";
 				$adv_cicerone = "";
@@ -868,11 +869,14 @@ if (isset($_SESSION['loginUsername'])) {
 				$rank .= strtoupper($judge_id);
 
 				if ($row_brewer['brewerJudgeMead'] == "Y") $mead = "Certified Mead Judge";
-				if ($row_brewer['brewerJudgeMCider'] == "Y") $cider = "Certified Cider Judge";
+				if (in_array("Certified Cider Guide", $bjcp_rank)) $cider = "Certified Cider Guide";
+	    		if (in_array("Certified Pommelier", $bjcp_rank)) $cider = "Certified Pommelier";
+				if ($row_brewer['brewerJudgeCider'] == "Y") $cider = "Certified Cider Judge";
 				if (in_array("Professional Brewer", $bjcp_rank)) $pro = "Professional Brewer";
 				if (in_array("Certified Cicerone", $bjcp_rank)) $cert_cicerone = "Certified Cicerone";
 				if (in_array("Advanced Cicerone", $bjcp_rank)) $adv_cicerone = "Advanced Cicerone";
 				if (in_array("Master Cicerone", $bjcp_rank)) $mast_cicerone = "Master Cicerone";
+				
 
 				$cicerone = array();
 				$other = array();
@@ -1097,6 +1101,8 @@ if (isset($_SESSION['loginUsername'])) {
 		$rank .= strtoupper($judge_id);
 
 		if ($row_brewer['brewerJudgeMead'] == "Y") $mead = "Certified Mead Judge";
+		if (in_array("Certified Cider Guide", $bjcp_rank)) $cider = "Certified Cider Guide";
+	    if (in_array("Certified Pommelier", $bjcp_rank)) $cider = "Certified Pommelier";
 		if ($row_brewer['brewerCiderMead'] == "Y") $cider = "Certified Cider Judge";
 		if (in_array("Professional Brewer", $bjcp_rank)) $pro = "Professional Brewer";
 		if (in_array("Certified Cicerone", $bjcp_rank)) $cert_cicerone = "Certified Cicerone";

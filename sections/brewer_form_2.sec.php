@@ -176,6 +176,16 @@ if (!$entrant_type_brewery) {
                     </div>
                     <div class="checkbox">
                         <label>
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Certified Cider Guide" <?php if (($action == "edit") && in_array("Certified Cider Guide",$judge_array)) echo "CHECKED"; ?>> Certified Cider Guide
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Certified Pommelier" <?php if (($action == "edit") && in_array("Certified Pommelier",$judge_array)) echo "CHECKED"; ?>> Certified Pommelier
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
                             <input type="checkbox" name="brewerJudgeRank[]" value="Certified Cicerone" <?php if (($action == "edit") && in_array("Certified Cicerone",$judge_array)) echo "CHECKED"; ?>> Certified Cicerone
                         </label>
                     </div>

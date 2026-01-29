@@ -299,7 +299,7 @@ $(document).ready(function(){
     });
     <?php } ?>
 
-    if ((email_password_hash.length === 0) && (email_sending_enable == 0)) $("#change-email-password").show();
+    if (((email_password_hash.length === 0) && (email_sending_enable == 0)) || (email_sending_enable == 3)) $("#change-email-password").show();
     else $("#change-email-password").hide();
 
     $("#send-test-email-show").hide();

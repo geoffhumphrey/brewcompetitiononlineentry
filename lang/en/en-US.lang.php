@@ -670,7 +670,7 @@ $alert_text_080 = "Password incorrect.";
 $alert_text_081 = "Password accepted.";
 $alert_email_valid = "Email format is valid.";
 $alert_email_not_valid = "Email format is not valid.";
-$alert_email_in_use = "The email address you entered is already in use &ndash; you will not be able to complete registration using this email address. Perhaps you already registered using this email address? If so, please log in.";
+$alert_email_in_use = "The email address you entered is already in use &ndash; you will not be able to complete registration. <strong>Perhaps you already registered using this email address?</strong> If so, please log in.";
 $alert_email_not_in_use = "Congratulations! The email address you entered is not in use.";
 
 /**

@@ -139,7 +139,7 @@ if ($entry_window_open == 1) {
 
 	if ($logged_in) {
 
-		if (($section == "list") || ($sectino == "pay")) {
+		if (($section == "list") || ($section == "pay")) {
 
 		}
 

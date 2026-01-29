@@ -90,7 +90,7 @@ if ((isset($_SESSION['prefsSEF'])) && ($_SESSION['prefsSEF'] == "Y")) $sef = TRU
  */
 
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
-$bypass_token = array("login","logout","forgot","reset","paypal");
+$bypass_token = array("login","logout","forgot","reset","paypal","register","contact-pub");
 
 if (($request_method === "POST") && (!in_array($section,$bypass_token))) {
 

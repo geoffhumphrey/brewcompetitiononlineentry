@@ -125,7 +125,7 @@ if ($action == "edit") $form_url .= "&amp;id=".$id;
 			<span class="input-group-addon" id="contactEmail-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
-		<span id="helpBlock" class="help-block">Email addresses are <strong>not</strong> displayed. Used only for contact purposes via the site&rsquo;s <a href="<?php echo $base_url; ?>index.php?section=contact">contact form</a>.</span>
+		<span id="helpBlock" class="help-block">Email addresses are <strong>not</strong> displayed. Used only for contact purposes via the site&rsquo;s <a href="<?php echo $base_url; ?>#contact">contact form</a>.</span>
 	</div>
 </div><!-- ./Form Group -->
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=contacts","default",$msg,$id); ?>">

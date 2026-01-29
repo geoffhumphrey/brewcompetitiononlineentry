@@ -2334,52 +2334,86 @@ function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebre
 }
 
 function bjcp_rank($rank,$method) {
+	
 	if ($method == "1") {
+		
 		switch($rank) {
+
+			case "Experienced": 
+			$return = "Level 0:"; 
+			break;
+			
 			case "Apprentice":
 			case "Provisional":
 			case "Rank Pending":
-			$return = "Level 1:"; break;
-			case "Recognized": $return = "Level 2:"; break;
-			case "Certified": $return = "Level 3:"; break;
-			case "Certified Cicerone":
-			case "National":
-			$return = "Level 4:"; break;
-			case "Master Cicerone":
-			case "Master": 
-			$return = "Level 5:"; break;
-			case "Grand Master": $return = "Level 6:"; break;
-			case "Honorary Master": $return = "Level 5:"; break;
-			case "Honorary Grand Master": $return = "Level 6:"; break;
-			case "Experienced": $return = "Level 0:"; break;
+			$return = "Level 1:"; 
+			break;
+			
+			case "Recognized": 
 			case "Professional Brewer":
 			case "Beer Sommelier":
 			case "Judge with Sensory Training":
-			$return = "Level 2:"; break;
-			case "Mead Judge": $return = "Level 3:"; break;
-			case "Cider Judge": $return = "Level 3:"; break;
-			default: $return = "Level 0:";
+			$return = "Level 2:"; 
+			break;
+
+			case "Certified": 
+			case "Certified Cider Guide":
+			case "Mead Judge":
+			case "Cider Judge": 
+			$return = "Level 3:"; 
+			break;
+			
+			case "National":
+			case "Certified Cicerone":
+			case "Certified Pommelier":
+			$return = "Level 4:"; 
+			break;
+			
+			case "Master":
+			case "Honorary Master":
+			case "Master Cicerone":
+			$return = "Level 5:"; 
+			break;
+			
+			case "Grand Master": 
+			case "Honorary Grand Master":
+			$return = "Level 6:"; 
+			break;
+
+			default: 
+			$return = "Level 0:";
+		
 		}
-	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
-	else $return .= " Non-BJCP Judge";
+
+		if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
+		else $return .= " Non-BJCP Judge";
+	
 	}
 
 	if ($method == "2") {
+		
 		switch($rank) {
 			case "None":
 			case "":
 			case "Novice";
 			case "Non-BJCP";
 			case "Experienced":
-			$return = "Non-BJCP Judge"; break;
+			$return = "Non-BJCP Judge"; 
+			break;
+			
 			case "Professional Brewer":
 			case "Beer Sommelier":
 			case "Certified Cicerone":
 			case "Master Cicerone":
 			case "Judge with Sensory Training":
-			$return = $rank; break;
-			default: $return = "BJCP ".$rank." Judge";
+			$return = $rank; 
+			break;
+			
+			default: 
+			$return = "BJCP ".$rank." Judge";
+		
 		}
+
 	}
 
 	return $return;

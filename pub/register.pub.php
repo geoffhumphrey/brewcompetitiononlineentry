@@ -966,6 +966,14 @@ if ($go == "default") {  ?>
                 <label class="form-check-label">Professional Cider Maker</label>
             </div>
             <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="brewerJudgeRank[]" value="Certified Cider Guide">
+                <label class="form-check-label">Certified Cider Guide</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="brewerJudgeRank[]" value="Certified Pommelier">
+                <label class="form-check-label">Certified Pommelier</label>
+            </div>
+            <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="brewerJudgeRank[]" value="Certified Cicerone">
                 <label class="form-check-label">Certified Cicerone</label>
             </div>

@@ -156,6 +156,14 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                     <label class="form-check-label">Professional Cider Maker</label>
                 </div>
                 <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="brewerJudgeRank[]" value="Certified Cider Guide" <?php if (($action == "edit") && in_array("Certified Cider Guide",$judge_array)) echo "CHECKED"; ?>>
+                    <label class="form-check-label">Certified Cider Guide</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="brewerJudgeRank[]" value="Certified Pommelier" <?php if (($action == "edit") && in_array("Certified Pommelier",$judge_array)) echo "CHECKED"; ?>>
+                    <label class="form-check-label">Certified Pommelier</label>
+                </div>
+                <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" name="brewerJudgeRank[]" value="Certified Cicerone" <?php if (($action == "edit") && in_array("Certified Cicerone",$judge_array)) echo "CHECKED"; ?>>
                     <label class="form-check-label">Certified Cicerone</label>
                 </div>

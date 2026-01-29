@@ -139,7 +139,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$message .= $table_assignments;
 					$message .= "</tbody>";
 					$message .= "</table>";
-					$message .= sprintf("<p>If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">please contact</a> the appropriate competition official.</p>",$base_url."index.php?section=contact");
+					$message .= sprintf("<p>If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">please contact</a> the appropriate competition official.</p>",$base_url."#contact");
 					$message .= "<p>Cheers,</p>";
 					$message .= "<p>".$row_organizer['brewerFirstName']." ".$row_organizer['brewerLastName'].", Organizer";
 					$message .= sprintf("<br><a href=\"%s\">%s</a></p>",$base_url,$_SESSION['contestName']);
