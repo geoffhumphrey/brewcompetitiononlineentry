@@ -2077,7 +2077,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div>
-                            <!-- 
+                            
                             
                             <?php if ($totalRows_tables > 0) { ?>
                             <div class="row">
@@ -2091,6 +2091,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div>
+                            <!-- 
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Medal Labels (Round)</strong>
@@ -2101,9 +2102,10 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div>
+                            -->
                             <?php } ?>
 
-                            -->
+                            
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Address Labels</strong>

@@ -16,16 +16,13 @@ if (($section == "admin") && (($go == "default") || ($go == "judging_tables"))) 
 ?>
 <div class="bcoem-admin-element hidden-print">
   <?php if (($section == "admin") && ($go == "evaluation")) { ?>
-		<div style="margin-bottom: 15px;" class="row">
-      <div class="col col-sm-2">
-        <a class="btn btn-block btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores"><span class="fa fa-chevron-circle-left"></span> Manage Scores</a>
-      </div>
-      <div class="col col-sm-10">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#eval-import-modal">Import Judges' Score Data</button> <a href="#" data-toggle="popover" title="Importing Judges' Score Data" data-content="<p>Judge evaluation scores <strong>are not official</strong> until an Administrator imports <strong>matching consensus scores entered by two or more judges</strong> into the scores database. Access Admin Dashboard > Scoring > Manage Scores to view, edit, and/or delete official consensus scores." data-trigger="hover" data-placement="right" data-html="true"><i class="fa fa-lg fa-question-circle"></i></a>
-      </div>
+    <div class="btn-group" role="group">
+        <a role="button" class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores"><span class="fa fa-chevron-circle-left"></span> Manage Scores</a>
+        <button class="btn btn-default" data-toggle="modal" data-target="#eval-import-modal"><i class="fa fa-file-import"></i> Import Score Data</button>
+        <a role="button" href="#" data-toggle="popover" title="Importing Judges' Score Data" data-content="<p>Judge evaluation scores <strong>are not official</strong> until an Administrator imports <strong>matching consensus scores entered by two or more judges</strong> into the scores database. Access Admin Dashboard > Scoring > Manage Scores to view, edit, and/or delete official consensus scores." data-trigger="hover" data-placement="auto" data-html="true" data-container="body" class="btn btn-default"><i class="fa fa-question-circle"></i></a>
     </div>
   <?php } ?>
-    <div class="row">
+    <div class="row bcoem-admin-element">
       <div class="col col-sm-12">
         <div id="import-scores-status-div" class="alert alert-grey">
             <i id="import-scores-status-icon"></i> <span id="import-scores-status"></span>

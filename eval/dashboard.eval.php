@@ -998,20 +998,28 @@ $show_alerts = TRUE;
 if ((empty($total_evals_alert)) && (empty($places_alert)) && (empty($judge_score_disparity)) && (empty($assign_score_mismatch)) && (empty($dup_judge_evals_alert)) && (empty($single_evaluation)) && (empty($mini_bos_mismatch_alert))) $show_alerts = FALSE;
 
 // Counts Sidebar
-$status_sidebar = "";
 
-$status_sidebar .= "<div class=\"bcoem-admin-element\">";
-$status_sidebar .= "<button class=\"btn btn-dark btn-sm btn-block\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapse-add-eval\" aria-expanded=\"false\" aria-controls=\"collapse-add-eval\">Add an Evaluation on Behalf of Judge</button>";
+$sidebar_buttons = "";
+$sidebar_buttons .= "<button class=\"btn btn-dark btn-sm btn-block\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapse-add-eval\" aria-expanded=\"false\" aria-controls=\"collapse-add-eval\">Add an Evaluation on Behalf of Judge</button>";
 
-if ($show_alerts) $status_sidebar .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#all-alerts\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-chevron-down\"></i>Expand/Collapse Alerts</a>";
+if ($show_alerts) $sidebar_buttons .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#all-alerts\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-chevron-down\"></i>Expand/Collapse Alerts</a>";
 
 if ((!empty($latest_submitted_accordion)) || (!empty($latest_updated_accordion))) {
-	if (!empty($latest_submitted_accordion)) $status_sidebar .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-submitted\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>Expand/Collapse 20 Latest Submitted</a>";
-	if (!empty($latest_updated_accordion)) $status_sidebar .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-updated\" aria-expanded=\"false\" aria-controls=\"latest-updated\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>Expand/Collapse 20 Latest Updated</a>";
+	if (!empty($latest_submitted_accordion)) $sidebar_buttons .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-submitted\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>Expand/Collapse 20 Latest Submitted</a>";
+	if (!empty($latest_updated_accordion)) $sidebar_buttons .= "<a class=\"btn btn-dark btn-sm btn-block\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-updated\" aria-expanded=\"false\" aria-controls=\"latest-updated\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>Expand/Collapse 20 Latest Updated</a>";
 }
 
-$status_sidebar .= "</div>";
+$buttons_small_viewport = "";
+$buttons_small_viewport .= "<div class=\"bcoem-admin-element hidden-sm hidden-md hidden-lg\">";
+$buttons_small_viewport .= $sidebar_buttons;
+$buttons_small_viewport .= "<a href=\"#status-sidebar\" class=\"btn btn-dark btn-sm btn-block\" role=\"button\">View Status</a>";
+$buttons_small_viewport .= "</div>";
 
+$status_sidebar = "";
+$status_sidebar .= "<div class=\"bcoem-admin-element hidden-xs\">";
+$status_sidebar .= $sidebar_buttons;
+$status_sidebar .= "</div>";
+$status_sidebar .= "<a name=\"status-sidebar\"></a>";
 $status_sidebar .= "<div class=\"panel panel-info\">";
 $status_sidebar .= "<div class=\"panel-heading\">";
 
@@ -1108,11 +1116,12 @@ if (!$admin) $left_side .= $assignment_display;
 if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
 
 ?>
-
+<a name="top"></a>
 <div class="row">
 	<div class="col-xs-12 col-sm-6 col-md-9">
 		<?php 
 		include (EVALS.'import_scores.eval.php');
+		echo $buttons_small_viewport;
 		echo $left_side;
 		echo $admin_add_eval;
 		echo $table_assignment_entries;
