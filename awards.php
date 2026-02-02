@@ -209,7 +209,7 @@ if (($display_to_admin) || ($display_to_public)) {
 							
 					$slides_tables .= "</section>\n";
 
-					if (($go == "table-numbers") || ($go == "default")) {
+					if (($go == "table-numbers") || ($go == "table-name-only") || ($go == "default")) {
 						$order_by[] = array(
 							'id' => $row_tables['tableNumber'],
 							'table_name' => $row_tables['tableName'],

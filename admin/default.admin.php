@@ -528,7 +528,8 @@ const driverObjDashTour = driver({
                     <p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p>
                     <p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>
                     <p>Choose a presentation display method below.</p>
-                    <p><a class="btn btn-block btn-primary" href="<?php echo $base_url; ?>awards.php" target="_blank">By Table Number</a></p>
+                    <p><a class="btn btn-block btn-dark" href="<?php echo $base_url; ?>awards.php" target="_blank">By Table Number</a></p>
+                    <p><a class="btn btn-block btn-primary" href="<?php echo $base_url; ?>awards.php?go=table-name-only" target="_blank">By Table Number &ndash; Table/Medal Group Name Only</a></p>
                     <p><a class="btn btn-block btn-success" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-asc" target="_blank">By Table/Medal Group Entry Count - Ascending</a></p>
                     <p><a class="btn btn-block btn-info" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-desc" target="_blank">By Table/Medal Group Entry Count - Descending</a></p>
                 </div>
