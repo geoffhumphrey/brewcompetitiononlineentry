@@ -192,40 +192,52 @@ if (($action == "default") && ($filter == "default")) {
     $row_judge_avail = mysqli_fetch_array($judge_avail);
 
     $judge_availability = array();
-
-    do {
-
-        $judge_availability[] = $row_judge_avail['brewerJudgeLocation'];
-
-    } while($row_judge_avail = mysqli_fetch_array($judge_avail));
-
-    $judge_availability = implode(",",$judge_availability);
-    $judge_availability = explode(",",$judge_availability);
-
+    $steward_availability = array();
     $all_judge_loc_avail_assign_total = array();
+    $all_steward_loc_avail_assign_total = array();
+
+    if ($row_judge_avail) {
+
+        do {
+
+            $judge_availability[] = $row_judge_avail['brewerJudgeLocation'];
+
+        } while($row_judge_avail = mysqli_fetch_array($judge_avail));
+
+        $judge_availability = implode(",",$judge_availability);
+        $judge_availability = explode(",",$judge_availability);
+
+    }
+
+    
+
+    
 
     $query_steward_avail = sprintf("SELECT * FROM %s a, %s b WHERE a.brewerSteward='Y' AND b.staff_steward='1' AND a.uid = b.uid;",$prefix."brewer",$prefix."staff");
     $steward_avail = mysqli_query($connection,$query_steward_avail);
     $row_steward_avail = mysqli_fetch_array($steward_avail);
 
-    $steward_availability = array();
+    if ($row_steward_avail) {
 
-    do {
+        do {
 
-        $steward_availability[] = $row_steward_avail['brewerStewardLocation'];
+            $steward_availability[] = $row_steward_avail['brewerStewardLocation'];
 
-    } while($row_steward_avail = mysqli_fetch_array($steward_avail));
+        } while($row_steward_avail = mysqli_fetch_array($steward_avail));
 
-    $steward_availability = implode(",",$steward_availability);
-    $steward_availability = explode(",",$steward_availability);
+        $steward_availability = implode(",",$steward_availability);
+        $steward_availability = explode(",",$steward_availability);
 
-    $all_steward_loc_avail_assign_total = array();
+    }
+
 
     do {
 
         $loc_total = 0;
         $count_steward_avail = 0;
         $count_judge_avail = 0;
+        $judge_difference = 0;
+        $steward_difference = 0;
 
         if (($row_judging) && ($row_judging['judgingLocType'] < 2)) {
             if ($row_judging) $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']);
@@ -1450,7 +1462,7 @@ function update_table_total(element_id) {
         <label for="tableStyles" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style(s)</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <?php
-		if ($row_entry_count['count'] > 0) { ?>
+		if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) || ($row_entry_count['count'] > 0)) { ?>
 			<table class="table table-responsive table-bordered small" id="sortable">
 				<thead>
 				<tr>
