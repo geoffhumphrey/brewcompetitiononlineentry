@@ -198,8 +198,7 @@ else {
 			$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$paypal_env."\" method=\"post\">\n";
 			$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
 			$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n";
-			if (TESTING) $page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n","noreply@brewingcompetitions.com");
-			else $page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n",$_SESSION['prefsPaypalAccount']);
+			$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n",$_SESSION['prefsPaypalAccount']);
 			if ($_SESSION['prefsProEdition'] == 1) $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s - %s - %s\">\n",$_SESSION['brewerBreweryName'],remove_accents($_SESSION['contestName']),$paypal_response_text_009);
 			else $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s - %s\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],remove_accents($_SESSION['contestName']),$paypal_response_text_009);
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"amount\" value=\"%s\">\n",$payment_amount);

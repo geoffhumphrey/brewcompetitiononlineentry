@@ -77,6 +77,49 @@ if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimi
     }
 }
 
+// Check if style limits by Medal Category or Table are in place.
+// If so, display.
+$entry_limits_by_medal_category = "";
+if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimits']) == 1) && (is_numeric($_SESSION['prefsStyleLimits']))) {
+
+	$query_tables = sprintf("SELECT * FROM %s WHERE tableEntryLimit IS NOT NULL ORDER BY tableName ASC",$prefix."judging_tables");
+	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
+	$row_tables = mysqli_fetch_assoc($tables);
+	$totalRows_tables = mysqli_num_rows($tables);
+
+	if ($totalRows_tables > 0) {
+		
+		do {
+
+			$medal_cat_styles = "<ul class=\"list-inline m-0 p-0\">";
+
+			$a = explode(",", $row_tables['tableStyles']);
+
+			foreach ($a as $value) {
+				
+				$query_style = sprintf("SELECT brewStyle,brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
+				$style = mysqli_query($connection,$query_style);
+				$row_style = mysqli_fetch_assoc($style);
+
+				if ($row_styles) {
+					$medal_cat_styles .= "<li class=\"list-inline-item\">";
+					$medal_cat_styles .= $row_style['brewStyle'];
+					$medal_cat_styles .= "<span class=\"fw-light ms-1\">(".style_number_const($row_style['brewStyleGroup'],$row_style['brewStyleNum'],$_SESSION['style_set_display_separator'],0).")</span>";
+					$medal_cat_styles .= "</li>";
+				}
+
+			}
+
+			$medal_cat_styles .= "</ul>";
+
+			$entry_limits_by_medal_category .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$row_tables['tableName'],$medal_cat_styles,$row_tables['tableEntryLimit']);
+		
+		} while ($row_tables = mysqli_fetch_assoc($tables));
+
+	}
+
+}
+
 $contestRulesJSON = json_decode($row_contest_info['contestRules'],true);
 
 // Registration Window
@@ -112,7 +155,8 @@ if ($show_entries) {
 		$page_info4 .= "</p>";
 
 		// Entry Limits
-		if ((!empty($row_limits['prefsEntryLimit'])) || (!empty($row_limits['prefsEntryLimitPaid'])) || (!empty($style_type_limits_display)) || (!empty($entry_limits_by_style))) {
+		// Overall Entry Limit or Entry Limits by Style or Medal Category
+		if ((!empty($row_limits['prefsEntryLimit'])) || (!empty($row_limits['prefsEntryLimitPaid'])) || (!empty($entry_limits_by_medal_category)) || (!empty($style_type_limits_display)) || (!empty($entry_limits_by_style))) {
 
 			$anchor_links[] = $label_entry_limit;
 			$anchor_name = str_replace(" ", "-", $label_entry_limit);
@@ -160,6 +204,22 @@ if ($show_entries) {
 				$page_info5 .= $entry_limits_by_style;
 				$page_info5 .= "</tbody>";
 				$page_info5 .= "</table>";
+			}
+
+			if (!empty($entry_limits_by_medal_category)) {
+
+				$page_info5 .= "<h3>Entry Limits by Medal Category</h3>";
+				$page_info5 .= "<table class='table table-bordered border-dark-subtle'>";
+				$page_info5 .= "<thead class='table-dark'>";
+				$page_info5 .= sprintf("<tr><th width='%s'>%s</th><th width='%s'>%s %s</th><th>%s</th>","30%",$label_medal_category,"50%",$_SESSION['style_set_short_name'],$label_admin_styles,$label_limit);
+				$page_info5 .= "</thead>";
+				$page_info5 .= "<tbody>";
+
+				$page_info5 .= $entry_limits_by_medal_category;
+				
+				$page_info5 .= "</tbody>";
+				$page_info5 .= "</table>";
+
 			}
 			
 		}
