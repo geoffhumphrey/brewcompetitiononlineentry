@@ -1461,8 +1461,7 @@ function update_table_total(element_id) {
     <div class="form-group">
         <label for="tableStyles" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style(s)</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <?php
-		if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) || ($row_entry_count['count'] > 0)) { ?>
+        <?php if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) || ($row_entry_count['count'] > 0)) { ?>
 			<table class="table table-responsive table-bordered small" id="sortable">
 				<thead>
 				<tr>

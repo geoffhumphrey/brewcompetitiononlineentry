@@ -29,7 +29,7 @@ if ($_SESSION['prefsProEdition'] == 0) { ?>
     <div id="brewerClubsOther" class="mb-3 row">
         <label for="brewerClubsOther" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_club_enter; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="" pattern="[^%&\x22\x27]+">
+            <input class="form-control" name="brewerClubsOther" type="text" value="<?php if (($action == "edit") && ($club_other)) echo $row_brewer['brewerClubs']; ?>" placeholder="" pattern="[^%&\x22\x27]+">
             <div class="help-block">
                 <p><?php echo $brewer_text_046; ?></p>
             </div>

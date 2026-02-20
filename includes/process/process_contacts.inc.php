@@ -8,6 +8,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
 require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
+require (CLASSES.'is_email/is_email.php');
 $config_html_purifier = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config_html_purifier);
 
@@ -115,6 +116,17 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		    $redirect_go_to = sprintf("Location: %s", $redirect);
 		}
 
+		// Validate email
+		$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
+		
+		if (!empty($from_email)) {
+			if (!is_email($from_email)) {
+				$redirect = $base_url."index.php?msg=98";
+		    	$redirect = prep_redirect_link($redirect);
+		    	$redirect_go_to = sprintf("Location: %s", $redirect);
+			}
+		}
+
 		if ($_SESSION['prefsCAPTCHA'] == 1) {
 
 			$captcha_response = FALSE;
@@ -169,7 +181,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		}
 
-		elseif ($_SESSION['prefsCAPTCHA'] == 0) $captcha_success = TRUE;
+		if ($_SESSION['prefsCAPTCHA'] == 0) $captcha_success = TRUE;
 
 		if (!$captcha_success) {
 
@@ -198,7 +210,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$to_email = $row_contact['contactEmail'];
 			$to_email = mb_convert_encoding($to_email, "UTF-8");
 
-			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$from_name = sterilize(ucwords($_POST['from_name']));
@@ -218,8 +229,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			// Build the message
 			$message = "<html>" . "\r\n";
 			$message .= "<body>";
-			$message .= "<p>". $message_post. "</p>";
-			$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>** Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
+			$message .= "<p><small>------------- Begin Sender's Message -------------</small></p>";
+			$message .= "<p>".$message_post."</p>";
+			$message .= "<p><small>-------------- End Sender's Message --------------</small></p>";
+			
+			$message .= "<p>The following information is provided by the BCOE&M processing script. Significant effort has been applied to prevent SPAM, and appropriate security measures have been taken to validate and sanitize the sender's input.</p>";
+			$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
+				
+			if (HOSTED) {
+				$message .= "<p>*** Since this email originated from the ".$comp_name." website, a <a href='https://info.brewingcompetitions.com/hosting'>hosted BCOE&M installation</a> where you are <a href='".$base_url."#contact'>listed as a contact</a>, please <strong>DO NOT report this email as SPAM</strong> via your email client or other means &ndash; even if it does appear to be. Doing so may flag the originating email address (noreply@brewingcompetitions.com) as &quot;abusive,&quot; which will prevent any other system-generated emails from being sent for ALL hosted installations housed on brewingcompetitions.com. ***</p>";
+				$message .= "<p>If you have any questions, please <a href='mailto:admin@brewingcompetitions.com'>contact Geoff Humphrey</a>, developer of BCOE&M.</p>";
+			}
+
 			if (DEBUG || TESTING) $message .= "<p><small>Sent using phpMailer.</small></p>";
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";

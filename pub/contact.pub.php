@@ -122,7 +122,8 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="row mb-3">
                 <label for="from-email" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label3; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" placeholder="<?php echo $contact_text_008; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo $_COOKIE['from_email']; ?>" autocomplete="off" required>
+                    <input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" onchange="AjaxFunction(this.value);" placeholder="<?php echo $contact_text_008; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo $_COOKIE['from_email']; ?>" autocomplete="off" required>
+                    <div id="msg_email" class="mt-2"></div>
                     <div class="invalid-feedback"><?php echo $contact_text_008; ?></div>
                 </div>
             </div>

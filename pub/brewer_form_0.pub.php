@@ -174,7 +174,6 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
             </div>
         </div>
         <div>
-            <input class="display-d" type="radio" name="userQuestion" value="" style="display: none;">
             <div class="help-block invalid-feedback text-danger"></div>
         </div>
         <div class="mb-3 row">

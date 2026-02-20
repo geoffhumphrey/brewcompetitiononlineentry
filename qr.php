@@ -43,6 +43,8 @@ $header_output = $row_contest_info['contestName'];
 $theme = $css_url.$row_prefs['prefsTheme'].".min.css";
 $process_allowed = FALSE;
 
+$request_method = strtoupper($_SERVER['REQUEST_METHOD']);
+
 // Validate user input against password in DB
 if ($action == "password-check") {
 
