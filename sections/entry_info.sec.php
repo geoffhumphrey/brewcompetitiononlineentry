@@ -254,7 +254,7 @@ else {
 
 			else {
 				$location_link = "#";
-				$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
+				$location_tooltip = $entry_info_text_058;
 			}
 
 			if ($row_judging['judgingLocation'] != "") $page_info7 .= " <a href=\"".$location_link."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";

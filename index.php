@@ -177,6 +177,6 @@ else include (INCLUDES.'load_cdn_libraries_public.inc.php');
 if (($section == "admin") || ($admin != "default")) require ('index.legacy.php');
 else require ('index.pub.php');
 if (($section == "list") || ($section == "pay")) echo $pay_modal;
+mysqli_close($connection); 
 ?>
-
 </html>

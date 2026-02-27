@@ -45,7 +45,6 @@ if (($display_to_admin) || ($display_to_public)) {
 		"white" => "white.min.css",
 		"black" => "black.min.css",
 		"blue" => "moon.min.css",
-		"beige" => "beige.min.css"
 	);
 
 	$places = array(

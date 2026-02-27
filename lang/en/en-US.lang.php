@@ -2217,21 +2217,20 @@ $output_text_034 = "No BOS Judge points were be awarded since the total number o
 
 /**
  * ------------------------------------------
- * Version 3.1.0 Additions
+ * Version 3.0.1 Additions
  * ------------------------------------------
  */
 
 $label_medal_category = "Medal Category";
 $label_entry_limit_medal_category = "Entry Limits by Medal Category";
-
-
-/*
 $label_practice_session = "Practice Session";
 $label_practice_beer = "Practice Beer";
 $label_practice_cider = "Practice Cider";
 $label_practice_mead = "Practice Mead";
+$label_practice_entry = "Practice Entry";
 $label_scoresheet_practice = "Scoresheet Practice";
-*/
+
+$entry_info_text_058 = "Log in to view the location and its address, if available.";
 
 /**
  * ------------------------------------------

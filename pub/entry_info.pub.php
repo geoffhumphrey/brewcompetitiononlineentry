@@ -150,7 +150,7 @@ if ($show_entries) {
 		$header1_4 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_fees);
 		$page_info4 .= sprintf("<p>%s%s (%s) %s. ",$currency_symbol,number_format($_SESSION['contestEntryFee'],2),$currency_code,$entry_info_text_003);
 		if ($_SESSION['contestEntryFeeDiscount'] == "Y") $page_info4 .= sprintf("%s%s %s %s %s. ",$currency_symbol,number_format($_SESSION['contestEntryFee2'],2),$entry_info_text_013,addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum']),strtolower($label_entry));
-		if ($_SESSION['contestEntryCap'] != "") $page_info4 .= sprintf("%s%s %s ",$currency_symbol,number_format($_SESSION['contestEntryCap'],2),$entry_info_text_017);
+		if (!empty($_SESSION['contestEntryCap'])) $page_info4 .= sprintf("%s%s %s ",$currency_symbol,number_format($_SESSION['contestEntryCap'],2),$entry_info_text_017);
 		if (NHC) $page_info4 .= sprintf("%s%s %s",$currency_symbol,number_format($_SESSION['contestEntryFeePasswordNum'],2),$entry_info_text_018);
 		$page_info4 .= "</p>";
 
@@ -208,7 +208,7 @@ if ($show_entries) {
 
 			if (!empty($entry_limits_by_medal_category)) {
 
-				$page_info5 .= "<h3>Entry Limits by Medal Category</h3>";
+				$page_info5 .= sprintf("<h3>%s</h3>",$label_entry_limit_medal_category);
 				$page_info5 .= "<table class='table table-bordered border-dark-subtle'>";
 				$page_info5 .= "<thead class='table-dark'>";
 				$page_info5 .= sprintf("<tr><th width='%s'>%s</th><th width='%s'>%s %s</th><th>%s</th>","30%",$label_medal_category,"50%",$_SESSION['style_set_short_name'],$label_admin_styles,$label_limit);
@@ -346,9 +346,9 @@ else {
 
 			$page_info7 .= "<p>";
 
-			if ($row_judging['judgingLocName'] != "") $page_info7 .= "<strong>".$row_judging['judgingLocName']."</strong>";
+			if (!empty($row_judging['judgingLocName'])) $page_info7 .= "<strong>".$row_judging['judgingLocName']."</strong>";
 
-			if ($row_judging['judgingLocType'] == "0") {
+			if ($row_judging['judgingLocType'] == 0) {
 
 				if ($logged_in) {
 					$address = rtrim($row_judging['judgingLocation'],"&amp;KeepThis=true");
@@ -361,18 +361,18 @@ else {
 
 				else {
 					$location_link = "#";
-					$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
+					$location_tooltip = $entry_info_text_058;
 				}
 
-				if ($row_judging['judgingLocation'] != "") $page_info7 .= "<a href=\"".$location_link."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
+				if (!empty($row_judging['judgingLocation'])) $page_info7 .= "<a href=\"".$location_link."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
 
 			}
 
-			if ($row_judging['judgingDate'] != "") $page_info7 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+			if (!empty($row_judging['judgingDate'])) $page_info7 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 
-			if ($row_judging['judgingDateEnd'] != "") $page_info7 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+			if (!empty($row_judging['judgingDateEnd'])) $page_info7 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 
-			if ($row_judging['judgingLocType'] == "1") {
+			if ($row_judging['judgingLocType'] == 1) {
 				$page_info7 .= "<br><em><small>".$row_judging['judgingLocation']."</small></em>";
 			}
 
@@ -382,8 +382,52 @@ else {
 
 		}
 
+		if ($row_judging['judgingLocType'] == 2) {
+
+			$page_info16 .= "<p>";
+
+			if (!empty($row_judging['judgingLocName'])) $page_info16 .= "<strong>".$row_judging['judgingLocName']."</strong>";
+
+			if ($logged_in) {
+				$address = rtrim($row_judging['judgingLocation'],"&amp;KeepThis=true");
+				$address = str_replace(' ', '+', $address);
+				$driving = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+				$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+				$location_tooltip = "Map to ".$row_judging['judgingLocName'];
+				$page_info16 .= "<br>".$row_judging['judgingLocation'];
+			}
+
+			else {
+				$location_link = "#";
+				$location_tooltip = $entry_info_text_058;
+			}
+
+			if (!empty($row_judging['judgingLocation'])) $page_info16 .= "<a href=\"".$location_link."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
+
+			if (!empty($row_judging['judgingDate'])) $page_info16 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+
+			if (!empty($row_judging['judgingDateEnd'])) $page_info16 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+
+			if ($row_judging['judgingLocType'] == 1) {
+				$page_info16 .= "<br><em><small>".$row_judging['judgingLocation']."</small></em>";
+			}
+
+			if ((!empty($row_judging['judgingLocNotes'])) && ($logged_in)) $page_info16 .= "<br><small><em>".$row_judging['judgingLocNotes']."</em></small>";
+
+			$page_info16 .= "</p>";
+
+		}
+
 	} while ($row_judging = mysqli_fetch_assoc($judging));
 	
+}
+
+if (!empty($page_info16)) {
+
+	$anchor_links[] = $label_non_judging;
+	$anchor_name = str_replace(" ", "-", $label_non_judging);
+	$header1_16 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_non_judging);
+
 }
 
 // Categories Accepted
@@ -517,7 +561,7 @@ if ($show_entries) {
 		do {
 
 			$page_info11 .= "<p>";
-			if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a><span class=\"fa fa-sm fa-external-link ms-2\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
+			if (!empty($row_dropoff['dropLocationWebsite'])) $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a><span class=\"fa fa-sm fa-external-link ms-2\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
 			else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 			$page_info11 .= "<br />";
 			
@@ -537,11 +581,11 @@ if ($show_entries) {
 			$page_info11 .= "<br />";
 			$page_info11 .= $row_dropoff['dropLocationPhone'];
 			$page_info11 .= "<br />";
-			if ($row_dropoff['dropLocationNotes'] != "") $page_info11 .= sprintf("*<em>%s</em>",$row_dropoff['dropLocationNotes']);
+			if (!empty($row_dropoff['dropLocationNotes'])) $page_info11 .= sprintf("*<em>%s</em>",$row_dropoff['dropLocationNotes']);
 
 			$page_info11 .= "</p>";
 
-			if ($row_dropoff['dropLocationNotes'] != "") {
+			if (!empty($row_dropoff['dropLocationNotes'])) {
 
 				$address = rtrim($row_dropoff['dropLocation'],"&amp;KeepThis=true");
 				$address = str_replace(' ', '+', $address);
@@ -608,7 +652,7 @@ if (isset($_SESSION['contestAwardsLocName'])) {
 	$page_info14 .= "<p>";
 	$page_info14 .= sprintf("<strong>%s</strong>",$_SESSION['contestAwardsLocName']);
 
-	if ($_SESSION['contestAwardsLocation'] != "") {
+	if (!empty($_SESSION['contestAwardsLocation'])) {
 
 		$address = rtrim($_SESSION['contestAwardsLocation'],"&amp;KeepThis=true");
 		$address = str_replace(' ', '+', $address);
@@ -618,7 +662,7 @@ if (isset($_SESSION['contestAwardsLocName'])) {
 
 	}
 
-	if ($_SESSION['contestAwardsLocTime'] != "") $page_info14 .= sprintf("<br />%s",getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
+	if (!empty($_SESSION['contestAwardsLocTime'])) $page_info14 .= sprintf("<br />%s",getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
 	$page_info14 .= "</p>";
 	//$page_info14 .= $anchor_top;
 }
@@ -753,6 +797,12 @@ echo "</div>";
 echo "<div class=\"reveal-element\">";
 echo $header1_7;
 echo $page_info7;
+echo "</div>";
+
+// Display Non-Judging Dates
+echo "<div class=\"reveal-element\">";
+echo $header1_16;
+echo $page_info16;
 echo "</div>";
 
 // Display Best of Show

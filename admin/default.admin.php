@@ -527,11 +527,50 @@ const driverObjDashTour = driver({
                 <div class="modal-body">
                     <p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p>
                     <p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>
-                    <p>Choose a presentation display method below.</p>
-                    <p><a class="btn btn-block btn-dark" href="<?php echo $base_url; ?>awards.php" target="_blank">By Table Number</a></p>
-                    <p><a class="btn btn-block btn-primary" href="<?php echo $base_url; ?>awards.php?go=table-name-only" target="_blank">By Table Number &ndash; Table/Medal Group Name Only</a></p>
-                    <p><a class="btn btn-block btn-success" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-asc" target="_blank">By Table/Medal Group Entry Count - Ascending</a></p>
-                    <p><a class="btn btn-block btn-info" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-desc" target="_blank">By Table/Medal Group Entry Count - Descending</a></p>
+                    <p>Choose a presentation display method and associated theme below.</p>
+                    
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <td width="60%"><strong>Method</strong></td>
+                                <td><strong>Available Themes</strong></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>By Table Number</td>
+                                <td>
+                                    <a style="margin:0 10px 0 0; padding:0;" href="<?php echo $base_url; ?>awards.php" target="_blank">Light</a>
+                                    <a style="margin:0 10px 0 0; padding:0;" href="<?php echo $base_url; ?>awards.php?view=black" target="_blank">Dark</a>
+                                    <a style="margin:0; padding:0;" href="<?php echo $base_url; ?>awards.php?view=blue" target="_blank">Blue-Green</a>
+                                </td>  
+                            </tr>
+                            <tr>
+                                <td>By Table Number &ndash; Table/Medal Group Name Only</td>
+                                <td>
+                                    <a style="margin:0 10px 0 0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-name-only&amp;" target="_blank">Light</a>
+                                    <a style="margin:0 10px 0 0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-name-only&amp;view=black" target="_blank">Dark</a>
+                                    <a style="margin:0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-name-only&amp;view=blue" target="_blank">Blue-Green</a>
+                                </td>  
+                            </tr>
+                            <tr>
+                                <td>By Table/Medal Group Entry Count &ndash; Ascending</td>
+                                <td>
+                                    <a style="margin:0 10px 0 0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-asc" target="_blank">Light</a>
+                                    <a style="margin:0 10px 0 0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-asc&amp;view=black" target="_blank">Dark</a>
+                                    <a style="margin:0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-asc&amp;view=blue" target="_blank">Blue-Green</a>
+                                </td>  
+                            </tr>
+                            <tr>
+                                <td>By Table/Medal Group Entry Count &ndash; Descending</td>
+                                <td>
+                                    <a style="margin:0 10px 0 0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-desc" target="_blank">Light</a>
+                                    <a style="margin:0 10px 0 0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-desc&amp;view=black" target="_blank">Dark</a>
+                                    <a style="margin:0; padding:0;" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-desc&amp;view=blue" target="_blank">Blue-Green</a>
+                                </td>  
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

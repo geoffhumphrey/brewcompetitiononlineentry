@@ -1,5 +1,4 @@
 <?php
-
 /*
 if (HOSTED) $styles_db_table = "bcoem_shared_styles";
 else
@@ -77,7 +76,9 @@ $versions = array(
 	"2.7.2.0" => 27,
 	"2.8.0.0" => 28,
 	"2.8.1.0" => 29,
-	"3.0.0.0" => 30
+	"2.8.2.0" => 30,
+	"3.0.0.0" => 31,
+	"3.0.1.0" => 32
 );
 
 $pre_update_version_index = $versions[$row_pv['version']];
