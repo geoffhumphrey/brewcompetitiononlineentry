@@ -64,8 +64,6 @@ include (DB.'output_staff_points.db.php');
  * 
  */
 
-$total_entries_received = 18;
-
 $bos_alert = "";
 $st_running_total = 0;
 $beer_styles_total = 0;

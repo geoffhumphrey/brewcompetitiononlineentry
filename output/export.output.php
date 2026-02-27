@@ -2422,8 +2422,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
              * 
              */
 
-            $total_entries_received = 18;
-
             $bos_alert = "";
             $st_running_total = 0;
             $beer_styles_total = 0;
