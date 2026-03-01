@@ -2214,7 +2214,6 @@ $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\
 
 $output_text_034 = "No BOS Judge points were be awarded since the total number of entries judged was less than the minimum threshold of 30 set by the BJCP.";
 
-
 /**
  * ------------------------------------------
  * Version 3.0.1 Additions

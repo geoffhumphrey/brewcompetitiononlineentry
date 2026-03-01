@@ -2152,6 +2152,22 @@ $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\
 $output_text_034 = "Nebyly uděleny žádné body BOS Judge, protože celkový počet hodnocených přihlášek byl nižší než minimální hranice 30 stanovená BJCP.";
 
 /**
+ * ------------------------------------------
+ * Version 3.0.1 Additions
+ * ------------------------------------------
+ */
+
+$label_medal_category = "Kategorie medailí";
+$label_entry_limit_medal_category = "Limity přihlášek podle kategorie medailí";
+$label_practice_session = "Cvičná sekce";
+$label_practice_beer = "Cvičné pivo";
+$label_practice_cider = "Cvičný cider";
+$label_practice_mead = "Cvičná medovina";
+$label_practice_entry = "Cvičná přihláška";
+$label_scoresheet_practice = "Cvičný hodnotící list";
+$entry_info_text_058 = "Přihlaste se pro zobrazení místa a jeho adresy, pokud je k dispozici.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

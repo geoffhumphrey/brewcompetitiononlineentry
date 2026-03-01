@@ -2231,6 +2231,22 @@ $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\
 $output_text_034 = "No se otorgaron puntos BOS Judge, ya que el número total de participantes evaluados fue inferior al mínimo establecido por el BJCP, que es de 30.";
 
 /**
+ * ------------------------------------------
+ * Version 3.0.1 Additions
+ * ------------------------------------------
+ */
+
+$label_medal_category = "Categoría de medalla";
+$label_entry_limit_medal_category = "Límites de inscripción por categoría de medalla";
+$label_practice_session = "Sesión de práctica";
+$label_practice_beer = "Cerveza de práctica";
+$label_practice_cider = "Sidra de práctica";
+$label_practice_mead = "Hidromiel de práctica";
+$label_practice_entry = "Inscripción de práctica";
+$label_scoresheet_practice = "Práctica de hoja de puntuación";
+$entry_info_text_058 = "Inicie sesión para ver la ubicación y su dirección, si está disponible.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

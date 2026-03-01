@@ -2231,6 +2231,21 @@ $entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\
 
 $output_text_034 = "Aucun point BOS Judge n'a été attribué, car le nombre total d'inscriptions jugées était inférieur au seuil minimum de 30 fixé par le BJCP.";
 
+/**
+ * ------------------------------------------
+ * Version 3.0.1 Additions
+ * ------------------------------------------
+ */
+
+$label_medal_category = "Catégorie de médaille";
+$label_entry_limit_medal_category = "Limites d'inscriptions par catégorie de médaille";
+$label_practice_session = "Session d'entraînement";
+$label_practice_beer = "Bière d'entraînement";
+$label_practice_cider = "Cidre d'entraînement";
+$label_practice_mead = "Hydromel d'entraînement";
+$label_practice_entry = "Inscription d'entraînement";
+$label_scoresheet_practice = "Feuille de notation d'entraînement";
+$entry_info_text_058 = "Connectez-vous pour voir le lieu et son adresse, si disponible.";
 
 /**
  * ----------------------------------------------------------------------------------
