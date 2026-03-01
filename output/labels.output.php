@@ -18,6 +18,21 @@ $aabc = FALSE;
 if ($_SESSION['prefsStyleSet'] == "BA") $ba = TRUE;
 if ($_SESSION['prefsStyleSet'] == "AABC") $aabc = TRUE;
 
+function unique_multidim_array($array, $key) {
+    $temp_array = array();
+    $i = 0;
+    $key_array = array();
+    
+    foreach($array as $val) {
+        if (!in_array($val[$key], $key_array)) {
+            $key_array[$i] = $val[$key];
+            $temp_array[$i] = $val;
+        }
+        $i++;
+    }
+    return $temp_array;
+}
+
 /*
  * -------------------------------------------------------------------
  * Define a character limit for address labels. 
@@ -820,9 +835,9 @@ if (isset($_SESSION['loginUsername'])) {
 					if ($row_brewer['brewerCity'] != "Anytown") $brewerLocation = $row_brewer['brewerCity'].", ".$row_brewer['brewerState'];
 
 					$text = sprintf("\n%s\n%s\n%s",
-						$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
-						$brewerAssignment,
-						$brewerLocation
+						html_entity_decode($row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']),
+						html_entity_decode($brewerAssignment),
+						html_entity_decode($brewerLocation)
 					);
 
 					$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text); 
@@ -875,8 +890,7 @@ if (isset($_SESSION['loginUsername'])) {
 				if (in_array("Professional Brewer", $bjcp_rank)) $pro = "Professional Brewer";
 				if (in_array("Certified Cicerone", $bjcp_rank)) $cert_cicerone = "Certified Cicerone";
 				if (in_array("Advanced Cicerone", $bjcp_rank)) $adv_cicerone = "Advanced Cicerone";
-				if (in_array("Master Cicerone", $bjcp_rank)) $mast_cicerone = "Master Cicerone";
-				
+				if (in_array("Master Cicerone", $bjcp_rank)) $mast_cicerone = "Master Cicerone";			
 
 				$cicerone = array();
 				$other = array();
@@ -900,18 +914,18 @@ if (isset($_SESSION['loginUsername'])) {
 				$other_ranks = ltrim($other_ranks,", ");
 				$other_ranks = ltrim($other_ranks,",");
 
-				$first_name = $row_brewer['brewerFirstName'];
-				$last_name = $row_brewer['brewerLastName'];
+				$first_name = html_entity_decode($row_brewer['brewerFirstName']);
+				$last_name = html_entity_decode($row_brewer['brewerLastName']);
 
 				for($i=0; $i<$number_of_labels; $i++) {
 
 					if (!empty($other_ranks)) {
-						$text = sprintf("\n%s %s\n%s\n%s\n%s",
-						$first_name,
-						$last_name,
-						truncate($rank,$character_limit),
-						truncate($other_ranks,$character_limit),
-						strtolower($row_brewer['brewerEmail'])
+							$text = sprintf("\n%s %s\n%s\n%s\n%s",
+							$first_name,
+							$last_name,
+							truncate($rank,$character_limit),
+							truncate($other_ranks,$character_limit),
+							strtolower($row_brewer['brewerEmail'])
 						);
 					}
 
@@ -964,28 +978,37 @@ if (isset($_SESSION['loginUsername'])) {
 
 					if (in_array($row_brewer['uid'],$with_entries_array)) {
 
+						if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
+						
 						$user_entry_count1 = user_entry_count($row_brewer['uid'],$view);
 						$user_entry_count2 = explode("^",$user_entry_count1);
 
-						if ($user_entry_count2[0] == 1) $entry_count ="(". $user_entry_count2[0]." Entry)";
-						else $entry_count = "(".$user_entry_count2[0]." Entries)";
+						if ($user_entry_count2[0] == 1) $entry_count = $user_entry_count2[0]." Entry";
+						else $entry_count = $user_entry_count2[0]." Entries";
 
 						if ($view == "entry") $entries = $user_entry_count2[1];
 						else $entries = $user_entry_count2[2];
 
-						if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
+						if (!empty($brewer_country)) $last_line = $brewer_country."\nEntry #: ".truncate($entries,126);
+						else $last_line = "Entry #: ".truncate($entries,166);
 
-						if (!empty($brewer_country)) $last_line = $brewer_country."\n#: ".truncate($entries,126);
-						else $last_line = "#: ".truncate($entries,166);
+						$text = sprintf("\n%s %s\n%s\n%s",
+							"Entry Summary for",
+							html_entity_decode($row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']),
+							html_entity_decode($entry_count),
+							html_entity_decode($last_line)
+						);
 
-						$text = sprintf("\n%s %s\n%s\n%s, %s %s\n%s",
-							$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
-							$entry_count,
-							$row_brewer['brewerAddress'],
-							$row_brewer['brewerCity'],
-							$row_brewer['brewerState'],
-							$row_brewer['brewerZip'],
-							$last_line
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
+						$pdf->Add_Label($text);
+
+						$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
+							html_entity_decode($row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']),
+							html_entity_decode($row_brewer['brewerAddress']),
+							html_entity_decode($row_brewer['brewerCity']),
+							html_entity_decode($row_brewer['brewerState']),
+							html_entity_decode($row_brewer['brewerZip']),
+							html_entity_decode($brewer_country)
 						);
 
 						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
@@ -999,12 +1022,12 @@ if (isset($_SESSION['loginUsername'])) {
 					if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
 
 					$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
-					$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
-					$row_brewer['brewerAddress'],
-					$row_brewer['brewerCity'],
-					$row_brewer['brewerState'],
-					$row_brewer['brewerZip'],
-					$brewer_country
+						html_entity_decode($row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']),
+						html_entity_decode($row_brewer['brewerAddress']),
+						html_entity_decode($row_brewer['brewerCity']),
+						html_entity_decode($row_brewer['brewerState']),
+						html_entity_decode($row_brewer['brewerZip']),
+						html_entity_decode($brewer_country)
 					);
 
 					$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
@@ -1034,6 +1057,63 @@ if (isset($_SESSION['loginUsername'])) {
 			$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 			include (DB.'output_labels_awards.db.php');
+			ob_end_clean();
+			//$pdf->Output();
+			$pdf->Output($filename,'D');
+
+		}
+
+		if (($go == "judging_scores") && ($action == "awards") && ($filter == "address")) {
+
+			if ($psort == "3422") $pdf = new PDF_Label('3422');
+			else $pdf = new PDF_Label('5160');
+			$pdf->AddPage();
+			$pdf->SetFont('Arial','',9);
+
+			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Winner_Address_Labels";
+			if ($psort == "3422") $filename .= "_Avery3422";
+			else $filename .= "_Avery5160";
+			$filename .= ".pdf";
+			$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
+
+			$query_scores = sprintf("SELECT c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerCity, c.brewerState, c.brewerZip, c.brewerCountry, b.brewBrewerID, b.brewBrewerFirstName, b.brewBrewerLastName FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scorePlace IS NOT NULL) ORDER BY c.brewerLastName,c.brewerFirstName", $prefix."judging_scores", $prefix."brewing", $prefix."brewer");
+			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
+			$row_scores = mysqli_fetch_assoc($scores);
+			$totalRows_scores = mysqli_num_rows($scores);
+
+			$address_labels_winners = array();
+
+			do {
+
+				$address_labels_winners[] = array(
+					"brewBrewerID" => $row_scores['brewBrewerID'],
+					"brewerFirstName" => $row_scores['brewerFirstName'],
+					"brewerLastName" => $row_scores['brewerLastName'],
+					"brewerAddress" => $row_scores['brewerAddress'],
+					"brewerCity" => $row_scores['brewerCity'],
+					"brewerState" => $row_scores['brewerState'],
+					"brewerZip" => $row_scores['brewerZip'],
+					"brewerCountry" => $row_scores['brewerCountry']
+				);
+
+			} while($row_scores = mysqli_fetch_assoc($scores));
+
+			$address_labels_winners = unique_multidim_array($address_labels_winners,'brewBrewerID');
+
+			foreach ($address_labels_winners as $key => $value) {
+				if ($value['brewerCountry'] != "United States") $brewer_country = $value['brewerCountry']; else $brewer_country = "";
+				$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
+					html_entity_decode($value['brewerFirstName']." ".$value['brewerLastName']),
+					html_entity_decode($value['brewerAddress']),
+					html_entity_decode($value['brewerCity']),
+					html_entity_decode($value['brewerState']),
+					html_entity_decode($value['brewerZip']),
+					html_entity_decode($brewer_country)
+				);
+				$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
+				$pdf->Add_Label($text);
+			}
+
 			ob_end_clean();
 			//$pdf->Output();
 			$pdf->Output($filename,'D');
@@ -1073,8 +1153,8 @@ if (isset($_SESSION['loginUsername'])) {
 		$pdf->AddPage();
 		$pdf->SetFont('Arial','',8);
 
-		$first_name = $row_brewer['brewerFirstName'];
-		$last_name = $row_brewer['brewerLastName'];
+		$first_name = html_entity_decode($row_brewer['brewerFirstName']);
+		$last_name = html_entity_decode($row_brewer['brewerLastName']);
 
 		//echo $query_brewer;
 

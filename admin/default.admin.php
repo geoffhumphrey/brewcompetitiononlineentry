@@ -2152,6 +2152,11 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
+                                        <li>Winners</li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=address&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                        <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=judging_scores&amp;action=awards&amp;filter=address&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    </ul>
+                                    <ul class="list-inline">
                                         <li>All Participants</li>
                                         <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
                                         <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
