@@ -101,7 +101,7 @@ if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimi
 				$style = mysqli_query($connection,$query_style);
 				$row_style = mysqli_fetch_assoc($style);
 
-				if ($row_styles) {
+				if ($row_style) {
 					$medal_cat_styles .= "<li class=\"list-inline-item\">";
 					$medal_cat_styles .= $row_style['brewStyle'];
 					$medal_cat_styles .= "<span class=\"fw-light ms-1\">(".style_number_const($row_style['brewStyleGroup'],$row_style['brewStyleNum'],$_SESSION['style_set_display_separator'],0).")</span>";

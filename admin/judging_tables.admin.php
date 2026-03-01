@@ -1241,6 +1241,13 @@ else {
 }
 </style>
 <script type="text/javascript">
+
+var tables_planning_mode = "<?php if ((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) echo "true"; else echo "false"; ?>";
+
+if (!tables_planning_mode) {
+    $("#add-table-submit").prop('disabled', true);
+}
+
 function update_table_total(element_id) {
 
     // Get current total value
@@ -1275,12 +1282,16 @@ function update_table_total(element_id) {
 
     }
 
-    if (overall_total == 0) {
-        $("#add-table-submit").prop('disabled', true);
-    }
+    if (!tables_planning_mode) {
 
-    if (overall_total > 0) {
-        $("#add-table-submit").removeAttr('disabled');
+        if (overall_total == 0) {
+            $("#add-table-submit").prop('disabled', true);
+        }
+
+        if (overall_total > 0) {
+            $("#add-table-submit").prop('disabled', false);
+        }
+
     }
 
 }  
@@ -1356,7 +1367,7 @@ function update_table_total(element_id) {
     <div class="form-group">
         <label for="tableStyles" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Available Style(s)</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <?php if ($row_entry_count['count'] > 0) { ?>
+        <?php if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) || ($row_entry_count['count'] > 0)) { ?>
 			<table class="table table-responsive table-bordered small" id="sortable">
 				<thead>
 				<tr>
@@ -1385,7 +1396,7 @@ function update_table_total(element_id) {
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input id="add-table-submit" type="submit" class="btn btn-primary" value="Add Table" disabled>
+			<input id="add-table-submit" type="submit" class="btn btn-primary" value="Add Table">
 		</div>
 	</div>
 </div>
@@ -1449,7 +1460,7 @@ function update_table_total(element_id) {
         </select>
         </div>
     </div>
-    <?php if (($_SESSION['jPrefsTablePlanning'] == 1) && ($limits_by_table)) { ?>
+    <?php if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) && ($limits_by_table)) { ?>
     <div class="form-group">
         <label for="tableEntryLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Total Entry Limit</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
