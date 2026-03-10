@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Create a report to help us improve
-title: 'Version 2.X.X: '
+title: 'Version 3.X.X: '
 labels: ''
 assignees: ''
 
