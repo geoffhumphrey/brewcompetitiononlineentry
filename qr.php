@@ -20,11 +20,7 @@ $totalRows_prefs = mysqli_num_rows($prefs);
 
 $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
 
-if (($action != "update") && ($action != "password-check")) {
-	if (function_exists('random_bytes')) $_SESSION['user_session_token'] = bin2hex(random_bytes(32));
-	elseif (function_exists('mcrypt_create_iv')) $_SESSION['user_session_token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
-	else $_SESSION['user_session_token'] = bin2hex(openssl_random_pseudo_bytes(32));
-}
+if (($action != "update") && ($action != "password-check")) csrf_token_generate(false);
 
 // Check if variation used (demarked with a dash)
 if (strpos($row_prefs['prefsLanguage'], '-') !== FALSE) {
@@ -94,6 +90,7 @@ if ($action == "password-check") {
 				if ($check == 1) {
 					$password_redirect .= "&msg=2";
 					$_SESSION['qrPasswordOK'] = $password;
+					csrf_token_generate(true);
 				}
 
 				// If not successful, destroy session and redirect

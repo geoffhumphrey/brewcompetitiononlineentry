@@ -12,18 +12,12 @@ if ((TESTING) || (DEBUG)) {
 if (DEBUG) include (DEBUGGING.'query_count_begin.debug.php');
 
 /**
- * Generate a CSRF token on every page load.
- * This will be used to prevent cross-site request forgeries
- * when processing form data.
- * First check for php 7 compatible random_bytes.
- * If not, use mcrypt_create_iv (deprecated in php 7.1 removed in 7.2)
- * If that's not available, default to openssl_random_pseudo_bytes.
+ * Ensure a CSRF token exists for form processing.
+ * Keep the current token for normal page loads so open forms in other tabs
+ * remain valid. Rotate only on explicit auth transitions.
  */
 
-unset($_SESSION['user_session_token']);
-if (function_exists('random_bytes')) $_SESSION['user_session_token'] = bin2hex(random_bytes(32));
-elseif (function_exists('mcrypt_create_iv')) $_SESSION['user_session_token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
-else $_SESSION['user_session_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+csrf_token_generate(false);
 
 // Bootstrap layout containers
 if (($section == "admin") || ($view == "admin")) {
