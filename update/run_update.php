@@ -78,7 +78,8 @@ $versions = array(
 	"2.8.1.0" => 29,
 	"2.8.2.0" => 30,
 	"3.0.0.0" => 31,
-	"3.0.1.0" => 32
+	"3.0.1.0" => 32,
+	"3.0.2.0" => 33
 );
 
 $pre_update_version_index = $versions[$row_pv['version']];
