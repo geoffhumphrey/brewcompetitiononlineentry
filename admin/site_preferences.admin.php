@@ -895,59 +895,6 @@ $(document).ready(function(){
     <div class="help-block">This theme is only for the Administration side of the application. Public themes will be available in future releases.</div>
     </div>
 </div>
-<?php if (!HOSTED) { ?>
-<div class="form-group">
-    <label for="prefsSEF" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Search Engine Friendly URLs</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($row_prefs['prefsSEF'] == "Y") echo "CHECKED"; ?> />Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($row_prefs['prefsSEF'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>Disable
-            </label>
-        </div>
-        <div class="help-block">
-            <div class="btn-group" role="group" aria-label="SEFModal">
-                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#SEFModal">
-                   SEF URLs Info
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="SEFModal" tabindex="-1" role="dialog" aria-labelledby="SEFModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="entryFormModalLabel">SEF URLs Info</h4>
-            </div>
-            <div class="modal-body">
-                <p>Generally, this can be enabled for most installations. However, if your installation is experiencing multiple &ldquo;Page Not Found&rdquo;  errors (404), select &ldquo;Disable&rdquo; to turn off Search Engine Friendly (SEF) URLs.</p>
-                <p>If you enable this and receive 404 errors, <?php if ($section == "step3") echo "<strong>after setup has been completed</strong>, "; ?>navigate to the login screen at <a class="hide-loader" href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and &ldquo;turn off&rdquo;  this feature.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="prefsUseMods" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Custom Modules</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">            
-            <label class="radio-inline">
-                <input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($row_prefs['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Enable
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($row_prefs['prefsUseMods'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
-            </label>
-        </div>
-        <div class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</div>
-    </div>
-</div>
 <h4>Results</h4>
 <div class="form-group">
     <label for="prefsDisplayWinners" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Results Display</label>
@@ -1010,6 +957,59 @@ $(document).ready(function(){
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
+    </div>
+</div>
+<?php if (!HOSTED) { ?>
+<div class="form-group">
+    <label for="prefsSEF" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Search Engine Friendly URLs</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($row_prefs['prefsSEF'] == "Y") echo "CHECKED"; ?> />Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($row_prefs['prefsSEF'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>Disable
+            </label>
+        </div>
+        <div class="help-block">
+            <div class="btn-group" role="group" aria-label="SEFModal">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#SEFModal">
+                   SEF URLs Info
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="SEFModal" tabindex="-1" role="dialog" aria-labelledby="SEFModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="entryFormModalLabel">SEF URLs Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Generally, this can be enabled for most installations. However, if your installation is experiencing multiple &ldquo;Page Not Found&rdquo;  errors (404), select &ldquo;Disable&rdquo; to turn off Search Engine Friendly (SEF) URLs.</p>
+                <p>If you enable this and receive 404 errors, <?php if ($section == "step3") echo "<strong>after setup has been completed</strong>, "; ?>navigate to the login screen at <a class="hide-loader" href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and &ldquo;turn off&rdquo;  this feature.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsUseMods" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Custom Modules</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">            
+            <label class="radio-inline">
+                <input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($row_prefs['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($row_prefs['prefsUseMods'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <div class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</div>
     </div>
 </div>
 <h4>CAPTCHA</h4>

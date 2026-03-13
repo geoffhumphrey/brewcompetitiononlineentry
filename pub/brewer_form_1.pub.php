@@ -22,7 +22,8 @@ if ($_SESSION['prefsProEdition'] == 0) { ?>
             <optgroup label="<?php echo $label_select_club; ?>"></optgroup>
             <?php echo $club_options; ?>
         </select>
-        <span class="help-block"><?php echo $brewer_text_023; ?></span>
+        <div class="help-block"><?php echo $brewer_text_023; ?></div>
+        <?php if ($club_array_backup_flag) echo "<div class=\"help-block text-danger\"><strong>The up-to-date club list source was unavailable.</strong> The list in the drop-down above is from an archived source and may not be current.</div>"; ?>
         <?php echo $club_alert; ?>
         </div>
     </div>

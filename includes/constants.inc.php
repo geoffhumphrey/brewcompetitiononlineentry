@@ -66,27 +66,79 @@ $club_array_backup = array("1.090","#sovai","10 Paces Brewing","1000 IBUS","1337
  * GitHub to request a club be added to the list.
  */
 
+$club_array_backup_flag = FALSE;
+
 if ((!isset($_SESSION['club_array'])) || (!empty($_SESSION['club_array']))) {
 
-    $club_json_link = "https://brewingcompetitions.com/admin/lib/clubs.php";
-    $club_link_contents = @file_get_contents($club_json_link);
-    
-    if ($club_link_contents === false) {
-        $club_array = $club_array_backup;
+    // Establish a cache file in server temp directory
+    // Rewrite if over 3 hours old
+    $cache_file = sys_get_temp_dir() . '/clubs_cache.json';
+    $cache_ttl  = 43200; // 12 hours in seconds
+
+    // Function to convert js file into usable php array    
+    function fetch_clubs_js($url) {
+        
+        $json = @file_get_contents($url);
+        if ($json === false) return false;
+
+        // Strip the JS variable declaration, leaving only the JSON array
+        $json = preg_replace('/\/\*[\s\S]*?\*\//', '', $json);
+        $json = preg_replace('/^\s*\*[^\n]*\n/m', '', $json);
+        $json = preg_replace('/\/\/[^\n]*\n/', '', $json);
+        $json = preg_replace('/^const CLUBS\s*=\s*/', '', trim($json));
+        $json = rtrim($json, ';');
+
+        $decoded = json_decode($json, true);
+        return (is_array($decoded) && count($decoded) > 0) ? $json : false;
+
     }
 
-    else {
-        $club_json = file_get_contents($club_json_link);
-        $club_array = json_decode($club_json,true);
+    // Check if cache file exists and if it's last writing was 12+ hours ago
+    // If either fail, fetch js list of clubs
+    if ((!file_exists($cache_file) || (time() - filemtime($cache_file)) > $cache_ttl)) {
+
+        // Primary Clubs List Source: jsDelivr
+        $json = fetch_clubs_js('https://cdn.jsdelivr.net/gh/geoffhumphrey/homebrew-clubs-list@main/clubs.js');
+
+        // Secondary Clubs List Source: GitHub Pages
+        if ($json === false) {
+            $json = fetch_clubs_js('https://geoffhumphrey.github.io/homebrew-clubs-list/clubs.js');
+        }
+
+        // Tertiary Clubs List Source: local file
+        if ($json === false) {
+            $local = $base_url.'/js_includes/clubs.js';
+            $json = fetch_clubs_js($local);
+            $club_array_backup_flag = TRUE;
+        }
+
+        // Write to cache if any source succeeded
+        if ($json !== false) {
+            file_put_contents($cache_file, $json);
+        } else {
+            error_log('clubs.js: all sources failed to load.');
+        }
+
+    } else {
+        $json = file_get_contents($cache_file);
     }
- 
+
+    // Decode the json array
+    // If all other club list sources fail, use the club array backup
+    if ($json !== false) {
+        $club_array = json_decode($json, true);
+    } else {
+        $club_array = $club_array_backup;
+        $club_array_backup_flag = TRUE;
+    }
+
     if ((isset($_SESSION['contestClubs'])) && (!empty($_SESSION['contestClubs']))) {
         $club_additions = json_decode($_SESSION['contestClubs'],true);
         $club_array = array_merge($club_array,$club_additions);
-    }
+        asort($club_array);
+    }    
 
-    asort($club_array);
-
+    // Finally, create a session variable with all clubs for this user
     $_SESSION['club_array'] = $club_array;
 
 }
