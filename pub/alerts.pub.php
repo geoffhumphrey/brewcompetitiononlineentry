@@ -372,7 +372,7 @@ else {
     $stacked_alert_msg_warning .= "<p class=\"mb-1\">".$alert_text_064."</p>";
   }   
 
-  if (($shipping_window_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { 
+  if ((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open == 2) && ($_SESSION['prefsShipping'] == 1) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { 
     $stacked_alert_msg_warning .= "<p class=\"mb-1\">".$alert_text_067."</p>";
   }
 

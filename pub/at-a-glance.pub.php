@@ -225,41 +225,45 @@ else {
 }
 
 // Shipping Card
-if ($shipping_window_open == 1) {
+if ((isset($_SESSION['contestShippingAddress'])) && ($_SESSION['prefsShipping'] == 1)) {
 
-	$body_content = "<ul class=\"list-unstyled\">";
-	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$shipping_open_sidebar."</li>";
-	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$shipping_closed_sidebar."</li>";
-	$body_content .= "<li id=\"shipping-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"shipping-close-date\"></span></li>";
-	$body_content .= "</ul>";
+	if ($shipping_window_open == 1) {
 
-	$glance_shipping = array(
-		"color" => $glance_open_color,
-		"status" => $glance_pill_open_text,
-		"body-content" => $body_content,
-		"button1" => array(),
-		"button2" => array(),
-		"button-color" => $glance_open_color,
-	);
-	
-}
+		$body_content = "<ul class=\"list-unstyled\">";
+		$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$shipping_open_sidebar."</li>";
+		$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$shipping_closed_sidebar."</li>";
+		$body_content .= "<li id=\"shipping-close-date-item\"><i class=\"fa fa-clock me-1\"></i><span id=\"shipping-close-date\"></span></li>";
+		$body_content .= "</ul>";
 
-else {
+		$glance_shipping = array(
+			"color" => $glance_open_color,
+			"status" => $glance_pill_open_text,
+			"body-content" => $body_content,
+			"button1" => array(),
+			"button2" => array(),
+			"button-color" => $glance_open_color,
+		);
+		
+	}
 
-	$body_content = "<ul class=\"list-unstyled\">";
-	$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$shipping_open_sidebar."</li>";
-	if ($shipping_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"shipping-open-date\"></span></li>";
-	$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$shipping_closed_sidebar."</li>";
-	$body_content .= "</ul>";
-	
-	$glance_shipping = array(
-		"color" => $glance_closed_color,
-		"status" => $glance_pill_closed_text,
-		"body-content" => $body_content,
-		"button1" => array(),
-		"button2" => array(),
-		"button-color" => $glance_disabled_color,
-	);
+	else {
+
+		$body_content = "<ul class=\"list-unstyled\">";
+		$body_content .= "<li><strong>".$label_open."</strong> &ndash; ".$shipping_open_sidebar."</li>";
+		if ($shipping_window_open == 0) $body_content .= "<li><i class=\"fa fa-clock me-1\"></i><span id=\"shipping-open-date\"></span></li>";
+		$body_content .= "<li><strong>".$label_close."</strong> &ndash; ".$shipping_closed_sidebar."</li>";
+		$body_content .= "</ul>";
+		
+		$glance_shipping = array(
+			"color" => $glance_closed_color,
+			"status" => $glance_pill_closed_text,
+			"body-content" => $body_content,
+			"button1" => array(),
+			"button2" => array(),
+			"button-color" => $glance_disabled_color,
+		);
+
+	}
 
 }
 

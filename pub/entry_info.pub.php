@@ -523,7 +523,7 @@ if ($show_entries) {
 	}
 
 	// Shipping Locations
-	if (((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2)) && ($_SESSION['prefsShipping'] == 1)) {
+	if ((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2) && ($_SESSION['prefsShipping'] == 1)) {
 
 		if (!empty($shipping_open)) $entry_info_text_001 = "&mdash;";
 		
