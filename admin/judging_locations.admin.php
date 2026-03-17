@@ -274,16 +274,16 @@ if ($section != "step5") {
 				else $checked = "";
 
 				if ($filter == "bos") {
-						$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
-						if (!empty($bos_judge_eligible)) {
-							$places_earned = explode("|",$bos_judge_eligible);
-							$judge_places = "";
-							foreach ($places_earned as $places) {
-								$places_earned = explode("-",$places);
-								$judge_places .= display_place($places_earned[0],1).": Table ".$places_earned[1].", ";
-							}
-							$judge_places = rtrim($judge_places,", ");
+					$bos_judge_eligible = bos_judge_eligible($row_brewer['uid']);
+					if (!empty($bos_judge_eligible)) {
+						$places_earned = explode("|",$bos_judge_eligible);
+						$judge_places = "";
+						foreach ($places_earned as $places) {
+							$places_earned = explode("-",$places);
+							$judge_places .= display_place($places_earned[0],1).": Table ".$places_earned[1].", ";
 						}
+						$judge_places = rtrim($judge_places,", ");
+					}
 				}
 
 				if (($filter == "judges") || ($filter == "stewards") || ($filter == "staff")) {
@@ -299,7 +299,6 @@ if ($section != "step5") {
 	                if ($row_judging_loc3) {
 	                	do {
 	                	    $j_sess_arr[$row_judging_loc3['id']] = $row_judging_loc3['judgingLocName'];
-	                	    
 	                	} while ($row_judging_loc3 = mysqli_fetch_assoc($judging_loc3));
 	                }
 	                
@@ -371,7 +370,7 @@ if ($section != "step5") {
 				if ($filter == "staff") $staff_column = "staff_staff";
 				if ($filter == "bos") $staff_column = "staff_judge_bos";
 
-				$output_datatables_body .= sprintf("\n<div class=\"checkbox\"><label><input name=\"%s%s\" type=\"checkbox\" value=\"1\" id=\"assigned-%s\" %s %s onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('%s','%s','judging_staff','%s','%s','default','default','default','assigned-%s','value')\" /></label></div>\n",$staff_row_field,$row_brewer['uid'],$row_brewer['uid'],$checked,$checkbox_disabled,$ajax_url,$staff_column,$row_brewer['id'],$row_brewer['uid'],$row_brewer['uid']);
+				$output_datatables_body .= sprintf("\n<div class=\"checkbox\"><label><input name=\"%s%s\" type=\"checkbox\" value=\"1\" id=\"assigned-%s\" %s %s onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('%s','%s','judging_staff','%s','%s','default','default','default','assigned-%s','value')\" /></label></div>\n",$staff_row_field,$row_brewer['uid'],$row_brewer['uid'],$checked,$checkbox_disabled,$ajax_url,$staff_column,$row_brewer['uid'],$row_brewer['uid'],$row_brewer['uid']);
 
 				$output_datatables_body .= "</td>";
 				$output_datatables_body .= "<td>";
