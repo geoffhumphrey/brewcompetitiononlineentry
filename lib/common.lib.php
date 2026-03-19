@@ -11,6 +11,23 @@
 include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
+function csrf_token_generate($force_regenerate = false) {
+	if (
+		(!$force_regenerate) &&
+		(isset($_SESSION['user_session_token'])) &&
+		(is_string($_SESSION['user_session_token'])) &&
+		(preg_match('/^[a-f0-9]{64}$/i', $_SESSION['user_session_token']))
+	) {
+		return $_SESSION['user_session_token'];
+	}
+
+	if (function_exists('random_bytes')) $_SESSION['user_session_token'] = bin2hex(random_bytes(32));
+	elseif (function_exists('mcrypt_create_iv')) $_SESSION['user_session_token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+	else $_SESSION['user_session_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+
+	return $_SESSION['user_session_token'];
+}
+
 /** ------------------ VERSION CHECK ------------------
  * Change version in system table if does not match in DB
  * If there are NO database structure or data updates for the current version,

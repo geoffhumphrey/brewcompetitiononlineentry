@@ -405,6 +405,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					
 					unset($_SESSION['user_info'.$prefix_session]);
 					$_SESSION['loginUsername'] = $username;
+					csrf_token_generate(true);
 					$redirect = $base_url."index.php?section=list&msg=7";
 					$redirect = prep_redirect_link($redirect);
 					$redirect_go_to = sprintf("Location: %s", $redirect);			
