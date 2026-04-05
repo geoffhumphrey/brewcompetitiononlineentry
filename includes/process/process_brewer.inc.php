@@ -18,7 +18,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		// Check whether user is "authorized" to edit the entry in DB
 		$query_brewer_id = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerEmail FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);
-		$brewer_id = mysqli_query($connection,$query_brewer_id) or die (mysqli_error($connection));
+		$brewer_id = mysqli_query($connection,$query_brewer_id) or die("A database error occurred.");
 		$row_brewer_id = mysqli_fetch_assoc($brewer_id);
 
 		if ($id != $row_brewer_id['id']) {
@@ -62,7 +62,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		foreach($_POST['uid'] as $uid) {
 
 			$query_staff = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE uid='%s'",$prefix."staff",$uid);
-			$staff = mysqli_query($connection,$query_staff) or die (mysqli_error($connection));
+			$staff = mysqli_query($connection,$query_staff) or die("A database error occurred.");
 			$row_staff = mysqli_fetch_assoc($staff);
 
 			//echo $row_staff['count'];
@@ -115,7 +115,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					// Check to see if the participant is assigned to be a judge or steward in the judging_assignments table
 					$query_assign = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignment='J'",$uid);
-					$assign = mysqli_query($connection,$query_assign) or die (mysqli_error($connection));
+					$assign = mysqli_query($connection,$query_assign) or die("A database error occurred.");
 					$row_assign = mysqli_fetch_assoc($assign);
 					$totalRows_assign = mysqli_num_rows($assign);
 
@@ -186,7 +186,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					// Check to see if the participant is assigned to be a steward in the judging_assignments table
 					$query_assign = sprintf("SELECT id FROM $judging_assignments_db_table WHERE bid='%s' AND assignment='S'",$uid);
-					$assign = mysqli_query($connection,$query_assign) or die (mysqli_error($connection));
+					$assign = mysqli_query($connection,$query_assign) or die("A database error occurred.");
 					$row_assign = mysqli_fetch_assoc($assign);
 					$totalRows_assign = mysqli_num_rows($assign);
 
@@ -317,7 +317,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$uid = sterilize($_POST['staff_organizer']);
 
 			$query_org = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."staff", $uid);
-			$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
+			$org = mysqli_query($connection,$query_org) or die("A database error occurred.");
 			$row_org = mysqli_fetch_assoc($org);
 			$totalRows_org = mysqli_num_rows($org);
 			//echo $_POST['Organizer']."<br>";
@@ -421,10 +421,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "add") {
 
-		$query_user = sprintf("SELECT id FROM $users_db_table WHERE id = '%s'", $_POST['uid']);
-		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
-		$row_user = mysqli_fetch_assoc($user);
-		$totalRows_user = mysqli_num_rows($user);
+		$db_conn->where('id', sterilize($_POST['uid']));
+		$user_result = $db_conn->get($users_db_table, 1);
+		$totalRows_user = $db_conn->count;
+		$row_user = $user_result ? $user_result[0] : null;
 
 		$brewerEmail = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
 		$uid = sterilize($_POST['uid']);
@@ -488,7 +488,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				// Check to see if processed correctly.
 				$query_brewer_check = sprintf("SELECT COUNT(*) as 'count' FROM %s",$brewer_db_table);
-				$brewer_check = mysqli_query($connection,$query_brewer_check) or die (mysqli_error($connection));
+				$brewer_check = mysqli_query($connection,$query_brewer_check) or die("A database error occurred.");
 				$row_brewer_check = mysqli_fetch_assoc($brewer_check);
 
 				// If so, mark step as complete in system table and redirect to next step.
@@ -536,8 +536,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if ($brewerJudge == "N") {
 
-			$query_staff_assign = sprintf("SELECT id,uid,staff_judge FROM %s WHERE uid='%s'",$prefix."staff",$_POST['uid']);
-			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
+			$query_staff_assign = sprintf("SELECT id,uid,staff_judge FROM %s WHERE uid='%s'",$prefix."staff",mysqli_real_escape_string($connection,$uid));
+			$staff_assign = mysqli_query($connection,$query_staff_assign);
 			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
 			$totalRows_staff_assign = mysqli_num_rows($staff_assign);
 
@@ -561,8 +561,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			}
 
-			$query_table_assign = sprintf("SELECT id,bid,assignment FROM %s WHERE bid='%s'",$prefix."judging_assignments",$_POST['uid']);
-			$table_assign = mysqli_query($connection,$query_table_assign) or die (mysqli_error($connection));
+			$query_table_assign = sprintf("SELECT id,bid,assignment FROM %s WHERE bid='%s'",$prefix."judging_assignments",mysqli_real_escape_string($connection,$uid));
+			$table_assign = mysqli_query($connection,$query_table_assign);
 			$row_table_assign = mysqli_fetch_assoc($table_assign);
 			$totalRows_table_assign = mysqli_num_rows($table_assign);
 
@@ -590,8 +590,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if ($brewerSteward == "N") {
 
-			$query_staff_assign = sprintf("SELECT id,uid,staff_steward FROM %s WHERE uid='%s'",$prefix."staff",$_POST['uid']);
-			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
+			$query_staff_assign = sprintf("SELECT id,uid,staff_steward FROM %s WHERE uid='%s'",$prefix."staff",mysqli_real_escape_string($connection,$uid));
+			$staff_assign = mysqli_query($connection,$query_staff_assign);
 			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
 			$totalRows_staff_assign = mysqli_num_rows($staff_assign);
 
@@ -615,8 +615,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			}
 
-			$query_table_assign = sprintf("SELECT id,bid,assignment FROM %s WHERE bid='%s'",$prefix."judging_assignments",$_POST['uid']);
-			$table_assign = mysqli_query($connection,$query_table_assign) or die (mysqli_error($connection));
+			$query_table_assign = sprintf("SELECT id,bid,assignment FROM %s WHERE bid='%s'",$prefix."judging_assignments",mysqli_real_escape_string($connection,$uid));
+			$table_assign = mysqli_query($connection,$query_table_assign);
 			$row_table_assign = mysqli_fetch_assoc($table_assign);
 			$totalRows_table_assign = mysqli_num_rows($table_assign);
 

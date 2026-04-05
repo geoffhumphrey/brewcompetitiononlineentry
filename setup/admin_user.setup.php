@@ -47,7 +47,7 @@ foreach ($security_questions_display as $key => $value) {
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onchange="AjaxFunction(this.value);" value="<?php if ((isset($_COOKIE['user_name'])) && ($msg > 0)) echo $_COOKIE['user_name']; ?>" required>
+				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onchange="AjaxFunction(this.value);" value="<?php if ((isset($_COOKIE['user_name'])) && ($msg > 0)) echo htmlspecialchars($_COOKIE['user_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
 				<span class="input-group-addon" id="email-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span>
 			</div>
 			<div id="msg_email" class="help-block"></div>
@@ -61,7 +61,7 @@ foreach ($security_questions_display as $key => $value) {
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ((isset($_COOKIE['password'])) && ($msg > 0)) echo $_COOKIE['password']; ?>" required>
+				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ((isset($_COOKIE['password'])) && ($msg > 0)) echo htmlspecialchars($_COOKIE['password'], ENT_QUOTES, 'UTF-8'); ?>" required>
 				<span class="input-group-addon" id="password-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span>
 			</div>
 		</div>
@@ -90,7 +90,7 @@ foreach ($security_questions_display as $key => $value) {
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ((isset($_COOKIE['userQuestionAnswer'])) && ($msg > 0)) echo $_COOKIE['userQuestionAnswer']; ?>" required>
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ((isset($_COOKIE['userQuestionAnswer'])) && ($msg > 0)) echo htmlspecialchars($_COOKIE['userQuestionAnswer'], ENT_QUOTES, 'UTF-8'); ?>" required>
 				<span class="input-group-addon" id="security-question-answer-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span>
 			</div>
 		</div>
