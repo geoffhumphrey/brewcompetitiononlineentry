@@ -16,9 +16,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$sponsor_info = $purifier->purify(sterilize($_POST['sponsorText'.$id]));
 			if ($_POST['sponsorEnable'.$id] == 1) $enable = 1; else $enable = 0;
 			if (isset($_POST['sponsorImage'.$id])) $image = $purifier->purify($_POST['sponsorImage'.$id]); else $image = "";
-			$updateSQL = sprintf("UPDATE %s SET sponsorEnable='%s', sponsorLevel='%s', sponsorImage='%s', sponsorText='%s' WHERE id='%s'",$sponsors_db_table,$enable,$_POST['sponsorLevel'.$id],$image,$sponsor_info,$id);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$data = array(
+				'sponsorEnable' => $enable,
+				'sponsorLevel' => sterilize($_POST['sponsorLevel'.$id]),
+				'sponsorImage' => $image,
+				'sponsorText' => $sponsor_info
+			);
+			$db_conn->where('id', $id);
+			$result = $db_conn->update($sponsors_db_table, $data);
 		}
 
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=sponsors&msg=9";

@@ -15,7 +15,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// First, wipe out all previously recorded scores for the table
 		$deleteSQL = sprintf("DELETE FROM %s WHERE scoreTable='%s'", $judging_scores_db_table, $id);
 		mysqli_real_escape_string($connection,$deleteSQL);
-		$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+		$result = mysqli_query($connection,$deleteSQL) or die("A database error occurred.");
 
 		$update_table = $prefix."judging_scores";
 		$db_conn->where ('scoreTable', $id);
@@ -38,8 +38,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			else $scoreMiniBOS = 0;
 
 			// Second, get rid of any duplicates, just in case they're in there
-			$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", $_POST['eid'.$score_id]);
-			$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
+			$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", mysqli_real_escape_string($connection,sterilize($_POST['eid'.$score_id])));
+			$delete_assign = mysqli_query($connection,$query_delete_assign);
 			$row_delete_assign = mysqli_fetch_assoc($delete_assign);
 			$totalRows_delete_assign = mysqli_num_rows($delete_assign);
 

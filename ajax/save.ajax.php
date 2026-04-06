@@ -488,15 +488,11 @@ if ($action == "judging_assignments") {
 
 						$sql .= sprintf("UPDATE `%s` SET assignFlight='%s' WHERE bid='%s' AND assignTable='%s' AND assignRound='%s'", $prefix.$action, $_POST['assignFlight'], $id, $rid1, $rid3);
 
-						echo $sql."<br>";
-
 					}
 
 					// If the choice is NOT assign to current table, clear any records that may be there
 					if ($_POST['assignFlight'] == 0) {
 						$sql = sprintf("DELETE FROM `%s` WHERE bid='%s' AND assignTable='%s' AND assignRound='%s' AND assignFlight='%s'", $prefix.$action, $rid2, $id, $rid1, $rid3, $_POST['assignFlight']);
-
-						echo $sql."<br>";
 					}
 				
 				}

@@ -114,7 +114,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="row mb-3">
                 <label for="from-name" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label2; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <input id="from-name" class="form-control no-spam" name="from_name" type="text" size="35" placeholder="<?php echo $contact_text_007; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_name']))) echo $_COOKIE['from_name']; ?>" autocomplete="off" required>
+                    <input id="from-name" class="form-control no-spam" name="from_name" type="text" size="35" placeholder="<?php echo $contact_text_007; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_name']))) echo htmlspecialchars($_COOKIE['from_name'], ENT_QUOTES, 'UTF-8'); ?>" autocomplete="off" required>
                     <div class="invalid-feedback"><?php echo $contact_text_007; ?></div>
                 </div>
             </div>
@@ -122,7 +122,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="row mb-3">
                 <label for="from-email" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label3; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" onchange="AjaxFunction(this.value);" placeholder="<?php echo $contact_text_008; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo $_COOKIE['from_email']; ?>" autocomplete="off" required>
+                    <input id="from-email" class="form-control no-spam" name="from_email" type="email" size="35" onchange="AjaxFunction(this.value);" placeholder="<?php echo $contact_text_008; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['from_email']))) echo htmlspecialchars($_COOKIE['from_email'], ENT_QUOTES, 'UTF-8'); ?>" autocomplete="off" required>
                     <div id="msg_email" class="mt-2"></div>
                     <div class="invalid-feedback"><?php echo $contact_text_008; ?></div>
                 </div>
@@ -131,7 +131,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="row mb-3">
                 <label for="subject" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label4; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <input id="subject" class="form-control no-spam" name="subject" type="text" placeholder="<?php echo $contact_text_009; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['subject']))) echo $_COOKIE['subject']; ?>" autocomplete="off" required> 
+                    <input id="subject" class="form-control no-spam" name="subject" type="text" placeholder="<?php echo $contact_text_009; ?>" value="<?php if (($msg == "2") && (isset($_COOKIE['subject']))) echo htmlspecialchars($_COOKIE['subject'], ENT_QUOTES, 'UTF-8'); ?>" autocomplete="off" required> 
                     <div class="invalid-feedback"><?php echo $contact_text_009; ?></div> 
                 </div>
             </div>
@@ -139,7 +139,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             <div class="row mb-3">
                 <label for="message" class="col-sm-12 col-md-2 col-form-label text-teal"><i class="fa fa-sm fa-star pe-1"></i><strong><?php echo $label5; ?></strong></label>
                 <div class="col-sm-12 col-md-10">
-                    <textarea id="message" class="form-control no-spam" style="height: 140px" name="message" required><?php if (($msg == "2") && (isset($_COOKIE['message']))) echo $_COOKIE['message']; ?></textarea>
+                    <textarea id="message" class="form-control no-spam" style="height: 140px" name="message" required><?php if (($msg == "2") && (isset($_COOKIE['message']))) echo htmlspecialchars($_COOKIE['message'], ENT_QUOTES, 'UTF-8'); ?></textarea>
                     <div class="invalid-feedback"><?php echo $contact_text_010; ?></div>
                 </div>
             </div>

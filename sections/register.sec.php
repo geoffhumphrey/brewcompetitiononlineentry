@@ -210,7 +210,7 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 $security_questions_display = (array_rand($security_question, 8));
 $security = "";
 
-if ((isset($_COOKIE['userQuestion'])) && ($_COOKIE['userQuestion'] != "Randomly generated.")) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_COOKIE['userQuestion']."\" CHECKED> ".$_COOKIE['userQuestion']."</label></div>";
+if ((isset($_COOKIE['userQuestion'])) && ($_COOKIE['userQuestion'] != "Randomly generated.")) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".htmlspecialchars($_COOKIE['userQuestion'], ENT_QUOTES, 'UTF-8')."\" CHECKED> ".htmlspecialchars($_COOKIE['userQuestion'], ENT_QUOTES, 'UTF-8')."</label></div>";
 
 foreach ($security_questions_display as $key => $value) {
 
@@ -394,7 +394,7 @@ if ($go == "default") {  ?>
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerBreweryName-addon1"><span class="fa fa-beer"></span></span>
                 <!-- Input Here -->
-                <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerBreweryName']))) echo $_COOKIE['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" required autofocus>
+                <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerBreweryName']))) echo htmlspecialchars($_COOKIE['brewerBreweryName'], ENT_QUOTES, 'UTF-8'); ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" required autofocus>
             </div>
             <div class="help-block"><?php echo $register_text_045; ?></div>
             <div class="help-block with-errors"></div>
@@ -404,7 +404,7 @@ if ($go == "default") {  ?>
         <label for="brewerBreweryTTB" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_ttb." (".$label_organization.")"; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         	<!-- Input Here -->
-       		<input class="form-control has-warning" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerBreweryTTB']))) echo $_COOKIE['brewerBreweryTTB']; ?>" placeholder="">
+       		<input class="form-control has-warning" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerBreweryTTB']))) echo htmlspecialchars($_COOKIE['brewerBreweryTTB'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="">
             <div class="help-block"><?php echo $register_text_046; ?></div>
         </div>
     </div><!-- ./Form Group -->
@@ -478,7 +478,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="" data-error="<?php echo $register_text_019; ?>" onBlur="checkAvailability()" onchange="AjaxFunction(this.value);" value="<?php if (($msg != "default") && (isset($_COOKIE['user_name']))) echo $_COOKIE['user_name']; ?>" required <?php if ($_SESSION['prefsProEdition'] == 0) echo "autofocus"; ?>>
+				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="" data-error="<?php echo $register_text_019; ?>" onBlur="checkAvailability()" onchange="AjaxFunction(this.value);" value="<?php if (($msg != "default") && (isset($_COOKIE['user_name']))) echo htmlspecialchars($_COOKIE['user_name'], ENT_QUOTES, 'UTF-8'); ?>" required <?php if ($_SESSION['prefsProEdition'] == 0) echo "autofocus"; ?>>
 			</div>
             <div class="help-block"><?php echo $register_text_021; ?></div>
 			<div class="help-block with-errors"></div>
@@ -493,7 +493,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="re-enter-email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name2" type="email" placeholder="" id="user_name2" data-match="#user_name" data-error="<?php echo $register_text_019; ?>"; data-match-error="<?php echo $register_text_020; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['user_name2']))) echo $_COOKIE['user_name2']; ?>" required>
+				<input class="form-control" name="user_name2" type="email" placeholder="" id="user_name2" data-match="#user_name" data-error="<?php echo $register_text_019; ?>"; data-match-error="<?php echo $register_text_020; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['user_name2']))) echo htmlspecialchars($_COOKIE['user_name2'], ENT_QUOTES, 'UTF-8'); ?>" required>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
@@ -560,7 +560,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['userQuestionAnswer']))) echo $_COOKIE['userQuestionAnswer']; ?>" data-error="<?php echo $register_text_023; ?>" required>
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['userQuestionAnswer']))) echo htmlspecialchars($_COOKIE['userQuestionAnswer'], ENT_QUOTES, 'UTF-8'); ?>" data-error="<?php echo $register_text_023; ?>" required>
 			</div>
             <div class="help-block"><?php echo $register_text_024; ?></div>
             <div class="help-block with-errors"></div>
@@ -574,7 +574,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="first-name-addon1"><span class="fa fa-user"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerFirstName" id="brewerFirstName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerFirstName']; ?>" data-error="<?php echo $register_text_025; ?>" required>
+				<input class="form-control" name="brewerFirstName" id="brewerFirstName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo htmlspecialchars($_COOKIE['brewerFirstName'], ENT_QUOTES, 'UTF-8'); ?>" data-error="<?php echo $register_text_025; ?>" required>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
@@ -585,7 +585,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="last-name-addon1"><span class="fa fa-user"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerLastName']; ?>" data-error="<?php echo $register_text_026; ?>" required>
+				<input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo htmlspecialchars($_COOKIE['brewerLastName'], ENT_QUOTES, 'UTF-8'); ?>" data-error="<?php echo $register_text_026; ?>" required>
 			</div>
             <?php if ($section != "admin") { ?><div id="helpBlock" class="help-block"><?php echo $brewer_text_000; if ($_SESSION['prefsProEdition'] == 0) echo " ".$brewer_text_022; ?></div><?php } ?>
             <div class="help-block with-errors"></div>
@@ -612,7 +612,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="street-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerAddress" id="brewerAddress" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAddress']))) echo $_COOKIE['brewerAddress']; ?>" data-error="<?php echo $register_text_028; ?>" required>
+				<input class="form-control" name="brewerAddress" id="brewerAddress" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAddress']))) echo htmlspecialchars($_COOKIE['brewerAddress'], ENT_QUOTES, 'UTF-8'); ?>" data-error="<?php echo $register_text_028; ?>" required>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
@@ -623,7 +623,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="city-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerCity" id="brewerCity" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerCity']))) echo $_COOKIE['brewerCity']; ?>" data-error="<?php echo $register_text_029; ?>" required>
+				<input class="form-control" name="brewerCity" id="brewerCity" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerCity']))) echo htmlspecialchars($_COOKIE['brewerCity'], ENT_QUOTES, 'UTF-8'); ?>" data-error="<?php echo $register_text_029; ?>" required>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
@@ -634,7 +634,7 @@ if ($go == "default") {  ?>
 			<div id="non-us-state" class="input-group has-warning">
 				<span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerState']))) echo htmlspecialchars($_COOKIE['brewerState'], ENT_QUOTES, 'UTF-8'); ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 			</div>
 			<div id="us-state" class="input-group has-warning">
 				<select class="selectpicker" name="brewerStateUS" id="brewerStateUS" data-live-search="true" data-size="10" data-width="fit" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
@@ -661,7 +661,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="zip-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerZip" id="brewerZip" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerZip']))) echo $_COOKIE['brewerZip']; ?>" data-error="<?php echo $register_text_031; ?>" required>
+				<input class="form-control" name="brewerZip" id="brewerZip" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerZip']))) echo htmlspecialchars($_COOKIE['brewerZip'], ENT_QUOTES, 'UTF-8'); ?>" data-error="<?php echo $register_text_031; ?>" required>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
@@ -673,7 +673,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="phone1-addon1"><span class="fa fa-phone"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerPhone1" id="brewerPhone1" type="tel" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerPhone1']))) echo $_COOKIE['brewerPhone1']; ?>" data-error="<?php echo $register_text_032; ?>" required>
+				<input class="form-control" name="brewerPhone1" id="brewerPhone1" type="tel" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerPhone1']))) echo htmlspecialchars($_COOKIE['brewerPhone1'], ENT_QUOTES, 'UTF-8'); ?>" data-error="<?php echo $register_text_032; ?>" required>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
@@ -684,7 +684,7 @@ if ($go == "default") {  ?>
 			<div class="input-group">
 				<span class="input-group-addon" id="phone2-addon1"><span class="fa fa-phone"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerPhone2" id="brewerPhone2" type="tel" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerPhone2']))) echo $_COOKIE['brewerPhone2']; ?>">
+				<input class="form-control" name="brewerPhone2" id="brewerPhone2" type="tel" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerPhone2']))) echo htmlspecialchars($_COOKIE['brewerPhone2'], ENT_QUOTES, 'UTF-8'); ?>">
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -759,7 +759,7 @@ if ($go == "default") {  ?>
 			<div class="input-group">
 				<span class="input-group-addon" id="aha-addon1"><span class="fa fa-beer"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerAHA" id="brewerAHA" type="text" pattern="[A-Za-z0-9]+" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAHA']))) echo $_COOKIE['brewerAHA']; ?>">
+				<input class="form-control" name="brewerAHA" id="brewerAHA" type="text" pattern="[A-Za-z0-9]+" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAHA']))) echo htmlspecialchars($_COOKIE['brewerAHA'], ENT_QUOTES, 'UTF-8'); ?>">
 			</div>
 			<div class="help-block with-errors"></div>
             <div id="ahaProAmText" class="help-block"><?php echo $register_text_033; ?></div>
@@ -769,7 +769,7 @@ if ($go == "default") {  ?>
 	    <div class="form-group">
 	        <label for="brewerMHP" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_mhp_number; ?></label>
 	        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-	            <input class="form-control" name="brewerMHP" id="brewerMHP" type="text" pattern="\d*" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerMHP']))) echo $_COOKIE['brewerMHP']; ?>" placeholder="">
+	            <input class="form-control" name="brewerMHP" id="brewerMHP" type="text" pattern="\d*" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerMHP']))) echo htmlspecialchars($_COOKIE['brewerMHP'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="">
 	            <span class="help-block"><?php echo $brewer_text_053; ?></span>
 	        </div>
 	    </div>
@@ -844,7 +844,7 @@ if ($go == "default") {  ?>
         <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <!-- Input Here -->
-            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerJudgeID']))) echo $_COOKIE['brewerJudgeID']; ?>" placeholder="">
+            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerJudgeID']))) echo htmlspecialchars($_COOKIE['brewerJudgeID'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="">
         </div>
     </div><!-- ./Form Group -->
     <div class="form-group"><!-- Form Group Radio STACKED -->
@@ -959,7 +959,7 @@ if ($go == "default") {  ?>
         <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <!-- Input Here -->
-            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerJudgeID']))) echo $_COOKIE['brewerJudgeID']; ?>" placeholder="">
+            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerJudgeID']))) echo htmlspecialchars($_COOKIE['brewerJudgeID'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="">
         </div>
     </div><!-- ./Form Group -->
 	<?php if ($totalRows_judging > 1) {
