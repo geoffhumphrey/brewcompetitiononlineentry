@@ -91,6 +91,9 @@ if ($check == 1) {
 	
 	// Register the session variable
 	$_SESSION['loginUsername'] = $loginUsername;
+
+	// Rotate CSRF token on successful login
+	csrf_token_generate(true);
 	
 	// Set the relocation variables
 	if ($section == "update") $location = $base_url."update.php";

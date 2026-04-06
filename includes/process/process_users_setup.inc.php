@@ -68,6 +68,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			$insertGoTo = $base_url."setup.php?section=step2&go=".$username;
 			$_SESSION['loginUsername'] = $username;
+			csrf_token_generate(true);
 
 		}
 
