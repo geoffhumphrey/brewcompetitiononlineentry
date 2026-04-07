@@ -767,6 +767,7 @@ const CLUBS = [
   "El Paso City Home Brewers",
   "El Riad Shrine Mystic Brewers",
   "Elba Mar Brewers Club",
+  "Első Magyar Házisörfőző Egyesület [Hungary]",
   "Elk County Brewers",
   "Elk Grove Brewers Guild",
   "Elkhorn Valley Society of Brewers",
