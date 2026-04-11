@@ -1703,6 +1703,7 @@ include (DB.'entry_info.db.php');
             <option value="5" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "5")) echo " SELECTED"; ?> />Standard with Barcode/QR Code</option>
             <option value="8" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "8")) echo " SELECTED"; ?> />Anonymous</option>
             <option value="6" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "6")) echo " SELECTED"; ?> />Anonymous with Barcode/QR Code</option>
+            <option value="9" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "9")) echo " SELECTED"; ?> />Anonymous with Large Entry Number</option>
         </optgroup>
     </select>
         <div class="help-block">
