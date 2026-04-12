@@ -1399,6 +1399,12 @@ $alert_text_088 = "Prezentace vítězů bude veřejně k dispozici po zveřejně
 $alert_text_089 = "Archivovaná data nejsou k dispozici.";
 
 $brewer_entries_text_025 = "Zobrazit nebo vytisknout degustační listy degustátorů";
+$brewer_entries_text_027 = "Momentálně nejsou vybrány žádné vzorky. Chcete vytisknout štítky pro všechny vzorky, nebo nyní vybrat konkrétní?";
+$brewer_entries_text_028 = "Vyberte vzorky, které chcete vytisknout:";
+$brewer_entries_text_029 = "Vybrat vzorky";
+$brewer_entries_text_030 = "Vytisknout všechny vzorky";
+$brewer_entries_text_031 = "Vytisknout vybrané vzorky";
+$brewer_entries_text_032 = "Vyberte prosím alespoň jeden vzorek k tisku.";
 
 $brewer_info_013 = "Byli jste přiřazeni jako degustátor.";
 $brewer_info_014 = "K přehledu degustace, kde uvidíte vzorky k posouzení, se dostanete tlačítkem níže.";
