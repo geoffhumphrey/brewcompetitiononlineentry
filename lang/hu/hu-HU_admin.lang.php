@@ -117,6 +117,24 @@ $label_not_archived = "Nincs archiválva";
 
 // -------------------- Barcode Check-In --------------------
 
+// -------------------- Hero Images --------------------
+
+$admin_hero_images_title = "Hős Háttérképek";
+$admin_hero_images_description = "Válassza ki, mely hős háttérképek jelenjenek meg a kezdőlapon. A képek véletlenszerűen kerülnek kiválasztásra a verseny által elfogadott stílustípusok alapján.";
+$admin_hero_images_saved = "A hős képek preferenciái sikeresen mentve.";
+$admin_hero_images_error = "Hiba a hős képek preferenciáinak mentése során.";
+$admin_hero_category_misc = "Vegyes";
+$admin_hero_category_beer = "Sör";
+$admin_hero_category_cider = "Almabor";
+$admin_hero_category_mead = "Mézbor";
+$admin_hero_category_shown_all = "Összes oldalon megjelenítve";
+$admin_hero_category_shown_beer = "Megjelenítve, ha a sör kategória aktív";
+$admin_hero_category_shown_cider = "Megjelenítve, ha az almabor kategória aktív";
+$admin_hero_category_shown_mead = "Megjelenítve, ha a mézbor kategória aktív";
+$admin_hero_no_images = "Nem található kép";
+$admin_hero_save_button = "Módosítások Mentése";
+
+// -------------------- Barcode Check-In --------------------
 
 
 // -------------------- Navigation --------------------

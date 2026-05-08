@@ -15,38 +15,28 @@
     $awards_date = "";
 
     /**
-     * Hero image array. 
+     * Hero image selection logic
      * 
-     * If you would like to customize, simply add or 
-     * subtract from the images listed in the array below. 
-     * Or, provide your own images but name them in the 
-     * [root]/images folder as they appear below.
+     * Images are loaded from the database if available.
+     * Falls back to hardcoded array for backwards compatibility.
      * 
-     * Please note that these are substantially wide and
-     * not very tall at a 6:1 ratio (3000x500) - optimized
-     * to serve as background images behind the name of
-     * the competition on the installation's home page
-     * up to very wide screen displays - they will scale
-     * down based upon the screen size.
+     * Images are 3000x500 pixels (6:1 ratio) optimized for
+     * background display behind competition name.
      * 
-     * The background image is randomly chosen from the
-     * array below. 
-     * 
-     * 0 is for misc (e.g., "0-a" or "0-b")
-     * 1 is for beer
-     * 2 is for cider
-     * 3 is for mead
-     * 
-     * If your competition accepts beer, mead, and cider,
-     * any image could be randomly accepted on each page
-     * load.
-     * 
-     * If your competition just accepts beer, only misc
-     * and beer images will be selected as a background,
-     * etc.
+     * Categories:
+     * 0 = Miscellaneous (shown on all pages)
+     * 1 = Beer
+     * 2 = Cider
+     * 3 = Mead
      */
 
-    $bg_hero_images = array(
+    // Include hero images library functions
+    if (file_exists(LIB.'hero_images.lib.php')) {
+        include (LIB.'hero_images.lib.php');
+    }
+
+    // Hardcoded fallback array for backwards compatibility
+    $bg_hero_images_fallback = array(
         "0-a" => "misc-cropped-bottles_3000x500.jpg",
         "0-b" => "misc-brussels-bottles_3000x500.jpg",
         "0-c" => "misc-plzen-fermenters_3000x500.jpg",
@@ -61,8 +51,8 @@
         "3-a" => "mead-bottles_3000x500.jpg",     
     );
 
+    // Get session style types for filtering
     if ((!isset($_SESSION['bg_hero_image_types'])) || (empty($_SESSION['bg_hero_image_types']))) {
-
         $_SESSION['bg_hero_image_types'] = array();
 
         $a = json_decode($_SESSION['prefsSelectedStyles'],true);
@@ -74,23 +64,119 @@
         }
 
         $_SESSION['bg_hero_image_types'] = array_unique($actual_styles_types);
-        
     }
 
-    if ((!isset($_SESSION['bg_hero_image_display'])) || (empty($_SESSION['bg_hero_image_display']))) {
+    // Try to get images from database
+    $hero_background = "";
+    $use_database = FALSE;
 
-        $_SESSION['bg_hero_image_display'] = array();
+    if ((isset($connection)) && (isset($prefix)) && (function_exists('table_exists'))) {
+        if (table_exists($connection, $prefix."hero_images")) {
+            $db_images = get_active_hero_images($connection, $prefix, $_SESSION['bg_hero_image_types']);
+            if (!empty($db_images)) {
+                $use_database = TRUE;
+                // Randomly select from database images
+                $i = rand(0, count($db_images)-1);
+                $hero_background = $db_images[$i];
+            }
+        }
+    }
 
-        foreach ($bg_hero_images as $key => $value) {
-            $image_style_type = explode("-",$key);
-            if (in_array($image_style_type[0],$_SESSION['bg_hero_image_types'])) $_SESSION['bg_hero_image_display'][] = $value;
+    // Fall back to hardcoded array if database images not available
+    if (empty($hero_background)) {
+        if ((!isset($_SESSION['bg_hero_image_display'])) || (empty($_SESSION['bg_hero_image_display']))) {
+            $_SESSION['bg_hero_image_display'] = array();
+
+            foreach ($bg_hero_images_fallback as $key => $value) {
+                $image_style_type = explode("-",$key);
+                if (in_array($image_style_type[0],$_SESSION['bg_hero_image_types'])) $_SESSION['bg_hero_image_display'][] = $value;
+            }
+        }
+        
+        if (!empty($_SESSION['bg_hero_image_display'])) {
+            $i = rand(0, count($_SESSION['bg_hero_image_display'])-1);
+            $hero_background = $_SESSION['bg_hero_image_display'][$i];
+        }
+    }
+
+    /**
+     * Hero image selection logic
+     * 
+     * Images are loaded from site_preferences if available.
+     * Falls back to hardcoded array for backwards compatibility.
+     * 
+     * Images are 3000x500 pixels (6:1 ratio) optimized for
+     * background display behind competition name.
+     * 
+     * Categories:
+     * 0 = Miscellaneous (shown on all pages)
+     * 1 = Beer
+     * 2 = Cider
+     * 3 = Mead
+     */
+
+    // Include hero images library functions
+    include (LIB.'hero_images.lib.php');
+
+    // Hardcoded fallback array for backwards compatibility
+    $bg_hero_images_fallback = array(
+        "0-a" => "misc-cropped-bottles_3000x500.jpg",
+        "0-b" => "misc-brussels-bottles_3000x500.jpg",
+        "0-c" => "misc-plzen-fermenters_3000x500.jpg",
+        "0-d" => "misc-bottles_3000x500.jpg",
+        "1-a" => "beer-barley-malt_3000x500.jpg",
+        "1-b" => "beer-brussels-barrels_3000x500.jpg",
+        "1-c" => "beer-hop-cones_3000x500.jpg",
+        "1-d" => "beer-kegs_3000x500.jpg",
+        "1-e" => "beer-munich-mugs_3000x500.jpg",
+        "1-f" => "beer-on-bar_3000x500.jpg",
+        "2-a" => "cider-bottles_3000x500.jpg",
+        "3-a" => "mead-bottles_3000x500.jpg",     
+    );
+
+    // Get session style types for filtering
+    if ((!isset($_SESSION['bg_hero_image_types'])) || (empty($_SESSION['bg_hero_image_types']))) {
+        $_SESSION['bg_hero_image_types'] = array();
+
+        $a = json_decode($_SESSION['prefsSelectedStyles'],true);
+        $actual_styles_types = array();
+        $actual_styles_types[] = 0;
+
+        foreach ($a as $key => $value) {
+            if (isset($value['brewStyleType'])) $actual_styles_types[] = $value['brewStyleType'];
         }
 
+        $_SESSION['bg_hero_image_types'] = array_unique($actual_styles_types);
     }
-    
-    $i = rand(0, count($_SESSION['bg_hero_image_display'])-1);
-    $hero_background = $_SESSION['bg_hero_image_display'][$i];
 
+    // Try to get images from site_preferences
+    $hero_background = "";
+
+    if ((isset($connection)) && (isset($prefix))) {
+        $pref_images = get_active_hero_images($connection, $prefix, $_SESSION['bg_hero_image_types']);
+        if (!empty($pref_images)) {
+            // Randomly select from preference images
+            $i = rand(0, count($pref_images)-1);
+            $hero_background = $pref_images[$i];
+        }
+    }
+
+    // Fall back to hardcoded array if preference images not available
+    if (empty($hero_background)) {
+        if ((!isset($_SESSION['bg_hero_image_display'])) || (empty($_SESSION['bg_hero_image_display']))) {
+            $_SESSION['bg_hero_image_display'] = array();
+
+            foreach ($bg_hero_images_fallback as $key => $value) {
+                $image_style_type = explode("-",$key);
+                if (in_array($image_style_type[0],$_SESSION['bg_hero_image_types'])) $_SESSION['bg_hero_image_display'][] = $value;
+            }
+        }
+        
+        if (!empty($_SESSION['bg_hero_image_display'])) {
+            $i = rand(0, count($_SESSION['bg_hero_image_display'])-1);
+            $hero_background = $_SESSION['bg_hero_image_display'][$i];
+        }
+    }
     include (DB.'sponsors.db.php');
 
     if ($section == "default") {

@@ -117,6 +117,24 @@ $label_not_archived = "Non Archivé";
 
 // -------------------- Barcode Check-In --------------------
 
+// -------------------- Hero Images --------------------
+
+$admin_hero_images_title = "Images de Héros d'Arrière-Plan";
+$admin_hero_images_description = "Sélectionnez les images de fond de héros affichées sur la page d'accueil. Les images sont sélectionnées aléatoirement en fonction des types de style acceptés par votre compétition.";
+$admin_hero_images_saved = "Les préférences des images de héros ont été enregistrées avec succès.";
+$admin_hero_images_error = "Erreur lors de l'enregistrement des préférences des images de héros.";
+$admin_hero_category_misc = "Divers";
+$admin_hero_category_beer = "Bière";
+$admin_hero_category_cider = "Cidre";
+$admin_hero_category_mead = "Hydromel";
+$admin_hero_category_shown_all = "Affiché sur toutes les pages";
+$admin_hero_category_shown_beer = "Affiché quand la catégorie bière est active";
+$admin_hero_category_shown_cider = "Affiché quand la catégorie cidre est active";
+$admin_hero_category_shown_mead = "Affiché quand la catégorie hydromel est active";
+$admin_hero_no_images = "Aucune image trouvée";
+$admin_hero_save_button = "Enregistrer les Modifications";
+
+// -------------------- Barcode Check-In --------------------
 
 
 // -------------------- Navigation --------------------

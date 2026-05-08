@@ -88,6 +88,55 @@ $archive_text_011 = "Alpha numeric characters only - all others will be omitted.
 $archive_text_012 = "Check the information you would like to retain for use in future competition instances.";
 $archive_text_013 = "Are you sure you want to archive current data?";
 $archive_text_014 = "Then, choose what data you would like to retain.";
+
+// -------------------- Hero Images --------------------
+
+$hero_images_text_001 = "Hero Background Images";
+$admin_hero_images_title = "Hero Background Images";
+$admin_hero_images_description = "Select which hero background images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types.";
+$admin_hero_images_saved = "Hero images preferences saved successfully.";
+$admin_hero_images_error = "Error saving hero images preferences.";
+$admin_hero_category_misc = "Miscellaneous";
+$admin_hero_category_beer = "Beer";
+$admin_hero_category_cider = "Cider";
+$admin_hero_category_mead = "Mead";
+$admin_hero_category_shown_all = "Shown on all pages";
+$admin_hero_category_shown_beer = "Shown when beer category is active";
+$admin_hero_category_shown_cider = "Shown when cider category is active";
+$admin_hero_category_shown_mead = "Shown when mead category is active";
+$admin_hero_no_images = "No images found";
+$admin_hero_save_button = "Save Changes";
+
+// Old strings kept for backwards compatibility
+$hero_images_text_002 = "Upload New Hero Image";
+$hero_images_text_003 = "Upload background images for the competition homepage. Recommended size: 3000x500 pixels (6:1 ratio). Acceptable formats: JPG, PNG, GIF, WebP, SVG.";
+$hero_images_text_004 = "Image File";
+$hero_images_text_005 = "Choose File";
+$hero_images_text_006 = "No file chosen...";
+$hero_images_text_007 = "Category";
+$hero_images_text_008 = "Select a category...";
+$hero_images_text_009 = "Images are randomly selected based on your competition's accepted style types. Miscellaneous images appear on all pages.";
+$hero_images_text_010 = "Active";
+$hero_images_text_011 = "Include this image in the homepage rotation";
+$hero_images_text_012 = "Upload Image";
+$hero_images_text_013 = "Guidelines";
+$hero_images_text_014 = "Size";
+$hero_images_text_015 = "Ratio";
+$hero_images_text_016 = "Formats";
+$hero_images_text_017 = "Categories";
+$hero_images_text_018 = "Existing Hero Images";
+$hero_images_text_019 = "Preview";
+$hero_images_text_020 = "File Name";
+$hero_images_text_021 = "Actions";
+$hero_images_text_022 = "Click to enlarge";
+$hero_images_text_023 = "Yes";
+$hero_images_text_024 = "No";
+$hero_images_text_025 = "Delete";
+$hero_images_text_026 = "Are you sure? This will remove the image named";
+$hero_images_text_027 = "from the server.";
+$hero_images_text_028 = "Error updating image. Please try again.";
+$hero_images_text_029 = "Error deleting image. Please try again.";
+$hero_images_text_030 = "No hero images have been uploaded yet. Upload your first image above.";
 $archive_text_015 = "This will delete the archive called";
 $archive_text_016 = "All associated records will be removed as well.";
 

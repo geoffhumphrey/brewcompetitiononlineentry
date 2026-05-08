@@ -117,6 +117,24 @@ $label_not_archived = "Není Archivováno";
 
 // -------------------- Barcode Check-In --------------------
 
+// -------------------- Hero Images --------------------
+
+$admin_hero_images_title = "Obrázky Herojských Pozadí";
+$admin_hero_images_description = "Vyberte, které obrázky herojského pozadí se zobrazí na domovské stránce. Obrázky jsou náhodně vybrány na základě typů stylů přijatých vaší soutěží.";
+$admin_hero_images_saved = "Preference herojských obrázků úspěšně uloženy.";
+$admin_hero_images_error = "Chyba při ukládání preferencí herojských obrázků.";
+$admin_hero_category_misc = "Různé";
+$admin_hero_category_beer = "Pivo";
+$admin_hero_category_cider = "Cidra";
+$admin_hero_category_mead = "Medovina";
+$admin_hero_category_shown_all = "Zobrazeno na všech stránkách";
+$admin_hero_category_shown_beer = "Zobrazeno, když je kategorie piva aktivní";
+$admin_hero_category_shown_cider = "Zobrazeno, když je kategorie cidry aktivní";
+$admin_hero_category_shown_mead = "Zobrazeno, když je kategorie medu aktivní";
+$admin_hero_no_images = "Nebyly nalezeny žádné obrázky";
+$admin_hero_save_button = "Uložit Změny";
+
+// -------------------- Barcode Check-In --------------------
 
 
 // -------------------- Navigation --------------------
