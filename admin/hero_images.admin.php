@@ -7,75 +7,207 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
     exit();
 }
 
-// Include hero images library
 include (LIB.'hero_images.lib.php');
 
 $save_message = "";
 $save_error = "";
-$all_images = array();
-$hero_prefs_json = "{}";
+$request_uri = htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
 
-if (($action == "default") || ($action == "hero_images")) {
+$category_prefixes = array(
+    "0" => "misc",
+    "1" => "beer",
+    "2" => "cider",
+    "3" => "mead"
+);
 
-    // Get all available images from /images folder
-    $all_images = get_all_available_hero_images();
+$allowed_extensions = array("jpg", "jpeg", "png", "gif", "webp");
+$allowed_mime_types = array("image/jpeg", "image/png", "image/gif", "image/webp");
+$max_upload_bytes = 2 * 1024 * 1024; // 2 MB
 
-    // Get current preferences from site_preferences
-    $prefs_table = $prefix."site_preferences";
-    $query = sprintf("SELECT prefsHeroImages FROM %s LIMIT 1", $prefs_table);
-    $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-    $row = mysqli_fetch_assoc($result);
+function is_valid_hero_token() {
+    return (
+        isset($_POST['user_session_token']) &&
+        isset($_SESSION['user_session_token']) &&
+        ($_POST['user_session_token'] === $_SESSION['user_session_token'])
+    );
+}
 
-    // Initialize if not set
-    if (!$row || empty($row['prefsHeroImages'])) {
-        initialize_hero_images_preferences($connection, $prefix);
-        $hero_prefs = $all_images;
-        // Flatten to get all images
-        $hero_images_flat = array();
-        foreach ($all_images as $category => $images) {
-            foreach ($images as $image) {
-                $hero_images_flat[$image] = true;
+function hero_safe_filename_stem($input) {
+    $input = strtolower($input);
+    $input = preg_replace('/[^a-z0-9]+/', '-', $input);
+    $input = trim($input, '-');
+    return $input;
+}
+
+function hero_upload_error_message($error_code) {
+    switch ((int)$error_code) {
+        case UPLOAD_ERR_INI_SIZE:
+            return "The uploaded file is larger than the server allows.";
+        case UPLOAD_ERR_FORM_SIZE:
+            return "The uploaded file is larger than the form allows.";
+        case UPLOAD_ERR_PARTIAL:
+            return "The file was only partially uploaded.";
+        case UPLOAD_ERR_NO_FILE:
+            return "No file was uploaded.";
+        case UPLOAD_ERR_NO_TMP_DIR:
+            return "The server is missing a temporary upload folder.";
+        case UPLOAD_ERR_CANT_WRITE:
+            return "The server could not write the uploaded file to disk.";
+        case UPLOAD_ERR_EXTENSION:
+            return "A server extension stopped the upload.";
+        default:
+            return "Image upload failed. Please try again.";
+    }
+}
+
+if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset($_POST['action'])) && ($_POST['action'] == "upload")) {
+    if (!is_valid_hero_token()) {
+        $save_error = "Security token validation failed. Please refresh and try again.";
+    }
+    else {
+        $upload_category = (isset($_POST['hero_image_category'])) ? (string)$_POST['hero_image_category'] : "";
+
+        if (!isset($category_prefixes[$upload_category])) {
+            $save_error = "Please select a valid category.";
+        }
+        elseif ((!isset($_FILES['hero_image_file'])) || (!is_array($_FILES['hero_image_file'])) || (!isset($_FILES['hero_image_file']['error']))) {
+            $save_error = "Please choose an image file to upload.";
+        }
+        elseif ($_FILES['hero_image_file']['error'] !== UPLOAD_ERR_OK) {
+            $save_error = hero_upload_error_message($_FILES['hero_image_file']['error']);
+        }
+        elseif (!isset($_FILES['hero_image_file']['size']) || ((int)$_FILES['hero_image_file']['size'] <= 0) || ((int)$_FILES['hero_image_file']['size'] > $max_upload_bytes)) {
+            $current_size = (isset($_FILES['hero_image_file']['size'])) ? number_format((int)$_FILES['hero_image_file']['size']) : "unknown";
+            $save_error = "Image size must be between 1 byte and 2 MB. Uploaded size: ".$current_size." bytes.";
+        }
+        elseif ((!isset($_FILES['hero_image_file']['tmp_name'])) || (!is_uploaded_file($_FILES['hero_image_file']['tmp_name']))) {
+            $save_error = "Invalid upload payload.";
+        }
+        else {
+            $original_name = (string)$_FILES['hero_image_file']['name'];
+            $safe_original_name = htmlspecialchars($original_name, ENT_QUOTES, 'UTF-8');
+            $extension = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
+
+            if (!in_array($extension, $allowed_extensions)) {
+                $save_error = "Unsupported file type for ".$safe_original_name.". Allowed: JPG, JPEG, PNG, GIF, WebP.";
+            }
+            else {
+                $image_info = @getimagesize($_FILES['hero_image_file']['tmp_name']);
+                if (($image_info === false) || (!isset($image_info['mime'])) || (!in_array($image_info['mime'], $allowed_mime_types))) {
+                    $save_error = "Uploaded file ".$safe_original_name." is not a valid image file.";
+                    $img_width = 0;
+                    $img_height = 0;
+                    $img_ratio = 0;
+                } else {
+                    $img_width = (int)$image_info[0];
+                    $img_height = (int)$image_info[1];
+                    $img_ratio = ($img_height > 0) ? ($img_width / $img_height) : 0;
+                }
+
+                if ((empty($save_error)) && (($img_width < 1200) || ($img_ratio < 3.5))) {
+                    $save_error = "Image must be a wide banner. Uploaded dimensions: ".$img_width."x".$img_height.". Minimum width 1200px and aspect ratio at least 3.5:1.";
+                }
+
+                if (!empty($save_error)) {
+                    // Validation failed; skip filename generation and move.
+                }
+                else {
+                $name_without_ext = pathinfo($original_name, PATHINFO_FILENAME);
+                $safe_stem = hero_safe_filename_stem($name_without_ext);
+                if (empty($safe_stem)) $safe_stem = "banner";
+
+                $base_filename = $category_prefixes[$upload_category]."-".$safe_stem;
+                $counter = 0;
+                do {
+                    $counter_suffix = ($counter > 0) ? "-".$counter : "";
+                    $target_filename = $base_filename.$counter_suffix.".".$extension;
+                    $target_path = IMAGES.$target_filename;
+                    $counter++;
+                } while (file_exists($target_path));
+
+                if (!move_uploaded_file($_FILES['hero_image_file']['tmp_name'], $target_path)) {
+                    $save_error = "Unable to save uploaded file to /images. Check folder permissions.";
+                }
+                else {
+                    $save_message = "Banner image uploaded successfully.";
+                }
+                }
             }
         }
-        $hero_prefs_json = json_encode($hero_images_flat);
-    } else {
-        $hero_prefs_json = $row['prefsHeroImages'];
+    }
+}
+
+$all_images = get_all_available_hero_images();
+$hero_prefs = load_hero_images_preferences($all_images);
+
+if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset($_POST['action'])) && ($_POST['action'] == "delete")) {
+    if (!is_valid_hero_token()) {
+        $save_error = "Security token validation failed. Please refresh and try again.";
+    }
+    else {
+        $delete_image = (isset($_POST['hero_image_delete'])) ? basename((string)$_POST['hero_image_delete']) : "";
+        $all_known_images = array();
+
+        foreach ($all_images as $images) {
+            foreach ($images as $image) {
+                $all_known_images[] = $image;
+            }
+        }
+
+        if (($delete_image === "") || (!in_array($delete_image, $all_known_images))) {
+            $save_error = "Please choose a valid image to delete.";
+        }
+        else {
+            $delete_path = IMAGES.$delete_image;
+            if (!file_exists($delete_path)) {
+                $save_error = "The selected image file could not be found.";
+            }
+            elseif (!@unlink($delete_path)) {
+                $save_error = "Unable to delete the selected image. Check folder permissions.";
+            }
+            else {
+                unset($hero_prefs[$delete_image]);
+                save_hero_images_preferences($connection, $prefix, $hero_prefs);
+                $save_message = "Banner image deleted successfully.";
+                $all_images = get_all_available_hero_images();
+                $hero_prefs = load_hero_images_preferences($all_images);
+            }
+        }
+    }
+}
+
+if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset($_POST['action'])) && ($_POST['action'] == "save")) {
+    $token_valid = is_valid_hero_token();
+    $images_to_save = array();
+
+    if (!$token_valid) {
+        $save_error = "Security token validation failed. Please refresh and try again.";
     }
 
-    // Handle form submission
-    if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset($_POST['action'])) && ($_POST['action'] == "save")) {
-        
-        $images_to_save = array();
-
-        // Get all available images and set their status based on form
-        foreach ($all_images as $category => $images) {
+    if ($token_valid) {
+        foreach ($all_images as $images) {
             foreach ($images as $image) {
-                $checkbox_name = "hero_image_" . preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
+                $checkbox_name = "hero_image_".preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
                 $images_to_save[$image] = (isset($_POST[$checkbox_name])) ? true : false;
             }
         }
 
-        // Save preferences
         if (save_hero_images_preferences($connection, $prefix, $images_to_save)) {
             $save_message = isset($lang['admin_hero_images_saved']) ? $lang['admin_hero_images_saved'] : "Hero images preferences saved successfully.";
-            $hero_prefs_json = json_encode($images_to_save);
-        } else {
+            $hero_prefs = $images_to_save;
+        }
+        else {
             $save_error = isset($lang['admin_hero_images_error']) ? $lang['admin_hero_images_error'] : "Error saving hero images preferences.";
         }
     }
-
-    // Parse current preferences for display
-    $hero_prefs = json_decode($hero_prefs_json, true);
-    if (!is_array($hero_prefs)) {
-        $hero_prefs = array();
-    }
+}
 
 ?>
 
 <div id="hero_images_admin" class="admin-section">
 
-    <h2><?php echo isset($lang['admin_hero_images_title']) ? $lang['admin_hero_images_title'] : "Hero Background Images"; ?></h2>
-    
+    <h2><?php echo isset($lang['admin_hero_images_title']) ? $lang['admin_hero_images_title'] : "Banner Images"; ?></h2>
+
     <?php if (!empty($save_message)): ?>
     <div class="alert alert-success alert-dismissible fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -94,137 +226,117 @@ if (($action == "default") || ($action == "hero_images")) {
     </div>
     <?php endif; ?>
 
-    <p><?php echo isset($lang['admin_hero_images_description']) ? $lang['admin_hero_images_description'] : "Select which hero background images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types."; ?></p>
+    <p><?php echo isset($lang['admin_hero_images_description']) ? $lang['admin_hero_images_description'] : "Select which banner images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types."; ?></p>
 
-    <form method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="hero_images_form">
-        <input type="hidden" name="section" value="hero_images">
-        <input type="hidden" name="action" value="save">
+    <div class="well well-sm">
+        <strong><?php echo isset($lang['admin_hero_how_it_works_title']) ? $lang['admin_hero_how_it_works_title'] : "How it works"; ?>:</strong>
+        <?php echo isset($lang['admin_hero_how_it_works_body']) ? $lang['admin_hero_how_it_works_body'] : "Banner images appear as a large background strip at the top of the competition homepage. One image is picked at random each time a visitor loads the page. Images are grouped by category &mdash; Miscellaneous images can appear at any time, while Beer, Cider, and Mead images only appear when your competition accepts entries in those categories. Use the checkboxes below to choose which images are in the rotation, then click <strong>Save Changes</strong>. To add a new image, use the upload panel and choose the matching category."; ?>
+    </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                
-                <!-- Misc Images (Category 0) -->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><?php echo isset($lang['admin_hero_category_misc']) ? $lang['admin_hero_category_misc'] : "Miscellaneous"; ?></h4>
-                        <small><?php echo isset($lang['admin_hero_category_shown_all']) ? $lang['admin_hero_category_shown_all'] : "Shown on all pages"; ?></small>
-                    </div>
-                    <div class="panel-body">
-                        <?php if (empty($all_images["0"])): ?>
-                            <p class="text-muted"><?php echo isset($lang['admin_hero_no_images']) ? $lang['admin_hero_no_images'] : "No images found"; ?></p>
-                        <?php else: ?>
-                            <div class="hero-images-grid">
-                                <?php foreach ($all_images["0"] as $image): 
-                                    $checkbox_name = "hero_image_" . preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
-                                    $is_checked = (isset($hero_prefs[$image])) ? $hero_prefs[$image] : false;
-                                ?>
-                                <div class="hero-image-item">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="<?php echo $checkbox_name; ?>" value="1" <?php echo ($is_checked) ? 'checked' : ''; ?>>
-                                            <span class="image-name"><?php echo htmlspecialchars($image); ?></span>
-                                        </label>
-                                    </div>
-                                    <img src="<?php echo IMAGES_URL.$image; ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title"><?php echo isset($lang['hero_images_text_002']) ? $lang['hero_images_text_002'] : "Upload New Banner Image"; ?></h4>
+        </div>
+        <div class="panel-body">
+            <form method="POST" action="<?php echo $request_uri; ?>" enctype="multipart/form-data" class="form-inline">
+                <input type="hidden" name="section" value="hero_images">
+                <input type="hidden" name="action" value="upload">
+                <input type="hidden" name="user_session_token" value="<?php echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
+
+                <p class="help-block" style="margin-bottom: 12px;">
+                    Step 1: choose a category. Step 2: choose the image file and upload it.
+                </p>
+
+                <div class="form-group" style="margin-right: 10px; margin-bottom: 10px;">
+                    <label for="hero_image_category" class="sr-only"><?php echo isset($lang['hero_images_text_007']) ? $lang['hero_images_text_007'] : "Category"; ?></label>
+                    <select class="form-control" id="hero_image_category" name="hero_image_category" required>
+                        <option value=""><?php echo isset($lang['hero_images_text_008']) ? $lang['hero_images_text_008'] : "Select a category..."; ?></option>
+                        <option value="0"><?php echo isset($lang['admin_hero_category_misc']) ? $lang['admin_hero_category_misc'] : "Miscellaneous"; ?></option>
+                        <option value="1"><?php echo isset($lang['admin_hero_category_beer']) ? $lang['admin_hero_category_beer'] : "Beer"; ?></option>
+                        <option value="2"><?php echo isset($lang['admin_hero_category_cider']) ? $lang['admin_hero_category_cider'] : "Cider"; ?></option>
+                        <option value="3"><?php echo isset($lang['admin_hero_category_mead']) ? $lang['admin_hero_category_mead'] : "Mead"; ?></option>
+                    </select>
                 </div>
 
-                <!-- Beer Images (Category 1) -->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><?php echo isset($lang['admin_hero_category_beer']) ? $lang['admin_hero_category_beer'] : "Beer"; ?></h4>
-                        <small><?php echo isset($lang['admin_hero_category_shown_beer']) ? $lang['admin_hero_category_shown_beer'] : "Shown when beer category is active"; ?></small>
-                    </div>
-                    <div class="panel-body">
-                        <?php if (empty($all_images["1"])): ?>
-                            <p class="text-muted"><?php echo isset($lang['admin_hero_no_images']) ? $lang['admin_hero_no_images'] : "No images found"; ?></p>
-                        <?php else: ?>
-                            <div class="hero-images-grid">
-                                <?php foreach ($all_images["1"] as $image): 
-                                    $checkbox_name = "hero_image_" . preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
-                                    $is_checked = (isset($hero_prefs[$image])) ? $hero_prefs[$image] : false;
-                                ?>
-                                <div class="hero-image-item">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="<?php echo $checkbox_name; ?>" value="1" <?php echo ($is_checked) ? 'checked' : ''; ?>>
-                                            <span class="image-name"><?php echo htmlspecialchars($image); ?></span>
-                                        </label>
-                                    </div>
-                                    <img src="<?php echo IMAGES_URL.$image; ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                <div class="form-group" id="hero_image_file_group" style="margin-right: 10px; margin-bottom: 10px; display:none;">
+                    <label for="hero_image_file" class="sr-only"><?php echo isset($lang['hero_images_text_004']) ? $lang['hero_images_text_004'] : "Image File"; ?></label>
+                    <input type="file" class="form-control" id="hero_image_file" name="hero_image_file" accept=".jpg,.jpeg,.png,.gif,.webp" required>
                 </div>
 
-                <!-- Cider Images (Category 2) -->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><?php echo isset($lang['admin_hero_category_cider']) ? $lang['admin_hero_category_cider'] : "Cider"; ?></h4>
-                        <small><?php echo isset($lang['admin_hero_category_shown_cider']) ? $lang['admin_hero_category_shown_cider'] : "Shown when cider category is active"; ?></small>
-                    </div>
-                    <div class="panel-body">
-                        <?php if (empty($all_images["2"])): ?>
-                            <p class="text-muted"><?php echo isset($lang['admin_hero_no_images']) ? $lang['admin_hero_no_images'] : "No images found"; ?></p>
-                        <?php else: ?>
-                            <div class="hero-images-grid">
-                                <?php foreach ($all_images["2"] as $image): 
-                                    $checkbox_name = "hero_image_" . preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
-                                    $is_checked = (isset($hero_prefs[$image])) ? $hero_prefs[$image] : false;
-                                ?>
-                                <div class="hero-image-item">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="<?php echo $checkbox_name; ?>" value="1" <?php echo ($is_checked) ? 'checked' : ''; ?>>
-                                            <span class="image-name"><?php echo htmlspecialchars($image); ?></span>
-                                        </label>
-                                    </div>
-                                    <img src="<?php echo IMAGES_URL.$image; ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <!-- Mead Images (Category 3) -->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><?php echo isset($lang['admin_hero_category_mead']) ? $lang['admin_hero_category_mead'] : "Mead"; ?></h4>
-                        <small><?php echo isset($lang['admin_hero_category_shown_mead']) ? $lang['admin_hero_category_shown_mead'] : "Shown when mead category is active"; ?></small>
-                    </div>
-                    <div class="panel-body">
-                        <?php if (empty($all_images["3"])): ?>
-                            <p class="text-muted"><?php echo isset($lang['admin_hero_no_images']) ? $lang['admin_hero_no_images'] : "No images found"; ?></p>
-                        <?php else: ?>
-                            <div class="hero-images-grid">
-                                <?php foreach ($all_images["3"] as $image): 
-                                    $checkbox_name = "hero_image_" . preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
-                                    $is_checked = (isset($hero_prefs[$image])) ? $hero_prefs[$image] : false;
-                                ?>
-                                <div class="hero-image-item">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="<?php echo $checkbox_name; ?>" value="1" <?php echo ($is_checked) ? 'checked' : ''; ?>>
-                                            <span class="image-name"><?php echo htmlspecialchars($image); ?></span>
-                                        </label>
-                                    </div>
-                                    <img src="<?php echo IMAGES_URL.$image; ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
+                <button type="submit" id="hero_image_upload_button" class="btn btn-success" style="margin-bottom: 10px; display:none;" disabled>
+                    <span class="glyphicon glyphicon-upload"></span> <?php echo isset($lang['hero_images_text_012']) ? $lang['hero_images_text_012'] : "Upload Image"; ?>
+                </button>
+            </form>
+            <div class="help-block" style="margin-top:12px;">
+                <strong><?php echo isset($lang['admin_hero_upload_note_title']) ? $lang['admin_hero_upload_note_title'] : "File naming"; ?>:</strong>
+                <?php echo isset($lang['admin_hero_upload_note_body']) ? $lang['admin_hero_upload_note_body'] : "The uploaded file is automatically renamed using the selected category as a prefix &mdash; for example, uploading <em>sunset.jpg</em> in the Beer category saves as <code>beer-sunset.jpg</code>. You do not need to rename the file before uploading."; ?>
+                <br><strong><?php echo isset($lang['admin_hero_upload_note_size_title']) ? $lang['admin_hero_upload_note_size_title'] : "Size &amp; format"; ?>:</strong>
+                <?php echo isset($lang['admin_hero_upload_note_size_body']) ? $lang['admin_hero_upload_note_size_body'] : "Recommended 3000&times;500 px (6:1 ratio). Minimum width 1200 px with at least a 3.5:1 aspect ratio. Accepted formats: JPG, PNG, GIF, WebP. Maximum file size: 2 MB."; ?>
             </div>
         </div>
+    </div>
+
+    <form method="POST" action="<?php echo $request_uri; ?>" id="hero_images_form">
+        <input type="hidden" name="section" value="hero_images">
+        <input type="hidden" name="action" value="save">
+        <input type="hidden" name="user_session_token" value="<?php echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
+
+        <p class="help-block"><?php echo isset($lang['hero_images_text_009']) ? $lang['hero_images_text_009'] : "Images are randomly selected based on your competition's accepted style types. Miscellaneous images appear on all pages."; ?></p>
+
+        <?php
+        $category_blocks = array(
+            "0" => array(
+                "title" => (isset($lang['admin_hero_category_misc']) ? $lang['admin_hero_category_misc'] : "Miscellaneous"),
+                "help" => (isset($lang['admin_hero_category_shown_all']) ? $lang['admin_hero_category_shown_all'] : "Shown on all pages")
+            ),
+            "1" => array(
+                "title" => (isset($lang['admin_hero_category_beer']) ? $lang['admin_hero_category_beer'] : "Beer"),
+                "help" => (isset($lang['admin_hero_category_shown_beer']) ? $lang['admin_hero_category_shown_beer'] : "Shown when beer category is active")
+            ),
+            "2" => array(
+                "title" => (isset($lang['admin_hero_category_cider']) ? $lang['admin_hero_category_cider'] : "Cider"),
+                "help" => (isset($lang['admin_hero_category_shown_cider']) ? $lang['admin_hero_category_shown_cider'] : "Shown when cider category is active")
+            ),
+            "3" => array(
+                "title" => (isset($lang['admin_hero_category_mead']) ? $lang['admin_hero_category_mead'] : "Mead"),
+                "help" => (isset($lang['admin_hero_category_shown_mead']) ? $lang['admin_hero_category_shown_mead'] : "Shown when mead category is active")
+            )
+        );
+
+        foreach ($category_blocks as $category => $meta) {
+        ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title"><?php echo $meta['title']; ?></h4>
+                <small><?php echo $meta['help']; ?></small>
+            </div>
+            <div class="panel-body">
+                <?php if (empty($all_images[$category])): ?>
+                    <p class="text-muted"><?php echo isset($lang['admin_hero_no_images']) ? $lang['admin_hero_no_images'] : "No images found"; ?></p>
+                <?php else: ?>
+                    <div class="hero-images-grid">
+                        <?php foreach ($all_images[$category] as $image):
+                            $checkbox_name = "hero_image_".preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
+                            $is_checked = (isset($hero_prefs[$image])) ? $hero_prefs[$image] : false;
+                        ?>
+                        <div class="hero-image-item">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="<?php echo $checkbox_name; ?>" value="1" <?php echo ($is_checked) ? 'checked' : ''; ?>>
+                                    <span class="image-name"><?php echo htmlspecialchars($image); ?></span>
+                                </label>
+                            </div>
+                            <img src="<?php echo $images_url.$image; ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
+                            <button type="button" class="btn btn-link btn-xs hero-image-delete-button" data-hero-image="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>">
+                                <span class="glyphicon glyphicon-trash"></span> <?php echo isset($lang['delete']) ? $lang['delete'] : "Delete"; ?>
+                            </button>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php } ?>
 
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-12">
@@ -237,6 +349,25 @@ if (($action == "default") || ($action == "hero_images")) {
             </div>
         </div>
     </form>
+
+    <form method="POST" action="<?php echo $request_uri; ?>" id="hero_image_delete_form" style="display:none;">
+        <input type="hidden" name="section" value="hero_images">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="user_session_token" value="<?php echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="hidden" name="hero_image_delete" id="hero_image_delete_input" value="">
+    </form>
+
+    <div id="hero_image_delete_modal" class="hero-delete-modal" aria-hidden="true" style="display:none;">
+        <div class="hero-delete-modal__backdrop"></div>
+        <div class="hero-delete-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="hero_image_delete_modal_title">
+            <h4 id="hero_image_delete_modal_title">Delete image?</h4>
+            <p id="hero_image_delete_modal_body">This action cannot be undone.</p>
+            <div class="hero-delete-modal__actions">
+                <button type="button" class="btn btn-default btn-sm" id="hero_image_delete_cancel">Cancel</button>
+                <button type="button" class="btn btn-danger btn-sm" id="hero_image_delete_confirm">Delete</button>
+            </div>
+        </div>
+    </div>
 
 </div>
 
@@ -261,7 +392,6 @@ if (($action == "default") || ($action == "hero_images")) {
 
 #hero_images_admin .hero-image-item .image-name {
     display: block;
-    font-size: 12px;
     color: #666;
     word-break: break-word;
     margin-left: 5px;
@@ -276,250 +406,147 @@ if (($action == "default") || ($action == "hero_images")) {
     border: 1px solid #ddd;
 }
 
+#hero_images_admin .hero-image-delete-button {
+    margin-top: 10px;
+    padding-left: 0;
+    padding-right: 0;
+    color: #888;
+    text-decoration: none;
+    box-shadow: none;
+}
+
+#hero_images_admin .hero-image-delete-button:hover,
+#hero_images_admin .hero-image-delete-button:focus {
+    color: #b94a48;
+    text-decoration: underline;
+}
+
+#hero_images_admin .hero-delete-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+}
+
+#hero_images_admin .hero-delete-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+#hero_images_admin .hero-delete-modal__dialog {
+    position: relative;
+    width: calc(100% - 40px);
+    max-width: 420px;
+    margin: 12vh auto 0;
+    background: #fff;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+}
+
+#hero_images_admin .hero-delete-modal__dialog h4 {
+    margin-top: 0;
+}
+
+#hero_images_admin .hero-delete-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
 #hero_images_admin .panel-heading small {
     display: block;
     font-weight: normal;
-    font-size: 12px;
     color: #999;
     margin-top: 3px;
 }
 </style>
 
-<?php
+<script>
+(function () {
+    var categorySelect = document.getElementById('hero_image_category');
+    var fileInput = document.getElementById('hero_image_file');
+    var fileGroup = document.getElementById('hero_image_file_group');
+    var uploadButton = document.getElementById('hero_image_upload_button');
 
-} // End if action hero_images
+    if (!categorySelect || !fileInput || !fileGroup || !uploadButton) {
+        return;
+    }
 
-?>
+    function updateUploadState() {
+        var categoryChosen = !!categorySelect.value;
+        var fileChosen = !!(fileInput.files && fileInput.files.length > 0);
 
+        fileGroup.style.display = categoryChosen ? 'block' : 'none';
+        uploadButton.style.display = categoryChosen ? 'inline-block' : 'none';
+        uploadButton.disabled = !(categoryChosen && fileChosen);
 
-<div class="row">
-    <div class="col-lg-8">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title"><?php echo (isset($lang['adminHeroImagesUpload'])) ? $lang['adminHeroImagesUpload'] : "Upload New Hero Image"; ?></h3>
-            </div>
-            <div class="panel-body">
-                <p class="bcoem-admin-element"><?php echo (isset($lang['adminHeroImagesHelp'])) ? $lang['adminHeroImagesHelp'] : "Upload background images for the competition homepage. Recommended size: 3000x500 pixels (6:1 ratio). Acceptable formats: JPG, PNG, GIF, WebP, SVG."; ?></p>
+        if (!categoryChosen) {
+            fileInput.value = '';
+        }
+    }
 
-                <form id="hero-image-upload-form" method="post" action="<?php echo $base_url; ?>handle.php?action=hero-images" ENCTYPE="multipart/form-data" class="form-horizontal">
-                    <input type="hidden" name="user_session_token" value="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
+    categorySelect.addEventListener('change', updateUploadState);
+    fileInput.addEventListener('change', updateUploadState);
+    updateUploadState();
+})();
 
-                    <div class="form-group">
-                        <label for="hero-image-file" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo (isset($lang['adminHeroImageFile'])) ? $lang['adminHeroImageFile'] : "Image File"; ?></label>
-                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                <span class="btn btn-default btn-file"><span><?php echo (isset($lang['adminChooseFile'])) ? $lang['adminChooseFile'] : "Choose File"; ?></span><input type="file" name="file" id="hero-image-file" accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml" required /></span>
-                                <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger"><?php echo (isset($lang['adminNoFileChosen'])) ? $lang['adminNoFileChosen'] : "No file chosen..."; ?></span>
-                            </div>
-                        </div>
-                    </div>
+(function () {
+    var deleteForm = document.getElementById('hero_image_delete_form');
+    var deleteInput = document.getElementById('hero_image_delete_input');
+    var deleteButtons = document.querySelectorAll('.hero-image-delete-button');
+    var deleteModal = document.getElementById('hero_image_delete_modal');
+    var deleteModalBody = document.getElementById('hero_image_delete_modal_body');
+    var deleteCancel = document.getElementById('hero_image_delete_cancel');
+    var deleteConfirm = document.getElementById('hero_image_delete_confirm');
+    var pendingDeleteImage = '';
 
-                    <div class="form-group">
-                        <label for="hero-image-category" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo (isset($lang['adminHeroImageCategory'])) ? $lang['adminHeroImageCategory'] : "Category"; ?></label>
-                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                            <select name="category" id="hero-image-category" class="form-control" required>
-                                <option value=""><?php echo (isset($lang['adminSelectCategory'])) ? $lang['adminSelectCategory'] : "Select a category..."; ?></option>
-                                <option value="0"><?php echo $category_labels[0]; ?> (0)</option>
-                                <option value="1"><?php echo $category_labels[1]; ?> (1)</option>
-                                <option value="2"><?php echo $category_labels[2]; ?> (2)</option>
-                                <option value="3"><?php echo $category_labels[3]; ?> (3)</option>
-                            </select>
-                            <p class="help-block"><?php echo (isset($lang['adminHeroImageCategoryHelp'])) ? $lang['adminHeroImageCategoryHelp'] : "Images are randomly selected based on your competition's accepted style types. Miscellaneous images appear on all pages."; ?></p>
-                        </div>
-                    </div>
+    if (!deleteForm || !deleteInput || !deleteButtons.length || !deleteModal || !deleteModalBody || !deleteCancel || !deleteConfirm) {
+        return;
+    }
 
-                    <div class="form-group">
-                        <label for="hero-image-active" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo (isset($lang['adminActive'])) ? $lang['adminActive'] : "Active"; ?></label>
-                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                            <div class="checkbox">
-                                <label><input type="checkbox" name="active" id="hero-image-active" value="1" checked> <?php echo (isset($lang['adminHeroImageActiveHelp'])) ? $lang['adminHeroImageActiveHelp'] : "Include this image in the homepage rotation"; ?></label>
-                            </div>
-                        </div>
-                    </div>
+    function openDeleteModal(imageName) {
+        pendingDeleteImage = imageName;
+        deleteModalBody.textContent = 'Delete ' + imageName + '? This cannot be undone.';
+        deleteModal.style.display = 'block';
+        deleteModal.setAttribute('aria-hidden', 'false');
+        deleteCancel.focus();
+    }
 
-                    <div class="form-group">
-                        <div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-offset-4 col-sm-8 col-xs-12">
-                            <button type="submit" class="btn btn-primary"><span class="fa fa-upload"></span> <?php echo (isset($lang['adminUploadImage'])) ? $lang['adminUploadImage'] : "Upload Image"; ?></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    function closeDeleteModal() {
+        pendingDeleteImage = '';
+        deleteModal.style.display = 'none';
+        deleteModal.setAttribute('aria-hidden', 'true');
+    }
 
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><?php echo (isset($lang['adminHeroImageGuidelines'])) ? $lang['adminHeroImageGuidelines'] : "Guidelines"; ?></h3>
-            </div>
-            <div class="panel-body">
-                <ul>
-                    <li><strong><?php echo (isset($lang['adminSize'])) ? $lang['adminSize'] : "Size"; ?>:</strong> 3000x500px</li>
-                    <li><strong><?php echo (isset($lang['adminRatio'])) ? $lang['adminRatio'] : "Ratio"; ?>:</strong> 6:1 (width:height)</li>
-                    <li><strong><?php echo (isset($lang['adminFormats'])) ? $lang['adminFormats'] : "Formats"; ?>:</strong> JPG, PNG, GIF, WebP, SVG</li>
-                    <li><strong><?php echo (isset($lang['adminCategories'])) ? $lang['adminCategories'] : "Categories"; ?>:</strong>
-                        <ul style="margin-top: 5px;">
-                            <li>0 - <?php echo $category_labels[0]; ?></li>
-                            <li>1 - <?php echo $category_labels[1]; ?></li>
-                            <li>2 - <?php echo $category_labels[2]; ?></li>
-                            <li>3 - <?php echo $category_labels[3]; ?></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
+    for (var i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].addEventListener('click', function (event) {
+            event.preventDefault();
+            var imageName = this.getAttribute('data-hero-image');
+            if (!imageName) {
+                return;
+            }
 
-<?php if (!empty($hero_images)) { ?>
+            openDeleteModal(imageName);
+        });
+    }
 
-<h2><?php echo (isset($lang['adminHeroImagesExisting'])) ? $lang['adminHeroImagesExisting'] : "Existing Hero Images"; ?></h2>
+    deleteCancel.addEventListener('click', closeDeleteModal);
+    deleteConfirm.addEventListener('click', function () {
+        if (!pendingDeleteImage) {
+            return;
+        }
 
-<div class="table-responsive">
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th><?php echo (isset($lang['adminPreview'])) ? $lang['adminPreview'] : "Preview"; ?></th>
-                <th><?php echo (isset($lang['adminFileName'])) ? $lang['adminFileName'] : "File Name"; ?></th>
-                <th><?php echo (isset($lang['adminCategory'])) ? $lang['adminCategory'] : "Category"; ?></th>
-                <th><?php echo (isset($lang['adminActive'])) ? $lang['adminActive'] : "Active"; ?></th>
-                <th><?php echo (isset($lang['adminActions'])) ? $lang['adminActions'] : "Actions"; ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($hero_images as $image) { ?>
-                <tr>
-                    <td>
-                        <img src="<?php echo $base_url; ?>images/<?php echo htmlspecialchars($image['filename']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" style="max-height: 60px; max-width: 200px; cursor: pointer;" class="img-thumbnail" data-toggle="modal" data-target="#imageModal<?php echo $image['id']; ?>" title="<?php echo (isset($lang['adminClickToEnlarge'])) ? $lang['adminClickToEnlarge'] : "Click to enlarge"; ?>">
-                    </td>
-                    <td><?php echo htmlspecialchars($image['filename']); ?></td>
-                    <td>
-                        <select class="form-control form-control-sm hero-category-select" data-hero-id="<?php echo $image['id']; ?>" style="width: 100px;">
-                            <option value="0" <?php echo ($image['category'] == 0) ? "selected" : ""; ?>>0 - <?php echo $category_labels[0]; ?></option>
-                            <option value="1" <?php echo ($image['category'] == 1) ? "selected" : ""; ?>>1 - <?php echo $category_labels[1]; ?></option>
-                            <option value="2" <?php echo ($image['category'] == 2) ? "selected" : ""; ?>>2 - <?php echo $category_labels[2]; ?></option>
-                            <option value="3" <?php echo ($image['category'] == 3) ? "selected" : ""; ?>>3 - <?php echo $category_labels[3]; ?></option>
-                        </select>
-                    </td>
-                    <td>
-                        <div class="checkbox" style="margin: 0;">
-                            <label><input type="checkbox" class="hero-active-toggle" data-hero-id="<?php echo $image['id']; ?>" <?php echo ($image['active']) ? "checked" : ""; ?>> <?php echo ($image['active']) ? (isset($lang['adminYes']) ? $lang['adminYes'] : "Yes") : (isset($lang['adminNo']) ? $lang['adminNo'] : "No"); ?></label>
-                        </div>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-xs btn-danger hero-delete-btn" data-hero-id="<?php echo $image['id']; ?>" data-hero-filename="<?php echo htmlspecialchars($image['filename']); ?>">
-                            <span class="fa fa-trash"></span> <?php echo (isset($lang['adminDelete'])) ? $lang['adminDelete'] : "Delete"; ?>
-                        </button>
-                    </td>
-                </tr>
-
-                <!-- Modal for enlarged image view -->
-                <div class="modal fade" id="imageModal<?php echo $image['id']; ?>" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title"><?php echo htmlspecialchars($image['filename']); ?></h4>
-                            </div>
-                            <div class="modal-body">
-                                <img src="<?php echo $base_url; ?>images/<?php echo htmlspecialchars($image['filename']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" style="width: 100%; height: auto;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-        </tbody>
-    </table>
-</div>
-
-<script type="text/javascript" language="javascript">
-$(document).ready(function() {
-
-    // Handle category change
-    $('.hero-category-select').on('change', function() {
-        var heroId = $(this).data('hero-id');
-        var category = $(this).val();
-        updateHeroImageCategory(heroId, category);
+        deleteInput.value = pendingDeleteImage;
+        deleteForm.submit();
     });
 
-    // Handle active toggle
-    $('.hero-active-toggle').on('change', function() {
-        var heroId = $(this).data('hero-id');
-        var active = ($(this).is(':checked')) ? 1 : 0;
-        updateHeroImageActive(heroId, active);
-    });
-
-    // Handle delete
-    $('.hero-delete-btn').on('click', function() {
-        var heroId = $(this).data('hero-id');
-        var filename = $(this).data('hero-filename');
-        if (confirm('<?php echo (isset($lang['adminConfirmDelete'])) ? $lang['adminConfirmDelete'] : "Are you sure? This will remove the image named"; ?> ' + filename + ' <?php echo (isset($lang['adminFromServer'])) ? $lang['adminFromServer'] : "from the server."; ?>')) {
-            deleteHeroImage(heroId, filename);
+    deleteModal.querySelector('.hero-delete-modal__backdrop').addEventListener('click', closeDeleteModal);
+    document.addEventListener('keydown', function (event) {
+        if ((event.key === 'Escape') && (deleteModal.style.display !== 'none')) {
+            closeDeleteModal();
         }
     });
-
-});
-
-function updateHeroImageCategory(heroId, category) {
-    $.ajax({
-        type: "POST",
-        url: "<?php echo $base_url; ?>ajax/hero_images.ajax.php",
-        data: {
-            action: "update_category",
-            hero_id: heroId,
-            category: category,
-            user_session_token: "<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>"
-        },
-        success: function(response) {
-            // Update label
-            var label = $('.hero-category-select[data-hero-id="'+heroId+'"]').next('option').text();
-        },
-        error: function() {
-            alert('<?php echo (isset($lang['adminErrorUpdating'])) ? $lang['adminErrorUpdating'] : "Error updating image. Please try again."; ?>');
-        }
-    });
-}
-
-function updateHeroImageActive(heroId, active) {
-    $.ajax({
-        type: "POST",
-        url: "<?php echo $base_url; ?>ajax/hero_images.ajax.php",
-        data: {
-            action: "update_active",
-            hero_id: heroId,
-            active: active,
-            user_session_token: "<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>"
-        },
-        error: function() {
-            alert('<?php echo (isset($lang['adminErrorUpdating'])) ? $lang['adminErrorUpdating'] : "Error updating image. Please try again."; ?>');
-        }
-    });
-}
-
-function deleteHeroImage(heroId, filename) {
-    $.ajax({
-        type: "POST",
-        url: "<?php echo $base_url; ?>ajax/hero_images.ajax.php",
-        data: {
-            action: "delete",
-            hero_id: heroId,
-            filename: filename,
-            user_session_token: "<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>"
-        },
-        success: function(response) {
-            location.reload();
-        },
-        error: function() {
-            alert('<?php echo (isset($lang['adminErrorDeleting'])) ? $lang['adminErrorDeleting'] : "Error deleting image. Please try again."; ?>');
-        }
-    });
-}
+})();
 </script>
-
-<?php } else { ?>
-
-<div class="alert alert-info">
-    <p><?php echo (isset($lang['adminNoHeroImages'])) ? $lang['adminNoHeroImages'] : "No hero images have been uploaded yet. Upload your first image above."; ?></p>
-</div>
-
-<?php } ?>

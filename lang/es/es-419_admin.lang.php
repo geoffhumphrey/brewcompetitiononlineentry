@@ -119,10 +119,10 @@ $label_not_archived = "No Archivado";
 
 // -------------------- Hero Images --------------------
 
-$admin_hero_images_title = "Imágenes de Héroe de Fondo";
-$admin_hero_images_description = "Seleccione qué imágenes de fondo de héroe se muestran en la página de inicio. Las imágenes se seleccionan aleatoriamente según los tipos de estilo aceptados en su competencia.";
-$admin_hero_images_saved = "Preferencias de imágenes de héroe guardadas exitosamente.";
-$admin_hero_images_error = "Error al guardar las preferencias de imágenes de héroe.";
+$admin_hero_images_title = "Imágenes de Banner";
+$admin_hero_images_description = "Seleccione qué imágenes de banner se muestran en la página de inicio. Las imágenes se seleccionan aleatoriamente según los tipos de estilo aceptados en su competencia.";
+$admin_hero_images_saved = "Preferencias de imágenes de banner guardadas exitosamente.";
+$admin_hero_images_error = "Error al guardar las preferencias de imágenes de banner.";
 $admin_hero_category_misc = "Miscelánea";
 $admin_hero_category_beer = "Cerveza";
 $admin_hero_category_cider = "Sidra";

@@ -47,6 +47,7 @@
                 if ($go == "make_admin") include (ADMIN.'make_admin.admin.php');
                 if ($go == "contest_info") include (ADMIN.'competition_info.admin.php');
                 if ($go == "preferences") include (ADMIN.'site_preferences.admin.php');
+                if ($go == "hero_images") include (ADMIN.'hero_images.admin.php');
                 if ($go == "sponsors") include (ADMIN.'sponsors.admin.php');
                 if ($go == "style_types") include (ADMIN.'style_types.admin.php');
                 if ($go == "special_best") include (ADMIN.'special_best.admin.php');

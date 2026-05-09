@@ -119,10 +119,10 @@ $label_not_archived = "Nincs archiválva";
 
 // -------------------- Hero Images --------------------
 
-$admin_hero_images_title = "Hős Háttérképek";
-$admin_hero_images_description = "Válassza ki, mely hős háttérképek jelenjenek meg a kezdőlapon. A képek véletlenszerűen kerülnek kiválasztásra a verseny által elfogadott stílustípusok alapján.";
-$admin_hero_images_saved = "A hős képek preferenciái sikeresen mentve.";
-$admin_hero_images_error = "Hiba a hős képek preferenciáinak mentése során.";
+$admin_hero_images_title = "Háttérképek";
+$admin_hero_images_description = "Válassza ki, mely háttérképek jelenjenek meg a kezdőlapon. A képek véletlenszerűen kerülnek kiválasztásra a verseny által elfogadott stílustípusok alapján.";
+$admin_hero_images_saved = "A háttérképek preferenciái sikeresen mentve.";
+$admin_hero_images_error = "Hiba a háttérképek preferenciáinak mentése során.";
 $admin_hero_category_misc = "Vegyes";
 $admin_hero_category_beer = "Sör";
 $admin_hero_category_cider = "Almabor";

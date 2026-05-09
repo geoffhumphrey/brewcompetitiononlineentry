@@ -119,10 +119,10 @@ $label_not_archived = "Není Archivováno";
 
 // -------------------- Hero Images --------------------
 
-$admin_hero_images_title = "Obrázky Herojských Pozadí";
-$admin_hero_images_description = "Vyberte, které obrázky herojského pozadí se zobrazí na domovské stránce. Obrázky jsou náhodně vybrány na základě typů stylů přijatých vaší soutěží.";
-$admin_hero_images_saved = "Preference herojských obrázků úspěšně uloženy.";
-$admin_hero_images_error = "Chyba při ukládání preferencí herojských obrázků.";
+$admin_hero_images_title = "Obrázky Pozadí";
+$admin_hero_images_description = "Vyberte, které obrázky pozadí se zobrazí na domovské stránce. Obrázky jsou náhodně vybrány na základě typů stylů přijatých vaší soutěží.";
+$admin_hero_images_saved = "Preference obrázků pozadí úspěšně uloženy.";
+$admin_hero_images_error = "Chyba při ukládání preferencí obrázků pozadí.";
 $admin_hero_category_misc = "Různé";
 $admin_hero_category_beer = "Pivo";
 $admin_hero_category_cider = "Cidra";
