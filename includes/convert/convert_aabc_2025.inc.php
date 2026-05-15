@@ -33,7 +33,7 @@ do {
 
 foreach ($styles_2022 as $key => $id_2022) {
 	// Convert the 2022 style to 2025
-	$mapped_style_to_2022 = aabc_map_2022_2025($key,1,$prefix,1);
+    $mapped_style_to_2025 = aabc_map_2022_2025($key,1,$prefix,1);
 	$mapped_style_ids[$id_2022] = $mapped_style_to_2025;
 }
 
@@ -244,7 +244,7 @@ if ($totalRows_styles_active > 0) {
  * Update any entries in the brewing table to analogous 2025 styles
  */
 
-$query_brews = sprintf("SELECT id,brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle WHERE brewCategorySort='20' FROM %s ORDER BY brewCategorySort,brewSubCategory", $prefix."brewing");
+$query_brews = sprintf("SELECT id,brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle FROM %s WHERE brewCategorySort='20' ORDER BY brewCategorySort,brewSubCategory", $prefix."brewing");
 $brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 $row_brews = mysqli_fetch_assoc($brews);
 $totalRows_brews = mysqli_num_rows($brews);
