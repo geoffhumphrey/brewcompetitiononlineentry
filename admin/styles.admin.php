@@ -28,6 +28,9 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			$brewStyleActive = "";
 			if (array_key_exists($row_styles['id'],$current_styles_active)) $brewStyleActive = "CHECKED";
 
+			$brewStyleAtLimit = "";
+			if ((!empty($row_styles['brewStyleAtLimit'])) && ($row_styles['brewStyleAtLimit'] == 1)) $brewStyleAtLimit = "CHECKED";
+
 			$brewStyleOwn_prefix = "";
 			$brewStyleOwn_suffix = "";
 			 if ($row_styles['brewStyleOwn'] != "bcoe") {
@@ -65,6 +68,7 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			else $table_body .= "<td>".$brewStyleOwn_prefix.$row_styles['brewStyleGroup'].$row_styles['brewStyleNum'].$brewStyleOwn_suffix."</td>";
 			$table_body .= "<td>".style_type($row_styles['brewStyleType'],"2",$style_own)."</td>";
 			$table_body .= "<td>".$brewStyleReqSpec.$brewStyleStrength.$brewStyleCarb.$brewStyleSweet."</td>";
+			$table_body .= "<td width=\"1%\" nowrap><input name=\"brewStyleAtLimit".$row_styles['id']."\" type=\"checkbox\" value=\"1\" ".$brewStyleAtLimit."></td>";
 			$table_body .= "<td class=\"hidden-print\">";
 			if ($section != "step7") {
 				if ($row_styles['brewStyleOwn'] != "bcoe") $table_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;id=".$row_styles['id']."&amp;view=".$row_styles['brewStyleType']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit ".$row_styles['brewStyle']."\"><span class=\"fa fa-lg fa-pencil\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=".$go."&amp;dbTable=".$styles_db_table."&amp;action=delete&amp;id=".$row_styles['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".$row_styles['brewStyle']."\" data-confirm=\"Are you sure you want to delete ".$row_styles['brewStyle']."? This cannot be undone. Deleting a custom style will remove it and associated entries from any public past winner lists. To avoid this, simply deactivate the style.\"><span class=\"fa fa-lg fa-trash-o\"></span></a> ";
@@ -120,6 +124,7 @@ if ($section != "step7") { ?>
 				null,
 				null,
 				{ "asSorting": [  ] },
+				null,
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -145,6 +150,7 @@ function checkUncheckAll(theElement) {
   <th><?php if (strpos($_SESSION['prefsStyleSet'],"BJCP") === false) echo "Overall Category"; else echo "#"; ?></th>
   <th>Style Type</th>
   <th>Requirements</th>
+  <th nowrap="nowrap">Restrict Entries <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you want to restrict further entries for a style on the fly, check its corresponding box in this column and then select Update at the bottom of the page. <span class='text-primary'><strong>Please Note:</strong> This will override any table-level restriction if using Table Limits in Tables Planning Mode.</span>" ?><i class="fa fa-question-circle"></i></a></th>
   <th class="hidden-print">Actions</th>
  </tr>
  </thead>

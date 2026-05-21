@@ -57,7 +57,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					$style_id = sterilize($id);
 
-					$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $style_id);
+					if (isset($_POST['brewStyleAtLimit'.$id])) $brewStyleAtLimit = 1;
+					else $brewStyleAtLimit = NULL;
+
+					$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType, brewStyleAtLimit FROM %s WHERE id='%s'", $styles_db_table, $style_id);
 					$styles_default = mysqli_query($connection,$query_styles_default);
 					$row_styles_default = mysqli_fetch_assoc($styles_default);
 					$totalRows_styles_default = mysqli_num_rows($styles_default);
@@ -69,10 +72,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
 							'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
 							'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion']),
-                            'brewStyleType' => $row_styles_default['brewStyleType']							
+                            'brewStyleType' => $row_styles_default['brewStyleType']				
 						);
 					}
 
+					$update_table = $prefix."styles";
+					$data = array('brewStyleAtLimit' => $brewStyleAtLimit);
+					$db_conn->where ('id', $row_styles_default['id']);
+					$result = $db_conn->update ($update_table, $data);
 				
 				} // if (isset($_POST['brewStyleActive'.$id]))
 
@@ -188,7 +195,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$query_log = sprintf("SELECT id FROM $brewing_db_table WHERE brewStyle = '%s'",$_POST['brewStyleOld']);
-		$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
+		$log = mysqli_query($connection,$query_log) or die ("A database error occurred.");
 		$row_log = mysqli_fetch_assoc($log);
 		$totalRows_log = mysqli_num_rows($log);
 
@@ -228,7 +235,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if ($action == "add") {
 
 				$query_last_style_added = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."styles");
-				$last_style_added = mysqli_query($connection,$query_last_style_added) or die (mysqli_error($connection));
+				$last_style_added = mysqli_query($connection,$query_last_style_added) or die ("A database error occurred.");
 				$row_last_style_added = mysqli_fetch_assoc($last_style_added);
 
 				$id = $row_last_style_added['id'];
