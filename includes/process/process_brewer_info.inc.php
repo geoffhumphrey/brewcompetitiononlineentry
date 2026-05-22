@@ -61,7 +61,7 @@ if (isset($_POST['brewerClubs'])) {
     include (INCLUDES.'constants.inc.php');
     $brewerClubs = $purifier->purify($_POST['brewerClubs']);
     // $brewerClubsConcat = $brewerClubs."|".$brewerClubs;
-    if (!in_array($brewerClubs,$_SESSION['club_array'])) {
+    if (!in_array(html_entity_decode($brewerClubs),$_SESSION['club_array'])) {
         if ($_POST['brewerClubs'] == "Other") {
             if (!empty($_POST['brewerClubsOther'])) $brewerClubs = ucwords($purifier->purify($_POST['brewerClubsOther']));
             else $brewerClubs = "Other";
@@ -447,7 +447,7 @@ if ($view == "quick") {
     $locations = array();
 
     $query_j_locs = sprintf("SELECT id FROM %s", $prefix."judging_locations");
-    $j_locs = mysqli_query($connection,$query_j_locs) or die (mysqli_error($connection));
+    $j_locs = mysqli_query($connection,$query_j_locs) or die ("A database error occurred.");
     $row_j_locs = mysqli_fetch_assoc($j_locs);
     
     do {
