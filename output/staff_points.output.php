@@ -79,6 +79,12 @@ do {
 $mead_cider_total = $mead_styles_total + $cider_styles_total;
 $all_styles_total = $beer_styles_total + $mead_styles_total + $cider_styles_total;
 
+$total_entries_scored = get_entry_count("scored");
+
+// Possiblity of more scored entries than marked as received. Slim, but could happen.
+// Best to go with what has presumably been judged.
+if ($total_entries_scored > $total_entries_received) $total_entries_received = $total_entries_scored;
+
 if ($total_entries_received >= 30) {
 	if (($beer_styles_total >= 5) || ($mead_cider_total >= 3)) $bos_judge_points = 0.5;
 }

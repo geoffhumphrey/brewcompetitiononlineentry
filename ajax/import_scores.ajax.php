@@ -22,10 +22,16 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	$styles_db_table = $prefix."styles";
 
 	// First, query DB to see if any evaluations have been recorded
+
+	/*
 	$query_eval = sprintf("SELECT * FROM %s",$prefix."evaluation");
-	$eval = mysqli_query($connection,$query_eval) or die (mysqli_error($connection));
+	$eval = mysqli_query($connection,$query_eval) or die ("A database error occurred.");
 	$row_eval = mysqli_fetch_assoc($eval);
 	$totalRows_eval = mysqli_num_rows($eval);
+	*/
+
+	$row_eval = $db_conn->get($prefix."evaluation");
+	$totalRows_eval = $db_conn->count;
 
 	// If no records
 	if ($totalRows_eval == 0) {
@@ -38,32 +44,38 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	// If there are records, update the scores DB table with scores recorded by judges
 	else {
 
+		/*
 		$query_scored = sprintf("SELECT * FROM %s",$prefix."judging_scores");
-		$scored = mysqli_query($connection,$query_scored) or die (mysqli_error($connection));
+		$scored = mysqli_query($connection,$query_scored) or die ("A database error occurred.");
 		$row_scored = mysqli_fetch_assoc($scored);
 		$totalRows_scored = mysqli_num_rows($scored);
+		*/
+
+		$db_conn->returnType = 'array'; 
+		$row_scored = $db_conn->get($prefix."judging_scores");
+		$totalRows_scored = $db_conn->count;
 
 		$flagged = array();
 		$eval_arr = array();
-		$scores_arr = array();
+		$scored_arr = array();
 		$scored_places = array();
 		$scored_places_discrepency = array();
 		$singles = array();
 		$evalPlace = array();
 		$status = 1;
 
-		do {
+		foreach ($row_scored as $row_scored) {
 			$scored_arr[] = $row_scored['eid'];
 			$scored_places[] = array(
 				"scored_id" => $row_scored['eid'],
 				"scored_place" => $row_scored['scorePlace'],
 				"scored_minibos" => $row_scored['scoreMiniBOS']
 			);
-		} while($row_scored = mysqli_fetch_assoc($scored));
+		} 
 
-		do {
+		foreach ($row_eval as $row_eval) {
 			$eval_arr[] = $row_eval['eid'];
-		} while($row_eval = mysqli_fetch_assoc($eval));
+		}
 
 		$eval_arr = array_unique($eval_arr);
 
@@ -80,14 +92,23 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			$update_miniBOS = FALSE;
 
 			// Query the evaluation table and return the evaluations associated with the entry
+			/*
 			$query_evals = sprintf("SELECT * FROM %s WHERE eid='%s'",$prefix."evaluation",$value);
-			$evals = mysqli_query($connection,$query_evals) or die (mysqli_error($connection));
+			$evals = mysqli_query($connection,$query_evals) or die ("A database error occurred.");
 			$row_evals = mysqli_fetch_assoc($evals);
 			$totalRows_evals = mysqli_num_rows($evals);
+			*/
 
+			$db_conn->returnType = 'array'; 
+			$db_conn->where ('eid', $value);
+			$row_evals = $db_conn->get($prefix."evaluation");
+			$totalRows_evals = $db_conn->count;
+
+			/*
 			$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'",$styles_db_table,$row_evals['evalStyle']);
-			$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
+			$style_type = mysqli_query($connection,$query_style_type) or die ("A database error occurred.");
 			$row_style_type = mysqli_fetch_assoc($style_type);
+			*/
 
 			// First, check if the score has been recorded already.
 			// If it has, check that any places OR mini-BOS has been recorded or changed
@@ -99,19 +120,23 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 				// If there is a record, update the record in the scores DB
 				// Loop through and compare each final score. 
-				do {
+				foreach ($row_evals as $row_evals) {
 
+					/*
 					$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle']);
-					$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
+					$style_type = mysqli_query($connection,$query_style_type) or die ("A database error occurred.");
 					$row_style_type = mysqli_fetch_assoc($style_type);
+					*/
+
+					$db_conn->where ('id', $row_evals['evalStyle']);
+					$row_style_type = $db_conn->getOne ($styles_db_table, null, "brewStyleType");
 
 					if ($row_style_type) $evalStyleType[] = $row_style_type['brewStyleType'];
 					else $evalStyleType[] = "";
 					$evalPlace[] = $row_evals['evalPlace'];
 					$evalMiniBOS[] = $row_evals['evalMiniBOS'];
 				
-				} while($row_evals = mysqli_fetch_assoc($evals));
-
+				}
 
 				if ((is_array($evalMiniBOS)) && (!empty($evalMiniBOS))) $evalMiniBOS = max($evalMiniBOS);
 				if ((is_numeric($evalMiniBOS)) && ($evalMiniBOS > 0)) $evalMiniBOS = 1;
@@ -204,18 +229,23 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 				// If only a single evaluation, add eid to the singles array
 				if ($totalRows_evals == 1) {
-					$singles[] = $row_evals['eid'];
+					$singles[] = $row_evals[0]['eid'];
 					$not_imported_count ++;
 				}
 				
 				if ($totalRows_evals > 1) {
 
 					// Loop through and compare each final score. 
-					do {
+					foreach ($row_evals as $row_evals)  {
 
+						/*
 						$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle']);
 						$style_type = mysqli_query($connection,$query_style_type);
 						$row_style_type = mysqli_fetch_assoc($style_type);
+						*/
+
+						$db_conn->where ('id', $row_evals['evalStyle']);
+						$row_style_type = $db_conn->getOne ($styles_db_table, null, "brewStyleType");
 
 						$eval_scores[] = $row_evals['evalFinalScore'];
 						$eid[] = $row_evals['eid'];
@@ -225,9 +255,8 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 						$evalPlace[] = $row_evals['evalPlace'];
 						if ($row_style_type) $evalStyleType[] = $row_style_type['brewStyleType'];
 						else $evalStyleType[] = "";
-						
 
-					} while ($row_evals = mysqli_fetch_assoc($evals));
+					}
 
 					// print_r($evalTable);
 					// echo "<br>";
@@ -244,9 +273,15 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					if ((is_numeric($evalPlace)) && ($evalPlace > 0)) $evalPlace = $evalPlace;
 					else $evalPlace = "";
 
+					/*
 					$query_eval_max = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE eid='%s' AND evalFinalScore='%s'",$prefix."evaluation",$value,$final_score);
-					$eval_max = mysqli_query($connection,$query_eval_max) or die (mysqli_error($connection));
+					$eval_max = mysqli_query($connection,$query_eval_max) or die ("A database error occurred.");
 					$row_eval_max = mysqli_fetch_assoc($eval_max);
+					*/
+
+					$db_conn->where ('eid', $value);
+					$db_conn->where ('evalFinalScore', $final_score);
+					$row_eval_max = $db_conn->getOne ($prefix."evaluation", "sum(id), count(*) as count");
 				
 					// If all consensus scores match, add the sql insert statement
 					if ($row_eval_max['count'] == $totalRows_evals) {

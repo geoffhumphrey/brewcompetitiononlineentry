@@ -28,11 +28,11 @@ if (isset($_SESSION['loginUsername'])) {
     if ($bid == "default") $bid = $_SESSION['uid'];
 
     $query_brewer = sprintf("SELECT * FROM %s WHERE uid = '%s'", $brewer_db_table, $bid);
-    $brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+    $brewer = mysqli_query($connection,$query_brewer) or die ("A database error occurred.");
     $row_brewer = mysqli_fetch_assoc($brewer);
 
     $query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s'", $brewing_db_table, $bid);
-    $log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
+    $log = mysqli_query($connection,$query_log) or die ("A database error occurred.");
     $row_log = mysqli_fetch_assoc($log);
     $totalRows_log = mysqli_num_rows($log);
 
@@ -62,10 +62,15 @@ if (isset($_SESSION['loginUsername'])) {
 
     // Flag if rendering an anonymous label (no name/address/phone)
     $anon = FALSE;
+    $standard = FALSE;
     $barcode_qr = FALSE;
     $large_entry_num = FALSE;
+    $large_text = FALSE;
+    $entry_number_disp = FALSE;
+    $judging_number_disp = FALSE;
 
     /**
+     * 0 = Anon, smaller printed number, with barcode [judging number] --New 3.1--
      * 1 = Anon, larger printed number, with barcode/qr [entry number] --New 3.1--
      * 2 = Anon, larger printed number [entry number] --New 3.1--
      * 3 = Anon, larger printed number, with barcode [judging number] --New 3.1--
@@ -75,18 +80,26 @@ if (isset($_SESSION['loginUsername'])) {
      * 7 = Standard [entry number] --Legacy--
      * 8 = Anon [entry number] --Legacy--
      * 9 = Anon, smaller printed number [judging number] --New 3.1--
-     * 0 = Anon, smaller printed number, with barcode [judging number] --New 3.1--
+     * 10 = Standard, large number and style [entry number]
+     * 11 = Standard, large number and style with barcode/qr [entry number]  
      */
 
     $anon_label_arr = array(1,2,3,4,6,8,9,0);
-    $barcode_qr_arr = array(1,3,5,6,0);
+    $standard_label_arr = array(5,7,10,11);
+    $barcode_qr_arr = array(1,3,5,6,0,11);
     $large_label_arr = array(1,2,3,4);
+    $large_text_arr = array(10,11);
     $judging_number_label_arr = array(3,4,9,0);
+    $entry_number_label_arr = array(1,2,5,6,7,8,10,11);
 
-    if (in_array($_SESSION['prefsEntryForm'],$anon_label_arr))  $anon = TRUE;
-    if (in_array($_SESSION['prefsEntryForm'],$barcode_qr_arr))  $barcode_qr = TRUE;
+    if (in_array($_SESSION['prefsEntryForm'],$anon_label_arr)) { $anon = TRUE; $standard = FALSE; }
+    if (in_array($_SESSION['prefsEntryForm'],$standard_label_arr)) { $standard = TRUE; $anon = FALSE; }
+    if (in_array($_SESSION['prefsEntryForm'],$barcode_qr_arr)) $barcode_qr = TRUE;
     if (in_array($_SESSION['prefsEntryForm'],$large_label_arr)) $large_entry_num = TRUE;
-
+    if (in_array($_SESSION['prefsEntryForm'],$large_text_arr)) $large_text = TRUE;
+    if (in_array($_SESSION['prefsEntryForm'],$judging_number_label_arr)) { $judging_number_disp = TRUE; $entry_number_disp = FALSE; }
+    if (in_array($_SESSION['prefsEntryForm'],$entry_number_label_arr)) { $judging_number_disp = FALSE; $entry_number_disp = TRUE; }
+    
     // Set up vars
     if (isset($_SESSION['jPrefsBottleNum'])) $bottle_label_count = $_SESSION['jPrefsBottleNum'];
     else $bottle_label_count = 3; // number of bottles required
@@ -121,8 +134,8 @@ if (isset($_SESSION['loginUsername'])) {
 
         for ($i=1; $i<=$bottle_label_count; $i++) {
 
-          if (in_array($_SESSION['prefsEntryForm'],$judging_number_label_arr)) $barcode = sprintf("%06s",$row_log['brewJudgingNumber']);
-          else $barcode = sprintf("%06s",$row_log['id']);
+          if ($judging_number_disp) $barcode = sprintf("%06s",$row_log['brewJudgingNumber']);
+          if ($entry_number_disp) $barcode = sprintf("%06s",$row_log['id']);
 
             if ($barcode_qr) {
               
@@ -152,19 +165,45 @@ if (isset($_SESSION['loginUsername'])) {
             $page_info1 .= "<div class=\"label-inner\">";
 
             $page_info1 .= "<div style=\"margin: 0 0 10px 0;\" class=\"text-center label-title\"><strong>".$_SESSION['contestName']."</strong></div>";
-            if ($large_entry_num) $page_info1 .= "<div style=\"margin: 10px 0 10px 0; padding: 5px 0 5px 0;\" class=\"text-center label-entry-num\">".$barcode."</div>";
+            if ($large_entry_num) $page_info1 .= "<div style=\"margin: 10px 0 10px 0; padding: 0;\" class=\"text-center label-entry-num\">".$barcode."</div>";
+            elseif ($large_text) $page_info1 .= "<div style=\"margin: 10px 0 10px 0; padding: 0;\" class=\"text-center label-category-name\">".$barcode."</div>";
             else $page_info1 .= "<div class=\"text-center\" style=\"margin: 0 0 10px 0; padding: 5px 0 5px 0; font-size: 1.2em; border: 1px solid #dedede; border-radius: 5px;\"><strong>".$label_entry_number.":</strong> ".$barcode."</span></div>";
-            
-            if (!$anon) $page_info1 .= "<div style=\"margin: 0 0 5px 0;\"><strong>".$label_entry_name.":</strong> ".truncate($entry_name,45,"&hellip;")."</span></div>";
 
-            if ($large_entry_num) $page_info1 .= "<div style=\"margin: 0 0 5px 0;\">";
-            else $page_info1 .= "<div style=\"margin: 0 0 5px 0;\">";
-            
-            if ($_SESSION['prefsStyleSet'] == "BA") $page_info1 .= "<strong>Cat:</strong> ".$row_log['brewStyle'];
-            elseif ($_SESSION['prefsStyleSet'] == "AABC")  $page_info1 .= "<strong>".$label_category.":</strong> ".ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0")." ".$row_log['brewStyle']."</span>";
-            else $page_info1 .= "<strong>".$label_category.":</strong> ".$row_log['brewCategory'].$row_log['brewSubCategory']." ".$row_log['brewStyle']."</span>";
+            if ($large_text) { 
+              
+              $page_info1 .= "<div class=\"text-center label-category-name\" style=\"margin: 0 0 20px 0; padding: 0 5px 0 5px;\" >";
+              
+              if ($_SESSION['prefsStyleSet'] == "BA") {
+                $page_info1 .= "<div>".$row_log['brewStyle']."</div>";
+              }
+              
+              elseif ($_SESSION['prefsStyleSet'] == "AABC") {
+                $page_info1 .= "<div>".$label_category.": ".ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0")."</div>";
+                $page_info1 .= "<div style=\"font-size: .7em;\">".$row_log['brewStyle']."</div>";
+              } 
+              
+              else {
+                $page_info1 .= "<div>".$row_log['brewCategory'].$row_log['brewSubCategory']."</div>";
+                $page_info1 .= "<div style=\"font-size: .7em;\">".$row_log['brewStyle']."</div>";
+              }
 
-            $page_info1 .= "</div>";
+              $page_info1 .= "</div>";
+
+            }
+            
+            if (!$anon) $page_info1 .= "<div style=\"margin: 0 0 5px 0;\"><strong>".$label_entry_name.":</strong> ".truncate($entry_name,30,"&hellip;")."</div>";
+
+            if (!$large_text) { 
+
+              $page_info1 .= "<div style=\"margin: 0 0 5px 0;\">";
+              
+              if ($_SESSION['prefsStyleSet'] == "BA") $page_info1 .= "<strong>Cat:</strong> ".$row_log['brewStyle'];
+              elseif ($_SESSION['prefsStyleSet'] == "AABC")  $page_info1 .= "<strong>".$label_category.":</strong> ".ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0")." ".$row_log['brewStyle']."</span>";
+              else $page_info1 .= "<strong>".$label_category.":</strong> ".$row_log['brewCategory'].$row_log['brewSubCategory']." ".$row_log['brewStyle']."</span>";
+
+              $page_info1 .= "</div>";
+
+            }
 
             if ($anon) {
               
@@ -196,9 +235,9 @@ if (isset($_SESSION['loginUsername'])) {
             
             }
 
-            else {
+            if ($standard) {
               
-              $page_info1 .= "<p class=\"label-entrant\">";
+              $page_info1 .= "<div>";
               
               if ($_SESSION['prefsProEdition'] == 1) {
                 $page_info1 .= $row_brewer['brewerBreweryName']."<br>";
@@ -208,7 +247,7 @@ if (isset($_SESSION['loginUsername'])) {
               else $page_info1 .= $brewerFirstName." ".$brewerLastName."<br>";
               $page_info1 .= $brewerEmail."<br>";
               $page_info1 .= $phone;
-              $page_info1 .= "</p>";
+              $page_info1 .= "</div>";
             
             }
 
@@ -287,7 +326,7 @@ else {
     <link rel="stylesheet" href="<?php echo $css_url."templates.min.css"; ?>">
     <style>
 
-  <?php if ($large_entry_num) { ?>
+  <?php if (($large_entry_num) || ($large_text)) { ?>
 
     body {
       font-size: 1em;
@@ -303,6 +342,13 @@ else {
       font-weight: 900;
       line-height: 1.1;
       margin: 10px 0 10px 0;
+    }
+
+    .label-category-name {
+      font-size: 2em;
+      font-weight: 900;
+      line-height: 1.0;
+      padding: 5px;
     }
 
     .label-inner p:not(.label-entry-num):not(.label-title) {
@@ -326,18 +372,19 @@ else {
   <?php } else { ?>
 
     body {
-      font-size: 1.05em;
+      font-size: 1em;
     }
 
     .label-title {
       font-size: 1.25em;
     }
+  
+
+  <?php } ?>
 
     .label-entrant {
       font-size: 1em;
     }
-
-  <?php } ?>
 
     .label-border {
       border: 1px solid #000;

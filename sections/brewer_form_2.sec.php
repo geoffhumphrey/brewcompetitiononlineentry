@@ -17,6 +17,63 @@ if ($_SESSION['prefsProEdition'] == 1) {
 
 else $participant_orgs_label = $label_brewing_partners;
 
+$styles_selected = array();
+$styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
+
+if (!empty($styles_selected)) {
+
+    if ($_SESSION['prefsStyleSet'] == "BA") array_multisort(array_column($styles_selected, 'brewStyle'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
+    else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
+
+    $j_likes_form_elements = "";
+    $j_dislikes_form_elements = "";
+
+    $a = array();
+    $b = array();
+
+    if (isset($row_brewer['brewerJudgeLikes'])) { 
+        $a = explode(",", $row_brewer['brewerJudgeLikes']);
+    }
+
+    if (isset($row_brewer['brewerJudgeDislikes'])) { 
+        $b = explode(",", $row_brewer['brewerJudgeDislikes']);
+    }
+
+    foreach($styles_selected as $key => $value) {
+
+        if ((isset($value['id'])) && (!empty($value['id']))) {
+            $style_display = "";
+            $style_selected_likes = "";
+            if (in_array($value['id'], $a)) $style_selected_likes = "CHECKED";
+
+            $style_selected_dislikes = "";
+            if (in_array($value['id'], $b)) $style_selected_dislikes = "CHECKED";
+
+            if ($_SESSION['prefsStyleSet'] == "BA") {
+                $style_display .= $value['brewStyle'];
+            }
+            
+            else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
+
+            $j_likes_form_elements .= "<div class=\"checkbox\">\n";
+            $j_likes_form_elements .= "<label>\n";
+            $j_likes_form_elements .= sprintf("<input name=\"brewerJudgeLikes[]\" type=\"checkbox\" value=\"%s\" %s>\n", $value['id'], $style_selected_likes);
+            $j_likes_form_elements .= $style_display;
+            $j_likes_form_elements .= "\n</label>\n";
+            $j_likes_form_elements .= "</div>\n";
+
+            $j_dislikes_form_elements .= "<div class=\"checkbox\">\n";
+            $j_dislikes_form_elements .= "<label>\n";
+            $j_dislikes_form_elements .= sprintf("<input name=\"brewerJudgeDislikes[]\" type=\"checkbox\" value=\"%s\" %s>\n", $value['id'], $style_selected_dislikes);
+            $j_dislikes_form_elements .= $style_display;
+            $j_dislikes_form_elements .= "\n</label>\n";
+            $j_dislikes_form_elements .= "</div>\n";
+        }
+        
+    }
+
+}
+
 if (!$entrant_type_brewery) { 
         
     $judge_checked = FALSE;
@@ -207,7 +264,6 @@ if (!$entrant_type_brewery) {
         <div class="form-group">
             <label for="brewerJudgeExp" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_comps; ?></label>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            
             <select class="selectpicker" name="brewerJudgeExp" id="brewerJudgeExp" data-width="auto" required>
                 <option value="0"<?php if (($action == "edit") && ($row_brewer['brewerJudgeExp'] == "0")) echo " SELECTED"; ?>>0</option>
                 <option value="1-5"<?php if (($action == "edit") && ($row_brewer['brewerJudgeExp'] == "1-5")) echo " SELECTED"; ?>>1-5</option>
@@ -217,6 +273,8 @@ if (!$entrant_type_brewery) {
             <span class="help-block"><?php echo $brewer_text_011; ?></span>
             </div>
         </div>
+        
+        <?php if (!empty($styles_selected)) { ?>
         <div class="form-group">
             <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -225,27 +283,11 @@ if (!$entrant_type_brewery) {
             </div>
         </div>
         <div class="collapse" id="collapsePref">
-            <div class="form-group"><!-- Form Group Checkbox  -->
+            <div class="form-group">
                 <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_preferred; ?></label>
                 <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-                <p><strong class="text-danger"><?php echo $brewer_text_012; ?></strong></p>
-                    <?php 
-                    $styles_selected = array();
-                    $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
-                    if ($_SESSION['prefsStyleSet'] == "BA") array_multisort(array_column($styles_selected, 'brewStyleType'), SORT_ASC, array_column($styles_selected, 'brewStyle'), SORT_ASC, $styles_selected);
-                    else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
-                    foreach ($styles_selected as $key => $value) {
-                        $style_id = $value['id'];
-                        $style_display = "";
-                        if ($_SESSION['prefsStyleSet'] == "BA") $style_display .= $value['brewStyle'];
-                        else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
-                    ?>
-                        <div class="checkbox">
-                            <label>
-                                <input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $style_id; ?>" <?php if (isset($row_brewer['brewerJudgeLikes'])) { $a = explode(",", $row_brewer['brewerJudgeLikes']); foreach ($a as $v) { if ($v == $style_id) echo "CHECKED"; } } ?>> <?php echo $style_display; ?>
-                            </label>
-                        </div>
-                    <?php }  ?>
+                    <p><strong class="text-danger"><?php echo $brewer_text_012; ?></strong></p>
+                    <?php echo $j_likes_form_elements; ?>
                 </div>
             </div>
         </div>
@@ -257,32 +299,15 @@ if (!$entrant_type_brewery) {
                 </div>
         </div>
         <div class="collapse" id="collapseNonPref">
-            <div class="form-group"><!-- Form Group Checkbox  -->
+            <div class="form-group">
                 <label for="brewJudgeDislikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_non_preferred; ?></label>
                 <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                     <p><strong class="text-danger"><?php echo $brewer_text_014; ?></strong></p>
-                    <!-- <div class="row"> -->
-                    <?php 
-                    $styles_selected = array();
-                    $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
-                    if ($_SESSION['prefsStyleSet'] == "BA") array_multisort(array_column($styles_selected, 'brewStyleType'), SORT_ASC, array_column($styles_selected, 'brewStyle'), SORT_ASC, $styles_selected);
-                    else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
-                    foreach ($styles_selected as $key => $value) {
-                        $style_id = $value['id'];          
-                        $style_display = "";
-                        if ($_SESSION['prefsStyleSet'] == "BA") $style_display .= $value['brewStyle'];
-                        else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
-                    ?>
-                        <div class="checkbox">
-                            <label>
-                                <input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $style_id; ?>" <?php if (isset($row_brewer['brewerJudgeDislikes'])) { $a = explode(",", $row_brewer['brewerJudgeDislikes']); foreach ($a as $v) { if ($v == $style_id) echo "CHECKED"; } } ?>> <?php echo $style_display; ?>
-                            </label>
-                        </div>
-                    <?php }  ?>
-                    <!-- </div> -->
+                    <?php echo $j_dislikes_form_elements; ?>
                 </div>
             </div>
         </div>
+        <?php } ?>
     </div><!-- ./ brewerJudgeFields -->
 </section><!-- ./ judge-preferences -->
 

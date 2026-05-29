@@ -26,13 +26,19 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 			$user_name_entered = filter_var($_POST['user_name'],FILTER_SANITIZE_EMAIL);
 			$user_name_entered = $purifier->purify($user_name_entered);
 
+			/*
 			$query_user_name = sprintf("SELECT user_name,userQuestion FROM %s WHERE user_name='%s'",$prefix."users",$user_name_entered);
-			$user_name = mysqli_query($connection,$query_user_name) or die (mysqli_error($connection));
+			$user_name = mysqli_query($connection,$query_user_name) or die ("A database error occurred.");
 			$row_user_name = mysqli_fetch_assoc($user_name);
+			*/
+
+			$cols = array("user_name","userQuestion");
+			$db_conn->where ("user_name", $user_name_entered);
+			$row_user_name = $db_conn->getOne ($prefix."users", null, $cols);
 
 			if ($go == "forgot") {
 				
-				if (mysqli_num_rows($user_name)) {
+				if ($row_user_name) {
 
 					if (is_email($user_name_entered)) {
 						$_SESSION['user_name_entered'] = $user_name_entered;
@@ -99,12 +105,20 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 		require (CLASSES.'phpass/PasswordHash.php');
 		$hasher = new PasswordHash(8, false);
 
+		/*
 		$query_user_question = sprintf("SELECT a.id, a.user_name, a.userQuestion, a.userQuestionAnswer, b.brewerFirstName, b.brewerLastName FROM %s a, %s b WHERE a.user_name='%s' AND a.id = b.uid;",$prefix."users",$prefix."brewer",$email);
-		$user_question = mysqli_query($connection,$query_user_question) or die (mysqli_error($connection));
+		$user_question = mysqli_query($connection,$query_user_question) or die ("A database error occurred.");
 		$row_user_question = mysqli_fetch_assoc($user_question);
 		$totalRows_user_question = mysqli_num_rows($user_question);
+		*/
 
-		$stored_hash = $row_user_question['userQuestionAnswer'];
+		$sql = sprintf("SELECT a.id, a.user_name, a.userQuestion, a.userQuestionAnswer, b.brewerFirstName, b.brewerLastName FROM %s a, %s b WHERE a.user_name='%s' AND a.id = b.uid;",$prefix."users",$prefix."brewer",$email);
+		$row_user_question = $db_conn->rawQuery($sql);
+		$totalRows_user_question = $db_conn->count;
+
+		// MysqliDB returns a multi-dimentional array for rawQuery calls
+		$stored_hash = $row_user_question[0]['userQuestionAnswer'];
+		
 		$check = 0;
 		if ($totalRows_user_question > 0) $check = $hasher->CheckPassword($answer, $stored_hash);
 
@@ -122,15 +136,15 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 				'userToken' => $token,
 				'userTokenTime' => time()
 			);
-			$db_conn->where ('id', $row_user_question['id']);
+			$db_conn->where ('id', $row_user_question[0]['id']);
 			$result = $db_conn->update ($update_table, $data);
 
 			// But only if token data is successfully inserted			
 			if ($result) {
 
 				// Build vars
-				$first_name = $row_user_question['brewerFirstName'];
-				$last_name = $row_user_question['brewerLastName'];
+				$first_name = $row_user_question[0]['brewerFirstName'];
+				$last_name = $row_user_question[0]['brewerLastName'];
 				$reset_url = $base_url."index.php?section=login&go=password&action=reset-password&token=".$token;
 
 				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
@@ -153,7 +167,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 				$from_name = html_entity_decode($from_name);
 				$from_name = mb_convert_encoding($from_name, "UTF-8");
 
-				$to_email = filter_var($row_user_question['user_name'],FILTER_SANITIZE_EMAIL);
+				$to_email = filter_var($row_user_question[0]['user_name'],FILTER_SANITIZE_EMAIL);
 				$to_email = mb_convert_encoding($to_email, "UTF-8");
 
 				$to_name = $first_name." ".$last_name;

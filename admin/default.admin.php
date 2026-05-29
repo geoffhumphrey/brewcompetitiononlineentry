@@ -2416,7 +2416,7 @@ if ($recently_updated) {
                                 <ul class="list-unstyled">
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">General</a></li>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries">Entry</a></li>
-                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email">Email Sending</a></li>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email">Email Sending / Contact Display</a></li>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment">Currency and Payment</a></li>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best">Best Brewer and/or Club</a></li>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Judging/Competition Organization</a></li>

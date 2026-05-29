@@ -9,7 +9,7 @@
  * @author    Alexander V. Butenko <a.butenka@gmail.com>
  * @copyright Copyright (c) 2010-2017
  * @license   http://opensource.org/licenses/gpl-3.0.html GNU Public License
- * @link      http://github.com/joshcam/PHP-MySQLi-Database-Class 
+ * @link      http://github.com/joshcam/PHP-MySQLi-Database-Class
  * @version   2.9.3
  */
 
@@ -216,9 +216,9 @@ class MysqliDb
     /**
      * Variables for query execution tracing
      */
-    protected $traceStartQ;
-    protected $traceEnabled;
-    protected $traceStripPrefix;
+    protected $traceStartQ = 0;
+    protected $traceEnabled = false;
+    protected $traceStripPrefix = '';
     public $trace = array();
 
     /**
@@ -243,7 +243,7 @@ class MysqliDb
      * @var string the name of a default (main) mysqli connection
      */
     public $defConnectionName = 'default';
-    
+
     public $autoReconnect = true;
     protected $autoReconnectCount = 0;
 
@@ -261,7 +261,7 @@ class MysqliDb
      * @param string $charset
      * @param string $socket
      */
-    public function __construct($host = null, $username = null, $password = null, $db = null, $port = null, $charset = 'utf8mb4', $socket = null)
+    public function __construct($host = null, $username = null, $password = null, $db = null, $port = null, $charset = 'utf8', $socket = null)
     {
         $isSubQuery = false;
 
@@ -306,7 +306,7 @@ class MysqliDb
     {
         if(!isset($this->connectionsSettings[$connectionName]))
             throw new Exception('Connection profile not set');
-        
+
         $pro = $this->connectionsSettings[$connectionName];
         $params = array_values($pro);
         $charset = array_pop($params);
@@ -553,11 +553,14 @@ class MysqliDb
     public function rawAddPrefix($query){
         $query = str_replace(PHP_EOL, '', $query);
         $query = preg_replace('/\s+/', ' ', $query);
-        preg_match_all("/(from|into|update|join) [\\'\\´]?([a-zA-Z0-9_-]+)[\\'\\´]?/i", $query, $matches);
+	preg_match_all("/(from|into|update|join|describe) [\\'\\´\\`]?([a-zA-Z0-9_-]+)[\\'\\´\\`]?/i", $query, $matches);
         list($from_table, $from, $table) = $matches;
 
-        if (isset($table[0])) $query = str_replace($table[0], self::$prefix.$table[0], $query);
-        return $query;
+        // Check if there are matches
+        if (empty($table[0]))
+            return $query; 
+
+        return str_replace($table[0], self::$prefix.$table[0], $query);
     }
 
     /**
@@ -725,10 +728,10 @@ class MysqliDb
     /**
      * A convenient SELECT * function.
      *
-     * @param string    $tableName   The name of the database table to work with.
-     * @param int|array $numRows     Array to define SQL limit in format Array ($offset, $count)
-     *                               or only $count
-     * @param string    $columns     Desired columns
+     * @param string       $tableName The name of the database table to work with.
+     * @param int|array    $numRows   Array to define SQL limit in format Array ($offset, $count)
+     *                                or only $count
+     * @param string|array $columns   Desired columns
      *
      * @return array|MysqliDb Contains the returned rows from the select query.
      * @throws Exception
@@ -767,8 +770,8 @@ class MysqliDb
     /**
      * A convenient SELECT * function to get one record.
      *
-     * @param string $tableName The name of the database table to work with.
-     * @param string $columns   Desired columns
+     * @param string       $tableName The name of the database table to work with.
+     * @param string|array $columns   Desired columns
      *
      * @return array Contains the returned rows from the select query.
      * @throws Exception
@@ -791,11 +794,11 @@ class MysqliDb
     /**
      * A convenient SELECT COLUMN function to get a single column value from one row
      *
-     * @param string $tableName The name of the database table to work with.
-     * @param string $column    The desired column
-     * @param int    $limit     Limit of rows to select. Use null for unlimited..1 by default
+     * @param string    $tableName The name of the database table to work with.
+     * @param string    $column    The desired column
+     * @param int|null  $limit     Limit of rows to select. Use null for unlimited. 1 by default
      *
-     * @return mixed Contains the value of a returned column / array of values
+     * @return mixed    Contains the value of a returned column / array of values
      * @throws Exception
      */
     public function getValue($tableName, $column, $limit = 1)
@@ -1642,7 +1645,7 @@ class MysqliDb
             }
 
             if ($this->_nestJoin && $field->table != $this->_tableName) {
-                $field->table = mb_substr($field->table, mb_strlen(self::$prefix));
+                $field->table = substr($field->table, strlen(self::$prefix));
                 $row[$field->table][$field->name] = null;
                 $parameters[] = & $row[$field->table][$field->name];
             } else {
@@ -1690,7 +1693,12 @@ class MysqliDb
             }
             $this->count++;
             if ($this->_mapKey) {
-                $results[$row[$this->_mapKey]] = count($row) > 2 ? $result : end($result);
+                if (count($row) < 3 && $this->returnType == 'object') {
+                    $res = new ArrayIterator($result);
+                    $res->seek($_res->count() - 1);
+                    $results[$row[$this->_mapKey]] = $res->current();
+                }
+                else $results[$row[$this->_mapKey]] = count($row) > 2 ? $result : end($result);
             } else {
                 array_push($results, $result);
             }
@@ -2043,9 +2051,6 @@ class MysqliDb
      * @param array  $vals
      *
      * @return string
-     * 
-     * UPDATED 06-17-2022 
-     * Errors output for empty array keys
      */
     protected function replacePlaceHolders($str, $vals)
     {
@@ -2056,31 +2061,19 @@ class MysqliDb
             return $str;
         }
 
-        else {
-
-            $str = "";
-
-            while ($pos = strpos($str, "?")) {
-
-                if (isset($vals)) {
-                    $val = $vals[$i++];
-                    if (is_object($val)) {
-                        $val = '[object]';
-                    }
-                    if ($val === null) {
-                        $val = 'NULL';
-                    }
-                    $newStr .= mb_substr($str, 0, $pos) . "'" . $val . "'";
-                    $str = mb_substr($str, $pos + 1);
-                }
-               
+        while ($pos = strpos($str, "?")) {
+            $val = $vals[$i++];
+            if (is_object($val)) {
+                $val = '[object]';
             }
-
-            $newStr .= $str;
-            return $newStr;
-
-        }   
-        
+            if ($val === null) {
+                $val = 'NULL';
+            }
+            $newStr .= substr($str, 0, $pos) . "'" . $val . "'";
+            $str = substr($str, $pos + 1);
+        }
+        $newStr .= $str;
+        return $newStr;
     }
 
     /**
@@ -2345,7 +2338,7 @@ class MysqliDb
      *
      * @return MysqliDb
      */
-    public function setTrace($enabled, $stripPrefix = null)
+    public function setTrace($enabled, $stripPrefix = '')
     {
         $this->traceEnabled = $enabled;
         $this->traceStripPrefix = $stripPrefix;
@@ -2366,7 +2359,7 @@ class MysqliDb
         }
 
         return __CLASS__ . "->" . $caller["function"] . "() >>  file \"" .
-            str_replace($this->traceStripPrefix, '', $caller["file"]) . "\" line #" . $caller["line"] . " ";
+        str_replace($this->traceStripPrefix , '', $caller["file"]) . "\" line #" . $caller["line"] . " ";
     }
 
     /**
@@ -2480,8 +2473,8 @@ class MysqliDb
             else
                 $joinStr = $joinTable;
 
-            $this->_query .= " " . $joinType. " JOIN " . $joinStr . 
-                (false !== stripos($joinCondition, 'using') ? " " : " on ") 
+            $this->_query .= " " . $joinType. " JOIN " . $joinStr .
+                (false !== stripos($joinCondition, 'using') ? " " : " on ")
                 . $joinCondition;
 
             // Add join and query

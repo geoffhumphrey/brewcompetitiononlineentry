@@ -13,6 +13,7 @@ elseif (is_array($user_submitted_eval)) $score_previous = TRUE;
 
 if (TESTING) {
 
+	/*
 	$styles_db_table = $prefix."styles";
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
@@ -24,8 +25,15 @@ if (TESTING) {
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$chosen_style_set,$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
-	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+	$style = mysqli_query($connection,$query_style) or die ("A database error occurred.");
 	$row_style = mysqli_fetch_assoc($style);
+	*/
+
+	$db_conn->where ("brewStyleGroup", $row_entries['brewCategorySort']);
+	$db_conn->where ("brewStyleNum", $row_entries['brewSubCategory']);
+	if ($_SESSION['prefsStyleSet'] == "BJCP2025") $db_conn->where ("brewStyleVersion = ? OR brewStyleVersion = ?", array("BJCP2025","BJCP2021"));
+	else $db_conn->where ("brewStyleVersion", $_SESSION['prefsStyleSet']);
+	$row_style = $db_conn->getOne ($prefix."styles", null, "brewStyleType");
 	
 	$add_link_full = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=1&amp;id=".$row_entries['id'];
 	$add_link_checklist = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=2&amp;id=".$row_entries['id'];
@@ -314,23 +322,24 @@ elseif ($scored_by_user) {
 		$actions .= "<div class=\"d-grid gap-1 mb-2\">";
 		
 		if (!$disable_add_edit) {
-			$actions .= "<div class=\"d-grid mb-1\">";
     		$actions .= "<a onclick=\"localStorage.clear();\" class=\"btn btn-sm btn-dark\" href=\"".$edit_link."\">".$label_edit;
     		$actions .= "</a>";
-    		$actions .= "</div>";
     	}
 		
 		$actions .= "<a style=\"word-wrap:break-word;\" data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-secondary modal-window-link hide-loader\" href=\"".$view_link."\">";
 		if (strpos($row_table_assignments['assignRoles'], "HJ") !== false) $actions .= $label_view_my_eval;
 		else $actions .= $label_view;
 		$actions .= "</a>";
+		
 		$actions .= "</div>";
 		
 	}
 
 	else {
-		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-block btn-sm btn-secondary modal-window-link hide-loader\" href=\"".$view_link."\">".$label_view;
+		$actions .= "<div class=\"d-grid gap-1 mb-2\">";
+		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-secondary modal-window-link hide-loader\" href=\"".$view_link."\">".$label_view;
 		$actions .= "</a>";
+		$actions .= "</div>";
 	}
 
 	$actions .= "<div class=\"text-center\">";

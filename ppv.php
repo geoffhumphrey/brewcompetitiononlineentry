@@ -24,23 +24,18 @@ require ('paths.php');
 require (CONFIG.'bootstrap.php');
 require (LIB.'email.lib.php');
 
+/*
 $query_prefs = sprintf("SELECT prefsPayPalAccount,prefsPaypalIPN FROM %s WHERE id='1'", $prefix."preferences");
-$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+$prefs = mysqli_query($connection,$query_prefs) or die ("A database error occurred.");
 $row_prefs = mysqli_fetch_assoc($prefs);
+*/
+
+$cols = array("prefsPaypalAccount","prefsPaypalIPN");
+$db_conn->where ("id", 1);
+$row_prefs = $db_conn->getOne ($prefix."preferences", null, $cols);
 
 // Only execute if IPN is "turned on"
 if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) { 
-
-	$query_logo = sprintf("SELECT contestName,contestLogo FROM %s WHERE id='1'", $prefix."contest_info");
-	$logo = mysqli_query($connection,$query_logo) or die (mysqli_error($connection));
-	$row_logo = mysqli_fetch_assoc($logo);
-	$totalRows_logo = mysqli_num_rows($logo);
-
-	$current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
-	$current_date_time_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time");
-	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
-
-	$custom_parts = explode("|",$_POST['custom']);
 
 	// Assign posted variables to local variables
 	$data['payment_status'] = sterilize($_POST['payment_status']);
@@ -56,14 +51,37 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	$data['payer_email'] = filter_var($_POST['payer_email'],FILTER_SANITIZE_EMAIL);
 	$data['custom'] = sterilize($_POST['custom']);
 
+	$custom_parts = explode("|",$_POST['custom']);
+	$current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
+	$current_date_time_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time");
+	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
+
+	/*
+	$query_logo = sprintf("SELECT contestName,contestLogo FROM %s WHERE id='1'", $prefix."contest_info");
+	$logo = mysqli_query($connection,$query_logo) or die ("A database error occurred.");
+	$row_logo = mysqli_fetch_assoc($logo);
+	$totalRows_logo = mysqli_num_rows($logo);
+	*/
+
+	$cols = array("contestName","contestLogo");
+	$db_conn->where ("id", 1);
+	$row_logo = $db_conn->getOne ($prefix."contest_info", null, $cols);
+	$totalRows_logo = $db_conn->count;
+
+	/*
 	$query_user_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerEmail FROM %s WHERE uid='%s'", $prefix."brewer",$custom_parts[0]);
-	$user_info = mysqli_query($connection,$query_user_info) or die (mysqli_error($connection));
+	$user_info = mysqli_query($connection,$query_user_info) or die ("A database error occurred.");
 	$row_user_info = mysqli_fetch_assoc($user_info);
 	$totalRows_user_info = mysqli_num_rows($user_info);
+	*/
+
+	$cols = array("brewerFirstName","brewerLastName","brewerEmail");
+	$db_conn->where ("uid", $custom_parts[0]);
+	$row_user_info = $db_conn->getOne ($prefix."brewer", null, $cols);
 
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
-	$paypal_email_address = filter_var($row_prefs['prefsPayPalAccount'],FILTER_SANITIZE_EMAIL);
+	$paypal_email_address = filter_var($row_prefs['prefsPaypalAccount'],FILTER_SANITIZE_EMAIL);
 
 	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 
@@ -101,10 +119,18 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	$ipn = new PaypalIPN();
 
 	if ($enable_sandbox) {
-	    $ipn->useSandbox();
+		try {
+	        $ipn->useSandbox();
+	    } catch (Exception $e) {
+	        error_log("IPN useSandbox failed: " . $e->getMessage());
+	    }
 	}
 
-	$verified = $ipn->verifyIPN();
+	try {
+        $verified = $ipn->verifyIPN();
+    } catch (Exception $e) {
+        error_log("IPN verifyIPN failed: " . $e->getMessage());
+    }
 
 	if ($send_confirmation_email) {
 		foreach ($_POST as $key => $value) {
@@ -164,7 +190,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 
 			$to_email = filter_var($row_user_info['brewerEmail'],FILTER_SANITIZE_EMAIL);
 			$to_email = mb_convert_encoding($to_email, "UTF-8");
-			$to_email_formatted .= $to_recipient." <".$to_email.">";
+			$to_email_formatted = $to_recipient." <".$to_email.">";
 
 			$from_email = filter_var($from_email,FILTER_SANITIZE_EMAIL);
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
@@ -239,7 +265,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	    $paypal_ipn_status = "Received from Sandbox While Live";
 	}
 
-	if ($save_log_file) {
+	if (($save_log_file) && (isset($data['txn_id'])) && (!empty($data['txn_id']))) {
 
 		$update_table = $prefix."payments";
 		$data_ppv = array(
@@ -308,7 +334,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	
 	}
 
-} // if ($row_prefs['prefsPaypalIPN'] == "1")
+} // end if ($row_prefs['prefsPaypalIPN'] == "1")
 
 // Reply with an empty 200 response to indicate to paypal the IPN was received correctly
 header("HTTP/1.1 200 OK");

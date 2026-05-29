@@ -79,7 +79,8 @@ $versions = array(
 	"2.8.2.0" => 30,
 	"3.0.0.0" => 31,
 	"3.0.1.0" => 32,
-	"3.0.2.0" => 33
+	"3.0.2.0" => 33,
+	"3.0.3.0" => 34
 );
 
 $pre_update_version_index = $versions[$row_pv['version']];
@@ -1063,7 +1064,7 @@ else {
 
 // Get the delay value from DB
 $query_delay = sprintf("SELECT prefsWinnerDelay FROM %s WHERE id='1'", $prefix."preferences");
-$delay = mysqli_query($connection,$query_delay) or die (mysqli_error($connection));
+$delay = mysqli_query($connection,$query_delay) or die ("A database error occurred.");
 $row_delay = mysqli_fetch_assoc($delay);
 
 // Check if the length is less than 10 (Unix timestamp is 10)
@@ -1071,7 +1072,7 @@ $row_delay = mysqli_fetch_assoc($delay);
 if ((!empty($row_delay)) && ((strlen($row_delay['prefsWinnerDelay'])) < 10)) {
 
 	$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations");
-	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+	$check = mysqli_query($connection,$query_check) or die ("A database error occurred.");
 	$row_check = mysqli_fetch_assoc($check);
 
 	// Add the hour delay to the latest judging date
@@ -1111,7 +1112,7 @@ $name_parser = new FullNameParser();
 
 // Standardize the proper names of entrants and locations
 $query_names = sprintf("SELECT * FROM %s",$prefix."brewer");
-$names = mysqli_query($connection,$query_names) or die (mysqli_error($connection));
+$names = mysqli_query($connection,$query_names) or die ("A database error occurred.");
 $row_names = mysqli_fetch_assoc($names);
 $totalRows_names = mysqli_num_rows($names);
 
@@ -1212,7 +1213,7 @@ if ($totalRows_names > 0) {
 
 // Standardize the names of entries
 $query_entry_names = sprintf("SELECT id,brewName,brewInfo,brewComments,brewCoBrewer,brewJudgingNumber FROM %s",$prefix."brewing");
-$entry_names = mysqli_query($connection,$query_entry_names) or die (mysqli_error($connection));
+$entry_names = mysqli_query($connection,$query_entry_names) or die ("A database error occurred.");
 $row_entry_names = mysqli_fetch_assoc($entry_names);
 $totalRows_entry_names = mysqli_num_rows($entry_names);
 
@@ -1471,7 +1472,7 @@ if (!check_update("prefsBestUseBOS", $prefix."preferences")) {
 }
 
 $query_mead_cider_present = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE styleTypeName = 'Mead/Cider'",$prefix."style_types");
-$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die (mysqli_error($connection));
+$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die ("A database error occurred.");
 $row_mead_cider_present = mysqli_fetch_assoc($mead_cider_present);
 
 if ($row_mead_cider_present['count'] == 0) {
@@ -1893,7 +1894,7 @@ if (HOSTED) $query_cust_st = sprintf("SELECT id,brewStyleGroup FROM %s WHERE bre
 else 
 */
 $query_cust_st = sprintf("SELECT id,brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup < 35 ORDER BY brewStyleGroup ASC", $styles_db_table);
-$cust_st = mysqli_query($connection,$query_cust_st) or die (mysqli_error($connection));
+$cust_st = mysqli_query($connection,$query_cust_st) or die ("A database error occurred.");
 $row_cust_st = mysqli_fetch_assoc($cust_st);
 $totalRows_cust_st = mysqli_num_rows($cust_st);
 
@@ -1905,7 +1906,7 @@ if ($totalRows_cust_st > 0) {
 	else 
 	*/
 	$query_st_num = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup >= 35 ORDER BY brewStyleGroup DESC LIMIT 1", $styles_db_table);
-	$st_num = mysqli_query($connection,$query_st_num) or die (mysqli_error($connection));
+	$st_num = mysqli_query($connection,$query_st_num) or die ("A database error occurred.");
 	$row_st_num = mysqli_fetch_assoc($st_num);
 	$totalRows_st_num = mysqli_num_rows($st_num);
 
@@ -1951,7 +1952,7 @@ $all_style_types = array_merge($old_style_types,$new_style_types);
 
 // First, gather current state of the style types table into an array to use later
 $query_current_st = sprintf("SELECT * FROM %s ORDER BY id ASC",$prefix."style_types");
-$current_st = mysqli_query($connection,$query_current_st) or die (mysqli_error($connection));
+$current_st = mysqli_query($connection,$query_current_st) or die ("A database error occurred.");
 $row_current_st = mysqli_fetch_assoc($current_st);
 
 $sql = sprintf("TRUNCATE %s",$prefix."style_types");
@@ -2080,7 +2081,7 @@ do {
 		}
 
         $query_new_st = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."style_types");
-        $new_st = mysqli_query($connection,$query_new_st) or die (mysqli_error($connection));
+        $new_st = mysqli_query($connection,$query_new_st) or die ("A database error occurred.");
         $row_new_st = mysqli_fetch_assoc($new_st);
 
         /*
@@ -3454,7 +3455,7 @@ if ($row_current_styleset) {
 		else 
 		*/
 		$query_style_number = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='%s' ORDER BY brewStyleNum DESC LIMIT 1", $styles_db_table, $row_current_styleset['prefsStyleSet']);
-		$style_number = mysqli_query($connection,$query_style_number) or die (mysqli_error($connection));
+		$style_number = mysqli_query($connection,$query_style_number) or die ("A database error occurred.");
 		$row_style_number = mysqli_fetch_assoc($style_number);
 		
 		if (is_numeric($row_style_number['brewStyleNum'])) $sub_style_id = $row_style_number['brewStyleNum'] + 1;
@@ -3945,7 +3946,7 @@ if (!check_update("brewStyleType", $prefix."brewing")) {
 
 	// Loop through the brewing table and provide a value for the new brewStyleType column
 	$query_entry_style_types = sprintf("SELECT DISTINCT a.id, a.brewCategorySort, a.brewSubCategory, b.brewStyleGroup, b.brewStyleNum, b.brewStyleType FROM %s a, %s b WHERE a.brewCategorySort = b.brewStyleGroup AND a.brewSubCategory = b.brewStyleNum ORDER BY a.id ASC", $prefix."brewing", $prefix."styles");
-	$entry_style_types = mysqli_query($connection,$query_entry_style_types) or die (mysqli_error($connection));
+	$entry_style_types = mysqli_query($connection,$query_entry_style_types) or die ("A database error occurred.");
 	$row_entry_style_types = mysqli_fetch_assoc($entry_style_types);
 	$totalRows_entry_style_types = mysqli_num_rows($entry_style_types);
 
@@ -4021,7 +4022,7 @@ if (check_update("brewerBreweryTTB", $prefix."brewer")) {
 	}
 
 	$query_ttb = sprintf("SELECT id,brewerBreweryInfo FROM %s WHERE brewerBreweryInfo IS NOT NULL", $prefix."brewer");
-	$ttb = mysqli_query($connection,$query_ttb) or die (mysqli_error($connection));
+	$ttb = mysqli_query($connection,$query_ttb) or die ("A database error occurred.");
 	$row_ttb = mysqli_fetch_assoc($ttb);
 	$totalRows_ttb = mysqli_num_rows($ttb);
 
@@ -4062,7 +4063,7 @@ foreach ($archive_suffixes as $suffix) {
 		$db_conn->rawQuery($sql);
 
 		$query_ttb = sprintf("SELECT id,brewerBreweryInfo FROM %s WHERE brewerBreweryInfo IS NOT NULL", $prefix."brewer_".$suffix);
-		$ttb = mysqli_query($connection,$query_ttb) or die (mysqli_error($connection));
+		$ttb = mysqli_query($connection,$query_ttb) or die ("A database error occurred.");
 		$row_ttb = mysqli_fetch_assoc($ttb);
 		$totalRows_ttb = mysqli_num_rows($ttb);
 
@@ -4802,6 +4803,141 @@ if (!$setup_running) $v3000_update .= "</ul>";
 
 $this_update_version_block = $versions['3.0.0.0'];
 if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3000_update;
+
+/**
+ * ----------------------------------------------- 3.0.1 ----------------------------------------------
+ * 
+ */
+
+$v3010_update = "";
+
+if ((!$setup_running) && (!$update_running)) {
+	$v3010_update .= "<p>";
+	$v3010_update .= "<strong>Version 3.0.1.0 Updates</strong>";
+	$v3010_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$v3010_update .= "<h4>Version 3.0.1</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $v3010_update .= "<ul>";
+
+$v3010_update .= "<li>Added winners only address label download option.</li>";
+$v3010_update .= "<li>Added entry limit per overall style option.</li>";$v3010_update .= "<li>Fixed club name freeform bug to address silent fails of accounting editing for selected users when club had \"illegal\" characters in it.</li>";
+$v3010_update .= "<li>Fixed bug preventing Admins from setting table entry limits prior to entry registration.</li>";
+$v3010_update .= "<li>Fixed BJCP reporting of BOS Judge points.</li>";
+$v3010_update .= "<li>Fixed display bug where non-judging sessions were showing with judging sessions. They are now separated.</li>";
+
+if (!$setup_running) $v3010_update .= "</ul>";
+
+$this_update_version_block = $versions['3.0.1.0'];
+if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3010_update;
+
+
+/**
+ * ----------------------------------------------- 3.0.2 ----------------------------------------------
+ * 
+ */
+
+$v3020_update = "";
+
+if ((!$setup_running) && (!$update_running)) {
+	$v3020_update .= "<p>";
+	$v3020_update .= "<strong>Version 3.0.2.0 Updates</strong>";
+	$v3020_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$v3020_update .= "<h4>Version 3.0.2</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $v3020_update .= "<ul>";
+$v3020_update .= "<li>Moved clubs master list to primary and secondary CDN sources with local redundancies should those fail to load.</li>";
+
+// Updates Below
+
+if (!$setup_running) $v3020_update .= "</ul>";
+
+$this_update_version_block = $versions['3.0.2.0'];
+if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3020_update;
+
+
+/**
+ * ----------------------------------------------- 3.0.3 ----------------------------------------------
+ * 
+ */
+
+$v3030_update = "";
+
+if ((!$setup_running) && (!$update_running)) {
+	$v3030_update .= "<p>";
+	$v3030_update .= "<strong>Version 3.0.3.0 Updates</strong>";
+	$v3030_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$v3030_update .= "<h4>Version 3.0.3</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $v3030_update .= "<ul>";
+
+// Updates Below
+$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsEntryForm` `prefsEntryForm` INT(2) NULL DEFAULT NULL;", $prefix."preferences");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $v3030_update .= "<li>prefsEntryForm column changed to INT(2).</li>";
+else {
+	$v3030_update .= "<li>prefsEntryForm column NOT changed to INT(2)</li>";
+	$error_count++;
+}
+
+$v3030_update .= "<li>Added four Anonymous bottle label options.</li>";
+$v3030_update .= "<li>Corrected bug where shipping information was showing when shipping info display is disabled.</li>";
+$v3030_update .= "<li>Corrected minor security issues.</li>";
+$v3030_update .= "<li>Corrected bug where Admins are being shown a judge or steward account's hashed security question response. Should be hidden.</li>";
+
+if (!$setup_running) $v3030_update .= "</ul>";
+
+$this_update_version_block = $versions['3.0.3.0'];
+if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3030_update;
+
+
+/**
+ * ----------------------------------------------- 3.X.X ----------------------------------------------
+ * 
+
+$v30XX_update = "";
+
+if ((!$setup_running) && (!$update_running)) {
+	$v30XX_update .= "<p>";
+	$v30XX_update .= "<strong>Version 3.X.X.0 Updates</strong>";
+	$v30XX_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$v30XX_update .= "<h4>Version 3.X.X</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $v30XX_update .= "<ul>";
+
+// Updates Below
+
+$v30XX_update .= "<li></li>";
+$v30XX_update .= "<li></li>";
+
+if (!$setup_running) $v30XX_update .= "</ul>";
+
+$this_update_version_block = $versions['3.0.X.X'];
+if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v30XX_update;
+
+*/
+
 
 /**
  * ---------------------------------------------------------------------------------------------------

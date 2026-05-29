@@ -2247,6 +2247,14 @@ $label_scoresheet_practice = "Práctica de hoja de puntuación";
 $entry_info_text_058 = "Inicie sesión para ver la ubicación y su dirección, si está disponible.";
 
 /**
+ * ------------------------------------------
+ * Version 3.0.3 Additions
+ * ------------------------------------------
+ */
+
+$contact_text_014 = "Los administradores del sitio han desactivado la visualización de los datos de contacto de la competencia. Utiliza otros medios para ponerte en contacto con cualquier responsable de la competencia (redes sociales, el sitio web de la organización, etc.).";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------
