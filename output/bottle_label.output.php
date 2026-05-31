@@ -209,17 +209,18 @@ if (isset($_SESSION['loginUsername'])) {
               
               $brewInfo = "";
               $brewMeadCider = "";
-              
-              if (!empty($row_log['brewInfo'])) {
-                $brewInfo = $row_log['brewInfo'];
-                if (strpos($row_log['brewInfo'],"^") !== FALSE) $brewInfo = str_replace("^", "&nbsp;&nbsp;", $brewInfo);
-                $brewInfo = truncate($brewInfo,70,"&hellip;");
-              }
 
               if ((!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
                 if (!empty($row_log['brewMead1'])) $brewMeadCider .= $row_log['brewMead1']."&nbsp;&nbsp;";
                 if (!empty($row_log['brewMead2'])) $brewMeadCider .= $row_log['brewMead2']."&nbsp;&nbsp;";
                 if (!empty($row_log['brewMead3'])) $brewMeadCider .= $row_log['brewMead3'];
+              }
+              
+              if (!empty($row_log['brewInfo'])) {
+                $brewInfo = $row_log['brewInfo'];
+                if (strpos($row_log['brewInfo'],"^") !== FALSE) $brewInfo = str_replace("^", "&nbsp;", $brewInfo);
+                if (empty($brewMeadCider)) $brewInfo = truncate($brewInfo,200,"&hellip;");
+                else $brewInfo = truncate($brewInfo,150,"&hellip;");
               }
 
               if (!empty($brewInfo)) {
