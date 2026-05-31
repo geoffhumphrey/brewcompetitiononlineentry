@@ -128,6 +128,8 @@ if ($_SESSION['prefsEval'] == 1) {
 
 $disable_label_print = FALSE;
 $disable_label_print_count = 0;
+$printable_label_count = 0;
+$no_printable_entries = FALSE;
 
 if ($totalRows_log > 0) {
 	
@@ -432,7 +434,8 @@ if ($totalRows_log > 0) {
 				$entry_output .= "<td class=\"d-print-none\">";
 				
 				if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) {
-					$multi_print_link .= "<input class=\"form-check-input entry-print\" name=\"id[]\" type=\"checkbox\" value=\"".$row_log['id']."\">";
+					$multi_print_link .= "<input class=\"form-check-input entry-print\" name=\"id[]\" type=\"checkbox\" value=\"".$row_log['id']."\" data-entry-name=\"".$entry_name."\" data-entry-number=\"".$entry_number."\">";
+					$printable_label_count += 1;
 				}
 
 				else {
@@ -692,6 +695,7 @@ if ($totalRows_log > 0) {
 	} while ($row_log = mysqli_fetch_assoc($log));
 
 	if ($disable_label_print_count > 0) $disable_label_print = TRUE;
+	if ($printable_label_count === 0) $no_printable_entries = TRUE;
 
 } // end if ($totalRows_log > 0)
 
@@ -741,7 +745,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 		<div class="col-sm-12 col-md-3">
 			<div class="d-grid mb-1">
 			<?php if (!$show_scores) { ?>
-				<button type="submit" id="btn" class="btn btn-primary" disabled data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-html="true" data-bs-content="<?php echo sprintf("%s %s",$brewer_entries_text_023,$bottle_labels_008); ?>"><i class='fa fa-print me-2'></i><?php echo $brewer_entries_text_024; ?></button>
+				<button type="submit" id="btn" class="btn btn-primary" <?php if ($no_printable_entries) echo "disabled"; ?> data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-html="true" data-bs-content="<?php echo sprintf("%s %s",$brewer_entries_text_023,$bottle_labels_008); ?>"><i class='fa fa-print me-2'></i><?php echo $brewer_entries_text_024; ?></button>
 			<?php } ?>
 			</div>
 		</div>
@@ -782,7 +786,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				  	<?php if ((!$show_scores) && ($print_bottle_labels)) { ?>
 				  	<?php if ((!$judging_started) && ($registration_open < 2)) { ?>
 				    <th class="d-print-none" width="7%" nowrap>
-				    	<input class="form-check-input d-print-none" type="checkbox" id="select_all" <?php if ($disable_label_print) echo "disabled"; ?>>
+				    	<input class="form-check-input d-print-none" type="checkbox" id="select_all" <?php if ($no_printable_entries) echo "disabled"; ?>>
 				    	<a class="hide-loader d-print-none" style="cursor: pointer;" data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-content="<?php echo $brewer_entries_text_021; if ($disable_label_print) echo " ".$alert_text_085; ?>"><i class="fa fa-question-circle hide-loader ms-1"></i></a>
 				    </th>
 				    <?php } ?>
@@ -796,6 +800,32 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 		</table>
 	</div>
 </form>
+
+<div class="modal fade d-print-none" id="entryPrintModal" tabindex="-1" aria-labelledby="entryPrintModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="entryPrintModalLabel"><i class="fa fa-print me-1"></i><?php echo $brewer_entries_text_024; ?></h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div id="entryPrintModalPrompt">
+					<p class="mb-0"><?php echo $brewer_entries_text_027; ?></p>
+				</div>
+				<div id="entryPrintModalChooser" class="d-none">
+					<p class="mb-2"><?php echo $brewer_entries_text_028; ?></p>
+					<div id="entryPrintModalList" class="list-group small"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo $label_cancel; ?></button>
+				<button type="button" class="btn btn-outline-primary" id="entryPrintChooseBtn"><?php echo $brewer_entries_text_029; ?></button>
+				<button type="button" class="btn btn-primary" id="entryPrintAllBtn"><?php echo $brewer_entries_text_030; ?></button>
+				<button type="button" class="btn btn-primary d-none" id="entryPrintChosenBtn"><?php echo $brewer_entries_text_031; ?></button>
+			</div>
+		</div>
+	</div>
+</div>
 <?php } // end if (($totalRows_log > 0) && ($entry_window_open >= 1))
 if ($entry_window_open == 0) echo sprintf("<p>%s %s.</p>",$brewer_entries_text_013, $entry_open);
 ?>
