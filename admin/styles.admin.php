@@ -54,8 +54,8 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 
 			$table_body .= "<tr>";
 			$table_body .= "<input type=\"hidden\" name=\"id[]\" value=\"".$row_styles['id']."\" />";
-			if ($bid == "default") $table_body .= "<td width=\"1%\" nowrap><input name=\"brewStyleActive".$row_styles['id']."\" type=\"checkbox\" value=\"Y\" ".$brewStyleActive."></td>";
-			if ($bid != "default") $table_body .= "<td width=\"1%\" nowrap><input name=\"brewStyleJudgingLoc".$row_styles['id']."\" type=\"checkbox\" value=\"".$bid."\" ".$brewStyleJudgingLoc."></td>";
+			if ($bid == "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleActive".$row_styles['id']."\" type=\"checkbox\" value=\"Y\" ".$brewStyleActive."></td>";
+			if ($bid != "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleJudgingLoc".$row_styles['id']."\" type=\"checkbox\" value=\"".$bid."\" ".$brewStyleJudgingLoc."></td>";
 			$table_body .= "<td>".$row_styles['brewStyle']."</td>";
 			if ($_SESSION['prefsStyleSet'] == "BA") {
 				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
@@ -68,7 +68,7 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			else $table_body .= "<td>".$brewStyleOwn_prefix.$row_styles['brewStyleGroup'].$row_styles['brewStyleNum'].$brewStyleOwn_suffix."</td>";
 			$table_body .= "<td>".style_type($row_styles['brewStyleType'],"2",$style_own)."</td>";
 			$table_body .= "<td>".$brewStyleReqSpec.$brewStyleStrength.$brewStyleCarb.$brewStyleSweet."</td>";
-			$table_body .= "<td width=\"1%\" nowrap><input name=\"brewStyleAtLimit".$row_styles['id']."\" type=\"checkbox\" value=\"1\" ".$brewStyleAtLimit."></td>";
+			$table_body .= "<td width=\"1%\" nowrap><input class=\"limit-style\" name=\"brewStyleAtLimit".$row_styles['id']."\" type=\"checkbox\" value=\"1\" ".$brewStyleAtLimit."></td>";
 			$table_body .= "<td class=\"hidden-print\">";
 			if ($section != "step7") {
 				if ($row_styles['brewStyleOwn'] != "bcoe") $table_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;id=".$row_styles['id']."&amp;view=".$row_styles['brewStyleType']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit ".$row_styles['brewStyle']."\"><span class=\"fa fa-lg fa-pencil\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=".$go."&amp;dbTable=".$styles_db_table."&amp;action=delete&amp;id=".$row_styles['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".$row_styles['brewStyle']."\" data-confirm=\"Are you sure you want to delete ".$row_styles['brewStyle']."? This cannot be undone. Deleting a custom style will remove it and associated entries from any public past winner lists. To avoid this, simply deactivate the style.\"><span class=\"fa fa-lg fa-trash-o\"></span></a> ";
@@ -109,48 +109,78 @@ if ($section != "step7") { ?>
 	<?php } ?>
 </div>
 <?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
+
 <script type="text/javascript" language="javascript">
-	$(document).ready(function() {
-		$('#sortable').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rft',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": <?php echo $sorting_default; ?>,
-			"bProcessing" : false,
-			"aoColumns": [
-				{ "asSorting": [  ] },
-				null,
-				null,
-				null,
-				{ "asSorting": [  ] },
-				null,
-				{ "asSorting": [  ] }
-				]
-			} );
-		} );
+function syncSelectAll($selectAll, $group) {
+  const allChecked = $group.length === $group.filter(':checked').length;
+  $selectAll.prop('checked', allChecked);
+}
 
-function checkUncheckAll(theElement) {
-     var theForm = theElement.form, z = 0;
-	 for(z=0; z<theForm.length;z++){
-      if(theForm[z].type == 'checkbox' && theForm[z].name != 'checkall'){
-	  theForm[z].checked = theElement.checked;
-	  }
-     }
-    }
+function handleSelectAll($selectAll, $group) {
+  const allChecked = $group.length === $group.filter(':checked').length;
+  $group.prop('checked', !allChecked);
+  $selectAll.prop('checked', !allChecked);
+}
+
+$(document).ready(function () {
+
+  const $selectAllEnable = $('#select-all-enable');
+  const $selectAllLimit  = $('#select-all-limit');
+  const $enableBoxes     = $('.enable-style');
+  const $limitBoxes      = $('.limit-style');
+
+  // Select-all checkbox click handlers
+  $selectAllEnable.on('change', function () {
+    handleSelectAll($selectAllEnable, $enableBoxes);
+  });
+
+  $selectAllLimit.on('change', function () {
+    handleSelectAll($selectAllLimit, $limitBoxes);
+  });
+
+  // Individual checkbox change handlers — keep select-all in sync
+  $enableBoxes.on('change', function () {
+    syncSelectAll($selectAllEnable, $enableBoxes);
+  });
+
+  $limitBoxes.on('change', function () {
+    syncSelectAll($selectAllLimit, $limitBoxes);
+  });
+
+  syncSelectAll($selectAllEnable, $enableBoxes);
+  syncSelectAll($selectAllLimit, $limitBoxes);
+
+  $('#sortable').dataTable({
+  	"bPaginate" : false,
+  	"sDom": 'rft',
+  	"bStateSave" : false,
+  	"bLengthChange" : false,
+  	"aaSorting": <?php echo $sorting_default; ?>,
+  	"bProcessing" : false,
+  	"aoColumns": [
+  		{ "asSorting": [  ] },
+  		null,
+  		null,
+  		null,
+  		{ "asSorting": [  ] },
+  		{ "asSorting": [  ] },
+  		{ "asSorting": [  ] }
+  		]
+  	});
+
+});
 </script>
-
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step7") echo "setup"; else echo $section; ?>&amp;action=update&amp;dbTable=<?php echo $styles_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <table class="table table-responsive table-striped table-bordered" id="sortable">
 <thead>
  <tr>
-  <th><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"/></th>
+  <th><input type="checkbox" id="select-all-enable" /></th>
   <th>Style Name</th>
   <th><?php if (strpos($_SESSION['prefsStyleSet'],"BJCP") === false) echo "Overall Category"; else echo "#"; ?></th>
   <th>Style Type</th>
   <th>Requirements</th>
-  <th nowrap="nowrap">Restrict Entries <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you want to restrict further entries for a style on the fly, check its corresponding box in this column and then select Update at the bottom of the page. <span class='text-primary'><strong>Please Note:</strong> This will override any table-level restriction if using Table Limits in Tables Planning Mode.</span>" ?><i class="fa fa-question-circle"></i></a></th>
+  <th nowrap="nowrap"><input type="checkbox" id="select-all-limit" /> Restrict Entries <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you want to restrict further entries for a style on the fly, check its corresponding box in this column and then select Update at the bottom of the page. <span class='text-primary'><strong>Please Note:</strong> This will override any table-level restriction if using Table Limits in Tables Planning Mode.</span>" ?><i class="fa fa-question-circle"></i></a></th>
   <th class="hidden-print">Actions</th>
  </tr>
  </thead>
