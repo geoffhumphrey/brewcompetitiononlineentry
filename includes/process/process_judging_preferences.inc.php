@@ -144,7 +144,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		    // Check whether any judging sessions have been defined. 
 		    // If so, loop through and find the earliest and the latest dates.
 		    $query_judging_locations = sprintf("SELECT id, judgingDate, judgingDateEnd FROM %s WHERE judgingLocType <= '1';", $prefix."judging_locations");
-		    $judging_locations = mysqli_query($connection,$query_judging_locations) or die ("A database error occurred.");
+		    $judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
 		    $row_judging_locations = mysqli_fetch_assoc($judging_locations);
 		    $totalRows_judging_locations = mysqli_num_rows($judging_locations);
 

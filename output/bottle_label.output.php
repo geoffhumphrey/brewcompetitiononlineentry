@@ -28,11 +28,11 @@ if (isset($_SESSION['loginUsername'])) {
     if ($bid == "default") $bid = $_SESSION['uid'];
 
     $query_brewer = sprintf("SELECT * FROM %s WHERE uid = '%s'", $brewer_db_table, $bid);
-    $brewer = mysqli_query($connection,$query_brewer) or die ("A database error occurred.");
+    $brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
     $row_brewer = mysqli_fetch_assoc($brewer);
 
     $query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s'", $brewing_db_table, $bid);
-    $log = mysqli_query($connection,$query_log) or die ("A database error occurred.");
+    $log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
     $row_log = mysqli_fetch_assoc($log);
     $totalRows_log = mysqli_num_rows($log);
 
@@ -170,21 +170,25 @@ if (isset($_SESSION['loginUsername'])) {
             else $page_info1 .= "<div class=\"text-center\" style=\"margin: 0 0 10px 0; padding: 5px 0 5px 0; font-size: 1.2em; border: 1px solid #dedede; border-radius: 5px;\"><strong>".$label_entry_number.":</strong> ".$barcode."</span></div>";
 
             if ($large_text) { 
+
+              // truncate($string, $your_desired_width, $append="", $max_word_length=20)
+
+              $style_name_large = truncate($row_log['brewStyle'],25,"...",20);
               
               $page_info1 .= "<div class=\"text-center label-category-name\" style=\"margin: 0 0 20px 0; padding: 0 5px 0 5px;\" >";
               
               if ($_SESSION['prefsStyleSet'] == "BA") {
-                $page_info1 .= "<div>".$row_log['brewStyle']."</div>";
+                $page_info1 .= "<div>".$style_name_large."</div>";
               }
               
               elseif ($_SESSION['prefsStyleSet'] == "AABC") {
                 $page_info1 .= "<div>".$label_category.": ".ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0")."</div>";
-                $page_info1 .= "<div style=\"font-size: .7em;\">".$row_log['brewStyle']."</div>";
+                $page_info1 .= "<div style=\"font-size: .7em;\">".$style_name_large."</div>";
               } 
               
               else {
                 $page_info1 .= "<div>".$row_log['brewCategory'].$row_log['brewSubCategory']."</div>";
-                $page_info1 .= "<div style=\"font-size: .7em;\">".$row_log['brewStyle']."</div>";
+                $page_info1 .= "<div style=\"font-size: .7em;\">".$style_name_large."</div>";
               }
 
               $page_info1 .= "</div>";

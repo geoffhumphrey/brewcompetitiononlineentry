@@ -28,7 +28,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 			/*
 			$query_user_name = sprintf("SELECT user_name,userQuestion FROM %s WHERE user_name='%s'",$prefix."users",$user_name_entered);
-			$user_name = mysqli_query($connection,$query_user_name) or die ("A database error occurred.");
+			$user_name = mysqli_query($connection,$query_user_name) or die (mysqli_error($connection));
 			$row_user_name = mysqli_fetch_assoc($user_name);
 			*/
 
@@ -107,7 +107,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 		/*
 		$query_user_question = sprintf("SELECT a.id, a.user_name, a.userQuestion, a.userQuestionAnswer, b.brewerFirstName, b.brewerLastName FROM %s a, %s b WHERE a.user_name='%s' AND a.id = b.uid;",$prefix."users",$prefix."brewer",$email);
-		$user_question = mysqli_query($connection,$query_user_question) or die ("A database error occurred.");
+		$user_question = mysqli_query($connection,$query_user_question) or die (mysqli_error($connection));
 		$row_user_question = mysqli_fetch_assoc($user_question);
 		$totalRows_user_question = mysqli_num_rows($user_question);
 		*/

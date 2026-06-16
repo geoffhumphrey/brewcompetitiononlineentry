@@ -25,7 +25,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 	/*
 	$query_eval = sprintf("SELECT * FROM %s",$prefix."evaluation");
-	$eval = mysqli_query($connection,$query_eval) or die ("A database error occurred.");
+	$eval = mysqli_query($connection,$query_eval) or die (mysqli_error($connection));
 	$row_eval = mysqli_fetch_assoc($eval);
 	$totalRows_eval = mysqli_num_rows($eval);
 	*/
@@ -46,7 +46,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 		/*
 		$query_scored = sprintf("SELECT * FROM %s",$prefix."judging_scores");
-		$scored = mysqli_query($connection,$query_scored) or die ("A database error occurred.");
+		$scored = mysqli_query($connection,$query_scored) or die (mysqli_error($connection));
 		$row_scored = mysqli_fetch_assoc($scored);
 		$totalRows_scored = mysqli_num_rows($scored);
 		*/
@@ -94,7 +94,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			// Query the evaluation table and return the evaluations associated with the entry
 			/*
 			$query_evals = sprintf("SELECT * FROM %s WHERE eid='%s'",$prefix."evaluation",$value);
-			$evals = mysqli_query($connection,$query_evals) or die ("A database error occurred.");
+			$evals = mysqli_query($connection,$query_evals) or die (mysqli_error($connection));
 			$row_evals = mysqli_fetch_assoc($evals);
 			$totalRows_evals = mysqli_num_rows($evals);
 			*/
@@ -106,7 +106,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 			/*
 			$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'",$styles_db_table,$row_evals['evalStyle']);
-			$style_type = mysqli_query($connection,$query_style_type) or die ("A database error occurred.");
+			$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 			$row_style_type = mysqli_fetch_assoc($style_type);
 			*/
 
@@ -124,7 +124,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 					/*
 					$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle']);
-					$style_type = mysqli_query($connection,$query_style_type) or die ("A database error occurred.");
+					$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 					$row_style_type = mysqli_fetch_assoc($style_type);
 					*/
 
@@ -275,7 +275,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 					/*
 					$query_eval_max = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE eid='%s' AND evalFinalScore='%s'",$prefix."evaluation",$value,$final_score);
-					$eval_max = mysqli_query($connection,$query_eval_max) or die ("A database error occurred.");
+					$eval_max = mysqli_query($connection,$query_eval_max) or die (mysqli_error($connection));
 					$row_eval_max = mysqli_fetch_assoc($eval_max);
 					*/
 

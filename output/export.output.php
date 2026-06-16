@@ -1,29 +1,4 @@
 <?php
-ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
-ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
-error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
-
-// Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
-    
-    $authorized = FALSE;
-
-    // Do not redirect if its the HTML or PDF download of results
-    // Available publicly on the results page
-    if ($section == "export-results") {
-        if ((($go == "judging_scores_bos") || ($go == "judging_scores")) && (($view == "html") || ($view == "pdf"))) $authorized = TRUE;
-    }
-
-    if ($section == "export-personal-results") $authorized = TRUE;
-
-    if (!$authorized) {
-        $redirect = "../../403.php";
-        $redirect_go_to = sprintf("Location: %s", $redirect);
-        header($redirect_go_to);
-        exit();
-    }
-
-}
 
 /**
  * Module: export.output.php
@@ -66,6 +41,32 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
  * Request from Hirendu Vaishnav (BJCP Assistant IT Director) to remove BOS 
  * info from BJCP XML output.
  */
+
+ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
+ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
+error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
+    
+    $authorized = FALSE;
+
+    // Do not redirect if its the HTML or PDF download of results
+    // Available publicly on the results page
+    if ($section == "export-results") {
+        if ((($go == "judging_scores_bos") || ($go == "judging_scores")) && (($view == "html") || ($view == "pdf"))) $authorized = TRUE;
+    }
+
+    if ($section == "export-personal-results") $authorized = TRUE;
+
+    if (!$authorized) {
+        $redirect = "../../403.php";
+        $redirect_go_to = sprintf("Location: %s", $redirect);
+        header($redirect_go_to);
+        exit();
+    }
+
+}
 
 // Run the integrity function. 
 // This will make sure that user ids line up with brewer uids, etc.
@@ -2436,6 +2437,12 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             $mead_cider_total = $mead_styles_total + $cider_styles_total;
             $all_styles_total = $beer_styles_total + $mead_styles_total + $cider_styles_total;
+
+            $total_entries_scored = get_entry_count("scored");
+
+            // Possiblity of more scored entries than marked as received. Slim, but could happen.
+            // Best to go with what has presumably been judged.
+            if ($total_entries_scored > $total_entries_received) $total_entries_received = $total_entries_scored;
 
             if ($total_entries_received >= 30) {
                 if (($beer_styles_total >= 5) || ($mead_cider_total >= 3)) $bos_judge_points = 0.5;

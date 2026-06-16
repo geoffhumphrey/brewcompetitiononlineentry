@@ -195,7 +195,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$query_log = sprintf("SELECT id FROM $brewing_db_table WHERE brewStyle = '%s'",$_POST['brewStyleOld']);
-		$log = mysqli_query($connection,$query_log) or die ("A database error occurred.");
+		$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
 		$row_log = mysqli_fetch_assoc($log);
 		$totalRows_log = mysqli_num_rows($log);
 
@@ -235,7 +235,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if ($action == "add") {
 
 				$query_last_style_added = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."styles");
-				$last_style_added = mysqli_query($connection,$query_last_style_added) or die ("A database error occurred.");
+				$last_style_added = mysqli_query($connection,$query_last_style_added) or die (mysqli_error($connection));
 				$row_last_style_added = mysqli_fetch_assoc($last_style_added);
 
 				$id = $row_last_style_added['id'];

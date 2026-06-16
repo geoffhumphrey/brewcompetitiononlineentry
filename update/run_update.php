@@ -1064,7 +1064,7 @@ else {
 
 // Get the delay value from DB
 $query_delay = sprintf("SELECT prefsWinnerDelay FROM %s WHERE id='1'", $prefix."preferences");
-$delay = mysqli_query($connection,$query_delay) or die ("A database error occurred.");
+$delay = mysqli_query($connection,$query_delay) or die (mysqli_error($connection));
 $row_delay = mysqli_fetch_assoc($delay);
 
 // Check if the length is less than 10 (Unix timestamp is 10)
@@ -1072,7 +1072,7 @@ $row_delay = mysqli_fetch_assoc($delay);
 if ((!empty($row_delay)) && ((strlen($row_delay['prefsWinnerDelay'])) < 10)) {
 
 	$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations");
-	$check = mysqli_query($connection,$query_check) or die ("A database error occurred.");
+	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 	$row_check = mysqli_fetch_assoc($check);
 
 	// Add the hour delay to the latest judging date
@@ -1112,7 +1112,7 @@ $name_parser = new FullNameParser();
 
 // Standardize the proper names of entrants and locations
 $query_names = sprintf("SELECT * FROM %s",$prefix."brewer");
-$names = mysqli_query($connection,$query_names) or die ("A database error occurred.");
+$names = mysqli_query($connection,$query_names) or die (mysqli_error($connection));
 $row_names = mysqli_fetch_assoc($names);
 $totalRows_names = mysqli_num_rows($names);
 
@@ -1213,7 +1213,7 @@ if ($totalRows_names > 0) {
 
 // Standardize the names of entries
 $query_entry_names = sprintf("SELECT id,brewName,brewInfo,brewComments,brewCoBrewer,brewJudgingNumber FROM %s",$prefix."brewing");
-$entry_names = mysqli_query($connection,$query_entry_names) or die ("A database error occurred.");
+$entry_names = mysqli_query($connection,$query_entry_names) or die (mysqli_error($connection));
 $row_entry_names = mysqli_fetch_assoc($entry_names);
 $totalRows_entry_names = mysqli_num_rows($entry_names);
 
@@ -1472,7 +1472,7 @@ if (!check_update("prefsBestUseBOS", $prefix."preferences")) {
 }
 
 $query_mead_cider_present = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE styleTypeName = 'Mead/Cider'",$prefix."style_types");
-$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die ("A database error occurred.");
+$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die (mysqli_error($connection));
 $row_mead_cider_present = mysqli_fetch_assoc($mead_cider_present);
 
 if ($row_mead_cider_present['count'] == 0) {
@@ -1894,7 +1894,7 @@ if (HOSTED) $query_cust_st = sprintf("SELECT id,brewStyleGroup FROM %s WHERE bre
 else 
 */
 $query_cust_st = sprintf("SELECT id,brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup < 35 ORDER BY brewStyleGroup ASC", $styles_db_table);
-$cust_st = mysqli_query($connection,$query_cust_st) or die ("A database error occurred.");
+$cust_st = mysqli_query($connection,$query_cust_st) or die (mysqli_error($connection));
 $row_cust_st = mysqli_fetch_assoc($cust_st);
 $totalRows_cust_st = mysqli_num_rows($cust_st);
 
@@ -1906,7 +1906,7 @@ if ($totalRows_cust_st > 0) {
 	else 
 	*/
 	$query_st_num = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup >= 35 ORDER BY brewStyleGroup DESC LIMIT 1", $styles_db_table);
-	$st_num = mysqli_query($connection,$query_st_num) or die ("A database error occurred.");
+	$st_num = mysqli_query($connection,$query_st_num) or die (mysqli_error($connection));
 	$row_st_num = mysqli_fetch_assoc($st_num);
 	$totalRows_st_num = mysqli_num_rows($st_num);
 
@@ -1952,7 +1952,7 @@ $all_style_types = array_merge($old_style_types,$new_style_types);
 
 // First, gather current state of the style types table into an array to use later
 $query_current_st = sprintf("SELECT * FROM %s ORDER BY id ASC",$prefix."style_types");
-$current_st = mysqli_query($connection,$query_current_st) or die ("A database error occurred.");
+$current_st = mysqli_query($connection,$query_current_st) or die (mysqli_error($connection));
 $row_current_st = mysqli_fetch_assoc($current_st);
 
 $sql = sprintf("TRUNCATE %s",$prefix."style_types");
@@ -2081,7 +2081,7 @@ do {
 		}
 
         $query_new_st = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."style_types");
-        $new_st = mysqli_query($connection,$query_new_st) or die ("A database error occurred.");
+        $new_st = mysqli_query($connection,$query_new_st) or die (mysqli_error($connection));
         $row_new_st = mysqli_fetch_assoc($new_st);
 
         /*
@@ -3455,7 +3455,7 @@ if ($row_current_styleset) {
 		else 
 		*/
 		$query_style_number = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='%s' ORDER BY brewStyleNum DESC LIMIT 1", $styles_db_table, $row_current_styleset['prefsStyleSet']);
-		$style_number = mysqli_query($connection,$query_style_number) or die ("A database error occurred.");
+		$style_number = mysqli_query($connection,$query_style_number) or die (mysqli_error($connection));
 		$row_style_number = mysqli_fetch_assoc($style_number);
 		
 		if (is_numeric($row_style_number['brewStyleNum'])) $sub_style_id = $row_style_number['brewStyleNum'] + 1;
@@ -3946,7 +3946,7 @@ if (!check_update("brewStyleType", $prefix."brewing")) {
 
 	// Loop through the brewing table and provide a value for the new brewStyleType column
 	$query_entry_style_types = sprintf("SELECT DISTINCT a.id, a.brewCategorySort, a.brewSubCategory, b.brewStyleGroup, b.brewStyleNum, b.brewStyleType FROM %s a, %s b WHERE a.brewCategorySort = b.brewStyleGroup AND a.brewSubCategory = b.brewStyleNum ORDER BY a.id ASC", $prefix."brewing", $prefix."styles");
-	$entry_style_types = mysqli_query($connection,$query_entry_style_types) or die ("A database error occurred.");
+	$entry_style_types = mysqli_query($connection,$query_entry_style_types) or die (mysqli_error($connection));
 	$row_entry_style_types = mysqli_fetch_assoc($entry_style_types);
 	$totalRows_entry_style_types = mysqli_num_rows($entry_style_types);
 
@@ -4022,7 +4022,7 @@ if (check_update("brewerBreweryTTB", $prefix."brewer")) {
 	}
 
 	$query_ttb = sprintf("SELECT id,brewerBreweryInfo FROM %s WHERE brewerBreweryInfo IS NOT NULL", $prefix."brewer");
-	$ttb = mysqli_query($connection,$query_ttb) or die ("A database error occurred.");
+	$ttb = mysqli_query($connection,$query_ttb) or die (mysqli_error($connection));
 	$row_ttb = mysqli_fetch_assoc($ttb);
 	$totalRows_ttb = mysqli_num_rows($ttb);
 
@@ -4063,7 +4063,7 @@ foreach ($archive_suffixes as $suffix) {
 		$db_conn->rawQuery($sql);
 
 		$query_ttb = sprintf("SELECT id,brewerBreweryInfo FROM %s WHERE brewerBreweryInfo IS NOT NULL", $prefix."brewer_".$suffix);
-		$ttb = mysqli_query($connection,$query_ttb) or die ("A database error occurred.");
+		$ttb = mysqli_query($connection,$query_ttb) or die (mysqli_error($connection));
 		$row_ttb = mysqli_fetch_assoc($ttb);
 		$totalRows_ttb = mysqli_num_rows($ttb);
 
@@ -4896,10 +4896,12 @@ else {
 	$error_count++;
 }
 
-$v3030_update .= "<li>Added four Anonymous bottle label options.</li>";
+$v3030_update .= "<li>Expanded bottle label options to include seven anonymous and four standard choices.</li>";
+$v3030_update .= "<li>Added BCJP Certified Cider and/or Mead Only (for those judges that do not have a beer rank), Distinguished Certified, and Distinguished National ranks.</li>";
 $v3030_update .= "<li>Corrected bug where shipping information was showing when shipping info display is disabled.</li>";
-$v3030_update .= "<li>Corrected minor security issues.</li>";
 $v3030_update .= "<li>Corrected bug where Admins are being shown a judge or steward account's hashed security question response. Should be hidden.</li>";
+$v3030_update .= "<li>Corrected bug where Admins were not able to switch to the AABC 2025 style set.</li>";
+$v3030_update .= "<li>Corrected minor security issues.</li>";
 
 if (!$setup_running) $v3030_update .= "</ul>";
 

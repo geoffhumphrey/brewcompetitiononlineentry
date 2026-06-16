@@ -2552,6 +2552,7 @@ function get_entry_count($method,$filter="") {
 	if ($method == "total-logged") $query_paid .= "";
 	if ($method == "unconfirmed") $query_paid .= " WHERE brewConfirmed <> '1'";
 	if ($method == "placing-entries") $query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scorePlace IS NOT NULL",$judging_scores_db_table);
+	if ($method == "scored") $query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s",$judging_scores_db_table);
 	$paid = mysqli_query($connection,$query_paid) or die (mysqli_error($connection));
 	$row_paid = mysqli_fetch_assoc($paid);
 	$r = $row_paid['count'];

@@ -8,7 +8,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
 	$query_user = sprintf("SELECT id,userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
-	$user = mysqli_query($connection,$query_user) or die ("A database error occurred.");
+	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
 
 	$admin_user = FALSE;
@@ -74,7 +74,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		$query_delete_assign = sprintf("SELECT id FROM %s WHERE sid='%s'", $special_best_data_db_table, $id);
-		$delete_assign = mysqli_query($connection,$query_delete_assign) or die ("A database error occurred.");
+		$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
 		$row_delete_assign = mysqli_fetch_assoc($delete_assign);
 		$totalRows_delete_assign = mysqli_num_rows($delete_assign);
 
@@ -94,7 +94,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $special_best_data_db_table, $aid);
 				mysqli_real_escape_string($connection,$deleteSQL);
-				$result = mysqli_query($connection,$deleteSQL) or die ("A database error occurred.");
+				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 			}
 		}
 
@@ -104,7 +104,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// remove relational location ids from affected rows in brewer's table
 		$query_loc = sprintf("SELECT id, brewerJudgeLocation, brewerStewardLocation from %s", $brewer_db_table);
-		$loc = mysqli_query($connection,$query_loc) or die ("A database error occurred.");
+		$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
 		$row_loc = mysqli_fetch_assoc($loc);
 		$totalRows_loc = mysqli_num_rows($loc);
 
@@ -209,7 +209,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			$query_entries = sprintf("SELECT id from $brewing_db_table WHERE brewBrewerID='%s'",$id);
-			$entries = mysqli_query($connection,$query_entries) or die ("A database error occurred.");
+			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 			$row_entries = mysqli_fetch_assoc($entries);
 
 			do { $a[] = $row_entries['id']; } while ($row_entries = mysqli_fetch_assoc($entries));
@@ -246,7 +246,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Clear any Judging Assignments
 			$query_judge_assign = sprintf("SELECT id from $judging_assignments_db_table WHERE bid='%s'",$id);
-			$judge_assign = mysqli_query($connection,$query_judge_assign) or die ("A database error occurred.");
+			$judge_assign = mysqli_query($connection,$query_judge_assign) or die (mysqli_error($connection));
 			$row_judge_assign = mysqli_fetch_assoc($judge_assign);
 
 			do { $b[] = $row_judge_assign['id']; } while ($row_judge_assign = mysqli_fetch_assoc($judge_assign));
@@ -267,7 +267,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Clear any Staff Assignments
 			$query_staff_assign = sprintf("SELECT id from %s WHERE uid='%s'",$prefix."staff",$id);
-			$staff_assign = mysqli_query($connection,$query_staff_assign) or die ("A database error occurred.");
+			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
 			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
 
 			do { $c[] = $row_staff_assign['id']; } while ($row_staff_assign = mysqli_fetch_assoc($staff_assign));
@@ -311,7 +311,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	elseif (($admin_user) && ($go == "entries")) {
 
 		$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE id='%s'", $id);
-		$brews = mysqli_query($connection,$query_brews) or die ("A database error occurred.");
+		$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 		$row_brews = mysqli_fetch_assoc($brews);
 
 		// Get the entry's style ID
@@ -322,7 +322,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
 		}
 		else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
-		$style_name = mysqli_query($connection,$query_style_name) or die ("A database error occurred.");
+		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 		$row_style_name = mysqli_fetch_assoc($style_name);
 
 		table_limit($row_style_name['id'],1);
@@ -336,7 +336,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		$query_delete_entry = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", $id);
-		$delete_entry = mysqli_query($connection,$query_delete_entry) or die ("A database error occurred.");
+		$delete_entry = mysqli_query($connection,$query_delete_entry) or die (mysqli_error($connection));
 		$row_delete_entry = mysqli_fetch_assoc($delete_entry);
 		$totalRows_delete_entry = mysqli_num_rows($delete_entry);
 
@@ -357,7 +357,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	elseif (($admin_user) && ($go == "judging_tables")) {
 
 		$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
-		$delete_assign = mysqli_query($connection,$query_delete_assign) or die ("A database error occurred.");
+		$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
 		$row_delete_assign = mysqli_fetch_assoc($delete_assign);
 		$totalRows_delete_assign = mysqli_num_rows($delete_assign);
 
@@ -383,7 +383,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			$query_delete_scores = sprintf("SELECT id,eid FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
-			$delete_scores = mysqli_query($connection,$query_delete_scores) or die ("A database error occurred.");
+			$delete_scores = mysqli_query($connection,$query_delete_scores) or die (mysqli_error($connection));
 			$row_delete_scores = mysqli_fetch_assoc($delete_scores);
 
 			do { $a[] = $row_delete_scores['id']; $c[] = $row_delete_scores['eid']; } while ($row_delete_scores = mysqli_fetch_assoc($delete_scores));
@@ -403,7 +403,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		$query_delete_flights = sprintf("SELECT id,flightTable FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
-		$delete_flights = mysqli_query($connection,$query_delete_flights) or die ("A database error occurred.");
+		$delete_flights = mysqli_query($connection,$query_delete_flights) or die (mysqli_error($connection));
 		$row_delete_flights = mysqli_fetch_assoc($delete_flights);
 		$totalRows_delete_flights = mysqli_num_rows($delete_flights);
 
@@ -428,7 +428,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				foreach ($c as $eid) {
 					
 					$query_delete_bos = sprintf("SELECT id,eid FROM $judging_scores_bos_db_table WHERE eid='%s'", $eid);
-					$delete_bos = mysqli_query($connection,$query_delete_bos) or die ("A database error occurred.");
+					$delete_bos = mysqli_query($connection,$query_delete_bos) or die (mysqli_error($connection));
 					$row_delete_bos = mysqli_fetch_assoc($delete_bos);
 
 					if ($eid == $row_delete_bos['eid']) {
@@ -443,7 +443,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 						$deleteSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $row_delete_bos['id']);
 						mysqli_real_escape_string($connection,$deleteSQL);
-						$result = mysqli_query($connection,$deleteSQL) or die ("A database error occurred.");
+						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 					}
 
 				}
@@ -516,7 +516,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (($admin_user) || ($admin_superuser)) {
 				
 				$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_user['id'], $id);
-				$brews = mysqli_query($connection,$query_brews) or die ("A database error occurred.");
+				$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 				$row_brews = mysqli_fetch_assoc($brews);
 				$entry_allow_delete = TRUE;
 
@@ -525,7 +525,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($row_user['userLevel'] == 2) {
 
 				$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE brewBrewerId = '%s' AND id='%s'", $row_user['id'], $id);
-				$brews = mysqli_query($connection,$query_brews) or die ("A database error occurred.");
+				$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 				$row_brews = mysqli_fetch_assoc($brews);
 				if ($row_brews) $entry_allow_delete = TRUE;
 
@@ -539,7 +539,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
 			}
 			else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
-			$style_name = mysqli_query($connection,$query_style_name) or die ("A database error occurred.");
+			$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 			$row_style_name = mysqli_fetch_assoc($style_name);
 
 			if ($entry_allow_delete) {

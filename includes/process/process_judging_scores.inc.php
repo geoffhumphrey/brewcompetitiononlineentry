@@ -29,7 +29,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Prep Vars
 			$eid = sterilize($_POST['eid'.$score_id]);
-			$bid = sterilize($_POST['bid'.$score_id]), "text"),
+			$bid = sterilize($_POST['bid'.$score_id]),
 			$scoreTable = sterilize($_POST['scoreTable'.$score_id]);
 			$scoreEntry = sterilize($_POST['scoreEntry'.$score_id]);
 			$scorePlace = sterilize($_POST['scorePlace'.$score_id]);

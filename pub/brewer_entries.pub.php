@@ -15,9 +15,20 @@ $print_bottle_labels = FALSE;
 $multiple_bottle_ids = TRUE;
 $discount = FALSE;
 $entry_editing = FALSE;
+
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && (!empty($_SESSION['contestEntryFeePasswordNum']))) $discount = TRUE;
 if ((time() < $entry_edit_deadline)) $entry_editing = TRUE;
-if (($dropoff_window_open == 1) || ($shipping_window_open == 1) || ($entry_window_open == 1)) $print_bottle_labels = TRUE;
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE;
+
+/**
+ * Updating logic to permit printing of entry labels.
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1691
+ * Request was to allow entrants to print labels prior to dropoff or shipping 
+ * open. The refactored logic will allow for that only if the entry window is
+ * open and/or the entry editing deadline has not passed [current date/time must 
+ * be 1) prior to the dropoff window close or shipping window close - AND 2) 
+ * fall within the entry window or 3) prior to the entry editing deadline].
+ */
+if ((($dropoff_window_open < 2) || ($shipping_window_open < 2)) && (($entry_window_open == 1) || ($entry_editing)) $print_bottle_labels = TRUE;
 
 $pay_button .= sprintf("<a class=\"btn btn-primary hide-loader %s\" href=\"#pay-fees\"><i class=\"fa fa-lg fa-money-bill me-2\"></i>%s</a>", $pay_button_disable, $label_pay);
 

@@ -57,14 +57,14 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		
 		// Get the new location's id
 		$query_new_location = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."judging_locations");
-		$new_location = mysqli_query($connection,$query_new_location) or die ("A database error occurred.");
+		$new_location = mysqli_query($connection,$query_new_location) or die (mysqli_error($connection));
 		$row_new_location = mysqli_fetch_assoc($new_location);
 
 		$new_location = ",Y-".$row_new_location['id'];
 
 		// Loop through all judges in the brewer table and update their availabilities
 		$query_judges = sprintf("SELECT id,uid,brewerJudgeLocation,brewerFirstName,brewerLastName FROM %s WHERE brewerJudge='Y';",$prefix."brewer");
-		$judges = mysqli_query($connection,$query_judges) or die ("A database error occurred.");
+		$judges = mysqli_query($connection,$query_judges) or die (mysqli_error($connection));
 		$row_judges = mysqli_fetch_assoc($judges);
 		$totalRows_judges = mysqli_num_rows($judges);
 
@@ -182,7 +182,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		
 		// Get last brewStyleGroup for any custom styles (will be 50+)
 		$query_last_custom = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleGroup >= '50' AND brewStyleOwn='custom' ORDER BY brewStyleGroup DESC LIMIT 1;",$prefix."styles");
-		$last_custom = mysqli_query($connection,$query_last_custom) or die ("A database error occurred.");
+		$last_custom = mysqli_query($connection,$query_last_custom) or die (mysqli_error($connection));
 		$row_last_custom = mysqli_fetch_assoc($last_custom);
 		$totalRows_last_custom = mysqli_num_rows($last_custom);
 
@@ -256,7 +256,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				
 				// Get the id of the newly created style.
 				$query_last_added = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' ORDER BY id DESC LIMIT 1;",$prefix."styles");
-				$last_added = mysqli_query($connection,$query_last_added) or die ("A database error occurred.");
+				$last_added = mysqli_query($connection,$query_last_added) or die (mysqli_error($connection));
 				$row_last_added = mysqli_fetch_assoc($last_added);
 				
 				$added_styles[] = array(
@@ -324,7 +324,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				if ($result) {
 
 					$query_last_entry_added = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1;",$prefix."brewing");
-					$last_entry_added = mysqli_query($connection,$query_last_entry_added) or die ("A database error occurred.");
+					$last_entry_added = mysqli_query($connection,$query_last_entry_added) or die (mysqli_error($connection));
 					$row_last_entry_added = mysqli_fetch_assoc($last_entry_added);
 
 					$added_entry_ids[] = $row_last_entry_added['id'];
@@ -358,7 +358,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			$practice_table_added = TRUE;
 			
 			$query_last_table_added = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1;",$prefix."judging_tables");
-			$last_table_added = mysqli_query($connection,$query_last_table_added) or die ("A database error occurred.");
+			$last_table_added = mysqli_query($connection,$query_last_table_added) or die (mysqli_error($connection));
 			$row_last_table_added = mysqli_fetch_assoc($last_table_added);
 
 			foreach ($added_entry_ids as $key => $value) {

@@ -88,7 +88,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		
 		/*
 		$query_flight_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."judging_flights");
-		$flight_entries = mysqli_query($connection,$query_flight_entries) or die ("A database error occurred.");
+		$flight_entries = mysqli_query($connection,$query_flight_entries) or die (mysqli_error($connection));
 		$row_flight_entries = mysqli_fetch_assoc($flight_entries);
 		*/
 
@@ -98,7 +98,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 			/*
 			$query_table = sprintf("SELECT id,tableStyles,tableLocation FROM %s", $prefix."judging_tables");
-			$table = mysqli_query($connection,$query_table) or die ("A database error occurred.");
+			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 			$row_table = mysqli_fetch_assoc($table);
 			*/
 
@@ -116,7 +116,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 					/*
 					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
-					$styles = mysqli_query($connection,$query_styles) or die ("A database error occurred.");
+					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
 					*/
 
@@ -126,7 +126,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 					
 					/*
 					$query_entries = sprintf("SELECT id,brewReceived FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
-					$entries = mysqli_query($connection,$query_entries) or die ("A database error occurred.");
+					$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 					$row_entries = mysqli_fetch_assoc($entries);
 					$totalRows_entries = mysqli_num_rows($entries);
 					*/
@@ -139,7 +139,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 					/*
 					$query_fl_round = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='1' LIMIT 1", $prefix."judging_flights", $row_table['id']);
-					$fl_round = mysqli_query($connection,$query_fl_round) or die ("A database error occurred.");
+					$fl_round = mysqli_query($connection,$query_fl_round) or die (mysqli_error($connection));
 					$row_fl_round = mysqli_fetch_assoc($fl_round);
 					*/
 
@@ -259,7 +259,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 		/*
 		$query_received_entries = sprintf("SELECT id FROM %s WHERE brewReceived='1'", $prefix."brewing");
-		$received_entries = mysqli_query($connection,$query_received_entries) or die ("A database error occurred.");
+		$received_entries = mysqli_query($connection,$query_received_entries) or die (mysqli_error($connection));
 		$row_received_entries = mysqli_fetch_assoc($received_entries);
 		$totalRows_received_entries = mysqli_num_rows($received_entries);
 		*/
@@ -279,7 +279,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		// Get all entry ids in the judging_flights table
 		/*
 		$query_flight_entries = sprintf("SELECT flightEntryID FROM %s", $prefix."judging_flights");
-		$flight_entries = mysqli_query($connection,$query_flight_entries) or die ("A database error occurred.");
+		$flight_entries = mysqli_query($connection,$query_flight_entries) or die (mysqli_error($connection));
 		$row_flight_entries = mysqli_fetch_assoc($flight_entries);
 		$totalRows_flight_entries = mysqli_num_rows($flight_entries);
 		*/
@@ -326,7 +326,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 			/*
 			$query_table = sprintf("SELECT id,tableStyles,tableLocation FROM %s", $prefix."judging_tables");
-			$table = mysqli_query($connection,$query_table) or die ("A database error occurred.");
+			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 			$row_table = mysqli_fetch_assoc($table);
 			*/
 
@@ -345,7 +345,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 					/*
 					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
-					$styles = mysqli_query($connection,$query_styles) or die ("A database error occurred.");
+					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
 					*/
 
@@ -355,7 +355,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 					
 					/*
 					$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
-					$entries = mysqli_query($connection,$query_entries) or die ("A database error occurred.");
+					$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 					$row_entries = mysqli_fetch_assoc($entries);
 					*/
 
@@ -406,7 +406,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 					/*
 					$query_table_assignments = sprintf("SELECT id,bid FROM %s WHERE assignTable='%s'",$prefix."judging_assignments",$row_table['id']);
-					$table_assignments = mysqli_query($connection,$query_table_assignments) or die ("A database error occurred.");
+					$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
 					$row_table_assignments = mysqli_fetch_assoc($table_assignments);
 					*/
 

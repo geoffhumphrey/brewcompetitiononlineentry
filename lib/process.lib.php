@@ -32,7 +32,7 @@ function check_judging_num($input) {
 	mysqli_select_db($connection,$database);
 
 	$query_brewing_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewJudgingNumber='%s'", $prefix."brewing", $input);
-	$brewing_styles = mysqli_query($connection,$query_brewing_styles) or die ("A database error occurred.");
+	$brewing_styles = mysqli_query($connection,$query_brewing_styles) or die (mysqli_error($connection));
 	$row_brewing_styles = mysqli_fetch_assoc($brewing_styles);
 
 	$files = array_slice(scandir(USER_DOCS), 2);
@@ -83,7 +83,7 @@ function generate_judging_num($method,$style_cat_num) {
 		mysqli_select_db($connection,$database);
 
 		$query_brewing_styles = sprintf("SELECT brewJudgingNumber FROM %s WHERE brewCategory='%s' ORDER BY brewJudgingNumber DESC LIMIT 1", $prefix."brewing", $style_cat_num);
-		$brewing_styles = mysqli_query($connection,$query_brewing_styles) or die ("A database error occurred.");
+		$brewing_styles = mysqli_query($connection,$query_brewing_styles) or die (mysqli_error($connection));
 		$row_brewing_styles = mysqli_fetch_assoc($brewing_styles);
 		$totalRows_brewing_styles = mysqli_num_rows($brewing_styles);
 
@@ -185,7 +185,7 @@ function generate_judging_numbers($brewing_db_table,$method) {
 	if (!$result) $status += 1;
 
 	$query_judging_numbers = sprintf("SELECT id,brewCategory,brewCategorySort,brewSubCategory,brewName FROM %s ORDER BY brewCategorySort,brewSubCategory ASC", $brewing_db_table);
-	$judging_numbers = mysqli_query($connection,$query_judging_numbers) or die ("A database error occurred.");
+	$judging_numbers = mysqli_query($connection,$query_judging_numbers) or die (mysqli_error($connection));
 	$row_judging_numbers = mysqli_fetch_assoc($judging_numbers);
 
 	if ($method == "default") {
@@ -279,7 +279,7 @@ function check_sweetness($style,$styleSet) {
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_brews = sprintf("SELECT brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $chosen_style_set);
-	$brews = mysqli_query($connection,$query_brews) or die ("A database error occurred.");
+	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 
 	if ($row_brews['brewStyleSweet'] == 1) return TRUE;
@@ -313,7 +313,7 @@ function check_carb($style,$styleSet) {
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_brews = sprintf("SELECT brewStyleCarb FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $chosen_style_set);
-	$brews = mysqli_query($connection,$query_brews) or die ("A database error occurred.");
+	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 
 	if ($row_brews['brewStyleCarb'] == 1) return TRUE;
@@ -341,7 +341,7 @@ function check_mead_strength($style,$styleSet) {
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 	
 	$query_brews = sprintf("SELECT brewStyleStrength FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $chosen_style_set);
-	$brews = mysqli_query($connection,$query_brews) or die ("A database error occurred.");
+	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 
 	if ($row_brews['brewStyleStrength'] == 1) return TRUE;
@@ -453,7 +453,7 @@ function table_limit($style_id,$planning) {
 		$return = 0;
 
 		$query_table_entry_limits = sprintf("SELECT id,tableStyles,tableEntryLimit FROM `%s` WHERE tableEntryLimit IS NOT NULL",$prefix."judging_tables");
-		$table_entry_limits = mysqli_query($connection,$query_table_entry_limits) or die ("A database error occurred.");
+		$table_entry_limits = mysqli_query($connection,$query_table_entry_limits) or die (mysqli_error($connection));
 		$row_table_entry_limits = mysqli_fetch_assoc($table_entry_limits);
 
 		// Loop through each table's defined styles and look for

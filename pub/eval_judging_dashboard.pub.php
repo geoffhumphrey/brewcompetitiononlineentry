@@ -25,7 +25,7 @@ if (TESTING) {
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$chosen_style_set,$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
-	$style = mysqli_query($connection,$query_style) or die ("A database error occurred.");
+	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 	*/
 

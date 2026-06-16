@@ -447,7 +447,7 @@ if ($view == "quick") {
     $locations = array();
 
     $query_j_locs = sprintf("SELECT id FROM %s", $prefix."judging_locations");
-    $j_locs = mysqli_query($connection,$query_j_locs) or die ("A database error occurred.");
+    $j_locs = mysqli_query($connection,$query_j_locs) or die (mysqli_error($connection));
     $row_j_locs = mysqli_fetch_assoc($j_locs);
     
     do {

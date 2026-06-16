@@ -111,7 +111,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         <?php } ?>
 
         <div class="mb-3 row">
-            <label for="brewerJudgeMead" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_bjcp_mead; ?></strong></label>
+            <label for="brewerJudgeMead" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong>BJCP <?php echo $label_bjcp_mead; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?>> 
@@ -128,7 +128,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <div class="mb-3 row">
-            <label for="brewerJudgeCider" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_bjcp_cider; ?></strong></label>
+            <label for="brewerJudgeCider" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong>BJCP <?php echo $label_bjcp_cider; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="brewerJudgeCider" value="Y" id="brewerJudgeCider_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeCider'] == "Y")) echo "CHECKED"; ?>> 
@@ -153,12 +153,12 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                     <label class="form-check-label">Non-BJCP *</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Rank Pending" <?php if (($action == "edit")  && in_array("Rank Pending",$judge_array)) echo "CHECKED"; ?>>
-                    <label class="form-check-label">Rank Pending</label>
+                    <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Mead/Cider Only" <?php if (($action == "edit") && (in_array("Mead/Cider Only",$judge_array))) echo "CHECKED"; else echo "CHECKED" ?>>
+                    <label class="form-check-label">BJCP Certified Mead and/or Cider Only</label> 
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Provisional" <?php if (($action == "edit") && in_array("Provisional",$judge_array)) echo "CHECKED"; ?>>
-                    <label class="form-check-label">Provisional **</label>
+                    <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Rank Pending" <?php if (($action == "edit")  && in_array("Rank Pending",$judge_array)) echo "CHECKED"; ?>>
+                    <label class="form-check-label">Rank Pending</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Recognized" <?php if (($action == "edit") && in_array("Recognized",$judge_array)) echo "CHECKED"; ?>>
@@ -169,8 +169,16 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                     <label class="form-check-label">Certified</label>
                 </div>
                 <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Distinguished Certified" <?php if (($action == "edit") && in_array("Distinguished Certified",$judge_array)) echo "CHECKED"; ?>>
+                    <label class="form-check-label">Distinguished Certified</label>
+                </div>
+                <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="National" <?php if (($action == "edit") && in_array("National",$judge_array)) echo "CHECKED"; ?>>
                     <label class="form-check-label">National</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Distinguished National" <?php if (($action == "edit") && in_array("Distinguished National",$judge_array)) echo "CHECKED"; ?>>
+                    <label class="form-check-label">Distinguished National</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Master" <?php if (($action == "edit") && in_array("Master",$judge_array)) echo "CHECKED"; ?>>
@@ -190,8 +198,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 </div>
                 <div class="help-block mt-1">
                     <p class="mt-1">
-                        <?php echo $brewer_text_008; ?><br>
-                        <?php echo $brewer_text_009; ?>
+                        <?php echo $brewer_text_008; ?>
                     </p>
                 </div>
             </div>
