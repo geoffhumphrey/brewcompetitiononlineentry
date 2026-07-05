@@ -2168,6 +2168,14 @@ $label_scoresheet_practice = "Cvičný hodnotící list";
 $entry_info_text_058 = "Přihlaste se pro zobrazení místa a jeho adresy, pokud je k dispozici.";
 
 /**
+ * ------------------------------------------
+ * Version 3.0.3 Additions
+ * ------------------------------------------
+ */
+
+$contact_text_014 = "Správci stránek zakázali zveřejňování kontaktních údajů na soutěž. Pro kontaktování pořadatelů soutěže využijte jiné způsoby (sociální sítě, webové stránky organizace atd.).";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

@@ -2235,6 +2235,14 @@ $label_scoresheet_practice = "Prática de ficha de pontuação";
 $entry_info_text_058 = "Faça login para ver o local e seu endereço, se disponível.";
 
 /**
+ * ------------------------------------------
+ * Version 3.0.3 Additions
+ * ------------------------------------------
+ */
+
+$contact_text_014 = "A exibição dos contatos da competição foi desativada pelos administradores do site. Utilize outros meios para entrar em contato com qualquer representante da competição (redes sociais, site da organização, etc.).";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

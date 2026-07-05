@@ -310,8 +310,26 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	elseif (($admin_user) && ($go == "entries")) {
 
+		$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE id='%s'", $id);
+		$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
+		$row_brews = mysqli_fetch_assoc($brews);
+
+		// Get the entry's style ID
+		// Determine if the style chosen is a cider - if so, run a different query
+		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+			$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
+			if ($first_character == "C") $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
+			else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
+		}
+		else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
+		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+		$row_style_name = mysqli_fetch_assoc($style_name);
+
+		table_limit($row_style_name['id'],1);
+
 		$db_conn->where ('id', $id);
 		$result = $db_conn->delete($dbTable);
+
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -489,29 +507,52 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	elseif ($go == "default") {
 
-		// Check if user is deleting their own stuff
+		// Check if user is deleting their own stuff or is an Admin
 
 		if ($dbTable == $prefix."brewing") {
 
 			$entry_allow_delete = FALSE;
 
-			if (($admin_user) || ($admin_superuser)) $entry_allow_delete = TRUE;
+			if (($admin_user) || ($admin_superuser)) {
+				
+				$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_user['id'], $id);
+				$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
+				$row_brews = mysqli_fetch_assoc($brews);
+				$entry_allow_delete = TRUE;
+
+			}
 
 			if ($row_user['userLevel'] == 2) {
 
-				$query_brews = sprintf("SELECT id FROM $brewing_db_table WHERE brewBrewerId = '%s' AND id='%s'", $row_user['id'], $id);
+				$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE brewBrewerId = '%s' AND id='%s'", $row_user['id'], $id);
 				$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 				$row_brews = mysqli_fetch_assoc($brews);
-
 				if ($row_brews) $entry_allow_delete = TRUE;
 
 			}
+
+			// Get the entry's style ID
+			// Determine if the style chosen is a cider - if so, run a different query
+			if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+				$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
+				if ($first_character == "C") $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
+				else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
+			}
+			else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
+			$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+			$row_style_name = mysqli_fetch_assoc($style_name);
 
 			if ($entry_allow_delete) {
 
 				$db_conn->where ('id', $id);
 				$result = $db_conn->delete($dbTable);
-				if (!$result) {
+
+				// If deleted successfully, use the table_limit function to check if there's an entry limit imposed on it's style's associated table.
+				if ($result) {
+					table_limit($row_style_name['id'],1);
+				}
+
+				else {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
 				}

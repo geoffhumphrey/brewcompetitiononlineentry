@@ -187,10 +187,16 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 				$data = array('staff_organizer' => 0);
 				$result = $db_conn->update ($update_table, $data);
 
+				/*
 				$query_org = sprintf("SELECT uid FROM %s WHERE uid='%s'", $prefix."staff", $uid);
-				$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
+				$org = mysqli_query($connection,$query_org) or die ("A database error occurred.");
 				$row_org = mysqli_fetch_assoc($org);
 				$totalRows_org = mysqli_num_rows($org);
+				*/
+
+				$db_conn->where ("uid", $uid);
+				$row_org = $db_conn->getOne ($update_table, null, "uid");
+				$totalRows_org = $db_conn->count;
 				
 				if ($totalRows_org == 0) {
 					
@@ -227,7 +233,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 					else $error_type = 3; // SQL error
 					
 				}
-				
 
 			}
 
@@ -250,10 +255,16 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			if ($go == "staff_judge") $staff_judge = $post;
 			if ($go == "staff_steward") $staff_steward = $post;
 
+			/*
 			$query_staff_assign = sprintf("SELECT uid FROM %s WHERE uid='%s'",$update_table,$id);
-			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
+			$staff_assign = mysqli_query($connection,$query_staff_assign) or die ("A database error occurred.");
 			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
 			$totalRows_staff_assign = mysqli_num_rows($staff_assign);
+			*/
+
+			$db_conn->where ("uid", $id);
+			$row_staff_assign = $db_conn->getOne ($update_table, null, "uid");
+			$totalRows_staff_assign = $db_conn->count;
 
 			if ($totalRows_staff_assign == 0) {
 
@@ -284,11 +295,19 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 				// Unassign from any tables
 				if ((empty($post)) || ($post == 0)) {
 
+					/*
 					if ($go == "staff_judge") $query_table_assign = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$id);
 					if ($go == "staff_steward") $query_table_assign = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$id);
-					$table_assign = mysqli_query($connection,$query_table_assign) or die (mysqli_error($connection));
+					$table_assign = mysqli_query($connection,$query_table_assign) or die ("A database error occurred.");
 					$row_table_assign = mysqli_fetch_assoc($table_assign);
 					$totalRows_table_assign = mysqli_num_rows($table_assign);
+					*/
+
+					$db_conn->where ("bid", $id);
+					if ($go == "staff_judge") $db_conn->where ("assignment", "J");
+					if ($go == "staff_steward") $db_conn->where ("assignment", "S");
+					$row_table_assign = $db_conn->get ($prefix."judging_assignments", null, "id");
+					$totalRows_table_assign = $db_conn->count;
 
 					if ($totalRows_table_assign > 0) {
 
@@ -299,6 +318,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 							$result = $db_conn->delete($update_table);
 
 						} while ($row_table_assign = mysqli_fetch_assoc($table_assign));
+					
 					}
 
 				}
@@ -338,13 +358,21 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			// However, if that number is actually zero, make the value null instead for storage in DB
 			if ($input == 0) $input = NULL;
 			
-			// First, query if there is a record with the eid
+			
+			/*
 			$query_already_scored = sprintf("SELECT * FROM %s WHERE eid=%s", $prefix.$action, $eid);
-			$already_scored = mysqli_query($connection,$query_already_scored) or die (mysqli_error($connection));
+			$already_scored = mysqli_query($connection,$query_already_scored) or die ("A database error occurred.");
 			$row_already_scored = mysqli_fetch_assoc($already_scored);
 			$totalRows_already_scored = mysqli_num_rows($already_scored);
+			*/
 
-			if ($totalRows_already_scored == 1) {				
+			// First, query if there is a record with the eid
+			$db_conn->where ("eid", $eid);
+			$row_already_scored = $db_conn->getOne ($prefix.$action);
+			$totalRows_already_scored = $db_conn->count;
+
+			// If so, update the row
+			if ($totalRows_already_scored == 1) {
 				
 				$process = TRUE;
 
@@ -359,6 +387,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
 			}
 
+			// If not, add a row
 			else if ($totalRows_already_scored == 0) {
 
 				if (($action == "judging_scores") && ($rid1 != "default") && ($rid2 != "default") && ($rid3 != "default")) $process = TRUE;
@@ -460,7 +489,7 @@ if ($action == "judging_assignments") {
 
 		// Do query if judge is already assigned in their specified role
 		$query_already_assigned = sprintf("SELECT * FROM %s WHERE bid='%s' AND assignment='%s'", $prefix.$action, $id, $rid2);
-		$already_assigned = mysqli_query($connection,$query_already_assigned) or die (mysqli_error($connection));
+		$already_assigned = mysqli_query($connection,$query_already_assigned) or die ("A database error occurred.");
 		$row_already_assigned = mysqli_fetch_assoc($already_assigned);
 		$totalRows_already_assigned = mysqli_num_rows($already_assigned);
 
@@ -526,12 +555,12 @@ if ($action == "judging_assignments") {
 		}
 
 		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		$result = mysqli_query($connection,$sql) or die ("A database error occurred.");
 
 	} // end if ($go == "assignRoles")
 
 	mysqli_real_escape_string($connection,$sql);
-	$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+	$result = mysqli_query($connection,$sql) or die ("A database error occurred.");
 
 	// If successful, change $status from fail (0) to success (1)
 	if ($result) $status = 1;

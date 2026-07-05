@@ -436,6 +436,102 @@ function blank_to_null($var) {
 	return $var;
 }
 
+function table_limit($style_id,$planning) {
+
+	// If in planning mode, query to see if the style's id is in a  
+	// table's defined styles and whether that table is limiting entries.
+	if ($planning == 1) {
+
+		require (CONFIG.'config.php');
+
+		// Define Vars
+		$db_conn = new MysqliDb($connection);
+		$table_id = "";
+		$table_limit = "";
+		$table_style_ids = "";
+		$result = 0;
+		$return = 0;
+
+		$query_table_entry_limits = sprintf("SELECT id,tableStyles,tableEntryLimit FROM `%s` WHERE tableEntryLimit IS NOT NULL",$prefix."judging_tables");
+		$table_entry_limits = mysqli_query($connection,$query_table_entry_limits) or die (mysqli_error($connection));
+		$row_table_entry_limits = mysqli_fetch_assoc($table_entry_limits);
+
+		// Loop through each table's defined styles and look for
+		// the chosen style's ID as defined in the function params.
+		// If found, define the necessary vars.
+		do {
+
+			$exploder = explode(",",$row_table_entry_limits['tableStyles']);
+			if (in_array($style_id, $exploder)) {
+				$table_id = $row_table_entry_limits['id'];
+				$table_limit = $row_table_entry_limits['tableEntryLimit'];
+				$table_style_ids = $row_table_entry_limits['tableStyles'];
+			}
+
+		} while($row_table_entry_limits = mysqli_fetch_assoc($table_entry_limits));
+
+		// If found and vars are not empty, get the total entries logged
+		// for all styles defined in the table, if the total is equal to
+		// the limit, mark all associated styles as "at limit."
+		if ((!empty($table_id)) && (!empty($table_limit)) && (!empty($table_style_ids))) {
+
+			// Call established function to get total entry count of the 
+			// table's defined styles.
+			$total_table_entries = get_table_info("1","count_total",$table_id,"default","default");
+
+			// If the total entries for that table are at or beyond limit,
+			// designate each style at the table as "at limit" (true) in the styles
+			// DB table.
+			if ($total_table_entries >= $table_limit) {
+
+				$exploder = explode(",",$table_style_ids);
+
+				foreach (array_unique($exploder) as $value) {
+
+					$update_table = $prefix."styles";
+					$data = array(
+						'brewStyleAtLimit' => 1
+					);
+					$db_conn->where ('id', $value);
+					$result = $db_conn->update ($update_table, $data);
+					if ($result) $return += 1;
+
+				} // end foreach
+			
+			} // end if ($row_table_entry_limits['tableEntryLimit'] >= $total_table_entries)
+
+			// If the total entries for that table is BELOW the limit,
+			// designate each style at the table as "available" (false) 
+			// in the styles DB table.
+			if ($total_table_entries < $table_limit) {
+
+				$exploder = explode(",",$table_style_ids);
+
+				foreach (array_unique($exploder) as $value) {
+
+					$update_table = $prefix."styles";
+					$data = array(
+						'brewStyleAtLimit' => NULL
+					);
+					$db_conn->where ('id', $value);
+					$result = $db_conn->update ($update_table, $data);
+					if ($result) $return += 1;
+
+				} // end foreach
+			
+			} // end if ($row_table_entry_limits['tableEntryLimit'] < $total_table_entries)
+
+		} // end if ((!empty($table_id)) && (!empty($table_limit)) && (!empty($table_style_ids)))
+
+		if ($return > 0) return TRUE;
+		else return FALSE;
+		
+	} // end if ($planning == 1)
+
+	else return FALSE;
+
+} // end function
+
 // Standardize name languages
 $name_check_langs = array("en", "fr", "es", "pt", "it", "de", "nl");
 $last_name_exception_langs = array("nl", "es", "de");

@@ -158,28 +158,41 @@ function pay_to_print($prefs_pay,$entry_paid) {
 // The following applies to labels.output.php
 // --------------------------------------------------------
 
-function truncate($string, $your_desired_width, $append="") {
-
+function truncate($string, $your_desired_width, $append="", $max_word_length=20) {
   $parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
   $parts_count = count($parts);
 
+  // Single word: truncate by character count
+  if ($parts_count === 1 && mb_strlen($string, 'UTF-8') > $your_desired_width) {
+    $append_len = mb_strlen($append, 'UTF-8');
+    return mb_substr($string, 0, $your_desired_width - $append_len, 'UTF-8') . $append;
+  }
+
   $length = 0;
   $last_part = 0;
-
   for (; $last_part < $parts_count; ++$last_part) {
-    $length += strlen($parts[$last_part]);
-    if ($length > $your_desired_width) { 
-    	break; 
+    $length += mb_strlen($parts[$last_part], 'UTF-8');
+    if ($length > $your_desired_width) {
+      $part = $parts[$last_part];
+      if (!preg_match('/[\s\n\r]/', $part) && mb_strlen($part, 'UTF-8') >= $max_word_length) {
+        $append_len = mb_strlen($append, 'UTF-8');
+        $remaining = $your_desired_width - ($length - mb_strlen($part, 'UTF-8')) - $append_len;
+        if ($remaining >= 1) {
+          $r = implode(array_slice($parts, 0, $last_part));
+          $r .= mb_substr($part, 0, $remaining, 'UTF-8') . $append;
+          return $r;
+        }
+      }
+      break;
     }
   }
 
   $r = implode(array_slice($parts, 0, $last_part));
-  
-  if (strlen($string) > $your_desired_width) {
-  	$r = rtrim($r);
-  	$r .= $append;
-  }
 
+  if (mb_strlen($string, 'UTF-8') > $your_desired_width) {
+    $r = rtrim($r);
+    $r .= $append;
+  }
   return $r;
 }
 

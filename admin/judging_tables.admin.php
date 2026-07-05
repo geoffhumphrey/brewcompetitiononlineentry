@@ -446,26 +446,24 @@ if (($action == "add") || ($action == "edit")) {
 
         if ($action == "edit") {
 
-            $query_current_table_styles = sprintf("SELECT * FROM %s WHERE id='%s'",$judging_tables_db_table,$id);
-            $current_table_styles = mysqli_query($connection,$query_current_table_styles) or die (mysqli_error($connection));
-            $row_current_table_styles = mysqli_fetch_assoc($current_table_styles);
-
+            $db_conn->where("id", $id);
+            $row_current_table_styles = $db_conn->getOne($judging_tables_db_table);
             $current_table_styles_array = explode(",",$row_current_table_styles['tableStyles']);
 
         }
 
-        $query_all_table_styles = sprintf("SELECT * FROM %s",$judging_tables_db_table);
-        $all_table_styles = mysqli_query($connection,$query_all_table_styles) or die (mysqli_error($connection));
-        $row_all_table_styles = mysqli_fetch_assoc($all_table_styles);
-        $totalRows_all_table_styles = mysqli_num_rows($all_table_styles);
+
+        $db_conn->returnType = "array"; 
+        $row_all_table_styles = $db_conn->get($judging_tables_db_table);
+        $totalRows_all_table_styles = $db_conn->count;
 
         // Get the table numbers and sub-style ids from the tables that have been defined and put into arrays
         if ($totalRows_all_table_styles > 0) {
 
-            do {
+            foreach ($row_all_table_styles as $row_all_table_styles) {
                 $all_table_styles_concat .= $row_all_table_styles['tableStyles'].",";
                 $all_table_numbers_array[] =  $row_all_table_styles['tableNumber'];
-            } while ($row_all_table_styles = mysqli_fetch_assoc($all_table_styles));
+            }
 
             $all_table_styles_concat = rtrim($all_table_styles_concat,",");
             $all_table_styles_array = explode(",",$all_table_styles_concat);
@@ -1583,5 +1581,5 @@ if (($action == "assign") && ($filter == "default")) { ?>
     </ul>
 </div>
 <?php } ?>
-<script src="<?php if (TESTING) echo $base_url."js_source/admin_ajax.js?t=".time(); else echo $js_url."admin_ajax.min.js"; ?>"></script>
+<script src="<?php echo $js_url."admin_ajax.min.js"; ?>"></script>
 <?php if (($action == "assign") && ($filter != "default") && ($id != "default")) include ('judging_assign.admin.php'); ?>

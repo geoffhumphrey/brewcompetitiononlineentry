@@ -105,7 +105,7 @@ foreach ($eval_scores as $key => $value) {
 	        	
 	        	else {
 	        		$actions_otf .= "<div class=\"d-grid gap-1 mb-2\">";
-	        		$actions_otf = "<a data-fancybox data-type=\"iframe\" class=\"btn btn-block btn-sm btn-secondary hide-loader modal-window-link\" href=\"".$view_link."\">".$label_view;
+	        		$actions_otf .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-secondary hide-loader modal-window-link\" href=\"".$view_link."\">".$label_view;
 	        		$actions_otf .= "</a>";
 	        		$actions_otf .= "</div>";
 	        	}

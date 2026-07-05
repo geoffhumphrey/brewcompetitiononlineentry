@@ -57,7 +57,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					$style_id = sterilize($id);
 
-					$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $style_id);
+					if (isset($_POST['brewStyleAtLimit'.$id])) $brewStyleAtLimit = 1;
+					else $brewStyleAtLimit = NULL;
+
+					$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType, brewStyleAtLimit FROM %s WHERE id='%s'", $styles_db_table, $style_id);
 					$styles_default = mysqli_query($connection,$query_styles_default);
 					$row_styles_default = mysqli_fetch_assoc($styles_default);
 					$totalRows_styles_default = mysqli_num_rows($styles_default);
@@ -69,10 +72,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
 							'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
 							'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion']),
-                            'brewStyleType' => $row_styles_default['brewStyleType']							
+                            'brewStyleType' => $row_styles_default['brewStyleType']				
 						);
 					}
 
+					$update_table = $prefix."styles";
+					$data = array('brewStyleAtLimit' => $brewStyleAtLimit);
+					$db_conn->where ('id', $row_styles_default['id']);
+					$result = $db_conn->update ($update_table, $data);
 				
 				} // if (isset($_POST['brewStyleActive'.$id]))
 

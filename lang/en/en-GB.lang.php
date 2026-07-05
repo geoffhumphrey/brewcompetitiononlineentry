@@ -2233,6 +2233,14 @@ $entry_info_text_058 = "Log in to view the location and its address, if availabl
 
 /**
  * ------------------------------------------
+ * Version 3.0.3 Additions
+ * ------------------------------------------
+ */
+
+$contact_text_014 = "Display of competition contacts has been disabled by the site administrators. Use other means to reach out to any competition official (social media, the organisation's website, etc.).";
+
+/**
+ * ------------------------------------------
  * END TRANSLATIONS
  * ------------------------------------------
  *

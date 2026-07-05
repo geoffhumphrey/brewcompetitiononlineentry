@@ -363,7 +363,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$prefsEmailHost = sterilize($row_prefs['prefsEmailHost']);
 				$prefsEmailEncrypt = sterilize($row_prefs['prefsEmailEncrypt']);
 				$prefsEmailPort = sterilize($row_prefs['prefsEmailPort']);
-				$prefsContact = "N"; // Disable Contact form
+				// $prefsContact = "N"; // Disable Contact form
 				$prefsEmailRegConfirm = 0; // Disable Confirmations
 				$prefsEmailCC = 0; // Disable CC
 				

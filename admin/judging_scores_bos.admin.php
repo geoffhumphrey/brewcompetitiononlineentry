@@ -85,13 +85,12 @@ if ($dbTable != "default") echo " (Archive ".$suffix.")";
                 <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-
                 <?php do {
-                    if ($row_style_types_2['styleTypeBOS'] == "Y") { ?>
-                    <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types_2['id'] ?>">BOS Places for <?php echo $row_style_types_2['styleTypeName']; ?></a>
+                    if ($row_style_type['styleTypeBOS'] == "Y") { ?>
+                    <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_type['id'] ?>">BOS Places for <?php echo $row_style_type['styleTypeName']; ?></a>
                 <?php
                     }
-                } while ($row_style_types_2 = mysqli_fetch_assoc($style_types_2));
+                } while ($row_style_type = mysqli_fetch_assoc($style_type));
                 ?>
                 </ul>
             </div>

@@ -65,6 +65,7 @@ if (($action == "default") || ($action == "entries")) {
         // array and show/hide the list as each are selected via jQuery.
         $styles_db_table = $prefix."styles";
 
+        /*
         if ($style_set['style_set_name'] == "BJCP2025") $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
         elseif ($style_set['style_set_name'] == "AABC2025") $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
         else $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
@@ -73,22 +74,32 @@ if (($action == "default") || ($action == "entries")) {
         elseif (strpos($style_set['style_set_name'],"AABC") !== false) $query_styles_all .= " ORDER BY brewStyleGroup,brewStyleNum,brewStyle ASC";
         else $query_styles_all .= " ORDER BY brewStyleType,brewStyleGroup,brewStyleNum,brewStyle ASC";
         
-        $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
+        $styles_all = mysqli_query($connection,$query_styles_all) or die ("A database error occurred.");
         $row_styles_all = mysqli_fetch_assoc($styles_all);
+        */
+        
+        $cols = array("id","brewStyleGroup","brewStyleNum","brewStyle","brewStyleVersion","brewStyleOwn");
+        $db_conn->returnType = 'array';
+        if ($style_set['style_set_name'] == "BJCP2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", array("BJCP2025","2","BJCP2021","2","custom"));
+        elseif ($style_set['style_set_name'] == "AABC2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", array("AABC2025","2","AABC2022","2","custom"));
+        else $db_conn->where ("brewStyleVersion = ? AND brewStyleOwn != ?", array($style_set['style_set_name'],"custom"));
+        $row_styles_all = $db_conn->get($styles_db_table, null, $cols);
 
         if ($style_set['style_set_name'] == "BA") $method = 2;
         else $method = 0;
 
         if ($row_styles_all) {
 
-            do {
+            foreach ($row_styles_all as $row_styles_all) {
+
+                if (isset($row_styles_all['id'])) {
+                    $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
+                    if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
+                    if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
+                    else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
+                }   
                 
-                $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
-                if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
-                if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
-                else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
-                
-            } while($row_styles_all = mysqli_fetch_assoc($styles_all));
+            } 
         
         }
 
@@ -193,7 +204,7 @@ if (($action == "default") || ($action == "entries")) {
 
 if ($section == "step3") {
     $query_prefs = sprintf("SHOW COLUMNS FROM %s", $prefix."preferences");
-    $prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+    $prefs = mysqli_query($connection,$query_prefs) or die ("A database error occurred.");
     while($row_prefs_setup = mysqli_fetch_array($prefs)){
         $row_prefs[$row_prefs_setup['Field']] = "";
     }
@@ -260,7 +271,7 @@ if (($section == "admin") && ($go == "preferences")) {
 <div class="bcoem-admin-element hidden-print">
         <a class="btn btn-<?php if ($action == "default") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> General Preferences</a>
         <a class="btn btn-<?php if ($action == "entries") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries"><span class="fa fa-beer"></span> Entry Preferences</a>
-        <a class="btn btn-<?php if ($action == "email") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email"><span class="fa fa-envelope"></span> Email Sending Preferences</a>
+        <a class="btn btn-<?php if ($action == "email") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email"><span class="fa fa-envelope"></span> Email Sending / Contact Display Preferences</a>
         <a class="btn btn-<?php if ($action == "payment") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment"><span class="fa fa-money"></span> Currency and Payment Preferences</a>
         <a class="btn btn-<?php if ($action == "best") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best"><span class="fa fa-trophy"></span> Best Brewer and/or Club Preferences</a>
         <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-gavel"></span> Judging/Competition Organization Preferences</a>
@@ -305,9 +316,18 @@ $(document).ready(function(){
     $("#send-test-email-show").hide();
     $("#sending-email-options").hide();
     $('#send-test-email-show-button').hide();
+    $("#enable-contact-form").hide();
+    $("#contact-cc").hide();
     
     if (email_sending_enable == 1) {
         $("#sending-email-options").show();
+        $("#enable-contact-form").show();
+        $("#contact-cc").show();
+        $("input[name='prefsEmailFrom']").prop("required", true);
+        $("input[name='prefsEmailHost']").prop("required", true);
+        $("input[name='prefsEmailUsername']").prop("required", true);
+        $("input[name='prefsEmailPassword']").prop("required", true);
+        $("input[name='prefsEmailPort']").prop("required", true);
         if (email_disabled_all_creds == 1) {
             $('#send-test-email-show-button').show();
         }
@@ -315,9 +335,6 @@ $(document).ready(function(){
            $('#send-test-email-show').show(); 
         }
         $("#setWebsitePrefs").prop("disabled", false);
-    }
-    else {
-        $("#setWebsitePrefs").prop("disabled", true);
     }
    
     if ((email_previous_no_creds == 1) && (email_sending_enable == 0)) $("#setWebsitePrefs").prop("disabled", false);
@@ -329,6 +346,8 @@ $(document).ready(function(){
     $("input[name='prefsEmailSMTP']").click(function() {
         if ($(this).val() == "1") {
             $("#sending-email-options").show("fast");
+            $("#enable-contact-form").show("fast");
+            $("#contact-cc").show("fast");
             $("#setWebsitePrefs").prop("disabled", false);
             $("input[name='prefsEmailFrom']").prop("required", true);
             $("input[name='prefsEmailHost']").prop("required", true);
@@ -341,6 +360,9 @@ $(document).ready(function(){
         }
         else {
             $("#sending-email-options").hide("fast");
+            $("#enable-contact-form").hide("fast");
+            $("#contact-cc").hide("fast");
+            // $("#prefsContact_0").attr("checked", false);
             $("#setWebsitePrefs").prop("disabled", false);
             $("input[name='prefsEmailFrom']").prop("required", false);
             $("input[name='prefsEmailHost']").prop("required", false);
@@ -1275,9 +1297,9 @@ $(document).ready(function(){
         <?php } ?>
         <div class="help-block">
         <?php if (HOSTED) { ?>
-            <p>If enabled, emails sent from your hosted installation will originate from the <?php echo $_SESSION['prefsEmailFrom']; ?> address. This address is not monitored and all emails generated will contain a disclaimer stating as such.</p>
+            <p class="text-primary"><strong>If enabled, emails sent from your hosted installation will originate from the <?php echo $_SESSION['prefsEmailFrom']; ?> address. This address is not monitored and all emails generated will contain a disclaimer stating as such.</strong></p>
         <?php } else { ?>
-            <p><strong>If enabled, you will need to provide a valid email address and associated information to send emails via the Simple Mail Transfer Protocol (SMTP).</strong></p>
+            <p class="text-primary"><strong>If enabled, you will need to provide a valid email address and associated information to send emails via the <a href="https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol" target="_blank">Simple Mail Transfer Protocol</a> (SMTP).</strong></p>
             <p>See your webhost's or email service's documentation for the necessary settings to set up sending emails using SMTP. If you would like to use a Gmail email address, you'll need to set up Gmail SMTP. <a href="https://mailtrap.io/blog/gmail-smtp/#Step-1-Enabling-SMTP-in-Gmail-settings" target="_blank">This guide</a> will help you get the necessary settings.</p>
         <?php } ?>
         </div>
@@ -1395,64 +1417,7 @@ $(document).ready(function(){
     </div>
 <?php } // End if (!HOSTED); ?>
     <div class="form-group">
-        <label for="prefsContact" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <div class="input-group">            
-                <label class="radio-inline">
-                    <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($row_prefs['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($row_prefs['prefsContact'] == "N") echo "CHECKED"; ?>/> Disable
-                </label>
-            </div>
-            <div class="help-block">
-                <div class="btn-group" role="group" aria-label="contactFormModal">    
-                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#contactFormModal">Contact Form Info</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bcoem-admin-modal">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Enable or disable your installation's contact form. When users fill out the form, an email is generated from the Originating Email Address as input above to a competition official.</p>
-                    <p>If disabled, competition email addresses are obfuscated and users will need to select a link and manually copy/paste email addresses into their email platform. </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php if (HOSTED) { ?>
-    <input type="hidden" name="prefsEmailCC" value="0">
-    <?php } else { ?>
-    <div class="form-group">
-        <label for="prefsEmailCC" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form CC</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <div class="input-group">            
-                <label class="radio-inline">
-                    <input type="radio" name="prefsEmailCC" value="1" id="prefsEmailCC_1" <?php if ($row_prefs['prefsEmailCC'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Enable
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="prefsEmailCC" value="0" id="prefsEmailCC_0"  <?php if ((empty($row_prefs['prefsEmailCC'])) || ($row_prefs['prefsEmailCC'] == "0")) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
-                </label>
-            </div>
-            <div class="help-block">
-                <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email.</p>
-                <p><strong>Disabling this function is STRONGLY recommended</strong> &ndash; since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam email addresses unrelated to the competition.</p>
-            </div>
-        </div>
-    </div>
-    <?php } ?>
-    <div class="form-group">
-        <label for="prefsEmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
+        <label for="prefsEmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Registration Confirmation Emails</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">            
                 <label class="radio-inline">
@@ -1462,28 +1427,7 @@ $(document).ready(function(){
                     <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($row_prefs['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> Disable
                 </label>
             </div>
-            <div class="help-block">
-                <div class="btn-group" role="group" aria-label="contactFormModal">
-                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#regEmailFormModalLabel">Confirmation Emails Info</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="regEmailFormModalLabel" tabindex="-1" role="dialog" aria-labelledby="regEmailFormModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bcoem-admin-modal">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="regEmailFormModalLabel">Confirmation Emails</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Do you want a system-generated confirmation email sent to all users upon registering their account information?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
+            <div class="help-block">Do you want a system-generated confirmation email sent to all users upon registering their account information?</div>
         </div>
     </div>
     <?php if (!HOSTED) { ?>
@@ -1503,6 +1447,72 @@ $(document).ready(function(){
     </section>
     <?php } ?>
 </section>
+<h3>Contact Display</h3>
+    <div class="form-group">
+        <label for="prefsContact" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="radio" id="enable-contact-form">            
+                <label>
+                    <input type="radio" name="prefsContact" value="Y" id="prefsContact_0" <?php if ($row_prefs['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable Contact Form
+                </label>
+            </div>
+            <div class="radio">  
+                <label>
+                    <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($row_prefs['prefsContact'] == "N") echo "CHECKED"; ?> /> Disable Contact Form - List Contacts
+                </label>
+            </div>
+            <div class="radio">  
+                <label>
+                    <input type="radio" name="prefsContact" value="X" id="prefsContact_2" <?php if ($row_prefs['prefsContact'] == "X") echo "CHECKED"; ?> /> Disable Contact Form - Do Not List Contacts
+                </label>
+            </div>
+            <div class="help-block">
+                <div class="btn-group" role="group" aria-label="contactFormModal">    
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#contactFormModal">Contact Form Info</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bcoem-admin-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Enable or disable your installation's contact form. When users fill out the form, an email is generated from the Originating Email Address as input above to a competition official. <strong>The contact form is only available when Email Sending is enabled.</strong></p>
+                    <p>If the form is disabled, and contacts are listed instead, competition email addresses are obfuscated and users will need to select a link and manually copy/paste email addresses into their email platform.</p>
+                    <p>If the form is disabled, and contacts are NOT listed, a message will be displayed directing users to use other means to contact competition officials.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php if (HOSTED) { ?>
+    <input type="hidden" name="prefsEmailCC" value="0">
+    <?php } else { ?>
+    <div class="form-group" id="contact-cc">
+        <label for="prefsEmailCC" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form CC</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="input-group">            
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailCC" value="1" id="prefsEmailCC_1" <?php if ($row_prefs['prefsEmailCC'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Enable
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="prefsEmailCC" value="0" id="prefsEmailCC_0"  <?php if ((empty($row_prefs['prefsEmailCC'])) || ($row_prefs['prefsEmailCC'] == "0")) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
+                </label>
+            </div>
+            <div class="help-block">
+                <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email.</p>
+                <p><strong class="text-danger">Disabling this function is STRONGLY recommended</strong> &ndash; since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam email addresses unrelated to the competition.</p>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
 <?php } // end if ($action == "email") { ?>
 
 <?php if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "best")) { ?>
@@ -1700,7 +1710,9 @@ include (DB.'entry_info.db.php');
     <select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm" data-size="12" data-width="auto">
         <optgroup label="Print Multiple Entries at a Time">
             <option value="7" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "7")) echo " SELECTED"; ?> />Standard</option>
+            <option value="10" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "10")) echo " SELECTED"; ?> />Standard - Larger Printed Number and Style</option>
             <option value="5" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "5")) echo " SELECTED"; ?> />Standard with Barcode/QR Code</option>
+            <option value="11" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "11")) echo " SELECTED"; ?> />Standard - Larger Printed Number and Style with Barcode/QR Code</option>
             <option value="8" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "8")) echo " SELECTED"; ?> />Anonymous - Smaller Printed Entry Number</option>
             <option value="6" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "6")) echo " SELECTED"; ?> />Anonymous - Smaller Printed Entry Number with Barcode/QR Code</option>
             <option value="9" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "9")) echo " SELECTED"; ?> />Anonymous - Smaller Printed Random Number</option>
@@ -1717,12 +1729,22 @@ include (DB.'entry_info.db.php');
         </div>
         <div class="help-block">
             <div class="btn-group" role="group" aria-label="entryFormModal">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryFormModal">Printed Entry Form and/or Bottle Labels Info</button>
-                </div>
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#entryFormModal">Printed Entry Form and/or Bottle Labels Info</button>
+            </div>
+            <div class="btn-group" role="group" aria-label="entryBottleLabelExamples">
+                <a class="btn btn-xs btn-info hide-loader" data-fancybox="gallery" rel="group-bottle-labels" href="<?php echo $base_url; ?>images/label_standard.png" data-caption="Standard">Examples</a>
             </div>
         </div>
     </div>
+</div>
+<div class="hidden">
+    <a data-fancybox="gallery" rel="group-bottle-labels" href="<?php echo $base_url; ?>images/label_standard_large_number.png" data-caption="Standard - Larger Printed Number and Style">Link</a>
+    <a data-fancybox="gallery" rel="group-bottle-labels" href="<?php echo $base_url; ?>images/label_standard_barcode.png" data-caption="Standard with Barcode/QR Code">Link</a>
+    <a data-fancybox="gallery" rel="group-bottle-labels" href="<?php echo $base_url; ?>images/label_standard_large_number_barcode.png" data-caption="Standard - Larger Printed Number and Style with Barcode/QR Code">Link</a>
+    <a data-fancybox="gallery" rel="group-bottle-labels" href="<?php echo $base_url; ?>images/label_anon.png" data-caption="Anonymous - Smaller Printed Entry Number">Link</a>
+    <a data-fancybox="gallery" rel="group-bottle-labels" href="<?php echo $base_url; ?>images/label_anon_barcode.png" data-caption="Anonymous - Smaller Printed Entry Number with Barcode/QR Code">Link</a>
+    <a data-fancybox="gallery" rel="group-bottle-labels" href="<?php echo $base_url; ?>images/label_anon_large_number.png" data-caption="Anonymous - Larger Printed Entry Number">Link</a>
+    <a data-fancybox="gallery" rel="group-bottle-labels" href="<?php echo $base_url; ?>images/label_anon_large_number_barcode.png" data-caption="Anonymous - Larger Printed Entry Number with Barcode/QR Code">Link</a>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="entryFormModal" tabindex="-1" role="dialog" aria-labelledby="entryFormModalLabel">
@@ -1744,7 +1766,6 @@ include (DB.'entry_info.db.php');
                 <div class="well">
                 <p>Both the QR code and barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewingcompetitions.com/barcode-labels" target="_blank"><strong>available for download at brewingcompetitions.com</strong></a>. BCOE&amp;M utilizes the&nbsp;<strong><a class="hide-loader" href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a></strong> to generate all barcodes. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
                 </div>
-                <p class="text-primary"><strong>As of version 2.7.1, the label options that printed one page per entry have been removed. General feedback was that they were either unused or unnecessarily wasteful.</strong></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -1752,6 +1773,7 @@ include (DB.'entry_info.db.php');
         </div>
     </div>
 </div>
+
 <div id="prefsHideSpecific" class="form-group">
     <label for="prefsHideSpecific" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

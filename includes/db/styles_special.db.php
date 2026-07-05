@@ -18,6 +18,7 @@ $spec_sweet_carb_only_info = array();
 $spec_carb_only = array();
 $spec_carb_only_info = array();
 $styles_entry_text = array();
+$styles_entry_text_cider = array();
 
 $replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
 if ($go == "default") $replacement2 = array('<strong class="text-danger-emphasis">Entry Instructions:</strong>','<strong class="text-info-emphasis">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
@@ -228,7 +229,7 @@ elseif ($_SESSION['prefsLanguage'] != "en-US") {
 
 	}
 
-	$styles_entry_text = array_merge($styles_entry_text,$styles_entry_text_cider);
+	if (!empty($styles_entry_text_cider)) $styles_entry_text = array_merge($styles_entry_text,$styles_entry_text_cider);
 
 }
 

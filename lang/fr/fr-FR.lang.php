@@ -2248,6 +2248,14 @@ $label_scoresheet_practice = "Feuille de notation d'entraînement";
 $entry_info_text_058 = "Connectez-vous pour voir le lieu et son adresse, si disponible.";
 
 /**
+ * ------------------------------------------
+ * Version 3.0.3 Additions
+ * ------------------------------------------
+ */
+
+$contact_text_014 = "L'affichage des coordonnées des responsables de la compétition a été désactivé par les administrateurs du site. Veuillez utiliser d'autres moyens pour contacter les responsables de la compétition (réseaux sociaux, site web de l'organisation, etc.).";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS 
  * ----------------------------------------------------------------------------------

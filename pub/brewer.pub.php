@@ -97,18 +97,18 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
     $club_alert = "";
 
     if ($section != "step2") {
-        if ((!empty($row_brewer['brewerClubs'])) && (!in_array($row_brewer['brewerClubs'],$_SESSION['club_array']))) {
+        if ((!empty($row_brewer['brewerClubs'])) && (!in_array(html_entity_decode($row_brewer['brewerClubs'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),$_SESSION['club_array']))) {
             $club_other = TRUE;
             $club_alert .= sprintf("<div id=\"clubOther\" class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_036,$brewer_text_037,$brewer_text_038);
         }
         // Fail safe from previous versions
-        if ((!$club_other) && (!in_array($row_brewer['brewerClubs'],$_SESSION['club_array'])) && (!empty($row_brewer['brewerClubs']))) $club_alert .= sprintf("<div id=\"clubOther-warning\" class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_039,$brewer_text_040,$brewer_text_038);
+        if ((!$club_other) && (!in_array(html_entity_decode($row_brewer['brewerClubs'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),$_SESSION['club_array'])) && (!empty($row_brewer['brewerClubs']))) $club_alert .= sprintf("<div id=\"clubOther-warning\" class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_039,$brewer_text_040,$brewer_text_038);
     }
 
     foreach ($_SESSION['club_array'] as $club) {
         $club_selected = "";
         if ($section != "step2") {
-            if ($club == $row_brewer['brewerClubs']) $club_selected = " SELECTED";
+            if ($club == (html_entity_decode($row_brewer['brewerClubs'], ENT_QUOTES | ENT_HTML5, 'UTF-8'))) $club_selected = " SELECTED";
         }
         $club_options .= "<option value=\"".$club."\"".$club_selected.">".$club."</option>\n";
     }

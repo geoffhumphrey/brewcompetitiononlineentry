@@ -25,20 +25,18 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
 
     // Check whether any judging sessions have been defined. 
     // If so, loop through and find the earliest and the latest dates.
-    $query_judging_locations = sprintf("SELECT id, judgingDate, judgingDateEnd FROM %s WHERE judgingLocType <= '1';", $prefix."judging_locations");
-    $judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
-    $row_judging_locations = mysqli_fetch_assoc($judging_locations);
-    $totalRows_judging_locations = mysqli_num_rows($judging_locations);
+    $cols = array("id", "judgingDate", "judgingDateEnd");
+    $db_conn->where ("judgingLocType", "1", "<=");
+    $db_conn->returnType = "array"; 
+    $row_judging_locations = $db_conn->get($prefix."judging_locations", null, $cols);
+    $totalRows_judging_locations = $db_conn->count;
 
     if ($totalRows_judging_locations > 0) {
 
-        do {
-
+        foreach ($row_judging_locations as $row_judging_locations) {
             if (!empty($row_judging_locations['judgingDate'])) $judging_dates[] = $row_judging_locations['judgingDate'];
             if (!empty($row_judging_locations['judgingDateEnd'])) $judging_dates[] = $row_judging_locations['judgingDateEnd'];
-
-
-        } while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+        }
 
         $judging_earliest_date = min($judging_dates);
         if ((max($judging_dates) > $judging_earliest_date)) $judging_latest_date = max($judging_dates);
@@ -185,7 +183,7 @@ $(document).ready(function() {
 <div class="bcoem-admin-element hidden-print">
     <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> General Preferences</a>
     <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries"><span class="fa fa-beer"></span> Entry Preferences</a>
-    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email"><span class="fa fa-envelope"></span> Email Sending Preferences</a>
+    <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email"><span class="fa fa-envelope"></span> Email Sending / Contact Display Preferences</a>
     <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment"><span class="fa fa-money"></span> Currency and Payment Preferences</a>
     <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best"><span class="fa fa-trophy"></span> Best Brewer and/or Club Preferences</a>
     <a class="btn btn-primary disabled"  style="margin: 5px 5px 5px 0"  href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-cog"></span> Judging/Competition Organization Preferences</a>

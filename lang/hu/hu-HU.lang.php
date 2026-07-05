@@ -2230,6 +2230,14 @@ $entry_info_text_058 = "A helyszín és címe megtekintéséhez jelentkezzen be,
 
 /**
  * ------------------------------------------
+ * Version 3.0.3 Additions
+ * ------------------------------------------
+ */
+
+$contact_text_014 = "A verseny kapcsolattartóinak megjelenítését a webhely rendszergazdái letiltották. Kérjük, más csatornákon keresztül vegye fel a kapcsolatot a verseny szervezőivel (közösségi média, a szervezet honlapja stb.).";
+
+/**
+ * ------------------------------------------
  * END TRANSLATIONS
  * ------------------------------------------
  *

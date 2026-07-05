@@ -24,10 +24,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	// If do not want or need stewards or judges, allow for 0
 	// The sanitize functions scrub zeroes
-	if ($_POST['jPrefsCapStewards'] == 0) $jPrefsCapStewards = 0;
-	else $jPrefsCapStewards = blank_to_null(sterilize($_POST['jPrefsCapStewards']));
-	if ($_POST['jPrefsCapJudges'] == 0) $jPrefsCapJudges = 0;
-	else $jPrefsCapJudges = blank_to_null(sterilize($_POST['jPrefsCapJudges']));
+	if ((isset($_POST['jPrefsCapStewards'])) && (is_numeric($_POST['jPrefsCapStewards']))) {
+		if ($_POST['jPrefsCapStewards'] == 0) $jPrefsCapStewards = 0;
+		else $jPrefsCapStewards = sterilize($_POST['jPrefsCapStewards']);
+	}
+	else $jPrefsCapStewards = NULL;
+	if ((isset($_POST['jPrefsCapJudges'])) && (is_numeric($_POST['jPrefsCapJudges']))) {
+		if ($_POST['jPrefsCapJudges'] == 0) $jPrefsCapJudges = 0;
+		else $jPrefsCapJudges = sterilize($_POST['jPrefsCapJudges']);
+	}
+	else $jPrefsCapJudges = NULL;
 
 	if (($action == "edit") || ($section == "setup")) {
 

@@ -16,7 +16,37 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 
 include (DB.'contacts.db.php');
 
+$smtp_enable = FALSE;
+if (($_SESSION['prefsEmailSMTP'] == 1) && (!empty($_SESSION['prefsEmailSMTP'])) && (!empty($_SESSION['prefsEmailUsername'])) && (!empty($_SESSION['prefsEmailPassword'])) && (!empty($_SESSION['prefsEmailHost'])) && (!empty($_SESSION['prefsEmailPort']))) $smtp_enable = TRUE;
+
+$show_contact_form = FALSE;
+$show_contact_list = FALSE;
+$show_contact_none = FALSE;
+
+if ($_SESSION['prefsContact'] == "X") {
+    $show_contact_none = TRUE;
+}
+
 if ($_SESSION['prefsContact'] == "N") {
+    $show_contact_list = TRUE;
+}
+
+if ($_SESSION['prefsContact'] == "Y") {
+    if ($smtp_enable) $show_contact_form = TRUE;
+    else $show_contact_list = TRUE;
+}
+
+
+if ($show_contact_none) {
+
+    $page_info = "";
+    $page_info .= sprintf("<p>%s</p>",$contact_text_014);
+    if ((isset($row_contest_info['contestHostWebsite'])) && (!empty($row_contest_info['contestHostWebsite']))) $page_info .= sprintf("<p><a class=\"btn btn-primary\" href=\"%s\" target=\"_blank\">%s<i class=\"fa fa-external-link ms-2\"></i></a></p>",$row_contest_info['contestHostWebsite'],$label_website); 
+    echo $page_info;
+
+}
+
+elseif ($show_contact_list) {
 
 	$page_info = "";
 
@@ -45,7 +75,7 @@ if ($_SESSION['prefsContact'] == "N") {
 
 }
 
-if ($_SESSION['prefsContact'] == "Y") {
+elseif ($show_contact_form) {
 
 	$option = "";
 

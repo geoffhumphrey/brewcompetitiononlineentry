@@ -10,13 +10,18 @@ else {
 
 if ($view == "all") {   
 
+    /*
     $query_eval_all = sprintf("SELECT id FROM %s WHERE eid=%s", $dbTable, $id);
-    $eval_all = mysqli_query($connection,$query_eval_all) or die (mysqli_error($connection));
+    $eval_all = mysqli_query($connection,$query_eval_all) or die ("A database error occurred.");
     $row_eval_all = mysqli_fetch_assoc($eval_all);
+    */
 
-    do {
+    $db_conn->where ("eid", $id);
+    $row_eval_all = $db_conn->get ($dbTable);
+
+    foreach ($row_eval_all as $row_eval_all) {
         $scoresheet_display[] = $row_eval_all['id'];
-    } while($row_eval_all = mysqli_fetch_assoc($eval_all));
+    }
 
 }
 
