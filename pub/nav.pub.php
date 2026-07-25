@@ -100,10 +100,12 @@ if ($logged_in) {
 	            <?php } else { ?>
 
 	            	<?php if (!$judging_started) { ?>
-	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#rules"><?php echo $label_rules; ?></a>
-	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#volunteers"><?php echo $label_volunteers; ?></a>
+	            	<a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#rules"><?php echo $label_rules; ?></a>
+	            	<a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#volunteers"><?php echo $label_volunteers; ?></a>
+	            	<?php } ?>
+	            	<?php if ($judging_past > 0) { ?>
 	            	<a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#entry-info"><?php echo $label_entry_info; ?></a>
-	                <?php } ?>
+	            	<?php } ?>
 	            	<?php if (file_exists(PUB.'custom_competition_info.pub.php')) { ?>
 	            	<a class="nav-item nav-link" href="<?php echo build_public_url("competition","default","default","default",$sef,$base_url,"default"); ?>"><?php echo $label_other_info; ?></a>	
 	            	<?php } ?>
@@ -120,11 +122,14 @@ if ($logged_in) {
 	                <?php
 	                // --- Per-Session Language Toggle ---
 	                // Shows a globe icon dropdown with available languages.
-	                // Only displayed if more than one language is enabled.
+	                // Only displayed when multi-language support is explicitly
+	                // enabled via $enable_language_toggle = TRUE in config.php
+	                // AND more than one language is available.
 	                // Users' selection is stored in a 30-day cookie (see bootstrap.php).
 	                // Links to the current page URL with ?lang= appended so users
 	                // don't lose their place when switching languages.
-	                if (count($languages) > 1) {
+	                global $enable_language_toggle;
+	                if (isset($enable_language_toggle) && $enable_language_toggle && count($languages) > 1) {
 	                    // Build the current page URL (without existing ?lang= param)
 	                    $current_url = $_SERVER['REQUEST_URI'];
 	                    // Strip any existing ?lang= parameter

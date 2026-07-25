@@ -72,7 +72,12 @@ if ($setup_success) {
 	// Sets a 30-day cookie and session variable, then continues rendering
 	// the current page (no redirect, so users don't lose form data).
 	// The cookie is checked on every subsequent page load in language.lang.php.
-	if (isset($_GET['lang'])) {
+	//
+	// This feature is disabled by default. To enable, set:
+	//   $enable_language_toggle = TRUE;
+	// in config.php. When disabled, ?lang= is ignored entirely.
+	global $enable_language_toggle;
+	if (isset($enable_language_toggle) && $enable_language_toggle && isset($_GET['lang'])) {
 		$valid_langs = array_keys($languages);
 		if (in_array($_GET['lang'], $valid_langs)) {
 			setcookie('userLanguage', $_GET['lang'], time() + (86400 * 30), "/");
