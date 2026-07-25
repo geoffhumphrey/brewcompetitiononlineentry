@@ -22,19 +22,21 @@ $languages = array(
 );
 
 /**
- * Allow per-installation language override via config.php.
+ * Allow per-installation language override via config.php. Intended 
+ * for use with '$enable_language_toggle = TRUE'.
  *
  * Set $override_languages in config.php to restrict which languages
- * are available on a given site. For example, a Korean competition
- * might want only Korean and English:
+ * are available on a given site. For example, a multi-lingual 
+ * competition might want only English and Spanish:
  *
  *   $override_languages = array(
- *       "ko-KR" => "한국어",
- *       "en-US" => "English (US)"
+ *       "en-US" => "English (US)",
+ *       "es-419" => "Spanish (Latin America)"
  *   );
  *
- * If $override_languages is not set, all languages defined above
- * are available (default behavior, backwards-compatible).
+ * If $override_languages is not set, all default languages defined 
+ * above are available in the language drop-down when 
+ * $enable_language_toggle is enabled.
  */
 if (isset($override_languages) && !empty($override_languages)) {
     $languages = $override_languages;

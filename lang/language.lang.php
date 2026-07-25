@@ -40,7 +40,7 @@ $prefsLanguage = "en-US";
 $prefsLanguageFolder = "en";
 
 /**
- * Per-session language override.
+ * Per-session language override. 
  *
  * Allows users to switch languages independently of the site-wide default
  * set in Site Preferences. The cookie is set by the language toggle in
