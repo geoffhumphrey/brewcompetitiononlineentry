@@ -49,8 +49,8 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 
 }
 
-if ($styleSet == "BJCP2025") $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table);
-elseif ($styleSet == "AABC2025") $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table);
+if ($styleSet == "BJCP2025") $query_styles = sprintf("SELECT * FROM %s WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')", $styles_db_table);
+elseif ($styleSet == "AABC2025") $query_styles = sprintf("SELECT * FROM %s WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')", $styles_db_table);
 else $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
 
 if ($section == "admin") {
@@ -108,8 +108,8 @@ if ($section != "list") {
 	if (HOSTED) $query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet, $prefix."styles", $styleSet);
 	else
 	*/
-	if ($styleSet == "BJCP2025") $query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table);
-	elseif ($styleSet == "AABC2025") $query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table);
+	if ($styleSet == "BJCP2025") $query_styles2 = sprintf("SELECT * FROM %s WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')", $styles_db_table);
+	elseif ($styleSet == "AABC2025") $query_styles2 = sprintf("SELECT * FROM %s WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')", $styles_db_table);
 	else $query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
 	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 	elseif ($section == "brew") $query_styles2 .= " AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'";
