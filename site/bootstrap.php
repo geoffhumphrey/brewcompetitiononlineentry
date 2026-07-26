@@ -70,8 +70,8 @@ if ($setup_success) {
 	// ---------------------------- Per-Session Language Override ----------------------------
 	// Handle ?lang=XX URL parameter to switch the user's display language.
 	// Sets a 30-day cookie and session variable, then continues rendering
-	// the current page (no redirect, so users don't lose form data).
-	// The cookie is checked on every subsequent page load in language.lang.php.
+	// the current page. The cookie is checked on every subsequent page
+	// load in language.lang.php.
 	//
 	// This feature is disabled by default. To enable, set:
 	//   $enable_language_toggle = TRUE;
