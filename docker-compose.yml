@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: bcoe_web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - DB_HOST=bcoe_db
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=brewing_competition
+      - DB_PORT=3306  # You can change if you need
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: bcoe_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: brewing_competition
+      MYSQL_USER: bcoe_user
+      MYSQL_PASSWORD: bcoe_password
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
