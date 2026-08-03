@@ -80,7 +80,13 @@ if ($setup_success) {
 	if (isset($enable_language_toggle) && $enable_language_toggle && isset($_GET['lang'])) {
 		$valid_langs = array_keys($languages);
 		if (in_array($_GET['lang'], $valid_langs)) {
-			setcookie('userLanguage', $_GET['lang'], time() + (86400 * 30), "/");
+			setcookie('userLanguage', $_GET['lang'], [
+				'expires' => time() + (86400 * 30),
+				'path' => '/',
+				'httponly' => true,
+				'secure' => true,
+				'samesite' => 'Lax',
+			]);
 			// Also update $_COOKIE so language.lang.php sees the new value
 			// immediately on this same page load (setcookie only affects
 			// the response header; $_COOKIE still holds the old request value).
