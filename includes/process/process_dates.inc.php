@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+// $timezone_raw is set by process.inc.php before including this file; default
+// to UTC if this file is ever included standalone (mirrors process.inc.php).
+if (!isset($timezone_raw)) $timezone_raw = 0;
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))))) {
 
 	$errors = FALSE;
