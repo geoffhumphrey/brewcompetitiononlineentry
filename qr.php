@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 require_once ('paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
 // Build array - used in language files, so it needs to be before bootstrap.php

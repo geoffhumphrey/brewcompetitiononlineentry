@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      maintenance.php
  * Description: This page displays if the site is in maintenance mode.

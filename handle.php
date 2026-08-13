@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
 require(LIB.'common.lib.php');
