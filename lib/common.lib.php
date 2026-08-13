@@ -313,7 +313,7 @@ function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$
 	return $return;
 }
 
-function build_public_url($section="default",$go="default",$action="default",$id="default",$sef,$base_url,$view="default") {
+function build_public_url($section="default",$go="default",$action="default",$id="default",$sef="",$base_url="",$view="default") {
 	
 	if ($_SESSION['prefsSEF'] == 'Y') {
 		$url = $base_url."";
@@ -4703,7 +4703,7 @@ function user_submitted_eval($uid,$eid) {
 
 }
 
-function eval_exits($eid="default",$method="default",$dbTable) {
+function eval_exits($eid="default",$method="default",$dbTable="") {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
