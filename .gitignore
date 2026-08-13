@@ -7,12 +7,14 @@ libraries/*
 sso/*
 .sftp-upload-on-change.json
 .github/*
+!.github/workflows/
 includes/brewerydb/*
 js_includes/autosave.js
 *.zip
 *.sublime-project
 *.sublime-workspace
-*.db
+vendor/
+var/
 update/char_set_update.php
 update/move_files.php
 .vscode/
