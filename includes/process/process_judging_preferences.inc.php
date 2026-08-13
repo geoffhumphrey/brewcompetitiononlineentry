@@ -166,13 +166,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		    if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) {
 
 		    	// If no defined earliest judging session date, use the posted date
-		    	if (empty($judging_earliest_date)) $jPrefsJudgingOpen = strtotime(sterilize($_POST['jPrefsJudgingOpen']));
+		    	if (empty($judging_earliest_date)) $jPrefsJudgingOpen = to_utc_epoch(sterilize($_POST['jPrefsJudgingOpen']), $timezone_raw);
 		    	
 		    	// Otherwise...
 		    	else {
 
 		    		// If the earliest judging session date defined is after the posted date, use the posted date
-		    		if ($judging_earliest_date > $_POST['jPrefsJudgingOpen']) $jPrefsJudgingOpen = strtotime(sterilize($_POST['jPrefsJudgingOpen']));
+		    		if ($judging_earliest_date > $_POST['jPrefsJudgingOpen']) $jPrefsJudgingOpen = to_utc_epoch(sterilize($_POST['jPrefsJudgingOpen']), $timezone_raw);
 
 		    		// Otherwise, use the earliest defined judging session date
 		    		else $jPrefsJudgingOpen = $judging_earliest_date;
@@ -199,13 +199,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		    if ((isset($_POST['jPrefsJudgingClosed'])) && (!empty($_POST['jPrefsJudgingClosed']))) {
 
 		    	// If no defined earlies judging session date, use the posted date
-		    	if (empty($judging_latest_date)) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingClosed']));
+		    	if (empty($judging_latest_date)) $jPrefsJudgingClosed = to_utc_epoch(sterilize($_POST['jPrefsJudgingClosed']), $timezone_raw);
 		    	
 		    	// Otherwise...
 		    	else {
 
 		    		// If the latest judging session date defined is prior to the posted date, use the posted date
-		    		if ($judging_latest_date < $_POST['jPrefsJudgingClosed']) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingClosed']));
+		    		if ($judging_latest_date < $_POST['jPrefsJudgingClosed']) $jPrefsJudgingClosed = to_utc_epoch(sterilize($_POST['jPrefsJudgingClosed']), $timezone_raw);
 
 		    		// Otherwise, use the latest defined judging session date
 		    		else $jPrefsJudgingClosed = $judging_latest_date;
@@ -221,7 +221,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		    	if (empty($judging_latest_date)) {
 		    		
 		    		// If open dated posted, add 1 day to it
-		    		if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingOpen'])) + 86400;
+		    		if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) $jPrefsJudgingClosed = to_utc_epoch(sterilize($_POST['jPrefsJudgingOpen']), $timezone_raw) + 86400;
 
 		    		// If not, and the earliest judging date is defined, add one day to it
 		    		elseif (!empty($judging_earliest_date)) $jPrefsJudgingClosed = $judging_earliest_date + 86400;

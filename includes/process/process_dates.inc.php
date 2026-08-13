@@ -16,14 +16,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$contestShippingDeadline = "";
 	$contestAwardsLocDate = "";
 
-	if (isset($_POST['contestEntryOpen'])) $contestEntryOpen = strtotime(sterilize($_POST['contestEntryOpen']));
-	if (isset($_POST['contestEntryDeadline'])) $contestEntryDeadline = strtotime(sterilize($_POST['contestEntryDeadline']));
-	if (isset($_POST['contestEntryEditDeadline'])) $contestEntryEditDeadline = strtotime(sterilize($_POST['contestEntryEditDeadline']));
-	if (isset($_POST['contestDropoffOpen'])) $contestDropoffOpen = strtotime(sterilize($_POST['contestDropoffOpen']));
-	if (isset($_POST['contestDropoffDeadline'])) $contestDropoffDeadline = strtotime(sterilize($_POST['contestDropoffDeadline']));
-	if (isset($_POST['contestShippingOpen'])) $contestShippingOpen = strtotime(sterilize($_POST['contestShippingOpen']));
-	if (isset($_POST['contestShippingDeadline'])) $contestShippingDeadline = strtotime(sterilize($_POST['contestShippingDeadline']));
-	if (isset($_POST['contestAwardsLocDate'])) $contestAwardsLocDate = strtotime(sterilize($_POST['contestAwardsLocDate']));
+	if (isset($_POST['contestEntryOpen'])) $contestEntryOpen = to_utc_epoch(sterilize($_POST['contestEntryOpen']), $timezone_raw);
+	if (isset($_POST['contestEntryDeadline'])) $contestEntryDeadline = to_utc_epoch(sterilize($_POST['contestEntryDeadline']), $timezone_raw);
+	if (isset($_POST['contestEntryEditDeadline'])) $contestEntryEditDeadline = to_utc_epoch(sterilize($_POST['contestEntryEditDeadline']), $timezone_raw);
+	if (isset($_POST['contestDropoffOpen'])) $contestDropoffOpen = to_utc_epoch(sterilize($_POST['contestDropoffOpen']), $timezone_raw);
+	if (isset($_POST['contestDropoffDeadline'])) $contestDropoffDeadline = to_utc_epoch(sterilize($_POST['contestDropoffDeadline']), $timezone_raw);
+	if (isset($_POST['contestShippingOpen'])) $contestShippingOpen = to_utc_epoch(sterilize($_POST['contestShippingOpen']), $timezone_raw);
+	if (isset($_POST['contestShippingDeadline'])) $contestShippingDeadline = to_utc_epoch(sterilize($_POST['contestShippingDeadline']), $timezone_raw);
+	if (isset($_POST['contestAwardsLocDate'])) $contestAwardsLocDate = to_utc_epoch(sterilize($_POST['contestAwardsLocDate']), $timezone_raw);
 	
 	// Account Registration
 	$contestRegistrationOpen = "";
@@ -31,10 +31,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$contestJudgeOpen = "";
 	$contestJudgeDeadline = "";
 
-	if (isset($_POST['contestRegistrationOpen'])) $contestRegistrationOpen = strtotime(sterilize($_POST['contestRegistrationOpen']));
-	if (isset($_POST['contestRegistrationDeadline'])) $contestRegistrationDeadline = strtotime(sterilize($_POST['contestRegistrationDeadline']));
-	if (isset($_POST['contestJudgeOpen'])) $contestJudgeOpen = strtotime(sterilize($_POST['contestJudgeOpen']));
-	if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = strtotime(sterilize($_POST['contestJudgeDeadline']));
+	if (isset($_POST['contestRegistrationOpen'])) $contestRegistrationOpen = to_utc_epoch(sterilize($_POST['contestRegistrationOpen']), $timezone_raw);
+	if (isset($_POST['contestRegistrationDeadline'])) $contestRegistrationDeadline = to_utc_epoch(sterilize($_POST['contestRegistrationDeadline']), $timezone_raw);
+	if (isset($_POST['contestJudgeOpen'])) $contestJudgeOpen = to_utc_epoch(sterilize($_POST['contestJudgeOpen']), $timezone_raw);
+	if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = to_utc_epoch(sterilize($_POST['contestJudgeDeadline']), $timezone_raw);
 
 	$update_table = $prefix."contest_info";
 	$data = array(
@@ -90,11 +90,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
     }
 
-	if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) $jPrefsJudgingOpen = strtotime(sterilize($_POST['jPrefsJudgingOpen']));
+	if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) $jPrefsJudgingOpen = to_utc_epoch(sterilize($_POST['jPrefsJudgingOpen']), $timezone_raw);
 	elseif ((isset($_POST['jPrefsJudgingOpen'])) && (empty($_POST['jPrefsJudgingOpen'])) && (!empty($judging_earliest_date))) $jPrefsJudgingOpen = sterilize($judging_earliest_date);
 	else $jPrefsJudgingOpen = "";
 
-	if ((isset($_POST['jPrefsJudgingClosed'])) && (!empty($_POST['jPrefsJudgingClosed']))) $jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingClosed']));
+	if ((isset($_POST['jPrefsJudgingClosed'])) && (!empty($_POST['jPrefsJudgingClosed']))) $jPrefsJudgingClosed = to_utc_epoch(sterilize($_POST['jPrefsJudgingClosed']), $timezone_raw);
 	elseif ((isset($_POST['jPrefsJudgingClosed'])) && (empty($_POST['jPrefsJudgingClosed']))) {
 	    if (!empty($judging_latest_date)) $jPrefsJudgingClosed = sterilize($judging_latest_date);
 	    else {
@@ -128,7 +128,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['prefsWinnerDelay'])) {
 		
 		if (!empty($_POST['prefsWinnerDelay'])) {
-			$prefsWinnerDelay = strtotime(sterilize($_POST['prefsWinnerDelay']));
+			$prefsWinnerDelay = to_utc_epoch(sterilize($_POST['prefsWinnerDelay']), $timezone_raw);
 			$prefsDisplayWinners = "Y";
 		}
 			
@@ -158,8 +158,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			$judgingDate = "";
 			$judgingDateEnd = "";
-			if (isset($_POST['judgingDate'.$id])) $judgingDate = strtotime(sterilize($_POST['judgingDate'.$id]));
-			if (isset($_POST['judgingDateEnd'.$id])) $judgingDateEnd = strtotime(sterilize($_POST['judgingDateEnd'.$id]));
+			if (isset($_POST['judgingDate'.$id])) $judgingDate = to_utc_epoch(sterilize($_POST['judgingDate'.$id]), $timezone_raw);
+			if (isset($_POST['judgingDateEnd'.$id])) $judgingDateEnd = to_utc_epoch(sterilize($_POST['judgingDateEnd'.$id]), $timezone_raw);
 
 			$update_table = $prefix."judging_locations";
 			$data = array(
@@ -188,5 +188,4 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$redirect = prep_redirect_link($redirect);
 	$redirect_go_to = sprintf("Location: %s", $redirect);
 }
-
 ?>

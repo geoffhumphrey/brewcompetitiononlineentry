@@ -73,6 +73,9 @@ if ($section == "setup") {
 // Set timezone globals for the site
 else  $timezone_raw = $_SESSION['prefsTimeZone'];
 
+// Guard against NULL/empty prefsTimeZone — treat as UTC
+if ($timezone_raw === null || $timezone_raw === '') { $timezone_raw = 0; }
+
 // Establish time zone for all date-related functions
 $timezone_prefs = get_timezone($timezone_raw);
 date_default_timezone_set($timezone_prefs);
