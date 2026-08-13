@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Module:      process_mods.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "mods" table
@@ -52,13 +53,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		elseif (isset($_POST['mod_extend_function_admin'])) $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
 		else $mod_extend_function_admin = "";
 
-		$mod_name = blank_to_null(trim(strip_tags($_POST['mod_name'])));
+		$mod_name = blank_to_null($purifier->purify($_POST['mod_name']));
+		$mod_name = blank_to_null(sterilize($mod_name));
 		$mod_type = blank_to_null(sterilize($_POST['mod_type']));
 		$mod_extend_function = blank_to_null(sterilize($_POST['mod_extend_function']));
 		$mod_extend_function_admin = blank_to_null(sterilize($mod_extend_function_admin));
 		$mod_filename = blank_to_null(sterilize($_POST['mod_filename']));
-		if ((!empty($mod_filename)) && (!preg_match('/^[A-Za-z0-9_\-]+\.php$/', $mod_filename))) $mod_filename = null;
-		$mod_description = blank_to_null(trim(strip_tags($_POST['mod_description'])));
+		$mod_description = blank_to_null($purifier->purify($_POST['mod_description']));
+		$mod_description = blank_to_null(sterilize($mod_description));
+		$mod_description = blank_to_null(trim($mod_description));
 		$mod_permission = blank_to_null(sterilize($_POST['mod_permission']));
 		$mod_rank = blank_to_null(sterilize($_POST['mod_rank']));
 		$mod_display_rank = blank_to_null(sterilize($_POST['mod_display_rank']));
@@ -112,12 +115,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	}
 
-	$rows_mods_display = $db_conn->get($mods_db_table);
-	$totalRows_mods_display = $db_conn->count;
+	$query_mods_display = sprintf("SELECT * FROM `%s`",$mods_db_table);
+	$mods_display = mysqli_query($connection,$query_mods_display) or die (mysqli_error($connection));
+	$row_mods_display = mysqli_fetch_assoc($mods_display);
+	$totalRows_mods_display = mysqli_num_rows($mods_display);
 
 	$mods_display_arr = array();
 
-	if ($totalRows_mods_display > 0) foreach ($rows_mods_display as $row_mods_display) {
+	if ($totalRows_mods_display > 0) do { 
 		$mods_display_arr[] = array(
 			'id' => $row_mods_display['id'],
 			'mod_extend_function' => $row_mods_display['mod_extend_function'],
@@ -128,7 +133,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'mod_enable' => $row_mods_display['mod_enable'],
 			'mod_type' => $row_mods_display['mod_type']
 		);
-	}
+	} while ($row_mods_display = mysqli_fetch_assoc($mods_display));
 
 	$_SESSION['mods_display'] = $mods_display_arr;
 

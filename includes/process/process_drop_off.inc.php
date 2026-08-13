@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Module:      process_drop_off.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 if (HOSTED) $styles_db_table = "bcoem_shared_styles";
 else

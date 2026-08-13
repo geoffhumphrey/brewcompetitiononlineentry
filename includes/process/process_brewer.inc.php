@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      process_brewer_add.inc.php
  * Description: This module does all the heavy lifting for adding participant information to the

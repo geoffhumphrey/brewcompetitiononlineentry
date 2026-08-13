@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Module:      process_prefs_add.inc.php
  * Description: This module does all the heavy lifting for adding information to the
