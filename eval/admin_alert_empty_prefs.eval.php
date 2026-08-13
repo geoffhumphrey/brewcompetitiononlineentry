@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 
 if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed'])) || (empty($row_judging_prefs['jPrefsScoresheet']))) {
 

@@ -1,3 +1,4 @@
+<?php declare(strict_types=1); ?>
 <script>
   var base_url = "<?php echo $base_url; ?>";
   var ajax_url = "<?php echo $ajax_url; ?>";

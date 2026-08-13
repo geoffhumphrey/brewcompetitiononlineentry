@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Module:      bos_mat.php
  * Description: Template for custom reports.
@@ -21,7 +23,7 @@ require (LIB.'admin.lib.php');
 require (LIB.'output.lib.php');
 if ($_SESSION['prefsStyleSet'] == "BA") include(INCLUDES.'ba_constants.inc.php');
 
-function check_table_name($id,$judging_tables_db_table) {
+function check_table_name(int|string $id,string $judging_tables_db_table): string {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('id', $id);

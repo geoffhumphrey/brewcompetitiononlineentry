@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Module: scoresheets.output.php
  * Description: This module copies the pdf of the scoresheets of a given entry from a

@@ -1,4 +1,6 @@
-<?php 
+<?php
+declare(strict_types=1);
+ 
 /**
  * Module:      dropoff.php 
  * Description: Outputs report of entries by dropoff location.

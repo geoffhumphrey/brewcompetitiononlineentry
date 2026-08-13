@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Module:      print.php
  * Description: This module is the delivery vehicle for pages that are meant to be print only (for output).
@@ -87,7 +89,7 @@ else {
     // Email contacts IF no form
     if (($section == "contact") && ($token != "default")) {
     	
-    	function hide_email($email) { 
+    	function hide_email(string $email): string {
     	    
     	    $character_set = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
     	    $key = str_shuffle($character_set); 

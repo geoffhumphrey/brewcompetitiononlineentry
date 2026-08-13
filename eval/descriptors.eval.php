@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $common_descriptors = array(
   $label_alcoholic => $descr_alcoholic,
   $label_metallic => $descr_metallic,
