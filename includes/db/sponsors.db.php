@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if ($action == "edit") {
 	$db_conn->where("id", $id);

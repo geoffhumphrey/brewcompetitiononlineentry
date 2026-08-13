@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if ($winner_method != 0) {
 

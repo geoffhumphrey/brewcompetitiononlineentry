@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if ((isset($style)) && (is_numeric($style))) $style_pad = sprintf("%02d", $style);
 else $style_pad = $style;

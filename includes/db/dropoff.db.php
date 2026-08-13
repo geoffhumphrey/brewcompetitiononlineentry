@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if (($section == "admin") && ($action == "edit") && ($go == "dropoff")) {
 	$db_conn->where("id", $id);
 } else {
