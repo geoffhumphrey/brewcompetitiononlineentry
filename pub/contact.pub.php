@@ -63,7 +63,7 @@ elseif ($show_contact_list) {
             $nacl = base64_encode(bin2hex($server_root));
             $link = sprintf('%06d', $row_contact['id']);
             $link = simpleEncrypt($link, $secretKey, $nacl);
-            $email_redirect_link = sprintf("%sincludes/output.inc.php?section=contact&action=edit&tb=no-print&token=%s",$base_url,$link);
+            $email_redirect_link = sprintf("%sincludes/output.inc.php?section=contact&action=edit&tb=no-print&token=%s",$base_url,rawurlencode($link));
             $page_info .= sprintf("<li><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">%s %s</a> &ndash; %s</li>",$email_redirect_link,h($row_contact['contactFirstName']),h($row_contact['contactLastName']),h($row_contact['contactPosition']));
 
     	}
