@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 // Import PHPMailer classes into the global namespace
 // These must be at the top
 use PHPMailer\PHPMailer\PHPMailer;
@@ -8,7 +11,10 @@ require (CLASSES.'phpmailer/src/Exception.php');
 require (CLASSES.'phpmailer/src/PHPMailer.php');
 require (CLASSES.'phpmailer/src/SMTP.php');
 
-function sendPHPMailerMessage($mail) {
+/**
+ * @param \PHPMailer\PHPMailer\PHPMailer $mail
+ */
+function sendPHPMailerMessage(\PHPMailer\PHPMailer\PHPMailer $mail): void {
 
     require (CONFIG.'config.php');
 

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 $bcoem_dashboard_help_array = array("comp-prep","entries-participants","sorting","organizing","scoring","preferences","reports","data-exports","data-mgmt","comp-logo","sponsor-logo","check-in","tables","assign-tables","materials","bos-judges","bos-results","winning","pro-am");
 
-function bcoem_dashboard_help($content) {
+function bcoem_dashboard_help(string $content): string {
 	require(CONFIG.'config.php');
 	require(INCLUDES.'url_variables.inc.php');
 	$bcoem_dashboard_help_title = "";
@@ -261,7 +263,7 @@ function bcoem_dashboard_help($content) {
 	return $return;
 }
 
-function bcoem_help($section,$go,$action,$filter) {
+function bcoem_help(string $section, string $go, string $action, string $filter): string {
 	require(CONFIG.'config.php');
 	require(INCLUDES.'url_variables.inc.php');
 	

@@ -43,6 +43,9 @@ parameters:
     ignoreErrors:
         -
             identifier: missingType.generics
+        -
+            message: '#Parameter \$mail of function sendPHPMailerMessage\(\) has invalid type PHPMailer#'
+            path: lib/email.lib.php
 
 includes:
     - phpstan-baseline.neon

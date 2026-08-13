@@ -1,7 +1,8 @@
 <?php
-function get_timezone($offset) {
+declare(strict_types=1);
+function get_timezone($offset): string {
 	
-	$offset = number_format($offset,3);
+	$offset = number_format((float)$offset,3);
 	
 	$timezones = array(
         '-12.000' => 'Pacific/Kwajalein',
@@ -53,7 +54,7 @@ function get_timezone($offset) {
 
 }
 
-function convert_timestamp($time_string, $timezone, $offset, $method) {
+function convert_timestamp(string $time_string, $timezone, $offset, $method) {
 
 	$timezone = get_timezone($timezone);
 
@@ -77,7 +78,7 @@ function convert_timestamp($time_string, $timezone, $offset, $method) {
 		date_default_timezone_set('UTC');
 
 		// 2. convert the GMT timestamp to the desired timezone using the provided offset
-		$timestamp = $time_string += ($offset * 3600);
+		$timestamp = $time_string += (int)$offset * 3600;
 
 		// 3. return the value
 		return $timestamp;
@@ -86,7 +87,7 @@ function convert_timestamp($time_string, $timezone, $offset, $method) {
 
 }
 
-function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_format, $display_format, $return_format) {
+function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_format, $display_format, $return_format): string {
 
 	$tz = get_timezone($timezone_offset); // convert offset number to PHP timezone
   
@@ -96,37 +97,37 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 		
 		// Long Format
 		case "long":
-			if ($date_format == "1") $date = date('l, F j, Y', $timestamp);
-			else $date = date('l j F, Y', $timestamp);
+			if ($date_format == "1") $date = date('l, F j, Y', (int)$timestamp);
+			else $date = date('l j F, Y', (int)$timestamp);
 		break;
 
 		// Short Format
 		case "short":
-			if ($date_format == 1) $date = date('m/d/Y', $timestamp);
-			elseif ($date_format == 2) $date = date('d/m/Y',$timestamp);
-			elseif ($date_format == 999) $date = date('Y-m-d H:i:s',$timestamp);
-			else $date = date('Y/m/d', $timestamp);
+			if ($date_format == 1) $date = date('m/d/Y', (int)$timestamp);
+			elseif ($date_format == 2) $date = date('d/m/Y',(int)$timestamp);
+			elseif ($date_format == 999) $date = date('Y-m-d H:i:s',(int)$timestamp);
+			else $date = date('Y/m/d', (int)$timestamp);
 		break;
 
 		// MySQL Format
 		case "system":
-			$date = date('Y-m-d', $timestamp);
+			$date = date('Y-m-d', (int)$timestamp);
 		break;
 
 		// XML Report Format
 		case "xml":
-			$date = date('l j F Y', $timestamp);
+			$date = date('l j F Y', (int)$timestamp);
 		break;
 	
 	}
 
-	if ($time_format == "1") $time = date('H:i',$timestamp);
-	else $time = date('g:i A',$timestamp);
+	if ($time_format == "1") $time = date('H:i',(int)$timestamp);
+	else $time = date('g:i A',(int)$timestamp);
 
 	switch($return_format) {
 		
 		case "date-time":
-			$return = $date." ".$time.", ".date('T',$timestamp);
+			$return = $date." ".$time.", ".date('T',(int)$timestamp);
 		break;
 		
 		case "date-time-no-gmt":
@@ -142,7 +143,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 		break;
 		
 		case "time-gmt":
-			$return = $time.", ".date('T',$timestamp);
+			$return = $time.", ".date('T',(int)$timestamp);
 		break;
 		
 		case "time":
@@ -150,7 +151,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 		break;
 
 		case "year":
-			$return = date('Y', $timestamp);
+			$return = date('Y', (int)$timestamp);
 		break;
 		
 		default: $return = $date;
@@ -161,7 +162,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 
 }
 
-function greaterDate($start_date, $end_date) {
+function greaterDate($start_date, $end_date): bool {
   
   $start = strtotime($start_date);
   $end = strtotime($end_date);
@@ -171,7 +172,7 @@ function greaterDate($start_date, $end_date) {
 
 }
 
-function judging_date_return() {
+function judging_date_return(): int {
 	
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);

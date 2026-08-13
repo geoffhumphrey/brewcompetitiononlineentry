@@ -1,5 +1,7 @@
 <?php
-function check_setup($tablename, $database) {
+declare(strict_types=1);
+
+function check_setup(string $tablename, string $database): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -13,7 +15,7 @@ function check_setup($tablename, $database) {
 
 }
 
-function check_update($column_name, $table_name) {
+function check_update(string $column_name, string $table_name): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -28,7 +30,7 @@ function check_update($column_name, $table_name) {
 
 }
 
-function check_new_style($style1, $style2, $style3, $mode="none") {
+function check_new_style(string $style1, string $style2, string $style3, $mode="none"): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -57,7 +59,7 @@ function check_new_style($style1, $style2, $style3, $mode="none") {
 }
 
 
-function check_mysql_data_type($column_name, $table_name) {
+function check_mysql_data_type(string $column_name, string $table_name): int {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);

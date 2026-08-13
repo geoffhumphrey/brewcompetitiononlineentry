@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-function dropoff_loc($id) {
+function dropoff_loc($id): string {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -13,7 +14,7 @@ function dropoff_loc($id) {
 	return $return;
 }
 
-function location_count($location_id) {
+function location_count($location_id): int {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -42,7 +43,7 @@ function location_count($location_id) {
 	return $location_count;
 }
 
-function dropoff_location_info($location_id) {
+function dropoff_location_info($location_id): string {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -59,7 +60,7 @@ function dropoff_location_info($location_id) {
 
 }
 
-function entries_by_dropoff_loc($id) {
+function entries_by_dropoff_loc($id): string {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -107,7 +108,7 @@ function entries_by_dropoff_loc($id) {
 //							/output/entries_export.php
 // --------------------------------------------------------
 
-function parseCSVComments($comments) {
+function parseCSVComments(string $comments): string {
 
 	// First, escape all " and make them ""
 	$comments = str_replace('"', '""', $comments);
@@ -125,7 +126,7 @@ function parseCSVComments($comments) {
 	else return $comments;
 }
 
-function filename($input) {
+function filename(string $input): string {
 
 	if ($input == "default") $return = "";
 	else {
@@ -140,18 +141,19 @@ function filename($input) {
 // The following applies to entry.output.php
 // --------------------------------------------------------
 
-function pay_to_print($prefs_pay,$entry_paid) {
+function pay_to_print(string $prefs_pay,$entry_paid): bool {
 	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
 	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
 	elseif ($prefs_pay == "N") return TRUE;
+	return FALSE;
 }
 
 // --------------------------------------------------------
 // The following applies to labels.output.php
 // --------------------------------------------------------
 
-function truncate($string, $your_desired_width, $append="", $max_word_length=20) {
-  $parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
+function truncate(string $string, $your_desired_width, string $append="", $max_word_length=20): string {
+  $parts = preg_split('/([\s\n\r]+)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
   $parts_count = count($parts);
 
   // Single word: truncate by character count
@@ -188,7 +190,7 @@ function truncate($string, $your_desired_width, $append="", $max_word_length=20)
   return $r;
 }
 
-function user_entry_count($uid,$view) {
+function user_entry_count($uid,$view): string {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -223,13 +225,14 @@ function user_entry_count($uid,$view) {
 // The following applies to /output/staff_points.php
 // --------------------------------------------------------
 
-function round_down_to_hundred($number) {
+function round_down_to_hundred(int|string $number): string {
+    $number = (string)$number;
     if (strlen($number)<3) { $number = $number;	}
 	else { $number = substr($number, 0, strlen($number)-2) . "00";	}
     return $number;
 }
 
-function total_days() {
+function total_days(): int {
 	include (CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -246,7 +249,7 @@ function total_days() {
 
 }
 
-function total_sessions() {
+function total_sessions(): int {
 	include (CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -263,7 +266,7 @@ function total_sessions() {
 
 }
 
-function total_flights() {
+function total_flights(): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$rows_tables = $db_conn->get($prefix."judging_tables", null, "id");
@@ -287,14 +290,14 @@ function total_flights() {
 
 }
 
-function validate_bjcp_id($input) {
+function validate_bjcp_id(string $input): bool {
 	$length = strlen($input);
 	if ($length != 5) return FALSE;
 	elseif (!preg_match('([a-zA-Z])',$input)) return FALSE;
 	else return TRUE;
 }
 
-function total_points($total_entries,$method) {
+function total_points($total_entries,$method): string {
 
 	// Get the maximum allowable points for all roles
 	// According to the Maximum Points Earned (Table 1) table - https://bjcp.org/about/reference/experience-point-award-schedule/
@@ -353,7 +356,7 @@ function total_points($total_entries,$method) {
 
 }
 
-function judge_points($user_id,$judge_max_points) {
+function judge_points($user_id,$judge_max_points): string {
 
 	/*
 	 * To figure out judge points, need to assess:
@@ -385,7 +388,7 @@ function judge_points($user_id,$judge_max_points) {
 		if ($row_judging['judgingLocType'] < 2) {
 			
 			// Get date and determine 24 hour window where it falls based upon the time zone
-			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
+			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", (int)$row_judging['judgingDate']));
 			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
 			$possible_judging_days[] = $timestamp_curr_day_midnight;	
 
@@ -463,7 +466,7 @@ function judge_points($user_id,$judge_max_points) {
 
 }
 
-function steward_points($user_id) {
+function steward_points($user_id): string {
 
 	/*
 	 * To figure out steward points, need to assess:
@@ -495,7 +498,7 @@ function steward_points($user_id) {
 
 		if ($row_judging['judgingLocType'] < 1) {
 			// Get date and determine 24 hour window where it falls based upon the time zone
-			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
+			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", (int)$row_judging['judgingDate']));
 			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
 			$possible_judging_days[] = $timestamp_curr_day_midnight;
 
@@ -547,7 +550,7 @@ function steward_points($user_id) {
 
 }
 
-function bos_points($uid) {
+function bos_points($uid): bool {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	require(INCLUDES.'db_tables.inc.php');
@@ -563,7 +566,7 @@ function bos_points($uid) {
 // The following applies to /output/pullsheets.php
 // --------------------------------------------------------
 
-function number_of_flights($table_id) {
+function number_of_flights($table_id): string {
     require(CONFIG.'config.php');
     $db_conn = new MysqliDb($connection);
 
@@ -575,7 +578,7 @@ function number_of_flights($table_id) {
 	return $r;
 }
 
-function check_flight_number($entry_id,$flight,$method) {
+function check_flight_number($entry_id,$flight,$method): string {
 	require(CONFIG.'config.php');
   $db_conn = new MysqliDb($connection);
 
@@ -593,7 +596,7 @@ function check_flight_number($entry_id,$flight,$method) {
 
 }
 
-function check_flight_round($flight_round,$round) {
+function check_flight_round($flight_round,$round): bool {
 
 	if ($round == "default") {
 		if ($flight_round != "") return TRUE;
@@ -605,9 +608,13 @@ function check_flight_round($flight_round,$round) {
 		else return FALSE;
 	}
 
+	return FALSE;
+
 }
 
-function results_count($style) {
+function results_count(string $style): string {
+	require(CONFIG.'config.php');
+    $db_conn = new MysqliDb($connection);
 	require(CONFIG.'config.php');
     $db_conn = new MysqliDb($connection);
 
@@ -622,7 +629,7 @@ function results_count($style) {
 
 }
 
-function get_flight_info($id) {
+function get_flight_info($id): array {
 	require(CONFIG.'config.php');
     $db_conn = new MysqliDb($connection);
 
