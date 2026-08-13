@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if ($action == "edit") {
 	$db_conn->where("id", $id);
 	$row_contact = $db_conn->getOne($contacts_db_table);

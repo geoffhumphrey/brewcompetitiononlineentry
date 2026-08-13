@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 if (!check_setup($prefix."evaluation",$database)) {
 
   $updateSQL = sprintf("CREATE TABLE `%s` (

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 $db_conn->where('eid', $row_post_inventory['id']);
 $rows_post_inventory_entry = $db_conn->get($prefix."judging_scores", null, "id,scoreEntry,scorePlace");

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Module:      process_special_best_data.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "special_best_data" table

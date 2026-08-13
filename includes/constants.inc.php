@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /** -------------------------- Languages Available ----------------------------------------------
  * Array of languages available for translation
  * Associative array of available translation languages.
@@ -77,7 +78,7 @@ if ((!isset($_SESSION['club_array'])) || (!empty($_SESSION['club_array']))) {
     $cache_ttl  = 43200; // 12 hours in seconds
 
     // Function to convert js file into usable php array    
-    function fetch_clubs_js($url) {
+    function fetch_clubs_js(string $url): string|false {
         
         $json = @file_get_contents($url);
         if ($json === false) return false;

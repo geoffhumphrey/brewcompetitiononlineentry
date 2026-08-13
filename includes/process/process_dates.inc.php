@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))))) {
 
 	$errors = FALSE;

@@ -1,4 +1,6 @@
-<?php if ($section != "admin") {
+<?php
+declare(strict_types=1);
+if ($section != "admin") {
 
     $judge_open_date = "";
     $judge_close_date = "";

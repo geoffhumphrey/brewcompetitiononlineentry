@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      common.inc.php
  * Description: This module houses all site-wide function definitions. If a function
@@ -11,7 +12,7 @@
 include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
-function csrf_token_generate($force_regenerate = false) {
+function csrf_token_generate(bool $force_regenerate = false): string {
 	if ((!$force_regenerate) && (isset($_SESSION['user_session_token'])) && (is_string($_SESSION['user_session_token'])) &&	(preg_match('/^[a-f0-9]{64}$/i', $_SESSION['user_session_token']))) {
 		return $_SESSION['user_session_token'];
 	}
@@ -176,7 +177,7 @@ function get_available_language_codes() {
  * OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
  */
 
-function version_check($version,$current_version,$current_version_date_display) {
+function version_check(string $version, string $current_version, string $current_version_date_display): void {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);;
@@ -196,7 +197,7 @@ function version_check($version,$current_version,$current_version_date_display) 
 
 }
 
-function search_array($array, $key, $value) { 
+function search_array(array $array, $key, $value): array { 
     // https://www.geeksforgeeks.org/how-to-search-by-keyvalue-in-a-multidimensional-array-in-php/?ref=rp
     // RecursiveArrayIterator to traverse an unknown amount of sub arrays within the outer array. 
     $arrIt = new RecursiveArrayIterator($array); 
@@ -214,11 +215,12 @@ function search_array($array, $key, $value) {
     return $result; 
 }
 
-function in_string($haystack,$needle) {
+function in_string($haystack,$needle): bool {
 	if (strpos($haystack,$needle) !== false) return TRUE;
+	return FALSE;
 }
 
-function designations($judge_array,$display) {
+function designations(string $judge_array,string $display): string {
 	$return = "";
 	$rank1 = explode(",",$judge_array);
 	foreach ($rank1 as $rank2) {
@@ -227,7 +229,7 @@ function designations($judge_array,$display) {
 	return $return;
 }
 
-function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$method=0,$tooltip_text="default") {
+function build_action_link(string $icon,string $base_url,string $section,string $go,string $action,string $filter,string $id,string $dbTable,string $alt_title,$method=0,string $tooltip_text="default"): string {
 
 	$alt_title = h($alt_title);
 	$tooltip_text = h($tooltip_text);
@@ -278,7 +280,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	return $return;
 }
 
-function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$modal_window) {
+function build_output_link(string $icon,string $base_url,string $filename,string $section,string $go,string $action,string $filter,string $id,string $dbTable,string $alt_title,bool $modal_window): string {
 
 	$return = "";
 	$alt_title = h($alt_title);
@@ -297,7 +299,7 @@ function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filte
 	return $return;
 }
 
-function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_required) {
+function build_form_action(string $base_url,string $section,string $go,string $action,string $filter,string $id,string $dbTable,bool $check_required): string {
 
 	$return = "";
 	if (strpos($section, 'step') !== FALSE) $section = "setup"; else $section = $section;
@@ -313,7 +315,7 @@ function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$
 	return $return;
 }
 
-function build_public_url($section="default",$go="default",$action="default",$id="default",$sef="",$base_url="",$view="default") {
+function build_public_url(string $section="default",string $go="default",string $action="default",string $id="default",string $sef="",string $base_url="",string $view="default"): string {
 	
 	if ($_SESSION['prefsSEF'] == 'Y') {
 		$url = $base_url."";
@@ -360,7 +362,7 @@ function build_admin_url ($section="default",$go="default",$action="default",$id
 }
 */
 
-function display_array_content($arrayname,$method) {
+function display_array_content(array $arrayname,$method): string {
 	$a = "";
 	foreach ($arrayname as $key => $value) {
 		if (is_array($value)) {
@@ -377,7 +379,7 @@ function display_array_content($arrayname,$method) {
 	return $b;
 }
 
-function addOrdinalNumberSuffix($num) {
+function addOrdinalNumberSuffix($num): string {
 	if (!is_numeric($num)) return $num;
 	else {
 		if (!in_array(($num % 100),array(11,12,13))) {
@@ -392,7 +394,7 @@ function addOrdinalNumberSuffix($num) {
 	}
 }
 
-function purge_entries($type, $interval) {
+function purge_entries(string $type, $interval): bool {
 
 	$count = 0;
 
@@ -485,8 +487,8 @@ function purge_entries($type, $interval) {
 }
 
 // function to generate random number
-function random_generator($digits,$method){
-	srand ((float) microtime() * 10000000);
+function random_generator($digits,$method): string|int {
+	srand ((int) ((double) microtime() * 10000000));
 
 	//Array of alphabet
 	if ($method == "1") $input = array ("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","t","d","y","u","b","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9");
@@ -518,7 +520,7 @@ function random_generator($digits,$method){
 	return $random_generator;
 } // end of function
 
-function relocate($referer,$page,$msg,$id,$keep_id="default") {
+function relocate($referer,string $page,string $msg,string $id,string $keep_id="default"): string {
 
 	include (CONFIG.'config.php');
 
@@ -557,7 +559,7 @@ function relocate($referer,$page,$msg,$id,$keep_id="default") {
 
 }
 
-function check_judging_numbers() {
+function check_judging_numbers(): bool {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -571,7 +573,7 @@ function check_judging_numbers() {
 
 // ---------------------------- Temperature, Weight, and Volume Conversion ----------------------------------
 
-function temp_convert($temp,$t) { // $t = desired output, defined at function call
+function temp_convert($temp,$t): float { // $t = desired output, defined at function call
 if ($t == "F") { // Celsius to F if source is C
 	$tcon = (($temp - 32) / 1.8);
 	return round ($tcon, 1);
@@ -581,9 +583,11 @@ if ($t == "C") { // F to Celsius
 	$tcon = (($temp - 32) * (5/9));
 	return round ($tcon, 1);
 	}
+
+return 0.0;
 }
 
-function weight_convert($weight,$w) { // $w = desired output, defined at function call
+function weight_convert($weight,$w): float { // $w = desired output, defined at function call
 if ($w == "pounds") { // kilograms to pounds
 	$wcon = ($weight * 2.2046);
 	return round ($wcon, 2);
@@ -603,9 +607,11 @@ if ($w == "kilograms") { // pounds to kilograms
 	$wcon = ($weight * 0.4535);
 	return round ($wcon, 2);
 	}
+
+return 0.0;
 }
 
-function volume_convert($volume,$v) {  // $v = desired output, defined at function call
+function volume_convert($volume,$v): float {  // $v = desired output, defined at function call
 if ($v == "gallons") { // liters to gallons
 	$vcon = ($volume * 0.2641);
 	return round ($vcon, 2);
@@ -626,9 +632,10 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 	return round ($vcon, 2);
 	}
 
+return 0.0;
 }
 
-function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")  {
+function GetSQLValueString($theValue, string $theType, string $theDefinedValue = "", string $theNotDefinedValue = ""): string|int  {
 
 	$theValue = addslashes($theValue);
 
@@ -658,7 +665,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 	return $theValue;
 }
 
-function currency_info($input,$method) {
+function currency_info(string $input,$method): string|array {
 
 	$currency_code = "";
 
@@ -903,7 +910,7 @@ function currency_info($input,$method) {
 
 }
 
-function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id) {
+function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -1073,9 +1080,10 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 
 	} // end if (($bid != "default") && ($filter == "default"))
 
+	return 0;
 }
 
-function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id) {
+function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	// echo "<br>entry_fee:".$entry_fee."<br>entry_fee_discount:".$entry_fee_discount."<br>entry_discount:".$entry_discount."<br>entry_discount_number:".$entry_discount_number."<br>cap_no:".$cap_no."<br>special_discount_amount:".$special_discount_number."<br>bid:".$bid."<br>filter:".$filter."<br>";
@@ -1367,9 +1375,11 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 
 	} // end if (($bid == "default") && ($filter != "default"))
 	// ----------------------------------------------------------------------
+
+	return 0;
 }
 
-function total_entries_brewer($bid) {
+function total_entries_brewer($bid): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -1380,7 +1390,7 @@ function total_entries_brewer($bid) {
 }
 
 
-function total_not_paid_brewer($bid) {
+function total_not_paid_brewer($bid): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -1398,7 +1408,7 @@ function total_not_paid_brewer($bid) {
 	return $total_not_paid;
 }
 
-function total_paid_received($go,$id,$archive="") {
+function total_paid_received(string $go,$id,string $archive=""): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -1417,7 +1427,7 @@ function total_paid_received($go,$id,$archive="") {
 	return $row['count'];
 }
 
-function total_paid() {
+function total_paid(): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -1426,7 +1436,7 @@ function total_paid() {
 	return $row['count'];
 }
 
-function total_nopay_received($go, $id, $comp_id) {
+function total_nopay_received(string $go, $id, $comp_id): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -1438,7 +1448,7 @@ function total_nopay_received($go, $id, $comp_id) {
 	return $row['count'];
 }
 
-function style_convert($number,$type,$base_url="",$archive="") {
+function style_convert(string $number,$type,string $base_url="",string $archive=""): string {
 	
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
@@ -1884,7 +1894,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 	return $style_convert;
 }
 
-function get_table_info($input,$method,$table_id,$db_table,$param,$base_url="") {
+function get_table_info($input,$method,$table_id,$db_table,$param,string $base_url=""): string|bool|array|int {
 
 	// Define Vars
 	require(CONFIG.'config.php');
@@ -2153,9 +2163,11 @@ function get_table_info($input,$method,$table_id,$db_table,$param,$base_url="") 
 
 	}
 
+	return false;
+
 } // end get_table_info()
 
-function style_type($type,$method,$source) {
+function style_type(string $type,string $method,string $source): string {
 	if ($method == "1") {
 		switch($type) {
 			case "Mead": $type = "3"; break;
@@ -2199,7 +2211,7 @@ function style_type($type,$method,$source) {
 	return $type;
 }
 
-function table_location($table_id,$date_format,$time_zone,$time_format,$method) {
+function table_location($table_id,$date_format,$time_zone,$time_format,$method): string {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -2229,7 +2241,7 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method) 
 	return $table_location;
 }
 
-function score_count($table_id,$method,$dbTable) {
+function score_count($table_id,$method,string $dbTable): int|bool {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -2255,9 +2267,10 @@ function score_count($table_id,$method,$dbTable) {
 		break;
 	}
 
+	return false;
 }
 
-function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebreaker, $method="0") {
+function best_brewer_points($bid, array $places, array $entry_scores, array $points_prefs, array $tiebreaker, $method="0"): float {
 
 	// Get number of entries for the user
 	$user_number_of_entries = total_paid_received("",$bid);
@@ -2366,7 +2379,7 @@ function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebre
 
 }
 
-function bjcp_rank($rank,$method) {
+function bjcp_rank(string $rank,$method): string {
 	
 	if ($method == "1") {
 		
@@ -2452,7 +2465,7 @@ function bjcp_rank($rank,$method) {
 	return $return;
 }
 
-function srm_color($srm,$method) {
+function srm_color($srm,$method): string {
 	if ($method == "ebc") $srm = (1.97 * $srm); else $srm = $srm;
 
 	if ($srm >= 1 && $srm < 2) $return = "#f3f993";
@@ -2490,7 +2503,7 @@ function srm_color($srm,$method) {
 return $return;
 }
 
-function get_contact_count() {
+function get_contact_count(): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$row = $db_conn->getOne($prefix."contacts", "COUNT(*) as 'count'");
@@ -2498,7 +2511,7 @@ function get_contact_count() {
 	return $contactCount;
 }
 
-function brewer_info($uid,$filter="default") {
+function brewer_info($uid,string $filter="default"): string {
 	require(CONFIG.'config.php');
 	$local_db_conn = new MysqliDb($connection);
 
@@ -2553,8 +2566,8 @@ function brewer_info($uid,$filter="default") {
 	return $r;
 }
 
-function get_entry_count($method,$filter="") {
-
+function get_entry_count(string $method,string $filter=""): int {
+	
 	require(CONFIG.'config.php');
 	$local_db_conn = new MysqliDb($connection);
 
@@ -2610,8 +2623,7 @@ function get_bjcp_entry_count($filter = "default") {
 
 }
 
-function get_evaluation_count($method,$table_id="default") {
-
+function get_evaluation_count(string $method,string $table_id="default"): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -2632,7 +2644,7 @@ function get_evaluation_count($method,$table_id="default") {
 	return $row['count'];
 }
 
-function get_participant_count($type,$filter="") {
+function get_participant_count(string $type,string $filter=""): array|string {
 	require(CONFIG.'config.php');
 	$local_db_conn = new MysqliDb($connection);
 
@@ -2703,10 +2715,11 @@ function get_participant_count($type,$filter="") {
 		else return $row_participant_count['count'];
 	}
 
+	return "";
 		
 }
 
-function display_place($place,$method) {
+function display_place($place,$method): string {
 
 	require(CONFIG.'config.php');
 
@@ -2764,7 +2777,7 @@ function display_place($place,$method) {
 	return $place;
 }
 
-function entry_info($id) {
+function entry_info($id): string {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('id', $id);
@@ -2773,13 +2786,13 @@ function entry_info($id) {
 	return $r;
 }
 
-function get_suffix($dbTable) {
+function get_suffix($dbTable): string {
 	$suffix = strrchr($dbTable, "_");
 	$suffix = ltrim($suffix, "_");
 	return $suffix;
 }
 
-function score_check($id,$judging_scores_db_table) {
+function score_check($id,$judging_scores_db_table): string {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -2791,7 +2804,7 @@ function score_check($id,$judging_scores_db_table) {
 	return $r;
 }
 
-function minibos_check($id,$judging_scores_db_table) {
+function minibos_check($id,$judging_scores_db_table): bool {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('eid', $id);
@@ -2801,8 +2814,8 @@ function minibos_check($id,$judging_scores_db_table) {
 	else return FALSE;
 }
 
-function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$method) {
-
+function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$method): string {
+	
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -2881,7 +2894,7 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 	return $r;
 }
 
-function brewer_assignment($user_id,$method,$id,$dbTable,$filter,$archive="default") {
+function brewer_assignment($user_id,$method,$id,$dbTable,$filter,string $archive="default"): string {
 
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
@@ -2938,7 +2951,7 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,$archive="defau
 return $r;
 }
 
-function entries_unconfirmed($user_id) {
+function entries_unconfirmed($user_id): array {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('brewBrewerID', $user_id);
@@ -2957,7 +2970,7 @@ function entries_unconfirmed($user_id) {
 	return $r;
 }
 
-function check_special_ingredients($style,$style_version) {
+function check_special_ingredients(string $style,string $style_version): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -2991,7 +3004,7 @@ function check_special_ingredients($style,$style_version) {
 
 }
 
-function entries_no_special($user_id) {
+function entries_no_special($user_id): bool {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -3016,7 +3029,7 @@ function entries_no_special($user_id) {
 	else return FALSE;
 }
 
-function data_integrity_check() {
+function data_integrity_check(): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -3182,7 +3195,7 @@ function data_integrity_check() {
 } // END function
 
 
-function readable_number($a){
+function readable_number($a): string {
 
 // http://www.iamcal.com/publish/articles/php/readable_numbers/
 
@@ -3227,7 +3240,7 @@ function readable_number($a){
 	return $out;
 }
 
-function winner_method($type,$output_type) {
+function winner_method($type,$output_type): string {
 
 	require(LANG.'language.lang.php');
 
@@ -3253,7 +3266,7 @@ function winner_method($type,$output_type) {
 }
 
 
-function table_exists($table_name) {
+function table_exists(string $table_name): bool {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	// taken from http://snippets.dzone.com/posts/show/3369
@@ -3265,7 +3278,7 @@ function table_exists($table_name) {
 	else return FALSE;
 }
 
-function judge_assignment($uid, $loc_id) {
+function judge_assignment($uid, $loc_id): array|false {
 	// Get judge table assignments by locations
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -3277,7 +3290,7 @@ function judge_assignment($uid, $loc_id) {
 	return $row_judge_assignment;
 }
 
-function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2,$label_table="Table") {
+function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2,string $label_table="Table"): array|string {
 	
 	// Gather and output the judging or stewarding assignments for a user
 	require(CONFIG.'config.php');
@@ -3387,7 +3400,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 
 }
 
-function available_at_location($location,$role,$round) {
+function available_at_location(string $location,string $role,$round): int {
 	// Returns the number of judges available per location/date
 	// Takes into account assignments in the judging_assignments table
 	// and returns a total number available less those who have been
@@ -3420,11 +3433,11 @@ function available_at_location($location,$role,$round) {
 	return $return;
 }
 
-function str_osplit($string, $offset){
+function str_osplit(string $string, int $offset): array|false {
 	return isset($string[$offset]) ? array(substr($string, 0, $offset), substr($string, $offset)) : false;
  }
 
-function readable_judging_number($style,$number) {
+function readable_judging_number($style,$number): string {
 
 	if (strlen($number) == 5) {
 		$judging_number = str_osplit($number, 2);
@@ -3441,7 +3454,7 @@ function readable_judging_number($style,$number) {
 	}
 }
 
-function dropoff_location($input) {
+function dropoff_location($input): string {
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
 	$db_conn = new MysqliDb($connection);
@@ -3452,7 +3465,7 @@ function dropoff_location($input) {
 	else return $brewer_text_005;
 }
 
-function judge_steward_availability($input,$method,$prefix) {
+function judge_steward_availability(string $input,$method,string $prefix): string {
 
 	require(LANG.'language.lang.php');
 
@@ -3518,7 +3531,7 @@ function judge_steward_availability($input,$method,$prefix) {
 	return $return;
 }
 
-function judge_entries($uid,$method) {
+function judge_entries($uid,$method): string {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('brewBrewerID', $uid);
@@ -3547,12 +3560,12 @@ function judge_entries($uid,$method) {
 	return $return;
 }
 
-function judging_winner_display($display_date) {
+function judging_winner_display($display_date): bool {
 	if (time() > $display_date) return TRUE;
 	else return FALSE;
 }
 
-function format_phone_us($phone = '', $convert = true, $trim = true) {
+function format_phone_us(string $phone = '', bool $convert = true, bool $trim = true): string|false {
 	// If we have not entered a phone number just return empty
 	if (empty($phone)) {
 		return false;
@@ -3584,7 +3597,7 @@ function format_phone_us($phone = '', $convert = true, $trim = true) {
 		// Replace each letter with a number
 		// Notice this is case insensitive with the str_ireplace instead of str_replace
 		foreach($replace as $digit=>$letters) {
-			$phone = str_ireplace($letters, $digit, $phone);
+			$phone = str_ireplace($letters, (string) $digit, $phone);
 		}
 	}
 
@@ -3607,7 +3620,7 @@ function format_phone_us($phone = '', $convert = true, $trim = true) {
 
 }
 
-function check_judging_flights() {
+function check_judging_flights(): bool {
 	// Checks if the count of received entries is the same as the count in judging_flights table
 	// If so, return TRUE
 	// If not, return FALSE
@@ -3625,9 +3638,10 @@ function check_judging_flights() {
 	if (($row_check_received['count'] > 0) && ($row_check_flights['count'] > 0) && ($row_check_tables['count'] > 0) && ($row_check_received['count'] == $row_check_flights['count'])) return TRUE;
 	if (($row_check_received['count'] > 0) && ($row_check_flights['count'] > 0) && ($row_check_tables['count'] > 0) && ($row_check_received['count'] != $row_check_flights['count'])) return FALSE;
 
+	return FALSE;
 }
 
-function get_archive_count($table) {
+function get_archive_count(string $table): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	// $table is already fully prefixed by callers, so get()/getOne() can't be used here
@@ -3644,11 +3658,11 @@ function get_archive_count($table) {
 	return $row_archive_count['count'];
 }
 
-function number_pad($number,$n) {
-	return str_pad((int) $number,$n,"0",STR_PAD_LEFT);
+function number_pad($number,$n): string {
+	return str_pad((string) (int) $number,$n,"0",STR_PAD_LEFT);
 }
 
-function open_or_closed($now,$date1,$date2) {
+function open_or_closed($now,$date1,$date2): int {
 
 	$output = 0;
 
@@ -3669,7 +3683,7 @@ function open_or_closed($now,$date1,$date2) {
 
 }
 
-function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid) {
+function limit_subcategory(string $style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid): bool {
 
 	/**
 	 * @param $style = Style category and subcategory number
@@ -3740,7 +3754,7 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 }
 
 // Unused. 2.6.0.
-function highlight_required($msg,$method,$style_version) {
+function highlight_required(string $msg,$method,string $style_version): bool {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
@@ -3815,7 +3829,7 @@ function highlight_required($msg,$method,$style_version) {
 
 }
 
-function user_check($user_name) {
+function user_check(string $user_name): string {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -3832,7 +3846,7 @@ function user_check($user_name) {
 
 }
 
-function judging_location_info($id) {
+function judging_location_info($id): array {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -3859,7 +3873,7 @@ function judging_location_info($id) {
 
 }
 
-function yes_no($input,$base_url,$method=0) {
+function yes_no($input,string $base_url,$method=0): string {
 	require(LANG.'language.lang.php');
 	$output = "";
 
@@ -3895,7 +3909,7 @@ function yes_no($input,$base_url,$method=0) {
 	return $output;
 }
 
-function styles_active($method,$archive="") {
+function styles_active($method,string $archive=""): array|string|int {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -3991,9 +4005,10 @@ function styles_active($method,$archive="") {
 
 	}
 
+	return array();
 }
 
-function check_exension($file_ext) {
+function check_exension(string $file_ext): bool {
 
 	switch($file_ext) {
 		case "xml": return TRUE;
@@ -4010,7 +4025,7 @@ function check_exension($file_ext) {
 
 }
 
-function open_limit($total,$limit,$registration_open) {
+function open_limit($total,$limit,$registration_open): bool {
 	// Check to see if the limit of entries has been reached
 	if ($limit != "") {
 		if (($total >= $limit) && ($registration_open == "1")) return TRUE;
@@ -4026,7 +4041,7 @@ function open_limit($total,$limit,$registration_open) {
  * Thanks to http://markgoldsmith.me/blog/url-safe-php-encryption-and-decryption-script/
  */
 
-function obfuscateURL($data,$key) {
+function obfuscateURL(string $data,string $key): string {
 
 	$dirty = array("+", "/", "=");
 	$clean = array("_p_", "_s_", "_e_");
@@ -4080,7 +4095,7 @@ function obfuscateURL($data,$key) {
 
 }
 
-function deobfuscateURL($data,$key) {
+function deobfuscateURL(string $data,string $key): string|false|null {
 
 	$dirty = array("+", "/", "=");
 	$clean = array("_p_", "_s_", "_e_");
@@ -4092,6 +4107,7 @@ function deobfuscateURL($data,$key) {
 		// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
 		// Get the data "dirty" again and remove base64 encoding
 		list($encrypted_data, $iv) = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
+		$iv = $iv ?? "";
 		return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
 	}
 	
@@ -4101,6 +4117,7 @@ function deobfuscateURL($data,$key) {
 			// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
 			// Get the data "dirty" again and remove base64 encoding
 			list($encrypted_data, $iv) = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
+			$iv = $iv ?? "";
 
 			return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
 		}
@@ -4118,7 +4135,7 @@ function deobfuscateURL($data,$key) {
 
 }
 
-function get_ba_style_info($id) {
+function get_ba_style_info($id): string {
 
 	$return = "";
 
@@ -4145,7 +4162,7 @@ function get_ba_style_info($id) {
 }
 
 // Unused.
-function convert_to_ba() {
+function convert_to_ba(): string {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
@@ -4214,7 +4231,7 @@ function convert_to_ba() {
 }
 
 // Unused.
-function convert_to_pro() {
+function convert_to_pro(): string {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
@@ -4261,7 +4278,7 @@ function convert_to_pro() {
 
 }
 
-function remove_sensitive_data() {
+function remove_sensitive_data(): string {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
@@ -4419,7 +4436,7 @@ function remove_sensitive_data() {
 
 }
 
-function verify_token($token,$time) {
+function verify_token(string $token,$time): int {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -4451,7 +4468,7 @@ function verify_token($token,$time) {
 
 }
 
-function tiebreak_rule($rule) {
+function tiebreak_rule(string $rule): string {
 
 	require (LANG.'language.lang.php');
 
@@ -4487,7 +4504,7 @@ function tiebreak_rule($rule) {
 
 if (!function_exists('mime_content_type')) {
 
-	function mime_content_type($filename) {
+	function mime_content_type(string $filename): string {
 
 		$mime_types = array(
 			'txt' => 'text/plain',
@@ -4556,7 +4573,7 @@ if (!function_exists('mime_content_type')) {
 
 }
 
-function is_dir_empty($dir) {
+function is_dir_empty(string $dir): bool {
 	foreach (new DirectoryIterator($dir) as $fileInfo) {
 		if($fileInfo->isDot()) continue;
 		return false;
@@ -4564,7 +4581,7 @@ function is_dir_empty($dir) {
 	return true;
 }
 
-function pro_am_check($uid) {
+function pro_am_check($uid): string|false {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -4576,11 +4593,11 @@ function pro_am_check($uid) {
 
 }
 
-function is_html($string) {
+function is_html(string $string): bool {
 	return preg_match("/<[^<]+>/",$string) != 0;
 }
 
-function style_number_const($style_category_number,$style_sub,$style_set_display_separator,$method) {
+function style_number_const(string $style_category_number,string $style_sub,$style_set_display_separator,$method): string {
 	switch ($method) {
 		case 0:
 			if (isset($_SESSION['prefsStyleSet'])) {
@@ -4607,7 +4624,7 @@ function style_number_const($style_category_number,$style_sub,$style_set_display
 }
 
 // Check if user is assigned to the flight that a entry is part of.
-function user_flight_assignment($uid,$table_id,$method=0) {
+function user_flight_assignment($uid,$table_id,$method=0): array|string|false {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -4619,9 +4636,10 @@ function user_flight_assignment($uid,$table_id,$method=0) {
 	if ($method == 1) return $row_flight_assign['assignRoles'];
 	if ($method == 2) return $row_flight_assign;
 
+	return false;
 }
 
-function entry_flight_assignment($eid,$table_id) {
+function entry_flight_assignment($eid,$table_id): string|false {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -4632,7 +4650,7 @@ function entry_flight_assignment($eid,$table_id) {
 	return $row_flight_assign['flightNumber'];
 }
 
-function flight_count_info($eid,$method) {
+function flight_count_info($eid,$method): array {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -4684,7 +4702,7 @@ function flight_count_info($eid,$method) {
 	
 }
 
-function user_submitted_eval($uid,$eid) {
+function user_submitted_eval($uid,$eid): array|string {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -4703,7 +4721,7 @@ function user_submitted_eval($uid,$eid) {
 
 }
 
-function eval_exits($eid="default",$method="default",$dbTable="") {
+function eval_exits($eid="default",$method="default",string $dbTable=""): array {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -4749,7 +4767,7 @@ function eval_exits($eid="default",$method="default",$dbTable="") {
 }
 
 // See https://core.trac.wordpress.org/browser/tags/4.1/src/wp-includes/formatting.php
-function remove_accents($string) {
+function remove_accents(string $string): string {
 
 	// Converts all accent characters to ASCII characters.
 	// If there are no accent characters, then the string given is just returned.
@@ -5281,7 +5299,7 @@ function remove_accents($string) {
 
 }
 
-function truncate_string($string, $limit, $break=".", $pad="...") {
+function truncate_string(string $string, int $limit, string $break=".", string $pad="..."): string {
 
 	// return with no change if string is shorter than $limit
 	if (strlen($string) <= $limit) return $string;
@@ -5296,7 +5314,7 @@ function truncate_string($string, $limit, $break=".", $pad="...") {
 	return $string;
 }
 
-function place_heirarchy($place) {
+function place_heirarchy(string $place): string|false {
 	switch ($place) {
 		case "1": return "5";
 			break;
@@ -5313,23 +5331,25 @@ function place_heirarchy($place) {
 		case "5": return "1";
 			break;
 	}
+
+	return false;
 }
 
-function normalizeClubs($string) {
+function normalizeClubs(string $string): string {
 	$club = strtolower($string);
 	$club = preg_replace( "/[^a-z0-9]/i", "", $club );
 	$club = preg_replace( '/  +/', ' ', $club );
 	return $club;
 }
 
-function clean_up_text($text) {
+function clean_up_text(string $text): string {
 	$r = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 	$r = preg_replace( "/\r|\n/", "", $r);
 	$r = htmlspecialchars_decode($r);
 	return $r;
 }
 
-function prep_redirect_link($link) {
+function prep_redirect_link(string $link): string {
 	$pattern = array('\'', '"');
 	$link = str_replace($pattern, "", $link);
 	$link = sterilize($link);
@@ -5339,7 +5359,7 @@ function prep_redirect_link($link) {
 	return $link;
 }
 
-function display_array_content_style($arrayname,$method,$base_url) {
+function display_array_content_style(array $arrayname,$method,string $base_url): string {
 	include (LANG.'language.lang.php');
 	$a = "";
 	sort($arrayname);
@@ -5369,7 +5389,7 @@ function display_array_content_style($arrayname,$method,$base_url) {
 	return $b;
 }
 
-function admin_relocate($user_level,$go,$referrer) {
+function admin_relocate($user_level,string $go,string $referrer): string {
 	$list = FALSE;
 	if (strstr($referrer,"list")) $list = TRUE;
 	if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
@@ -5378,13 +5398,13 @@ function admin_relocate($user_level,$go,$referrer) {
 	return $output;
 }
 
-function scrub_filename($filename) {
+function scrub_filename(string $filename): string {
 	$scrub_characters = array("&" => "", "?" => "", "=" => "", "%" => "", "\"" => "", "'" => "", "$" => "", "*" => "");
 	$filename = strtr($filename, $scrub_characters);
 	return $filename;
 }
 
-function clean_filename($filename) {
+function clean_filename(string $filename): string {
 
 	// Get the file extension
 	$file_extension = pathinfo($filename, PATHINFO_EXTENSION);
@@ -5431,7 +5451,7 @@ function clean_filename($filename) {
  * Version 3.0 Additions
  */
 
-function create_bs_alert($alert_id,$alert_type,$alert_header="",$alert_body="",$alert_icon="",$alert_dismiss="",$alert_stacked=FALSE) {
+function create_bs_alert(string $alert_id,string $alert_type,string $alert_header="",string $alert_body="",string $alert_icon="",string $alert_dismiss="",bool $alert_stacked=FALSE): string {
 
     if ($alert_dismiss == "no-dismiss") $alert_dismissable = "";
     else $alert_dismissable = "alert-dismissible";
@@ -5459,7 +5479,7 @@ function create_bs_alert($alert_id,$alert_type,$alert_header="",$alert_body="",$
 
 }
 
-function create_bs_popover($popover_id,$popover_class,$popover_type,$popover_title,$popover_body,$popover_trigger,$popover_icon,$popover_link_text) {
+function create_bs_popover(string $popover_id,string $popover_class,string $popover_type,string $popover_title,string $popover_body,string $popover_trigger,string $popover_icon,string $popover_link_text): string {
 
     // $popover_type can be "button" (typically on its own), "link" or "icon" (typically inline with text)  
     
@@ -5485,7 +5505,7 @@ function create_bs_popover($popover_id,$popover_class,$popover_type,$popover_tit
     return $popover_output;
 }
 
-function simpleEncrypt($data,$key,$salt) {
+function simpleEncrypt(string $data,string $key,string $salt): string {
 
 	$encryption_key = base64_decode($key);
 	
@@ -5519,12 +5539,13 @@ function simpleEncrypt($data,$key,$salt) {
 	
 }
 
-function simpleDecrypt($data,$key,$salt) {
+function simpleDecrypt(string $data,string $key,string $salt): string|false {
 
 	$encryption_key = base64_decode($key);
 	
 	if (HOSTED) {
 		list($encrypted_data, $iv) = explode('::', base64_decode($data));
+		$iv = $iv ?? "";
 		$decrypted_data = openssl_decrypt($encrypted_data, 'AES-128-CBC', $encryption_key, 0, $iv);
 	}
 	
@@ -5532,6 +5553,7 @@ function simpleDecrypt($data,$key,$salt) {
 		
 		if (function_exists('openssl_decrypt')) {
 			list($encrypted_data, $iv) = explode('::', base64_decode($data));
+			$iv = $iv ?? "";
 			$decrypted_data = openssl_decrypt($encrypted_data, 'AES-128-CBC', $encryption_key, 0, $iv);
 		}
 

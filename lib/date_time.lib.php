@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 function get_timezone($offset) {
 	
 	$offset = number_format($offset,3);

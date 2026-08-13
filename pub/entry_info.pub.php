@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      entry_info.sec.php
  * Description: This module houses public-facing information including entry.

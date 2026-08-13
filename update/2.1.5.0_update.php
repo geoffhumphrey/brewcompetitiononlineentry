@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (!function_exists('check_update')) {
 	$redirect = "../../403.php";
@@ -105,10 +106,11 @@ if (!check_update("brewStyleComEx", $prefix."styles")) {
 $target_charset = "utf8";
 $target_collate = "utf8_general_ci";
 
-function MysqlError($connection) {
+function MysqlError(\mysqli $connection): ?string {
 	if (mysqli_errno($connection)) {
 		return "<li>MySQL Error: " . mysqli_error($connection) . "</li>";
 	}
+	return null;
 }
 
 $count = array();

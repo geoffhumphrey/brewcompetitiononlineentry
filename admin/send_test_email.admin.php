@@ -1,4 +1,5 @@
 <?php 
+declare(strict_types=1);
 require_once ("../paths.php");
 require_once (CONFIG.'bootstrap.php');
 require_once (LIB.'process.lib.php');
@@ -26,7 +27,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2) && ($csr
 
     $admin = TRUE;
 
-    function send_test_message($mail,$smtp_password) {
+    function send_test_message(PHPMailer $mail,string $smtp_password): void {
 
         require (CONFIG.'config.php');
         

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if ($filter == "default") {
 	$winner_style_set = $_SESSION['prefsStyleSet'];

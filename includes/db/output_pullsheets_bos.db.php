@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 $query_bos = sprintf("SELECT * FROM %s",$prefix."judging_scores");
 if ($type == "4") $query_bos .= sprintf(" WHERE (scoreType='%s' OR scoreType='%s')", "2", "3");

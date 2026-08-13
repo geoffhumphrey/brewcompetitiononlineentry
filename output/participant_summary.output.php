@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
@@ -17,7 +19,7 @@ include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
 
 // Best of Show check
-function bos_place_output($entry_id,$prefix,$connection) {
+function bos_place_output(int|string $entry_id,string $prefix,\mysqli $connection): string {
     $db_conn = new MysqliDb($connection);
     $query_bos = "SELECT a.scorePlace FROM ".$prefix."judging_scores_bos"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE a.eid = ? AND c.uid = b.brewBrewerID";
     $row_bos = $db_conn->rawQueryOne($query_bos, array($entry_id));

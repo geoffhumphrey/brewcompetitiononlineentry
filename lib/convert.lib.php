@@ -1,8 +1,10 @@
 <?php 
 
+declare(strict_types=1);
+
 // Map BJCP2008 Styles to BJCP2015 Styles
 
-function bjcp_map_2008_2015($style, $method, $prefix, $id) {
+function bjcp_map_2008_2015(string $style, int $method, string $prefix, int|string $id): string {
 
 	// $id is always a brewing-table auto-increment primary key; cast to int
 	// so it can be safely spliced into the UPDATE strings built below.
@@ -537,7 +539,7 @@ function bjcp_map_2008_2015($style, $method, $prefix, $id) {
 
 }
 
-function bjcp_map_2015_2021($style, $method, $prefix, $id) {
+function bjcp_map_2015_2021(string $style, int $method, string $prefix, int|string $id): string {
 
     // $id is always a brewing-table auto-increment primary key; cast to int
     // so it can be safely spliced into the UPDATE strings built below.
@@ -689,7 +691,7 @@ function bjcp_map_2015_2021($style, $method, $prefix, $id) {
 
 }
 
-function bjcp_map_2021_2025($style, $method, $prefix, $id) {
+function bjcp_map_2021_2025(string $style, int $method, string $prefix, int|string $id): string {
 
 	// January 15, 2025 update was cider only.
 
@@ -768,7 +770,7 @@ function bjcp_map_2021_2025($style, $method, $prefix, $id) {
 
 }
 
-function aabc_map_2022_2025($style, $method, $prefix, $id) {
+function aabc_map_2022_2025(string $style, int $method, string $prefix, int|string $id): string {
 
 	// July 31, 2025 update was cider only.
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if (($filter != "default") && ($filter != "rounds"))  {
 	
 		$style_name = explode(",",$style_name);

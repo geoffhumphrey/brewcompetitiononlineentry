@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Module:      paths.php
@@ -152,7 +153,7 @@ else ini_set('display_errors','Off');
  * @see https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
  */
 
-function is_https() {
+function is_https(): bool {
     if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return TRUE;
     elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == "on"))) return TRUE;
     else return FALSE;
@@ -163,7 +164,7 @@ function is_https() {
  * use in the url_variables.inc.php file.
  */
 
-function sterilize($sterilize = NULL) {
+function sterilize(mixed $sterilize = null): mixed {
     if (is_array($sterilize)) return array_map('sterilize', $sterilize);
     elseif ($sterilize == NULL) return NULL;
     elseif (empty($sterilize)) return $sterilize;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      nav.sec.php
  * Description: This module houses the main navigation.

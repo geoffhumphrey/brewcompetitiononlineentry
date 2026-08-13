@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if ($id == "default") $id_table = $row_tables['id'];
 else $id_table = $id;
 $db_conn->where('assignTable', $id_table);

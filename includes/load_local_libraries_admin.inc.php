@@ -1,3 +1,4 @@
+<?php declare(strict_types=1); ?>
     
     <!-- Load jQuery / http://jquery.com/ -->
     <script src="<?php echo $base_url; ?>libraries/public/jquery/jquery.min.js"></script>

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /*
 // Empty vars defined in index.pub.php

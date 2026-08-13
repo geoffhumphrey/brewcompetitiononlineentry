@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if (isset($_SESSION['userLevel'])) {
 	if ($_SESSION['userLevel'] == 0) {
 		$row_count_end = $db_conn->rawQuery("SHOW SESSION STATUS LIKE 'Questions'")[0];

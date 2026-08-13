@@ -1,4 +1,5 @@
 <?php 
+declare(strict_types=1);
 /**
  * Module:      past_winners.sec.php 
  * Description: This module displays winners from archived database tables. 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if ($go == "judging_locations") $db_conn->where('tableLocation', $location);
 if ($id != "default") $db_conn->where('id', $id);
 else $db_conn->orderBy('tableNumber', 'ASC');

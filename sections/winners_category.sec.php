@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      winners_category.sec.php
  * Description: This module displays the winners entered into the database.

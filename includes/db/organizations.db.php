@@ -1,4 +1,5 @@
 <?php 
+declare(strict_types=1);
 if ($_SESSION['prefsProEdition'] == 1) {
     $db_conn->where('brewerBreweryName', NULL, 'IS NOT');
     $db_conn->orWhere('brewerAssignment', NULL, 'IS NOT');

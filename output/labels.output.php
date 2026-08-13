@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 
 // Redirect if directly accessed without authenticated session
 if (!isset($_SESSION['loginUsername'])) {
@@ -18,7 +20,7 @@ $aabc = FALSE;
 if ($_SESSION['prefsStyleSet'] == "BA") $ba = TRUE;
 if ($_SESSION['prefsStyleSet'] == "AABC") $aabc = TRUE;
 
-function unique_multidim_array($array, $key) {
+function unique_multidim_array(array $array, string $key): array {
     $temp_array = array();
     $i = 0;
     $key_array = array();

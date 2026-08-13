@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 $update_table = $prefix."styles";
 

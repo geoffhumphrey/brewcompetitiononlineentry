@@ -1,8 +1,8 @@
 <?php
-
-function random_judging_num_generator(){
+declare(strict_types=1);
+function random_judging_num_generator(): string {
 	
-	srand ((float) microtime() * 10000000);
+	srand (rand(1,10000000));
 
 	$random_generator = "";
 	
@@ -14,7 +14,7 @@ function random_judging_num_generator(){
 
 }
 
-function check_http($input) {
+function check_http(string $input): ?string {
 
 	if ($input != "") {
 
@@ -24,9 +24,11 @@ function check_http($input) {
 
 	}
 
+	return null;
+
 }
 
-function check_judging_num($input) {
+function check_judging_num($input): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -42,7 +44,7 @@ function check_judging_num($input) {
 
 }
 
-function generate_judging_num($method,$style_cat_num) {
+function generate_judging_num($method,$style_cat_num): string {
 
 	if ($method == 1) {
 		// Generate the Judging Number each entry
@@ -102,15 +104,17 @@ function generate_judging_num($method,$style_cat_num) {
 
 	}
 
+	return "";
+
 }
 
-function ucwordspecific($str,$delimiter) {
+function ucwordspecific(string $str,string $delimiter): string {
 	$delimiter_space = $delimiter." ";
 	$output = str_replace($delimiter_space,$delimiter,ucwords(str_replace($delimiter,$delimiter_space,$str)));
 	return $output;
 }
 
-function capitalize($string1) {
+function capitalize(string $string1): string {
 	require(INCLUDES.'scrubber.inc.php');
 	$output = strtr($string1,$html_remove);
 	$output = ucwords($output);
@@ -122,12 +126,12 @@ function capitalize($string1) {
 	return $output;
 }
 
-function strip_newline($input) {
+function strip_newline(string $input): string {
 	$output = preg_replace("/[\n\r]/"," ",$input);
 	return $output;
 }
 
-function clean_up_url($referer) {
+function clean_up_url(?string $referer): string {
 
 	$reconstruct = "";
 
@@ -170,7 +174,7 @@ function clean_up_url($referer) {
 
 }
 
-function generate_judging_numbers($brewing_db_table,$method) {
+function generate_judging_numbers($brewing_db_table,$method): int {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -251,7 +255,7 @@ function generate_judging_numbers($brewing_db_table,$method) {
 
 }
 
-function check_sweetness($style,$styleSet) {
+function check_sweetness(string $style,$styleSet): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -284,7 +288,7 @@ function check_sweetness($style,$styleSet) {
 }
 
 
-function check_carb($style,$styleSet) {
+function check_carb(string $style,$styleSet): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -316,7 +320,7 @@ function check_carb($style,$styleSet) {
 
 }
 
-function check_mead_strength($style,$styleSet) {
+function check_mead_strength(string $style,$styleSet): bool {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -343,7 +347,7 @@ function check_mead_strength($style,$styleSet) {
 
 }
 
-function standardize_name($string) {
+function standardize_name(string $string): string {
 
 	// Modified version of Armand Niculescu's function
 	// See http://www.media-division.com/correct-name-capitalization-in-php/
@@ -381,7 +385,7 @@ function standardize_name($string) {
 	return $string;
 }
 
-function rmove($src, $dest) {
+function rmove(string $src, string $dest): bool {
 
     // If source is not a directory stop processing
     if (!is_dir($src)) return false;
@@ -407,7 +411,7 @@ function rmove($src, $dest) {
 
 }
 
-function rdelete($src,$file_mimes) {
+function rdelete(string $src, $file_mimes): bool {
 
 	if (empty($file_mimes)) $file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml');
 	else $file_mimes = array('application/pdf');
@@ -419,18 +423,22 @@ function rdelete($src,$file_mimes) {
 
 	foreach($files as $file) {
 		$mime = mime_content_type($file->getPathname());
-		if (in_array($mime, $file_mimes)) unlink($file);
+		if (in_array($mime, $file_mimes)) unlink($file->getPathname());
 	}
 
 	return true;
 }
 
+/**
+ * @param mixed $var
+ * @return mixed
+ */
 function blank_to_null($var) {
 	if ((!isset($var)) || (empty($var))) $var = NULL;
 	return $var;
 }
 
-function table_limit($style_id,$planning) {
+function table_limit($style_id,$planning): bool {
 
 	// If in planning mode, query to see if the style's id is in a  
 	// table's defined styles and whether that table is limiting entries.

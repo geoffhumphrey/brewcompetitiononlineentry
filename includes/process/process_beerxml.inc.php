@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if ((isset($_SERVER['HTTP_REFERER'])) && ($_SESSION['loginUsername'])) {
 include (INCLUDES.'beerXML/input_beer_xml.inc.php');
 	//Mmaximum file size.

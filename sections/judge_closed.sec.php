@@ -1,4 +1,5 @@
 <?php 
+declare(strict_types=1);
 /**
  * Module:      judge_closed.sec.php 
  * Description: This module houses the information that will be displayded

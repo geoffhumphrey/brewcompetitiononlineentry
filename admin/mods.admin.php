@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      mods.admin.php
  * Description: Add, edit, and delete any custom modules that extend core functions.
@@ -14,7 +15,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 
 //require(DB.'mods.db.php');
 
-function mod_info($info,$method) {
+function mod_info(string $info,int $method): string {
 
 	$output = "";
 	

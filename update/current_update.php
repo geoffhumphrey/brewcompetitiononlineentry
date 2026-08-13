@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * -----------------------------------------------------------
  * If version is below 2.1.8.0, the following will run.

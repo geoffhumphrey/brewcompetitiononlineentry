@@ -1,4 +1,5 @@
 <?php 
+declare(strict_types=1);
 /**
  * Module:      login.pub.php 
  * Description: This module houses the functionality for users to log into the

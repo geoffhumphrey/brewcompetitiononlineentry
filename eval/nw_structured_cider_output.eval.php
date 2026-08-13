@@ -1,3 +1,4 @@
+<?php declare(strict_types=1); ?>
 <style>
 	.tick-row {
 		margin-top: 3px;

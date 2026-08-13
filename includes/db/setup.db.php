@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // Check to see if initial setup has taken place
 if (table_exists($prefix."bcoem_sys")) {
 

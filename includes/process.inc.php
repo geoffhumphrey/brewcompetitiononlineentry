@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Module:      process.inc.php
  * Description: This module does all the heavy lifting for any DB updates; new entries,

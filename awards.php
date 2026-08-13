@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      awards.php
  * Description: This module is the delivery vehicle for the awards presentation.

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 
 /**
  * Module: export.output.php
@@ -124,7 +126,7 @@ $BOM = "\xEF\xBB\xBF"; // UTF-8 byte order mark (BOM)
 
 if (!function_exists('fputcsv')) {
     
-    function fputcsv(&$handle, $fields = array(), $delimiter = ',', $enclosure = '"') {
+    function fputcsv(&$handle, array $fields = array(), string $delimiter = ',', string $enclosure = '"'): int|false {
 
         // Sanity Check
         if (!is_resource($handle)) {
@@ -248,6 +250,11 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             include (DB.'output_entries_export.db.php');
 
             $row_sql_field_names = ($row_sql) ? array_keys($row_sql) : array();
+
+            function mysqli_field_name(\mysqli_result $result, int $field_offset): ?string {
+                $properties = mysqli_fetch_field_direct($result, $field_offset);
+                return is_object($properties) ? $properties->name : null;
+            }
 
             if (($go == "csv") && ($action == "all") && ($tb == "all")) {
 

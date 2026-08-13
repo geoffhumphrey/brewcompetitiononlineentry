@@ -1,4 +1,5 @@
 <?php 
+declare(strict_types=1);
 $color_array = array(
 	$label_pale,
 	$label_straw,

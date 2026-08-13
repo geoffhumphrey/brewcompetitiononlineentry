@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      bos.sec.php
  * Description: This module houses public-facing display of the BEST of

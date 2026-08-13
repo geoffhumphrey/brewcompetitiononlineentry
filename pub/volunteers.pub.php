@@ -1,4 +1,5 @@
 <?php 
+declare(strict_types=1);
 /**
  * Module:      volunteers.pub.php 
  * Description: This module displays the public-facing competition volunteers

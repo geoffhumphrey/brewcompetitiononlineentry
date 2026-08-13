@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      brew.sec.php
  * Description: This module houses the functionality for users to add/edit individual competition
