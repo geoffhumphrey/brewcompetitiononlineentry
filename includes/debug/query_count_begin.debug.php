@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 $output_query_count = "";
 if (isset($_SESSION['userLevel'])) {
 	if ($_SESSION['userLevel'] == 0) {
