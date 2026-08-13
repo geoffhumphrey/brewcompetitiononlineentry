@@ -628,7 +628,7 @@ else {
 <!-- Overall Impression -->
 <h5><?php echo $label_overall_impression ?><span class="pull-right"><?php echo $row_eval['evalOverallScore']; ?> <small>/ <?php echo $overall_possible; ?></small></span></h5>
 <hr>
-<p><?php echo htmlentities($row_eval['evalOverallComments']); ?></p>
+<p><?php echo $row_eval['evalOverallComments']; ?></p>
 <div class="row section-row no-break">
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
     <strong><?php echo $label_style_accuracy; ?></strong>

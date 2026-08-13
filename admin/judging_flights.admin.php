@@ -25,7 +25,7 @@ if (($filter != "default") && ($filter != "rounds"))  {
 
 		if ($row_entries) {
 
-			do {
+			foreach ($rows_entries as $row_entries) {
 
 				$random = random_generator(7,2);
 				$flight_number_entry = "";
@@ -51,9 +51,9 @@ if (($filter != "default") && ($filter != "rounds"))  {
 				$flight_table_tbody .= "</td>\n";
 
 				$flight_table_tbody .= "<td>";
-				if ($_SESSION['prefsStyleSet'] == "BA") $flight_table_tbody .= $row_entries['brewStyle'];
-				elseif ($_SESSION['prefsStyleSet'] == "AABC") $flight_table_tbody .= ltrim($row_entries['brewCategorySort'],"0").".".ltrim($row_entries['brewSubCategory'],"0")." ".style_convert($row_entries['brewCategorySort'],1,$base_url).": ".$row_entries['brewStyle'];
-				else $flight_table_tbody .= $row_entries['brewCategorySort'].$row_entries['brewSubCategory']." ".style_convert($row_entries['brewCategorySort'],1,$base_url).": ".$row_entries['brewStyle'];
+				if ($_SESSION['prefsStyleSet'] == "BA") $flight_table_tbody .= h($row_entries['brewStyle']);
+				elseif ($_SESSION['prefsStyleSet'] == "AABC") $flight_table_tbody .= ltrim($row_entries['brewCategorySort'],"0").".".ltrim($row_entries['brewSubCategory'],"0")." ".style_convert($row_entries['brewCategorySort'],1,$base_url).": ".h($row_entries['brewStyle']);
+				else $flight_table_tbody .= $row_entries['brewCategorySort'].$row_entries['brewSubCategory']." ".style_convert($row_entries['brewCategorySort'],1,$base_url).": ".h($row_entries['brewStyle']);
 				$flight_table_tbody .= "</td>\n";
 
 				for($i=1; $i<$flight_count+1; $i++) {
@@ -75,7 +75,7 @@ if (($filter != "default") && ($filter != "rounds"))  {
 				$flight_table_tbody .= "</td>\n";
 				$flight_table_tbody .= "</tr>\n";
 
-			}  while ($row_entries = mysqli_fetch_assoc($entries));
+			}
 
 		}
 
@@ -84,11 +84,11 @@ if (($filter != "default") && ($filter != "rounds"))  {
 }
 
 $title = "";
-if (($action == "edit") && ($id != "default") && ($filter == "default")) $title = ": Edit Flights for Table ".$row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName'];
-elseif (($action == "add") && ($id != "default") && ($filter == "default")) $title = ": Define Flights for Table ".$row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName'];
+if (($action == "edit") && ($id != "default") && ($filter == "default")) $title = ": Edit Flights for Table ".h($row_tables_edit['tableNumber'])." &ndash; ".h($row_tables_edit['tableName']);
+elseif (($action == "add") && ($id != "default") && ($filter == "default")) $title = ": Define Flights for Table ".h($row_tables_edit['tableNumber'])." &ndash; ".h($row_tables_edit['tableName']);
 elseif (($action == "assign") && ($filter == "rounds"))  $title = ": Assign $assign_to to Rounds";
 else $title =  ": Define/Edit Flights"; ?>
-<p onload="updateButCount(event);" class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
+<p onload="updateButCount(event);" class="lead"><?php echo h($_SESSION['contestName']).$title;  ?></p>
 <div class="bcoem-admin-element hidden-print">
    	<!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
@@ -117,15 +117,15 @@ if ($totalRows_tables > 0) {
             Choose a Table <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <?php do {
+            <?php foreach ($rows_tables_edit as $row_tables_edit) {
 
                 $table_choose = table_choose($section,$go,$action,$row_tables_edit['id'],$view,"default","flight_choose");
                 $table_choose = explode("^",$table_choose);
                 if ($table_choose[0] > 0) $table_choose_display = "edit&amp;id=".$table_choose[1]; else $table_choose_display = "add&amp;id=".$table_choose[1];
 
                 ?>
-            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php echo $table_choose_display; ?>"><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a></li>
-            <?php } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php echo $table_choose_display; ?>"><?php echo "Table ".h($row_tables_edit['tableNumber']).": ".h($row_tables_edit['tableName']); ?></a></li>
+            <?php } ?>
         </ul>
     </div>
 </div>
@@ -260,7 +260,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 <form class="form-horizontal" name="form1" role="form" id="formfield" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <?php
-		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit));
+		foreach ($rows_tables_edit as $row_tables_edit) { $a[] = $row_tables_edit['id']; }
 
 		//print_r($a);
 
@@ -271,16 +271,16 @@ if (($action == "assign") && ($filter == "rounds")) {
 			//echo $totalRows_flights."<br>";
 
 			$judging_location_rounds = "";
-			$judging_table_name = "Table ".$row_tables['tableNumber']." &ndash; ".$row_tables['tableName'];
+			$judging_table_name = "Table ".h($row_tables['tableNumber'])." &ndash; ".h($row_tables['tableName']);
 			$judging_location_string = "";
 			$location_missing = FALSE;
 
 			if ($row_table_location) {
 				if ($row_table_location['judgingRounds'] > 1) $judging_location_rounds = $row_table_location['judgingRounds']." rounds";
 				else $judging_location_rounds = $judging_location_rounds = $row_table_location['judgingRounds']." round";
-				if ($_SESSION['jPrefsQueued'] == "N") $judging_table_name .= " <small><a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$flight_table." data-toggle=\"tooltip\" data-placement=\"top\" title=\"Define/Edit the ".$row_tables['tableName']." Flights\"><span class=\"fa fa-lg fa-pencil-square-o\"></span></a></small>";
+				if ($_SESSION['jPrefsQueued'] == "N") $judging_table_name .= " <small><a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$flight_table." data-toggle=\"tooltip\" data-placement=\"top\" title=\"Define/Edit the ".h($row_tables['tableName'])." Flights\"><span class=\"fa fa-lg fa-pencil-square-o\"></span></a></small>";
 
-				$judging_location_string = $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")." (".$judging_location_rounds." <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=".$row_table_location['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit the ".$row_table_location['judgingLocName']." location\">defined for this location</a>)";
+				$judging_location_string = h($row_table_location['judgingLocName'])." &ndash; ".h(getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"))." (".$judging_location_rounds." <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=".$row_table_location['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit the ".h($row_table_location['judgingLocName'])." location\">defined for this location</a>)";
 			} else {
 				$location_missing = TRUE;
 				$judging_location_string = sprintf("<span class=\"text-danger\">No location chosen.</span> <a href=\"%s%s\">Choose a location</a>.",$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=edit&amp;id=",$row_tables['id']);

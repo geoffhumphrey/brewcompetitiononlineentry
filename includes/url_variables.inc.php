@@ -42,7 +42,10 @@ if (isset($_GET['msg'])) $msg = sterilize($_GET['msg']);
 if (isset($_GET['go'])) $go = sterilize($_GET['go']);
 if (isset($_GET['admin'])) $admin = sterilize($_GET['admin']);
 if (isset($_GET['username'])) $username = sterilize($_GET['username']);
-if (isset($_GET['dbTable'])) $dbTable = sterilize($_GET['dbTable']);
+// $dbTable is used as a raw table/identifier name in several MysqliDb calls (get/getOne/update/delete),
+// which does not escape or quote table names - only word characters are allowed through here since
+// this value is spliced directly into SQL rather than passed as a bound parameter.
+if (isset($_GET['dbTable'])) $dbTable = preg_replace("/[^a-zA-Z0-9_]+/", "", sterilize($_GET['dbTable']));
 if (isset($_GET['filter'])) $filter = sterilize($_GET['filter']);
 if (isset($_GET['bid'])) $bid = sterilize($_GET['bid']);
 if (isset($_GET['view'])) $view = sterilize($_GET['view']);

@@ -26,7 +26,7 @@ $(document).ready(function () {
 });
 </script>
 <script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
-<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; if ($dbTable != "default") echo " (Archive ".$archive_suffix.")"; ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; if ($dbTable != "default") echo " (Archive ".h($archive_suffix).")"; ?></p>
 <div class="bcoem-admin-element hidden-print">
 <?php if (($action == "add") || ($action == "edit")) { ?>
 	<div class="btn-group" role="group" aria-label="add-sponsor">
@@ -103,17 +103,17 @@ $(document).ready(function () {
  </tr>
  </thead>
  <tbody>
- <?php do { ?>
+ <?php foreach ($rows_sponsors as $row_sponsors) { ?>
  <tr>
   <td>
     <?php if ($dbTable != "default") {
-    if ($row_sponsors['sponsorURL'] !="") echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\">".$row_sponsors['sponsorName']."</a>"; else echo $row_sponsors['sponsorName'];
+    if (($row_sponsors['sponsorURL'] != "") && (preg_match('#^https?://#i', $row_sponsors['sponsorURL']))) echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\">".$row_sponsors['sponsorName']."</a>"; else echo $row_sponsors['sponsorName'];
     }
-  else echo $row_sponsors['sponsorName']; 
+  else echo $row_sponsors['sponsorName'];
   ?>
     
   </td>
-  <td><?php echo $row_sponsors['sponsorLocation']; ?></td>
+  <td><?php echo h($row_sponsors['sponsorLocation']); ?></td>
   <td><?php if (isset($row_sponsors['sponsorLevel'])) { ?>
     <?php if ($dbTable == "default") { ?>
     <div class="form-group" id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>-sponsorLevel-form-group">
@@ -129,7 +129,7 @@ $(document).ready(function () {
         <span id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>-sponsorLevel-status-msg"></span>
       </div>
     </div>
-  <?php } else echo $row_sponsors['sponsorLevel']; ?>
+  <?php } else echo h($row_sponsors['sponsorLevel']); ?>
   <?php } ?>
   </td>
   <?php if ($dbTable == "default") { ?>
@@ -142,8 +142,8 @@ $(document).ready(function () {
           foreach ($sponsor_images as $filename) {
             $selected = "";
             if ($filename == $row_sponsors['sponsorImage']) $selected = " selected";
-            $sponsor_images_options .= "<option value=\"".$filename."\"".$selected.">";
-            $sponsor_images_options .= $filename;
+            $sponsor_images_options .= "<option value=\"".h($filename)."\"".$selected.">";
+            $sponsor_images_options .= h($filename);
             $sponsor_images_options .= "</option>";
           }
         echo $sponsor_images_options;
@@ -181,11 +181,11 @@ $(document).ready(function () {
   <td nowrap="nowrap">
   <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-lg fa-pencil"></span></a>
   <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
-  <?php if ($row_sponsors['sponsorURL'] !="") echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?>
+  <?php if (($row_sponsors['sponsorURL'] != "") && (preg_match('#^https?://#i', $row_sponsors['sponsorURL']))) echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?>
   </td>
   <?php } ?>
  </tr>
-<?php } while($row_sponsors = mysqli_fetch_assoc($sponsors)) ?>
+<?php } ?>
  </tbody>
 </table>
 <?php if ($dbTable == "default") { ?>
@@ -223,7 +223,7 @@ if ($action == "default") { ?>
     <label for="sponsorLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <input class="form-control" id="sponsorLocation" name="sponsorLocation" type="text" value="<?php if ($action == "edit") echo $row_sponsors['sponsorLocation']; ?>" placeholder="">
+        <input class="form-control" id="sponsorLocation" name="sponsorLocation" type="text" value="<?php if ($action == "edit") echo h($row_sponsors['sponsorLocation']); ?>" placeholder="">
     </div>
 </div><!-- ./Form Group -->
 
@@ -262,8 +262,8 @@ if ($action == "default") { ?>
           foreach ($sponsor_images as $filename) {
             $selected = "";
             if ($filename == $row_sponsors['sponsorImage']) $selected = " selected";
-            $sponsor_images_options .= "<option value=\"".$filename."\"".$selected.">";
-            $sponsor_images_options .= $filename;
+            $sponsor_images_options .= "<option value=\"".h($filename)."\"".$selected.">";
+            $sponsor_images_options .= h($filename);
             $sponsor_images_options .= "</option>";
           }
         echo $sponsor_images_options;

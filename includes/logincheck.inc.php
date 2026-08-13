@@ -16,18 +16,14 @@ $loginUsername = sterilize($_POST['loginUsername']);
 $entered_password = sterilize($_POST['loginPassword']);
 $location = $base_url."index.php?section=login";
 
-if (NHC) $base_url = "../";
-else $base_url = $base_url;
-
 if (strlen($entered_password) > 72) { 
 	session_destroy();
 	header(sprintf("Location: %s", $base_url."index.php?msg=11"));
 	exit;
 }
 
-mysqli_real_escape_string($connection,$loginUsername);
-mysqli_real_escape_string($connection,$entered_password);
 $entered_password = md5($entered_password);
+$loginUsername = strtolower($loginUsername);
 
 /**
  * ONLY for 1.3.0.0 release; evaluate for deletion in future releases
@@ -35,39 +31,30 @@ $entered_password = md5($entered_password);
  */
 
 if ($section == "update") {
-	
-	$loginUsername = strtolower($loginUsername);	
-	
-	$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$loginUsername);
-	$login = mysqli_query($connection,$query_login) or die("A database error occurred.");
-	$row_login = mysqli_fetch_assoc($login);
-	$totalRows_login = mysqli_num_rows($login);
-	
+
+	$db_conn->where('user_name', $loginUsername);
+	$row_login = $db_conn->getOne($prefix."users");
+	$totalRows_login = $db_conn->count;
+
 	$stored_hash = $row_login['password'];
-	
+
 	$check = 0;
-	
-	if ($totalRows_login > 0) {
-		$check = $hasher->CheckPassword($entered_password, $stored_hash);
-		$check = 1;
-	}
-	
+
+	if ($totalRows_login > 0) $check = $hasher->CheckPassword($entered_password, $stored_hash);
+
 	else $check = 0;
-	
+
 }
 
-if ($section != "update") {
-	
-	$loginUsername = strtolower($loginUsername);	
-	
-	$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users",$loginUsername);
-	$login = mysqli_query($connection,$query_login) or die("A database error occurred.");
-	$row_login = mysqli_fetch_assoc($login);
-	$totalRows_login = mysqli_num_rows($login);
-	
+else {
+
+	$db_conn->where('user_name', $loginUsername);
+	$row_login = $db_conn->getOne($prefix."users");
+	$totalRows_login = $db_conn->count;
+
 	$stored_hash = $row_login['password'];
 	$check = 0;
-	
+
 	if ($totalRows_login > 0) $check = $hasher->CheckPassword($entered_password, $stored_hash);
 
 }
@@ -78,16 +65,17 @@ if ($section != "update") {
  */
 
 if ($check == 1) {
-	
+
+	// Regenerate the session ID on successful authentication to prevent session fixation.
+	session_regenerate_id(true);
+
 	// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
-	$updateSQL = sprintf("UPDATE %s SET user_name='%s' WHERE id='%s'",$prefix."users",$loginUsername, $row_login['id']);
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die("A database error occurred.");
+	$db_conn->where('id', $row_login['id']);
+	$db_conn->update($prefix."users", array('user_name' => $loginUsername));
 
 	// Convert email address in the user's accociated record in the "brewer" table
-	$updateSQL = sprintf("UPDATE %s SET brewerEmail='%s' WHERE uid='%s'",$prefix."brewer",$loginUsername, $row_login['id']);
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die("A database error occurred.");
+	$db_conn->where('uid', $row_login['id']);
+	$db_conn->update($prefix."brewer", array('brewerEmail' => $loginUsername));
 	
 	// Register the session variable
 	$_SESSION['loginUsername'] = $loginUsername;
@@ -118,5 +106,5 @@ else {
 
 // Relocate
 header(sprintf("Location: %s", $location, true));
-exit;
+exit();
 ?>

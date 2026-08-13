@@ -185,14 +185,13 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         // Get all judging session start and end dates
         if ((check_setup($prefix."judging_locations",$database)) && (check_update("judgingDateEnd", $prefix."judging_locations"))) {
 
-            $query_judging_dates = sprintf("SELECT judgingDate,judgingDateEnd FROM %s WHERE judgingLocType < '2'",$judging_locations_db_table);
-            $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
-            $row_judging_dates = mysqli_fetch_assoc($judging_dates);
-            $totalRows_judging_dates = mysqli_num_rows($judging_dates);
+            $db_conn->where('judgingLocType', '2', '<');
+            $rows_judging_dates = $db_conn->get($judging_locations_db_table, null, "judgingDate,judgingDateEnd");
+            $totalRows_judging_dates = $db_conn->count;
 
             if ($totalRows_judging_dates > 0) {
-                do {
-                    
+                foreach ($rows_judging_dates as $row_judging_dates) {
+
                     if (!empty($row_judging_dates['judgingDate'])) {
                         $date_arr[] = $row_judging_dates['judgingDate'];
                         $later_date_arr[] = $row_judging_dates['judgingDate'];
@@ -203,7 +202,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
                         $later_date_arr[] = $row_judging_dates['judgingDateEnd'];
                     }
 
-                } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
+                }
             }
 
             if (!empty($date_arr)) {
@@ -357,10 +356,9 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $style_type_limits_display = array();
         $style_type_limits_alert = array();
 
-        $query_style_type_entry_limits = sprintf("SELECT * FROM %s WHERE styleTypeEntryLimit > 0",$prefix."style_types");
-        $style_type_entry_limits = mysqli_query($connection,$query_style_type_entry_limits) or die (mysqli_error($connection));
-        $row_style_type_entry_limits = mysqli_fetch_assoc($style_type_entry_limits);
-        $totalRows_style_type_entry_limits = mysqli_num_rows($style_type_entry_limits);
+        $db_conn->where('styleTypeEntryLimit', 0, '>');
+        $rows_style_type_entry_limits = $db_conn->get($prefix."style_types");
+        $totalRows_style_type_entry_limits = $db_conn->count;
 
         $style_type_entry_count_display = array();
         $style_limit_entry_count_display = array();
@@ -371,9 +369,8 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
             foreach (json_decode($_SESSION['prefsStyleLimits'],true) as $key => $value) {
 
-                $query_style_limit_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s'", $prefix."brewing", $key);
-                $style_limit_entry_count = mysqli_query($connection,$query_style_limit_entry_count) or die (mysqli_error($connection));
-                $row_style_limit_entry_count = mysqli_fetch_assoc($style_limit_entry_count);
+                $db_conn->where('brewCategorySort', $key);
+                $row_style_limit_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
                 $style_limit_entry_count_display[$key] = $row_style_limit_entry_count['count'];
             
@@ -384,18 +381,20 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         if ($totalRows_style_type_entry_limits > 0) {
 
             // Build style type count array
-            
-            do {
+
+            foreach ($rows_style_type_entry_limits as $row_style_type_entry_limits) {
 
                 // Default entry limit flag is 0 (false)
                 $style_type_limits[$row_style_type_entry_limits['id']] = 0;
 
                 $style_type_limits_display[$row_style_type_entry_limits['styleTypeName']] = $row_style_type_entry_limits['styleTypeEntryLimit'];
 
-                if ($row_style_type_entry_limits['id'] == 4) $query_style_type_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleType='2' OR brewStyleType='3'",$prefix."brewing",$row_style_type_entry_limits['id']);
-                else $query_style_type_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleType='%s'",$prefix."brewing",$row_style_type_entry_limits['id']);
-                $style_type_entry_count = mysqli_query($connection,$query_style_type_entry_count) or die (mysqli_error($connection));
-                $row_style_type_entry_count = mysqli_fetch_assoc($style_type_entry_count);
+                if ($row_style_type_entry_limits['id'] == 4) {
+                    $db_conn->where('brewStyleType', '2');
+                    $db_conn->orWhere('brewStyleType', '3');
+                }
+                else $db_conn->where('brewStyleType', $row_style_type_entry_limits['id']);
+                $row_style_type_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
                 $style_type_entry_count_display[$row_style_type_entry_limits['styleTypeName']] = array($row_style_type_entry_count['count'],$row_style_type_entry_limits['styleTypeEntryLimit']);
 
@@ -423,8 +422,8 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
                     }
 
                 }
-            
-            } while ($row_style_type_entry_limits = mysqli_fetch_assoc($style_type_entry_limits));
+
+            }
 
         }
 
@@ -471,9 +470,8 @@ else {
 
     if (($section == "step4") || ($section == "step5") || ($section == "step6")) {
 
-        $query_prefs_tz = sprintf("SELECT prefsTimeZone,prefsDateFormat,prefsTimeFormat FROM %s WHERE id='1'", $prefix."preferences");
-        $prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
-        $row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
+        $db_conn->where('id', '1');
+        $row_prefs_tz = $db_conn->getOne($prefix."preferences", "prefsTimeZone,prefsDateFormat,prefsTimeFormat");
 
         $current_date = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], "system", "date");
         $current_date_display = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], $sidebar_date_format, "date");
@@ -639,9 +637,8 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
     
     if ((check_update("prefsSelectedStyles", $prefix."preferences")) && (empty($_SESSION['prefsSelectedStyles']))) {
 
-        $query_selected_styles = sprintf("SELECT prefsSelectedStyles FROM %s WHERE id='1';",$prefix."preferences");
-        $selected_styles = mysqli_query($connection,$query_selected_styles) or die (mysqli_error($connection));
-        $row_selected_styles = mysqli_fetch_assoc($selected_styles);
+        $db_conn->where('id', '1');
+        $row_selected_styles = $db_conn->getOne($prefix."preferences", "prefsSelectedStyles");
 
         if (empty($row_selected_styles['prefsSelectedStyles'])) $regenerate_selected_styles = TRUE;
         
@@ -661,20 +658,24 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
             $update_selected_styles = array();
             $prefsStyleSet = $_SESSION['prefsStyleSet'];
 
-            if ($prefsStyleSet == "BJCP2025") $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2')", $prefix."styles");
-            else $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE brewStyleVersion='%s'", $prefix."styles", $prefsStyleSet);
-            $styles_default = mysqli_query($connection,$query_styles_default);
-            $row_styles_default = mysqli_fetch_assoc($styles_default);
+            if ($prefsStyleSet == "BJCP2025") {
+                $query_styles_default = "SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM ".$prefix."styles WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2')";
+                $rows_styles_default = $db_conn->rawQuery($query_styles_default);
+            }
+            else {
+                $query_styles_default = "SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM ".$prefix."styles WHERE brewStyleVersion=?";
+                $rows_styles_default = $db_conn->rawQuery($query_styles_default, array($prefsStyleSet));
+            }
 
-            if ($row_styles_default) {
-                do {
+            if ($rows_styles_default) {
+                foreach ($rows_styles_default as $row_styles_default) {
                     $update_selected_styles[$row_styles_default['id']] = array(
                         'brewStyle' => sterilize($row_styles_default['brewStyle']),
                         'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
                         'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
                         'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion'])
                     );
-                } while($row_styles_default = mysqli_fetch_assoc($styles_default));
+                }
             }
 
             $update_selected_styles = json_encode($update_selected_styles);

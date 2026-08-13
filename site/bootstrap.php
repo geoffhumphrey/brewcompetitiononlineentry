@@ -113,24 +113,18 @@ if ($setup_success) {
 
 	if (!isset($_SESSION['characterSet'])) {
 
-		$query_character_check = "SHOW VARIABLES LIKE 'character_set_database'";
-		$character_check = mysqli_query($connection,$query_character_check) or die (mysqli_error($connection));
-		$row_character_check = mysqli_fetch_assoc($character_check);
+		$row_character_check = $db_conn->rawQueryOne("SHOW VARIABLES LIKE 'character_set_database'");
 
 		// If not usf8mb4, convert DB and all tables
 		if ($row_character_check['Value'] != "utf8mb4") {
 
 			$sql = sprintf("ALTER DATABASE `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$database);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$db_conn->rawQuery($sql);
 
 			foreach ($db_table_array as $table) {
 
 				$sql = sprintf("ALTER TABLE `%s` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$table);
-				mysqli_select_db($connection,$database);
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+				$db_conn->rawQuery($sql);
 
 			}
 
@@ -150,10 +144,9 @@ if ($setup_success) {
 
 	if (!isset($_SESSION['preferencesSet'])) {
 
-		$query_prefs_check = sprintf("SELECT id FROM %s ORDER BY id ASC LIMIT 1",$preferences_db_table);
-		$prefs_check = mysqli_query($connection,$query_prefs_check) or die (mysqli_error($connection));
-		$row_prefs_check = mysqli_fetch_assoc($prefs_check);
-		$totalRows_prefs_check = mysqli_num_rows($prefs_check);
+		$db_conn->orderBy('id', 'ASC');
+		$row_prefs_check = $db_conn->getOne($preferences_db_table, 'id');
+		$totalRows_prefs_check = $db_conn->count;
 
 		if ($totalRows_prefs_check == 0) {
 
@@ -266,10 +259,9 @@ if ($setup_success) {
 	// Check if contest_info DB table is empty or does not have a row with id of 1. If so, add row with id of 1 with dummy content. Set alert flag.
 	if (!isset($_SESSION['compInfoSet'])) {
 
-		$query_contest_info_check = sprintf("SELECT id FROM %s ORDER BY id ASC LIMIT 1",$contest_info_db_table);
-		$contest_info_check = mysqli_query($connection,$query_contest_info_check) or die (mysqli_error($connection));
-		$row_contest_info_check = mysqli_fetch_assoc($contest_info_check);
-		$totalRows_contest_info_check = mysqli_num_rows($contest_info_check);
+		$db_conn->orderBy('id', 'ASC');
+		$row_contest_info_check = $db_conn->getOne($contest_info_db_table, 'id');
+		$totalRows_contest_info_check = $db_conn->count;
 
 		if ($totalRows_contest_info_check == 0) {
 

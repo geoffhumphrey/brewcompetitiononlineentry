@@ -1,8 +1,11 @@
 <?php
 
-if ($section == "past-winners") $query_scored_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scorePlace IS NOT NULL", $prefix."judging_scores_".$go);
-else $query_scored_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scorePlace IS NOT NULL", $prefix."judging_scores");
-$scored_entries = mysqli_query($connection,$query_scored_entries) or die (mysqli_error($connection));
-$row_scored_entries = mysqli_fetch_assoc($scored_entries);
+if ($section == "past-winners") {
+	$go_clean = preg_replace("/[^a-zA-Z0-9]+/", "", $go);
+	$score_count_table = $prefix."judging_scores_".$go_clean;
+}
+else $score_count_table = $prefix."judging_scores";
+$db_conn->where("scorePlace IS NOT NULL");
+$row_scored_entries = $db_conn->getOne($score_count_table, "COUNT(*) as 'count'");
 
 ?>

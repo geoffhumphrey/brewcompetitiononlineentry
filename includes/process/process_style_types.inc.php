@@ -17,17 +17,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$styleTypeName = "";
 
 	if (isset($_POST['styleTypeName'])) {
-		$styleTypeName = $purifier->purify($_POST['styleTypeName']);
+		$styleTypeName = trim(strip_tags($_POST['styleTypeName']));
 		$styleTypeName = capitalize($styleTypeName);
-		$styleTypeName = sterilize($styleTypeName,);
 	}
 		
 	if ($action == "add") {
 
 		// Determine the greatest id value that is in the style_types table
-		$query_id_last_num = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."style_types");
-		$id_last_num = mysqli_query($connection,$query_id_last_num) or die (mysqli_error($connection));
-		$row_id_last_num = mysqli_fetch_assoc($id_last_num);
+		$db_conn->orderBy("id", "DESC");
+		$row_id_last_num = $db_conn->getOne($prefix."style_types", "id");
 
 		// ids 1-15 are reserved for system use
 		if ($row_id_last_num['id'] < 16) $id = 16;
@@ -144,9 +142,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Delete any BOS score entries with Mead/Cider id; failsafe
-			$query_mead_cider_present = sprintf("SELECT id FROM %s WHERE styleTypeName = 'Mead/Cider'",$prefix."style_types");
-			$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die (mysqli_error($connection));
-			$row_mead_cider_present = mysqli_fetch_assoc($mead_cider_present);
+			$db_conn->where('styleTypeName', 'Mead/Cider');
+			$row_mead_cider_present = $db_conn->getOne($prefix."style_types", "id");
 
 			$update_table = $prefix."judging_scores_bos";
 			$db_conn->where ('scoreType', $row_mead_cider_present['id']);

@@ -2,49 +2,49 @@
 
 //@single
 if ($bid != "") {
-	$query_judging = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'",$prefix."judging_locations", $bid);
-	$judging = mysqli_query($connection,$query_judging) or die (mysqli_error($connection));
-	$row_judging = mysqli_fetch_assoc($judging);
+	$db_conn->where('id', $bid);
+	$row_judging = $db_conn->getOne($prefix."judging_locations", "judgingLocName");
 }
 
+$params_sql = array();
+
 if ($filter == "judges") {
-	$query_sql = sprintf("SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.brewerJudgeLocation, a.brewerStewardLocation, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLikes, a.brewerJudgeDislikes, a.brewerJudgeMead, a.brewerJudgeCider, b.uid FROM %s a, %s b WHERE b.staff_judge='1' AND a.uid = b.uid", $prefix."brewer", $prefix."staff");
-	if (SINGLE) $query_sql .= sprintf(" AND b.comp_id='%s'",$_SESSION['comp_id']);
+	$query_sql = "SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.brewerJudgeLocation, a.brewerStewardLocation, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLikes, a.brewerJudgeDislikes, a.brewerJudgeMead, a.brewerJudgeCider, b.uid FROM ".$prefix."brewer"." a, ".$prefix."staff"." b WHERE b.staff_judge='1' AND a.uid = b.uid";
+	if (SINGLE) { $query_sql .= " AND b.comp_id=?"; $params_sql[] = $_SESSION['comp_id']; }
 	$query_sql .= " ORDER BY a.brewerLastName,a.brewerFirstName ASC";
 }
 
 elseif ($filter == "stewards") {
-	$query_sql = sprintf("SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLocation, a.brewerStewardLocation, a.brewerJudgeLikes, a.brewerJudgeDislikes, b.uid FROM %s a, %s b WHERE b.staff_steward='1' AND a.uid=b.uid", $prefix."brewer", $prefix."staff");
-	if (SINGLE) $query_sql .= sprintf(" AND b.comp_id='%s'",$_SESSION['comp_id']);
+	$query_sql = "SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLocation, a.brewerStewardLocation, a.brewerJudgeLikes, a.brewerJudgeDislikes, b.uid FROM ".$prefix."brewer"." a, ".$prefix."staff"." b WHERE b.staff_steward='1' AND a.uid=b.uid";
+	if (SINGLE) { $query_sql .= " AND b.comp_id=?"; $params_sql[] = $_SESSION['comp_id']; }
 	$query_sql .= " ORDER BY a.brewerLastName,a.brewerFirstName ASC";
 }
 
 elseif ($filter == "staff") {
-	$query_sql = sprintf("SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLocation, a.brewerStewardLocation, a.brewerStaff, b.uid, b.staff_staff FROM %s a, %s b WHERE a.brewerStaff='Y' AND a.uid=b.uid", $prefix."brewer", $prefix."staff");
-	if (SINGLE) $query_sql .= sprintf(" AND b.comp_id='%s'",$_SESSION['comp_id']);
+	$query_sql = "SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLocation, a.brewerStewardLocation, a.brewerStaff, b.uid, b.staff_staff FROM ".$prefix."brewer"." a, ".$prefix."staff"." b WHERE a.brewerStaff='Y' AND a.uid=b.uid";
+	if (SINGLE) { $query_sql .= " AND b.comp_id=?"; $params_sql[] = $_SESSION['comp_id']; }
 	$query_sql .= " ORDER BY a.brewerLastName,a.brewerFirstName ASC";
 }
 
 //@single
 elseif ($filter == "avail_judges")  {
-	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes, brewerJudgeMead, brewerJudgeCider FROM %s WHERE brewerJudge='Y'", $prefix."brewer");
+	$query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes, brewerJudgeMead, brewerJudgeCider FROM ".$prefix."brewer"." WHERE brewerJudge='Y'";
 	$query_sql .= " ORDER BY brewerLastName,brewerFirstName ASC";
 }
 
 //@single
 elseif ($filter == "avail_stewards") {
-	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM %s WHERE brewerSteward='Y'", $prefix."brewer");
+	$query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM ".$prefix."brewer"." WHERE brewerSteward='Y'";
 	$query_sql .= " ORDER BY brewerLastName,brewerFirstName ASC";
 }
 
 //@single
 else {
-	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerClubs, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerJudgeMead, brewerJudgeCider, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerBreweryName, brewerBreweryInfo FROM %s", $prefix."brewer");
+	$query_sql = "SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerClubs, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerJudgeMead, brewerJudgeCider, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerBreweryName, brewerBreweryInfo FROM ".$prefix."brewer";
 	$query_sql .= " ORDER BY brewerLastName ASC";
 }
 
-$sql = mysqli_query($connection,$query_sql) or die (mysqli_error($connection));
-$row_sql = mysqli_fetch_assoc($sql);
-$num_fields = mysqli_num_fields($sql);
-$totalRows_sql = mysqli_num_rows($sql);
+$rows_sql = (!empty($params_sql)) ? $db_conn->rawQuery($query_sql, $params_sql) : $db_conn->rawQuery($query_sql);
+$row_sql = ($rows_sql && count($rows_sql) > 0) ? $rows_sql[0] : null;
+$totalRows_sql = $db_conn->count;
 ?>

@@ -29,21 +29,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 					$cleaned = strtolower(sterilize($_POST['sbd_judging_no'.$id]));
 
-					$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
-					$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-					$row_entry = mysqli_fetch_assoc($entry);
-					$totalRows_entry = mysqli_num_rows($entry);
-
-					/*
-					if ($totalRows_entry == 0) {
-						// if did not find 5 digit number, try a 6 digit (barcode standard)
-						//$cleaned = sprintf('%06d',$cleaned);
-						$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
-						$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-						$row_entry = mysqli_fetch_assoc($entry);
-						$totalRows_entry = mysqli_num_rows($entry);
-					}
-					*/
+					$db_conn->where("brewJudgingNumber", $cleaned);
+					$row_entry = $db_conn->getOne($brewing_db_table);
+					$totalRows_entry = $db_conn->count;
 
 					// echo $query_entry."<br>";
 					// exit;
@@ -53,21 +41,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						if (isset($_POST['sbd_place'.$id])) $sbd_place = sterilize($_POST['sbd_place'.$id]);
 						else $sbd_place = "";
 
-						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = sterilize($_POST['sbd_comments'.$id]);
+						// Plain strip_tags/trim, no entity encoding - matches process_special_best_info.inc.php's
+						// fix for the same purify()/sterilize()-then-h() double-encoding shape (sbd_comments
+						// is rendered through h() in output/export.output.php).
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = trim(strip_tags($_POST['sbd_comments'.$id]));
 						else $sbd_comments = "";
 
-						$insertSQL = sprintf("INSERT INTO %s (sid, bid, eid, sbd_place, sbd_comments) VALUES (%s, %s, %s, %s, %s)",
-											$special_best_data_db_table,
-											GetSQLValueString(sterilize($_POST['sid'.$id]), "int"),
-											GetSQLValueString($row_entry['brewBrewerID'], "int"),
-											GetSQLValueString($row_entry['id'], "int"),
-											GetSQLValueString($sbd_place, "int"),
-											GetSQLValueString($sbd_comments, "text")
-										   	);
-
-						mysqli_real_escape_string($connection,$insertSQL);
-						$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-						// echo $updateSQL."<br>";
+						$data = array(
+							'sid' => blank_to_null(sterilize($_POST['sid'.$id])),
+							'bid' => blank_to_null($row_entry['brewBrewerID']),
+							'eid' => blank_to_null($row_entry['id']),
+							'sbd_place' => blank_to_null($sbd_place),
+							'sbd_comments' => blank_to_null($sbd_comments)
+						);
+						$result = $db_conn->insert($special_best_data_db_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
 
 						$a[] = 0;
 
@@ -105,21 +96,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				$cleaned = strtolower(sterilize($_POST['sbd_judging_no'.$id]));
 
-				$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
-				$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-				$row_entry = mysqli_fetch_assoc($entry);
-				$totalRows_entry = mysqli_num_rows($entry);
-
-				/*
-				if ($totalRows_entry == 0) {
-					// if did not find 5 digit number, try a 6 digit (barcode standard)
-					//$cleaned = sprintf('%06d',$cleaned);
-					$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
-					$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-					$row_entry = mysqli_fetch_assoc($entry);
-					$totalRows_entry = mysqli_num_rows($entry);
-				}
-				*/
+				$db_conn->where("brewJudgingNumber", $cleaned);
+				$row_entry = $db_conn->getOne($brewing_db_table);
+				$totalRows_entry = $db_conn->count;
 
 				// echo $query_entry."<br>";
 				// echo $_POST['entry_exists'.$id]."<br>";
@@ -131,20 +110,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						if (isset($_POST['sbd_place'.$id])) $sbd_place = sterilize($_POST['sbd_place'.$id]);
 						else $sbd_place = "";
 
-						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = sterilize($_POST['sbd_comments'.$id]);
+						// Plain strip_tags/trim, no entity encoding - matches process_special_best_info.inc.php's
+						// fix for the same purify()/sterilize()-then-h() double-encoding shape (sbd_comments
+						// is rendered through h() in output/export.output.php).
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = trim(strip_tags($_POST['sbd_comments'.$id]));
 						else $sbd_comments = "";
 
-						$updateSQL = sprintf("UPDATE %s SET sid=%s, bid=%s, eid=%s, sbd_place=%s, sbd_comments=%s WHERE id=%s",
-											$special_best_data_db_table,
-											GetSQLValueString(sterilize($_POST['sid'.$id]), "int"),
-											GetSQLValueString($row_entry['brewBrewerID'], "int"),
-											GetSQLValueString($row_entry['id'], "int"),
-											GetSQLValueString($sbd_place, "int"),
-											GetSQLValueString($sbd_comments, "text"),
-											GetSQLValueString($id, "int"));
-
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$data = array(
+							'sid' => blank_to_null(sterilize($_POST['sid'.$id])),
+							'bid' => blank_to_null($row_entry['brewBrewerID']),
+							'eid' => blank_to_null($row_entry['id']),
+							'sbd_place' => blank_to_null($sbd_place),
+							'sbd_comments' => blank_to_null($sbd_comments)
+						);
+						$db_conn->where('id', sterilize($id));
+						$result = $db_conn->update($special_best_data_db_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
 						// echo $updateSQL."<br>";
 
 						$a[] = 0;
@@ -161,20 +145,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						if (isset($_POST['sbd_place'.$id])) $sbd_place = sterilize($_POST['sbd_place'.$id]);
 						else $sbd_place = "";
 
-						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = sterilize($_POST['sbd_comments'.$id]);
+						// Plain strip_tags/trim, no entity encoding - matches process_special_best_info.inc.php's
+						// fix for the same purify()/sterilize()-then-h() double-encoding shape (sbd_comments
+						// is rendered through h() in output/export.output.php).
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = trim(strip_tags($_POST['sbd_comments'.$id]));
 						else $sbd_comments = "";
 
-						$insertSQL = sprintf("INSERT INTO %s (sid, bid, eid, sbd_place, sbd_comments) VALUES (%s, %s, %s, %s, %s)",
-										$special_best_data_db_table,
-										GetSQLValueString(sterilize($_POST['sid'.$id]), "int"),
-										GetSQLValueString($row_entry['brewBrewerID'], "int"),
-										GetSQLValueString($row_entry['id'], "int"),
-										GetSQLValueString($sbd_place, "int"),
-										GetSQLValueString($sbd_comments, "text")
-										);
-
-						mysqli_real_escape_string($connection,$insertSQL);
-						$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+						$data = array(
+							'sid' => blank_to_null(sterilize($_POST['sid'.$id])),
+							'bid' => blank_to_null($row_entry['brewBrewerID']),
+							'eid' => blank_to_null($row_entry['id']),
+							'sbd_place' => blank_to_null($sbd_place),
+							'sbd_comments' => blank_to_null($sbd_comments)
+						);
+						$result = $db_conn->insert($special_best_data_db_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
 						// echo $updateSQL."<br>";
 
 					}

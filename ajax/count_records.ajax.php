@@ -32,35 +32,45 @@ $response = array(
     "message" => ''
 );
 
-if ((isset($_SESSION['session_set_'.$prefix_session])) && ($section != "default")) {
+// $section and its associated columns are restricted to a fixed allow-list matching the
+// values used by this endpoint's real callers (fetchRecordCount() in admin/sidebar.admin.php,
+// index.pub.php, eval/dashboard.eval.php).
+$allowed_sections = array("evaluation", "brewing", "updated-display");
+$allowed_columns = array(
+    "evaluation" => array("evalTable"),
+    "brewing" => array("brewConfirmed", "brewPaid", "brewReceived")
+);
+
+if ((isset($_SESSION['session_set_'.$prefix_session])) && (in_array($section, $allowed_sections))) {
 
     try {
 
-        $db_table = $prefix.$section;
         $do_query = TRUE;
         $no_query_value = "";
-        $query_count = "";
+        $row_count = null;
 
         // For evals only
         if ($section == "evaluation") {
 
-            if ($p1 == "eid") {
-                if ($c1 == "table") $query_count = sprintf("SELECT COUNT(DISTINCT `eid`) as 'count' FROM %s WHERE %s='%s'",$db_table,$p2,$c2);
-                else $query_count = sprintf("SELECT COUNT(DISTINCT `eid`) as 'count' FROM %s",$db_table);
-            }
-            else $query_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$db_table);
+            $db_table = $prefix."evaluation";
 
-            if (($p1 != "default") && ($p1 != "eid") && ($c1 != "default")) {
-                
-                $query_count .= sprintf(" WHERE %s='%s'",$p1,$c1);
-                if (($p2 != "default") && ($c2 != "default")) $query_count .= sprintf(" AND %s='%s'",$p2,$c2);
-                if (($p3 != "default") && ($c3 != "default")) $query_count .= sprintf(" AND %s='%s'",$p3,$c3);
-            
+            if ($p1 == "eid") {
+
+                if (($c1 == "table") && (in_array($p2, $allowed_columns["evaluation"])) && ($c2 != "default")) {
+                    $db_conn->where($p2, $c2);
+                }
+
+                $row_count = $db_conn->getOne($db_table, "COUNT(DISTINCT eid) as 'count'");
+
             }
+
+            else $row_count = $db_conn->getOne($db_table, "COUNT(*) as 'count'");
 
         }
 
         elseif ($section == "brewing") {
+
+            $db_table = $prefix."brewing";
 
             if ($p1 == "total-fees") {
                 $do_query = FALSE;
@@ -74,14 +84,16 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && ($section != "default"
                 $no_query_value = number_format($no_query_value,2);
             }
 
-            else $query_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$db_table);
+            else {
 
-            if (($p1 != "default") && ($c1 != "default")) {
-                
-                $query_count .= sprintf(" WHERE %s='%s'",$p1,$c1);
-                if (($p2 != "default") && ($c2 != "default")) $query_count .= sprintf(" AND %s='%s'",$p2,$c2);
-                if (($p3 != "default") && ($c3 != "default")) $query_count .= sprintf(" AND %s='%s'",$p3,$c3);
-            
+                if ((in_array($p1, $allowed_columns["brewing"])) && ($c1 != "default")) {
+                    $db_conn->where($p1, $c1);
+                    if ((in_array($p2, $allowed_columns["brewing"])) && ($c2 != "default")) $db_conn->where($p2, $c2);
+                    if ((in_array($p3, $allowed_columns["brewing"])) && ($c3 != "default")) $db_conn->where($p3, $c3);
+                }
+
+                $row_count = $db_conn->getOne($db_table, "COUNT(*) as 'count'");
+
             }
 
         }
@@ -90,27 +102,10 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && ($section != "default"
 
             $do_query = FALSE;
             $no_query_value = sprintf("%s %s", $current_date_display_short, $current_time);
-            
-        }
-
-        else {
-
-            $query_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$db_table);
-
-            if (($p1 != "default") && ($c1 != "default")) {
-                
-                $query_count .= sprintf(" WHERE %s='%s'",$p1,$c1);
-                if (($p2 != "default") && ($c2 != "default")) $query_count .= sprintf(" AND %s='%s'",$p2,$c2);
-                if (($p3 != "default") && ($c3 != "default")) $query_count .= sprintf(" AND %s='%s'",$p3,$c3);
-            
-            }
 
         }
-        
-        if (($do_query) && (!empty($query_count))) {
 
-            $count = mysqli_query($connection,$query_count);
-            $row_count = mysqli_fetch_assoc($count);
+        if ($do_query) {
 
             if ($row_count) {
 
@@ -122,7 +117,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && ($section != "default"
 
             else {
 
-                throw new Exception("Query failed: " . $connnection->error);
+                throw new Exception("Query failed: " . $db_conn->getLastError());
 
             }
 
@@ -132,7 +127,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && ($section != "default"
 
             if (empty($no_query_value)) {
 
-                throw new Exception("Fetch failed: " . $connnection->error);
+                throw new Exception("Fetch failed: " . $db_conn->getLastError());
 
             }
 
@@ -141,15 +136,15 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && ($section != "default"
                 $response['success'] = true;
                 $response['count'] = $no_query_value;
                 $response['updated'] = sprintf("%s %s", $current_date_display_short, $current_time);
-                
+
             }
 
         }
-    
+
     } catch (Exception $e) {
-        
+
         $response['message'] = $e->getMessage();
-    
+
     }
 
 }

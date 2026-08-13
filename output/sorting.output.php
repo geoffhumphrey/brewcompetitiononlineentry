@@ -11,9 +11,9 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 $section = "sorting";
 include (DB.'styles.db.php');
 
-do { 
-	$a[] = $row_styles['brewStyleGroup']; 
-} while ($row_styles = mysqli_fetch_assoc($styles));
+foreach ($rows_styles as $row_styles) {
+	$a[] = $row_styles['brewStyleGroup'];
+}
 
 if ($_SESSION['prefsStyleSet'] == "BA") {
 	include (INCLUDES.'ba_constants.inc.php');
@@ -92,7 +92,7 @@ if ($totalRows_entries > 0) {
     </tr>
     </thead>
     <tbody>
-    <?php do { 
+    <?php foreach ($rows_entries as $row_entries) {
 	$info = brewer_info($row_entries['brewBrewerID']);
 	$brewer_info = explode("^",$info);
 	if ($brewer_info[14] == "United States") $phone = format_phone_us($brewer_info[2]); else $phone = $brewer_info[2];
@@ -118,7 +118,7 @@ if ($totalRows_entries > 0) {
         <td><p class="box"></p></td>
     </tr>
 
-   <?php } while ($row_entries = mysqli_fetch_assoc($entries)); ?>
+   <?php } ?>
     </tbody>
     </table>
 <div style="page-break-after:always;"></div>
@@ -154,7 +154,7 @@ if ($totalRows_entries > 0) {
     </tr>
     </thead>
     <tbody>
-    <?php do { 
+    <?php foreach ($rows_entries as $row_entries) {
 	$info = brewer_info($row_entries['brewBrewerID']);
 	$brewer_info = explode("^",$info);
 	?>
@@ -164,7 +164,7 @@ if ($totalRows_entries > 0) {
         <td><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td><p class="box_small">&nbsp;</p></td>
     </tr>
-    <?php } while ($row_entries = mysqli_fetch_assoc($entries)); ?>
+    <?php } ?>
     </tbody>
     </table>
 	<div style="page-break-after:always;"></div>  

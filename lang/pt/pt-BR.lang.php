@@ -951,7 +951,7 @@ $pay_text_029 = "Por favor, vá para a sua lista de amostras para confirmar todo
  * QR Code Check-in
  * ------------------------------------------------------------------------
  */
-if (strpos ($view, "^")!== FALSE) {
+if ($carat_url_var) {
     $qr_text_019 =sprintf ("%06d", $checked_in_numbers [0]);
     if (is_numeric ($checked_in_numbers [1])) $qr_text_020 = sprintf ("%06d", $checked_in_numbers [1]);
     else $qr_text_020 = $checked_in_numbers [1];
@@ -961,11 +961,11 @@ $qr_text_000 = $alert_text_080;
 $qr_text_001 = $alert_text_081;
 
 // Comece traduções aqui
-if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Número de amostra <span class=\"text-danger\">%s</span> é verificado com <span class=\"text-danger\">%s</ span> como seu número de julgamento.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+if ($carat_url_var) $qr_text_002 = sprintf("Número de amostra <span class=\"text-danger\">%s</span> é verificado com <span class=\"text-danger\">%s</ span> como seu número de julgamento.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 $qr_text_003 = "Se este número de avaliação não for <em> </em> correto, <strong> verifique novamente o código e digite novamente o número de avaliação correto.";
-if (strpos ($view, "^")!== FALSE) $qr_text_004 = sprintf ("Número da amostra %s está marcado", $qr_text_019); else $qr_text_004 = "";
-if (strpos ($view, "^")!== FALSE) $qr_text_005 = sprintf ("Número da amostra %s não foi encontrado no banco de dados. Deixe a(s) garrafa(s) de lado e alerte o organizador da competição.", $qr_text_019 ); else $qr_text_005 = "";
-if (strpos ($view, "^")!== FALSE) $qr_text_006 = sprintf ("O número do julgamento que você digitou - %s - já está atribuído ao número de amostra %s.", $qr_text_020, $qr_text_019); else $qr_text_006 = "";
+if ($carat_url_var) $qr_text_004 = sprintf ("Número da amostra %s está marcado", $qr_text_019); else $qr_text_004 = "";
+if ($carat_url_var) $qr_text_005 = sprintf ("Número da amostra %s não foi encontrado no banco de dados. Deixe a(s) garrafa(s) de lado e alerte o organizador da competição.", $qr_text_019 ); else $qr_text_005 = "";
+if ($carat_url_var) $qr_text_006 = sprintf ("O número do julgamento que você digitou - %s - já está atribuído ao número de amostra %s.", $qr_text_020, $qr_text_019); else $qr_text_006 = "";
 $qr_text_007 = "Check-in de amostra por código QR";
 $qr_text_008 = "Para fazer o check-in das amostras por meio do código QR, forneça a senha correta. Você só precisará fornecer a senha uma vez por sessão - certifique-se de manter o aplicativo de verificação de código QR aberto.";
 $qr_text_009 = "Atribuir um número de julgamento e/ou número de caixa à amostra";

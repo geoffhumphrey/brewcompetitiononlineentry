@@ -53,10 +53,23 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				// Verify reCAPTCHA response
 				if ($captcha_type == 1) {
 
-					$response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
+					$recaptcha_data = array(
+						'secret' => $private_captcha_key,
+						'response' => $_POST['g-recaptcha-response']
+					);
+
+					$verify = curl_init();
+					curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+					curl_setopt($verify, CURLOPT_POST, true);
+					curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($recaptcha_data));
+					curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+
+					$response = curl_exec($verify);
+					curl_close($verify);
 					$response_data = json_decode($response);
-					if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
-					
+
+					if ((!empty($response_data)) && ($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
+
 				}
 
 				// Verify hCAPTCHA response
@@ -88,14 +101,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	} // end if ($filter != "admin")
 
-	if (($view == "default") && ($filter != "admin") && (!$captcha_success)) {
+	if (($filter != "admin") && (!$captcha_success)) {
 
 		$no_register = TRUE;
 		$redirect = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
 
-	} // end if (($view == "default") && ($filter != "admin") && (!$captcha_success))
+	} // end if (($filter != "admin") && (!$captcha_success))
 
 	/*
 
@@ -118,10 +131,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		if (strstr($username,'@'))  {
 
 			// Sanity check from AJAX widget
-			$query_userCheck = sprintf("SELECT user_name FROM %s WHERE user_name = '%s'",$prefix."users",$username);
-			$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
-			$row_userCheck = mysqli_fetch_assoc($userCheck);
-			$totalRows_userCheck = mysqli_num_rows($userCheck);
+			$db_conn->where("user_name", $username);
+			$row_userCheck = $db_conn->getOne($prefix."users", "user_name");
+			$totalRows_userCheck = $db_conn->count;
 
 			if ($totalRows_userCheck > 0) {
 
@@ -140,13 +152,21 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$hasher_question = new PasswordHash(8, false);
 				$hash_question = $hasher_question->HashPassword(sterilize($userQuestionAnswer));
 
+				// Only a genuinely authenticated admin session may assign a userLevel other than
+				// the standard public-registration participant level (2); otherwise the client-supplied
+				// value is untrusted and would allow self-registration as an admin/staff account.
+				if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) {
+					$registerUserLevel = sterilize($_POST['userLevel']);
+				}
+				else $registerUserLevel = "2";
+
 				$userAdminObfuscate = 1;
-				if ($_POST['userLevel'] == 0) $userAdminObfuscate = 0;
+				if ($registerUserLevel == 0) $userAdminObfuscate = 0;
 
 				$update_table = $prefix."users";
 				$data = array(
 					'user_name' => $username,
-					'userLevel' => sterilize($_POST['userLevel']),
+					'userLevel' => $registerUserLevel,
 					'password' => $hash,
 					'userQuestion' => sterilize($_POST['userQuestion']),
 					'userQuestionAnswer' => $hash_question,
@@ -161,9 +181,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				}
 
 				// Get the id from the "users" table to insert as the uid in the "brewer" table
-				$query_user= "SELECT * FROM $users_db_table WHERE user_name = '$username'";
-				$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
-				$row_user = mysqli_fetch_assoc($user);
+				$db_conn->where("user_name", $username);
+				$row_user = $db_conn->getOne($users_db_table);
 
 				$update_table = $prefix."brewer";
 				$data = array(
@@ -256,9 +275,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				 * clear out assignments and associate with the newly added staff member.
 				 */
 
-				$query_stray = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE uid='%s'", $prefix."staff", $row_user['id']);
-	 			$stray = mysqli_query($connection,$query_stray) or die (mysqli_error($connection));
-	 			$row_stray = mysqli_fetch_assoc($stray);
+	 			$db_conn->where("uid", $row_user['id']);
+	 			$row_stray = $db_conn->getOne($prefix."staff", "COUNT(*) AS 'count'");
 
 	 			if ($row_stray['count'] == 0) {
 
@@ -322,7 +340,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$to_name = mb_convert_encoding($to_name, "UTF-8");
 					
 					$to_email = mb_convert_encoding($username, "UTF-8");
-					$to_email_formatted .= $to_name." <".$to_email.">";
+					$to_email_formatted = $to_name." <".$to_email.">";
 					
 					$subject = sprintf($_SESSION['contestName'].": %s",$register_text_037);
 					$subject = html_entity_decode($subject);
@@ -348,7 +366,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$message .= sprintf("<tr><td valign='top'><strong>%s (%s):</strong></td><td valign='top'>%s</td></tr>",$label_username,$label_email,$username);
 					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_question,sterilize($_POST['userQuestion']));
 					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_answer,$userQuestionAnswer);
-					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s<br>%s, %s %s</td></tr>",$label_address,$address,$city,sterilize($_POST['brewerState']),sterilize($_POST['brewerZip']));
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s<br>%s, %s %s</td></tr>",$label_address,$address,$city,$state_province,sterilize($_POST['brewerZip']));
 					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_primary,$brewerPhone1);
 					if (!empty($brewerPhone2)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_secondary,$brewerPhone2);
 
@@ -417,9 +435,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					// Redirect to Judge Info section if willing to judge
 					if ($brewerJudge == "Y") {
 
-						$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
-						$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-						$row_brewer = mysqli_fetch_assoc($brewer);
+						$db_conn->where("uid", $row_user['id']);
+						$row_brewer = $db_conn->getOne($brewer_db_table, "id");
 						
 						if ($view == "quick") {
 							$insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";

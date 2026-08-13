@@ -15,6 +15,9 @@
 // sure it's able to be used by any translation file
 $mail_use_smtp = FALSE;
 
+$carat_url_var = FALSE;
+if ((isset($view)) && ($view != "default") && ((strpos($view, "^") !== FALSE) || (strpos($view, "%5E") !== FALSE))) $carat_url_var = TRUE;
+
 if (HOSTED) {
   
   $mail_use_smtp = TRUE;
@@ -51,7 +54,9 @@ if ((isset($_SESSION['prefsLanguage'])) && (!empty($_SESSION['prefsLanguage'])))
 } 
 
 if ((isset($_SESSION['prefsLanguageFolder'])) && (!empty($_SESSION['prefsLanguageFolder']))) {
-  if ($prefsLanguage == "English") $prefsLanguageFolder = "en";
+  // A legacy "English"/"english" prefsLanguage value derives to a "english" folder
+  // upstream, which doesn't exist on disk (the actual folder is "en") - catch it here too.
+  if (strtolower($_SESSION['prefsLanguageFolder']) == "english") $prefsLanguageFolder = "en";
   else $prefsLanguageFolder = $_SESSION['prefsLanguageFolder'];
 }
 

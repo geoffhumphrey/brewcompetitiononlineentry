@@ -16,23 +16,28 @@ else
 $styles_db_table = $prefix."styles"; 
 
 // Perform query in appropriate db table rows
-$query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'",$prefix."brewing",$cat);
-$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
-$row_style_count = mysqli_fetch_assoc($style_count);
+$db_conn->where('brewCategorySort', $cat);
+$db_conn->where('brewPaid', '1');
+$db_conn->where('brewReceived', '1');
+$db_conn->where('brewConfirmed', '1');
+$row_style_count = $db_conn->getOne($prefix."brewing", "COUNT(*) AS 'count'");
 
-$query_style_count_logged = sprintf("SELECT id, brewCategorySort, brewSubCategory FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' ORDER BY brewCategorySort,brewSubCategory,id ASC",$prefix."brewing",$cat);
-$style_count_logged = mysqli_query($connection,$query_style_count_logged) or die (mysqli_error($connection));
-$row_style_count_logged = mysqli_fetch_assoc($style_count_logged);
-$totalRows_style_count_logged = mysqli_num_rows($style_count_logged);
+$db_conn->where('brewCategorySort', $cat);
+$db_conn->where('brewConfirmed', '1');
+$db_conn->orderBy('brewCategorySort', 'ASC');
+$db_conn->orderBy('brewSubCategory', 'ASC');
+$db_conn->orderBy('id', 'ASC');
+$rows_style_count_logged = $db_conn->get($prefix."brewing", null, "id,brewCategorySort,brewSubCategory");
+$totalRows_style_count_logged = $db_conn->count;
+$row_style_count_logged = ($rows_style_count_logged && count($rows_style_count_logged) > 0) ? $rows_style_count_logged[0] : array();
 $row_style_count_logged['count'] = $totalRows_style_count_logged;
 
 /*
 if (HOSTED) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s' UNION ALL SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$styles_db_table,$cat,$prefix."styles",$cat);
 else
 */
-$query_style_type = sprintf("SELECT brewStyle,brewStyleType,brewStyleCategory FROM %s WHERE brewStyleGroup='%s'", $styles_db_table, $cat);
-$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
-$row_style_type = mysqli_fetch_assoc($style_type);
+$db_conn->where('brewStyleGroup', $cat);
+$row_style_type = $db_conn->getOne($styles_db_table, "brewStyle,brewStyleType,brewStyleCategory");
 
 if ($_SESSION['prefsStyleSet'] == "BA") {
 

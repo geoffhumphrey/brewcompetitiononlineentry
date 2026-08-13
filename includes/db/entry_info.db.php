@@ -1,6 +1,5 @@
 <?php
-if (SINGLE) $query_contest_info = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."contest_info", $_SESSION['comp_id']);
-else $query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
-$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
-$row_contest_info = mysqli_fetch_assoc($contest_info);
+if (SINGLE) $db_conn->where('id', $_SESSION['comp_id']);
+else $db_conn->where('id', 1);
+$row_contest_info = $db_conn->getOne($prefix."contest_info");
 ?>

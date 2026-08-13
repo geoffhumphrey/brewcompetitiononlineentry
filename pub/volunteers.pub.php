@@ -35,9 +35,9 @@ if ($registration_open < 2) {
 	$page_info_vol_2 .= sprintf("<p>%s",$volunteers_text_009, build_public_url("contact","default","default","default",$sef,$base_url), $volunteers_text_010);
 	
 	if ($row_judging1) {
-		do {
+		foreach ($rows_judging1 as $row_judging1) {
 			if ($row_judging1['judgingLocType'] == 2) $staff_locations .= sprintf("<li>%s &ndash; %s</li>",$row_judging1['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
-		} while($row_judging1 = mysqli_fetch_assoc($judging1));
+		}
 	}
 		
 

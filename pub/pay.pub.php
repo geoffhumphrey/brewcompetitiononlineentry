@@ -102,7 +102,7 @@ else {
 		if ($total_not_paid == "1") $primary_page_info .= sprintf("%s</strong>:",strtolower($label_entry)); else $primary_page_info .= sprintf("%s</strong>:",strtolower($label_entries));
 		$primary_page_info .= "</small></p>";
 		$primary_page_info .= "<ul class=\"ms-5 list-unstyled\">";
-			do {
+			foreach ($rows_log_confirmed as $row_log_confirmed) {
 				if ($row_log_confirmed['brewPaid'] != "1") {
 					$entry_name = html_entity_decode($row_log_confirmed['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
     				$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
@@ -113,7 +113,7 @@ else {
 					$entries .= sprintf("%06s",$row_log_confirmed['id']).", ";
 					$return_entries .= $row_log_confirmed['id']."-";
 				}
-			} while ($row_log_confirmed = mysqli_fetch_assoc($log_confirmed));
+			}
 		$primary_page_info .= "</ul>";
 	}
 

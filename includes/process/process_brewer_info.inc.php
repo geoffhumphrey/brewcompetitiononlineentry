@@ -40,22 +40,23 @@ $location_pref1 = "";
 $location_pref2 = "";
 $brewerAssignment = "";
 
-if ($go == "admin") $user_id = $filter;
-elseif ($id != "default") $user_id = $id;
+// Ownership check: the "admin" path (editing another participant's judging/steward assignment)
+// requires an actual admin session; otherwise a user may only affect their own assignment records.
+if (($go == "admin") && (isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) $user_id = $filter;
+elseif (($go != "admin") && ($id != "default") && ($id == $_SESSION['user_id'])) $user_id = $id;
 
 // Gather, convert, and/or sanitize info from the form
 if (isset($_POST['brewerJudgeID'])) {
     $brewerJudgeID = $purifier->purify($_POST['brewerJudgeID']);
     $brewerJudgeID = strtoupper($brewerJudgeID);
-    $brewerJudgeID = sterilize($brewerJudgeID);
 }
 
-if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = $_POST['brewerJudgeMead'];
-if (isset($_POST['brewerJudgeCider'])) $brewerJudgeCider = $_POST['brewerJudgeCider'];
-if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
+if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);
+if (isset($_POST['brewerJudgeCider'])) $brewerJudgeCider = sterilize($_POST['brewerJudgeCider']);
+if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = sterilize($_POST['brewerJudgeRank']);
 if (isset($_POST['brewerAHA'])) $brewerAHA = sterilize($_POST['brewerAHA']);
 if (isset($_POST['brewerMHP'])) $brewerMHP = sterilize($_POST['brewerMHP']);
-if (isset($_POST['brewerProAm'])) $brewerProAm = $_POST['brewerProAm'];
+if (isset($_POST['brewerProAm'])) $brewerProAm = sterilize($_POST['brewerProAm']);
 if (isset($_POST['brewerClubs'])) {
     include (DB.'entries.db.php');
     include (INCLUDES.'constants.inc.php');
@@ -77,31 +78,29 @@ if (isset($_POST['brewerDropOff'])) $brewerDropOff = sterilize($_POST['brewerDro
 
 if (isset($_POST['brewerBreweryName'])) {
     $brewerBreweryName = $purifier->purify($_POST['brewerBreweryName']);
-    $brewerBreweryName = sterilize($brewerBreweryName);
 }
 
 if (isset($_POST['brewerBreweryTTB'])) {
     $brewerBreweryTTB = $purifier->purify($_POST['brewerBreweryTTB']);
     $brewerBreweryTTB = strtoupper($brewerBreweryTTB);
-    $brewerBreweryInfo['TTB'] = sterilize($brewerBreweryTTB);
+    $brewerBreweryInfo['TTB'] = $brewerBreweryTTB;
 }
 
 if (isset($_POST['brewerBreweryProd'])) {
     $brewerBreweryInfo['Production'] = sterilize($_POST['brewerBreweryProd'])." ".sterilize($_POST['brewerBreweryProdMeas']);
 }
 
-if (isset($_POST['brewerJudge'])) $brewerJudge = $_POST['brewerJudge'];
-if (isset($_POST['brewerSteward'])) $brewerSteward = $_POST['brewerSteward'];
+if (isset($_POST['brewerJudge'])) $brewerJudge = sterilize($_POST['brewerJudge']);
+if (isset($_POST['brewerSteward'])) $brewerSteward = sterilize($_POST['brewerSteward']);
 if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) {
     $brewerJudge = "N";
     $brewerSteward = "N";
 }
 
-if (isset($_POST['brewerStaff'])) $brewerStaff = $_POST['brewerStaff'];
-if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = $_POST['brewerJudgeExp'];
+if (isset($_POST['brewerStaff'])) $brewerStaff = sterilize($_POST['brewerStaff']);
+if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = sterilize($_POST['brewerJudgeExp']);
 if (isset($_POST['brewerJudgeNotes'])) {
     $brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
-    $brewerJudgeNotes = sterilize($brewerJudgeNotes);
 }
 
 if ((isset($_POST['brewerAssignment'])) && (!empty($_POST['brewerAssignment']))) {
@@ -109,8 +108,7 @@ if ((isset($_POST['brewerAssignment'])) && (!empty($_POST['brewerAssignment'])))
     $aff = $_POST['brewerAssignment'];
     $affiliated_cleaned = array();
     foreach ($aff as $value) {
-        $value = $purifier->purify($value);
-        $value = sterilize($value);
+        $value = $purifier->purify(sterilize($value));
         $affiliated_cleaned[] = $value;
     }
 
@@ -130,9 +128,8 @@ if ((isset($_POST['brewerAssignmentOther'])) && (!empty($_POST['brewerAssignment
     $affilliated_other_arr = explode(",",$affilliated_other_arr);
     $affilliated_other = array();
 
-    foreach ($affilliated_other_arr as $value) {  
-        $value = $purifier->purify($value);
-        $value = sterilize($value);
+    foreach ($affilliated_other_arr as $value) {
+        $value = $purifier->purify(sterilize($value));
         $value = strtolower($value);
         if (!in_array($value,$all_orgs)) $affilliated_other[] = ucwords($value);
     }
@@ -425,17 +422,17 @@ if (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs)) {
 }
 
 else {
-    $first_name = sterilize($fname);
-    $last_name = sterilize($lname);
+    $first_name = $fname;
+    $last_name = $lname;
 }
 
-$address = sterilize($purifier->purify($_POST['brewerAddress']));
-$city = sterilize($purifier->purify($_POST['brewerCity']));
+$address = $purifier->purify($_POST['brewerAddress']);
+$city = $purifier->purify($_POST['brewerCity']);
 
 if ((isset($_POST['brewerStateUS'])) && (!empty($_POST['brewerStateUS']))) $state_province = $_POST['brewerStateUS'];
 elseif ((isset($_POST['brewerStateCA'])) && (!empty($_POST['brewerStateCA']))) $state_province = $_POST['brewerStateCA'];
 elseif ((isset($_POST['brewerStateAUS'])) && (!empty($_POST['brewerStateAUS']))) $state_province = $_POST['brewerStateAUS'];
-elseif ((isset($_POST['brewerStateNon'])) && (!empty($_POST['brewerStateNon']))) $state_province = $purifier->purify($_POST['brewerStateNon']);
+elseif ((isset($_POST['brewerStateNon'])) && (!empty($_POST['brewerStateNon']))) $state_province = $_POST['brewerStateNon'];
 else $state_province = "";
 
 if (strlen($state_province) <= 2) $state_province = strtoupper($state_province);
@@ -446,13 +443,11 @@ if ($view == "quick") {
 
     $locations = array();
 
-    $query_j_locs = sprintf("SELECT id FROM %s", $prefix."judging_locations");
-    $j_locs = mysqli_query($connection,$query_j_locs) or die (mysqli_error($connection));
-    $row_j_locs = mysqli_fetch_assoc($j_locs);
-    
-    do {
+    $rows_j_locs = $db_conn->get($prefix."judging_locations", null, "id");
+
+    foreach ($rows_j_locs as $row_j_locs) {
         $locations[] = "Y-".$row_j_locs['id'];
-    } while ($row_j_locs = mysqli_fetch_assoc($j_locs));
+    }
 
     $location_pref1 = sterilize(implode(",",$locations));
     $location_pref2 = $location_pref1;

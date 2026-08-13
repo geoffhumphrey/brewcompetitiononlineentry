@@ -30,7 +30,7 @@ if ($_SESSION['prefsProEdition'] == 0) { ?>
     <div id="brewerClubsOther" class="mb-3 row">
         <label for="brewerClubsOther" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_club_enter; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" id="club-freeform-entry" name="brewerClubsOther" type="text" value="<?php if (($action == "edit") && ($club_other)) echo $row_brewer['brewerClubs']; ?>" placeholder="" pattern="[^%&\x22\x27]+">
+            <input class="form-control" id="club-freeform-entry" name="brewerClubsOther" type="text" value="<?php if (($action == "edit") && ($club_other)) echo h(html_entity_decode($row_brewer['brewerClubs'], ENT_QUOTES, 'UTF-8')); ?>" placeholder="" pattern="[^%&\x22\x27]+">
             <div class="help-block">
                 <p><?php echo $brewer_text_046; ?></p>
             </div>
@@ -96,11 +96,11 @@ if ($_SESSION['prefsProEdition'] == 0) { ?>
         <span class="help-block mt-1"><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_051; else echo $brewer_text_055; ?></span>
         </div>
     </div>
-    <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
+    <input name="allOrgs" type="hidden" value="<?php echo h(html_entity_decode($org_array, ENT_QUOTES, 'UTF-8')); ?>">
     <div id="brewerAssignmentOther" class="mb-3 row">
         <label for="brewerAssignmentOther" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $participant_orgs_label." &ndash; ".$label_other; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%\x22]+">
+            <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo h(html_entity_decode(str_replace(",",", ",$org_other), ENT_QUOTES, 'UTF-8')); ?>" placeholder="" pattern="[^%\x22]+">
             <div class="help-block mt-1">
                 <p><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_052; else echo $brewer_text_054; ?></p>
             </div>

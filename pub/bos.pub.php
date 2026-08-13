@@ -21,7 +21,7 @@ $display_bos_style_type = FALSE;
 require(DB.'winners.db.php');
 
 	// Display BOS winners for each applicable style type
-	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
+	foreach ($rows_style_types as $row_style_types) { $a[] = $row_style_types['id']; }
 
 		sort($a);
 
@@ -49,7 +49,7 @@ require(DB.'winners.db.php');
 				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th>%s</th>",$label_club);
 				$table_head1 .= "</tr>";
 
-				do {
+				foreach ($rows_bos as $row_bos) {
 
 					$entry_name = html_entity_decode($row_bos['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
             		$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
@@ -71,20 +71,20 @@ require(DB.'winners.db.php');
 					$table_body1 .= "</td>";
 
 					$table_body1 .= "<td>";
-					if ($_SESSION['prefsStyleSet'] == "BA") $table_body1 .= $row_bos['brewStyle'];
-					elseif ($_SESSION['prefsStyleSet'] == "AABC") $table_body1 .= ltrim($row_bos['brewCategory'],"0").".".ltrim($row_bos['brewSubCategory'],"0").": ".$row_bos['brewStyle'];
-					else $table_body1 .= $row_bos['brewCategory'].$row_bos['brewSubCategory'].": ".$row_bos['brewStyle'];
+					if ($_SESSION['prefsStyleSet'] == "BA") $table_body1 .= h($row_bos['brewStyle']);
+					elseif ($_SESSION['prefsStyleSet'] == "AABC") $table_body1 .= ltrim(h($row_bos['brewCategory']),"0").".".ltrim(h($row_bos['brewSubCategory']),"0").": ".h($row_bos['brewStyle']);
+					else $table_body1 .= h($row_bos['brewCategory']).h($row_bos['brewSubCategory']).": ".h($row_bos['brewStyle']);
 					$table_body1 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {
 						$table_body1 .= "<td width=\"20%\">";
-						$table_body1 .= $row_bos['brewerClubs'];
+						$table_body1 .= h($row_bos['brewerClubs']);
 						$table_body1 .= "</td>";
 					}
 
 					$table_body1 .= "</tr>";
 
-				} while ($row_bos = mysqli_fetch_assoc($bos));
+				}
 
 				$random = "";
 				$random = random_generator(7,2);
@@ -131,7 +131,7 @@ require(DB.'winners.db.php');
 }
 // Special/Custom "Best of" Display
 if ($totalRows_sbi > 0) {
-	do {
+	foreach ($rows_sbi as $row_sbi) {
 		include (DB.'output_results_download_sbd.db.php');
 			
 			if ($totalRows_sbd > 0) {
@@ -158,7 +158,7 @@ if ($totalRows_sbi > 0) {
 				$table_head2 .= "</tr>";
 
 				// Build table body
-				do {
+				foreach ($rows_sbd as $row_sbd) {
 					//$brewer_info = explode("^",brewer_info($row_sbd['bid']));
 					//$entry_info = explode("^",entry_info($row_sbd['eid']));
 					//$style = $entry_info['5'].$entry_info['2'];
@@ -185,21 +185,21 @@ if ($totalRows_sbi > 0) {
 					$table_body2 .= "</td>";
 
 					$table_body2 .= "<td>";
-					if ($_SESSION['prefsStyleSet'] == "BA") $table_body2 .= $row_sbd['brewStyle'];
-					elseif ($_SESSION['prefsStyleSet'] == "AABC") $table_body2 .= ltrim($row_sbd['brewCategory'],"0").".".ltrim($row_sbd['brewSubCategory'],"0").": ".$row_sbd['brewStyle'];
-					else $table_body2 .= $row_sbd['brewCategory'].$row_sbd['brewSubCategory'].": ".$row_sbd['brewStyle'];
+					if ($_SESSION['prefsStyleSet'] == "BA") $table_body2 .= h($row_sbd['brewStyle']);
+					elseif ($_SESSION['prefsStyleSet'] == "AABC") $table_body2 .= ltrim(h($row_sbd['brewCategory']),"0").".".ltrim(h($row_sbd['brewSubCategory']),"0").": ".h($row_sbd['brewStyle']);
+					else $table_body2 .= h($row_sbd['brewCategory']).h($row_sbd['brewSubCategory']).": ".h($row_sbd['brewStyle']);
 					$table_body2 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {
 						$table_body2 .= "<td width=\"25%\">";
-						$table_body2 .= $row_sbd['brewerClubs'];
+						$table_body2 .= h($row_sbd['brewerClubs']);
 						$table_body2 .= "</td>";
 					}
 
 					$table_body2 .= "</tr>";
 
 
-				} while ($row_sbd = mysqli_fetch_assoc($sbd));
+				}
 
 				$random1 = "";
 				$random1 .= random_generator(7,2);
@@ -242,7 +242,7 @@ if ($totalRows_sbi > 0) {
 </table>
 </div>
 <?php }
-	} while ($row_sbi = mysqli_fetch_assoc($sbi));
+	}
 }
 ?>
 <!-- Public Page Rebuild completed 08.26.15 -->

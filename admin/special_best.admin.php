@@ -14,7 +14,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 }
 
 ?>
-<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Custom Category"; elseif ($action == "edit") echo ": Edit a Custom Category"; else echo " Custom Categories"; ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add a Custom Category"; elseif ($action == "edit") echo ": Edit a Custom Category"; else echo " Custom Categories"; ?></p>
 <?php if ($action == "default") { ?>
     <p>Custom categories are useful if your competition features unique &ldquo;best of show&rdquo; categories, such as Pro-Am opportunities, Stewards&rsquo; Choice, Best Name, etc.</p>
 <?php } ?>
@@ -36,12 +36,20 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 			<?php } ?>
         </ul>
     </div><!-- ./button group -->
-
 	<?php if ($action == "default") { ?>
 	<div class="btn-group" role="group" aria-label="add-custom-winning">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Custom Category</a>
     </div><!-- ./button group -->
 	<?php } ?>
+	<div class="btn-group" role="group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="fa fa-plus-circle"></span> Add/Edit Entries For...
+        <span class="caret"></span>
+        </button>
+		<ul class="dropdown-menu" aria-labelledby="scoresMenu2">
+			<?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?>
+		</ul>
+	</div><!-- ./button group -->
 </div>
 <?php if (($totalRows_sbi > 0) && ($action == "default")) { ?>
     <script type="text/javascript" language="javascript">
@@ -77,27 +85,27 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
      </tr>
      </thead>
      <tbody>
-     <?php do {
+     <?php foreach ($rows_sbi as $row_sbi) {
 		$sbd_count = sbd_count($row_sbi['id']);
 	 ?>
      <tr>
-      <td width="20%"><?php echo $row_sbi['sbi_name']; ?></td>
-      <td><?php echo $row_sbi['sbi_description']; ?></td>
+      <td width="20%"><?php echo h($row_sbi['sbi_name']); ?></td>
+      <td><?php echo h($row_sbi['sbi_description']); ?></td>
       <td><?php echo $row_sbi['sbi_places']; ?></td>
       <td><?php if ($row_sbi['sbi_display_places'] == 1) echo "<span class=\"fa fa-lg fa-check text-success\"></span>"; else echo "<span class=\"fa fa-lg fa-times text-danger\"></span>" ?></td>
       <td><?php echo $row_sbi['sbi_rank']; ?></td>
       <td>
-      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-pencil"></span></a>
-	  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sbi['sbi_name']; ?>."  data-confirm="Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-lg fa-trash-o"></span></a>
+      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo h($row_sbi['sbi_name']); ?>"><span class="fa fa-lg fa-pencil"></span></a>
+	  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo h($row_sbi['sbi_name']); ?>."  data-confirm="Are you sure you want to delete <?php echo h($row_sbi['sbi_name']); ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-lg fa-trash-o"></span></a>
 	  <?php if ($sbd_count > 0) { ?>
-	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-pencil-square-o"></span></a>
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit winners for <?php echo h($row_sbi['sbi_name']); ?>"><span class="fa fa-lg fa-pencil-square-o"></span></a>
 	  <?php } else { ?>
-	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-plus-circle-sign"></span></a>
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Enter winners for <?php echo h($row_sbi['sbi_name']); ?>"><span class="fa fa-lg fa-plus-circle-sign"></span></a>
 	  <?php } ?>
 
       </td>
      </tr>
-    <?php } while($row_sbi = mysqli_fetch_assoc($sbi)) ?>
+    <?php } ?>
      </tbody>
     </table>
 <?php } if (($totalRows_sbi == 0) && ($action == "default")) echo "<p>No custom categories were found in the database.</p>"; ?>
@@ -109,7 +117,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="sbi_name" name="sbi_name" type="text" value="<?php if ($action == "edit") echo $row_sbi['sbi_name']; ?>" placeholder="Pro-Am with XXX Brewery, People's Choice, etc." data-error="The the custom category's name is required." autofocus required>
+			<input class="form-control" id="sbi_name" name="sbi_name" type="text" value="<?php if ($action == "edit") echo h($row_sbi['sbi_name']); ?>" placeholder="Pro-Am with XXX Brewery, People's Choice, etc." data-error="The the custom category's name is required." autofocus required>
 			<span class="input-group-addon" id="sbi_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<div class="help-block with-errors"></div>
@@ -133,7 +141,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 	<label for="sbi_description" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
     <div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-		<textarea class="form-control" name="sbi_description" rows="6"><?php if ($action == "edit") echo $row_sbi['sbi_description']; ?></textarea>
+		<textarea class="form-control" name="sbi_description" rows="6"><?php if ($action == "edit") echo h($row_sbi['sbi_description']); ?></textarea>
 	 </div>
 </div><!-- ./Form Group -->
 

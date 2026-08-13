@@ -11,34 +11,30 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$error_output = array();
 	$_SESSION['error_output'] = "";
 
-	$query_check_received = sprintf("SELECT id,brewCategorySort,brewSubCategory FROM %s WHERE brewReceived='1'", $prefix."brewing");
-	$check_received = mysqli_query($connection,$query_check_received) or die (mysqli_error($connection));
-	$row_check_received = mysqli_fetch_assoc($check_received);
-	$totalRows_check_received = mysqli_num_rows($check_received);
+	$db_conn->where('brewReceived', '1');
+	$rows_check_received = $db_conn->get($prefix."brewing", null, "id,brewCategorySort,brewSubCategory");
+	$totalRows_check_received = $db_conn->count;
 
-	$query_check_flights = sprintf("SELECT flightTable,flightEntryID FROM %s", $prefix."judging_flights");
-	$check_flights = mysqli_query($connection,$query_check_flights) or die (mysqli_error($connection));
-	$row_check_flights = mysqli_fetch_assoc($check_flights);
-	$totalRows_check_flights = mysqli_num_rows($check_flights);
+	$rows_check_flights = $db_conn->get($prefix."judging_flights", null, "flightTable,flightEntryID");
+	$totalRows_check_flights = $db_conn->count;
 
-	$query_check_empty = sprintf("SELECT * FROM %s WHERE flightTable IS NULL", $prefix."judging_flights");
-	$check_empty = mysqli_query($connection,$query_check_empty) or die (mysqli_error($connection));
-	$row_check_empty = mysqli_fetch_assoc($check_empty);
-	$totalRows_check_empty = mysqli_num_rows($check_empty);
+	$db_conn->where('flightTable', NULL, 'IS');
+	$rows_check_empty = $db_conn->get($prefix."judging_flights");
+	$totalRows_check_empty = $db_conn->count;
 
 	if ($totalRows_check_empty > 0) {
-		do { 
-			$empty_array[] = $row_check_empty['flightEntryID']; 
-		} while ($row_check_empty = mysqli_fetch_assoc($check_empty));
+		foreach ($rows_check_empty as $row_check_empty) {
+			$empty_array[] = $row_check_empty['flightEntryID'];
+		}
 	}
 
 	// Put all of the flightEntryIDs into an array
-	do { 
-		$flight_array[] = $row_check_flights['flightEntryID']; 
-	} while ($row_check_flights = mysqli_fetch_assoc($check_flights));
+	foreach ($rows_check_flights as $row_check_flights) {
+		$flight_array[] = $row_check_flights['flightEntryID'];
+	}
 
-	do {
-		
+	foreach ($rows_check_received as $row_check_received) {
+
 		if ($totalRows_check_empty > 0) {
 
 			if (in_array($row_check_received['id'],$empty_array)) {
@@ -52,15 +48,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
-				$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
-				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-				$row_style = mysqli_fetch_assoc($style);
+				$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
+				$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']));
 
 				// Then, get the id of the user defined judging table
-				$query_table = sprintf("SELECT id FROM %s WHERE FIND_IN_SET('%s',tableStyles) > 0",$judging_tables_db_table,$row_style['id']);
-				$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
-				$row_table = mysqli_fetch_assoc($table);
-				$totalRows_table = mysqli_num_rows($table);
+				$query_table = "SELECT id FROM ".$judging_tables_db_table." WHERE FIND_IN_SET(?,tableStyles) > 0";
+				$row_table = $db_conn->rawQueryOne($query_table, array($row_style['id']));
+				$totalRows_table = $db_conn->count;
 				//echo $query_table."<br>";
 
 				if ($totalRows_table > 0) {
@@ -97,15 +91,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			else $chosen_style_set = $_SESSION['prefsStyleSet'];
 			
-			$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
-			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-			$row_style = mysqli_fetch_assoc($style);
+			$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
+			$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']));
 
 			// Then, get the id of the user defined judging table
-			$query_table = sprintf("SELECT id FROM %s WHERE FIND_IN_SET('%s',tableStyles) > 0",$judging_tables_db_table,$row_style['id']);
-			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
-			$row_table = mysqli_fetch_assoc($table);
-			$totalRows_table = mysqli_num_rows($table);
+			$query_table = "SELECT id FROM ".$judging_tables_db_table." WHERE FIND_IN_SET(?,tableStyles) > 0";
+			$row_table = $db_conn->rawQueryOne($query_table, array($row_style['id']));
+			$totalRows_table = $db_conn->count;
 
 			if ($totalRows_table > 0) {
 				
@@ -128,7 +120,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		} // end if (!in_array($row_check_received['id'],$flight_array))
 
-	} while ($row_check_received = mysqli_fetch_assoc($check_received));
+	}
 
 	if ($go == "judging_tables") {
 		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=4";

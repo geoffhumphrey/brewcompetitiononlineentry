@@ -4,6 +4,10 @@
 
 function bjcp_map_2008_2015($style, $method, $prefix, $id) {
 
+	// $id is always a brewing-table auto-increment primary key; cast to int
+	// so it can be safely spliced into the UPDATE strings built below.
+	$id = (int) $id;
+
 	$return = "";
 
 	switch($style) {
@@ -535,6 +539,10 @@ function bjcp_map_2008_2015($style, $method, $prefix, $id) {
 
 function bjcp_map_2015_2021($style, $method, $prefix, $id) {
 
+    // $id is always a brewing-table auto-increment primary key; cast to int
+    // so it can be safely spliced into the UPDATE strings built below.
+    $id = (int) $id;
+
     $return = "";
 
     switch($style) {
@@ -685,6 +693,10 @@ function bjcp_map_2021_2025($style, $method, $prefix, $id) {
 
 	// January 15, 2025 update was cider only.
 
+	// $id is always a brewing-table auto-increment primary key; cast to int
+	// so it can be safely spliced into the UPDATE strings built below.
+	$id = (int) $id;
+
     $return = "";
 
     switch($style) {
@@ -759,6 +771,10 @@ function bjcp_map_2021_2025($style, $method, $prefix, $id) {
 function aabc_map_2022_2025($style, $method, $prefix, $id) {
 
 	// July 31, 2025 update was cider only.
+
+	// $id is always a brewing-table auto-increment primary key; cast to int
+	// so it can be safely spliced into the UPDATE strings built below.
+	$id = (int) $id;
 
     $return = "";
 

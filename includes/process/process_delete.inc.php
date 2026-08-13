@@ -7,9 +7,8 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
-	$query_user = sprintf("SELECT id,userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
-	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
-	$row_user = mysqli_fetch_assoc($user);
+	$db_conn->where('user_name', $_SESSION['loginUsername']);
+	$row_user = $db_conn->getOne($users_db_table, "id,userLevel");
 
 	$admin_user = FALSE;
 	$admin_superuser = FALSE;
@@ -28,7 +27,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if (($admin_user) && ($go == "image")) {
 		
 		$upload_dir = (USER_IMAGES);
-		unlink($upload_dir.$filter);
+		unlink($upload_dir.basename($filter));
 		if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload&action=html&msg=31";
 		else $deleteGoTo = $base_url."index.php?section=admin&go=upload&msg=31";
 		
@@ -40,7 +39,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	elseif (($admin_user) && ($go == "doc")) {
 		
 		$upload_dir = (USER_DOCS);
-		unlink($upload_dir.$filter);
+		unlink($upload_dir.basename($filter));
 		if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=html&msg=31";
 		else $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&msg=31";
 		
@@ -73,16 +72,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$errors = TRUE;
 		}
 
-		$query_delete_assign = sprintf("SELECT id FROM %s WHERE sid='%s'", $special_best_data_db_table, $id);
-		$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
-		$row_delete_assign = mysqli_fetch_assoc($delete_assign);
-		$totalRows_delete_assign = mysqli_num_rows($delete_assign);
+		$db_conn->where('sid', $id);
+		$rows_delete_assign = $db_conn->get($special_best_data_db_table, null, "id");
+		$totalRows_delete_assign = $db_conn->count;
 
 		if ($totalRows_delete_assign > 0) {
-			do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
 
-			foreach ($z as $aid) {
+			foreach ($rows_delete_assign as $row_delete_assign) {
 
+				$aid = $row_delete_assign['id'];
+
+				// Note: the delete below is redundant with a second delete of the same row that
+				// existed in the original code (a duplicate DELETE on the same table/id) — preserved
+				// as a harmless no-op rather than removed, since only the query parameterization changed.
 				$update_table = $special_best_data_db_table;
 				$db_conn->where ('id', $aid);
 				$result = $db_conn->delete($update_table);
@@ -91,10 +93,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$errors = TRUE;
 				}
 
-
-				$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $special_best_data_db_table, $aid);
-				mysqli_real_escape_string($connection,$deleteSQL);
-				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+				$db_conn->where('id', $aid);
+				$db_conn->delete($special_best_data_db_table);
 			}
 		}
 
@@ -103,14 +103,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	elseif (($admin_user) && ($go == "judging")) {
 
 		// remove relational location ids from affected rows in brewer's table
-		$query_loc = sprintf("SELECT id, brewerJudgeLocation, brewerStewardLocation from %s", $brewer_db_table);
-		$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
-		$row_loc = mysqli_fetch_assoc($loc);
-		$totalRows_loc = mysqli_num_rows($loc);
+		$rows_loc = $db_conn->get($brewer_db_table, null, "id, brewerJudgeLocation, brewerStewardLocation");
+		$totalRows_loc = $db_conn->count;
 
 		if ($totalRows_loc > 0) {
 
-			do  {
+			foreach ($rows_loc as $row_loc) {
 
 				if ($row_loc['brewerJudgeLocation'] != "") {
 
@@ -174,7 +172,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				}
 
-			} while ($row_loc = mysqli_fetch_assoc($loc));
+			}
 
 		}
 
@@ -208,11 +206,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			$query_entries = sprintf("SELECT id from $brewing_db_table WHERE brewBrewerID='%s'",$id);
-			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-			$row_entries = mysqli_fetch_assoc($entries);
+			$db_conn->where('brewBrewerID', $id);
+			$rows_entries = $db_conn->get($brewing_db_table, null, "id");
 
-			do { $a[] = $row_entries['id']; } while ($row_entries = mysqli_fetch_assoc($entries));
+			$a = array();
+			foreach ($rows_entries as $row_entries) { $a[] = $row_entries['id']; }
 
 				sort($a);
 
@@ -245,11 +243,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				}
 
 			// Clear any Judging Assignments
-			$query_judge_assign = sprintf("SELECT id from $judging_assignments_db_table WHERE bid='%s'",$id);
-			$judge_assign = mysqli_query($connection,$query_judge_assign) or die (mysqli_error($connection));
-			$row_judge_assign = mysqli_fetch_assoc($judge_assign);
+			$db_conn->where('bid', $id);
+			$rows_judge_assign = $db_conn->get($judging_assignments_db_table, null, "id");
 
-			do { $b[] = $row_judge_assign['id']; } while ($row_judge_assign = mysqli_fetch_assoc($judge_assign));
+			$b = array();
+			foreach ($rows_judge_assign as $row_judge_assign) { $b[] = $row_judge_assign['id']; }
 
 				sort($b);
 
@@ -266,11 +264,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				}
 
 			// Clear any Staff Assignments
-			$query_staff_assign = sprintf("SELECT id from %s WHERE uid='%s'",$prefix."staff",$id);
-			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
-			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
+			$db_conn->where('uid', $id);
+			$rows_staff_assign = $db_conn->get($prefix."staff", null, "id");
 
-			do { $c[] = $row_staff_assign['id']; } while ($row_staff_assign = mysqli_fetch_assoc($staff_assign));
+			$c = array();
+			foreach ($rows_staff_assign as $row_staff_assign) { $c[] = $row_staff_assign['id']; }
 
 				sort($c);
 
@@ -310,20 +308,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	elseif (($admin_user) && ($go == "entries")) {
 
-		$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE id='%s'", $id);
-		$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
-		$row_brews = mysqli_fetch_assoc($brews);
+		$db_conn->where('id', $id);
+		$row_brews = $db_conn->getOne($brewing_db_table, "id,brewStyle,brewCategory,brewCategorySort,brewSubCategory");
 
 		// Get the entry's style ID
 		// Determine if the style chosen is a cider - if so, run a different query
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 			$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
-			if ($first_character == "C") $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
-			else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
+			$style_version = ($first_character == "C") ? 'BJCP2025' : 'BJCP2021';
 		}
-		else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
-		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-		$row_style_name = mysqli_fetch_assoc($style_name);
+		else $style_version = $_SESSION['prefsStyleSet'];
+
+		$query_style_name = "SELECT id FROM ".$prefix."styles WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
+		$row_style_name = $db_conn->rawQueryOne($query_style_name, array($style_version, $row_brews['brewCategorySort'], $row_brews['brewSubCategory']));
 
 		table_limit($row_style_name['id'],1);
 
@@ -335,10 +332,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$errors = TRUE;
 		}
 
-		$query_delete_entry = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", $id);
-		$delete_entry = mysqli_query($connection,$query_delete_entry) or die (mysqli_error($connection));
-		$row_delete_entry = mysqli_fetch_assoc($delete_entry);
-		$totalRows_delete_entry = mysqli_num_rows($delete_entry);
+		$db_conn->where('eid', $id);
+		$row_delete_entry = $db_conn->getOne($judging_scores_db_table, "id");
+		$totalRows_delete_entry = $db_conn->count;
 
 		if ($totalRows_delete_entry > 0) {
 
@@ -356,10 +352,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	elseif (($admin_user) && ($go == "judging_tables")) {
 
-		$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
-		$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
-		$row_delete_assign = mysqli_fetch_assoc($delete_assign);
-		$totalRows_delete_assign = mysqli_num_rows($delete_assign);
+		$db_conn->where('scoreTable', $id);
+		$rows_delete_assign = $db_conn->get($judging_scores_db_table, null, "id");
+		$totalRows_delete_assign = $db_conn->count;
 
 		$a = array();
 		$b = array();
@@ -367,8 +362,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$c = array();
 
 		if ($totalRows_delete_assign > 0) {
-			
-			do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
+
+			foreach ($rows_delete_assign as $row_delete_assign) { $z[] = $row_delete_assign['id']; }
 
 			foreach ($z as $aid) {
 
@@ -382,11 +377,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			}
 
-			$query_delete_scores = sprintf("SELECT id,eid FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
-			$delete_scores = mysqli_query($connection,$query_delete_scores) or die (mysqli_error($connection));
-			$row_delete_scores = mysqli_fetch_assoc($delete_scores);
+			$db_conn->where('scoreTable', $id);
+			$rows_delete_scores = $db_conn->get($judging_scores_db_table, null, "id,eid");
 
-			do { $a[] = $row_delete_scores['id']; $c[] = $row_delete_scores['eid']; } while ($row_delete_scores = mysqli_fetch_assoc($delete_scores));
+			foreach ($rows_delete_scores as $row_delete_scores) { $a[] = $row_delete_scores['id']; $c[] = $row_delete_scores['eid']; }
 
 			foreach ($a as $sid) {
 
@@ -402,14 +396,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		$query_delete_flights = sprintf("SELECT id,flightTable FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
-		$delete_flights = mysqli_query($connection,$query_delete_flights) or die (mysqli_error($connection));
-		$row_delete_flights = mysqli_fetch_assoc($delete_flights);
-		$totalRows_delete_flights = mysqli_num_rows($delete_flights);
+		$db_conn->where('flightTable', $id);
+		$rows_delete_flights = $db_conn->get($judging_flights_db_table, null, "id,flightTable");
+		$totalRows_delete_flights = $db_conn->count;
 
 		if ($totalRows_delete_flights > 0) {
-			
-			do { $b[] = $row_delete_flights['id']; } while ($row_delete_flights = mysqli_fetch_assoc($delete_flights));
+
+			foreach ($rows_delete_flights as $row_delete_flights) { $b[] = $row_delete_flights['id']; }
 
 			foreach ($b as $fid) {
 
@@ -426,10 +419,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($c != "") {
 
 				foreach ($c as $eid) {
-					
-					$query_delete_bos = sprintf("SELECT id,eid FROM $judging_scores_bos_db_table WHERE eid='%s'", $eid);
-					$delete_bos = mysqli_query($connection,$query_delete_bos) or die (mysqli_error($connection));
-					$row_delete_bos = mysqli_fetch_assoc($delete_bos);
+
+					$db_conn->where('eid', $eid);
+					$row_delete_bos = $db_conn->getOne($judging_scores_bos_db_table, "id,eid");
 
 					if ($eid == $row_delete_bos['eid']) {
 
@@ -441,9 +433,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 							$errors = TRUE;
 						}
 
-						$deleteSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $row_delete_bos['id']);
-						mysqli_real_escape_string($connection,$deleteSQL);
-						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+						// Note: redundant duplicate delete of the same row, preserved as a harmless
+						// no-op — pre-existing behavior, not changed by this parameterization pass.
+						$db_conn->where('id', $row_delete_bos['id']);
+						$db_conn->delete($judging_scores_bos_db_table);
 					}
 
 				}
@@ -514,19 +507,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$entry_allow_delete = FALSE;
 
 			if (($admin_user) || ($admin_superuser)) {
-				
-				$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_user['id'], $id);
-				$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
-				$row_brews = mysqli_fetch_assoc($brews);
+
+				// Note: the original query passed $row_user['id'] to sprintf() but the format string
+				// only had one %s placeholder (for $id) — $row_user['id'] was silently discarded.
+				// Preserved exactly: only $id is used as the lookup condition here.
+				$db_conn->where('id', $id);
+				$row_brews = $db_conn->getOne($brewing_db_table, "id,brewStyle,brewCategory,brewCategorySort,brewSubCategory");
 				$entry_allow_delete = TRUE;
 
 			}
 
 			if ($row_user['userLevel'] == 2) {
 
-				$query_brews = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory FROM $brewing_db_table WHERE brewBrewerId = '%s' AND id='%s'", $row_user['id'], $id);
-				$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
-				$row_brews = mysqli_fetch_assoc($brews);
+				$db_conn->where('brewBrewerId', $row_user['id']);
+				$db_conn->where('id', $id);
+				$row_brews = $db_conn->getOne($brewing_db_table, "id,brewStyle,brewCategory,brewCategorySort,brewSubCategory");
 				if ($row_brews) $entry_allow_delete = TRUE;
 
 			}
@@ -535,12 +530,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// Determine if the style chosen is a cider - if so, run a different query
 			if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 				$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
-				if ($first_character == "C") $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
-				else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
+				$style_version = ($first_character == "C") ? 'BJCP2025' : 'BJCP2021';
 			}
-			else $query_style_name = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_brews['brewCategorySort'], $row_brews['brewSubCategory']);
-			$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-			$row_style_name = mysqli_fetch_assoc($style_name);
+			else $style_version = $_SESSION['prefsStyleSet'];
+
+			$query_style_name = "SELECT id FROM ".$prefix."styles WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
+			$row_style_name = $db_conn->rawQueryOne($query_style_name, array($style_version, $row_brews['brewCategorySort'], $row_brews['brewSubCategory']));
 
 			if ($entry_allow_delete) {
 

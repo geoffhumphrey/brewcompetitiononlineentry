@@ -27,9 +27,9 @@ if ($_SESSION['prefsContact'] == "N") {
     else {
     	$page_info .= sprintf("<p>%s</p>",$contact_text_000);
     	$page_info .= "<ul>";
-    	do {
-    		$page_info .= "<li>".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition']." &ndash; <a href='mailto:".$row_contact['contactEmail']."'>".$row_contact['contactEmail']."</a></li>";
-    	} while ($row_contact = mysqli_fetch_assoc($contact));
+    	foreach ($rows_contact as $row_contact) {
+    		$page_info .= "<li>".h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName']).", ".h($row_contact['contactPosition'])." &ndash; <a href='mailto:".h($row_contact['contactEmail'])."'>".h($row_contact['contactEmail'])."</a></li>";
+    	}
     	$page_info .= "</ul>";
     }
 	echo $page_info;
@@ -45,16 +45,16 @@ if ($_SESSION['prefsContact'] == "Y") {
 
     else {
 
-    	do {
+    	foreach ($rows_contact as $row_contact) {
 
     		$option .= "<option value=".$row_contact['id'];
     		if(isset($_COOKIE['to'])) {
     			if ($row_contact['id'] == $_COOKIE['to']) $option .= " SELECTED";
     			}
-    		$option .= ">".$row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']."</option>";
+    		$option .= ">".h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName'])." &ndash; ".h($row_contact['contactPosition'])."</option>";
 
 
-    	} while ($row_contact = mysqli_fetch_assoc($contact));
+    	}
 
     	$primary_page_info = sprintf("<p>%s</p>",$contact_text_001);
     	$label1 = $label_contact;

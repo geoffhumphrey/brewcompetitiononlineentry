@@ -362,7 +362,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 <!-- Overall Feedback -->
 <div class="mb-3">
     <label class="form-label" for="evalOverallComments"><strong><?php echo $label_feedback; ?></strong></label>
-    <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
+    <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo $row_eval['evalOverallComments']; ?></textarea>
     <div class="help-block small invalid-feedback"><?php echo $evaluation_info_061; ?></div>
     <div class="help-block small" id="evalOverallComments-words"></div>
 </div>

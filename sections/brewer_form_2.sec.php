@@ -354,11 +354,11 @@ if (!$entrant_type_brewery) {
         <span class="help-block"><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_051; else echo $brewer_text_055; ?></span>
         </div>
     </div>
-    <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
+    <input name="allOrgs" type="hidden" value="<?php echo h(html_entity_decode($org_array, ENT_QUOTES, 'UTF-8')); ?>">
     <div id="brewerAssignmentOther" class="form-group">
         <label for="brewerAssignmentOther" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $participant_orgs_label." &ndash; ".$label_other; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%\x22]+">
+            <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo h(html_entity_decode(str_replace(",",", ",$org_other), ENT_QUOTES, 'UTF-8')); ?>" placeholder="" pattern="[^%\x22]+">
             <div class="help-block">
                 <p><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_052; else echo $brewer_text_054; ?></p>
             </div>

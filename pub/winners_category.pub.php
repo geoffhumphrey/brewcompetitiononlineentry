@@ -73,7 +73,7 @@ if ($row_scored_entries['count'] > 0) {
 
 				include (DB.'scores.db.php');
 
-				do {
+				foreach ($rows_scores as $row_scores) {
 					if ($winner_style_set == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
        				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 
@@ -138,7 +138,7 @@ if ($row_scored_entries['count'] > 0) {
 
 					$table_body1 .= "</tr>";
 
-				 } while ($row_scores = mysqli_fetch_assoc($scores));
+				 }
 
 	$random1 = "";
 	$random1 .= random_generator(12,1);

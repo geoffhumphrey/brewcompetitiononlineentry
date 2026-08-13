@@ -14,7 +14,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 }
 
 ?>
-<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add Entries to the ".$row_sbi['sbi_name']." Custom Style"; elseif ($action == "edit") echo ": Edit Entries in the ".$row_sbi['sbi_name']." Custom Style"; else echo " Custom Style Entries"; ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add Entries to the ".h($row_sbi['sbi_name'])." Custom Style"; elseif ($action == "edit") echo ": Edit Entries in the ".h($row_sbi['sbi_name'])." Custom Style"; else echo " Custom Style Entries"; ?></p>
 
 <div class="bcoem-admin-element hidden-print">
 <!-- View Button Group Dropdown -->
@@ -87,26 +87,26 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
      </tr>
      </thead>
      <tbody>
-    <?php do {
+    <?php foreach ($rows_sbd as $row_sbd) {
 	$info = explode("^", entry_info($row_sbd['eid']));
 	$brewer_info = explode("^", brewer_info($row_sbd['bid']));
 	$special_best_info = explode("^",special_best_info($row_sbd['sid']));
 
 	?>
      <tr>
-      <td><?php echo $special_best_info[1]; ?></td>
+      <td><?php echo h($special_best_info[1]); ?></td>
       <td><?php echo $row_sbd['sbd_place']; ?></td>
       <td><?php echo sprintf("%06s",$row_sbd['eid']); ?></td>
       <td><?php echo readable_judging_number($info[3],$info[6]); ?></td>
-      <td><?php echo $info[0]; ?></td>
-      <td><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
+      <td><?php echo h($info[0]); ?></td>
+      <td><?php echo h($brewer_info[0])." ".h($brewer_info[1]); ?></td>
       <td nowrap="nowrap">
-	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $special_best_info[1]; ?> Custom Style entries"><span class="fa fa-lg fa-pencil"></span></a>
-	  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbd['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete &ldquo;<?php echo $info[0]; ?>&rdquo; as a winner for the <?php echo $special_best_info[1]; ?> Custom Style"  data-confirm="Are you sure you want to delete <?php echo $info[0]; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo h($special_best_info[1]); ?> Custom Style entries"><span class="fa fa-lg fa-pencil"></span></a>
+	  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbd['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete &ldquo;<?php echo h($info[0]); ?>&rdquo; as a winner for the <?php echo h($special_best_info[1]); ?> Custom Style"  data-confirm="Are you sure you want to delete <?php echo h($info[0]); ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
       </td>
      </tr>
     <?php
-	} while($row_sbd = mysqli_fetch_assoc($sbd));  ?>
+	} ?>
      </tbody>
     </table>
     <?php }
@@ -149,7 +149,7 @@ if ($action == "add") {
   <?php }
 	} // end if ($action == "add")
 	if ($action == "edit") {
-		do {
+		foreach ($rows_sbd as $row_sbd) {
 		if ($row_sbd) $info = explode("^", entry_info($row_sbd['eid']));
 	?>
 
@@ -193,7 +193,7 @@ if ($action == "add") {
 			<p class="form-control-static"><?php if ($row_sbd) echo $info2[0]." ".$info2[1]; ?></p>
 		</div>
 	</div><!-- ./Form Group -->
-  	<?php } while($row_sbd = mysqli_fetch_assoc($sbd));
+  	<?php }
 
 	if ($totalRows_sbd < $row_sbi['sbi_places']) {
 

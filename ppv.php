@@ -24,12 +24,6 @@ require ('paths.php');
 require (CONFIG.'bootstrap.php');
 require (LIB.'email.lib.php');
 
-/*
-$query_prefs = sprintf("SELECT prefsPayPalAccount,prefsPaypalIPN FROM %s WHERE id='1'", $prefix."preferences");
-$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
-$row_prefs = mysqli_fetch_assoc($prefs);
-*/
-
 $cols = array("prefsPaypalAccount","prefsPaypalIPN");
 $db_conn->where ("id", 1);
 $row_prefs = $db_conn->getOne ($prefix."preferences", null, $cols);
@@ -56,24 +50,10 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	$current_date_time_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time");
 	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
 
-	/*
-	$query_logo = sprintf("SELECT contestName,contestLogo FROM %s WHERE id='1'", $prefix."contest_info");
-	$logo = mysqli_query($connection,$query_logo) or die (mysqli_error($connection));
-	$row_logo = mysqli_fetch_assoc($logo);
-	$totalRows_logo = mysqli_num_rows($logo);
-	*/
-
 	$cols = array("contestName","contestLogo");
 	$db_conn->where ("id", 1);
 	$row_logo = $db_conn->getOne ($prefix."contest_info", null, $cols);
 	$totalRows_logo = $db_conn->count;
-
-	/*
-	$query_user_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerEmail FROM %s WHERE uid='%s'", $prefix."brewer",$custom_parts[0]);
-	$user_info = mysqli_query($connection,$query_user_info) or die (mysqli_error($connection));
-	$row_user_info = mysqli_fetch_assoc($user_info);
-	$totalRows_user_info = mysqli_num_rows($user_info);
-	*/
 
 	$cols = array("brewerFirstName","brewerLastName","brewerEmail");
 	$db_conn->where ("uid", $custom_parts[0]);

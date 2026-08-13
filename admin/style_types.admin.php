@@ -8,18 +8,18 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
     exit();
 }
 
-$query_mead_cider_present = sprintf("SELECT styleTypeBOS FROM %s WHERE styleTypeName = 'Mead/Cider'",$prefix."style_types");
-$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die (mysqli_error($connection));
-$row_mead_cider_present = mysqli_fetch_assoc($mead_cider_present);
-
 $mead_cider_combined = FALSE;
+
+$db_conn->where ("styleTypeName", "Mead/Cider");
+$row_mead_cider_present = $db_conn->getOne ($prefix."style_types");
+
 if ($row_mead_cider_present['styleTypeBOS'] == "Y") $mead_cider_combined = TRUE;
 
 $tbody = "";
 
 if ($action == "default") {
 	
-	do {
+	foreach ($rows_style_type as $row_style_type) {
 
 		$display = TRUE;
 		if (($mead_cider_combined) && (($row_style_type['styleTypeName'] == "Cider") || ($row_style_type['styleTypeName'] == "Mead"))) $display = FALSE;
@@ -27,7 +27,7 @@ if ($action == "default") {
 		if ($display) {
 			$tbody .= "<tr>";
 			$tbody .= "<td>";
-			$tbody .= $row_style_type['styleTypeName'];
+			$tbody .= h($row_style_type['styleTypeName']);
 			if ($row_style_type['styleTypeOwn']  == "custom") $tbody .= " (Custom Style Type)";
 			$tbody .= "</td>";
 			$tbody .= "<td>";
@@ -42,21 +42,21 @@ if ($action == "default") {
 			else $tbody .= "N/A";
 			$tbody .= "</td>";
 			$tbody .= "<td>";
-			$tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;id=".$row_style_type['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit ".$row_style_type['styleTypeName']."\"><span class=\"fa fa-lg fa-pencil\"></a>";
-			if ($row_style_type['styleTypeOwn'] != "bcoe") $tbody .= " <a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=default&amp;dbTable=".$style_types_db_table."&amp;action=delete&amp;id=".$row_style_type['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".$row_style_type['styleTypeName']."\" data-confirm=\"Are you sure you want to delete ".$row_style_type['styleTypeName']."? This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a>";
+			$tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;id=".$row_style_type['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit ".h($row_style_type['styleTypeName'])."\"><span class=\"fa fa-lg fa-pencil\"></a>";
+			if ($row_style_type['styleTypeOwn'] != "bcoe") $tbody .= " <a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=default&amp;dbTable=".$style_types_db_table."&amp;action=delete&amp;id=".$row_style_type['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".h($row_style_type['styleTypeName'])."\" data-confirm=\"Are you sure you want to delete ".h($row_style_type['styleTypeName'])."? This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a>";
 			else $tbody .= " <span class=\"fa fa-lg fa-trash-o text-muted\">";
 			$tbody .= "</td>";
 			$tbody .= "</tr>";
 		}
 
 
-	} while ($row_style_type = mysqli_fetch_assoc($style_type));
+	}
 
 }
 
 ?>
 
-<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Style Type"; elseif ($action == "edit") echo ": Edit the ".$row_style_type['styleTypeName']." Style Type";  else echo " Style Types";  ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add a Style Type"; elseif ($action == "edit") echo ": Edit the ".h($row_style_type['styleTypeName'])." Style Type";  else echo " Style Types";  ?></p>
 
 <div class="bcoem-admin-element hidden-print">
 	<!-- Postion 1: View All Button -->
@@ -134,7 +134,7 @@ if ($action == "default") {
 	<label for="styleTypeName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
-			<input class="form-control" id="styleTypeName" name="styleTypeName" type="text" value="<?php if ($action == "edit") echo $row_style_type['styleTypeName']; ?>" placeholder="" autofocus <?php if (($action == "edit") && ($row_style_type['styleTypeOwn'] == "bcoe")) echo "disabled"; ?> required>
+			<input class="form-control" id="styleTypeName" name="styleTypeName" type="text" value="<?php if ($action == "edit") echo h($row_style_type['styleTypeName']); ?>" placeholder="" autofocus <?php if (($action == "edit") && ($row_style_type['styleTypeOwn'] == "bcoe")) echo "disabled"; ?> required>
 			<span class="input-group-addon" id="styleTypeName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<div class="help-block with-errors"></div>
@@ -152,7 +152,7 @@ if ($action == "default") {
 </div>
 
 <?php if (($action == "edit") && ($row_style_type['styleTypeOwn'] == "bcoe")) { ?>
-<input type="hidden" name="styleTypeName" value="<?php echo $row_style_type['styleTypeName']; ?>">
+<input type="hidden" name="styleTypeName" value="<?php echo h($row_style_type['styleTypeName']); ?>">
 <?php } ?>
 
 <div class="form-group"><!-- Form Group Radio INLINE -->

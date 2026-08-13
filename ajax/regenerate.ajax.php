@@ -10,7 +10,10 @@ error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL fo
 $return_json = array();
 $status = 0;
 
-if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
+// CSRF: require a same-origin Referer for this destructive, session-authenticated action.
+$referrer_ok = (isset($_SERVER['HTTP_REFERER'])) && (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === $_SERVER['SERVER_NAME']);
+
+if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0) && ($referrer_ok)) {
 
 	require(LIB.'process.lib.php');
 	$new_jn = generate_judging_numbers($prefix."brewing",$action);

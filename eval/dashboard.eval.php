@@ -1,5 +1,5 @@
 <?php
-
+ 
 /**
  * -------- User Judging/Evaluation Dashboard --------
  * 
@@ -84,12 +84,9 @@ function count_future($arr,$needle,$diff) {
 }
 
 // Get last judging session end date/time (if any)
-$query_session_end = sprintf("SELECT judgingDateEnd FROM %s",$prefix."judging_locations");
-if (SINGLE) $query_session_end .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-$query_session_end .= " ORDER BY judgingDateEnd DESC LIMIT 1";
-$session_end = mysqli_query($connection,$query_session_end) or die (mysqli_error($connection));
-$row_session_end = mysqli_fetch_assoc($session_end);
-$totalRows_session_end = mysqli_num_rows($session_end);
+$db_conn->orderBy ("judgingDateEnd", "DESC");
+$row_session_end = $db_conn->getOne ($prefix."judging_locations", null, "judgingDateEnd");
+$totalRows_session_end = $db_conn->count;
 
 if ((time() > $row_judging_prefs['jPrefsJudgingOpen']) && (time() < $row_judging_prefs['jPrefsJudgingClosed'])) $judging_open = TRUE;
 if (($totalRows_session_end > 0) && (time() < $row_session_end['judgingDateEnd'])) $judging_open = TRUE;
@@ -130,16 +127,13 @@ $admin_add_eval .= "</section>";
 
 $header = sprintf("<p class=\"lead\">%s <small>%s</small></p>",$evaluation_info_000,$evaluation_info_008);
 if ($queued) $header .= sprintf("<div class=\"alert alert-info\"><p><strong>%s</strong>: %s</p><p>%s</p></div>",ucfirst(strtolower($label_please_note)),$evaluation_info_001,$evaluation_info_002); 
-	
-$query_table_assignments = sprintf("SELECT * FROM %s ORDER BY tableNumber ASC",$prefix."judging_tables");
-$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
-$row_table_assignments = mysqli_fetch_assoc($table_assignments);
-$totalRows_table_assignments = mysqli_num_rows($table_assignments);
 
-$query_eval_sub = sprintf("SELECT * FROM %s", $prefix."evaluation");
-$eval_sub = mysqli_query($connection,$query_eval_sub) or die (mysqli_error($connection));
-$row_eval_sub = mysqli_fetch_assoc($eval_sub);
-$totalRows_eval_sub = mysqli_num_rows($eval_sub);
+$db_conn->orderBy ("tableNumber","ASC");
+$row_table_assignments = $db_conn->get($prefix."judging_tables");
+$totalRows_table_assignments = $db_conn->count;
+
+$row_eval_sub = $db_conn->get($prefix."evaluation");
+$totalRows_eval_sub = $db_conn->count;
 
 $eval_scores = array();
 $eval_judge_evaluations = array();
@@ -148,7 +142,7 @@ $eval_no_evaluations = array();
 
 if ($totalRows_eval_sub > 0) {
 
-	do {
+	foreach ($row_eval_sub as $row_eval_sub) {
 
 		$judge_score = $row_eval_sub['evalAromaScore'] + $row_eval_sub['evalAppearanceScore'] + $row_eval_sub['evalFlavorScore'] + $row_eval_sub['evalMouthfeelScore'] + $row_eval_sub['evalOverallScore'];
 
@@ -180,7 +174,7 @@ if ($totalRows_eval_sub > 0) {
 			"mini_bos" => $row_eval_sub['evalMiniBOS']
 		);
 
-	} while($row_eval_sub = mysqli_fetch_assoc($eval_sub));
+	}
 	
 }
 
@@ -195,7 +189,7 @@ if ($totalRows_table_assignments > 0) {
 
 	$table_assignment_start = array();
 
-	do {
+	foreach ($row_table_assignments as $row_table_assignments) {
 
 		$table_places = array();
 		$table_places_display = "";
@@ -293,11 +287,13 @@ if ($totalRows_table_assignments > 0) {
 				}
 
 				else {
-					$query_tables = sprintf("SELECT tableStyles FROM %s WHERE id='%s'",$prefix."judging_tables",$tbl_id);
-					$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-					$row_tables = mysqli_fetch_assoc($tables);
-					$totalRows_tables = mysqli_num_rows($tables);
+
+					$db_conn->where ("id", $tbl_id);
+					$row_tables = $db_conn->getOne($prefix."judging_tables", null, "tableStyles");
+					$totalRows_tables = $db_conn->count;
+
 					$a = explode(",", $row_tables['tableStyles']);
+
 				}
 				
 				sort($a);
@@ -309,16 +305,16 @@ if ($totalRows_table_assignments > 0) {
 					if (!empty($score_style_data)) {
 
 						$score_style_data = explode("^",$score_style_data);
-				        
-						$query_entries = sprintf("SELECT * FROM %s WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $prefix."brewing", $score_style_data[0], $score_style_data[1]);
-						//$query_entries .= " ORDER BY brewJudgingNumber, brewCategorySort, brewSubCategory ASC;";
-						$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-						$row_entries = mysqli_fetch_assoc($entries);
-						$totalRows_entries = mysqli_num_rows($entries);
+
+						$db_conn->where ("brewCategorySort", $score_style_data[0]);
+						$db_conn->where ("brewSubCategory", $score_style_data[1]);
+						$db_conn->where ("brewReceived", 1);
+						$row_entries = $db_conn->get ($prefix."brewing");
+						$totalRows_entries = $db_conn->count;
 
 				        if ($totalRows_entries > 0) {
 
-				        	do {
+				        	foreach ($row_entries as $row_entries) {
 
 				        		if ($_SESSION['prefsDisplaySpecial'] == "J") $number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 					    		else $number = sprintf("%06s",$row_entries['id']);
@@ -540,7 +536,7 @@ if ($totalRows_table_assignments > 0) {
 						        	}
 						        }
 
-					        } while ($row_entries = mysqli_fetch_assoc($entries));
+					        } // end foreach
 
 					    } // end if ($totalRows_entries > 0)
 
@@ -555,10 +551,6 @@ if ($totalRows_table_assignments > 0) {
 
 				$table_assignment_post .= "<p><small><a href=\"#top\"><i class=\"fa fa-sm fa-arrow-circle-up\"></i> Top</a></small></p>";
 			}
-
-			
-			
-			
 
 			// If places have been awarded at the table, but there are duplicates, list them for admins
 			if (($admin) && (!empty($table_places))) {
@@ -596,7 +588,7 @@ if ($totalRows_table_assignments > 0) {
 				 * -------------------------------------------
 				 * Build Table Counts Sidebar Data
 				 * For each table, get count data and build
-				 * the associated javascript ajax calls.
+				 * the associated ajax calls.
 				 * -------------------------------------------
 				 */
 
@@ -648,23 +640,23 @@ if ($totalRows_table_assignments > 0) {
 
 				if ($assigned_judges > 0) {
 
-					$query_assigned_judge_names = sprintf("SELECT a.brewerFirstName,a.brewerLastName, b.assignment FROM %s a, %s b WHERE b.assignTable='%s' AND a.uid = b.bid AND b.assignment='J' ORDER BY a.brewerLastName, a.brewerFirstName ASC",$prefix."brewer",$prefix."judging_assignments",$tbl_id);
-					$assigned_judge_names = mysqli_query($connection,$query_assigned_judge_names);
-					$row_assigned_judge_names = mysqli_fetch_assoc($assigned_judge_names);
+					$sql = "SELECT a.brewerFirstName,a.brewerLastName, b.assignment FROM ".$prefix."brewer"." a, ".$prefix."judging_assignments"." b WHERE b.assignTable=? AND a.uid = b.bid AND b.assignment='J' ORDER BY a.brewerLastName, a.brewerFirstName ASC";
+					$row_assigned_judge_names = $db_conn->rawQuery ($sql, array($tbl_id));
+					$totalRows_entries = $db_conn->count;
 					
-					do {
+					foreach ($row_assigned_judge_names as $row_assigned_judge_names) {
 						$assigned_judge_names_display .= $row_assigned_judge_names['brewerFirstName']." ".$row_assigned_judge_names['brewerLastName'].", ";
-					} while ($row_assigned_judge_names = mysqli_fetch_assoc($assigned_judge_names));
+					}
 
 					$assigned_judge_names_display = rtrim($assigned_judge_names_display, ", ");
 				
 				}
 
 				$table_assignment_stats .= "<section class=\"row\">";
-				$table_assignment_stats .= "<div class=\"col col-lg-3 col-md-5 col-sm-5 col-xs-6\">";
+				$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
 				$table_assignment_stats .= "<strong>".$evaluation_info_025."</strong>";
 				$table_assignment_stats .= "</div>";
-				$table_assignment_stats .= "<div class=\"col col-lg-9 col-md-7 col-sm-7 col-xs-6\">";
+				$table_assignment_stats .= "<div class=\"col col-lg-8 col-md-7 col-sm-7 col-xs-6\">";
 				$table_assignment_stats .= $assigned_judges;
 				if (!empty($assigned_judge_names_display)) $table_assignment_stats .= " &ndash; ".$assigned_judge_names_display;
 				$table_assignment_stats .= "</div>";
@@ -683,29 +675,29 @@ if ($totalRows_table_assignments > 0) {
 					$judge_names = rtrim($judge_names, ", ");
 
 					$table_assignment_stats .= "<section class=\"row\">";
-					$table_assignment_stats .= "<div class=\"col col-lg-3 col-md-5 col-sm-5 col-xs-6\">";
+					$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
 					$table_assignment_stats .= "<strong>".$evaluation_info_043."</strong>";
 					$table_assignment_stats .= "</div>";
-					$table_assignment_stats .= "<div class=\"col col-lg-9 col-md-7 col-sm-7 col-xs-6\">";
+					$table_assignment_stats .= "<div class=\"col col-lg-8 col-md-7 col-sm-7 col-xs-6\">";
 					$table_assignment_stats .= $judge_names;
 					$table_assignment_stats .= "</div>";
 					$table_assignment_stats .= "</section>";
 				}
 
 				$table_assignment_stats .= "<section class=\"row\">";
-				$table_assignment_stats .= "<div class=\"col col-lg-3 col-md-5 col-sm-5 col-xs-6\">";
+				$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
 				$table_assignment_stats .= "<strong>".$evaluation_info_039."</strong>";
 				$table_assignment_stats .= "</div>";
-				$table_assignment_stats .= "<div class=\"col col-lg-9 col-md-7 col-sm-7 col-xs-6\">";
+				$table_assignment_stats .= "<div class=\"col col-lg-8 col-md-7 col-sm-7 col-xs-6\">";
 				$table_assignment_stats .= $table_entries_count;
 				$table_assignment_stats .= "</div>";
 				$table_assignment_stats .= "</section>";
 
 				$table_assignment_stats .= "<section class=\"row\">";
-				$table_assignment_stats .= "<div class=\"col col-lg-3 col-md-5 col-sm-5 col-xs-6\">";
+				$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
 				$table_assignment_stats .= "<strong>".$evaluation_info_040."</strong>";
 				$table_assignment_stats .= "</div>";
-				$table_assignment_stats .= "<div class=\"col col-lg-9 col-md-7 col-sm-7 col-xs-6\">";
+				$table_assignment_stats .= "<div class=\"col col-lg-8 col-md-7 col-sm-7 col-xs-6\">";
 				$table_assignment_stats .= sprintf("<span class=\"total-evaluations-table-%s\">%s</span> <i class=\"fa fa-xs fa-sync fa-spin icon-sync-table-%s hidden\"></i>",$tbl_id,$table_scored_entries_count,$tbl_id);
 				$table_assignment_stats .= sprintf(" <span style=\"margin-left: 10px;\" class=\"refresh-link refresh-link-table-%s small hidden\"><a href=\"#\" onClick=\"window.location.reload()\">Refresh</a> to review updates.</span>",$tbl_id);
 				$table_assignment_stats .= "</div>";
@@ -725,7 +717,7 @@ if ($totalRows_table_assignments > 0) {
 			
 		} // end if (time() > $table_location[0])
 
-	} while ($row_table_assignments = mysqli_fetch_assoc($table_assignments));
+	} 
 
 	asort($table_assignment_start);
 

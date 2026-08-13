@@ -124,15 +124,13 @@ if ($_SESSION['prefsEval'] == 1) {
 
 	$evals = array();
 	// Check which evaluations exist
-	$query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$prefix."evaluation");
-	$eval_exists = mysqli_query($connection,$query_eval_exists) or die (mysqli_error($connection));
-	$row_eval_exists = mysqli_fetch_assoc($eval_exists);
-	$totalRows_eval_exists = mysqli_num_rows($eval_exists);
+	$rows_eval_exists = $db_conn->get($prefix."evaluation", null, "DISTINCT eid");
+	$totalRows_eval_exists = $db_conn->count;
 
 	if ($totalRows_eval_exists > 0) {
-		do {
+		foreach ($rows_eval_exists as $row_eval_exists) {
 			$evals[] = $row_eval_exists['eid'];
-		} while ($row_eval_exists = mysqli_fetch_assoc($eval_exists));
+		}
 	}
 		 
 }
@@ -141,8 +139,8 @@ $disable_label_print = FALSE;
 $disable_label_print_count = 0;
 
 if ($totalRows_log > 0) {
-	
-	do {
+
+	foreach ($rows_log as $row_log) {
 
 		// include (DB.'styles.db.php');
 		$print_forms_link = "";
@@ -272,9 +270,10 @@ if ($totalRows_log > 0) {
 
 					else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
-					$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles", $chosen_style_set, $row_log['brewCategorySort'], $row_log['brewSubCategory']);
-					$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-					$row_style = mysqli_fetch_assoc($style);
+					$db_conn->where('brewStyleVersion', $chosen_style_set);
+					$db_conn->where('brewStyleGroup', $row_log['brewCategorySort']);
+					$db_conn->where('brewStyleNum', $row_log['brewSubCategory']);
+					$row_style = $db_conn->getOne($prefix."styles", "id,brewStyleType");
 
 					$scoresheet = TRUE;
 					$scoresheet_es = TRUE;
@@ -333,14 +332,16 @@ if ($totalRows_log > 0) {
 			
 			foreach ($tempfiles as $file) {
 				
+				// file_exists() guards against a file already removed by the other block below -
+				// both check "older than a minute" independently, so an old file satisfies both.
 				if (!empty($scoresheet_file_name_judging)) {
-					if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+					if ((file_exists(USER_TEMP.$file)) && ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE)))) {
 						unlink(USER_TEMP.$file);
 					}
 				}
 
 				if (!empty($scoresheet_file_name_entry)) {
-					if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+					if ((file_exists(USER_TEMP.$file)) && ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE)))) {
 						unlink(USER_TEMP.$file);
 					}
 				}
@@ -580,13 +581,14 @@ if ($totalRows_log > 0) {
 			}
 
 			// If the entry window is open, display delete
+			// A paid entry (where there's an entry fee) can't be deleted - reassign $delete_link
+			// itself, not just $entry_output, since the card view below reuses $delete_link too.
 			if ($entry_window_open == 1) {
-				if ($row_log['brewPaid'] == 1) {
-					if ($_SESSION['contestEntryFee'] > 0) $entry_output .= sprintf("<a class=\"hide-loader\" role=\"button\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"%s\"><i class=\"fa fa-lg fa-trash-can text-muted me-1\"></i></a>",$brewer_entries_text_015);
-					else $entry_output .= "<span class=\"me-1\">".$delete_link."</span>";
+				if (($row_log['brewPaid'] == 1) && ($_SESSION['contestEntryFee'] > 0)) {
+					$delete_link = sprintf("<a class=\"hide-loader\" role=\"button\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"%s\"><i class=\"fa fa-lg fa-trash-can text-muted\"></i></a>",$brewer_entries_text_015);
 				}
-				else $entry_output .= "<span class=\"me-1\">".$delete_link."</span>";
-			} 
+				$entry_output .= "<span class=\"me-1\">".$delete_link."</span>";
+			}
 
 			else $entry_output .= "<span class=\"me-1\">".$delete_link."</span>";
 
@@ -700,7 +702,7 @@ if ($totalRows_log > 0) {
 		$entry_output_cards .= "</div>"; // end card
 		$entry_output_cards .= "</div>"; // end col
 
-	} while ($row_log = mysqli_fetch_assoc($log));
+	}
 
 	if ($disable_label_print_count > 0) $disable_label_print = TRUE;
 

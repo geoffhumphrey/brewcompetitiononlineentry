@@ -66,17 +66,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$entry_number = sterilize($_POST['eid'.$id]);
 
 			// Check to see if the judging number has already been used and if so, flag it
-			$query_jnum = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewJudgingNumber='%s'",$prefix."brewing",$judging_number);
-			$jnum = mysqli_query($connection,$query_jnum) or die (mysqli_error($connection));
-			$row_jnum = mysqli_fetch_assoc($jnum);
+			$db_conn->where("brewJudgingNumber", $judging_number);
+			$row_jnum = $db_conn->getOne($prefix."brewing", "COUNT(*) AS 'count'");
 
 			// echo $query_jnum; exit();
 
 			// Check to see if the entry number exists
-			$query_enum = sprintf("SELECT brewJudgingNumber,brewPaid FROM %s WHERE id='%s'",$prefix."brewing",$entry_number);
-			$enum = mysqli_query($connection,$query_enum) or die (mysqli_error($connection));
-			$row_enum = mysqli_fetch_assoc($enum);
-			$totalRows_enum = mysqli_num_rows($enum);
+			$db_conn->where("id", $entry_number);
+			$row_enum = $db_conn->getOne($prefix."brewing", "brewJudgingNumber,brewPaid");
+			$totalRows_enum = $db_conn->count;
 
 			if ($totalRows_enum == 0) $flag_enum[] = $entry_number;
 

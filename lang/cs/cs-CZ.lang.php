@@ -881,7 +881,7 @@ $pay_text_028 = "Máte nepotvrzené vzorky, které <em>nejsou</em> zahrnuty do c
 $pay_text_029 = "Prosím, otevřete si seznam vzorků a potvrďte všechny vaše vzorky. Nepotvrzené vzorky mohou být smazány ze systému bez předchozího varování.";
 
 // Ignore the next four lines
-if (strpos($view, "^") !== FALSE) {
+if ($carat_url_var) {
     $qr_text_019 = sprintf("%06d",$checked_in_numbers[0]);
     if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
     else $qr_text_020 = $checked_in_numbers[1];
@@ -891,11 +891,11 @@ $qr_text_000 = $alert_text_080;
 $qr_text_001 = $alert_text_081;
 
 // Begin translations here
-if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Vzorek číslo <span class=\"text-danger\">%s</span> je označen degustačním číslem <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+if ($carat_url_var) $qr_text_002 = sprintf("Vzorek číslo <span class=\"text-danger\">%s</span> je označen degustačním číslem <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 $qr_text_003 = "Pokud je toto degustační číslo <em>chybné</em>, <strong>naskenujte kód znovu a znovu zadejte správné degustační číslo.";
-if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Vzorek číslo %s byl přijat.",$qr_text_019); else $qr_text_004 = "";
-if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("Vzorek číslo %s nebyl v databázi nalezen. Lahve odložte stranou a upozorňete organizátora soutěže.",$qr_text_019); else $qr_text_005 = "";
-if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("Zadané degustační číslo - %s - je již přiřazeno vzorku %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
+if ($carat_url_var) $qr_text_004 = sprintf("Vzorek číslo %s byl přijat.",$qr_text_019); else $qr_text_004 = "";
+if ($carat_url_var) $qr_text_005 = sprintf("Vzorek číslo %s nebyl v databázi nalezen. Lahve odložte stranou a upozorňete organizátora soutěže.",$qr_text_019); else $qr_text_005 = "";
+if ($carat_url_var) $qr_text_006 = sprintf("Zadané degustační číslo - %s - je již přiřazeno vzorku %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
 $qr_text_007 = "Příjem vzorků pomocí QR kódů";
 $qr_text_008 = "Abyste mohli přijímat vzorky QR kódem, zadejte platné heslo. Heslo musíte zadat pouze jednou, nechte však po celou dobu spuštěnou skenovací aplikaci.";
 $qr_text_009 = "Přiřadit degustační číslo nebo číslo krabice vzorku";

@@ -20,11 +20,15 @@ $winners_by_table = "";
 $order_by = array();
 
 if ($section == "past-winners") {
-	$suffix = $go;
-	$judging_tables_db_table = $prefix."judging_tables_".$go;
-	$judging_scores_db_table = $prefix."judging_scores_".$go;
-	$brewing_db_table = $prefix."brewing_".$go;
-	$brewer_db_table = $prefix."brewer_".$go;
+	// $go is restricted to alphanumeric characters before use in table-name identifiers
+	// (matching the pattern used elsewhere in the codebase, e.g. includes/db/winners.db.php's
+	// and pub/past_winners.pub.php's $filter_clean).
+	$go_clean = preg_replace("/[^a-zA-Z0-9]+/", "", $go);
+	$suffix = $go_clean;
+	$judging_tables_db_table = $prefix."judging_tables_".$go_clean;
+	$judging_scores_db_table = $prefix."judging_scores_".$go_clean;
+	$brewing_db_table = $prefix."brewing_".$go_clean;
+	$brewer_db_table = $prefix."brewer_".$go_clean;
 }
 
 else {
@@ -37,10 +41,10 @@ else {
 
 if ($row_scored_entries['count'] > 0) {
 
-	do {
+	foreach ($rows_tables as $row_tables) {
 
 		$winners_table_all = "";
-		
+
 		$a = explode(",", $row_tables['tableStyles']);
 		$missing_style = FALSE;
 
@@ -48,21 +52,18 @@ if ($row_scored_entries['count'] > 0) {
 
 		foreach ($a as $value) {
 
-			/*
-			if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", "bcoem_shared_styles", $value, $prefix."styles", $value);
-			else 
-			*/
-			$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $value);
-			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-			$row_styles = mysqli_fetch_assoc($styles);
-			$totalRows_styles = mysqli_num_rows($styles);
-			
+			// NOTE: original HOSTED branch (UNION ALL across a shared styles table) was already dead/commented code
+			$db_conn->where('id', $value);
+			$row_styles = $db_conn->getOne($prefix."styles", "brewStyleGroup,brewStyleNum");
+			$totalRows_styles = $db_conn->count;
+
 			if ($totalRows_styles == 0) $missing_style = TRUE;
-			
+
 			else {
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
-				$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
-				$row_style_count = mysqli_fetch_assoc($style_count);
+				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
+				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
+				$db_conn->where('brewReceived', '1');
+				$row_style_count = $db_conn->getOne($brewing_db_table, "COUNT(*) as count");
 
 				$entry_count += $row_style_count['count'];
 			}
@@ -108,7 +109,7 @@ if ($row_scored_entries['count'] > 0) {
 					if ($tb == "scores") $winners_table_head_1 .= sprintf("<th nowrap>Score</th>",$label_score);
 					$winners_table_head_1 .= "</tr>";
 
-					do {
+					foreach ($rows_scores as $row_scores) {
 						if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
 	       				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 
@@ -173,7 +174,7 @@ if ($row_scored_entries['count'] > 0) {
 
 						$winners_table_body_1 .= "</tr>";
 
-					} while ($row_scores = mysqli_fetch_assoc($scores));
+					}
 				}
 
 				$random1 = "";
@@ -246,8 +247,8 @@ if ($row_scored_entries['count'] > 0) {
 				'data' => $winners_table_all
 			);
 		}
-	
-	} while ($row_tables = mysqli_fetch_assoc($tables));
+
+	}
 
 	$table_number = array_column($order_by, 'id');
 	$table_name = array_column($order_by, 'table_name');

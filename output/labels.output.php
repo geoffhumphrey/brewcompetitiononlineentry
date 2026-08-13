@@ -57,8 +57,8 @@ if (isset($_SESSION['loginUsername'])) {
 	$special_ingredients = array();
 	$mead = array();
 
-	do {
-			
+	foreach ($rows_styles as $row_styles) {
+
 		// Special ingredients required
 		if ($row_styles['brewStyleReqSpec'] == 1) {
 			if ($ba) $special_ingredients[] = $row_styles['brewStyleNum'];
@@ -71,9 +71,9 @@ if (isset($_SESSION['loginUsername'])) {
 			else $mead[] = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum'];
 		}
 
-	} while ($row_styles = mysqli_fetch_assoc($styles));
+	}
 
-	if ($_SESSION['userLevel'] <= 1) {
+	if ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) {
 
 		/**
 		 * -------------------------------------------------------------------
@@ -99,10 +99,10 @@ if (isset($_SESSION['loginUsername'])) {
 
 			if ($filter == "judges") {
 
-				$query_brewer = sprintf("SELECT * FROM %s WHERE brewerJudge='Y' ORDER BY brewerLastName ASC",$prefix."brewer");
-				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-				$row_brewer = mysqli_fetch_assoc($brewer);
-				
+				$db_conn->where('brewerJudge', 'Y');
+				$db_conn->orderBy('brewerLastName', 'ASC');
+				$rows_brewer = $db_conn->get($prefix."brewer");
+
 				$filename = str_replace(" ", "_", $_SESSION['contestName']) . "_Virtual_Judge_Labels";
 				if ($psort == "3422") $filename .= "_Avery3422";
 				else $filename .= "_Avery5160";
@@ -116,10 +116,10 @@ if (isset($_SESSION['loginUsername'])) {
 				// Get a list of virtual/distributed locations
 				$virtual_locations = virtual_locations();
 
-				if ($row_brewer) {
-				
-					do {
-						
+				if ($rows_brewer) {
+
+					foreach ($rows_brewer as $row_brewer) {
+
 						$judge_info = judge_info($row_brewer['uid']);
 						$judge_info = explode("^", $judge_info);
 						$locations = explode(",", $judge_info[8]);
@@ -212,7 +212,7 @@ if (isset($_SESSION['loginUsername'])) {
 						
 						}
 
-					} while ($row_brewer = mysqli_fetch_assoc($brewer));
+					}
 
 				}
 
@@ -230,46 +230,46 @@ if (isset($_SESSION['loginUsername'])) {
 				$pdf->Next_Label();
 				$pdf->SetFont('Arial', '', 12);
 
-				do {
-					
-					$style_arr = array(get_table_info("0", "list", $row_tables['id'], $dbTable, "default"));
+				foreach ($rows_tables_edit as $row_tables_edit) {
+
+					$style_arr = array(get_table_info("0", "list", $row_tables_edit['id'], $dbTable, "default"));
 					$styles = str_replace('&nbsp;', ' ', display_array_content($style_arr, 0));
 					$styles = rtrim($styles,", ");
 
-					$tableName = htmlspecialchars_decode($row_tables['tableName']);
+					$tableName = htmlspecialchars_decode($row_tables_edit['tableName']);
 					$tableName = truncate($tableName, 30);
-					$tableName = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $tableName)));							
+					$tableName = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $tableName)));
 
-					$loc_arr = explode("^", get_table_info($row_tables['tableLocation'], "location", $row_tables['id'], $dbTable, "default"));
+					$loc_arr = explode("^", get_table_info($row_tables_edit['tableLocation'], "location", $row_tables_edit['id'], $dbTable, "default"));
 					$location = $loc_arr[2];
 					$location = htmlspecialchars_decode($location);
 					$location = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $location)));
 					$location = truncate($location, 30);
 
 					for ($i = 1; $i <= $sort; $i++) {
-						
+
 						$pdf->SetFont('Arial', '', 36);
-						
+
 						if ($loc_arr[4] == 1) {
 							$pdf->SetFillColor(225, 225, 225);
 							$fill = true;
 						}
 
 						else $fill = false;
-						
-						$pdf->Cell(18, 18, $row_tables['tableNumber'], 0, 0, "C", $fill);
-						
-						$pdf->SetFont('Arial', 'B', 10);		
+
+						$pdf->Cell(18, 18, $row_tables_edit['tableNumber'], 0, 0, "C", $fill);
+
+						$pdf->SetFont('Arial', 'B', 10);
 						$pdf->Cell(48, 5, $tableName, 0, 2, 'L');
 
-						$pdf->SetFont('Arial', '', 9);						
+						$pdf->SetFont('Arial', '', 9);
 						$pdf->Cell(48, 5, $location, 0, 2);
 						$pdf->MultiCell(48, 5, $styles, 0, 'L');
 						$pdf->Next_Label();
-					
+
 					}
 
-				} while ($row_tables = mysqli_fetch_assoc($tables_edit));
+				}
 			
 			} // end else
 
@@ -299,8 +299,8 @@ if (isset($_SESSION['loginUsername'])) {
 				$pdf->SetFont('Courier','',6);
 				
 				// Print labels
-				do {
-					
+				foreach ($rows_log as $row_log) {
+
 					if ($action == "bottle-entry") $entry_no = sprintf("%06s",$row_log['id']);
 					else $entry_no = sprintf("%06s",strtoupper($row_log['brewJudgingNumber']));
 
@@ -308,7 +308,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$subcategory = $row_log['brewSubCategory'];
 					if ($aabc) $cat_output = ltrim($category,"0").".".ltrim($subcategory,"0");
 					else $cat_output = $category.$subcategory;
-					
+
 					$text = sprintf("\n%s (%s)  %s (%s)  %s (%s)\n\n\n\n%s (%s)  %s (%s)  %s (%s)",
 					$entry_no, $cat_output,
 					$entry_no, $cat_output,
@@ -318,10 +318,10 @@ if (isset($_SESSION['loginUsername'])) {
 					$entry_no, $cat_output
 					);
 
-					$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));              
+					$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 					$pdf->Add_Label($text);
 
-				} while ($row_log = mysqli_fetch_assoc($log));
+				}
 
 				if (ob_get_length()) ob_clean();
 				//$pdf->Output();
@@ -344,8 +344,8 @@ if (isset($_SESSION['loginUsername'])) {
 				$pdf->SetFont('Arial', '', 9);
 				$lastStyle = "";
 
-				do {
-					
+				foreach ($rows_log as $row_log) {
+
 					if ($lastStyle != "") {
 						
 						if ($lastStyle == $row_log['brewCategory']) {
@@ -421,15 +421,15 @@ if (isset($_SESSION['loginUsername'])) {
 
 					}
 
-				} while ($row_log = mysqli_fetch_assoc($log));
-				
+				}
+
 				if (ob_get_length()) ob_clean();
 				//$pdf->Output();
 				$pdf->Output($filename,'D');
-			
+
 			}
 
-			else {		
+			else {
 
 				$labels_by_table = FALSE;
 
@@ -474,15 +474,14 @@ if (isset($_SESSION['loginUsername'])) {
 					$table_info = explode("^",get_table_info(1,"basic",$location,"default","default"));
 
 					// First, get all of the entry ids for the table in the judging_flights db
-					$query_table_entries = sprintf("SELECT * FROM %s WHERE flightTable='%s'", $prefix."judging_flights",$location);
-					$row_table_entries = mysqli_query($connection,$query_table_entries) or die (mysqli_error($connection));
-					$table_entries = mysqli_fetch_assoc($row_table_entries);
+					$db_conn->where('flightTable', $location);
+					$rows_table_entries = $db_conn->get($prefix."judging_flights");
 
-					do {
+					foreach ($rows_table_entries as $table_entries) {
 
 						$entries_at_table[] = $table_entries['flightEntryID'];
 
-					} while($table_entries = mysqli_fetch_assoc($row_table_entries));
+					}
 
 					if (!empty($entries_at_table)) $labels_by_table = TRUE;
 				
@@ -501,7 +500,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 				
 				// Print labels
-				do {
+				foreach ($rows_log as $row_log) {
 
 					$character_length = 0;
 
@@ -672,7 +671,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 					}
 
-				} while ($row_log = mysqli_fetch_assoc($log));
+				}
 
 				if (ob_get_length()) ob_clean();
 				//$pdf->Output();
@@ -701,7 +700,7 @@ if (isset($_SESSION['loginUsername'])) {
 			else $pdf->SetFont('Courier','',9);
 
 			// Print labels
-			do {
+			foreach ($rows_log as $row_log) {
 
 				for($i=0; $i<$sort; $i++) {
 
@@ -723,7 +722,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 				}
 
-			} while ($row_log = mysqli_fetch_assoc($log));
+			}
 
 			//$pdf->Output();
 			if (ob_get_length()) ob_clean();
@@ -746,7 +745,7 @@ if (isset($_SESSION['loginUsername'])) {
 			else $pdf->SetFont('Courier','',9);
 
 			// Print labels
-			do {
+			foreach ($rows_log as $row_log) {
 
 				for($i=0; $i<$sort; $i++) {
 
@@ -768,7 +767,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 				}
 
-			} while ($row_log = mysqli_fetch_assoc($log));
+			}
 
 			//$pdf->Output();
 			if (ob_get_length()) ob_clean();
@@ -790,16 +789,16 @@ if (isset($_SESSION['loginUsername'])) {
 			else $pdf->SetFont('Arial','',10);
 
 			// Print labels
-			do {
+			foreach ($rows_log as $row_log) {
 
 				for($i=0; $i<$sort; $i++) {
 					if ($aabc) $text = sprintf("\n%s",ltrim($row_log['brewCategorySort'],"0").".".ltrim($row_log['brewSubCategory'],"0"));
 					else $text = sprintf("\n%s",$row_log['brewCategorySort'].$row_log['brewSubCategory']);
-					$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+					$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 					$pdf->Add_Label($text);
 				}
 
-			} while ($row_log = mysqli_fetch_assoc($log));
+			}
 
 			//$pdf->Output();
 			if (ob_get_length()) ob_clean();
@@ -814,7 +813,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Nametags_Avery5395.pdf";
 			$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
-			do {
+			foreach ($rows_brewer as $row_brewer) {
 
 				$brewerAssignment = "";
 				$brewerLocation = "";
@@ -843,7 +842,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 				}
 
-			} while ($row_brewer = mysqli_fetch_assoc($brewer));
+			}
 
 			if (ob_get_length()) ob_clean();
 			$pdf->Output($filename,'D');
@@ -864,7 +863,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 			$character_limit = $character_limit + 6; // Arial allows for more characters per line
 
-			do {
+			foreach ($rows_brewer as $row_brewer) {
 
 				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 				$rank = bjcp_rank($bjcp_rank[0],2);
@@ -940,7 +939,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$pdf->Add_Label($text);
 				}
 
-			} while ($row_brewer = mysqli_fetch_assoc($brewer));
+			}
 
 			if (ob_get_length()) ob_clean();
 			$pdf->Output($filename,'D');
@@ -957,9 +956,9 @@ if (isset($_SESSION['loginUsername'])) {
 
 			if ($filter == "with_entries") {
 				$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Participants_With_Entries_Address_Labels";
-				do {
+				foreach ($rows_with_entries as $row_with_entries) {
 					$with_entries_array[] = $row_with_entries['brewBrewerID'];
-				} while ($row_with_entries = mysqli_fetch_assoc($with_entries));
+				}
 			}
 
 			else $filename .= str_replace(" ","_",$_SESSION['contestName'])."_All_Participant_Address_Labels";
@@ -971,7 +970,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 					
 
-			do {
+			foreach ($rows_brewer as $row_brewer) {
 
 				if ($filter == "with_entries") {
 
@@ -1034,7 +1033,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 				}
 
-			} while ($row_brewer = mysqli_fetch_assoc($brewer));
+			}
 
 			//$pdf->Output();
 			if (ob_get_length()) ob_clean();
@@ -1076,13 +1075,12 @@ if (isset($_SESSION['loginUsername'])) {
 			$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
 			$query_scores = sprintf("SELECT c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerCity, c.brewerState, c.brewerZip, c.brewerCountry, b.brewBrewerID, b.brewBrewerFirstName, b.brewBrewerLastName FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scorePlace IS NOT NULL) ORDER BY c.brewerLastName,c.brewerFirstName", $prefix."judging_scores", $prefix."brewing", $prefix."brewer");
-			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-			$row_scores = mysqli_fetch_assoc($scores);
-			$totalRows_scores = mysqli_num_rows($scores);
+			$rows_scores = $db_conn->rawQuery($query_scores);
+			$totalRows_scores = $db_conn->count;
 
 			$address_labels_winners = array();
 
-			do {
+			foreach ($rows_scores as $row_scores) {
 
 				$address_labels_winners[] = array(
 					"brewBrewerID" => $row_scores['brewBrewerID'],
@@ -1095,7 +1093,7 @@ if (isset($_SESSION['loginUsername'])) {
 					"brewerCountry" => $row_scores['brewerCountry']
 				);
 
-			} while($row_scores = mysqli_fetch_assoc($scores));
+			}
 
 			$address_labels_winners = unique_multidim_array($address_labels_winners,'brewBrewerID');
 
@@ -1146,6 +1144,12 @@ if (isset($_SESSION['loginUsername'])) {
 	// --------------------------------------------------------
 
 	if (($go == "participants") && ($action == "judging_labels") && ($id != "default")) {
+
+		// Non-staff users may only pull their own judge/participant labels
+		if (((!isset($_SESSION['userLevel'])) || ($_SESSION['userLevel'] > 1)) && ((!isset($row_brewer['uid'])) || ($row_brewer['uid'] != $_SESSION['user_id']))) {
+			header("Location: ../../403.php");
+			exit();
+		}
 
 		if ($psort == "3422") $pdf = new PDF_Label('3422');
 		else $pdf = new PDF_Label('5160');

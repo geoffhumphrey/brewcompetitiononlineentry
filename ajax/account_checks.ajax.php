@@ -26,12 +26,6 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 			$user_name_entered = filter_var($_POST['user_name'],FILTER_SANITIZE_EMAIL);
 			$user_name_entered = $purifier->purify($user_name_entered);
 
-			/*
-			$query_user_name = sprintf("SELECT user_name,userQuestion FROM %s WHERE user_name='%s'",$prefix."users",$user_name_entered);
-			$user_name = mysqli_query($connection,$query_user_name) or die (mysqli_error($connection));
-			$row_user_name = mysqli_fetch_assoc($user_name);
-			*/
-
 			$cols = array("user_name","userQuestion");
 			$db_conn->where ("user_name", $user_name_entered);
 			$row_user_name = $db_conn->getOne ($prefix."users", null, $cols);
@@ -64,7 +58,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 			if ($go == "change") {
 				
 				$user_name_found = 0;
-				if (mysqli_num_rows($user_name)) $user_name_found = 1;
+				if ($row_user_name) $user_name_found = 1;
 				if (!is_email($user_name_entered)) $user_name_found = 2;
 
 				$change_email_array = array(
@@ -76,7 +70,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 			}
 			
 			if ($go == "default") {
-				if (mysqli_num_rows($user_name)) echo sprintf("<p class=\"text-danger\"><i class=\"fas fa-exclamation-triangle pe-2\"></i><strong>%s</strong></p>",$alert_email_in_use);
+				if ($row_user_name) echo sprintf("<p class=\"text-danger\"><i class=\"fas fa-exclamation-triangle pe-2\"></i><strong>%s</strong></p>",$alert_email_in_use);
 				else echo sprintf("<p class=\"text-success\"><i class=\"fas fa-check-circle pe-2\"></i><strong>%s</strong></p>",$alert_email_not_in_use);
 			}
 			
@@ -105,15 +99,8 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 		require (CLASSES.'phpass/PasswordHash.php');
 		$hasher = new PasswordHash(8, false);
 
-		/*
-		$query_user_question = sprintf("SELECT a.id, a.user_name, a.userQuestion, a.userQuestionAnswer, b.brewerFirstName, b.brewerLastName FROM %s a, %s b WHERE a.user_name='%s' AND a.id = b.uid;",$prefix."users",$prefix."brewer",$email);
-		$user_question = mysqli_query($connection,$query_user_question) or die (mysqli_error($connection));
-		$row_user_question = mysqli_fetch_assoc($user_question);
-		$totalRows_user_question = mysqli_num_rows($user_question);
-		*/
-
-		$sql = sprintf("SELECT a.id, a.user_name, a.userQuestion, a.userQuestionAnswer, b.brewerFirstName, b.brewerLastName FROM %s a, %s b WHERE a.user_name='%s' AND a.id = b.uid;",$prefix."users",$prefix."brewer",$email);
-		$row_user_question = $db_conn->rawQuery($sql);
+		$sql = sprintf("SELECT a.id, a.user_name, a.userQuestion, a.userQuestionAnswer, b.brewerFirstName, b.brewerLastName FROM %s a, %s b WHERE a.user_name=? AND a.id = b.uid;",$prefix."users",$prefix."brewer");
+		$row_user_question = $db_conn->rawQuery($sql, array($email));
 		$totalRows_user_question = $db_conn->count;
 
 		// MysqliDB returns a multi-dimentional array for rawQuery calls

@@ -9,23 +9,29 @@ if ($filter == "default") {
 
 else {
 	$winner_style_set = $row_disp_archive_winners['archiveStyleSet'];
-	$special_best_info_db_table = $prefix."special_best_info_".$filter;
-	$judging_tables_db_table = $prefix."judging_tables_".$filter;
-	$style_types_db_table = $prefix."style_types_".$filter;
-	$judging_scores_db_table = $prefix."judging_scores_".$filter;
-	$judging_scores_bos_db_table = $prefix."judging_scores_bos_".$filter;
+	$filter_clean = preg_replace("/[^a-zA-Z0-9]+/", "", $filter);
+	$special_best_info_db_table = $prefix."special_best_info_".$filter_clean;
+	$judging_tables_db_table = $prefix."judging_tables_".$filter_clean;
+	$style_types_db_table = $prefix."style_types_".$filter_clean;
+	$judging_scores_db_table = $prefix."judging_scores_".$filter_clean;
+	$judging_scores_bos_db_table = $prefix."judging_scores_bos_".$filter_clean;
 }
 
-if ($winner_style_set == "BA") $query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategory='%s' AND brewReceived='1'", $brewing_db_table,  $style);
-else $query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewReceived='1'", $brewing_db_table,  $style_pad);
-$entry_count = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
-$row_entry_count = mysqli_fetch_assoc($entry_count);
+if ($winner_style_set == "BA") $db_conn->where("brewCategory", $style);
+else $db_conn->where("brewCategorySort", $style_pad);
+$db_conn->where("brewReceived", "1");
+$row_entry_count = $db_conn->getOne($brewing_db_table, "COUNT(*) as 'count'");
 
-if ($winner_style_set == "BA")  $query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategory='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style);
-else $query_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style_pad);
-if (($action == "print") && ($view == "winners")) $query_score_count .= " AND a.scorePlace IS NOT NULL";
-if (($action == "default") && ($view == "default")) $query_score_count .= " AND a.scorePlace IS NOT NULL";
-$score_count = mysqli_query($connection,$query_score_count) or die (mysqli_error($connection));
-$row_score_count = mysqli_fetch_assoc($score_count);
+if ($winner_style_set == "BA") {
+	$sql_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategory=? AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
+	$score_count_params = array($style);
+}
+else {
+	$sql_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
+	$score_count_params = array($style_pad);
+}
+if (($action == "print") && ($view == "winners")) $sql_score_count .= " AND a.scorePlace IS NOT NULL";
+if (($action == "default") && ($view == "default")) $sql_score_count .= " AND a.scorePlace IS NOT NULL";
+$row_score_count = $db_conn->rawQueryOne($sql_score_count, $score_count_params);
 
 ?>

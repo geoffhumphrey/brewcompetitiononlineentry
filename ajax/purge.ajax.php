@@ -27,7 +27,10 @@ $dom_total_fees = 0;
 $dom_total_fees_paid = 0;
 $dom_ct_eval = 0;
 
-if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
+// CSRF: require a same-origin Referer for this destructive, session-authenticated action.
+$referrer_ok = (isset($_SERVER['HTTP_REFERER'])) && (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === $_SERVER['SERVER_NAME']);
+
+if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0) && ($referrer_ok)) {
 
 	// Purge selected data
 	include(INCLUDES.'data_cleanup.inc.php');

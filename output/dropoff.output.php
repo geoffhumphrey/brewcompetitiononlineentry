@@ -65,7 +65,7 @@ if ($go == "default") {  ?>
 
 
     <?php }
-    do { $dropoff_id[] = $row_dropoff['id']; } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+    foreach ($rows_dropoff as $row_dropoff) { $dropoff_id[] = $row_dropoff['id']; }
     
     foreach ($dropoff_id as $id) { 
         
@@ -152,7 +152,7 @@ if ($go == "default") {  ?>
     </table>
     <div style="page-break-after:always;"></div>
     <?php }
-    do { 
+    foreach ($rows_dropoff as $row_dropoff) {
     $random = random_generator(5,2);
     $entries_by_dropoff_loc = entries_by_dropoff_loc($row_dropoff['id']);
     $location_count = location_count($row_dropoff['id']);
@@ -194,6 +194,6 @@ if ($go == "default") {  ?>
     <div style="page-break-after:always;"></div>
     <?php
         } // end if ($location_count > 0)
-    } while ($row_dropoff = mysqli_fetch_assoc($dropoff)) ?>   
+    } ?>
     <!-- END content -->
 <?php } ?>

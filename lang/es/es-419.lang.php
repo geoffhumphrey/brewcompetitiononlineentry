@@ -959,7 +959,7 @@ $pay_text_029 = "Ve a tu lista de entradas para confirmar todos los datos de tu 
  */
 
 // Ignore the next four lines
-if (strpos($view, "^") !== FALSE) {
+if ($carat_url_var) {
 	$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
 	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
 	else $qr_text_020 = $checked_in_numbers[1];
@@ -969,11 +969,11 @@ $qr_text_000 = $alert_text_080;
 $qr_text_001 = $alert_text_081;
 
 // Begin translations here
-if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("El número de entrada <span class=\"text-danger\">%s</span> está marcado con el número de evaluación <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+if ($carat_url_var) $qr_text_002 = sprintf("El número de entrada <span class=\"text-danger\">%s</span> está marcado con el número de evaluación <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 $qr_text_003 = "Si este número de evaluación <em>no</em> es correcto, <strong>escanea nuevamente el código y vuelve a ingresar el número de evaluación correcto.";
-if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("La entrada número %s está registrada.",$qr_text_019); else $qr_text_004 = "";
-if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("La entrada número %s no se encontró en la base de datos. Coloca las botellas a un lado y avisa al organizador de la competencia.",$qr_text_019); else $qr_text_005 = "";
-if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("El número de evaluación que ingresaste - %s - ya está asignado a la entrada número %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
+if ($carat_url_var) $qr_text_004 = sprintf("La entrada número %s está registrada.",$qr_text_019); else $qr_text_004 = "";
+if ($carat_url_var) $qr_text_005 = sprintf("La entrada número %s no se encontró en la base de datos. Coloca las botellas a un lado y avisa al organizador de la competencia.",$qr_text_019); else $qr_text_005 = "";
+if ($carat_url_var) $qr_text_006 = sprintf("El número de evaluación que ingresaste - %s - ya está asignado a la entrada número %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
 $qr_text_007 = "Registro de Entrada mediante Código QR";
 $qr_text_008 = "Para registrar las entradas mediante código QR, proporciona la contraseña correcta. Solo necesitarás proporcionar la contraseña una vez por sesión; asegúrate de mantener la aplicación de escaneo de códigos QR abierta.";
 $qr_text_009 = "Asigna un número de evaluación y/o un número de caja a la entrada";

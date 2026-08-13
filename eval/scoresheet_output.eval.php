@@ -10,12 +10,6 @@ else {
 
 if ($view == "all") {   
 
-    /*
-    $query_eval_all = sprintf("SELECT id FROM %s WHERE eid=%s", $dbTable, $id);
-    $eval_all = mysqli_query($connection,$query_eval_all) or die ("A database error occurred.");
-    $row_eval_all = mysqli_fetch_assoc($eval_all);
-    */
-
     $db_conn->where ("eid", $id);
     $row_eval_all = $db_conn->get ($dbTable);
 

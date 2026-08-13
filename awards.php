@@ -56,10 +56,10 @@ if (($display_to_admin) || ($display_to_public)) {
 	);
 
 	// Judges and Stewards
-	$query_assignments = sprintf("SELECT DISTINCT c.uid, c.brewerLastName, c.brewerFirstName, c.brewerJudgeRank, c.brewerClubs, a.assignment, b.staff_judge, b.staff_steward, b.staff_judge_bos, b.staff_staff, b.staff_organizer FROM %s a RIGHT JOIN (%s b CROSS JOIN %s c ON b.uid=c.uid) ON c.uid=a.bid WHERE b.staff_judge='1' OR b.staff_steward='1' OR b.staff_judge_bos='1' OR b.staff_staff='1' OR b.staff_organizer='1' ORDER BY c.brewerLastName, c.brewerFirstName ASC;", $prefix."judging_assignments", $prefix."staff", $prefix."brewer");
-	$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-	$row_assignments = mysqli_fetch_assoc($assignments);
-	$totalRows_assignments = mysqli_num_rows($assignments);
+	$sql = sprintf("SELECT DISTINCT c.uid, c.brewerLastName, c.brewerFirstName, c.brewerJudgeRank, c.brewerClubs, a.assignment, b.staff_judge, b.staff_steward, b.staff_judge_bos, b.staff_staff, b.staff_organizer FROM %s a RIGHT JOIN (%s b CROSS JOIN %s c ON b.uid=c.uid) ON c.uid=a.bid WHERE b.staff_judge='1' OR b.staff_steward='1' OR b.staff_judge_bos='1' OR b.staff_staff='1' OR b.staff_organizer='1' ORDER BY c.brewerLastName, c.brewerFirstName ASC;", $prefix."judging_assignments", $prefix."staff", $prefix."brewer");
+	$row_assignments = $db_conn->rawQuery($sql);
+	$totalRows_assignments = $db_conn->count;
+
 	$judge_list = "";
 	$judge_bos = "";
 	$steward_list = "";
@@ -68,7 +68,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 	if ($totalRows_assignments > 0) {
 		
-		do {
+		foreach ($row_assignments as $row_assignments) {
 
 			if ($row_assignments['staff_judge'] == 1) {
 				$judge_list .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
@@ -95,7 +95,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				$staff_organizer .= ", ";
 			}
 
-		} while ($row_assignments = mysqli_fetch_assoc($assignments));
+		}
 	
 	}
 
@@ -113,7 +113,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 			if ($totalRows_tables > 0) {
 
-				do {
+				foreach ($rows_tables as $row_tables) {
 
 					$slides_tables = "";
 
@@ -128,15 +128,16 @@ if (($display_to_admin) || ($display_to_public)) {
 
 					if ($assigned_judges > 0) {
 
-						$query_assigned_judge_names = sprintf("SELECT a.brewerFirstName,a.brewerLastName, b.assignRoles FROM %s a, %s b WHERE b.assignTable='%s' AND assignment = 'J' AND a.uid = b.bid ORDER BY a.brewerLastName, a.brewerFirstName ASC",$prefix."brewer",$prefix."judging_assignments",$row_tables['id']);
-						$assigned_judge_names = mysqli_query($connection,$query_assigned_judge_names);
-						$row_assigned_judge_names = mysqli_fetch_assoc($assigned_judge_names);
+						// Bound parameter used for $row_tables['id'].
+						$sql = "SELECT a.brewerFirstName,a.brewerLastName, b.assignRoles FROM ".$prefix."brewer"." a, ".$prefix."judging_assignments"." b WHERE b.assignTable=? AND assignment = 'J' AND a.uid = b.bid ORDER BY a.brewerLastName, a.brewerFirstName ASC";
+						$row_assigned_judge_names = $db_conn->rawQuery($sql, array($row_tables['id']));
+						$totalRows_assigned_judge_names = $db_conn->count;
 						
-						do {
+						foreach ($row_assigned_judge_names as $row_assigned_judge_names) {
 							$assigned_judge_names_display .= $row_assigned_judge_names['brewerFirstName']." ".$row_assigned_judge_names['brewerLastName'];
 							if ((isset($row_assigned_judge_names['assignRoles'])) && (strpos($row_assigned_judge_names['assignRoles'], "HJ") !== false)) $assigned_judge_names_display .= " <span style=\"font-size: .75em;\">(".$label_head_judge.")</span>";
 							$assigned_judge_names_display .= ", ";
-						} while ($row_assigned_judge_names = mysqli_fetch_assoc($assigned_judge_names));
+						} 
 
 						$assigned_judge_names_display = rtrim($assigned_judge_names_display, ", ");
 					
@@ -162,7 +163,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					// If so, loop through and display as normal
 					if ($totalRows_scores > 0) {
 
-						do {
+						foreach ($rows_scores as $row_scores) {
 
 							$place_heirarchy = place_heirarchy($row_scores['scorePlace']);
 							$display_place = display_place($row_scores['scorePlace'],1);
@@ -197,7 +198,7 @@ if (($display_to_admin) || ($display_to_public)) {
 							$slides_tables .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
 							$slides_tables .= "</div>";
 
-						} while ($row_scores = mysqli_fetch_assoc($scores));
+						}
 
 					}
 
@@ -224,7 +225,7 @@ if (($display_to_admin) || ($display_to_public)) {
 						);
 					}
 
-				} while ($row_tables = mysqli_fetch_assoc($tables));
+				}
 
 			} // end if ($totalRows_tables > 0)
 
@@ -284,7 +285,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						if ($totalRows_scores > 0) {
 
-							do {
+							foreach ($rows_scores as $row_scores) {
 
 								$place_heirarchy = place_heirarchy($row_scores['scorePlace']);
 								$display_place = display_place($row_scores['scorePlace'],1);
@@ -317,7 +318,7 @@ if (($display_to_admin) || ($display_to_public)) {
 								$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
 								$slides .= "</div>";
 
-							} while ($row_scores = mysqli_fetch_assoc($scores));
+							}
 
 						}
 
@@ -383,7 +384,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						if ($totalRows_scores > 0) {
 
-							do {
+							foreach ($rows_scores as $row_scores) {
 
 								$place_heirarchy = place_heirarchy($row_scores['scorePlace']);
 								$display_place = display_place($row_scores['scorePlace'],1);
@@ -416,7 +417,7 @@ if (($display_to_admin) || ($display_to_public)) {
 								$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
 								$slides .= "</div>";
 
-							} while ($row_scores = mysqli_fetch_assoc($scores));
+							}
 
 						}
 
@@ -444,9 +445,9 @@ if (($display_to_admin) || ($display_to_public)) {
 
 	$display_bos_style_type = FALSE;
 
-	do { 
-		$st[] = $row_style_types['id']; 
-	} while ($row_style_types = mysqli_fetch_assoc($style_types));
+	foreach ($rows_style_types as $row_style_types) {
+		$st[] = $row_style_types['id'];
+	}
 
 	sort($st);
 
@@ -470,7 +471,7 @@ if (($display_to_admin) || ($display_to_public)) {
 			$slides_bos .= "</h3>";
 			if (!empty($judge_bos)) $slides_bos .= sprintf("<p class=\"small entry-count\">%s: %s</p>",$label_judges,rtrim($judge_bos,", "));
 
-			do {
+			foreach ($rows_bos as $row_bos) {
 
 				$place_heirarchy = place_heirarchy($row_bos['scorePlace']);
 				$display_place = display_place($row_bos['scorePlace'],1);
@@ -479,31 +480,31 @@ if (($display_to_admin) || ($display_to_public)) {
 				$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
 				// Category/Style Display
-				if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_bos['brewCategory'],"0").".".ltrim($row_bos['brewSubCategory'],"0");
-					else $style = $row_bos['brewCategory'].$row_bos['brewSubCategory'];
-					if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $row_bos['brewStyle'];
-				else $style_display = $style.": ".$row_bos['brewStyle'];
+				if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim(h($row_bos['brewCategory']),"0").".".ltrim(h($row_bos['brewSubCategory']),"0");
+					else $style = h($row_bos['brewCategory']).h($row_bos['brewSubCategory']);
+					if ($_SESSION['prefsStyleSet'] == "BA") $style_display = h($row_bos['brewStyle']);
+				else $style_display = $style.": ".h($row_bos['brewStyle']);
 
 					// Name Display
 				if ($_SESSION['prefsProEdition'] == 1) $brewer_name = $row_bos['brewerBreweryName'];
 				else $brewer_name = $row_bos['brewerFirstName']." ".$row_bos['brewerLastName'];
 
 				$brewer_club = "";
-				if ((!empty($row_bos['brewerClubs'])) && ($row_bos['brewerClubs'] != "Other")) $brewer_club = $row_bos['brewerClubs'];
+				if ((!empty($row_bos['brewerClubs'])) && ($row_bos['brewerClubs'] != "Other")) $brewer_club = h($row_bos['brewerClubs']);
 
 				// Build Slide Content
 				$slides_bos .= "<div id=\"medal-grid\">";
 				$slides_bos .= "<div class=\"fragment justify-right col-right\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."\"><i class=\"fa fa-trophy icon pos-".$place_heirarchy."-medal-color\"></i>".$display_place."</div>";
 				$slides_bos .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">";
 				$slides_bos .= $brewer_name;
-				if (!empty($row_bos['brewCoBrewer'])) $slides_bos .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string($row_bos['brewCoBrewer'],20," ")."</em></span>";
+				if (!empty($row_bos['brewCoBrewer'])) $slides_bos .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string(h($row_bos['brewCoBrewer']),20," ")."</em></span>";
 				$slides_bos .= "</div>";
 
 				if ($_SESSION['prefsProEdition'] == 0) $slides_bos .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
 				$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
-				$slides_bos .= "</div>"; 
-			
-			} while ($row_bos = mysqli_fetch_assoc($bos));
+				$slides_bos .= "</div>";
+
+			}
 
 			$slides_bos .= "</section>\n";
 
@@ -517,7 +518,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 	if ($totalRows_sbi > 0) {
 
-		do {
+		foreach ($rows_sbi as $row_sbi) {
 
 			include (DB.'output_results_download_sbd.db.php');
 				
@@ -531,7 +532,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 					$place_heirarchy_count = 0;
 
-					do {
+					foreach ($rows_sbd as $row_sbd) {
 
 						$place_heirarchy_count += 1;
 						$display_place = "";
@@ -549,17 +550,17 @@ if (($display_to_admin) || ($display_to_public)) {
 						$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 						
 						// Category/Style Display
-						if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_sbd['brewerCategory'],"0").".".ltrim($row_sbd['brewSubCategory'],"0");
-							else $style = $row_sbd['brewCategory'].$row_sbd['brewSubCategory'];
-						if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $row_sbd['brewStyle'];
-						else $style_display = $row_sbd['brewCategory'].$row_sbd['brewSubCategory'].": ".$row_sbd['brewStyle'];
+						if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim(h($row_sbd['brewerCategory']),"0").".".ltrim(h($row_sbd['brewSubCategory']),"0");
+							else $style = h($row_sbd['brewCategory']).h($row_sbd['brewSubCategory']);
+						if ($_SESSION['prefsStyleSet'] == "BA") $style_display = h($row_sbd['brewStyle']);
+						else $style_display = h($row_sbd['brewCategory']).h($row_sbd['brewSubCategory']).": ".h($row_sbd['brewStyle']);
 
 							// Name Display
 						if ($_SESSION['prefsProEdition'] == 1) $brewer_name = $row_sbd['brewerBreweryName'];
 						else $brewer_name = $row_sbd['brewerFirstName']." ".$row_sbd['brewerLastName'];
 
 						$brewer_club = "";
-						if ((!empty($row_sbd['brewerClubs'])) && ($row_sbd['brewerClubs'] != "Other")) $brewer_club = $row_sbd['brewerClubs'];
+						if ((!empty($row_sbd['brewerClubs'])) && ($row_sbd['brewerClubs'] != "Other")) $brewer_club = h($row_sbd['brewerClubs']);
 
 						// Build Slide Content
 						$slides_bos .= "<div id=\"medal-grid\">";
@@ -568,14 +569,14 @@ if (($display_to_admin) || ($display_to_public)) {
 						if ($_SESSION['prefsProEdition'] == 0) $slides_bos .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
 						$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
 						$slides_bos .= "</div>";
-					
-					} while ($row_sbd = mysqli_fetch_assoc($sbd));
+
+					}
 
 					$slides_bos .= "</section>\n";
 
 				}
 
-		} while ($row_sbi = mysqli_fetch_assoc($sbi));
+		}
 
 	}
 
@@ -584,7 +585,7 @@ if (($display_to_admin) || ($display_to_public)) {
 	 */
 
 
-	if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) {
+	if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) {
 		
 		$bestbrewer = array();
 		$bestbrewer_clubs = array();
@@ -594,7 +595,7 @@ if (($display_to_admin) || ($display_to_public)) {
 		if ($bb_totalRows_scores > 0) {
 
 			// Loop through brewing table for preliminary round scores
-			do {
+			foreach ($rows_bb_scores as $bb_row_scores) {
 
 				$place = floor($bb_row_scores['scorePlace']);
 				$club_name = normalizeClubs($bb_row_scores['brewerClubs']);
@@ -793,16 +794,16 @@ if (($display_to_admin) || ($display_to_public)) {
 					
 				}
 
-			} while ($bb_row_scores = mysqli_fetch_assoc($bb_scores));
+			}
 
 		}
 
 		// BOS - do calcs only if pref is true
 		if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
 
-			if ($bb_row_bos_scores) {
+			if ($rows_bb_bos_scores) {
 
-				do {
+				foreach ($rows_bb_bos_scores as $bb_row_bos_scores) {
 
 					$club_name = normalizeClubs($bb_row_bos_scores['brewerClubs']);
 
@@ -864,7 +865,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 					}
 
-				} while ($bb_row_bos_scores = mysqli_fetch_assoc($bb_bos_scores));
+				}
 
 			}
 
@@ -1222,14 +1223,14 @@ if (($display_to_admin) || ($display_to_public)) {
 					<h1 style="margin:0;padding:0" class="r-fit-text"><?php echo $_SESSION['contestName']; ?></h1>
 					<h1 style="margin:0;padding:0" class="tight"><?php echo $label_sponsors; ?></h1>
 					    <ul id="sponsor-slider">
-					   	<?php do { 
+					   	<?php foreach ($rows_sponsors as $row_sponsors) {
 					   	if ($row_sponsors['sponsorEnable'] == "1") {
 					   	if ((!empty($row_sponsors['sponsorImage'])) && (file_exists(USER_IMAGES.$row_sponsors['sponsorImage']))) { ?>
 					   		<li data-thumb="<?php echo $base_url."user_images/".$row_sponsors['sponsorImage']; ?>"><img src="<?php echo $base_url."user_images/".$row_sponsors['sponsorImage']; ?>" height="200" alt="<?php echo $row_sponsors['sponsorName']; ?>"></li>
-					   	<?php 
-					   			} 
-					   		} 
-					   	} while ($row_sponsors = mysqli_fetch_assoc($sponsors)); ?>
+					   	<?php
+					   			}
+					   		}
+					   	} ?>
 					    </ul>
 				</section>
 				<?php } ?>

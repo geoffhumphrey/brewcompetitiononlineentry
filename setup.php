@@ -43,10 +43,9 @@ if ($section == "default") $section = "setup";
 if (($section == "step4") || ($section == "step5") || ($section == "step6") || ($section == "step7")) {
 	
 	unset($_SESSION['prefs'.$prefix_session]);
-	$query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
-	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
-	$row_prefs = mysqli_fetch_assoc($prefs);
-	$totalRows_prefs = mysqli_num_rows($prefs);
+	$db_conn->where('id', '1');
+	$row_prefs = $db_conn->getOne($prefix."preferences");
+	$totalRows_prefs = $db_conn->count;
 
 	if ($totalRows_prefs == 1) {
 		$prefs_set = TRUE;
@@ -55,10 +54,9 @@ if (($section == "step4") || ($section == "step5") || ($section == "step6") || (
 		}
 	}
 
-	$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
-	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
-	$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);
-	$totalRows_judging_prefs = mysqli_num_rows($judging_prefs);
+	$db_conn->where('id', '1');
+	$row_judging_prefs = $db_conn->getOne($prefix."judging_preferences");
+	$totalRows_judging_prefs = $db_conn->count;
 
 	if ($totalRows_judging_prefs == 1) {
 		$jprefs_set = TRUE;
@@ -102,17 +100,13 @@ require_once (INCLUDES.'scrubber.inc.php');
 
 if ($section == "step0") {
 
-	$query_character_check = "SHOW VARIABLES LIKE 'character_set_database'";
-	$character_check = mysqli_query($connection,$query_character_check) or die (mysqli_error($connection));
-	$row_character_check = mysqli_fetch_assoc($character_check);
+	$row_character_check = $db_conn->rawQueryOne("SHOW VARIABLES LIKE 'character_set_database'");
 
 	// If not usf8mb4, convert DB and all tables
 	if ($row_character_check['Value'] != "utf8mb4") {
 
 		$sql = sprintf("ALTER DATABASE `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$database);
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		$db_conn->rawQuery($sql);
 
 	}
 
@@ -123,10 +117,9 @@ $timezone_raw = "0";
 
 if (check_setup($prefix."preferences",$database)) {
 
-	$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
-	$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
-	$row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
-	$totalRows_prefs_tz = mysqli_num_rows($prefs_tz);
+	$db_conn->where('id', '1');
+	$row_prefs_tz = $db_conn->getOne($prefix."preferences", "prefsTimeZone");
+	$totalRows_prefs_tz = $db_conn->count;
 
 	if ($totalRows_prefs_tz > 0) {
 		$timezone_raw = $row_prefs_tz['prefsTimeZone'];
@@ -257,9 +250,7 @@ csrf_token_generate(false);
 
 				if (table_exists($prefix."bcoem_sys")) {
 
-					$query_system = sprintf("SELECT setup FROM %s", $prefix."bcoem_sys");
-					$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
-					$row_system = mysqli_fetch_assoc($system);
+					$row_system = $db_conn->getOne($prefix."bcoem_sys", "setup");
 
 					if (ENABLE_MARKDOWN) {
 	                    include (CLASSES.'parsedown/Parsedown.php');

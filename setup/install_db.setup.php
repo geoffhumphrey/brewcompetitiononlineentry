@@ -81,10 +81,8 @@ if ($setup_free_access == TRUE) {
 		 */
 
 		$sql = sprintf("ALTER DATABASE `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$database);
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		if (!$result) {
+		$db_conn->rawQuery($sql);
+		if ($db_conn->getLastErrno()) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> DB character set NOT changed to UTF8-mb4.</li>";
@@ -879,9 +877,7 @@ if ($setup_free_access == TRUE) {
 		// -------------------
 
 		$sql = sprintf("DROP TABLE IF EXISTS %s;",$prefix."styles");
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		$db_conn->rawQuery($sql);
 
 		$sql = sprintf("
 			CREATE TABLE `%s` (

@@ -23,24 +23,17 @@ elseif (is_array($user_submitted_eval)) $score_previous = TRUE;
 
 if (TESTING) {
 
-	$styles_db_table = $prefix."styles";
-
-	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
-        $first_character = mb_substr($row_entries['brewCategorySort'], 0, 1);
-        if ($first_character == "C") $chosen_style_set = "BJCP2025";
-        else $chosen_style_set = "BJCP2021";
-    }
-
-    else $chosen_style_set = $_SESSION['prefsStyleSet'];
-
-	$query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles", $chosen_style_set, $row_entries['brewCategorySort'], $row_entries['brewSubCategory']);
-	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-	$row_style = mysqli_fetch_assoc($style);
+	$db_conn->where ("brewStyleGroup", $row_entries['brewCategorySort']);
+	$db_conn->where ("brewStyleNum", $row_entries['brewSubCategory']);
+	if ($_SESSION['prefsStyleSet'] == "BJCP2025") $db_conn->where ("brewStyleVersion = ? OR brewStyleVersion = ?", array("BJCP2025","BJCP2021"));
+	else $db_conn->where ("brewStyleVersion", $_SESSION['prefsStyleSet']);
+	$row_style = $db_conn->getOne ($prefix."styles", null, "brewStyleType");
 	
 	$add_link_full = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=1&amp;id=".$row_entries['id'];
 	$add_link_checklist = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=2&amp;id=".$row_entries['id'];
 	$add_link_structured = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=3&amp;id=".$row_entries['id'];
 	$add_link_nw_cider = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;sort=4&amp;id=".$row_entries['id'];
+
 }
 
 	
@@ -324,8 +317,10 @@ elseif ($scored_by_user) {
 	}
 
 	else {
-		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-block btn-sm btn-info modal-window-link hide-loader\" href=\"".$view_link."\">".$label_view;
+		$actions .= "<div class=\"d-grid gap-2\">";
+		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-info modal-window-link hide-loader\" href=\"".$view_link."\">".$label_view;
 		$actions .= "</a>";
+		$actions .= "</div>";
 	}
 
 	$actions .= "<div class=\"text-center\">";
@@ -429,7 +424,7 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 				$score_previous_id = $value['id'];
 				$score_previous = $value['judge_score'];
 				$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$score_previous_id."&amp;tb=1";
-				$actions .= "<div style=\"margin-top: 5px;\">";
+				$actions .= "<div style=\"d-grid gap-2\">";
 				$actions .= "<a style=\"word-wrap:break-word;\" data-fancybox data-type=\"iframe\" class=\"btn btn-block btn-sm btn-info modal-window-link hide-loader\" href=\"".$view_link."\">";
 				$actions .= $label_view_other_judge_eval;
 				$actions .= " (";

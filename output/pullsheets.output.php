@@ -85,8 +85,8 @@ if ($go == "all_entry_info") {
 		$judge_inventory = array();
 
 		if ($row_assignments) {
-		
-			do {
+
+			foreach ($rows_assignments as $row_assignments) {
 
 				$show_table = FALSE;
 				$judge_info = judge_info($row_assignments['bid']);
@@ -132,7 +132,7 @@ if ($go == "all_entry_info") {
 								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 								$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-								do {
+								foreach ($rows_entries as $row_entries) {
 
 									if (!empty($row_entries['brewCategorySort'])) {
 
@@ -219,7 +219,7 @@ if ($go == "all_entry_info") {
 
 									}
 
-								} while ($row_entries = mysqli_fetch_assoc($entries));
+								}
 
 							}
 
@@ -309,7 +309,7 @@ if ($go == "all_entry_info") {
 					"inventory-html" => $judge_inventory_output
 				);
 
-			} while ($row_assignments = mysqli_fetch_assoc($assignments));
+			}
 
 			sort($judge_inventory);
 
@@ -328,7 +328,7 @@ if ($go == "all_entry_info") {
 
 	} else {
 
-		do {
+		foreach ($rows_tables as $row_tables) {
 
 			$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 			include (DB.'output_pullsheets_queued.db.php');
@@ -355,7 +355,7 @@ if ($go == "all_entry_info") {
 						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
  
-						do {
+						foreach ($rows_entries as $row_entries) {
 
 							$show_record = FALSE;
 
@@ -406,7 +406,7 @@ if ($go == "all_entry_info") {
 
 							}
 
-						} while ($row_entries = mysqli_fetch_assoc($entries));
+						}
 
 					} // end foreach
 
@@ -478,10 +478,10 @@ if ($go == "all_entry_info") {
 				}
 			}
 
-		} while ($row_tables = mysqli_fetch_assoc($tables));
+		}
 
-		
-	} // end else	
+
+	} // end else
 
 } // end if ($go == "all_entry_info")
 
@@ -536,7 +536,7 @@ if ($go == "mini_bos") {
 		$table_flight .= "</thead>";
 		$table_flight .= "<tbody>";
 
-		do {
+		foreach ($rows_entries_mini as $row_entries_mini) {
 
 			$style = style_number_const($row_entries_mini['brewCategorySort'],$row_entries_mini['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 			$style_special = $row_entries_mini['brewCategorySort']."^".$row_entries_mini['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
@@ -637,7 +637,7 @@ if ($go == "mini_bos") {
 
 			$table_flight_tbody .= "</tr>";
 
-		} while ($row_entries_mini = mysqli_fetch_assoc($entries_mini));
+		}
 
 		$table_flight .= $table_flight_tbody;
 		$table_flight .= "</tbody>";
@@ -658,9 +658,9 @@ if ($go == "judging_scores_bos") {
 	$a = array();
 
 	if ($id == "default") {
-		do {
+		foreach ($rows_style_types as $row_style_types) {
 			$a[] = $row_style_types['id'];
-		} while ($row_style_types = mysqli_fetch_assoc($style_types));
+		}
 		sort($a);
 	}
 
@@ -722,7 +722,7 @@ if ($go == "judging_scores_bos") {
 				$table_flight .= "</thead>";
 				$table_flight .= "<tbody>";
 
-				do {
+				foreach ($rows_bos as $row_bos) {
 
 					// include (DB.'output_pullsheets_bos_entries.db.php');
 
@@ -833,7 +833,7 @@ if ($go == "judging_scores_bos") {
 					}
 
 
-				} while ($row_bos = mysqli_fetch_assoc($bos));
+				}
 
 				$table_flight .= $table_flight_tbody;
 				$table_flight .= "</tbody>";
@@ -866,7 +866,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 			$pullsheet_output = "";
 			$round_count = array();
 
-			do {
+			foreach ($rows_tables as $row_tables) {
 
 				$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 				include (DB.'output_pullsheets_queued.db.php');
@@ -954,9 +954,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 								$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 							}
-							
 
-							do {
+
+							foreach ($rows_entries as $row_entries) {
 
 								if (!empty($row_entries['brewCategorySort'])) {
 
@@ -1052,7 +1052,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								}
 
-							} while ($row_entries = mysqli_fetch_assoc($entries));
+							}
 
 						} // end foreach
 
@@ -1072,7 +1072,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 				$pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
 
-			} while ($row_tables = mysqli_fetch_assoc($tables));
+			}
 
 		} // end if ($tables_all)
 
@@ -1162,7 +1162,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 							$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-							do {
+							foreach ($rows_entries as $row_entries) {
 
 								if (!empty($row_entries['brewCategorySort'])) {
 
@@ -1261,7 +1261,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								}
 
-							} while ($row_entries = mysqli_fetch_assoc($entries));
+							}
 
 						}
 
@@ -1294,7 +1294,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 			if ($filter == "mini_bos") {
 
-				do {
+				foreach ($rows_tables as $row_tables) {
 
 					// Reset Vars
 					$table_info_location = "";
@@ -1337,14 +1337,6 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_flight_datatables = "";
 
 					$random = random_generator(5,2);
-
-					/*
-					$query_round_check = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $row_tables['id'],$i);
-					$round_check = mysqli_query($connection,$query_round_check) or die (mysqli_error($connection));
-					$row_round_check = mysqli_fetch_assoc($round_check);
-
-					// $table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
-					*/
 
 					$table_flight_datatables .= "<script>";
 					$table_flight_datatables .= "$(document).ready(function() {";
@@ -1394,7 +1386,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
 								$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-								do {
+								foreach ($rows_entries as $row_entries) {
 
 									$flight_round = check_flight_number($row_entries['id'],$i,0);
 
@@ -1499,7 +1491,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 									$table_flight .= $table_flight_tbody;
 
-								} while ($row_entries = mysqli_fetch_assoc($entries));
+								}
 
 							}
 
@@ -1519,7 +1511,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					//if (($flights == 0) || ($filter == "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
 					$pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
 
-				} while ($row_tables = mysqli_fetch_assoc($tables));
+				}
 
 			}
 
@@ -1527,7 +1519,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 			else {
 
-				do {
+				foreach ($rows_tables as $row_tables) {
 
 					// Reset Vars
 					$table_info_location = "";
@@ -1572,9 +1564,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 						$random = random_generator(5,2);
 
-						$query_round_check = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $row_tables['id'],$i);
-						$round_check = mysqli_query($connection,$query_round_check) or die (mysqli_error($connection));
-						$row_round_check = mysqli_fetch_assoc($round_check);
+						$db_conn->where('flightTable', $row_tables['id']);
+						$db_conn->where('flightNumber', $i);
+						$row_round_check = $db_conn->getOne($prefix."judging_flights", "flightRound");
 
 						$table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
 
@@ -1617,7 +1609,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 							$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-							do {
+							foreach ($rows_entries as $row_entries) {
 
 								$table_flight_tbody = "";
 
@@ -1727,7 +1719,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								$table_flight .= $table_flight_tbody;
 
-							} while ($row_entries = mysqli_fetch_assoc($entries));
+							}
 
 						} // end foreach
 
@@ -1740,7 +1732,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 					if (($flights == 0) || ($filter == "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
 
-				} while ($row_tables = mysqli_fetch_assoc($tables));
+				}
 			}
 
 		} // end if ($tables_all)
@@ -1829,9 +1821,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 					$random = random_generator(5,2);
 
-					$query_round_check = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' LIMIT 1", $prefix."judging_flights", $row_tables['id'],$i);
-					$round_check = mysqli_query($connection,$query_round_check) or die (mysqli_error($connection));
-					$row_round_check = mysqli_fetch_assoc($round_check);
+					$db_conn->where('flightTable', $row_tables['id']);
+					$db_conn->where('flightNumber', $i);
+					$row_round_check = $db_conn->getOne($prefix."judging_flights", "flightRound");
 
 					$table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
 
@@ -1880,7 +1872,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-						do {
+						foreach ($rows_entries as $row_entries) {
 
 							$table_flight_tbody = "";
 
@@ -2021,7 +2013,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 							$table_flight .= $table_flight_tbody;
 
-						} while ($row_entries = mysqli_fetch_assoc($entries));
+						}
 
 					} // if (!empty($row_entries))
 

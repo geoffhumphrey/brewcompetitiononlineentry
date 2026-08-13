@@ -60,9 +60,9 @@ if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php'
         </tr>
     </thead>
     <tbody>
-    <?php 
+    <?php
 
-    do {
+    foreach ($rows_post_inventory as $row_post_inventory) {
 
 		include (DB.'output_post_judge.db.php');
 		if ((($totalRows_post_inventory_entry > 0) && ($row_post_inventory_entry['scorePlace'] == "")) || ($totalRows_post_inventory_entry == 0)) {
@@ -100,6 +100,6 @@ if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php'
         </tr>
     <?php
 		}
-	} while ($row_post_inventory = mysqli_fetch_assoc($post_inventory)); ?>
+	} ?>
     </tbody>
     </table>

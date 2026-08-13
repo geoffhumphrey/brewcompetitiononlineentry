@@ -11,14 +11,18 @@ if ((!empty($_SESSION['mods_display'])) && ($go != "mods")) {
 	foreach ($_SESSION['mods_display'] as $key => $value) {
 
 		if (!file_exists(MODS.$value['mod_filename'])) {
-			if ($value['mod_enable'] == 1) $missing_enabled_files .= "<li>".$value['mod_filename']."</li>";
-			if ($value['mod_enable'] == 0) $missing_disabled_files .= "<li>".$value['mod_filename']."</li>";
+			if ($value['mod_enable'] == 1) $missing_enabled_files .= "<li>".h($value['mod_filename'])."</li>";
+			if ($value['mod_enable'] == 0) $missing_disabled_files .= "<li>".h($value['mod_filename'])."</li>";
 		}
-		
+
 		$mods_top = mod_display($value,$section,$go,$user_level_mods,1);
 
 		if (($mods_top['file_ok'] == 1) && ($value['mod_enable'] == 1)) {
-			include(MODS.$value['mod_filename']);
+			$mod_real_path = realpath(MODS.$value['mod_filename']);
+			$mods_real_dir = realpath(MODS);
+			if (($mod_real_path !== FALSE) && ($mods_real_dir !== FALSE) && (str_starts_with($mod_real_path, $mods_real_dir.DIRECTORY_SEPARATOR))) {
+				include($mod_real_path);
+			}
 		}
 
 	}

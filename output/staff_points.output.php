@@ -70,11 +70,11 @@ $beer_styles_total = 0;
 $mead_styles_total = 0;
 $cider_styles_total = 0;
 
-do {
+foreach ($rows_styles2 as $row_styles2) {
     if (($row_styles2['brewStyleType'] == "Cider") || ($row_styles2['brewStyleType'] == "2")) $cider_styles_total++;
     elseif (($row_styles2['brewStyleType'] == "Mead") || ($row_styles2['brewStyleType'] == "3")) $mead_styles_total++;
     else $beer_styles_total++;
-} while ($row_styles2 = mysqli_fetch_assoc($styles2));
+}
 
 $mead_cider_total = $mead_styles_total + $cider_styles_total;
 $all_styles_total = $beer_styles_total + $mead_styles_total + $cider_styles_total;
@@ -129,11 +129,11 @@ if ($view == "default") {
 
 	if ($totalRows_judges > 0) {
 
-		do { 
-			
-			$j[] = $row_judges['uid']; 
-		
-		} while ($row_judges = mysqli_fetch_assoc($judges));
+		foreach ($rows_judges as $row_judges) {
+
+			$j[] = $row_judges['uid'];
+
+		}
 
 		$j = array_unique($j);
 
@@ -221,12 +221,12 @@ if ($view == "default") {
 	}
 
 	if ($totalRows_stewards > 0) {
-        
-		do { 
-			
-			$s[] = $row_stewards['uid']; 
-		
-		} while ($row_stewards = mysqli_fetch_assoc($stewards));
+
+		foreach ($rows_stewards as $row_stewards) {
+
+			$s[] = $row_stewards['uid'];
+
+		}
 
 		foreach (array_unique($s) as $uid) {
 			
@@ -255,13 +255,13 @@ if ($view == "default") {
 	}
 
 	if ($totalRows_staff > 0) {
-        
-		do {
 
-			$st[] = $row_staff['uid']; 
-		
-		} while ($row_staff = mysqli_fetch_assoc($staff));
-		
+		foreach ($rows_staff as $row_staff) {
+
+			$st[] = $row_staff['uid'];
+
+		}
+
 		$st_running_total = 0;
 		
 		foreach (array_unique($st) as $uid) {

@@ -953,7 +953,7 @@ $pay_text_029 = "Kérjük, lépjen a nevezési listájához az összes nevezési
  * ------------------------------------------
  */
 // Ignore the next four lines
-if (strpos($view, "^") !== FALSE) {
+if ($carat_url_var) {
 	$qr_text_019 = sprintf("%06d",$checked_in_numbers[0]);
 	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
 	else $qr_text_020 = $checked_in_numbers[1];
@@ -963,11 +963,11 @@ $qr_text_000 = $alert_text_080;
 $qr_text_001 = $alert_text_081;
 
 // Begin translations here
-if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("A(z) <span class=\"text-danger\">%s</span> számú nevezés bejelentkeztetve, bírálati száma: <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+if ($carat_url_var) $qr_text_002 = sprintf("A(z) <span class=\"text-danger\">%s</span> számú nevezés bejelentkeztetve, bírálati száma: <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 $qr_text_003 = "Ha ez a bírálati szám <em>nem</em> helyes, <strong>szkennelje újra a kódot és adja meg a helyes bírálati számot.";
-if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("A(z) %s számú nevezés bejelentkeztetve.",$qr_text_019); else $qr_text_004 = "";
-if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("A(z) %s számú nevezés nem található az adatbázisban. Tegye félre a palacko(ka)t és értesítse a verseny szervezőjét.",$qr_text_019); else $qr_text_005 = "";
-if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("A megadott bírálati szám - %s - már hozzá van rendelve a(z) %s számú nevezéshez.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
+if ($carat_url_var) $qr_text_004 = sprintf("A(z) %s számú nevezés bejelentkeztetve.",$qr_text_019); else $qr_text_004 = "";
+if ($carat_url_var) $qr_text_005 = sprintf("A(z) %s számú nevezés nem található az adatbázisban. Tegye félre a palacko(ka)t és értesítse a verseny szervezőjét.",$qr_text_019); else $qr_text_005 = "";
+if ($carat_url_var) $qr_text_006 = sprintf("A megadott bírálati szám - %s - már hozzá van rendelve a(z) %s számú nevezéshez.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
 $qr_text_007 = "QR-kódos nevezés bejelentkeztetés";
 $qr_text_008 = "A QR-kóddal történő nevezés bejelentkeztetéshez kérjük, adja meg a helyes jelszót. A jelszót munkamenetenként csak egyszer kell megadnia - ügyeljen arra, hogy a QR-kód olvasó alkalmazás nyitva maradjon.";
 $qr_text_009 = "Bírálati szám és/vagy dobozszám hozzárendelése a következő nevezéshez:";

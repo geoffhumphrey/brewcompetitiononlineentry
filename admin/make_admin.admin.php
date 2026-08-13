@@ -57,7 +57,7 @@ else $edit_user_enable = 0;
 	</div>
 </div>
 </div>
-<input type="hidden" name="user_name" value="<?php echo $row_username['user_name']; ?>">
+<input type="hidden" name="user_name" value="<?php echo h($row_username['user_name']); ?>">
 <input type="hidden" name="userEdit" value="<?php echo $edit_user_enable; ?>">
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">

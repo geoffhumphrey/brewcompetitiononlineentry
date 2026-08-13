@@ -30,7 +30,7 @@ if ($action == "html") {
 	<li>Be <strong><?php if (HOSTED) echo "10"; else echo "15"; ?> MB or less</strong> in size.</li>
 </ul>
 <?php if ($action == "html") { ?>
-<form method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
+<form id="single-upload-doc-form" method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-default btn-file"><span>Choose PDF File</span><input type="file" name="file" /></span>
@@ -38,6 +38,26 @@ if ($action == "html") {
 </div>
 	<p><input type="submit" class="btn btn-primary" value="Upload PDF File"></p>
 </form>
+<script>
+$(document).ready(function() {
+    // Rename the file client-side before it's sent so an offending character (quotes,
+    // apostrophes, etc. - the kind a hosting WAF/security scanner can flag) never reaches
+    // the request in the first place. sanitizeUploadFilename() is defined in dz.min.js.
+    $('#single-upload-doc-form').on('submit', function() {
+        var input = this.querySelector('input[type="file"]');
+        if (input && input.files && input.files.length > 0) {
+            var original = input.files[0];
+            var cleanName = sanitizeUploadFilename(original.name);
+            if (cleanName !== original.name) {
+                var renamed = new File([original], cleanName, { type: original.type });
+                var dt = new DataTransfer();
+                dt.items.add(renamed);
+                input.files = dt.files;
+            }
+        }
+    });
+});
+</script>
 <?php } else { ?>
 <form style="min-height: 300px;" id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
@@ -126,14 +146,14 @@ if (!is_dir_empty(USER_DOCS)) {
 			$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=scoresheet";
 			$scoresheet_link .= "&amp;scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$_SESSION['encryption_key']));
 			$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$_SESSION['encryption_key']))."&amp;download=true";
-			$scoresheet_link .= "\" data-download=\"true\">".$scoresheet_file_name."</a>";
+			$scoresheet_link .= "\" data-download=\"true\">".h($scoresheet_file_name)."</a>";
 			$scoresheet_file_size = number_format($file->getSize()/1000000,4);
 
 			$filelist .= "<tr>\n";
 			$filelist .= "<td>".$scoresheet_link."</td>\n";
-			$filelist .= "<td>".$scoresheet_file_size." MB</td>";
-			$filelist .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], filemtime($file), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")."</td>\n";
-			$filelist .= "<td><a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=doc&amp;filter=".$scoresheet_file_name."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the file named ".$scoresheet_file_name." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
+			$filelist .= "<td>".h($scoresheet_file_size)." MB</td>";
+			$filelist .= "<td>".h(getTimeZoneDateTime($_SESSION['prefsTimeZone'], filemtime($file), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"))."</td>\n";
+			$filelist .= "<td><a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=doc&amp;filter=".urlencode($scoresheet_file_name)."&amp;view=".h($action)."\" data-confirm=\"Are you sure? This will remove the file named ".h($scoresheet_file_name)." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
 			$filelist .= "</tr>\n";
 
 		}

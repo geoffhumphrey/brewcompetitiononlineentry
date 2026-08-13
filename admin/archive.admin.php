@@ -1,4 +1,13 @@
 <?php
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 require (DB.'archive.db.php');
 require (DB.'styles.db.php');
 
@@ -13,10 +22,10 @@ $style_set_dropdown = "";
 $results_data = FALSE;
 
 if ($action == "edit") {
-    $query_results_recorded = sprintf("SELECT COUNT(*) AS 'count' FROM %s;",$prefix."judging_scores_".$row_archive['archiveSuffix']);
-    $results_recorded = mysqli_query($connection,$query_results_recorded) or die (mysqli_error($connection));
-    $row_results_recorded = mysqli_fetch_assoc($results_recorded);
+    
+    $row_results_recorded = $db_conn->getOne ($prefix."judging_scores_".$row_archive['archiveSuffix'], "sum(id), COUNT(*) as count");
     if ($row_results_recorded['count'] > 0) $results_data = TRUE;
+
 }
 
 foreach ($style_sets as $style_set) {
@@ -31,7 +40,7 @@ foreach ($style_sets as $style_set) {
 }
 
 ?>
-<p class="lead"><?php echo $_SESSION['contestName']." ".$label_admin_archives; ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName'])." ".$label_admin_archives; ?></p>
 <?php if (HOSTED) { ?>
 <p><?php echo $archive_text_000; ?></p>
 <p><?php echo $archive_text_001; ?></p>
@@ -73,7 +82,7 @@ foreach ($style_sets as $style_set) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="<?php echo date('Y'); ?> or Q2<?php echo date('Y'); ?>, etc." pattern="^[a-zA-Z0-9]+$" autofocus required value="<?php if ($action == "edit") echo $row_archive['archiveSuffix']; ?>">
+			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="<?php echo date('Y'); ?> or Q2<?php echo date('Y'); ?>, etc." pattern="^[a-zA-Z0-9]+$" autofocus required value="<?php if ($action == "edit") echo h($row_archive['archiveSuffix']); ?>">
 			<span class="input-group-addon" id="mod_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block with-errors"></span>
@@ -119,6 +128,13 @@ foreach ($style_sets as $style_set) {
                     <input type="checkbox" name="keepSponsors" id="retain_3" value="Y"> <?php echo $label_sponsors; ?>
                 </label>
             </div>
+            <?php if (check_setup($prefix."evaluation", $database)) { ?>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="keepEvaluations" id="retain_6" value="Y"> <?php echo $label_evaluations; ?>
+                </label>
+            </div>
+            <?php } ?>
         </div>
         <div id="helpBlock" class="help-block" style="margin-top: 10px;"><?php echo $archive_text_012; ?></div>
     </div>
@@ -202,7 +218,7 @@ foreach ($style_sets as $style_set) {
     </div>
 </div><!-- ./Form Group -->
 <?php } else { ?>
-<input type="hidden" name="archiveScoresheet" value="<?php echo $row_archive['archiveScoresheet']; ?>">
+<input type="hidden" name="archiveScoresheet" value="<?php echo h($row_archive['archiveScoresheet']); ?>">
 <?php } ?>
 <?php } ?>
 <div class="bcoem-admin-element hidden-print">
@@ -282,15 +298,15 @@ foreach ($style_sets as $style_set) {
     <th><?php echo $table_header7; ?></th>
 </thead>
 <tbody>
-  <?php do { ?>
+  <?php foreach ($rows_archive as $row_archive) { ?>
   <tr>
     <td>
     <?php
 	$db = $prefix."brewer_".$row_archive['archiveSuffix'];
 	$count = get_archive_count($db);
 	if ($count > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;dbTable=<?php echo $db;  ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
-    <?php } else echo $row_archive['archiveSuffix']. " - ".$label_not_archived;	?>
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;dbTable=<?php echo $db;  ?>"><?php echo h($row_archive['archiveSuffix']); ?></a> (<?php echo $count; ?>)
+    <?php } else echo h($row_archive['archiveSuffix']). " - ".$label_not_archived;	?>
     </td>
     <td>
     <?php
@@ -298,18 +314,18 @@ foreach ($style_sets as $style_set) {
     if (table_exists($db)) {
         $count = get_archive_count($db);
         if ($count > 0) { ?>
-        <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
+        <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;dbTable=<?php echo $db; ?>"><?php echo h($row_archive['archiveSuffix']); ?></a> (<?php echo $count; ?>)
     <?php 
         } 
-    } else echo $row_archive['archiveSuffix']. " - ".$label_not_archived;  ?>
+    } else echo h($row_archive['archiveSuffix']). " - ".$label_not_archived;  ?>
     </td>
     <td>
     <?php
 	$db = $prefix."brewing_".$row_archive['archiveSuffix'];
 	$count = get_archive_count($db);
 	if ($count > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)<?php if (!isset($row_archive['archiveStyleSet'])) echo "*<br><em><small>".$archive_text_023."</small></em>"; ?>
-    <?php } else echo $row_archive['archiveSuffix']. " - ".$label_not_archived; ?>
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;dbTable=<?php echo $db; ?>"><?php echo h($row_archive['archiveSuffix']); ?></a> (<?php echo $count; ?>)<?php if (!isset($row_archive['archiveStyleSet'])) echo "*<br><em><small>".$archive_text_023."</small></em>"; ?>
+    <?php } else echo h($row_archive['archiveSuffix']). " - ".$label_not_archived; ?>
     </td>
     <td>
     <?php
@@ -317,9 +333,9 @@ foreach ($style_sets as $style_set) {
 	if (table_exists($db)) {
 	$count = get_archive_count($db);
 	   if ($count > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $db; ?>"><?php echo h($row_archive['archiveSuffix']); ?></a> (<?php echo $count; ?>)
     <?php 
-        } else echo $row_archive['archiveSuffix']. " - ".$label_not_archived;
+        } else echo h($row_archive['archiveSuffix']). " - ".$label_not_archived;
 	}  ?>
     </td>
     <td>
@@ -327,9 +343,9 @@ foreach ($style_sets as $style_set) {
 	$db = $prefix."judging_scores_".$row_archive['archiveSuffix'];
 	if (table_exists($db)) {
 	   if (get_archive_count($db) > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $db."&amp;filter=".$row_archive['archiveSuffix']; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $db."&amp;filter=".$row_archive['archiveSuffix']; ?>"><?php echo h($row_archive['archiveSuffix']); ?></a>
     <?php 
-        } else echo $row_archive['archiveSuffix']. " - ".$label_not_archived; 
+        } else echo h($row_archive['archiveSuffix']). " - ".$label_not_archived; 
 	} ?>
     </td>
     <td>
@@ -337,9 +353,9 @@ foreach ($style_sets as $style_set) {
 	$db = $prefix."judging_scores_bos_".$row_archive['archiveSuffix'];
 	if (table_exists($db)) {
 	   if (get_archive_count($db) > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;dbTable=<?php echo $db."&amp;filter=".$row_archive['archiveSuffix']; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;dbTable=<?php echo $db."&amp;filter=".$row_archive['archiveSuffix']; ?>"><?php echo h($row_archive['archiveSuffix']); ?></a>
     <?php 
-        } else echo $row_archive['archiveSuffix']. " - ".$label_not_archived;
+        } else echo h($row_archive['archiveSuffix']). " - ".$label_not_archived;
 	}  ?>
     </td>
     <td class="hidden-xs hidden-sm">
@@ -347,15 +363,15 @@ foreach ($style_sets as $style_set) {
         echo yes_no($row_archive['archiveDisplayWinners'],$base_url,1);
         if (($row_archive['archiveDisplayWinners'] == "Y") && ($_SESSION['prefsProEdition'] == 0)) {
         ?>
-        &nbsp;<a target="_blank" data-toggle="tooltip" data-placement="top" title="Download a CSV of this archive's winner data." href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;tb=circuit&amp;sort=<?php echo $row_archive['archiveSuffix']; ?>" target="_blank"><span class="fa fa-lg fa-file-excel"></span></a>
+        &nbsp;<a target="_blank" data-toggle="tooltip" data-placement="top" title="Download a CSV of this archive's winner data." href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;filter=<?php echo h($row_archive['archiveSuffix']); ?>&amp;tb=circuit&amp;sort=<?php echo h($row_archive['archiveSuffix']); ?>" target="_blank"><span class="fa fa-lg fa-file-excel"></span></a>
         <?php } ?>
     </td>
     <td>
         <a href="<?php echo $base_url; ?>index.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_archive['id']; ?>"><span class="fa fa-lg fa-pencil"></span></a>&nbsp;
-        <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix'].". ".$archive_text_016; ?>"><span class="fa fa-lg fa-trash-o"></span></a>
+        <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo h($row_archive['archiveSuffix']); ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix'].". ".$archive_text_016; ?>"><span class="fa fa-lg fa-trash-o"></span></a>
     </td>
   </tr>
-  <?php } while ($row_archive = mysqli_fetch_assoc($archive)); ?>
+  <?php } ?>
 </tbody>
 </table>
 <?php } else echo "<p>No archive data is present.</p>"; // end else ?>

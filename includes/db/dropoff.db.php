@@ -1,8 +1,10 @@
 <?php
-$query_dropoff = sprintf("SELECT * FROM %s",$drop_off_db_table);
-if (($section == "admin") && ($action == "edit") && ($go == "dropoff")) $query_dropoff .= sprintf(" WHERE id='%s'",$id);
-else $query_dropoff .= " ORDER BY dropLocationName ASC";
-$dropoff = mysqli_query($connection,$query_dropoff) or die (mysqli_error($connection));
-$row_dropoff = mysqli_fetch_assoc($dropoff);
-$totalRows_dropoff = mysqli_num_rows($dropoff);
+if (($section == "admin") && ($action == "edit") && ($go == "dropoff")) {
+	$db_conn->where("id", $id);
+} else {
+	$db_conn->orderBy("dropLocationName", "ASC");
+}
+$rows_dropoff = $db_conn->get($drop_off_db_table);
+$row_dropoff = ($rows_dropoff && count($rows_dropoff) > 0) ? $rows_dropoff[0] : null;
+$totalRows_dropoff = $db_conn->count;
 ?>

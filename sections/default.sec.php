@@ -88,12 +88,12 @@ else {
 			else $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_014."</h2>";
 			if ($action != "print") $page_info10 .= sprintf("<p>%s <a href='%s'>%s</a>.</p>",$default_page_text_015,build_public_url("contact","default","default","default",$sef,$base_url,"default"),$label_contact);
 			$page_info10 .= "<ul>";
-			do {
+			foreach ($rows_contact as $row_contact) {
 				$page_info10 .= "<li>";
-				$page_info10 .= $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition'];
-				if ($action == "print") $page_info10 .= " (".$row_contact['contactEmail'].")";
+				$page_info10 .= h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName'])." &mdash; ".h($row_contact['contactPosition']);
+				if ($action == "print") $page_info10 .= " (".h($row_contact['contactEmail']).")";
 				$page_info10 .= "</li>";
-			} while ($row_contact = mysqli_fetch_assoc($contact));
+			}
 			$page_info10 .= "</ul>";
 		}
 
@@ -136,16 +136,16 @@ if ($filter == "default") {
 else {
 
 	// Query the archive table for preferences
-	$query_archive_prefs = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive", $filter);
-	$archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
-	$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
-	$totalRows_archive_prefs = mysqli_num_rows($archive_prefs);
+	$filter_clean = preg_replace("/[^a-zA-Z0-9]+/", "", $filter);
+	$db_conn->where("archiveSuffix", $filter);
+	$row_archive_prefs = $db_conn->getOne($prefix."archive");
+	$totalRows_archive_prefs = $db_conn->count;
 
 	$winner_method = $row_archive_prefs['archiveWinnerMethod'];
 	$style_set = $row_archive_prefs['archiveStyleSet'];
-	$judging_scores_db_table = $prefix."judging_scores_".$filter;
-	$brewing_db_table = $prefix."brewing_".$filter;
-	$brewer_db_table = $prefix."brewer_".$filter;
+	$judging_scores_db_table = $prefix."judging_scores_".$filter_clean;
+	$brewing_db_table = $prefix."brewing_".$filter_clean;
+	$brewer_db_table = $prefix."brewer_".$filter_clean;
 
 }
 

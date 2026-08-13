@@ -30,11 +30,11 @@ include (DB.'styles.db.php');
 
 $accepted_categories = array();
 
-do {
+foreach ($rows_styles as $row_styles) {
 	if (array_key_exists($row_styles['id'], $styles_selected)) {
 		$accepted_categories[] = $row_styles['brewStyleGroup'];
-	} 
-} while ($row_styles = mysqli_fetch_assoc($styles));
+	}
+}
 
 sort($accepted_categories);
 $total_cat = array_unique($accepted_categories);
@@ -267,7 +267,7 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
 }
 ?>
 
-<p class="lead"><?php echo $_SESSION['contestName']; ?> entry count by broken down by style.</p>
+<p class="lead"><?php echo h($_SESSION['contestName']); ?> entry count by broken down by style.</p>
 
 <?php if ($action != "print") { ?>
 <div class="bcoem-admin-element hidden-print">

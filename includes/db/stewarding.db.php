@@ -1,16 +1,20 @@
 <?php	
-$query_stewarding = "SELECT * FROM $judging_locations_db_table";
-if ($section == "list") $query_stewarding .= sprintf(" WHERE id='%s'", $row_brewer['brewerStewardLocation']);
-if (($section == "brewer") || ($section == "admin") || ($section == "register")) $query_stewarding .= " ORDER BY judgingDate,judgingLocName ASC";
-$stewarding = mysqli_query($connection,$query_stewarding) or die (mysqli_error($connection));
-$row_stewarding = mysqli_fetch_assoc($stewarding);
-$totalRows_stewarding = mysqli_num_rows($stewarding);
+if ($section == "list") $db_conn->where('id', $row_brewer['brewerStewardLocation']);
+if (($section == "brewer") || ($section == "admin") || ($section == "register")) {
+	$db_conn->orderBy('judgingDate', 'ASC');
+	$db_conn->orderBy('judgingLocName', 'ASC');
+}
+$rows_stewarding = $db_conn->get($judging_locations_db_table);
+$row_stewarding = ($rows_stewarding && count($rows_stewarding) > 0) ? $rows_stewarding[0] : null;
+$totalRows_stewarding = $db_conn->count;
 
-$query_stewarding2 = "SELECT * FROM $judging_locations_db_table";
-if ($section == "list") $query_stewarding2 .= sprintf(" WHERE id='%s'", $row_brewer['brewerStewardLocation2']);
-if (($section == "brewer") || ($section == "admin") || ($section == "register")) $query_stewarding2 .= " ORDER BY judgingDate,judgingLocName ASC";
-$stewarding2 = mysqli_query($connection,$query_stewarding2) or die (mysqli_error($connection));
-$row_stewarding2 = mysqli_fetch_assoc($stewarding2);
-$totalRows_stewarding2 = mysqli_num_rows($stewarding2);
+if ($section == "list") $db_conn->where('id', $row_brewer['brewerStewardLocation2']);
+if (($section == "brewer") || ($section == "admin") || ($section == "register")) {
+	$db_conn->orderBy('judgingDate', 'ASC');
+	$db_conn->orderBy('judgingLocName', 'ASC');
+}
+$rows_stewarding2 = $db_conn->get($judging_locations_db_table);
+$row_stewarding2 = ($rows_stewarding2 && count($rows_stewarding2) > 0) ? $rows_stewarding2[0] : null;
+$totalRows_stewarding2 = $db_conn->count;
 
 ?>

@@ -13,7 +13,7 @@ if ($action == "html") {
 ?>
 <p class="lead">If you want to upload mutiple images at once, use the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload">enhanced image upload function</a>.</p>
 <p class="bcoem-admin-element">Acceptable file types are .jpg, .jpeg, .png, .svg, .webp, or .gif. Maximum file size is <?php if (HOSTED) echo "4"; else echo "10"; ?> MB.</p>
-<form method="post" action="<?php echo $base_url; ?>handle.php?action=html" ENCTYPE="multipart/form-data">
+<form id="single-upload-image-form" method="post" action="<?php echo $base_url; ?>handle.php?action=html" ENCTYPE="multipart/form-data">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-default btn-file"><span>Choose Image File</span><input type="file" name="file" /></span>
@@ -21,6 +21,26 @@ if ($action == "html") {
 </div>
 	<p><input type="submit" class="btn btn-primary" value="Upload Logo Image"></p>
 </form>
+<script>
+$(document).ready(function() {
+    // Rename the file client-side before it's sent so an offending character (quotes,
+    // apostrophes, etc. - the kind a hosting WAF/security scanner can flag) never reaches
+    // the request in the first place. sanitizeUploadFilename() is defined in dz.min.js.
+    $('#single-upload-image-form').on('submit', function() {
+        var input = this.querySelector('input[type="file"]');
+        if (input && input.files && input.files.length > 0) {
+            var original = input.files[0];
+            var cleanName = sanitizeUploadFilename(original.name);
+            if (cleanName !== original.name) {
+                var renamed = new File([original], cleanName, { type: original.type });
+                var dt = new DataTransfer();
+                dt.items.add(renamed);
+                input.files = dt.files;
+            }
+        }
+    });
+});
+</script>
 <?php } else { ?>
 <p class="lead">The <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html">single image upload function</a> is also available as an alternative to this multiple upload function.</p>
 <p class="bcoem-admin-element">Acceptable file types are .jpg, .jpeg, .png, .svg, .webp, or .gif. Maximum file size is <?php if (HOSTED) echo "4"; else echo "10"; ?> MB.</p>
@@ -94,9 +114,9 @@ if (!is_dir_empty($upload_dir)) {
 			$file_date = date("l, F j, Y H:i", filemtime($upload_dir.$file));
 			
 			$filelist .= "<tr>\n";
-			$filelist .= sprintf("<td><a data-fancybox=\"gallery\" class=\"user_images hide-loader\" rel=\"group1\" href=\"%s\" title=\"%s\" >%s</a></td>\n", $image_url, $file, $file);
-			$filelist .= sprintf("<td>%s</td>\n", $file_date);
-			$filelist .= sprintf("<td><a class=\"hide-loader\" href=\"%s\" data-confirm=\"Are you sure? This will remove the image named %s from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n", $delete_url, $file);
+			$filelist .= sprintf("<td><a data-fancybox=\"gallery\" class=\"user_images hide-loader\" rel=\"group1\" href=\"%s\" title=\"%s\" >%s</a></td>\n", h($image_url), h($file), h($file));
+			$filelist .= sprintf("<td>%s</td>\n", h($file_date));
+			$filelist .= sprintf("<td><a class=\"hide-loader\" href=\"%s\" data-confirm=\"Are you sure? This will remove the image named %s from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n", $delete_url, h($file));
 			$filelist .= "</tr>\n";
 	   
 	   }

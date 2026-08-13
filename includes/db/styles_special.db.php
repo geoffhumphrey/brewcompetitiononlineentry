@@ -249,12 +249,19 @@ else $styleSet = $_SESSION['prefsStyleSet'];
  * - Optional Info ($optional_info_styles array already exists in constants)
  */
 
-if ($_SESSION['prefsStyleSet'] == "BJCP2025") $query_required_optional = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table, $_SESSION['prefsStyleSet']);
-elseif ($_SESSION['prefsStyleSet'] == "AABC2025") $query_required_optional = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'", $styles_db_table, $_SESSION['prefsStyleSet']);
-else $query_required_optional = sprintf("SELECT * FROM %s WHERE (brewStyleVersion = '%s' OR brewStyleOwn = 'custom')", $styles_db_table, $_SESSION['prefsStyleSet']);
-$required_optional = mysqli_query($connection,$query_required_optional) or die (mysqli_error($connection));
-$row_required_optional = mysqli_fetch_assoc($required_optional);
-$totalRows_required_optional = mysqli_num_rows($required_optional);
+if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+	$query_required_optional = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'";
+	$rows_required_optional = $db_conn->rawQuery($query_required_optional);
+}
+elseif ($_SESSION['prefsStyleSet'] == "AABC2025") {
+	$query_required_optional = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'";
+	$rows_required_optional = $db_conn->rawQuery($query_required_optional);
+}
+else {
+	$query_required_optional = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion = ? OR brewStyleOwn = 'custom')";
+	$rows_required_optional = $db_conn->rawQuery($query_required_optional, array($_SESSION['prefsStyleSet']));
+}
+$totalRows_required_optional = $db_conn->count;
 
 $req_special_ing_styles = array();
 $req_strength_styles = array();
@@ -265,7 +272,7 @@ $req_pouring = array();
 $cider_sweetness_custom_styles = array();
 $mead_sweetness_custom_styles = array();
 
-do {
+foreach ($rows_required_optional as $row_required_optional) {
 
 	$style_id = ltrim($row_required_optional['brewStyleGroup'],"0")."-".$row_required_optional['brewStyleNum'];
 
@@ -390,7 +397,7 @@ do {
 
 	}
 	
-} while($row_required_optional = mysqli_fetch_assoc($required_optional));
+}
 
 ?>
 

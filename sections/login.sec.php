@@ -37,10 +37,9 @@ if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUserna
 	if ($username == "default") $username_check = $_POST['loginUsername'];
 	else $username_check = $username;
 
-	$query_userCheck = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$username_check);
-	$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
-	$row_userCheck = mysqli_fetch_assoc($userCheck);
-	$totalRows_userCheck = mysqli_num_rows($userCheck);
+	$db_conn->where("user_name", $username_check);
+	$row_userCheck = $db_conn->getOne($prefix."users");
+	$totalRows_userCheck = $db_conn->count;
 	
 	if (($totalRows_userCheck == 0) && ($msg == "default")) { 
 		$message2 .= sprintf("<div class='text-warning lead'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div><p><a class=\"btn btn-primary\" href=\"%s\">%s</a></p>",$login_text_001, build_public_url("login","password","forgot","default",$sef,$base_url,"default"),$login_text_002);

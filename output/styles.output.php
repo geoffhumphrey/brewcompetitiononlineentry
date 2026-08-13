@@ -19,7 +19,7 @@ include (DB.'styles.db.php');
     <?php } ?>
     </div>
 <?php if ($totalRows_styles > 0) { ?>
-<?php do {
+<?php foreach ($rows_styles as $row_styles) {
 $replacement1 = array('$label_entry_instructions:','$label_commerical_examples:','must specify','may specify','MUST specify','MAY specify','must provide');
 if ($go == "default") $replacement2 = array('<p><strong class="text-danger">$label_entry_instructions:</strong>','<p><strong class="text-info">$label_commercial_examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
 else $replacement2 = array('<p><strong class="text-danger">$label_entry_instructions:</strong>','<p><strong class="text-info">$label_commercial_examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
@@ -116,5 +116,5 @@ if (!empty($row_styles['brewStyleEntry'])) echo "<p>".$entryReq."</p>";
 <?php if (($go == "default") && ($view == "default")) { ?>
 <?php }
 	}
- } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
+ } ?>
 <?php } else echo spritf("<p>%s</p>",$output_text_026); ?>

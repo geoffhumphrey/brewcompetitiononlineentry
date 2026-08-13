@@ -21,7 +21,7 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 
 	$current_styles_active = json_decode($_SESSION['prefsSelectedStyles'],true);
 
-	do {
+	foreach ($rows_styles as $row_styles) {
 
 		if ($row_styles['id'] != "") {
 
@@ -56,7 +56,7 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			$table_body .= "<input type=\"hidden\" name=\"id[]\" value=\"".$row_styles['id']."\" />";
 			if ($bid == "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleActive".$row_styles['id']."\" type=\"checkbox\" value=\"Y\" ".$brewStyleActive."></td>";
 			if ($bid != "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleJudgingLoc".$row_styles['id']."\" type=\"checkbox\" value=\"".$bid."\" ".$brewStyleJudgingLoc."></td>";
-			$table_body .= "<td>".$row_styles['brewStyle']."</td>";
+			$table_body .= "<td>".h($row_styles['brewStyle'])."</td>";
 			if ($_SESSION['prefsStyleSet'] == "BA") {
 				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
 				else $table_body .= "<td>".$ba_category_names[ltrim($row_styles['brewStyleGroup'],"0")]."</td>";
@@ -71,21 +71,21 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			$table_body .= "<td width=\"1%\" nowrap><input class=\"limit-style\" name=\"brewStyleAtLimit".$row_styles['id']."\" type=\"checkbox\" value=\"1\" ".$brewStyleAtLimit."></td>";
 			$table_body .= "<td class=\"hidden-print\">";
 			if ($section != "step7") {
-				if ($row_styles['brewStyleOwn'] != "bcoe") $table_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;id=".$row_styles['id']."&amp;view=".$row_styles['brewStyleType']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit ".$row_styles['brewStyle']."\"><span class=\"fa fa-lg fa-pencil\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=".$go."&amp;dbTable=".$styles_db_table."&amp;action=delete&amp;id=".$row_styles['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".$row_styles['brewStyle']."\" data-confirm=\"Are you sure you want to delete ".$row_styles['brewStyle']."? This cannot be undone. Deleting a custom style will remove it and associated entries from any public past winner lists. To avoid this, simply deactivate the style.\"><span class=\"fa fa-lg fa-trash-o\"></span></a> ";
+				if ($row_styles['brewStyleOwn'] != "bcoe") $table_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;id=".$row_styles['id']."&amp;view=".$row_styles['brewStyleType']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit ".h($row_styles['brewStyle'])."\"><span class=\"fa fa-lg fa-pencil\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=".$go."&amp;dbTable=".$styles_db_table."&amp;action=delete&amp;id=".$row_styles['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".h($row_styles['brewStyle'])."\" data-confirm=\"Are you sure you want to delete ".h($row_styles['brewStyle'])."? This cannot be undone. Deleting a custom style will remove it and associated entries from any public past winner lists. To avoid this, simply deactivate the style.\"><span class=\"fa fa-lg fa-trash-o\"></span></a> ";
 				else $table_body .= "<span class=\"fa fa-lg fa-pencil text-muted\"></span> <span class=\"fa fa-lg fa-trash-o text-muted\"></span> ";
 			}
-			if ($row_styles['brewStyleLink'] !="") $table_body .= "<a class=\"hide-loader\" href=\"".$row_styles['brewStyleLink']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Link to BJCP ".$row_styles['brewStyle']." sub-style on bjcp.org\"><span class=\"fa fa-lg fa-link\"></span></a>";
+			if (($row_styles['brewStyleLink'] != "") && (preg_match('#^https?://#i', $row_styles['brewStyleLink']))) $table_body .= "<a class=\"hide-loader\" href=\"".h($row_styles['brewStyleLink'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Link to BJCP ".h($row_styles['brewStyle'])." sub-style on bjcp.org\"><span class=\"fa fa-lg fa-link\"></span></a>";
 			$table_body .= "</td>";
 			$table_body .= "</tr>";
 
 		}
 
-	} while ($row_styles = mysqli_fetch_assoc($styles));
+	}
 
 }
 
 if ($section != "step7") { ?>
-<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Custom Style"; elseif ($action == "edit") echo ": Edit a Custom Style" ; elseif (($action == "default") && ($filter == "judging") && ($bid != "default")) echo ": Style Judged at ".$row_judging['judgingLocName']; else echo " Accepted Styles"; ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add a Custom Style"; elseif ($action == "edit") echo ": Edit a Custom Style" ; elseif (($action == "default") && ($filter == "judging") && ($bid != "default")) echo ": Style Judged at ".h($row_judging['judgingLocName']); else echo " Accepted Styles"; ?></p>
 <?php if (($filter == "default") && ($action == "default")) { ?><p class="lead"><span class="small">Check or uncheck the styles <?php if (($action == "default") && ($filter == "judging") && ($bid != "default")) { echo "that will be judged at ".$row_judging['judgingLocName']." on "; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"); } else echo "your competition will accept (any custom styles are at the top of the list)"; ?>.</span></p><?php } ?>
 <div class="bcoem-admin-element hidden-print">
 	<?php if ($action != "default") { ?>
@@ -305,11 +305,11 @@ function checkStyleIdentifier() {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 has-warning">
 	<!-- Input Here -->
 	<select class="selectpicker" name="brewStyleType" id="brewStyleType" data-size="10" data-width="auto">
-        <?php do {
+        <?php foreach ($rows_style_type as $row_style_type) {
         if ($row_style_type['styleTypeName'] != "Mead/Cider") { ?>
-        <option value="<?php echo $row_style_type['id']; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleType'] == $row_style_type['id'])) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
+        <option value="<?php echo $row_style_type['id']; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleType'] == $row_style_type['id'])) echo "SELECTED"; ?>><?php echo h($row_style_type['styleTypeName']); ?></option>
     	<?php }
-    	} while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
+    	} ?>
 	</select>
 	<span id="helpBlock" class="help-block"><a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Style Type</a></span>
 	</div>

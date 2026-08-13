@@ -85,6 +85,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	$evalStyle = sterilize($_POST['evalStyle']);
 
+	// Ownership binding: a non-staff user may only submit/edit a scoresheet under their own
+	// judge identity, matching the invariant already enforced on the read side (eval/scoresheet.eval.php).
+	if ($_SESSION['userLevel'] > 1) {
+
+		$evalJudgeInfo = $_SESSION['user_id'];
+
+		if ($action == "edit") {
+			$db_conn->where('id', $id);
+			$row_eval_owner = $db_conn->getOne($prefix."evaluation", "evalJudgeInfo");
+			if ((!$row_eval_owner) || ($row_eval_owner['evalJudgeInfo'] != $_SESSION['user_id'])) {
+				$redirect = $base_url."403.php";
+				$redirect_go_to = sprintf("Location: %s", $redirect);
+				header($redirect_go_to);
+				exit();
+			}
+		}
+
+	}
+
 	$exceptions = array(
 		"evalSpecialIngredients",
 		"evalOtherNotes",
@@ -123,22 +142,26 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		foreach ($_POST as $key => $value) {
 
 			if (!empty($value)) {
-				
-				if (is_numeric($value)) $value = sterilize($value);	
-				
-				if (is_array($value)) {
+
+				if (is_numeric($value)) $value = sterilize($value);
+
+				elseif (is_array($value)) {
 
 					$new_value = array();
-					
+
 					foreach ($value as $v) {
-						if (is_numeric($v)) $v = sterilize($value);
+						if (is_numeric($v)) $v = sterilize($v);
 						else  $v = $purifier->purify(sterilize($v));
 						$new_value[] = $v;
 					}
-					
+
 					$value = implode(", ",$new_value);
-					
+
 				}
+
+				// Free-text string values (e.g. evalAppearanceColorOther) reach this point
+				// unsanitized otherwise - match the same treatment applied to array elements above.
+				else $value = $purifier->purify(sterilize($value));
 
 			}
 
@@ -155,8 +178,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$key = sterilize($key);
 				if ($key == "evalAppearanceColorChoice") {
 					$key = "evalAppearanceColor";
-					if ($value == "999") $value = $_POST['evalAppearanceColorOther'];
-					else $value = $_POST['evalAppearanceColorChoice'];
+					if ($value == "999") $value = $purifier->purify(sterilize($_POST['evalAppearanceColorOther']));
+					else $value = $purifier->purify(sterilize($_POST['evalAppearanceColorChoice']));
 				}
 				$evalAppearance[$key] = $value;
 			}
@@ -248,11 +271,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 			header($redirect_go_to);
-			
-		} // if ($action == "add") 
+			exit();
+
+		} // if ($action == "add")
 
 		if ($action == "edit") {
-			
+
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -261,12 +285,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-			
+
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 			header($redirect_go_to);
-			
+			exit();
+
 		} // end if ($action == "edit")
 
 	}
@@ -332,12 +357,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 			header($redirect_go_to);
-			
+			exit();
+
 		} // end if ($action == "add")
-		
-		
+
+
 		if ($action == "edit") {
-				
+
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -346,14 +372,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-			
+
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 			header($redirect_go_to);
-			
+			exit();
+
 		} // end if ($action == "edit")
-		
+
 	}
 
 	if ($section == "process-eval-checklist") {
@@ -488,11 +515,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 			header($redirect_go_to);
-			
-		} // end if ($action == "add") 
-		
+			exit();
+
+		} // end if ($action == "add")
+
 		if ($action == "edit") {
-			
+
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -501,15 +529,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-			
+
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 			header($redirect_go_to);
-			
+			exit();
+
 		} // end if ($action == "edit")
 
-	} // end if (($section == "process-eval-full") || ($section == "process-eval-checklist")) 
+	} // end if (($section == "process-eval-full") || ($section == "process-eval-checklist"))
 
 } else {
 
@@ -517,6 +546,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$redirect = prep_redirect_link($redirect);
 	$redirect_go_to = sprintf("Location: %s", $redirect);
 	header($redirect_go_to);
-	
+	exit();
+
 }
 ?>

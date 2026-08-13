@@ -57,16 +57,16 @@ elseif ($show_contact_list) {
         $page_info .= sprintf("<p>%s</p>",$contact_text_000);
     	$page_info .= "<ul>";
     	
-        do {
+        foreach ($rows_contact as $row_contact) {
 
             $secretKey = base64_encode(bin2hex($password));
             $nacl = base64_encode(bin2hex($server_root));
             $link = sprintf('%06d', $row_contact['id']);
             $link = simpleEncrypt($link, $secretKey, $nacl);
             $email_redirect_link = sprintf("%sincludes/output.inc.php?section=contact&action=edit&tb=no-print&token=%s",$base_url,$link);
-            $page_info .= sprintf("<li><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">%s %s</a> &ndash; %s</li>",$email_redirect_link,$row_contact['contactFirstName'],$row_contact['contactLastName'],$row_contact['contactPosition']);
-            
-    	} while ($row_contact = mysqli_fetch_assoc($contact));
+            $page_info .= sprintf("<li><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">%s %s</a> &ndash; %s</li>",$email_redirect_link,h($row_contact['contactFirstName']),h($row_contact['contactLastName']),h($row_contact['contactPosition']));
+
+    	}
     	
         $page_info .= "</ul>";
     }
@@ -83,18 +83,18 @@ elseif ($show_contact_form) {
 
     else {
 
-    	do {
+    	foreach ($rows_contact as $row_contact) {
 
     		$option .= "<option value=\"".$row_contact['id']."\"";
-            
+
     		if (isset($_COOKIE['to'])) {
     			// if ($row_contact['id'] == $_COOKIE['to']) $option .= " SELECTED";
     		}
 
-    		$option .= ">".$row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']."</option>";
+    		$option .= ">".h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName'])." &ndash; ".h($row_contact['contactPosition'])."</option>";
 
 
-    	} while ($row_contact = mysqli_fetch_assoc($contact));
+    	}
 
     	$primary_page_info = sprintf("<p>%s</p>",$contact_text_001);
     	$label1 = $label_contact;

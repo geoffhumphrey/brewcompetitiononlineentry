@@ -63,29 +63,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	// If not retaining participant data, keep current admins
 	if ($filter == "default") {
 
-		$query_admin = sprintf("SELECT id FROM %s WHERE userLevel < '2'", $prefix."users");
-		$admin = mysqli_query($connection,$query_admin) or die (mysqli_error($connection));
-		$row_admin = mysqli_fetch_assoc($admin);
-		$totalRows_admin = mysqli_num_rows($admin);
+		$db_conn->where('userLevel', '2', '<');
+		$rows_admin = $db_conn->get($prefix."users", null, "id");
+		$totalRows_admin = $db_conn->count;
 
 		$admin_ids = array();
 
 		if ($totalRows_admin > 0) {
 
-			do {
+			foreach ($rows_admin as $row_admin) {
 				$admin_ids[] = $row_admin['id'];
-			} while($row_admin = mysqli_fetch_assoc($admin));
+			}
 
 		}
 
-		$query_non_admin = sprintf("SELECT id FROM %s WHERE userLevel='2'", $prefix."users");
-		$non_admin = mysqli_query($connection,$query_non_admin) or die (mysqli_error($connection));
-		$row_non_admin = mysqli_fetch_assoc($non_admin);
-		$totalRows_non_admin = mysqli_num_rows($non_admin);
+		$db_conn->where('userLevel', '2');
+		$rows_non_admin = $db_conn->get($prefix."users", null, "id");
+		$totalRows_non_admin = $db_conn->count;
 
 		if ($totalRows_non_admin > 0) {
 
-			do {
+			foreach ($rows_non_admin as $row_non_admin) {
 
 				if (!in_array($row_non_admin['id'],$admin_ids)) {
 
@@ -109,7 +107,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				} // end if (!in_array($row_non_admin['id'],$admin_ids))
 
-			} while ($row_non_admin = mysqli_fetch_assoc($non_admin));
+			}
 
 		} // end if ($totalRows_non_admin > 0)
 

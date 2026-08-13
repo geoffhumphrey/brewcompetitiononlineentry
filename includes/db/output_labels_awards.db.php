@@ -5,27 +5,25 @@ else
 */
 $styles_db_table = $prefix."styles";
 
-$query_tables = sprintf("SELECT * FROM %s ORDER BY tableNumber",$prefix."judging_tables");
-$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-$row_tables = mysqli_fetch_assoc($tables);
-$totalRows_tables = mysqli_num_rows($tables);
+$db_conn->orderBy('tableNumber', 'ASC');
+$rows_tables = $db_conn->get($prefix."judging_tables");
+$totalRows_tables = $db_conn->count;
 
-$query_bos = sprintf("SELECT * FROM %s ORDER BY scoreType,scorePlace ASC",$prefix."judging_scores_bos");
-$bos = mysqli_query($connection,$query_bos) or die (mysqli_error($connection));
-$row_bos = mysqli_fetch_assoc($bos);
-$totalRows_bos = mysqli_num_rows($bos);
+$db_conn->orderBy('scoreType', 'ASC');
+$db_conn->orderBy('scorePlace', 'ASC');
+$rows_bos = $db_conn->get($prefix."judging_scores_bos");
+$totalRows_bos = $db_conn->count;
 
 if ($filter == "round") $character_limit = 18;
 else $character_limit = 31;
 
 $styles_selected = json_decode($_SESSION['prefsSelectedStyles'], true);
 
-do {
+foreach ($rows_bos as $row_bos) {
 
-	$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory FROM %s WHERE id='%s'", $prefix."brewing", $row_bos['eid']);
-	$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-	$row_entries = mysqli_fetch_assoc($entries);
-	
+	$db_conn->where('id', $row_bos['eid']);
+	$row_entries = $db_conn->getOne($prefix."brewing", "id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory");
+
 	if ($row_bos['scorePlace'] != "") {
 		$text = sprintf("\n%s - %s (%s)\n%s\n'%s' %s",
 		display_place($row_bos['scorePlace'],1),
@@ -39,38 +37,40 @@ do {
 		$pdf->Add_Label($text);
 	}
 
-} while ($row_bos = mysqli_fetch_assoc($bos));
+}
 
 if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 
-	if ($styleSet == "BJCP2025") $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC;", $styles_db_table);
-	else $query_styles = sprintf("SELECT id,brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC;", $styles_db_table, $_SESSION['prefsStyleSet']);
-	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-	$row_styles = mysqli_fetch_assoc($styles);
-	$totalRows_styles = mysqli_num_rows($styles);
+	if ($styleSet == "BJCP2025") {
+		$query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC";
+		$rows_styles = $db_conn->rawQuery($query_styles);
+	}
+	else {
+		$query_styles = "SELECT id,brewStyleGroup FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC";
+		$rows_styles = $db_conn->rawQuery($query_styles, array($_SESSION['prefsStyleSet']));
+	}
+	$totalRows_styles = $db_conn->count;
 
-	do { 
-		if (array_key_exists($row_styles['id'], $styles_selected)) $style[] = $row_styles['brewStyleGroup']; 
-	} while ($row_styles = mysqli_fetch_assoc($styles));
+	foreach ($rows_styles as $row_styles) {
+		if (array_key_exists($row_styles['id'], $styles_selected)) $style[] = $row_styles['brewStyleGroup'];
+	}
 
 	foreach (array_unique($style) as $style) {
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewReceived='1'", $prefix."brewing",  $style);
-		$entry_count = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
-		$row_entry_count = mysqli_fetch_assoc($entry_count);
+		$db_conn->where('brewCategorySort', $style);
+		$db_conn->where('brewReceived', '1');
+		$row_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
-		$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scorePlace IS NOT NULL OR a.scorePlace='')", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", $style);
-		$score_count = mysqli_query($connection,$query_score_count) or die (mysqli_error($connection));
-		$row_score_count = mysqli_fetch_assoc($score_count);
+		$query_score_count = "SELECT  COUNT(*) as 'count' FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
+		$row_score_count = $db_conn->rawQueryOne($query_score_count, array($style));
 
 
 		if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
 
-			$query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", $style);
-			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-			$row_scores = mysqli_fetch_assoc($scores);
-			$totalRows_scores = mysqli_num_rows($scores);
+			$query_scores = "SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace";
+			$rows_scores = $db_conn->rawQuery($query_scores, array($style));
+			$totalRows_scores = $db_conn->count;
 
-			do {
+			foreach ($rows_scores as $row_scores) {
 
 			$display_place = display_place($row_scores['scorePlace'],1);
 			$brewer_name = truncate($row_scores['brewerFirstName']." ".$row_scores['brewerLastName'], $character_limit,"...");
@@ -106,7 +106,7 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 			$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 			$pdf->Add_Label($text);
 
-			} while ($row_scores = mysqli_fetch_assoc($scores));
+			}
 
 		}
 	}
@@ -114,34 +114,37 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 
 elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 
-	if ($styleSet == "BJCP2025") $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC;", $styles_db_table);
-	else $query_styles = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup,brewStyleNum ASC;", $styles_db_table, $_SESSION['prefsStyleSet']);
-	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-	$row_styles = mysqli_fetch_assoc($styles);
-	$totalRows_styles = mysqli_num_rows($styles);
-	
-	do { 
-		if (array_key_exists($row_styles['id'], $styles_selected)) $style[] = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum']."-".$row_styles['brewStyle']; 
-	} while ($row_styles = mysqli_fetch_assoc($styles));
+	if ($styleSet == "BJCP2025") {
+		$query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC";
+		$rows_styles = $db_conn->rawQuery($query_styles);
+	}
+	else {
+		$query_styles = "SELECT id,brewStyleGroup,brewStyleNum,brewStyle FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') ORDER BY brewStyleGroup,brewStyleNum ASC";
+		$rows_styles = $db_conn->rawQuery($query_styles, array($_SESSION['prefsStyleSet']));
+	}
+	$totalRows_styles = $db_conn->count;
+
+	foreach ($rows_styles as $row_styles) {
+		if (array_key_exists($row_styles['id'], $styles_selected)) $style[] = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum']."-".$row_styles['brewStyle'];
+	}
 
 	foreach (array_unique($style) as $style) {
 		$style = explode("-",$style);
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing",  $style[0], $style[1]);
-		$entry_count = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
-		$row_entry_count = mysqli_fetch_assoc($entry_count);
+		$db_conn->where('brewCategorySort', $style[0]);
+		$db_conn->where('brewSubCategory', $style[1]);
+		$db_conn->where('brewReceived', '1');
+		$row_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
-		$query_score_count = sprintf("SELECT  COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", $style[0], $style[1]);
-		$score_count = mysqli_query($connection,$query_score_count) or die (mysqli_error($connection));
-		$row_score_count = mysqli_fetch_assoc($score_count);
+		$query_score_count = "SELECT  COUNT(*) as 'count' FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND b.brewSubCategory=? AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID";
+		$row_score_count = $db_conn->rawQueryOne($query_score_count, array($style[0], $style[1]));
 
 		if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
 
-			$query_scores = sprintf("SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewSubCategory, b.brewStyle, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID  AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", $style[0], $style[1]);
-			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-			$row_scores = mysqli_fetch_assoc($scores);
-			$totalRows_scores = mysqli_num_rows($scores);
+			$query_scores = "SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewSubCategory, b.brewStyle, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND b.brewSubCategory=? AND a.eid = b.id  AND c.uid = b.brewBrewerID  AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace";
+			$rows_scores = $db_conn->rawQuery($query_scores, array($style[0], $style[1]));
+			$totalRows_scores = $db_conn->count;
 
-			do {
+			foreach ($rows_scores as $row_scores) {
 
 				$display_place = display_place($row_scores['scorePlace'],1);
 				$brewer_name = truncate($row_scores['brewerFirstName']." ".$row_scores['brewerLastName'], $character_limit,"...");
@@ -176,25 +179,24 @@ elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 				$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 				$pdf->Add_Label($text);
 
-			} while ($row_scores = mysqli_fetch_assoc($scores));
+			}
 		}
 	}
 } // end elseif ($_SESSION['prefsWinnerMethod'] == "2")
 
 else { // Output by Table.
 
-	do {
+	foreach ($rows_tables as $row_tables) {
 
-	$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", $prefix."judging_scores", $row_tables['id']);
+	$query_scores = "SELECT * FROM ".$prefix."judging_scores WHERE scoreTable=?";
+	$params_scores = array($row_tables['id']);
 	$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') ORDER BY scorePlace ASC";
-	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-	$row_scores = mysqli_fetch_assoc($scores);
-	$totalRows_scores = mysqli_num_rows($scores);
+	$rows_scores = $db_conn->rawQuery($query_scores, $params_scores);
+	$totalRows_scores = $db_conn->count;
 
-		do {
-			$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewSubCategory FROM %s WHERE id='%s'", $prefix."brewing", $row_scores['eid']);
-			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-			$row_entries = mysqli_fetch_assoc($entries);
+		foreach ($rows_scores as $row_scores) {
+			$db_conn->where('id', $row_scores['eid']);
+			$row_entries = $db_conn->getOne($prefix."brewing", "id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewSubCategory");
 
 			$display_place = display_place($row_scores['scorePlace'],1);
 			$table_name = truncate($row_tables['tableName'], ($character_limit - 3));
@@ -230,9 +232,9 @@ else { // Output by Table.
 			$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 			if ($display_place != "N/A") $pdf->Add_Label($text);
 
-		} while ($row_scores = mysqli_fetch_assoc($scores));
+		}
 
-	} while ($row_tables = mysqli_fetch_assoc($tables));
+	}
 
 }
 

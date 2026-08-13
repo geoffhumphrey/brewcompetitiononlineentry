@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
 
-if (isset($_SERVER['HTTP_REFERER'])) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) {
 
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
@@ -19,15 +19,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	if ($filter == "test-email") {
 
-		$query_forgot = "SELECT * FROM $users_db_table WHERE id = '$id'";
-		$forgot = mysqli_query($connection,$query_forgot) or die (mysqli_error($connection));
-		$row_forgot = mysqli_fetch_assoc($forgot);
-		$totalRows_forgot = mysqli_num_rows($forgot);
+		$db_conn->where('id', $id);
+		$row_forgot = $db_conn->getOne($users_db_table);
+		$totalRows_forgot = $db_conn->count;
 
-		$query_brewer = "SELECT brewerLastName,brewerFirstName FROM $brewer_db_table WHERE uid = '$id'";
-		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-		$row_brewer = mysqli_fetch_assoc($brewer);
-		$totalRows_brewer = mysqli_num_rows($brewer);
+		$db_conn->where('uid', $id);
+		$row_brewer = $db_conn->getOne($brewer_db_table, "brewerLastName,brewerFirstName");
+		$totalRows_brewer = $db_conn->count;
 
 		$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
 		$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
@@ -85,16 +83,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		if ($mail_use_smtp) {
 
 			$query_brewer = "SELECT a.id,a.uid,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,a.brewerEmail,b.uid,b.staff_judge,b.staff_steward FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND (b.staff_steward='1' OR b.staff_judge='1') ORDER BY brewerLastName ASC";
-			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-			$row_brewer = mysqli_fetch_assoc($brewer);
-			$totalRows_brewer = mysqli_num_rows($brewer);
+			$rows_brewer = $db_conn->rawQuery($query_brewer);
+			$totalRows_brewer = $db_conn->count;
 
 			$query_organizer = "SELECT a.brewerFirstName,a.brewerLastName FROM $brewer_db_table a, $staff_db_table b WHERE a.uid = b.uid AND staff_organizer='1'";
-			$organizer = mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
-			$row_organizer = mysqli_fetch_assoc($organizer);
-			$totalRows_organizer = mysqli_num_rows($organizer);
+			$row_organizer = $db_conn->rawQueryOne($query_organizer);
+			$totalRows_organizer = $db_conn->count;
 
-			do {
+			foreach ($rows_brewer as $row_brewer) {
 
 				$message = "";
 				$table_assignments = "";
@@ -164,7 +160,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				
 				}
 
-			} while ($row_brewer = mysqli_fetch_assoc($brewer));
+			}
 
 		}
 

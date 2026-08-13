@@ -57,15 +57,15 @@ $cards_loc_rnd = "";
 $organizer_assigned = get_participant_count('organizer-assigned');
 
 if ($totalRows_judging > 0) {
-    
-    do {
+
+    foreach ($rows_judging as $row_judging) {
 
         $judge_assign_links[$row_judging['judgingLocName']] = $base_url."includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
         $steward_assign_links[$row_judging['judgingLocName']] = $base_url."includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];                                     
         for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {
             
             $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
-            $location_name = sprintf("%s - %s, Round %s", $row_judging['judgingLocName'], $location_date, $round);
+            $location_name = sprintf("%s - %s, Round %s", h($row_judging['judgingLocName']), $location_date, $round);
 
             $ps_loc_j_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round;
 
@@ -92,18 +92,18 @@ if ($totalRows_judging > 0) {
         $ji_link_entry = $base_url."includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];
         $ji_loc_entry .= "<li class=\"small\">";
         $ji_loc_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">",$ji_link_entry);
-        $ji_loc_entry .= $row_judging['judgingLocName'];
+        $ji_loc_entry .= h($row_judging['judgingLocName']);
         $ji_loc_entry .= "</a>";
         $ji_loc_entry .= "</li>";
 
         $ji_loc_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging['id'];
         $ji_loc_judging .= "<li class=\"small\">";
         $ji_loc_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">",$ji_loc_judging_link);
-        $ji_loc_judging .= $row_judging['judgingLocName'];
+        $ji_loc_judging .= h($row_judging['judgingLocName']);
         $ji_loc_judging .= "</a>";
         $ji_loc_judging .= "</li>";
 
-    } while ($row_judging = mysqli_fetch_assoc($judging));
+    }
 }
 
 // BOS Pullsheets and Cup Mats for Individual Style Types
@@ -118,7 +118,7 @@ if ($totalRows_tables > 0) {
     $bos_cup_mat_pro_am_st_entry = "";
     $bos_cup_mat_pro_am_st_judging = "";
 
-    do {
+    foreach ($rows_style_type as $row_style_type) {
 
         if (($row_style_type) && ($row_style_type['styleTypeBOS'] == "Y")) {
 
@@ -126,11 +126,11 @@ if ($totalRows_tables > 0) {
             $bos_pull_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=".$row_style_type['id']; 
 
             $bos_pull_st_entry .= "<li>";
-            $bos_pull_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s</a>",$bos_pull_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_pull_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s</a>",$bos_pull_entry_link,h($row_style_type['styleTypeName']),h($row_style_type['styleTypeName']));
             $bos_pull_st_entry .= "</li>";
 
             $bos_pull_st_judging .= "<li>";
-            $bos_pull_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s</a>",$bos_pull_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_pull_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s</a>",$bos_pull_judging_link,h($row_style_type['styleTypeName']),h($row_style_type['styleTypeName']));
             $bos_pull_st_judging .= "</li>";
 
 
@@ -144,11 +144,11 @@ if ($totalRows_tables > 0) {
                 $bos_pull_pro_am_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;id=".$row_style_type['id']; 
 
                 $bos_pull_pro_am_st_entry .= "<li>";
-                $bos_pull_pro_am_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_pull_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_pull_pro_am_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_pull_pro_am_entry_link,h($row_style_type['styleTypeName']),h($row_style_type['styleTypeName']),$pro_am_bos_method);
                 $bos_pull_pro_am_st_entry .= "</li>";
 
                 $bos_pull_pro_am_st_judging .= "<li>";
-                $bos_pull_pro_am_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_pull_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_pull_pro_am_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_pull_pro_am_judging_link,h($row_style_type['styleTypeName']),h($row_style_type['styleTypeName']),$pro_am_bos_method);
                 $bos_pull_pro_am_st_judging .= "</li>";
 
 
@@ -156,11 +156,11 @@ if ($totalRows_tables > 0) {
                 $bos_cup_mat_pro_am_judging_link = $base_url."includes/output.inc.php?section=bos-mat&amp;action=pro-am&amp;sort=".$i."&amp;view=".$row_style_type['id'];
 
                 $bos_cup_mat_pro_am_st_entry .= "<li>";
-                $bos_cup_mat_pro_am_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_cup_mat_pro_am_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_entry_link,h($row_style_type['styleTypeName']),h($row_style_type['styleTypeName']),$pro_am_bos_method);
                 $bos_cup_mat_pro_am_st_entry .= "</li>";
 
                 $bos_cup_mat_pro_am_st_judging .= "<li>";
-                $bos_cup_mat_pro_am_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_cup_mat_pro_am_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_judging_link,h($row_style_type['styleTypeName']),h($row_style_type['styleTypeName']),$pro_am_bos_method);
                 $bos_cup_mat_pro_am_st_judging .= "</li>";
 
             
@@ -170,37 +170,37 @@ if ($totalRows_tables > 0) {
             $bos_mat_judging = $base_url."includes/output.inc.php?section=bos-mat&amp;view=".$row_style_type['id'];
 
             $bos_cup_mat_st_entry .= "<li>";
-            $bos_cup_mat_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Entry Numbers\">%s</a>",$bos_mat_entry,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_cup_mat_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Entry Numbers\">%s</a>",$bos_mat_entry,h($row_style_type['styleTypeName']),h($row_style_type['styleTypeName']));
             $bos_cup_mat_st_entry .= "</li>";
 
             $bos_cup_mat_st_judging .= "<li>";
-            $bos_cup_mat_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s</a>",$bos_mat_judging,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_cup_mat_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s</a>",$bos_mat_judging,h($row_style_type['styleTypeName']),h($row_style_type['styleTypeName']));
             $bos_cup_mat_st_judging .= "</li>";
 
             
 
         }
 
-    } while ($row_style_type = mysqli_fetch_assoc($style_type));
+    }
 
     $mini_bos_cup_mat_st_entry = "";
     $mini_bos_cup_mat_st_judging = "";
 
-    do {
+    foreach ($rows_tables as $row_tables) {
 
         $mini_bos_mat_entry = $base_url."includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry&amp;view=".$row_tables['id'];
         $mini_bos_mat_judging = $base_url."includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;view=".$row_tables['id'];
 
         $mini_bos_cup_mat_st_entry .= "<li>";
-        $mini_bos_cup_mat_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s Mini-BOS Cup Mat Using Entry Numbers\">%s: %s</a>",$mini_bos_mat_entry,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
+        $mini_bos_cup_mat_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s Mini-BOS Cup Mat Using Entry Numbers\">%s: %s</a>",$mini_bos_mat_entry,h($row_tables['tableName']),h($row_tables['tableNumber']),h($row_tables['tableName']));
         $mini_bos_cup_mat_st_entry .= "</li>";
 
         $mini_bos_cup_mat_st_judging .= "<li>";
-        $mini_bos_cup_mat_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s: %s</a>",$mini_bos_mat_judging,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
+        $mini_bos_cup_mat_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s: %s</a>",$mini_bos_mat_judging,h($row_tables['tableName']),h($row_tables['tableNumber']),h($row_tables['tableName']));
         $mini_bos_cup_mat_st_judging .= "</li>";
 
 
-    } while ($row_tables = mysqli_fetch_assoc($tables));
+    }
 
 }
 
@@ -585,7 +585,7 @@ const driverObjDashTour = driver({
     <?php } ?>
     <?php } if ($show_best) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <button type="button" class="btn btn-info btn-sm btn-block" data-toggle="modal" data-target="#previewBest">Best Brewer/Best Club Results <span class="fa fa-lg fa-trophy"></span></button>
+        <button type="button" class="btn btn-info btn-sm btn-block" data-toggle="modal" data-target="#previewBest">Best Brewer<?php if ($_SESSION['prefsProEdition'] == 0) echo "/Best Club"; ?> Results <span class="fa fa-lg fa-trophy"></span></button>
     </div>
     <div class="modal fade" id="previewBest" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -1613,11 +1613,11 @@ if ($recently_updated) {
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="judgeAssignMenuLoc">
                                             <?php foreach($judge_assign_links as $key => $value) { ?>
-                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
+                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo h($key); ?>"><?php echo h($key); ?> By Name</a></li>
                                             <?php } ?>
                                             <li role="separator" class="divider"></li>
                                             <?php foreach($judge_assign_links as $key => $value) { ?>
-                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
+                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo h($key); ?>"><?php echo h($key); ?> By Table</a></li>
                                             <?php } ?>
                                         </ul>
                                     </div>
@@ -1626,11 +1626,11 @@ if ($recently_updated) {
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="stewardAssignMenuLoc">
                                             <?php foreach($steward_assign_links as $key => $value) { ?>
-                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
+                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo h($key); ?>"><?php echo h($key); ?> By Name</a></li>
                                             <?php } ?>
                                             <li role="separator" class="divider"></li>
                                             <?php foreach($steward_assign_links as $key => $value) { ?>
-                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
+                                                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo h($key); ?>"><?php echo h($key); ?> By Table</a></li>
                                             <?php } ?>
                                         </ul>
                                     </div>
@@ -1980,14 +1980,14 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div>
-                            <?php if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) { ?>
+                            <?php if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                    <strong>Best Brewer and/or Club</strong>
+                                    <strong>Best Brewer<?php if ($_SESSION['prefsProEdition'] == 0) echo " and/or Club"; ?></strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;view=default" title="Best Brewer<?php if ($_SESSION['prefsProEdition'] == 0) echo " and/or Club Results Report"; ?>">Print</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -2418,7 +2418,7 @@ if ($recently_updated) {
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries">Entry</a></li>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email">Email Sending / Contact Display</a></li>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment">Currency and Payment</a></li>
-                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best">Best Brewer and/or Club</a></li>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best">Best Brewer<?php if ($_SESSION['prefsProEdition'] == 0) echo " and/or Club"; ?></a></li>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Judging/Competition Organization</a></li>
                                 </ul>
                             </div>
@@ -2979,7 +2979,7 @@ if ($recently_updated) {
                     <div style="font-size:1.1em; margin-bottom: 10px;"><strong>Competition ID</strong></div>
                     <p>Before generating your XML Report, <strong>double-check that your BJCP Competition ID is correct, <span class="text-primary">especially if you entered an ID for any previous competition iterations</span></strong>.</p>
                     <p>You should have received a competition ID from the BJCP when you <a class="hide-loader" href="https://app.bjcp.org/competitions/register" target="_blank">registered your competition</a>.
-                    <p><strong>The BJCP Competition ID that is currently entered is: <span class="text-danger"><?php echo $_SESSION['contestID']; ?></span>.</strong> If this is incorrect, go to the Admin Dashboard > Competition Preparation > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a> function and update the ID <strong>before</strong> generating the report.</p>
+                    <p><strong>The BJCP Competition ID that is currently entered is: <span class="text-danger"><?php echo h($_SESSION['contestID']); ?></span>.</strong> If this is incorrect, go to the Admin Dashboard > Competition Preparation > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a> function and update the ID <strong>before</strong> generating the report.</p>
                 <?php } ?>
                 
                 <?php if (empty($organizer_assigned)) { ?>

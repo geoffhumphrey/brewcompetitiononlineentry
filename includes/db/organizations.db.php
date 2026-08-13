@@ -1,9 +1,17 @@
 <?php 
-if ($_SESSION['prefsProEdition'] == 1) $query_organizations = sprintf("SELECT brewerAssignment, brewerBreweryName FROM %s WHERE brewerBreweryName IS NOT NULL OR brewerAssignment IS NOT NULL ORDER BY brewerBreweryName ASC", $prefix."brewer");
-else $query_organizations = sprintf("SELECT uid, brewerAssignment, brewerLastName, brewerFirstName FROM %s WHERE brewerLastName IS NOT NULL OR brewerAssignment IS NOT NULL ORDER BY brewerLastName ASC", $prefix."brewer");
-$organizations = mysqli_query($connection,$query_organizations) or die (mysqli_error($connection));
-$row_organizations = mysqli_fetch_assoc($organizations);
-$totalRows_organizations = mysqli_num_rows($organizations);
+if ($_SESSION['prefsProEdition'] == 1) {
+    $db_conn->where('brewerBreweryName', NULL, 'IS NOT');
+    $db_conn->orWhere('brewerAssignment', NULL, 'IS NOT');
+    $db_conn->orderBy('brewerBreweryName', 'ASC');
+    $rows_organizations = $db_conn->get($prefix."brewer", null, "brewerAssignment, brewerBreweryName");
+}
+else {
+    $db_conn->where('brewerLastName', NULL, 'IS NOT');
+    $db_conn->orWhere('brewerAssignment', NULL, 'IS NOT');
+    $db_conn->orderBy('brewerLastName', 'ASC');
+    $rows_organizations = $db_conn->get($prefix."brewer", null, "uid, brewerAssignment, brewerLastName, brewerFirstName");
+}
+$totalRows_organizations = $db_conn->count;
 
 $org_options = "";
 
@@ -15,7 +23,7 @@ if ($totalRows_organizations > 0) {
     
     if (!empty($row_brewer['brewerAssignment'])) $affiliated_orgs = json_decode($row_brewer['brewerAssignment'],true);
 
-        do {
+        foreach ($rows_organizations as $row_organizations) {
 
             if ($_SESSION['prefsProEdition'] == 1) {
                 if (!empty($row_organizations['brewerBreweryName'])) $org_array[] = $row_organizations['brewerBreweryName']; 
@@ -69,13 +77,19 @@ if ($totalRows_organizations > 0) {
             }
 
             if ($_SESSION['prefsProEdition'] == 1) {
-                if ((isset($row_organizations['brewerBreweryName'])) && (!empty($row_organizations['brewerBreweryName']))) $org_options .= "<option value=\"".$row_organizations['brewerBreweryName']."\"".$org_selected_dropdown.">".$row_organizations['brewerBreweryName']."</option>\n";
+                if ((isset($row_organizations['brewerBreweryName'])) && (!empty($row_organizations['brewerBreweryName']))) {
+                    $org_name_safe = h(html_entity_decode($row_organizations['brewerBreweryName'], ENT_QUOTES, 'UTF-8'));
+                    $org_options .= "<option value=\"".$org_name_safe."\"".$org_selected_dropdown.">".$org_name_safe."</option>\n";
+                }
             }
             else {
-                if ((isset($row_organizations['brewerLastName'])) && (!empty($row_organizations['brewerLastName']))) $org_options .= "<option value=\"".$affiliated_brewer."\"".$org_selected_dropdown.">".$affiliated_brewer."</option>\n";
+                if ((isset($row_organizations['brewerLastName'])) && (!empty($row_organizations['brewerLastName']))) {
+                    $org_name_safe = h(html_entity_decode($affiliated_brewer, ENT_QUOTES, 'UTF-8'));
+                    $org_options .= "<option value=\"".$org_name_safe."\"".$org_selected_dropdown.">".$org_name_safe."</option>\n";
+                }
             }
 
-        } while($row_organizations = mysqli_fetch_assoc($organizations));
+        }
 
 }
 

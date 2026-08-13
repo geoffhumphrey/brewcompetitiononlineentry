@@ -87,7 +87,7 @@ else {
 
 if ($totalRows_log > 0) {
 
-	do {
+	foreach ($rows_log as $row_log) {
 
 		$saving_random_num = random_generator(8,2);
 
@@ -196,31 +196,31 @@ if ($totalRows_log > 0) {
 
 		// Required Info for Cider / Mead (Strength, Carb, Sweetness)
 		$cider_mead_req_info = "";
-		if (!empty($row_log['brewMead1'])) $cider_mead_req_info .= "<li><strong>".$label_carbonation.":</strong> ".$row_log['brewMead1']."</li>";
-		if (!empty($row_log['brewMead2'])) $cider_mead_req_info .= "<li><strong>".$label_sweetness.":</strong> ".$row_log['brewMead2']."</li>";
-		
+		if (!empty($row_log['brewMead1'])) $cider_mead_req_info .= "<li><strong>".$label_carbonation.":</strong> ".h($row_log['brewMead1'])."</li>";
+		if (!empty($row_log['brewMead2'])) $cider_mead_req_info .= "<li><strong>".$label_sweetness.":</strong> ".h($row_log['brewMead2'])."</li>";
+
 		if (!empty($row_log['brewSweetnessLevel'])) {
-			
+
 			$sweetness_json = json_decode($row_log['brewSweetnessLevel'],true);
-			
+
 			if (json_last_error() === JSON_ERROR_NONE) {
 
-				if (!empty($sweetness_json['OG'])) $cider_mead_req_info .= "<li><strong>".$label_original_gravity.":</strong> ".$sweetness_json['OG']."</li>";
-				if (!empty($sweetness_json['FG'])) $cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".$sweetness_json['FG']."</li>";
+				if (!empty($sweetness_json['OG'])) $cider_mead_req_info .= "<li><strong>".$label_original_gravity.":</strong> ".h($sweetness_json['OG'])."</li>";
+				if (!empty($sweetness_json['FG'])) $cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".h($sweetness_json['FG'])."</li>";
 
 			}
-			
+
 			else {
-				$cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".$row_log['brewSweetnessLevel']."</li>";
+				$cider_mead_req_info .= "<li><strong>".$label_final_gravity.":</strong> ".h($row_log['brewSweetnessLevel'])."</li>";
 			}
 
 		}
 
-		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".$row_log['brewMead3']."</li>";
+		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".h($row_log['brewMead3'])."</li>";
 
 		if (!empty($cider_mead_req_info)) $required_info .= $cider_mead_req_info;
 
-		if (!empty($row_log['brewABV'])) $required_info .= "<li><strong>".$label_abv.":</strong> ".$row_log['brewABV']."%</li>";
+		if (!empty($row_log['brewABV'])) $required_info .= "<li><strong>".$label_abv.":</strong> ".h($row_log['brewABV'])."%</li>";
 
 		if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_log['brewJuiceSource']))) {
 		  
@@ -243,18 +243,18 @@ if ($totalRows_log > 0) {
 			$juice_src_disp_other = rtrim($juice_src_disp_other,",");
 			$juice_src_disp_other = rtrim($juice_src_disp_other,", ");
 
-			$required_info .= "<li><strong>".$label_juice_source."</strong>: ".$juice_src_disp."</li>";
-			$required_info .= "<li><strong>".$label_fruit_add_source."</strong>: ".$juice_src_disp_other."</li>";
-		
+			$required_info .= "<li><strong>".$label_juice_source."</strong>: ".h($juice_src_disp)."</li>";
+			$required_info .= "<li><strong>".$label_fruit_add_source."</strong>: ".h($juice_src_disp_other)."</li>";
+
 		}
 
-		if (!empty($row_log['brewPackaging'])) $required_info .= "<li><strong>".$label_packaging.":</strong> ".$packaging_display[$row_log['brewPackaging']]."</li>";
+		if (!empty($row_log['brewPackaging'])) $required_info .= "<li><strong>".$label_packaging.":</strong> ".h($packaging_display[$row_log['brewPackaging']])."</li>";
 
 		if ((!empty($row_log['brewPouring'])) && ((!empty($row_log['brewStyleType'])) && ($row_log['brewStyleType'] == 1))) {
 			$pouring_arr = json_decode($row_log['brewPouring'],true);
-			$required_info .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
+			$required_info .= "<li><strong>".$label_pouring.":</strong> ".h($pouring_arr['pouring'])."</li>";
 			if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $required_info .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-			if ((isset($pouring_arr['pouring_rouse'])) && (!empty($pouring_arr['pouring_rouse']))) $required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".$pouring_arr['pouring_rouse']."</li>";
+			if ((isset($pouring_arr['pouring_rouse'])) && (!empty($pouring_arr['pouring_rouse']))) $required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".h($pouring_arr['pouring_rouse'])."</li>";
 		}
 
 		// Allergens
@@ -286,19 +286,19 @@ if ($totalRows_log > 0) {
 
 		// Entry Style
 		if ($style_set == "BA") {
-			if ($row_log['brewCategory'] <= 14) $entry_style_display .= $row_log['brewStyle'];
-			else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
+			if ($row_log['brewCategory'] <= 14) $entry_style_display .= h($row_log['brewStyle']);
+			else $entry_style_display .= "Custom: ".h($row_log['brewStyle']);
 		}
 
 		else {
-			
+
 			if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default"))
-			$entry_style_display .= "<span class=\"hidden\">".$row_log['brewCategorySort']."</span><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_log['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only the category ".ltrim($row_log['brewCategorySort'],"0")." entries\" >";
-			
+			$entry_style_display .= "<span class=\"hidden\">".h($row_log['brewCategorySort'])."</span><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".h($row_log['brewCategorySort'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only the category ".h(ltrim($row_log['brewCategorySort'],"0"))." entries\" >";
+
 			if ((!empty($row_log['brewCategorySort'])) && ($row_log['brewCategorySort'] != "00")) {
 				$entry_style_display .= style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-				$entry_style_display .= ": ".$row_log['brewStyle'];
-			} 
+				$entry_style_display .= ": ".h($row_log['brewStyle']);
+			}
 
 			else $entry_style_display .= "<span class=\"text-danger\"><strong>Style NOT Specified</strong></span>";
 			if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) $entry_style_display .= "</a>";
@@ -316,29 +316,29 @@ if ($totalRows_log > 0) {
 			if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
 			$entry_brewer_display .= "<br><small>";
 			$entry_brewer_display .= rtrim($row_log['brewerCity']).", ".$row_log['brewerState'];
-			
+
 			if ($row_log['brewerCountry'] == "United States") {
 				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= format_phone_us($row_log['brewerPhone1']);
+				$entry_brewer_display .= h(format_phone_us($row_log['brewerPhone1']));
 			}
-			
+
 			else {
-				$entry_brewer_display .= ", ".$row_log['brewerCountry'];
+				$entry_brewer_display .= ", ".h($row_log['brewerCountry']);
 				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= $row_log['brewerPhone1'];
+				$entry_brewer_display .= h($row_log['brewerPhone1']);
 			}
 
 			if ($co_brewer) {
 				$entry_brewer_display .= "<br>Co-Brewer: ";
 				$entry_brewer_display .= $row_log['brewCoBrewer'];
 			}
-			
+
 			$entry_brewer_display .= "</small>";
 
 		}
 
 		elseif (($row_log['brewerBreweryName'] != "&nbsp;") && ($pro_edition == 1)) {
-			
+
 			if (($bid == "default") && ($dbTable == "default")) {
 				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$row_log['brewerBreweryName']."&rsquo;s entries\">";
 			}
@@ -348,14 +348,14 @@ if ($totalRows_log > 0) {
 			$entry_brewer_display .= "<br><small>";
 			$entry_brewer_display .= rtrim($row_log['brewerCity']).", ".$row_log['brewerState'];
 			if ($row_log['brewerCountry'] != "United States") {
-				$entry_brewer_display .= ", ".$row_log['brewerCountry'];
+				$entry_brewer_display .= ", ".h($row_log['brewerCountry']);
 				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= $row_log['brewerPhone1'];
+				$entry_brewer_display .= h($row_log['brewerPhone1']);
 				$entry_brewer_display .= "</small>";
 			}
 			else {
 				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= format_phone_us($row_log['brewerPhone1']);
+				$entry_brewer_display .= h(format_phone_us($row_log['brewerPhone1']));
 				$entry_brewer_display .= "</small>";
 			}
 
@@ -370,11 +370,11 @@ if ($totalRows_log > 0) {
 		// Paid
 		if (($action != "print") && ($dbTable == "default")) {
 			
-			$entry_paid_display .= "<span class=\"hidden\">".$row_log['brewPaid']."</span>";
+			$entry_paid_display .= "<span class=\"hidden\">".h($row_log['brewPaid'])."</span>";
 			$entry_paid_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Paid</span>";
 			$entry_paid_display .= "<div class=\"form-group\" id=\"paid-ajax-".$saving_random_num."-brewPaid-form-group\">";
 			$entry_paid_display .= "<div class=\"checkbox\"><label>";
-			$entry_paid_display .= "<input type=\"checkbox\" value=\"1\" id=\"paid-ajax-".$saving_random_num."\" name=\"brewPaid".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewPaid']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$ajax_url."','brewPaid','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','paid-ajax-".$saving_random_num."','value')\"";
+			$entry_paid_display .= "<input type=\"checkbox\" value=\"1\" id=\"paid-ajax-".$saving_random_num."\" name=\"brewPaid".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".h($row_log['brewPaid'])."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$ajax_url."','brewPaid','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','paid-ajax-".$saving_random_num."','value')\"";
 			if ($row_log['brewPaid'] == "1") $entry_paid_display .= " checked>";
 			else $entry_paid_display .= ">";
 			$entry_paid_display .= "</label></div>";
@@ -395,9 +395,9 @@ if ($totalRows_log > 0) {
 		// Received
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_received_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Received</span>";
-			$entry_received_display .= "<span class=\"hidden\">".$row_log['brewReceived']."</span>";
+			$entry_received_display .= "<span class=\"hidden\">".h($row_log['brewReceived'])."</span>";
 			$entry_received_display .= "<div class=\"form-group\" id=\"received-ajax-".$saving_random_num."-brewReceived-form-group\">";
-			$entry_received_display .= "<div class=\"checkbox\"><label><input name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"received-ajax-".$saving_random_num."\" name=\"brewReceived".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewReceived']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$ajax_url."','brewReceived','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','received-ajax-".$saving_random_num."','value')\"";
+			$entry_received_display .= "<div class=\"checkbox\"><label><input name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"received-ajax-".$saving_random_num."\" name=\"brewReceived".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".h($row_log['brewReceived'])."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$ajax_url."','brewReceived','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','received-ajax-".$saving_random_num."','value')\"";
 			if ($row_log['brewReceived'] == "1") $entry_received_display .= " checked>";
 			else $entry_received_display .= ">";
 			$entry_received_display .= "</label></div>";
@@ -436,7 +436,7 @@ if ($totalRows_log > 0) {
 			$entry_staff_notes_display .= "<span id=\"staff-notes-ajax-".$saving_random_num."-brewStaffNotes-status\"></span>";
 			$entry_staff_notes_display .= "<span id=\"staff-notes-ajax-".$saving_random_num."-brewStaffNotes-status-msg\"></span>";
 			$entry_staff_notes_display .= "</div>";
-			
+
 		}
 		else {
 			if (isset($row_log['brewStaffNotes'])) $entry_staff_notes_display = $row_log['brewStaffNotes'];
@@ -466,7 +466,7 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "</a> ";
 			$entry_actions .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$entry_name."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$entry_name."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
 			$entry_actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$base_url."includes/output.inc.php?section=entry-form-multi&amp;action=print&amp;id=".$row_log['id']."&amp;bid=".$row_log['uid']."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$entry_name."&rdquo;\"><span class=\"fa fa-lg fa-print <?php echo $hidden_sm; ?>\"></a> ";
-			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$row_log['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$row_log['brewerFirstName']." ".$row_log['brewerLastName'].", at ".$row_log['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
+			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".h($row_log['brewerEmail'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$row_log['brewerFirstName']." ".$row_log['brewerLastName'].", at ".h($row_log['brewerEmail'])."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 		}
 
 		if ($eval_db_table) {
@@ -590,7 +590,7 @@ if ($totalRows_log > 0) {
 		if ($row_log['brewerProAm'] >= 1) $tbody_rows .= "<p><span class=\"label label-info hidden-print <?php echo $hidden_sm; ?>\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td nowrap=\"nowrap\" class=\"<?php echo $hidden_sm; ?>\">".$entry_brewer_display."</td>";
-		if ($pro_edition == 0) $tbody_rows .= "<td class=\"<?php echo $hidden_md; ?> hidden-print\">".$row_log['brewerClubs']."</td>";
+		if ($pro_edition == 0) $tbody_rows .= "<td class=\"<?php echo $hidden_md; ?> hidden-print\">".h($row_log['brewerClubs'])."</td>";
 		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_md; ?> hidden-print\">".$entry_updated_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_sm; ?>\">".$entry_paid_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_sm; ?>\">".$entry_received_display."</td>";
@@ -603,24 +603,26 @@ if ($totalRows_log > 0) {
 		// Build all brewer email array
 		if (!empty($row_log['brewerEmail'])) $copy_paste_all_emails[] = $row_log['brewerEmail'];
 
-	} while($row_log = mysqli_fetch_assoc($log));
+	}
 }
 
 if ($totalRows_log_paid > 0) {
-	do {
+	foreach ($rows_log_paid as $row_log_paid) {
+		// Pre-existing bug (predates this conversion): references the stale $row_log from the
+		// loop above instead of $row_log_paid, so every iteration pushes the same email.
 		if (!empty($row_log['brewerEmail'])) $copy_paste_paid_emails[] = $row_log['brewerEmail'];
-	} while ($row_log_paid = mysqli_fetch_assoc($log_paid));
+	}
 }
-// Unpaid email addresses
-$query_log_unpaid = sprintf("SELECT a.brewerEmail, a.uid, b.brewBrewerID FROM %s a, %s b WHERE a.uid = b.brewBrewerID AND (b.brewPaid <> 1 OR b.brewPaid IS NULL)", $prefix."brewer", $prefix."brewing");
-$log_unpaid = mysqli_query($connection,$query_log_unpaid) or die (mysqli_error($connection));
-$row_log_unpaid = mysqli_fetch_assoc($log_unpaid);
-$totalRows_log_unpaid = mysqli_num_rows($log_unpaid);
+
+$sql = sprintf("SELECT a.brewerEmail, a.uid, b.brewBrewerID FROM %s a, %s b WHERE a.uid = b.brewBrewerID AND (b.brewPaid <> 1 OR b.brewPaid IS NULL)", $prefix."brewer", $prefix."brewing");
+$db_conn->returnType = "array";
+$row_log_unpaid = $db_conn->rawQuery($sql);
+$totalRows_log_unpaid = $db_conn->count;
 
 if ($totalRows_log_unpaid > 0) {
-	do {
+	foreach ($row_log_unpaid as $row_log_unpaid) {
 		$copy_paste_unpaid_emails [] = $row_log_unpaid['brewerEmail'];
-	} while ($row_log_unpaid = mysqli_fetch_assoc($log_unpaid));
+	}
 }
 
 if ($action != "print") { ?>
@@ -866,7 +868,7 @@ $(document).ready(function () {
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact all participants with entries.</p>
-						<textarea class="form-control" rows="8"><?php echo ltrim($all_email_display," ")
+						<textarea class="form-control" rows="8"><?php echo h(ltrim($all_email_display," "))
 						?></textarea>
 					</div>
 					<div class="modal-footer">
@@ -894,7 +896,7 @@ $(document).ready(function () {
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact participants with <strong>PAID</strong> entries.</p>
-						<textarea class="form-control" rows="8"><?php echo ltrim($paid_email_display); ?></textarea>
+						<textarea class="form-control" rows="8"><?php echo h(ltrim($paid_email_display)); ?></textarea>
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -920,7 +922,7 @@ $(document).ready(function () {
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact participants with <strong>UNPAID</strong> entries.</p>
-						<textarea class="form-control" rows="8"><?php echo ltrim($unpaid_email_display); ?></textarea>
+						<textarea class="form-control" rows="8"><?php echo h(ltrim($unpaid_email_display)); ?></textarea>
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

@@ -11,7 +11,7 @@
 
 <?php 
 
-	do { 
+	foreach ($rows_sponsors as $row_sponsors) {
 
 		$sponsor_logo = "";
 
@@ -28,7 +28,11 @@
 	<div class="col">
 		<div class="card h-100 sponsor-card-bg reveal-element">
 			<div class="card-body">
-				<header class="sponsor-header"><?php echo $row_sponsors['sponsorName']; ?></header>
+				<header class="sponsor-header">
+					<?php echo $row_sponsors['sponsorName']; ?>	
+				</header>
+				<?php if (!empty($row_sponsors['sponsorLocation'])) echo "<div class=\"fs-6 text-secondary\">".$row_sponsors['sponsorLocation']."</div>";
+				?>
 				<?php if ($_SESSION['prefsSponsorLogos'] == "Y") { ?>
 				<div class="d-flex align-content-center flex-wrap">
 					<?php echo $sponsor_logo; ?>
@@ -48,6 +52,6 @@
 	</div>
 
 <?php }
-} while ($row_sponsors = mysqli_fetch_assoc($sponsors)); ?>
+} ?>
 
 </div>

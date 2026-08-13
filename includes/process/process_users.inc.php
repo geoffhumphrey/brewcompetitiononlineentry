@@ -30,10 +30,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		if (strstr($username,'@')) {
 
-			$query_userCheck = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
-			$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
-			$row_userCheck = mysqli_fetch_assoc($userCheck);
-			$totalRows_userCheck = mysqli_num_rows($userCheck);
+			$db_conn->where("user_name", $username);
+			$row_userCheck = $db_conn->getOne($users_db_table, "user_name");
+			$totalRows_userCheck = $db_conn->count;
 
 			if ($totalRows_userCheck > 0) {
 
@@ -74,10 +73,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				if ($section != "admin") {
 
-					$query_login = "SELECT password FROM $users_db_table WHERE user_name = '$username' AND password = '$hash'";
-					$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
-					$row_login = mysqli_fetch_assoc($login);
-					$totalRows_login = mysqli_num_rows($login);
+					$db_conn->where("user_name", $username);
+					$db_conn->where("password", $hash);
+					$row_login = $db_conn->getOne($users_db_table, "password");
+					$totalRows_login = $db_conn->count;
 
 					if (session_status() === PHP_SESSION_NONE) {
 						session_name($prefix_session);
@@ -146,15 +145,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		if (strstr($username,'@')) {
 
-			$query_brewerCheck = "SELECT brewerEmail FROM $brewer_db_table WHERE brewerEmail = '$usernameOld'";
-			$brewerCheck = mysqli_query($connection,$query_brewerCheck) or die (mysqli_error($connection));
-			$row_brewerCheck = mysqli_fetch_assoc($brewerCheck);
-			$totalRows_brewerCheck = mysqli_num_rows($brewerCheck);
+			$db_conn->where("brewerEmail", $usernameOld);
+			$row_brewerCheck = $db_conn->getOne($brewer_db_table, "brewerEmail");
+			$totalRows_brewerCheck = $db_conn->count;
 
-			$query_userCheck = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
-			$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
-			$row_userCheck = mysqli_fetch_assoc($userCheck);
-			$totalRows_userCheck = mysqli_num_rows($userCheck);
+			$db_conn->where("user_name", $username);
+			$row_userCheck = $db_conn->getOne($users_db_table);
+			$totalRows_userCheck = $db_conn->count;
 
 			// ----- If Changing a Participant's User Level ----- //
 			if (($go == "make_admin") && ($_SESSION['userLevel'] <= 1)) {
@@ -192,8 +189,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			}
 
 			// --------------------------- If Changing a Participant's User Name ------------------------------- //
-			if ($go == "username") {
-				
+			// Ownership check: a user may only change their own username/email unless an admin is
+			// performing the change (filter=admin), matching this file's own admin/self-service distinction.
+			if (($go == "username") && ((($filter == "admin") && ($_SESSION['userLevel'] <= 1)) || (($filter != "admin") && ($id == $_SESSION['user_id'])))) {
+
 				// User name found. Redirect.
 				if ($totalRows_userCheck > 0) {
 
@@ -245,10 +244,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 					if ($filter != "admin") {
 
-						$query_login = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
-						$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
-						$row_login = mysqli_fetch_assoc($login);
-						$totalRows_login = mysqli_num_rows($login);
+						$db_conn->where("user_name", $username);
+						$row_login = $db_conn->getOne($users_db_table, "user_name");
+						$totalRows_login = $db_conn->count;
 
 						if (session_status() == PHP_SESSION_NONE) {
 							session_name($prefix_session);
@@ -304,9 +302,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$password_old = md5(sterilize($_POST['passwordOld']));
 			$password_new = md5(sterilize($_POST['password']));
 
-			$query_userPass = sprintf("SELECT password FROM $users_db_table WHERE id = '%s'",$id);
-			$userPass = mysqli_query($connection,$query_userPass) or die (mysqli_error($connection));
-			$row_userPass = mysqli_fetch_assoc($userPass);
+			$db_conn->where("id", $id);
+			$row_userPass = $db_conn->getOne($users_db_table, "password");
 
 			$check = $hasher->CheckPassword($password_old, $row_userPass['password']);
 			$hash_new = $hasher->HashPassword($password_new);
@@ -342,7 +339,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		} // end if ($go == "password")
 
 		// --------------------------- If an admin is changing their password ------------------------------- //
-		if ($go == "change_user_password") {
+		if (($go == "change_user_password") && ($_SESSION['userLevel'] <= 1)) {
 
 			require(CLASSES.'phpass/PasswordHash.php');
 			$hasher = new PasswordHash(8, false);

@@ -46,7 +46,7 @@ if ($go == "org_notes") {
 </thead>
 <tbody>
 <?php 
-do { 
+foreach ($rows_brewer as $row_brewer) {
 	if (!empty($row_brewer['brewerJudgeNotes'])) {
 ?>
 <tr>
@@ -54,7 +54,7 @@ do {
 	<td><?php echo $row_brewer['brewerJudgeNotes']; ?></td>
 </tr>
 <?php }
-} while ($row_brewer = mysqli_fetch_assoc($brewer)); ?>
+} ?>
 </tbody>
 </table>
 <?php } else { ?>
@@ -100,7 +100,7 @@ do {
 </tr>
 </thead>
 <tbody>
-<?php do {
+<?php foreach ($rows_log_paid as $row_log_paid) {
 
 	if (!empty($row_log_paid['brewPossAllergens'])) {
 
@@ -126,7 +126,7 @@ do {
 	<td><?php echo $row_log_paid['brewPossAllergens']; ?></td>
 </tr>
 <?php }
-} while ($row_log_paid = mysqli_fetch_assoc($log_paid)); ?>
+} ?>
 </tbody>
 </table>
 <?php } else { ?>
@@ -173,7 +173,7 @@ do {
 </tr>
 </thead>
 <tbody>
-<?php do {
+<?php foreach ($rows_log as $row_log) {
 
 	if ((!empty($row_log['brewAdminNotes'])) || (!empty($row_log['brewStaffNotes']))) {
 
@@ -201,7 +201,7 @@ do {
 </tr>
 <?php 
 	}
-} while ($row_log = mysqli_fetch_assoc($log)); 
+}
 ?>
 </tbody>
 </table>

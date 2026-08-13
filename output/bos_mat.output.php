@@ -23,10 +23,9 @@ if ($_SESSION['prefsStyleSet'] == "BA") include(INCLUDES.'ba_constants.inc.php')
 
 function check_table_name($id,$judging_tables_db_table) {
 	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
-	$query_tables = sprintf("SELECT tableName,tableNumber FROM %s WHERE id='%s'",$judging_tables_db_table,$id);
-	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-	$row_tables = mysqli_fetch_assoc($tables);
+	$db_conn = new MysqliDb($connection);
+	$db_conn->where('id', $id);
+	$row_tables = $db_conn->getOne($judging_tables_db_table, "tableName,tableNumber");
 	return "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName'];
 }
 
@@ -63,18 +62,16 @@ if ($action == "blank") {
 // Group by Table
 elseif ($action == "mini-bos") {
 
-	$query_tables = sprintf("SELECT id,tableNumber FROM %s",$judging_tables_db_table);
-	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-	$row_tables = mysqli_fetch_assoc($tables);
+	$rows_tables = $db_conn->get($judging_tables_db_table, null, "id,tableNumber");
 
-	if ($row_tables) {
+	if ($rows_tables) {
 
 		if ($view == "default") {
-		
-			do { 
-				$a[] = $row_tables['id']; 
-			} while ($row_tables = mysqli_fetch_assoc($tables));
-			
+
+			foreach ($rows_tables as $row_tables) {
+				$a[] = $row_tables['id'];
+			}
+
 			sort($a);
 		}
 
@@ -89,9 +86,9 @@ else {
 
 	if ($view == "default") {
 
-		do { 
-			$a[] = $row_style_types['id']; 
-		} while ($row_style_types = mysqli_fetch_assoc($style_types));
+		foreach ($rows_style_types as $row_style_types) {
+			$a[] = $row_style_types['id'];
+		}
 		
 		sort($a);
 
@@ -130,8 +127,8 @@ if (!empty($a)) {
 
 			$output .= '<table class="BOS-mat">';
 
-			do {
-				
+			foreach ($rows_scores as $row_scores) {
+
 				if (!empty($row_scores['brewJudgingNumber'])) {
 
 					$tile_count++;
@@ -228,7 +225,7 @@ if (!empty($a)) {
 
 				}
 
-			} while ($row_scores = mysqli_fetch_assoc($scores));
+			}
 
 			if ($tile_count < $cells) {
 

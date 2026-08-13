@@ -57,7 +57,7 @@ if ($totalRows_judging == 0) $page_info2 .= sprintf("<p>%s</p>",$reg_closed_text
 
 else {
 
-	do {
+	foreach ($rows_judging as $row_judging) {
 		$page_info2 .= "<p>";
 
 		if ($row_judging['judgingLocName'] != "") $page_info2 .= "<strong>".$row_judging['judgingLocName']."</strong>";
@@ -87,7 +87,7 @@ else {
 
 		$page_info2 .= "</p>";
 
-	} while ($row_judging = mysqli_fetch_assoc($judging));
+	}
 
 }
 

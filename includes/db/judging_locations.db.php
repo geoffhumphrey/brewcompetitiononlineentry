@@ -1,98 +1,105 @@
 <?php
 
+$params_judging = array();
+
 if (SINGLE) {
-	
-	$query_judging = sprintf("SELECT * FROM %s WHERE comp_id='%s'",$judging_locations_db_table,$_SESSION['comp_id']);
+
+	$query_judging = "SELECT * FROM ".$judging_locations_db_table." WHERE comp_id=?";
+	$params_judging[] = $_SESSION['comp_id'];
 
 	if ($go != "default") {
-		if (($go == "styles") && ($bid != "default")) $query_judging .= sprintf(" AND id='%s'",$bid);
-		elseif (($go == "judging") && ($action == "update") && ($bid != "default")) $query_judging .= sprintf(" AND id='%s'",$bid);
-		elseif (($go == "judging") && (($action == "add") || ($action == "edit")))  $query_judging .= sprintf(" AND id='%s'",$id);
+		if (($go == "styles") && ($bid != "default")) { $query_judging .= " AND id=?"; $params_judging[] = $bid; }
+		elseif (($go == "judging") && ($action == "update") && ($bid != "default")) { $query_judging .= " AND id=?"; $params_judging[] = $bid; }
+		elseif (($go == "judging") && (($action == "add") || ($action == "edit")))  { $query_judging .= " AND id=?"; $params_judging[] = $id; }
 		elseif (($go == "non-judging") && ($action == "default")) $query_judging .= " AND judgingLocType='2' ORDER BY judgingDate,judgingLocName ASC";
-		elseif (($go == "non-judging") && (($action == "add") || ($action == "edit"))) $query_judging .= sprintf(" AND id='%s'",$id);
+		elseif (($go == "non-judging") && (($action == "add") || ($action == "edit"))) { $query_judging .= " AND id=?"; $params_judging[] = $id; }
 	}
 	else $query_judging .= " WHERE judgingLocType < 2 ORDER BY judgingDate,judgingLocName ASC";
-	
+
 }
 
 else {
-	
-	$query_judging = sprintf("SELECT * FROM %s",$judging_locations_db_table);
+
+	$query_judging = "SELECT * FROM ".$judging_locations_db_table;
 
 	if ($go != "default") {
-		if (($go == "styles") && ($bid != "default")) $query_judging .= sprintf(" WHERE id='%s'",$bid);
+		if (($go == "styles") && ($bid != "default")) { $query_judging .= " WHERE id=?"; $params_judging[] = $bid; }
 		elseif (($go == "judging") && ($action == "default")) $query_judging .= " WHERE judgingLocType < 2 ORDER BY judgingDate,judgingLocName ASC";
-		elseif (($go == "judging") && ($action == "update") && ($bid != "default")) $query_judging .= sprintf(" WHERE id='%s'",$bid);
-		elseif (($go == "judging") && (($action == "add") || ($action == "edit"))) $query_judging .= sprintf(" WHERE id='%s'",$id);
+		elseif (($go == "judging") && ($action == "update") && ($bid != "default")) { $query_judging .= " WHERE id=?"; $params_judging[] = $bid; }
+		elseif (($go == "judging") && (($action == "add") || ($action == "edit"))) { $query_judging .= " WHERE id=?"; $params_judging[] = $id; }
 		elseif (($go == "non-judging") && ($action == "default")) $query_judging .= " WHERE judgingLocType='2' ORDER BY judgingDate,judgingLocName ASC";
-		elseif (($go == "non-judging") && (($action == "add") || ($action == "edit"))) $query_judging .= sprintf(" WHERE id='%s'",$id);
+		elseif (($go == "non-judging") && (($action == "add") || ($action == "edit"))) { $query_judging .= " WHERE id=?"; $params_judging[] = $id; }
 		elseif (($section == "admin") && ($go == "judging_tables")) $query_judging .= " ORDER BY judgingDate,judgingLocName ASC";
 	}
-	
+
 	else $query_judging .= " ORDER BY judgingDate,judgingLocName ASC";
-	
+
 }
 
-$judging = mysqli_query($connection,$query_judging) or die (mysqli_error($connection));
-$row_judging = mysqli_fetch_assoc($judging);
-$totalRows_judging = mysqli_num_rows($judging); 
+$rows_judging = (!empty($params_judging)) ? $db_conn->rawQuery($query_judging, $params_judging) : $db_conn->rawQuery($query_judging);
+$row_judging = ($rows_judging && count($rows_judging) > 0) ? $rows_judging[0] : null;
+$totalRows_judging = $db_conn->count;
 
 // Separate connections for selected queries that are housed on the same page.
 // ********************* Should be replaced with function *********************
 
 // Apparently Unused - v 2.5.0
-$query_judging1 = sprintf("SELECT * FROM %s",$judging_locations_db_table);
-if (SINGLE) $query_judging1 .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+$query_judging1 = "SELECT * FROM ".$judging_locations_db_table;
+$params_judging1 = array();
+if (SINGLE) { $query_judging1 .= " WHERE comp_id=?"; $params_judging1[] = $_SESSION['comp_id']; }
 $query_judging1 .= "  WHERE judgingLocType = 2 ORDER BY judgingDate,judgingLocName ASC";
-$judging1 = mysqli_query($connection,$query_judging1) or die (mysqli_error($connection));
-$row_judging1 = mysqli_fetch_assoc($judging1);
-$totalRows_judging1 = mysqli_num_rows($judging1);
+$rows_judging1 = (!empty($params_judging1)) ? $db_conn->rawQuery($query_judging1, $params_judging1) : $db_conn->rawQuery($query_judging1);
+$row_judging1 = ($rows_judging1 && count($rows_judging1) > 0) ? $rows_judging1[0] : null;
+$totalRows_judging1 = $db_conn->count;
 
 
 if (($section == "admin") && ($go == "default")) {
-	$query_judging2 = sprintf("SELECT * FROM %s",$judging_locations_db_table);
-	if (SINGLE) $query_judging2 .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+	$query_judging2 = "SELECT * FROM ".$judging_locations_db_table;
+	$params_judging2 = array();
+	if (SINGLE) { $query_judging2 .= " WHERE comp_id=?"; $params_judging2[] = $_SESSION['comp_id']; }
 	if (($section == "brewer") || ($section == "admin") || ($section == "register")) $query_judging2 .= " WHERE judgingLocType < 2 ORDER BY judgingDate,judgingLocName ASC";
-	$judging2 = mysqli_query($connection,$query_judging2) or die (mysqli_error($connection));
-	$row_judging2 = mysqli_fetch_assoc($judging2);
-	$totalRows_judging2 = mysqli_num_rows($judging2);
+	$rows_judging2 = (!empty($params_judging2)) ? $db_conn->rawQuery($query_judging2, $params_judging2) : $db_conn->rawQuery($query_judging2);
+	$row_judging2 = ($rows_judging2 && count($rows_judging2) > 0) ? $rows_judging2[0] : null;
+	$totalRows_judging2 = $db_conn->count;
 }
 
-$query_judging3 = sprintf("SELECT * FROM %s",$judging_locations_db_table);
-if (SINGLE) $query_judging3 .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+$query_judging3 = "SELECT * FROM ".$judging_locations_db_table;
+$params_judging3 = array();
+if (SINGLE) { $query_judging3 .= " WHERE comp_id=?"; $params_judging3[] = $_SESSION['comp_id']; }
 if ((($section == "brewer") && ($action == "edit")) || ($section == "admin") || ($section == "register")) $query_judging3 .= " ORDER BY judgingDate,judgingLocName ASC";
-$judging3 = mysqli_query($connection,$query_judging3) or die (mysqli_error($connection));
-$row_judging3 = mysqli_fetch_assoc($judging3);
-$totalRows_judging3 = mysqli_num_rows($judging3);
+$rows_judging3 = (!empty($params_judging3)) ? $db_conn->rawQuery($query_judging3, $params_judging3) : $db_conn->rawQuery($query_judging3);
+$row_judging3 = ($rows_judging3 && count($rows_judging3) > 0) ? $rows_judging3[0] : null;
+$totalRows_judging3 = $db_conn->count;
 
 // Make DB Connections
 
 if ((($action == "default") || ($action == "assign")) && ($section != "step5")) {
-	
+
 	// Get Judging Locations Info
-	$query_judging_locs = sprintf("SELECT * FROM %s",$judging_locations_db_table);
-	if (SINGLE) $query_judging_locs .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+	$query_judging_locs = "SELECT * FROM ".$judging_locations_db_table;
+	$params_judging_locs = array();
+	if (SINGLE) { $query_judging_locs .= " WHERE comp_id=?"; $params_judging_locs[] = $_SESSION['comp_id']; }
 	if (($go == "judging") && ($action == "default")) $query_judging_locs .= " WHERE judgingLocType < 2";
 	if (($go == "non-judging") && ($action == "default")) $query_judging_locs .= " WHERE judgingLocType='2'";
 	$query_judging_locs .= " ORDER by judgingDate ASC";
-	$judging_locs = mysqli_query($connection,$query_judging_locs) or die (mysqli_error($connection));
-	$row_judging_locs = mysqli_fetch_assoc($judging_locs);
-	$totalRows_judging_locs = mysqli_num_rows($judging_locs);
+	$rows_judging_locs = (!empty($params_judging_locs)) ? $db_conn->rawQuery($query_judging_locs, $params_judging_locs) : $db_conn->rawQuery($query_judging_locs);
+	$row_judging_locs = ($rows_judging_locs && count($rows_judging_locs) > 0) ? $rows_judging_locs[0] : null;
+	$totalRows_judging_locs = $db_conn->count;
 
 }
 
 if ($filter == "staff") {
-	
-	$query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$prefix."staff");
-	if (SINGLE) $query_organizer .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
-	$organizer = mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
-	$row_organizer = mysqli_fetch_assoc($organizer);
-	$totalRows_organizer = mysqli_num_rows($organizer);
-	
+
+	$db_conn->where("staff_organizer", "1");
+	if (SINGLE) $db_conn->where("comp_id", $_SESSION['comp_id']);
+	$rows_organizer = $db_conn->get($prefix."staff", null, "uid");
+	$row_organizer = ($rows_organizer && count($rows_organizer) > 0) ? $rows_organizer[0] : null;
+	$totalRows_organizer = $db_conn->count;
+
 	// @single
-	$query_brewers = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName";
-	$brewers = mysqli_query($connection,$query_brewers) or die (mysqli_error($connection));
-	$row_brewers = mysqli_fetch_assoc($brewers);
+	$db_conn->orderBy("brewerLastName", "ASC");
+	$rows_brewers = $db_conn->get($brewer_db_table);
+	$row_brewers = ($rows_brewers && count($rows_brewers) > 0) ? $rows_brewers[0] : null;
 
 }
 

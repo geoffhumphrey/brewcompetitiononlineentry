@@ -57,10 +57,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			// Purge all data from brewing table
 			if (!empty($date_threshold)) {
 
-				$query_purge_entries = sprintf("SELECT id,brewJudgingNumber FROM %s WHERE brewUpdated < '%s' OR brewUpdated IS NULL", $prefix."brewing", $date_threshold);
-				$purge_entries = mysqli_query($connection,$query_purge_entries) or die (mysqli_error($connection));
-				$row_purge_entries = mysqli_fetch_assoc($purge_entries);
-				$totalRows_purge_entries = mysqli_num_rows($purge_entries);
+				$query_purge_entries = "SELECT id,brewJudgingNumber FROM ".$prefix."brewing WHERE brewUpdated < ? OR brewUpdated IS NULL";
+				$rows_purge_entries = $db_conn->rawQuery($query_purge_entries, array($date_threshold));
+				$totalRows_purge_entries = $db_conn->count;
 
 				// echo $totalRows_purge_entries;
 
@@ -73,7 +72,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$purge_array = array($judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
 					if (table_exists($prefix."evaluation")) $purge_array[] = $prefix."evaluation";
 
-					do {
+					foreach ($rows_purge_entries as $row_purge_entries) {
 
 						$update_table = $prefix."brewing";
 						$db_conn->where ('id', $row_purge_entries['id']);
@@ -108,7 +107,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 							unlink($scoresheetfile_judging);
 						}
 
-					} while ($row_purge_entries = mysqli_fetch_assoc($purge_entries));
+					}
 
 				} // end else
 
@@ -179,26 +178,27 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$count_results_actual = 0;
 
 			// Purge all data from brewer and users tables (except admins)
-			$query_admin = sprintf("SELECT id FROM %s WHERE userLevel < '2'", $prefix."users");
-			$admin = mysqli_query($connection,$query_admin) or die (mysqli_error($connection));
-			$row_admin = mysqli_fetch_assoc($admin);
-			$totalRows_admin = mysqli_num_rows($admin);
+			$db_conn->where('userLevel', '2', '<');
+			$rows_admin = $db_conn->get($prefix."users", null, "id");
+			$totalRows_admin = $db_conn->count;
 
 			$admin_ids = array();
 
 			if ($totalRows_admin > 0) {
 
-				do {
+				foreach ($rows_admin as $row_admin) {
 					$admin_ids[] = $row_admin['id'];
-				} while($row_admin = mysqli_fetch_assoc($admin));
+				}
 
 			}
 
-			$query_non_admin = sprintf("SELECT id FROM %s WHERE userLevel='2'", $prefix."users");
-			if (!empty($date_threshold)) $query_non_admin .= sprintf(" AND userCreated < '%s' OR userCreated IS NULL", $date_threshold);
-			$non_admin = mysqli_query($connection,$query_non_admin) or die (mysqli_error($connection));
-			$row_non_admin = mysqli_fetch_assoc($non_admin);
-			$totalRows_non_admin = mysqli_num_rows($non_admin);
+			$query_non_admin = "SELECT id FROM ".$prefix."users WHERE userLevel='2'";
+			if (!empty($date_threshold)) {
+				$query_non_admin .= " AND userCreated < ? OR userCreated IS NULL";
+				$rows_non_admin = $db_conn->rawQuery($query_non_admin, array($date_threshold));
+			}
+			else $rows_non_admin = $db_conn->rawQuery($query_non_admin);
+			$totalRows_non_admin = $db_conn->count;
 
 			if ($totalRows_non_admin == 0) $status = 2; // No entries found
 
@@ -206,7 +206,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 				$dom_ct_participants += $totalRows_non_admin;
 
-				do {
+				foreach ($rows_non_admin as $row_non_admin) {
 
 					if (!in_array($row_non_admin['id'],$admin_ids)) {
 
@@ -252,20 +252,17 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 					}
 
-				} while($row_non_admin = mysqli_fetch_assoc($non_admin));
+				}
 
 				// Search for any strays in the users table that is NOT in the brewer's table
-				$query_stray_brewers = sprintf("SELECT id,uid FROM %s",$prefix."brewer");
-				$stray_brewers = mysqli_query($connection,$query_stray_brewers) or die (mysqli_error($connection));
-				$row_stray_brewers = mysqli_fetch_assoc($stray_brewers);
-				$totalRows_stray_brewers = mysqli_num_rows($stray_brewers);
+				$rows_stray_brewers = $db_conn->get($prefix."brewer", null, "id,uid");
+				$totalRows_stray_brewers = $db_conn->count;
 
-				do {
+				foreach ($rows_stray_brewers as $row_stray_brewers) {
 
-					$query_stray_users = sprintf("SELECT id FROM %s WHERE id='%s'", $prefix."users", $row_stray_brewers['uid']);
-					$stray_users = mysqli_query($connection,$query_stray_users) or die (mysqli_error($connection));
-					$row_stray_users = mysqli_fetch_assoc($stray_users);
-					$totalRows_stray_users = mysqli_num_rows($stray_users);
+					$db_conn->where('id', $row_stray_brewers['uid']);
+					$row_stray_users = $db_conn->getOne($prefix."users", "id");
+					$totalRows_stray_users = $db_conn->count;
 
 					if ($totalRows_stray_users == 0) {
 
@@ -287,7 +284,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 					}
 
-				} while ($row_stray_brewers = mysqli_fetch_assoc($stray_brewers));
+				}
 
 			} // end if ($totalRows_non_admin > 0)
 
@@ -311,8 +308,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			foreach ($purge_array as $db_table) {
 
 				$sql_purge = sprintf("TRUNCATE %s",$db_table);
-				if (SINGLE) $sql_purge .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				$db_conn->rawQuery($sql_purge);
+				if (SINGLE) {
+					$sql_purge .= " WHERE comp_id=?";
+					$db_conn->rawQuery($sql_purge, array($_SESSION['comp_id']));
+				}
+				else $db_conn->rawQuery($sql_purge);
 				if ($db_conn->getLastErrno() === 0) {
 					$count_results += 1;
 					$count_results_actual += 1;
@@ -338,8 +338,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			foreach ($purge_array as $db_table) {
 
 				$sql_purge = sprintf("TRUNCATE %s",$db_table);
-				if (SINGLE) $sql_purge .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				$db_conn->rawQuery($sql_purge);
+				if (SINGLE) {
+					$sql_purge .= " WHERE comp_id=?";
+					$db_conn->rawQuery($sql_purge, array($_SESSION['comp_id']));
+				}
+				else $db_conn->rawQuery($sql_purge);
 				if ($db_conn->getLastErrno() === 0) {
 					$count_results += 1;
 					$count_results_actual += 1;
@@ -420,8 +423,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			foreach ($purge_array as $db_table) {
 
 				$sql_purge = sprintf("TRUNCATE %s",$db_table);
-				if (SINGLE) $sql_purge .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				$db_conn->rawQuery($sql_purge);
+				if (SINGLE) {
+					$sql_purge .= " WHERE comp_id=?";
+					$db_conn->rawQuery($sql_purge, array($_SESSION['comp_id']));
+				}
+				else $db_conn->rawQuery($sql_purge);
 				if ($db_conn->getLastErrno() === 0) {
 					$count_results += 1;
 					$count_results_actual += 1;
@@ -484,21 +490,19 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			}
 
-			$query_judge_locations = sprintf("SELECT id FROM %s", $judging_locations_db_table);
-			if (SINGLE) $query_judge_locations .= sprintf(" WHERE comp_id='%s'", $_SESSION['comp_id']);
-			$judge_locations = mysqli_query($connection,$query_judge_locations) or die (mysqli_error($connection));
-			$row_judge_locations = mysqli_fetch_assoc($judge_locations);
-			$totalRows_judge_locations = mysqli_num_rows($judge_locations);
+			if (SINGLE) $db_conn->where('comp_id', $_SESSION['comp_id']);
+			$rows_judge_locations = $db_conn->get($judging_locations_db_table, null, "id");
+			$totalRows_judge_locations = $db_conn->count;
 
 			$locations = array();
 
 			if ($totalRows_judge_locations > 0) {
 
-				do {
+				foreach ($rows_judge_locations as $row_judge_locations) {
 
 					$locations [] = "N-".$row_judge_locations['id'];
 
-				} while ($row_judge_locations = mysqli_fetch_assoc($judge_locations));
+				}
 
 				if (is_array($locations)) {
 
@@ -522,14 +526,13 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			if (SINGLE) {
 
-				$query_availability = sprintf("SELECT id FROM %s WHERE comp_id='%s'", $judging_assignments_db_table, $_SESSION['comp_id']);
-				$availability = mysqli_query($connection,$query_availability) or die (mysqli_error($connection));
-				$row_availability = mysqli_fetch_assoc($availability);
-				$totalRows_availability = mysqli_num_rows($availability);
+				$db_conn->where('comp_id', $_SESSION['comp_id']);
+				$rows_availability = $db_conn->get($judging_assignments_db_table, null, "id");
+				$totalRows_availability = $db_conn->count;
 
 				if ($totalRows_availability > 0) {
 
-					do {
+					foreach ($rows_availability as $row_availability) {
 
 						$db_conn->where ('id', $row_availability['id']);
 						$result = $db_conn->delete ($judging_assignments_db_table);
@@ -538,7 +541,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 							$count_results_actual += 1;
 						}
 
-					} while ($row_availability = mysqli_fetch_assoc($availability));
+					}
 
 				}
 

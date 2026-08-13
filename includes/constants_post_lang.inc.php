@@ -34,18 +34,16 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 
 if ($section == "past-winners") {
 
-    $query_disp_archive_winners = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive",$go);
-    $disp_archive_winners = mysqli_query($connection,$query_disp_archive_winners);
-    $row_disp_archive_winners = mysqli_fetch_assoc($disp_archive_winners);
-    $totalRows_disp_archive_winners = mysqli_num_rows($disp_archive_winners);
+    $db_conn->where('archiveSuffix', $go);
+    $row_disp_archive_winners = $db_conn->getOne($prefix."archive");
+    $totalRows_disp_archive_winners = $db_conn->count;
     
     $archive_winner_display = FALSE;
     
     if (($totalRows_disp_archive_winners > 0) && ($row_disp_archive_winners['archiveDisplayWinners'] == "Y") && ($row_disp_archive_winners['archiveStyleSet'] != "")) {
 
-        $query_disp_archive_winners = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive",$go);
-        $disp_archive_winners = mysqli_query($connection,$query_disp_archive_winners);
-        $row_disp_archive_winners = mysqli_fetch_assoc($disp_archive_winners);
+        $db_conn->where('archiveSuffix', $go);
+        $row_disp_archive_winners = $db_conn->getOne($prefix."archive");
 
         if ((check_setup($prefix."brewer_".$go,$database)) && (check_setup($prefix."brewing_".$go,$database)) && (check_setup($prefix."judging_scores_".$go,$database))) {
 

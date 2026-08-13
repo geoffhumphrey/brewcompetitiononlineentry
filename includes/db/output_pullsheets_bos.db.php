@@ -5,9 +5,14 @@ if ($type == "4") $query_bos .= sprintf(" WHERE (scoreType='%s' OR scoreType='%s
 else $query_bos .= sprintf(" WHERE scoreType='%s'", $type);
 */
 
-if ($type == 4) $query_bos = sprintf("SELECT b.id, a.eid, a.scorePlace, a.scoreTable, a.scoreEntry, a.scorePlace, a.scoreType, a.scoreMiniBOS, c.brewerProAm, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewComments, b.brewInfoOptional, b.brewBrewerID, b.brewBoxNum, b.brewPossAllergens, b.brewStaffNotes, b.brewJuiceSource, b.brewABV, b.brewPouring, b.brewStyleType, b.brewPackaging FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scoreType='%s' OR a.scoreType='%s')", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", "2", "3");
+$params_bos = array();
 
-else $query_bos = sprintf("SELECT b.id, a.eid, a.scorePlace, a.scoreTable, a.scoreEntry, a.scorePlace, a.scoreType, a.scoreMiniBOS, c.brewerProAm, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewComments, b.brewInfoOptional, b.brewBrewerID, b.brewBoxNum, b.brewPossAllergens, b.brewStaffNotes, b.brewJuiceSource, b.brewABV, b.brewPouring, b.brewStyleType, b.brewPackaging FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND a.scoreType='%s'", $prefix."judging_scores", $prefix."brewing", $prefix."brewer", $type);
+if ($type == 4) $query_bos = "SELECT b.id, a.eid, a.scorePlace, a.scoreTable, a.scoreEntry, a.scorePlace, a.scoreType, a.scoreMiniBOS, c.brewerProAm, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewComments, b.brewInfoOptional, b.brewBrewerID, b.brewBoxNum, b.brewPossAllergens, b.brewStaffNotes, b.brewJuiceSource, b.brewABV, b.brewPouring, b.brewStyleType, b.brewPackaging FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scoreType='2' OR a.scoreType='3')";
+
+else {
+	$query_bos = "SELECT b.id, a.eid, a.scorePlace, a.scoreTable, a.scoreEntry, a.scorePlace, a.scoreType, a.scoreMiniBOS, c.brewerProAm, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewComments, b.brewInfoOptional, b.brewBrewerID, b.brewBoxNum, b.brewPossAllergens, b.brewStaffNotes, b.brewJuiceSource, b.brewABV, b.brewPouring, b.brewStyleType, b.brewPackaging FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND a.scoreType=?";
+	$params_bos[] = $type;
+}
 
 if (($action == "pro-am") && ($filter != "default")) {
 	if ($filter == "1") $query_bos .= " AND scorePlace='1'";
@@ -22,7 +27,7 @@ else {
 }
 
 $query_bos .= " ORDER BY scoreTable ASC";
-$bos = mysqli_query($connection,$query_bos) or die (mysqli_error($connection));
-$row_bos = mysqli_fetch_assoc($bos);
-$totalRows_bos = mysqli_num_rows($bos);
+$rows_bos = (!empty($params_bos)) ? $db_conn->rawQuery($query_bos, $params_bos) : $db_conn->rawQuery($query_bos);
+$row_bos = ($rows_bos && count($rows_bos) > 0) ? $rows_bos[0] : null;
+$totalRows_bos = $db_conn->count;
 ?>

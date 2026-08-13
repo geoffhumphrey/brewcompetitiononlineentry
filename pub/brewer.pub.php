@@ -110,7 +110,8 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
         if ($section != "step2") {
             if ($club == (html_entity_decode($row_brewer['brewerClubs'], ENT_QUOTES | ENT_HTML5, 'UTF-8'))) $club_selected = " SELECTED";
         }
-        $club_options .= "<option value=\"".$club."\"".$club_selected.">".$club."</option>\n";
+        $club_safe = h(html_entity_decode($club, ENT_QUOTES, 'UTF-8'));
+        $club_options .= "<option value=\"".$club_safe."\"".$club_selected.">".$club_safe."</option>\n";
     }
 
 }
@@ -199,7 +200,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
     $judge_staff_locations = explode(",", $row_brewer['brewerJudgeLocation']);
     $steward_locations = explode(",", $row_brewer['brewerStewardLocation']); 
     
-    do { 
+    foreach ($rows_judging3 as $row_judging3) {
 
         $location_yes = "";
         $location_no = "";
@@ -306,7 +307,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
         }
 
-    }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); 
+    }
 
 }
 
@@ -315,11 +316,11 @@ if (($_SESSION['prefsProEdition'] == 1) && ((!$show_judge_steward_fields) || ($g
 // Build drop-off select element
 $dropoff_select = "";
 if (($section != "step2") && ($row_brewer) && ($row_dropoff)) {
-    do {
+    foreach ($rows_dropoff as $row_dropoff) {
         if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) $selected = "SELECTED";
         else $selected = "";
         $dropoff_select .= sprintf("<option value=\"%s\" %s>%s</option>",$row_dropoff['id'],$selected,$row_dropoff['dropLocationName']);
-     } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+     }
 }
 
 if ($action == "add") {

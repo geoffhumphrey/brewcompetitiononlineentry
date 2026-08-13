@@ -90,7 +90,7 @@ foreach ($security_questions_display as $key => $value) {
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ((isset($_COOKIE['userQuestionAnswer'])) && ($msg > 0)) echo htmlspecialchars($_COOKIE['userQuestionAnswer'], ENT_QUOTES, 'UTF-8'); ?>" required>
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ((isset($_COOKIE['userQuestionAnswer'])) && ($msg > 0)) echo $_COOKIE['userQuestionAnswer']; ?>" required>
 				<span class="input-group-addon" id="security-question-answer-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span>
 			</div>
 		</div>

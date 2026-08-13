@@ -73,7 +73,7 @@ if ($section != "step5") {
 		$output_datatables_head .= "<th>Actions</th>";
 		$output_datatables_head .= "</tr>";
 
-		do {
+		foreach ($rows_judging_locs as $row_judging_locs) {
 
 			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"admin","non-judging","edit",$filter,$row_judging_locs['id'],$dbTable,"default",0,"Edit ".$row_judging_locs['judgingLocName']);
 
@@ -82,13 +82,13 @@ if ($section != "step5") {
 			$output_datatables_actions = $output_datatables_edit_link." ".$output_datatables_delete_link;
 
 			$output_datatables_body .= "<tr>";
-			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocName']."</td>";
-			$output_datatables_body .= "<td><span class=\"hidden\">".$row_judging_locs['judgingDate']."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time")."</td>";
-			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocation']."</td>";
+			$output_datatables_body .= "<td>".h($row_judging_locs['judgingLocName'])."</td>";
+			$output_datatables_body .= "<td><span class=\"hidden\">".h($row_judging_locs['judgingDate'])."</span>".h(getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"))."</td>";
+			$output_datatables_body .= "<td>".h($row_judging_locs['judgingLocation'])."</td>";
 			$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 			$output_datatables_body .= "</tr>";
 
-		} while($row_judging_locs = mysqli_fetch_assoc($judging_locs));
+		}
 
 	} // end if (($totalRows_judging_locs > 0) && ($action == "default"))
 
@@ -140,7 +140,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 //if (!empty($output_no_records)) echo $output_no_records;
 ?>
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
-<p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']).$subtitle; ?></p>
 <div class="bcoem-admin-element hidden-print">
 	<!-- Page Navigation Elements -->
 	<?php if (($action == "add") || ($action == "edit")) { ?>
@@ -214,7 +214,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingLocName" name="judgingLocName" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>" placeholder="" autofocus required>
+			<input class="form-control" id="judgingLocName" name="judgingLocName" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo h($row_judging['judgingLocName']); ?>" placeholder="" autofocus required>
 			<span class="input-group-addon" id="judgingTime2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">Provide the name of the judging location.</span>
@@ -238,7 +238,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>" placeholder="" required>
+			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo h($row_judging['judgingLocation']); ?>" placeholder="" required>
 			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <span id="helpBlockLocation1" class="help-block">Provide the street address, city, and zip/postal code where the session will take place.</span>
@@ -248,7 +248,7 @@ if (($output_add_edit) && ($msg != 9)) {
 <div class="form-group">
     <label id="judgingLocNotesLabel" for="judgingLocNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Notes</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="judgingLocNotes" name="judgingLocNotes" type="text" maxlength="1000" value="<?php if ($action == "edit") echo $row_judging['judgingLocNotes']; ?>" placeholder="">  
+        <input class="form-control" id="judgingLocNotes" name="judgingLocNotes" type="text" maxlength="1000" value="<?php if ($action == "edit") echo h($row_judging['judgingLocNotes']); ?>" placeholder="">  
         <id id="helpBlock" class="help-block">Further information or notes for judges, stewards, and/or staff.</span>
     </div>
 </div>

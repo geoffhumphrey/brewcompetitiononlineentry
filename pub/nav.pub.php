@@ -20,7 +20,7 @@ if ($entry_window_open == 1) {
 }
 
 if ($_SESSION['prefsProEdition'] == 1) {
-	if (((isset($_SESSION['brewerJudge'])) && ($_SESSION['brewerJudge'] == "Y")) || ((isset($_SESSION['brewerSteward'])) && ($_SESSION['brewerSteward'] == "Y"))) {
+	if ((((isset($_SESSION['brewerJudge'])) && ($_SESSION['brewerJudge'] == "Y")) || ((isset($_SESSION['brewerSteward'])) && ($_SESSION['brewerSteward'] == "Y"))) && ($_SESSION['userLevel'] == 2)) {
 		$show_entries = FALSE;
 		$disable_pay = TRUE;
 		$add_entry_link_show = FALSE;

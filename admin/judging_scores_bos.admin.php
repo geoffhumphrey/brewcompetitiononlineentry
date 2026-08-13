@@ -44,7 +44,7 @@ $(document).ready(function () {
     </div>
   </div>
 </div>
-<p class="lead"><?php echo $_SESSION['contestName'];
+<p class="lead"><?php echo h($_SESSION['contestName']);
 if ($action == "enter") echo ": Add or Update BOS Places for ".$row_style_type['styleTypeName']; else echo ": Best of Show (BOS) Entries and Places";
 if ($dbTable != "default") echo " (Archive ".$suffix.")";
 ?></p>
@@ -85,12 +85,12 @@ if ($dbTable != "default") echo " (Archive ".$suffix.")";
                 <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                <?php do {
+                <?php foreach ($rows_style_type as $row_style_type) {
                     if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-                    <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_type['id'] ?>">BOS Places for <?php echo $row_style_type['styleTypeName']; ?></a>
+                    <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_type['id'] ?>">BOS Places for <?php echo h($row_style_type['styleTypeName']); ?></a>
                 <?php
                     }
-                } while ($row_style_type = mysqli_fetch_assoc($style_type));
+                }
                 ?>
                 </ul>
             </div>
@@ -102,11 +102,11 @@ if ($dbTable != "default") echo " (Archive ".$suffix.")";
             <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <?php do {
+                <?php foreach ($rows_style_type as $row_style_type) {
                 if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-                    <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader menuItem" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
+                    <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader menuItem" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo h($row_style_type['styleTypeName']); ?> BOS Pullsheet">BOS Pullsheet for <?php echo h($row_style_type['styleTypeName']); ?></a></li>
             <?php }
-                } while ($row_style_type = mysqli_fetch_assoc($style_type));
+                }
                 ?>
                 <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat" title="Print BOS Cup Mats">BOS Cup Mats (Judging Numbers)</a></li>
                 <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;filter=entry" title="Print BOS Cup Mats">BOS Cup Mats (Entry Numbers)</a></li>
@@ -116,7 +116,7 @@ if ($dbTable != "default") echo " (Archive ".$suffix.")";
 </div>
 <?php
 if (($action == "default") && ($totalRows_style_type > 0)) {
-    do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
+    foreach ($rows_style_types as $row_style_types) { $a[] = $row_style_types['id']; }
     foreach ($a as $type) {
     	$style_type_info = style_type_info($type,$suffix);
     	$style_type_info = explode("^",$style_type_info);
@@ -172,32 +172,32 @@ $(document).ready(function() {
 </thead>
 <tbody>
 	<?php
-    do {
+    foreach ($rows_bos as $row_bos) {
     	$bos_entry_info = bos_entry_info($row_bos['eid'], $row_bos['scoreTable'],$filter);
     	$bos_entry_info = explode("^",$bos_entry_info);
         $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],$style_display_method);
         $judging_number = sprintf("%06s",$bos_entry_info[6]);
-        if (empty($style)) $style_name = $bos_entry_info[0];
-        else $style_name = $style.": ".$bos_entry_info[0];
+        if (empty($style)) $style_name = h($bos_entry_info[0]);
+        else $style_name = $style.": ".h($bos_entry_info[0]);
 	?>
 	<tr>
     	<td nowrap><?php echo sprintf("%06s",$row_bos['eid']); ?></td>
         <td><?php echo $judging_number; ?></td>
-        <td><?php echo $bos_entry_info[9]; ?></td>
-        <td class="hidden-xs hidden-sm"><?php echo $bos_entry_info[8]; ?></td>
+        <td><?php echo h($bos_entry_info[9]); ?></td>
+        <td class="hidden-xs hidden-sm"><?php echo h($bos_entry_info[8]); ?></td>
         <td><?php echo $style_name; ?></td>
         <?php if ($dbTable == "default") { ?>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scoreEntry']; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scorePlace']; ?></td>
         <?php } ?>
         <?php if ($dbTable != "default") { ?>
-        <td><?php if ($pro_edition == 1) echo $bos_entry_info[16]; else echo $bos_entry_info[5].", ".$bos_entry_info[4]; ?></td>
-        <td><?php echo $bos_entry_info[12]; ?></td>
+        <td><?php if ($pro_edition == 1) echo h($bos_entry_info[16]); else echo h($bos_entry_info[5]).", ".h($bos_entry_info[4]); ?></td>
+        <td><?php echo h($bos_entry_info[12]); ?></td>
         <?php } ?>
         <td><?php echo $bos_entry_info[11]; ?></td>
         <td><?php if ($bos_entry_info[10] == "5") echo "HM"; else echo $bos_entry_info[10]; ?></td>
     </tr>
-    <?php } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
+    <?php } ?>
 </tbody>
 </table>
 <?php       } else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>";
@@ -247,14 +247,14 @@ $(document).ready(function(){
 </thead>
 <tbody>
 	<?php
-	do {
+	foreach ($rows_enter_bos as $row_enter_bos) {
 		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default","default");
 		$bos_entry_info = explode("^",$bos_entry_info);
 		$judging_number = sprintf("%06s",$bos_entry_info[6]);
         $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],$style_display_method);
         $judging_number = sprintf("%06s",$bos_entry_info[6]);
-        if (!empty($style)) $style_name = $bos_entry_info[0];
-        else $style_name = $style.": ".$bos_entry_info[0];
+        if (!empty($style)) $style_name = h($bos_entry_info[0]);
+        else $style_name = $style.": ".h($bos_entry_info[0]);
 	?>
 	<tr>
 		<?php $eid = $row_enter_bos['eid']; ?>
@@ -294,7 +294,7 @@ $(document).ready(function(){
             <span id="score-place-bos-ajax-<?php echo $eid; ?>-scorePlace-status-msg"></span>
         </td>
 	</tr>
-<?php } while ($row_enter_bos = mysqli_fetch_assoc($enter_bos)); ?>
+<?php } ?>
 </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">

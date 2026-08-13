@@ -5,11 +5,9 @@ $count_mead_cider = FALSE;
 $count_cider = FALSE;
 $other_count = FALSE;
 
-$substyle_count = mysqli_query($connection,$query_substyle_count) or die (mysqli_error($connection));
-$row_substyle_count = mysqli_fetch_assoc($substyle_count);
+$row_substyle_count = $db_conn->rawQueryOne($query_substyle_count, $params_substyle_count);
 
-$substyle_count_logged = mysqli_query($connection,$query_substyle_count_logged) or die (mysqli_error($connection));
-$row_substyle_count_logged = mysqli_fetch_assoc($substyle_count_logged);
+$row_substyle_count_logged = $db_conn->rawQueryOne($query_substyle_count_logged, $params_substyle_count_logged);
 
 /*
 if (HOSTED) $styles_db_table = "bcoem_shared_styles";
@@ -63,9 +61,8 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 			if (HOSTED) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s' UNION ALL SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'", $styles_db_table, $substyle_cat_num, $prefix."styles", $substyle_cat_num);
 			else 
 			*/
-			$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'", $styles_db_table, $substyle_cat_num);
-			$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
-			$row_style_type = mysqli_fetch_assoc($style_type);
+			$db_conn->where('brewStyleGroup', $substyle_cat_num);
+			$row_style_type = $db_conn->getOne($styles_db_table, "brewStyleType");
 			$count_cider = FALSE;
 			$count_beer = FALSE;
 			$count_mead = FALSE;

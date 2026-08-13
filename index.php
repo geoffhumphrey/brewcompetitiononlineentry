@@ -95,6 +95,16 @@ if ($section == "admin") {
     require_once (DB.'stewarding.db.php');
     require_once (DB.'dropoff.db.php');
     require_once (DB.'contacts.db.php');
+
+    if ($_SESSION['userLevel'] == 0) {
+        // Cached for the session so this scan runs at most once per login, not on every
+        // admin/default.admin.php hit. Cleared by cleanup_double_encoding.php after a live run.
+        if (!isset($_SESSION['double_encoding_checked'])) {
+            $_SESSION['double_encoding_detected'] = has_double_encoded_data($db_conn);
+            $_SESSION['double_encoding_checked'] = true;
+        }
+        $double_encoding_detected = $_SESSION['double_encoding_detected'];
+    }
 }
 
 /**

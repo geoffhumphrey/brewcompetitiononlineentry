@@ -151,9 +151,9 @@ $data = array(
 
 $update_table = $prefix."styles";
 $result = $db_conn->insertMulti($update_table, $data);
-if ($result) $output_run_update .= "<li>Added 2022 AABC Styles to styles table.</li>";
+if ($result) $v2500_update .= "<li>Added 2022 AABC Styles to styles table.</li>";
 else {
-  $output_run_update .= "<li>Addition of 2022 AABC Styles to the style table failed. Error: ".$db_conn->getLastError()."</li>";
+  $v2500_update .= "<li>Addition of 2022 AABC Styles to the style table failed. Error: ".$db_conn->getLastError()."</li>";
   $error_count += 1;
 }
 

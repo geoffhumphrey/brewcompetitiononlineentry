@@ -26,7 +26,7 @@ $sponsors_hloopRow1 = 0; // first row flag
 // Define Bootstrap Row
 $page_info1 .= "<section class=\"row\">";
 
-do {
+foreach ($rows_sponsors as $row_sponsors) {
 	if ($row_sponsors['sponsorEnable'] == "1") {
 
 		if (($sponsors_endRow == 0) && ($sponsors_hloopRow1++ != 0)) $page_info1 .= "<section class=\"row\">";
@@ -68,7 +68,7 @@ do {
 		}
 	}
 
-} while ($row_sponsors = mysqli_fetch_assoc($sponsors));
+}
 
 // Insert Empty Column if No Content Available
 if ($sponsors_endRow != 0) {

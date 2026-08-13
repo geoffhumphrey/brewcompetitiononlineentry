@@ -1,9 +1,8 @@
 <?php
-$query_tables = sprintf("SELECT * FROM %s",$prefix."judging_tables");
-if ($go == "judging_locations") $query_tables .= sprintf(" WHERE tableLocation = '%s'", $location);
-if ($id != "default") $query_tables .= sprintf(" WHERE id='%s'",$id);
-else $query_tables .= " ORDER BY tableNumber";
-$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-$row_tables = mysqli_fetch_assoc($tables);
-$totalRows_tables = mysqli_num_rows($tables);
+if ($go == "judging_locations") $db_conn->where('tableLocation', $location);
+if ($id != "default") $db_conn->where('id', $id);
+else $db_conn->orderBy('tableNumber', 'ASC');
+$rows_tables = $db_conn->get($prefix."judging_tables");
+$row_tables = ($rows_tables && count($rows_tables) > 0) ? $rows_tables[0] : null;
+$totalRows_tables = $db_conn->count;
 ?>

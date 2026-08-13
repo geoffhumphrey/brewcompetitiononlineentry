@@ -17,7 +17,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
         include (SECTIONS.'bos.sec.php');
     }
 
-    elseif (($go == "best") && ($action == "print") && (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)))  {
+    elseif (($go == "best") && ($action == "print") && (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)))  {
         include (SECTIONS.'bestbrewer.sec.php');
     }
 
@@ -28,7 +28,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
         
         echo "<h2>".$label_bos."</h2>";
         include (SECTIONS.'bos.sec.php');
-        if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) include (SECTIONS.'bestbrewer.sec.php');
+        if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) include (SECTIONS.'bestbrewer.sec.php');
         
         echo "<h2>".$label_winners."</h2>";
         if ($row_prefs['prefsWinnerMethod'] == "1") include (SECTIONS.'winners_category.sec.php');

@@ -11,7 +11,7 @@ else
 */
 $styles_db_table = $prefix."styles";
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))) || ($section == "setup"))) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))) || ($setup_free_access))) {
 
 	$errors = FALSE;
 	$error_output = array();
@@ -22,10 +22,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-	$query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
-	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
-	$row_prefs = mysqli_fetch_assoc($prefs);
-	$totalRows_prefs = mysqli_num_rows($prefs);
+	$db_conn->where("id", 1);
+	$row_prefs = $db_conn->getOne($prefix."preferences");
+	$totalRows_prefs = $db_conn->count;
 
 	// Sanity check for prefs
 	if ($section == "setup") {
@@ -318,11 +317,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				foreach ($style_type_limits as $value) {
 					
 					$entry_limit = sterilize($_POST['styleTypeEntryLimit-'.$value]);
-				 	$sql = sprintf("UPDATE %s SET styleTypeEntryLimit='%s' WHERE id='%s';", $prefix."style_types", blank_to_null($entry_limit), $value);
-					mysqli_select_db($connection,$database);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql);
-					if (!$result) $errors = TRUE;
+					$data = array('styleTypeEntryLimit' => blank_to_null($entry_limit));
+					$db_conn->where('id', sterilize($value));
+					$result = $db_conn->update($prefix."style_types", $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 					
 				}
 
@@ -406,12 +407,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if (!empty($_POST['prefsBestBrewerTitle'])) {
 				$prefsBestBrewerTitle = $purifier->purify($_POST['prefsBestBrewerTitle']);
-				$prefsBestBrewerTitle = sterilize($prefsBestBrewerTitle);
 			}
 
 			if (!empty($_POST['prefsBestClubTitle'])) {
 				$prefsBestClubTitle = $purifier->purify($_POST['prefsBestClubTitle']);
-				$prefsBestClubTitle = sterilize($prefsBestClubTitle);
 			}
 
 			$prefsBestUseBOS = sterilize($_POST['prefsBestUseBOS']);
@@ -461,20 +460,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
             	if ($prefsStyleSet == "BA") {
             		
             		// No hosted call since searching for custom styles
-            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $styles_db_table);
-					$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-					$row_style_name = mysqli_fetch_assoc($style_name);
+            		$db_conn->where("brewStyleOwn", "custom");
+					$db_conn->orderBy("id", "ASC");
+					$rows_style_name = $db_conn->get($styles_db_table, null, "id,brewStyleNum");
 
-					$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $styles_db_table);
-					$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
-					$row_style_num = mysqli_fetch_assoc($style_num);
+					$db_conn->where("brewStyleVersion", "BA");
+					$db_conn->orderBy("brewStyleNum", "DESC");
+					$row_style_num = $db_conn->getOne($styles_db_table, "brewStyleNum");
 
 					$sub_style_id = $row_style_num['brewStyleNum'] + 1;
 
-					do {
+					foreach ($rows_style_name as $row_style_name) {
 
 						$sub_style = str_pad($sub_style_id,3,"0", STR_PAD_LEFT);
-						
+
 						$data = array('brewStyleNum' => $sub_style);
 						$db_conn->where ('id', $row_style_name['id']);
 						$result = $db_conn->update ($prefix."styles", $data);
@@ -485,7 +484,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 						$sub_style_id++;
 
-					} while ($row_style_name = mysqli_fetch_assoc($style_name));
+					}
 
             	}
             	
@@ -552,9 +551,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		} // end if ($_POST['prefsPaypalIPN'] == 1)
 
 		// Check to see if processed correctly.
-		$query_prefs_check = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."preferences");
-		$prefs_check = mysqli_query($connection,$query_prefs_check) or die (mysqli_error($connection));
-		$row_prefs_check = mysqli_fetch_assoc($prefs_check);
+		$row_prefs_check = $db_conn->getOne($prefix."preferences", "COUNT(*) as 'count'");
 
 		// If so, mark step as complete in system table and redirect to next step.
 		if ($row_prefs_check['count'] == 1) {
@@ -654,9 +651,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					include (INCLUDES.'convert/convert_bjcp_2021.inc.php');	
 				}
 
-				$query_check_entry_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='Clone Beer' OR brewStyle='New England IPA' OR brewStyle='Trappist Single' OR brewCategorySort='PR' OR (brewCategorySort='21' AND brewSubCategory='B7' AND brewStyle='New England IPA') OR (brewCategorySort='27' AND brewSubCategory='A1' AND brewStyle='Gose')", $prefix."brewing");
-				$check_entry_styles = mysqli_query($connection,$query_check_entry_styles) or die (mysqli_error($connection));
-				$row_check_entry_styles = mysqli_fetch_assoc($check_entry_styles);
+				$db_conn->where("brewStyle='Clone Beer' OR brewStyle='New England IPA' OR brewStyle='Trappist Single' OR brewCategorySort='PR' OR (brewCategorySort='21' AND brewSubCategory='B7' AND brewStyle='New England IPA') OR (brewCategorySort='27' AND brewSubCategory='A1' AND brewStyle='Gose')");
+				$row_check_entry_styles = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
 				if ($row_check_entry_styles['count'] > 0) {
 					include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
@@ -681,9 +677,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					include (INCLUDES.'convert/convert_bjcp_2025.inc.php');
 				}
 
-				$query_check_entry_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='New World Perry' OR brewStyle='Traditional Perry' OR brewStyle='Specialty Cider/Perry' OR brewStyle='Cider with Herbs/Spices' OR brewStyle='Cider with Other Fruit' OR brewStyle='New World Cider'", $prefix."brewing");
-				$check_entry_styles = mysqli_query($connection,$query_check_entry_styles) or die (mysqli_error($connection));
-				$row_check_entry_styles = mysqli_fetch_assoc($check_entry_styles);
+				$db_conn->where("brewStyle='New World Perry' OR brewStyle='Traditional Perry' OR brewStyle='Specialty Cider/Perry' OR brewStyle='Cider with Herbs/Spices' OR brewStyle='Cider with Other Fruit' OR brewStyle='New World Cider'");
+				$row_check_entry_styles = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
 				if ($row_check_entry_styles['count'] > 0) {
 					include (INCLUDES.'convert/convert_bjcp_2025.inc.php');
@@ -708,9 +703,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					include (INCLUDES.'convert/convert_aabc_2025.inc.php');
 				}
 
-				$query_check_entry_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='New World Perry [BJCP C1D]' OR brewStyle='Traditional Perry [BJCP C1E]' OR brewStyle='Specialty Cider/Perry [BJCP C2F]' OR brewStyle='Cider with Herbs/Spices' OR brewStyle='Cider with Herbs/Spices [BJCP C2E]' OR brewStyle='New World Cider [BJCP C1A]'", $prefix."brewing");
-				$check_entry_styles = mysqli_query($connection,$query_check_entry_styles) or die (mysqli_error($connection));
-				$row_check_entry_styles = mysqli_fetch_assoc($check_entry_styles);
+				$db_conn->where("brewStyle='New World Perry [BJCP C1D]' OR brewStyle='Traditional Perry [BJCP C1E]' OR brewStyle='Specialty Cider/Perry [BJCP C2F]' OR brewStyle='Cider with Herbs/Spices' OR brewStyle='Cider with Herbs/Spices [BJCP C2E]' OR brewStyle='New World Cider [BJCP C1A]'");
+				$row_check_entry_styles = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
 				if ($row_check_entry_styles['count'] > 0) {
 					include (INCLUDES.'convert/convert_aabc_2025.inc.php');
@@ -726,13 +720,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (($style_set_change) || (empty($prefsSelectedStyles))) {
 
 				$update_selected_styles = array();
-				$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleVersion='%s'", $styles_db_table, $prefsStyleSet);
-				$styles_default = mysqli_query($connection,$query_styles_default);
-				$row_styles_default = mysqli_fetch_assoc($styles_default);
+				$db_conn->where("brewStyleVersion", $prefsStyleSet);
+				$rows_styles_default = $db_conn->get($styles_db_table, null, "id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion");
 
-				if ($row_styles_default) {
+				if ($rows_styles_default) {
 
-					do {
+					foreach ($rows_styles_default as $row_styles_default) {
 
 						$update_selected_styles[$row_styles_default['id']] = array(
 							'brewStyle' => $row_styles_default['brewStyle'],
@@ -741,8 +734,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							'brewStyleVersion' => $row_styles_default['brewStyleVersion']
 						);
 
-					} while($row_styles_default = mysqli_fetch_assoc($styles_default));
-				
+					}
+
 				}
 
 				$update_selected_styles = json_encode($update_selected_styles);
@@ -786,9 +779,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				foreach ($style_limits as $key => $value) {
 
-					$query_style_limit_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s'", $prefix."brewing", $key);
-					$style_limit_entry_count = mysqli_query($connection,$query_style_limit_entry_count) or die (mysqli_error($connection));
-					$row_style_limit_entry_count = mysqli_fetch_assoc($style_limit_entry_count);
+					$db_conn->where("brewCategorySort", $key);
+					$row_style_limit_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
 					if ($prefsStyleSet == "BJCP2025") {
 						$first_character = mb_substr($key, 0, 1);

@@ -101,14 +101,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($_POST['flightRound'.$a] != $_POST['flightRoundPrevious'.$a]) {
 
 				// If so, delete all judging/steward assignments for the "old" round
-				$query_assignments = sprintf("SELECT id FROM $judging_assignments_db_table WHERE assignTable='%s' AND assignFlight='%s' AND assignRound='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a],$_POST['flightRoundPrevious'.$a]);
-				$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-				$row_assignments = mysqli_fetch_assoc($assignments);
-				$totalRows_assignments = mysqli_num_rows($assignments);
+				$db_conn->where("assignTable", $_POST['flightTable'.$a]);
+				$db_conn->where("assignFlight", $_POST['flightNumber'.$a]);
+				$db_conn->where("assignRound", $_POST['flightRoundPrevious'.$a]);
+				$db_conn->orderBy("id", "ASC");
+				$rows_assignments = $db_conn->get($judging_assignments_db_table, null, "id");
+				$totalRows_assignments = $db_conn->count;
 
 				if ($totalRows_assignments > 0) {
-					
-					do {
+
+					foreach ($rows_assignments as $row_assignments) {
 
 						$update_table = $prefix."judging_assignments";
 						$db_conn->where ('id', $row_assignments['id']);
@@ -118,16 +120,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 							$errors = TRUE;
 						}
 
-					} while ($row_assignments = mysqli_fetch_assoc($assignments));
+					}
 
 				} // end if ($totalRows_assignments > 0)
 
 				// Change the rounds for all affected table/flight assignments.
-				$query_flights = sprintf("SELECT id FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a]);
-				$flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
-				$row_flights = mysqli_fetch_assoc($flights);
+				$db_conn->where("flightTable", $_POST['flightTable'.$a]);
+				$db_conn->where("flightNumber", $_POST['flightNumber'.$a]);
+				$db_conn->orderBy("id", "ASC");
+				$rows_flights = $db_conn->get($judging_flights_db_table, null, "id");
 
-				do {
+				foreach ($rows_flights as $row_flights) {
 
 					// Update with single WHERE
 					$update_table = $prefix."judging_flights";
@@ -138,8 +141,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						$error_output[] = $db_conn->getLastError();
 						$errors = TRUE;
 					}
-				
-				} while ($row_flights = mysqli_fetch_assoc($flights));
+
+				}
 			
 			} // end if ($_POST['flightRound'.$a] != $_POST['flightRoundPrevious'.$a])
 

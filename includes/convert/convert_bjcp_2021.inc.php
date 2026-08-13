@@ -14,9 +14,10 @@ $styles_db_table = $prefix."styles";
 if (HOSTED) $query_style_ids = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyleVersion FROM `%s` WHERE brewStyleVersion='BJCP2015' OR brewStyleVersion='BJCP2021' UNION ALL SELECT id,brewStyleGroup,brewStyleNum,brewStyleVersion FROM `%s` WHERE brewStyleVersion='BJCP2015' OR brewStyleVersion='BJCP2021' ORDER BY brewStyleVersion,id ASC", $styles_db_table, $prefix."styles");
 else 
 */ 
-$query_style_ids = sprintf("SELECT id, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleVersion='BJCP2015' OR brewStyleVersion='BJCP2021' ORDER BY brewStyleVersion, id ASC", $styles_db_table);
-$style_ids = mysqli_query($connection,$query_style_ids) or die (mysqli_error($connection));
-$row_style_ids = mysqli_fetch_assoc($style_ids);
+$db_conn->where('brewStyleVersion', array('BJCP2015','BJCP2021'), 'in');
+$db_conn->orderBy('brewStyleVersion', 'ASC');
+$db_conn->orderBy('id', 'ASC');
+$rows_style_ids = $db_conn->get($styles_db_table, null, "id, brewStyleGroup, brewStyleNum, brewStyleVersion");
 
 $styles_2015 = array();
 $styles_2021 = array();
@@ -24,19 +25,19 @@ $mapped_style_ids = array();
 
 if (!isset($output)) $output = "";
 
-do {
+foreach ($rows_style_ids as $row_style_ids) {
 
 	$style_num = $row_style_ids['brewStyleGroup'].$row_style_ids['brewStyleNum'];
 
 	if ($row_style_ids['brewStyleVersion'] == "BJCP2015") {
 		$styles_2015[$style_num] = $row_style_ids['id'];
 	}
-	
+
 	if ($row_style_ids['brewStyleVersion'] == "BJCP2021") {
 		$styles_2021[$style_num] = $row_style_ids['id'];
-	}		
+	}
 
-} while($row_style_ids = mysqli_fetch_assoc($style_ids));
+}
 
 foreach ($styles_2015 as $key => $id_2015) {
 	// Convert the 2015 style to 2021
@@ -59,14 +60,14 @@ echo "<br><br>";
  * Update judge likes and dislikes from 2015 to analogous 2021 styles
  */
 
-$query_judge_likes = sprintf("SELECT * FROM %s WHERE (brewerJudgeLikes IS NOT NULL OR brewerJudgeDislikes IS NOT NULL) OR (brewerJudgeLikes !='' OR brewerJudgeDislikes !='') ORDER BY id ASC", $prefix."brewer");
-$judge_likes = mysqli_query($connection,$query_judge_likes) or die (mysqli_error($connection));
-$row_judge_likes = mysqli_fetch_assoc($judge_likes);
-$totalRows_judge_likes = mysqli_num_rows($judge_likes);
+$db_conn->where("(brewerJudgeLikes IS NOT NULL OR brewerJudgeDislikes IS NOT NULL) OR (brewerJudgeLikes !='' OR brewerJudgeDislikes !='')");
+$db_conn->orderBy('id', 'ASC');
+$rows_judge_likes = $db_conn->get($prefix."brewer");
+$totalRows_judge_likes = $db_conn->count;
 
 if ($totalRows_judge_likes > 0) {
 
-    do {
+    foreach ($rows_judge_likes as $row_judge_likes) {
 
         $likes_arr_new = array();
         $dislikes_arr_new = array();
@@ -134,10 +135,10 @@ if ($totalRows_judge_likes > 0) {
         print_r($bjcp_2021_dislikes);
         echo "<br><br>";
         if (isset($updateSQL)) echo $updateSQL."<br><br>";
-        echo "<hr><br><br>";   
+        echo "<hr><br><br>";
         */
 
-    } while($row_judge_likes = mysqli_fetch_assoc($judge_likes));
+    }
 
 } // end if ($totalRows_judge_likes > 0)
 
@@ -145,14 +146,13 @@ if ($totalRows_judge_likes > 0) {
  * Update defined 2015 styles for any table to 2021
  */
 
-$query_tables = sprintf("SELECT * FROM %s ORDER BY id ASC", $prefix."judging_tables");
-$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-$row_tables = mysqli_fetch_assoc($tables);
-$totalRows_tables = mysqli_num_rows($tables);
+$db_conn->orderBy('id', 'ASC');
+$rows_tables = $db_conn->get($prefix."judging_tables");
+$totalRows_tables = $db_conn->count;
 
 if ($totalRows_tables > 0) {
 
-    do {
+    foreach ($rows_tables as $row_tables) {
 
         $table_styles_arr_new = array();
 
@@ -187,7 +187,7 @@ if ($totalRows_tables > 0) {
         echo $updateSQL."<br><br><hr><br><br>";
         */
 
-    } while ($row_tables = mysqli_fetch_assoc($tables));
+    }
 
 } // end if ($totalRows_tables > 0)
 
@@ -200,10 +200,10 @@ if ($totalRows_tables > 0) {
 if (HOSTED) $query_styles_active = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BJCP2015' AND brewStyleActive='Y' UNION ALL SELECT * FROM %s WHERE brewStyleVersion='BJCP2015' AND brewStyleActive='Y'", $styles_db_table, $prefix."styles");
 else 
 */
-$query_styles_active = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BJCP2015' AND brewStyleActive='Y'", $styles_db_table);
-$styles_active = mysqli_query($connection,$query_styles_active) or die (mysqli_error($connection));
-$row_styles_active = mysqli_fetch_assoc($styles_active);
-$totalRows_styles_active = mysqli_num_rows($styles_active);
+$db_conn->where('brewStyleVersion', 'BJCP2015');
+$db_conn->where('brewStyleActive', 'Y');
+$rows_styles_active = $db_conn->get($styles_db_table);
+$totalRows_styles_active = $db_conn->count;
 
 if ($totalRows_styles_active > 0) {
 
@@ -220,7 +220,7 @@ if ($totalRows_styles_active > 0) {
         $result = $db_conn->update ($update_table, $data);
     }
 
-    do {
+    foreach ($rows_styles_active as $row_styles_active) {
 
         $style = $row_styles_active['brewStyleGroup'].$row_styles_active['brewStyleNum'];
 
@@ -244,7 +244,7 @@ if ($totalRows_styles_active > 0) {
 
         }
 
-    } while ($row_styles_active = mysqli_fetch_assoc($styles_active));
+    }
 
 } // end if ($totalRows_styles_active > 0)
 
@@ -252,16 +252,16 @@ if ($totalRows_styles_active > 0) {
  * Update any entries in the brewing table to analogous 2021 styles
  */
 
-$query_brews = sprintf("SELECT id,brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle FROM %s ORDER BY brewCategorySort,brewSubCategory", $prefix."brewing");
-$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
-$row_brews = mysqli_fetch_assoc($brews);
-$totalRows_brews = mysqli_num_rows($brews);
+$db_conn->orderBy('brewCategorySort', 'ASC');
+$db_conn->orderBy('brewSubCategory', 'ASC');
+$rows_brews = $db_conn->get($prefix."brewing", null, "id,brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle");
+$totalRows_brews = $db_conn->count;
 
 $current_active = array();
 
 if ($totalRows_brews > 0) {
 
-	do {
+	foreach ($rows_brews as $row_brews) {
 
 		$style = $row_brews['brewCategorySort'].$row_brews['brewSubCategory'];
         $sql = "";
@@ -271,8 +271,8 @@ if ($totalRows_brews > 0) {
             $result = $db_conn->rawQuery($sql);
         }
 
-	} while ($row_brews = mysqli_fetch_assoc($brews));
-	
+	}
+
 } // end if ($totalRows_brews > 0)
 
 // Activate all styles that have been converted.

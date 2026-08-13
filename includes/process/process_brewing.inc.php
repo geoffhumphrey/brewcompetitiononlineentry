@@ -20,9 +20,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	include (DB.'entries.db.php');
 	include (INCLUDES.'constants.inc.php');
 
-	$query_user = sprintf("SELECT id,userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
-	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
-	$row_user = mysqli_fetch_assoc($user);
+	$db_conn->where("user_name", $_SESSION['loginUsername']);
+	$row_user = $db_conn->getOne($users_db_table, "id,userLevel");
 
 	$process_allowed_entries = FALSE;
 
@@ -43,9 +42,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if (($row_limits['prefsUserEntryLimit'] != "") && ($row_user['userLevel'] == 2) && ($action == "add")) {
 
 		// Check if user has reached the limit of entries in a particular sub-category. If so, redirect.
-		$query_brews = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewBrewerId = '%s'", $_SESSION['user_id']);
-		$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
-		$row_brews = mysqli_fetch_assoc($brews);
+		$db_conn->where("brewBrewerId", $_SESSION['user_id']);
+		$row_brews = $db_conn->getOne($brewing_db_table, "COUNT(*) as 'count'");
 
 			if ($row_brews['count'] >= $row_limits['prefsUserEntryLimit']) {
 				$insertGoTo = $base_url."index.php?section=list&msg=8";
@@ -94,9 +92,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$name_parser = new FullNameParser();
 
 	// Do not rely on session var to determine if in tables planning mode
-	$query_table_planning = sprintf("SELECT jPrefsTablePlanning FROM `%s` WHERE id='1'",$prefix."judging_preferences");
-	$table_planning = mysqli_query($connection,$query_table_planning);
-	$row_table_planning = mysqli_fetch_assoc($table_planning);
+	$db_conn->where("id", 1);
+	$row_table_planning = $db_conn->getOne($prefix."judging_preferences", "jPrefsTablePlanning");
 
 	if (($action == "add") || ($action == "edit")) {
 
@@ -274,9 +271,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (($_SESSION['userLevel'] <= 1) && (isset($_POST['brewReceived']))) $brewReceived = $_POST['brewReceived'];
 			if (($_SESSION['userLevel'] > 1) || ((!isset($_POST['brewPaid'])) || (!isset($_POST['brewReceived'])))) {
 
-				$query_entry_status = sprintf("SELECT brewPaid,brewReceived FROM %s WHERE id='%s'", $prefix."brewing",$id);
-				$entry_status = mysqli_query($connection,$query_entry_status) or die (mysqli_error($connection));
-				$row_entry_status = mysqli_fetch_assoc($entry_status);
+				$db_conn->where("id", $id);
+				$row_entry_status = $db_conn->getOne($prefix."brewing", "brewPaid,brewReceived");
 
 				$brewPaid = $row_entry_status['brewPaid'];
 				$brewReceived = $row_entry_status['brewReceived'];
@@ -337,13 +333,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Determine if the style chosen is a cider - if so, run a different query
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 			$first_character = mb_substr($styleFix, 0, 1);
-			if ($first_character == "C") $query_style_name = sprintf("SELECT id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $styleFix, $style[1]);
-			else $query_style_name = sprintf("SELECT id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $styleFix, $style[1]);
+			if ($first_character == "C") $style_version = "BJCP2025";
+			else $style_version = "BJCP2021";
 		}
 
-		else $query_style_name = sprintf("SELECT id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $styleFix, $style[1]);
-		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-		$row_style_name = mysqli_fetch_assoc($style_name);
+		else $style_version = $_SESSION['prefsStyleSet'];
+
+		$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $styleFix, $style[1]));
+		$row_style_name = $db_conn->getOne($prefix."styles", "id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType");
 		
 		$styleName = $row_style_name['brewStyle'];
 
@@ -413,9 +410,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($row_user['userLevel'] <= 1) {
 
-			$query_brewer = sprintf("SELECT * FROM `%s` WHERE uid = '%s'", $brewer_db_table, $_POST['brewBrewerID']);
-			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-			$row_brewer = mysqli_fetch_assoc($brewer);
+			$db_conn->where("uid", $_POST['brewBrewerID']);
+			$row_brewer = $db_conn->getOne($brewer_db_table);
 
 			$brewBrewerID = $row_brewer['uid'];
 			$brewBrewerLastName = $row_brewer['brewerLastName'];
@@ -499,9 +495,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($id == "default") {
 
-			$query_brew_id = sprintf("SELECT id FROM `%s` WHERE brewBrewerID='%s' ORDER BY id DESC LIMIT 1",$brewing_db_table,$brewBrewerID);
-			$brew_id = mysqli_query($connection,$query_brew_id) or die (mysqli_error($connection));
-			$row_brew_id = mysqli_fetch_assoc($brew_id);
+			$db_conn->where("brewBrewerID", $brewBrewerID);
+			$db_conn->orderBy("id", "DESC");
+			$row_brew_id = $db_conn->getOne($brewing_db_table, "id");
 			$id = $row_brew_id['id'];
 
 		}
@@ -686,26 +682,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Before processing the edit, determine the style of the entry
 		// as stored in the DB
-		$query_current_style = sprintf("SELECT brewCategorySort, brewSubCategory FROM %s WHERE id = '%s'", $prefix."brewing",$id);
-		$current_style = mysqli_query($connection,$query_current_style) or die (mysqli_error($connection));
-		$row_current_style = mysqli_fetch_assoc($current_style);
+		$db_conn->where("id", $id);
+		$row_current_style = $db_conn->getOne($prefix."brewing", "brewCategorySort, brewSubCategory");
 
 		// Determine if the style chosen is a cider - if so, run a different query
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 			$first_character = mb_substr($row_current_style['brewCategorySort'], 0, 1);
-			if ($first_character == "C") $query_current_style_id = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']);
-			else $query_current_style_id = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']);
+			if ($first_character == "C") $style_version = "BJCP2025";
+			else $style_version = "BJCP2021";
 		}
 
-		else $query_current_style_id = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']);
-		$current_style_id = mysqli_query($connection,$query_current_style_id) or die (mysqli_error($connection));
-		$row_current_style_id = mysqli_fetch_assoc($current_style_id);
+		else $style_version = $_SESSION['prefsStyleSet'];
+
+		$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']));
+		$row_current_style_id = $db_conn->getOne($prefix."styles", "id");
 
 		if ($row_user['userLevel'] <= 1) {
 
-			$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", sterilize($_POST['brewBrewerID']));
-			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-			$row_brewer = mysqli_fetch_assoc($brewer);
+			$db_conn->where("uid", sterilize($_POST['brewBrewerID']));
+			$row_brewer = $db_conn->getOne($brewer_db_table);
 			
 			$brewBrewerID = $row_brewer['uid'];
 			$brewBrewerLastName = $row_brewer['brewerLastName'];
@@ -951,18 +946,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewJudgingNumber = str_replace("^","-",$_POST['brewJudgingNumber'.$id]);
 
 			if (isset($_POST['brewBoxNum'.$id])) {
-				$brewBoxNum = $purifier->purify($_POST['brewBoxNum'.$id]);
-				$brewBoxNum = sterilize($brewBoxNum);
+				$brewBoxNum = $purifier->purify(sterilize($_POST['brewBoxNum'.$id]));
 			}
 
 			if (isset($_POST['brewAdminNotes'.$id])) {
-				$brewAdminNotes = $purifier->purify($_POST['brewAdminNotes'.$id]);
-				$brewAdminNotes = sterilize($brewAdminNotes);
-			} 
-			
+				$brewAdminNotes = $purifier->purify(sterilize($_POST['brewAdminNotes'.$id]));
+			}
+
 			if (isset($_POST['brewStaffNotes'.$id])) {
-				$brewStaffNotes = $purifier->purify($_POST['brewStaffNotes'.$id]);
-				$brewStaffNotes = sterilize($brewStaffNotes);
+				$brewStaffNotes = $purifier->purify(sterilize($_POST['brewStaffNotes'.$id]));
 			}
 
 			if ((isset($_POST['brewPaid'.$id])) && ($_POST['brewPaid'.$id] == 1)) $brewPaid = 1;

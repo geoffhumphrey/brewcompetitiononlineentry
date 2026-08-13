@@ -31,20 +31,16 @@ $styles_db_table = $prefix."styles";
 $session_active = FALSE;
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername']))) $session_active = TRUE;
 
-if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
+// CSRF: require a same-origin Referer for this destructive, session-authenticated action.
+$referrer_ok = (isset($_SERVER['HTTP_REFERER'])) && (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === $_SERVER['SERVER_NAME']);
+
+if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 
 	if ($section == "enable-planning") {
 
 		// Check if assignPlanning row is in the judging_assignments table
 		// If not, add it
 		if (!check_update("assignPlanning", $prefix."judging_assignments")) {
-
-			/*
-			$sql = sprintf("ALTER TABLE `%s` ADD `assignPlanning` TINYINT(1) NULL;",$prefix."judging_assignments");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql);
-			*/
 
 			$sql = sprintf("ALTER TABLE `%s` ADD `assignPlanning` TINYINT(1) NULL;",$prefix."judging_assignments");
 			$db_conn->rawQuery($sql);
@@ -55,14 +51,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		// Check if flightPlanning row is in the judging_flights table
 		// If not, add it
 		if (!check_update("flightPlanning", $prefix."judging_flights")) {
-			
-			/*
-			$sql = sprintf("ALTER TABLE `%s` ADD `flightPlanning` TINYINT(1) NULL;",$prefix."judging_flights");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql);
-			*/
-			
+
 			$sql = sprintf("ALTER TABLE `%s` ADD `flightPlanning` TINYINT(1) NULL;",$prefix."judging_flights");
 			$db_conn->rawQuery($sql);
 			if ($db_conn->getLastErrno() !== 0) $error_count += 1;
@@ -72,13 +61,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		// Check if jPrefsTablePlanning row is in the judging_preferences table
 		// If not, add it
 		if (!check_update("jPrefsTablePlanning", $prefix."judging_preferences")) {
-			
-			/*
-			$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsTablePlanning` TINYINT(1) NULL;",$prefix."judging_preferences");
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql);
-			*/
 
 			$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsTablePlanning` TINYINT(1) NULL;",$prefix."judging_preferences");
 			$db_conn->rawQuery($sql);
@@ -86,21 +68,9 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 		}
 		
-		/*
-		$query_flight_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."judging_flights");
-		$flight_entries = mysqli_query($connection,$query_flight_entries) or die (mysqli_error($connection));
-		$row_flight_entries = mysqli_fetch_assoc($flight_entries);
-		*/
-
 		$row_flight_entries = $db_conn->getOne ($prefix."judging_flights", "count(*) as count");
 
 		if ($row_flight_entries['count'] > 0) {
-
-			/*
-			$query_table = sprintf("SELECT id,tableStyles,tableLocation FROM %s", $prefix."judging_tables");
-			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
-			$row_table = mysqli_fetch_assoc($table);
-			*/
 
 			// Loop through the tables and their styles
 			$cols = array("id","tableStyles","tableLocation");
@@ -114,34 +84,15 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 				// Query the entries table for all ids for each sub-style
 				foreach (array_unique($a) as $value) {
 
-					/*
-					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
-					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-					$row_styles = mysqli_fetch_assoc($styles);
-					*/
-
 					$cols = array("brewStyleGroup","brewStyleNum");
 					$db_conn->where ("id", $value);
 					$row_styles = $db_conn->getOne ($styles_db_table, null, $cols);
-					
-					/*
-					$query_entries = sprintf("SELECT id,brewReceived FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
-					$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-					$row_entries = mysqli_fetch_assoc($entries);
-					$totalRows_entries = mysqli_num_rows($entries);
-					*/
 
 					$cols = array("id","brewReceived");
 					$db_conn-> where ("brewCategorySort",$row_styles['brewStyleGroup']);
 					$db_conn-> where ("brewSubCategory",$row_styles['brewStyleNum']);
 					$row_entries = $db_conn->get ($prefix."brewing", null, $cols);
 					$totalRows_entries = $db_conn->count;
-
-					/*
-					$query_fl_round = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='1' LIMIT 1", $prefix."judging_flights", $row_table['id']);
-					$fl_round = mysqli_query($connection,$query_fl_round) or die (mysqli_error($connection));
-					$row_fl_round = mysqli_fetch_assoc($fl_round);
-					*/
 
 					// Get assigned round for flight 1
 					$db_conn-> where ("flightTable",$row_table['id']);
@@ -257,13 +208,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		$received_entries_arr = array();
 		$flight_entries_arr = array();
 
-		/*
-		$query_received_entries = sprintf("SELECT id FROM %s WHERE brewReceived='1'", $prefix."brewing");
-		$received_entries = mysqli_query($connection,$query_received_entries) or die (mysqli_error($connection));
-		$row_received_entries = mysqli_fetch_assoc($received_entries);
-		$totalRows_received_entries = mysqli_num_rows($received_entries);
-		*/
-
 		// Get ids of all entries marked as received in the brewing table
 		$db_conn-> where ("brewReceived", 1);
 		$row_received_entries = $db_conn->get ($prefix."brewing", null, "id");
@@ -277,13 +221,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		}
 
 		// Get all entry ids in the judging_flights table
-		/*
-		$query_flight_entries = sprintf("SELECT flightEntryID FROM %s", $prefix."judging_flights");
-		$flight_entries = mysqli_query($connection,$query_flight_entries) or die (mysqli_error($connection));
-		$row_flight_entries = mysqli_fetch_assoc($flight_entries);
-		$totalRows_flight_entries = mysqli_num_rows($flight_entries);
-		*/
-
 		$row_flight_entries = $db_conn->get ($prefix."judging_flights", null, "flightEntryID");
 		$totalRows_flight_entries = $db_conn->count;
 
@@ -324,12 +261,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) $error_count += 1;
 
-			/*
-			$query_table = sprintf("SELECT id,tableStyles,tableLocation FROM %s", $prefix."judging_tables");
-			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
-			$row_table = mysqli_fetch_assoc($table);
-			*/
-
 			// Loop through the tables and their styles made in planning mode
 			$cols = array("id","tableStyles","tableLocation");
 			$row_table = $db_conn->get ($prefix."judging_tables", null, $cols);
@@ -343,21 +274,9 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 				foreach (array_unique($a) as $value) {
 
-					/*
-					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
-					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-					$row_styles = mysqli_fetch_assoc($styles);
-					*/
-
 					$cols = array("brewStyleGroup","brewStyleNum");
 					$db_conn->where ("id",$value);
 					$row_styles = $db_conn->getOne ($styles_db_table, null, $cols);
-					
-					/*
-					$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
-					$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-					$row_entries = mysqli_fetch_assoc($entries);
-					*/
 
 					$db_conn->where ("brewCategorySort", $row_styles['brewStyleGroup']);
 					$db_conn->where ("brewSubCategory", $row_styles['brewStyleNum']);
@@ -403,12 +322,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 					// Check if assigned judges or stewards have any
 					// entries at this table.
-
-					/*
-					$query_table_assignments = sprintf("SELECT id,bid FROM %s WHERE assignTable='%s'",$prefix."judging_assignments",$row_table['id']);
-					$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
-					$row_table_assignments = mysqli_fetch_assoc($table_assignments);
-					*/
 
 					// Query judging assignments for this table.
 					$cols = array("id","bid");

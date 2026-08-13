@@ -1,9 +1,7 @@
 <?php
 if (isset($_SESSION['userLevel'])) {
 	if ($_SESSION['userLevel'] == 0) {
-		$query_count_end = "SHOW SESSION STATUS LIKE 'Questions'";
-		$count_end = mysqli_query($connection,$query_count_end) or die (mysqli_error($connection));
-		$row_count_end = mysqli_fetch_array($count_end, MYSQLI_ASSOC);
+		$row_count_end = $db_conn->rawQuery("SHOW SESSION STATUS LIKE 'Questions'")[0];
 		$stop_queries = $row_count_end['Value'];
 		$queries_total_page = $stop_queries - $start_queries - 1;
 		if (basename($_SERVER['SCRIPT_FILENAME'], '.php') == "process.inc") $_SESSION['queries_last'] = $queries_total_page;

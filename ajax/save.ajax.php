@@ -38,7 +38,10 @@ $error_type = 0;
 $session_active = FALSE;
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername']))) $session_active = TRUE;
 
-if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
+// CSRF: require a same-origin Referer for these session-authenticated write actions.
+$referrer_ok = (isset($_SERVER['HTTP_REFERER'])) && (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === $_SERVER['SERVER_NAME']);
+
+if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 
 	if ($action == "evaluation") {
 
@@ -67,7 +70,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 }
 
-if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
+if (($session_active) && ($_SESSION['userLevel'] <= 1) && ($referrer_ok)) {
 
 	if ($action == "brewing") {
 		
@@ -187,13 +190,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 				$data = array('staff_organizer' => 0);
 				$result = $db_conn->update ($update_table, $data);
 
-				/*
-				$query_org = sprintf("SELECT uid FROM %s WHERE uid='%s'", $prefix."staff", $uid);
-				$org = mysqli_query($connection,$query_org) or die ("A database error occurred.");
-				$row_org = mysqli_fetch_assoc($org);
-				$totalRows_org = mysqli_num_rows($org);
-				*/
-
 				$db_conn->where ("uid", $uid);
 				$row_org = $db_conn->getOne ($update_table, null, "uid");
 				$totalRows_org = $db_conn->count;
@@ -255,13 +251,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			if ($go == "staff_judge") $staff_judge = $post;
 			if ($go == "staff_steward") $staff_steward = $post;
 
-			/*
-			$query_staff_assign = sprintf("SELECT uid FROM %s WHERE uid='%s'",$update_table,$id);
-			$staff_assign = mysqli_query($connection,$query_staff_assign) or die ("A database error occurred.");
-			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
-			$totalRows_staff_assign = mysqli_num_rows($staff_assign);
-			*/
-
 			$db_conn->where ("uid", $id);
 			$row_staff_assign = $db_conn->getOne ($update_table, null, "uid");
 			$totalRows_staff_assign = $db_conn->count;
@@ -295,30 +284,22 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 				// Unassign from any tables
 				if ((empty($post)) || ($post == 0)) {
 
-					/*
-					if ($go == "staff_judge") $query_table_assign = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$id);
-					if ($go == "staff_steward") $query_table_assign = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$id);
-					$table_assign = mysqli_query($connection,$query_table_assign) or die ("A database error occurred.");
-					$row_table_assign = mysqli_fetch_assoc($table_assign);
-					$totalRows_table_assign = mysqli_num_rows($table_assign);
-					*/
-
 					$db_conn->where ("bid", $id);
 					if ($go == "staff_judge") $db_conn->where ("assignment", "J");
 					if ($go == "staff_steward") $db_conn->where ("assignment", "S");
-					$row_table_assign = $db_conn->get ($prefix."judging_assignments", null, "id");
+					$rows_table_assign = $db_conn->get ($prefix."judging_assignments", null, "id");
 					$totalRows_table_assign = $db_conn->count;
 
 					if ($totalRows_table_assign > 0) {
 
-						do {
+						foreach ($rows_table_assign as $row_table_assign) {
 
 							$update_table = $prefix."judging_assignments";
 							$db_conn->where ('id', $row_table_assign['id']);
 							$result = $db_conn->delete($update_table);
 
-						} while ($row_table_assign = mysqli_fetch_assoc($table_assign));
-					
+						}
+
 					}
 
 				}
@@ -359,13 +340,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			if ($input == 0) $input = NULL;
 			
 			
-			/*
-			$query_already_scored = sprintf("SELECT * FROM %s WHERE eid=%s", $prefix.$action, $eid);
-			$already_scored = mysqli_query($connection,$query_already_scored) or die ("A database error occurred.");
-			$row_already_scored = mysqli_fetch_assoc($already_scored);
-			$totalRows_already_scored = mysqli_num_rows($already_scored);
-			*/
-
 			// First, query if there is a record with the eid
 			$db_conn->where ("eid", $eid);
 			$row_already_scored = $db_conn->getOne ($prefix.$action);
@@ -466,108 +440,5 @@ $return_json = array(
 
 // Return the json
 echo json_encode($return_json);
-
-/**  
- * The following is unfinished. Need more
- * thought into the various scenarios
- * associated with assigning judges and 
- * stewards to tables/flights/rounds.
- */
-
-/*
-if ($action == "judging_assignments") {
-
-	if ($go == "assignFlight") {
-
-		// https://test.brewcomp.com/ajax/save.ajax.php?action=judging_assignments&go=assignTable&id=212&rid1=1&rid2=J&rid3=1
-		// $id = judge's uid
-		// $rid1 = table id
-		// $rid2 = judge or steward
-		// $rid3 = round
-		// $rid4 = assigned location
-		// $_POST['assignFlight']
-
-		// Do query if judge is already assigned in their specified role
-		$query_already_assigned = sprintf("SELECT * FROM %s WHERE bid='%s' AND assignment='%s'", $prefix.$action, $id, $rid2);
-		$already_assigned = mysqli_query($connection,$query_already_assigned) or die ("A database error occurred.");
-		$row_already_assigned = mysqli_fetch_assoc($already_assigned);
-		$totalRows_already_assigned = mysqli_num_rows($already_assigned);
-
-		// If no record of the user assigned to any table as either a judge or steward,
-		// simply add a record.
-		if ($totalRows_already_assigned == 0) {
-			if ($_POST['assignFlight'] > 0) $sql .= sprintf("INSERT INTO `%s` (bid, assignment, assignTable, assignFlight, assignRound, assignLocation) VALUES (%s, %s, %s, %s, %s, %s)", $prefix.$action, $id, $rid2, $rid1, $_POST['assignFlight'], $rid3, $rid4);
-		}
-
-		// Otherwise, loop through user's assignments for the role
-		
-		else {
-
-			do {
-
-				// If assigned to the same round, check to see if the user chose to assign to current table. 
-				// If the choice is to assign to current table, delete the previous record and add a new one with this assignment.
-				// If the choice is NOT assign to current table, clear any records that may be there
-
-				// Check if assigned to this round and table
-				if (($row_already_assigned['assignRound'] == $rid3) && ($row_already_assigned['assignTable'] == $rid1)) {
-
-					// Check to see if the user chose to assign. If so, update the record.
-					if ($_POST['assignFlight'] > 0) {
-
-						$sql .= sprintf("UPDATE `%s` SET assignFlight='%s' WHERE bid='%s' AND assignTable='%s' AND assignRound='%s'", $prefix.$action, $_POST['assignFlight'], $id, $rid1, $rid3);
-
-					}
-
-					// If the choice is NOT assign to current table, clear any records that may be there
-					if ($_POST['assignFlight'] == 0) {
-						$sql = sprintf("DELETE FROM `%s` WHERE bid='%s' AND assignTable='%s' AND assignRound='%s' AND assignFlight='%s'", $prefix.$action, $rid2, $id, $rid1, $rid3, $_POST['assignFlight']);
-					}
-				
-				}
-
-				// Check if assigned to this round at another table, but at same location
-				if (($row_already_assigned['assignRound'] == $rid3) && ($row_already_assigned['assignTable'] != $rid1) && ($row_already_assigned['assignLocation'] == $rid4)) {
-					
-					// if ($_POST['assignFlight'] > 0) $sql .= sprintf("INSERT INTO `%s` (bid, assignment, assignTable, assignFlight, assignRound) VALUES (%s, %s, %s, %s, %s)", $prefix.$action, $id, $rid2, $rid1, $_POST['assignFlight'], $rid3);
-				}
-
-			} while ($row_already_assigned = mysqli_fetch_assoc($already_assigned));
-
-		}
-
-	}
-
-	if ($go == "assignRoles") {
-		
-		$input = sterilize($rid1);
-		
-		if (empty($input)) {
-			$sql = sprintf("UPDATE `%s` SET %s=NULL WHERE assignTable='%s'", $prefix.$action, $go, $id);
-		}
-
-		else {
-
-			// Check if ID is assigned to the table, if so, change
-			// If not, flag
-			$sql = sprintf("UPDATE `%s` SET %s='HJ' WHERE bid='%s' AND assignTable='%s'", $prefix.$action, $go, $input, $id);
-
-		}
-
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die ("A database error occurred.");
-
-	} // end if ($go == "assignRoles")
-
-	mysqli_real_escape_string($connection,$sql);
-	$result = mysqli_query($connection,$sql) or die ("A database error occurred.");
-
-	// If successful, change $status from fail (0) to success (1)
-	if ($result) $status = 1;
-	else $error_type = 3; // SQL error
-
-}
-
-*/
 
 ?>

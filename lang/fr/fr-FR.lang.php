@@ -955,7 +955,7 @@ $pay_text_029 = "Veuillez consulter votre liste de participations pour confirmer
  */
 
 // Ignore the next four lines
-if (strpos($view, "^") !== FALSE) {
+if ($carat_url_var) {
 	$qr_text_019 = sprintf("%06d",$checked_in_numbers[0]);
 	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
 	else $qr_text_020 = $checked_in_numbers[1];
@@ -965,11 +965,11 @@ $qr_text_000 = $alert_text_080;
 $qr_text_001 = $alert_text_081;
 
 // Begin translations here
-if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Le numéro d'entrée <span class=\"text-danger\">%s</span> est enregistré avec le numéro de jugement <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+if ($carat_url_var) $qr_text_002 = sprintf("Le numéro d'entrée <span class=\"text-danger\">%s</span> est enregistré avec le numéro de jugement <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 $qr_text_003 = "Si ce numéro de jugement n'est <em>pas</em> correct, <strong>re-scannez le code et saisissez le bon numéro de jugement.";
-if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("L'entrée numéro %s est enregistrée.",$qr_text_019); else $qr_text_004 = "";
-if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("L'entrée numéro %s n'a pas été trouvée dans la base de données. Mettez de côté la ou les bouteilles et informez l'organisateur de la compétition.",$qr_text_019); else $qr_text_005 = "";
-if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("Le numéro de jugement que vous avez saisi - %s - est déjà attribué à l'entrée numéro %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
+if ($carat_url_var) $qr_text_004 = sprintf("L'entrée numéro %s est enregistrée.",$qr_text_019); else $qr_text_004 = "";
+if ($carat_url_var) $qr_text_005 = sprintf("L'entrée numéro %s n'a pas été trouvée dans la base de données. Mettez de côté la ou les bouteilles et informez l'organisateur de la compétition.",$qr_text_019); else $qr_text_005 = "";
+if ($carat_url_var) $qr_text_006 = sprintf("Le numéro de jugement que vous avez saisi - %s - est déjà attribué à l'entrée numéro %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
 $qr_text_007 = "Enregistrement d'entrée par code QR";
 $qr_text_008 = "Pour enregistrer des entrées via un code QR, veuillez fournir le mot de passe correct. Vous devrez fournir le mot de passe une seule fois par session - assurez-vous de laisser l'application de numérisation de code QR ouverte.";
 $qr_text_009 = "Attribuer un numéro de jugement et/ou un numéro de boîte à l'entrée";

@@ -8,10 +8,9 @@ foreach ($eval_scores as $key => $value) {
 		if (!in_array($value['table'], $table_assignments_user)) {
 
 			// Get entry info
-			$query_entry = sprintf("SELECT id, brewBrewerID, brewStyle, brewCategorySort, brewCategory, brewSubCategory, brewInfo, brewJudgingNumber, brewName FROM %s WHERE id='%s'", $prefix."brewing", $value['eid']);
-			$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-			$row_entry = mysqli_fetch_assoc($entry);
-			$totalRows_entry = mysqli_num_rows($entry);
+			$db_conn->where('id', $value['eid']);
+			$row_entry = $db_conn->getOne($prefix."brewing", "id, brewBrewerID, brewStyle, brewCategorySort, brewCategory, brewSubCategory, brewInfo, brewJudgingNumber, brewName");
+			$totalRows_entry = $db_conn->count;
 
 			$actions_otf = "";
 			$number_otf = "";
@@ -41,18 +40,17 @@ foreach ($eval_scores as $key => $value) {
 	        	else $style_display_otf = $style_otf.": ".$row_entry['brewStyle'];
 
 				// Get recorded evaluation entries
-				$query_evals = sprintf("SELECT evalFinalScore FROM %s WHERE eid='%s'", $prefix."evaluation", $value['eid']);
-				$evals = mysqli_query($connection,$query_evals) or die (mysqli_error($connection));
-				$row_evals = mysqli_fetch_assoc($evals);
-				$totalRows_evals = mysqli_num_rows($evals);
+				$db_conn->where('eid', $value['eid']);
+				$rows_evals = $db_conn->get($prefix."evaluation", null, "evalFinalScore");
+				$totalRows_evals = $db_conn->count;
 
 				// If other judges have evaluated the entry, compare evalFinalScores
 				if ($totalRows_evals > 1) {
 					$assigned_score = array();
 
-					do {
+					foreach ($rows_evals as $row_evals) {
 						$assigned_score[] = $row_evals['evalFinalScore'];
-					} while ($row_evals = mysqli_fetch_assoc($evals));
+					}
 
 					if (count(array_unique($assigned_score)) === 1) $notes_otf .= "<div style=\"margin-bottom:5px;\" class=\"text-success\">".$evaluation_info_026."<br>".$label_assigned_score.": ".$assigned_score[0]."</div>";
 					

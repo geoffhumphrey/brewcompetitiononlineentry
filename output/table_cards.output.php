@@ -59,12 +59,12 @@ if (($table_card_output) && ($psort == "sorting-placards")) {
                     $table_card_output_print .= "<h1 style=\"margin-bottom: 0px;\">".$cat_number." - ".$value."</h1>";
                     $table_card_output_print .= "<h2><small>".$row_style_count_logged['count']." ".$display_entries."</small></h2>";
                     $table_card_output_print .= "<ul class=\"list-unstyled\">";
-                    do {
+                    foreach ($rows_style_count_logged as $row_style_count_logged) {
                         $table_card_output_print .= "<li>";
                         $table_card_output_print .= "&#x2610; ".$label_entry." # ".sprintf("%06s",$row_style_count_logged['id'])." &ndash; ";
                         $table_card_output_print .= $row_style_count_logged['brewCategorySort'].$row_style_count_logged['brewSubCategory'];
                         $table_card_output_print .= "</li>";
-                    } while ($row_style_count_logged = mysqli_fetch_assoc($style_count_logged));
+                    }
                     $table_card_output_print .= "</ul>";
                     $table_card_output_print .= "</div>";
                     $table_card_output_print .= "<div style=\"page-break-after:always;\"></div>";
@@ -101,7 +101,7 @@ if (($table_card_output) && ($psort == "sorting-tables")) {
         $table_card_output_print .= "<tbody>";
     }
 
-    do {
+    foreach ($rows_tables as $row_tables) {
 
 
         $a = array(get_table_info("1","list",$row_tables['id'],$dbTable,"default"));
@@ -129,8 +129,8 @@ if (($table_card_output) && ($psort == "sorting-tables")) {
             $table_card_output_print .= "<div style=\"page-break-after:always;\"></div>";
         }
 
-    } while ($row_tables = mysqli_fetch_assoc($tables));
-    
+    }
+
     if ($view == "master-list") {
         $table_card_output_print .= "</tbody>";
         $table_card_output_print .= "</table>";
@@ -150,7 +150,7 @@ $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span c
 
 if ($id == "default") { ?>
 
-<?php do {
+<?php foreach ($rows_tables as $row_tables) {
     include (DB.'output_table_cards.db.php');
 ?>
 <div class="table_card">
@@ -182,7 +182,7 @@ if ($id == "default") { ?>
     </thead>
     <tbody>
 
-        <?php do {
+        <?php foreach ($rows_assignments as $row_assignments) {
                         $judge_info = explode("^",brewer_info($row_assignments['bid']));
                         if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
@@ -200,14 +200,14 @@ if ($id == "default") { ?>
                 <td width="5%" nowrap="nowrap"><?php echo $flight; ?></td>
                 <?php } ?>
         </tr>
-                <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
+                <?php } ?>
     </tbody>
     </table>
     <?php } ?>
 
 </div>
 <div style="page-break-after:always;"></div>
-<?php } while ($row_tables = mysqli_fetch_assoc($tables));
+<?php }
 }
 if ($id != "default") {
     include (DB.'output_table_cards.db.php');
@@ -241,7 +241,7 @@ if ($id != "default") {
     </thead>
     <tbody>
 
-        <?php do {
+        <?php foreach ($rows_assignments as $row_assignments) {
                         $judge_info = explode("^",brewer_info($row_assignments['bid']));
                         if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
@@ -258,7 +258,7 @@ if ($id != "default") {
                 <td width="5%" nowrap="nowrap"><?php echo $flight; ?></td>
                 <?php } ?>
         </tr>
-                <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
+                <?php } ?>
     </tbody>
     </table>
     <?php } // end if ($totalRows_assignments > 0) ?>

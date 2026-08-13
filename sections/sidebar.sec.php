@@ -330,7 +330,7 @@ if ($section != "admin") {
 	
 	else {
 		
-		do {
+		foreach ($rows_judging as $row_judging) {
 
 			if ($row_judging['judgingLocType'] == 2) {
 
@@ -384,8 +384,8 @@ if ($section != "admin") {
 			
 			}
 			
-		} while ($row_judging = mysqli_fetch_assoc($judging));
-	
+		}
+
 	} // end else
 	
 	$page_info400 .= "</div>";
@@ -413,7 +413,7 @@ if ($section != "admin") {
 
 		if ($totalRows_archive > 0) {
 
-			do {
+			foreach ($row_archive as $row_archive) {
 
 				if (($row_archive['archiveDisplayWinners'] == "Y") && ($row_archive['archiveStyleSet'] != "")) {
 					$table_archive = $prefix."judging_scores_".$row_archive['archiveSuffix'];
@@ -427,7 +427,7 @@ if ($section != "admin") {
 					}
 				}	
 
-			} while($row_archive = mysqli_fetch_assoc($archive));
+			}
 
 		}
 

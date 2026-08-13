@@ -116,7 +116,7 @@ if ($section != "step5") {
 		$output_datatables_head .= "<th width=\"5%\">Actions</th>";
 		$output_datatables_head .= "</tr>";
 
-		do {
+		foreach ($rows_judging_locs as $row_judging_locs) {
 
 			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"admin","judging","edit",$filter,$row_judging_locs['id'],$dbTable,"default",0,"Edit ".$row_judging_locs['judgingLocName']);
 
@@ -129,19 +129,19 @@ if ($section != "step5") {
 			if ($row_judging_locs['judgingLocType'] == "1") $judgingLocType = "Distributed"; 
 
 			$output_datatables_body .= "<tr>";
-			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocName']."</td>";
+			$output_datatables_body .= "<td>".h($row_judging_locs['judgingLocName'])."</td>";
 			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$judgingLocType."</td>";
-			$output_datatables_body .= "<td><span class=\"hidden\">".$row_judging_locs['judgingDate']."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time")."</td>";
-			if (!empty($row_judging_locs['judgingDateEnd'])) $output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time")."</td>";
+			$output_datatables_body .= "<td><span class=\"hidden\">".h($row_judging_locs['judgingDate'])."</span>".h(getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"))."</td>";
+			if (!empty($row_judging_locs['judgingDateEnd'])) $output_datatables_body .= "<td>".h(getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"))."</td>";
 			else $output_datatables_body .= "<td>N/A</td>";
 			$output_datatables_body .= "</td>";
-			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocation']."</td>";
+			$output_datatables_body .= "<td>".h($row_judging_locs['judgingLocation'])."</td>";
 			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$row_judging_locs['judgingRounds']."</td>";
-			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$row_judging_locs['judgingLocNotes']."</td>";
+			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".h($row_judging_locs['judgingLocNotes'])."</td>";
 			$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 			$output_datatables_body .= "</tr>";
 
-		} while($row_judging_locs = mysqli_fetch_assoc($judging_locs));
+		}
 
 	} // end if (($totalRows_judging_locs > 0) && ($action == "default"))
 
@@ -164,7 +164,7 @@ if ($section != "step5") {
 			$organizer_assigned = FALSE;
 			$organizer_count = 0;
 
-			do {
+			foreach ($rows_brewers as $row_brewers) {
 				$form_organizer_select .= "<option value=\"".$row_brewers['uid']."\"";
 				if (($totalRows_organizer > 0) && (($row_brewers['uid'] == $row_organizer['uid']))) {
 					$form_organizer_select .= " SELECTED";
@@ -173,7 +173,7 @@ if ($section != "step5") {
 				$form_organizer_select .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName'];
 				if (($totalRows_organizer > 0) && (($row_brewers['uid'] == $row_organizer['uid']))) $form_organizer_select .= " (Selected Competition Organizer)";
 				$form_organizer_select .= "</option>";
-			} while ($row_brewers = mysqli_fetch_assoc($brewers));
+			}
 
 			if ($organizer_count > 0) $organizer_assigned = TRUE;
 
@@ -223,7 +223,7 @@ if ($section != "step5") {
 
 			$copy_paste_emails = "";
 
-			do {
+			foreach ($rows_brewer as $row_brewer) {
 
 				$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable,$filter,"default");
 
@@ -234,16 +234,16 @@ if ($section != "step5") {
 					if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {
 
 						if (strpos($brewer_assignment,"Judge") !== false) {
-							if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".$table_assign_judge."<p>";
+							if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".h($table_assign_judge)."<p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
 						}
 
 						if (strpos($brewer_assignment,"Steward") !== false) {
-							if (!empty($table_assign_steward))  $assignment_modal_body .= "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
+							if (!empty($table_assign_steward))  $assignment_modal_body .= "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".h($table_assign_steward)."<p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
 						}
 
-						if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in: ".$judge_entries."</p>";
+						if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in: ".h($judge_entries)."</p>";
 						$output_assignment_modals .= "<div class=\"modal fade\" id=\"assignment-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_brewer['uid']."\">\n";
 						$output_assignment_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
 						$output_assignment_modals .= "\t\t<div class=\"modal-content\">\n";
@@ -287,19 +287,17 @@ if ($section != "step5") {
 				}
 
 				if (($filter == "judges") || ($filter == "stewards") || ($filter == "staff")) {
+
+					$cols = array("id","judgingLocName","judgingLocType");
+					if ($filter == "staff") $db_conn->where ("judgingLocType", 2);
+					$row_judging_loc3 = $db_conn->get ($prefix."judging_locations", null, $cols);
 				    
-				    // Get Judging Sessions
-				    $query_judging_loc3 = sprintf("SELECT id, judgingLocName, judgingLocType FROM %s", $prefix."judging_locations");
-				    if ($filter == "staff") $query_judging_loc3 .= " WHERE judgingLocType='2'";
-					$judging_loc3 = mysqli_query($connection,$query_judging_loc3) or die (mysqli_error($connection));
-					$row_judging_loc3 = mysqli_fetch_assoc($judging_loc3);
-	
 	                $j_sess_arr = array();
 
 	                if ($row_judging_loc3) {
-	                	do {
+	                	foreach ($row_judging_loc3 as $row_judging_loc3) {
 	                	    $j_sess_arr[$row_judging_loc3['id']] = $row_judging_loc3['judgingLocName'];
-	                	} while ($row_judging_loc3 = mysqli_fetch_assoc($judging_loc3));
+	                	}
 	                }
 	                
 					if (($filter == "judges") || ($filter == "staff")) $exploder = $row_brewer['brewerJudgeLocation'];
@@ -426,7 +424,7 @@ if ($section != "step5") {
 
 				$output_datatables_body .= "</tr>\n";
 
-			} while ($row_brewer = mysqli_fetch_assoc($brewer));
+			}
 
 		} // end if ($totalRows_brewer > 0)
 
@@ -469,7 +467,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <?php if ($section != "step5") { ?>
-	<p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p>
+	<p class="lead"><?php echo h($_SESSION['contestName']).$subtitle; ?></p>
 	<?php if (($action == "assign") && (($filter == "judges") || ($filter == "stewards"))) echo "<p><strong>".$filter_readable." are assigned to the ".rtrim(strtolower($filter_readable),"s")." pool automatically upon registration providing they registered as a ".rtrim(strtolower($filter_readable),"s").".</strong> Those who first signed up as participants, but then edited their accounts to indicate their availability to ".rtrim(strtolower($filter_readable),"s")." are not automatically assigned. You can assign ".strtolower($filter_readable)." to the pool by checking the box next to a name or uassign by unchecking the box.</p><p class=\"text-danger\" style=\"margin-bottom: 20px;\"><strong>Caution:</strong> ".strtolower($filter_readable)." who are unassigned will also be removed from all table assignments.</p>"; ?>
 <?php } ?>
 <?php if (($filter == "default") && ($msg == "9"))  {
@@ -816,7 +814,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingLocName" name="judgingLocName" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>" placeholder="" autofocus required>
+			<input class="form-control" id="judgingLocName" name="judgingLocName" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo h($row_judging['judgingLocName']); ?>" placeholder="" autofocus required>
 			<span class="input-group-addon" id="judgingTime2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">Provide the name of the judging location.</span>
@@ -872,7 +870,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>" placeholder="" required>
+			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo h($row_judging['judgingLocation']); ?>" placeholder="" required>
 			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <span id="helpBlockLocation1" class="help-block">Provide the street address, city, and zip/postal code where the session will take place.</span>
@@ -895,7 +893,7 @@ if (($output_add_edit) && ($msg != 9)) {
 <div class="form-group">
     <label id="judgingLocNotesLabel" for="judgingLocNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Notes</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="judgingLocNotes" name="judgingLocNotes" type="text" maxlength="1000" value="<?php if ($action == "edit") echo $row_judging['judgingLocNotes']; ?>" placeholder="">  
+        <input class="form-control" id="judgingLocNotes" name="judgingLocNotes" type="text" maxlength="1000" value="<?php if ($action == "edit") echo h($row_judging['judgingLocNotes']); ?>" placeholder="">  
         <id id="helpBlock" class="help-block">Further information or notes for judges, stewards, and/or staff.</span>
     </div>
 </div>

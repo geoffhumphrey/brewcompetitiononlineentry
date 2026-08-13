@@ -1,7 +1,9 @@
 <?php
 
 // PayPal settings
-$paypal_email = $_POST['business'];
+// The payee address must come from the competition's own configured setting, never from the
+// submitted form, otherwise a tampered request could redirect payment to an attacker's account.
+$paypal_email = $_SESSION['prefsPaypalAccount'];
 $return_url = $_POST['return'];
 $cancel_url = $_POST['cancel_return'];
 
@@ -22,7 +24,7 @@ $query_string .= "?business=".urlencode($paypal_email)."&";
 
 // Loop for posted values and append to querystring
 foreach($_POST as $key => $value){
-	if (($key != "cancel_return") && ($key != "return")) {
+	if (($key != "cancel_return") && ($key != "return") && ($key != "business")) {
 		$value = urlencode(stripslashes($value));
 		$query_string .= "$key=$value&";
 	}

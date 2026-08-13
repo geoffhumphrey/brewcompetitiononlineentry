@@ -79,11 +79,9 @@ function count_future($arr,$needle,$diff) {
 }
 
 // Get last judging session end date/time (if any)
-$query_session_end = sprintf("SELECT judgingDateEnd FROM %s",$prefix."judging_locations");
-$query_session_end .= " ORDER BY judgingDateEnd DESC LIMIT 1";
-$session_end = mysqli_query($connection,$query_session_end) or die (mysqli_error($connection));
-$row_session_end = mysqli_fetch_assoc($session_end);
-$totalRows_session_end = mysqli_num_rows($session_end);
+$db_conn->orderBy("judgingDateEnd", "DESC");
+$row_session_end = $db_conn->getOne($prefix."judging_locations", "judgingDateEnd");
+$totalRows_session_end = $db_conn->count;
 
 if ((time() > $row_judging_prefs['jPrefsJudgingOpen']) && (time() < $row_judging_prefs['jPrefsJudgingClosed'])) $judging_open = TRUE;
 if (($totalRows_session_end > 0) && (time() < $row_session_end['judgingDateEnd'])) $judging_open = TRUE;
@@ -99,78 +97,18 @@ else {
 	if ($queued) $header .= sprintf("<div class=\"mb-3 p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-2\"><p><i class=\"fa fa-sticky-note me-2\"></i><strong>%s:</strong> %s</p><p class=\"mb-0\">%s</p></div>",ucfirst(strtolower($label_please_note)),$evaluation_info_001,$evaluation_info_002); 
 }
 	
-$query_table_assignments = sprintf("SELECT * FROM %s a, %s b WHERE a.bid='%s' AND a.assignment='%s' AND a.assignTable = b.id ORDER BY b.tableNumber",$prefix."judging_assignments",$prefix."judging_tables",$_SESSION['user_id'],"J");
-$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
-$row_table_assignments = mysqli_fetch_assoc($table_assignments);
-$totalRows_table_assignments = mysqli_num_rows($table_assignments);
+$query_table_assignments = "SELECT * FROM ".$prefix."judging_assignments"." a, ".$prefix."judging_tables"." b WHERE a.bid=? AND a.assignment=? AND a.assignTable = b.id ORDER BY b.tableNumber";
+$rows_table_assignments = $db_conn->rawQuery($query_table_assignments, array($_SESSION['user_id'], "J"));
+$row_table_assignments = ($rows_table_assignments && count($rows_table_assignments) > 0) ? $rows_table_assignments[0] : null;
+$totalRows_table_assignments = $db_conn->count;
 
-$query_eval_sub = sprintf("SELECT * FROM %s", $prefix."evaluation");
-$eval_sub = mysqli_query($connection,$query_eval_sub) or die (mysqli_error($connection));
-$row_eval_sub = mysqli_fetch_assoc($eval_sub);
-$totalRows_eval_sub = mysqli_num_rows($eval_sub);
-
-$eval_scores = array();
-$eval_judge_evaluations = array();
-$eval_judge_tables = array();
 $eval_no_evaluations = array();
-
-if ($totalRows_eval_sub > 0) {
-
-	do {
-
-		$judge_score = $row_eval_sub['evalAromaScore'] + $row_eval_sub['evalAppearanceScore'] + $row_eval_sub['evalFlavorScore'] + $row_eval_sub['evalMouthfeelScore'] + $row_eval_sub['evalOverallScore'];
-			
-		$eval_judge_evaluations[] = array(
-			"entry_id" => $row_eval_sub['eid']
-		);
-
-		$eval_judge_tables[] = array(
-			"judge_id" => $row_eval_sub['evalJudgeInfo'],
-			"table_id" => $row_eval_sub['evalTable']
-		);
-
-		$eval_scores[] = array(
-			"id" => $row_eval_sub['id'],
-			"eid" => $row_eval_sub['eid'],
-			"judge_id" => $row_eval_sub['evalJudgeInfo'],
-			"judge_score" => $judge_score,
-			"consensus_score" => $row_eval_sub['evalFinalScore'],
-			"table" => $row_eval_sub['evalTable'],
-			"place" => $row_eval_sub['evalPlace'],
-			"ordinal_position" => $row_eval_sub['evalPosition'],
-			"date_added" => $row_eval_sub['evalInitialDate'],
-			"date_updated" => $row_eval_sub['evalUpdatedDate'],
-			"scoresheet" => $row_eval_sub['evalScoresheet'],
-			"mini_bos" => $row_eval_sub['evalMiniBOS']
-		);
-
-	} while($row_eval_sub = mysqli_fetch_assoc($eval_sub));
-
-	/*
-	foreach ($eval_scores as $key => $value) {
-		$entries_evaluated[] = $value['eid'];
-	}
-
-	$total_entries_eval = (count(array_unique($entries_evaluated)));
-	*/
-	
-}
-
-/*
-print_r($eval_scores);
-echo "<br>";
-print_r($eval_judge_evaluations);
-echo "<br>";
-print_r($eval_judge_tables);
-echo "<br>";
-exit;
-*/
 
 if ($totalRows_table_assignments > 0) {
 
 	$table_assignment_start = array();
 
-	do {
+	foreach ($rows_table_assignments as $row_table_assignments) {
 
 		$table_places = array();
 		$table_places_display = "";
@@ -263,10 +201,9 @@ if ($totalRows_table_assignments > 0) {
 			";
 			
 			
-			$query_tables = sprintf("SELECT tableStyles FROM %s WHERE id='%s'",$prefix."judging_tables",$tbl_id);
-			$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-			$row_tables = mysqli_fetch_assoc($tables);
-			$totalRows_tables = mysqli_num_rows($tables);
+			$db_conn->where('id', $tbl_id);
+			$row_tables = $db_conn->getOne($prefix."judging_tables", "tableStyles");
+			$totalRows_tables = $db_conn->count;
 			$a = explode(",", $row_tables['tableStyles']);
 			
 			sort($a);
@@ -279,15 +216,16 @@ if ($totalRows_table_assignments > 0) {
 
 					$score_style_data = explode("^",$score_style_data);
 			        
-					$query_entries = sprintf("SELECT * FROM %s WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $prefix."brewing", $score_style_data[0], $score_style_data[1]);
-					//$query_entries .= " ORDER BY brewJudgingNumber, brewCategorySort, brewSubCategory ASC;";
-					$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-					$row_entries = mysqli_fetch_assoc($entries);
-					$totalRows_entries = mysqli_num_rows($entries);
+					$db_conn->where('brewCategorySort', $score_style_data[0]);
+					$db_conn->where('brewSubCategory', $score_style_data[1]);
+					$db_conn->where('brewReceived', '1');
+					$rows_entries = $db_conn->get($prefix."brewing");
+					$row_entries = ($rows_entries && count($rows_entries) > 0) ? $rows_entries[0] : null;
+					$totalRows_entries = $db_conn->count;
 
 			        if ($totalRows_entries > 0) {
 
-			        	do {
+			        	foreach ($rows_entries as $row_entries) {
 
 			        		if ($_SESSION['prefsDisplaySpecial'] == "J") $number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 				    		else $number = sprintf("%06s",$row_entries['id']);
@@ -478,7 +416,7 @@ if ($totalRows_table_assignments > 0) {
 					        	}
 					        }
 
-				        } while ($row_entries = mysqli_fetch_assoc($entries));
+				        }
 
 				    } // end if ($totalRows_entries > 0)
 
@@ -598,7 +536,7 @@ if ($totalRows_table_assignments > 0) {
 			
 		} // end if (time() > $table_location[0])
 
-	} while ($row_table_assignments = mysqli_fetch_assoc($table_assignments));
+	}
 
 	asort($table_assignment_start);
 	//print_r($table_assignment_start);
@@ -704,10 +642,6 @@ if ($totalRows_table_assignments > 0) {
 		}
 		$assign_score_mismatch .= "</ul>";
 		$assign_score_mismatch .= "</div>";
-	}
-
-	if (!empty($eval_judge_evaluations)) {
-
 	}
 
 	// Build assigned score mismatch alert

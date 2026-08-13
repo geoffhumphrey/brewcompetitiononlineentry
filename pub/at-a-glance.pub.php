@@ -224,6 +224,8 @@ else {
 
 }
 
+$glance_shipping = array();
+
 // Shipping Card
 if ((isset($_SESSION['contestShippingAddress'])) && ($_SESSION['prefsShipping'] == 1)) {
 
@@ -518,7 +520,7 @@ if (($section == "list") || ($section == "pay")) {
 	if (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y")) $glance_cards[$label_judging] = $glance_judging;
 	if ($at_a_glance_entry_info) $glance_cards[$label_entry_registration] = $glance_entry_reg;
 	if ((!empty($dropoff_open_sidebar)) && ($at_a_glance_entry_info)) $glance_cards[$label_entry_drop_off] = $glance_drop_off;
-	if ((!empty($shipping_open_sidebar)) && ($at_a_glance_entry_info)) $glance_cards[$label_entry_shipping] = $glance_shipping;
+	if ((!empty($shipping_open_sidebar)) && ($at_a_glance_entry_info) && (!empty($glance_shipping))) $glance_cards[$label_entry_shipping] = $glance_shipping;
 
 	$row_class = "row row-cols-1 g-4 justify-content-center";
 
@@ -537,7 +539,7 @@ else {
 	    $glance_cards[$label_judge_reg] = $glance_judge_reg;
 	    $glance_cards[$label_steward_reg] = $glance_steward_reg;
 	    if (!empty($dropoff_open_sidebar)) $glance_cards[$label_entry_drop_off] = $glance_drop_off;
-	    if (!empty($shipping_open_sidebar)) $glance_cards[$label_entry_shipping] = $glance_shipping;
+	    if ((!empty($shipping_open_sidebar)) && (!empty($glance_shipping))) $glance_cards[$label_entry_shipping] = $glance_shipping;
 	}
 	
 	if ($_SESSION['prefsProEdition'] == 1) {
@@ -547,7 +549,7 @@ else {
 	    $glance_cards[$label_steward_reg] = $glance_steward_reg;
 	    if (!empty($dropoff_open_sidebar)) $glance_cards[$label_entry_drop_off] = $glance_drop_off;
 	    if (!empty($shipping_open_sidebar)) $glance_cards[$label_entry_shipping] = $glance_shipping;
-	    if (!empty($glance_awards)) $glance_cards[$label_awards] = $glance_awards;
+	    if ((!empty($shipping_open_sidebar)) && (!empty($glance_shipping))) $glance_cards[$label_awards] = $glance_awards;
 	    $glance_cards[$label_judging] = $glance_judging;	
 	}
 

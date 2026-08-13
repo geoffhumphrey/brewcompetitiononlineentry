@@ -184,9 +184,9 @@ $data = array(
 
 $update_table = $prefix."styles";
 $result = $db_conn->insertMulti($update_table, $data);
-if ($result) $output_run_update .= "<li>Added BA Styles to styles table.</li>";
+if ($result) $v21130_update .= "<li>Added BA Styles to styles table.</li>";
 else {
-  $output_run_update .= "<li>Addition of BA Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
+  $v21130_update .= "<li>Addition of BA Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
   $error_count += 1;
 }
 

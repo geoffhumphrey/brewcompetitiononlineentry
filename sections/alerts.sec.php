@@ -461,6 +461,15 @@ if ($msg != "default") {
     </div>
 <?php } ?>
 
+<?php if ((!empty($double_encoding_detected)) && ($section == "admin") && ($go == "default") && ($_SESSION['userLevel'] == 0)) { ?>
+    <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p><span class="fa fa-lg fa-exclamation-triangle"></span> <strong>Data Cleanup Available</strong></p>
+        <p>Some entries in your database appear to have leftover double-encoded characters from a previously-fixed display bug (for example, an ampersand showing as <code>&amp;amp;</code> instead of <code>&amp;</code>). A one-time cleanup tool is available to correct this.</p>
+        <p><a href="<?php echo $base_url; ?>cleanup_double_encoding.php" class="btn btn-warning btn-sm" target="_blank" rel="noopener">Run Cleanup Tool</a></p>
+    </div>
+<?php } ?>
+
 <?php if ((MAINT) && ($logged_in) && ($_SESSION['userLevel'] == 0)) { ?>
   <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

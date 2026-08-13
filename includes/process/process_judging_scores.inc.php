@@ -13,10 +13,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if (($action == "add") || ($action == "edit")) {
 
 		// First, wipe out all previously recorded scores for the table
-		$deleteSQL = sprintf("DELETE FROM %s WHERE scoreTable='%s'", $judging_scores_db_table, $id);
-		mysqli_real_escape_string($connection,$deleteSQL);
-		$result = mysqli_query($connection,$deleteSQL) or die("A database error occurred.");
-
 		$update_table = $prefix."judging_scores";
 		$db_conn->where ('scoreTable', $id);
 		$result = $db_conn->delete ($update_table);
@@ -29,7 +25,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Prep Vars
 			$eid = sterilize($_POST['eid'.$score_id]);
-			$bid = sterilize($_POST['bid'.$score_id]),
+			$bid = sterilize($_POST['bid'.$score_id]);
 			$scoreTable = sterilize($_POST['scoreTable'.$score_id]);
 			$scoreEntry = sterilize($_POST['scoreEntry'.$score_id]);
 			$scorePlace = sterilize($_POST['scorePlace'.$score_id]);
@@ -38,14 +34,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			else $scoreMiniBOS = 0;
 
 			// Second, get rid of any duplicates, just in case they're in there
-			$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", mysqli_real_escape_string($connection,sterilize($_POST['eid'.$score_id])));
-			$delete_assign = mysqli_query($connection,$query_delete_assign);
-			$row_delete_assign = mysqli_fetch_assoc($delete_assign);
-			$totalRows_delete_assign = mysqli_num_rows($delete_assign);
+			$db_conn->where("eid", sterilize($_POST['eid'.$score_id]));
+			$rows_delete_assign = $db_conn->get($judging_scores_db_table, null, "id");
+			$totalRows_delete_assign = $db_conn->count;
 
 			if ($totalRows_delete_assign > 0) {
 
-				do {
+				foreach ($rows_delete_assign as $row_delete_assign) {
 
 					$update_table = $prefix."judging_scores";
 					$db_conn->where ('id', $row_delete_assign['id']);
@@ -55,8 +50,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						$errors = TRUE;
 					}
 
-				} while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
-			
+				}
+
 			} // end if ($totalRows_delete_assign > 0)
 
 

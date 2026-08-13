@@ -5,6 +5,14 @@
  *
  */
 
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $fields = 15;
 $maxlength = 6;
 $entry_list = "";
@@ -13,14 +21,14 @@ $flag_enum = "";
 $jnum_info = "";
 $enum_info = "";
 
-if ((isset($_SESSION['barcode_entry_list'])) && (!empty($_SESSION['barcode_entry_list']))) $entry_list .= implode(", ",$_SESSION['barcode_entry_list']);
+if ((isset($_SESSION['barcode_entry_list'])) && (!empty($_SESSION['barcode_entry_list']))) $entry_list .= h(implode(", ",$_SESSION['barcode_entry_list']));
 
-if ((isset($_SESSION['flag_enum'])) && (!empty($_SESSION['flag_enum']))) $enum_info .= implode(", ",$_SESSION['flag_enum']);
+if ((isset($_SESSION['flag_enum'])) && (!empty($_SESSION['flag_enum']))) $enum_info .= h(implode(", ",$_SESSION['flag_enum']));
 
 if ((isset($_SESSION['flag_jnum'])) && (!empty($_SESSION['flag_jnum']))) {
     foreach ($_SESSION['flag_jnum'] as $key => $value) {
         if ((isset($value)) && (!empty($value))) {
-          $jnum_info .= "<li>".$value." - attempted to assign to entry ".number_pad($key,6)."</li>";
+          $jnum_info .= "<li>".h($value)." - attempted to assign to entry ".number_pad($key,6)."</li>";
         }
     }
 }
@@ -71,7 +79,7 @@ $(function() {
     });
 });
 </script>
-<p class="lead"><?php echo $_SESSION['contestName'].": ".$barcode_text_000; ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']).": ".$barcode_text_000; ?></p>
 <?php if (!empty($entry_list)) {?>
 <div class="alert alert-info">
 <span class="fa fa-info-circle"></span> <?php echo sprintf("<strong>%s</strong>: %s", $barcode_text_001, $entry_list); ?>

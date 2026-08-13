@@ -15,7 +15,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 }
 
 
-$competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" class=\"bcoem-comp-logo img-responsive hidden-print\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
+$competition_logo = "<img src=\"".$base_url."user_images/".h($_SESSION['contestLogo'])."\" class=\"bcoem-comp-logo img-responsive hidden-print\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
 
 $admin_sidebar_header = "";
 $admin_sidebar_body = "";

@@ -7,7 +7,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($section == "setup"))) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($setup_free_access))) {
 
 	$errors = FALSE;
 	$error_output = array();
@@ -143,20 +143,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			
 		    // Check whether any judging sessions have been defined. 
 		    // If so, loop through and find the earliest and the latest dates.
-		    $query_judging_locations = sprintf("SELECT id, judgingDate, judgingDateEnd FROM %s WHERE judgingLocType <= '1';", $prefix."judging_locations");
-		    $judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
-		    $row_judging_locations = mysqli_fetch_assoc($judging_locations);
-		    $totalRows_judging_locations = mysqli_num_rows($judging_locations);
+		    $db_conn->where('judgingLocType', '1', '<=');
+		    $rows_judging_locations = $db_conn->get($prefix."judging_locations", null, "id, judgingDate, judgingDateEnd");
+		    $totalRows_judging_locations = $db_conn->count;
 
 		    if ($totalRows_judging_locations > 0) {
 
-		        do {
+		        foreach ($rows_judging_locations as $row_judging_locations) {
 
 		            if (!empty($row_judging_locations['judgingDate'])) $judging_dates[] = $row_judging_locations['judgingDate'];
 		            if (!empty($row_judging_locations['judgingDateEnd'])) $judging_dates[] = $row_judging_locations['judgingDateEnd'];
 
-
-		        } while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+		        }
 
 		        $judging_earliest_date = min($judging_dates);
 		        if ((max($judging_dates) > $judging_earliest_date)) $judging_latest_date = max($judging_dates);

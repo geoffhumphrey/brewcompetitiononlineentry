@@ -65,9 +65,9 @@ if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
   </div>
 </div>
 <?php } ?>
-<p class="lead"><?php echo $_SESSION['contestName'];
-if (($action == "edit") && ($id != "default")) echo ": Edit Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];
-elseif (($action == "add") && ($id != "default")) echo ": Add Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];
+<p class="lead"><?php echo h($_SESSION['contestName']);
+if (($action == "edit") && ($id != "default")) echo ": Edit Scores for Table ".h($row_tables_edit['tableNumber'])." - ".h($row_tables_edit['tableName']);
+elseif (($action == "add") && ($id != "default")) echo ": Add Scores for Table ".h($row_tables_edit['tableNumber'])." - ".h($row_tables_edit['tableName']);
 else echo " Scores";
 if ($dbTable != "default") echo ": All Scores (Archive ".get_suffix($dbTable).")";
 $totalRows_entry_count = total_paid_received($go,0);
@@ -113,11 +113,11 @@ $totalRows_entry_count = total_paid_received($go,0);
         <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <?php do {
+            <?php foreach ($rows_tables_edit_2 as $row_tables_edit_2) {
                     $table_count_total = table_count_total($row_tables_edit_2['id']);
                 ?>
-                <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a></li>
-                <?php  } while ($row_tables_edit_2 = mysqli_fetch_assoc($tables_edit_2)); ?>
+                <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".h($row_tables_edit_2['tableNumber']).": ".h($row_tables_edit_2['tableName']); ?></a></li>
+                <?php  } ?>
         </ul>
     </div>
     <?php } ?>
@@ -129,11 +129,11 @@ $totalRows_entry_count = total_paid_received($go,0);
         <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <?php do {
+            <?php foreach ($rows_style_type as $row_style_type) {
             if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader menuItem" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
+                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader menuItem" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo h($row_style_type['styleTypeName']); ?> BOS Pullsheet">BOS Pullsheet for <?php echo h($row_style_type['styleTypeName']); ?></a></li>
         <?php }
-            } while ($row_style_type = mysqli_fetch_assoc($style_type));
+            }
             ?>
         </ul>
     </div>
@@ -210,7 +210,7 @@ $totalRows_entry_count = total_paid_received($go,0);
 <tbody>
 <?php
 
-    do {
+    foreach ($rows_scores as $row_scores) {
 
     $table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter);
     $table_score_data = explode("^",$table_score_data);
@@ -232,8 +232,8 @@ $totalRows_entry_count = total_paid_received($go,0);
     if ($dbTable == "default") $entry_category = $style_display_number.": ".style_convert($table_score_data[8],1,$base_url,$filter).": ".$table_score_data[13];
     else 
     */
-    if (empty($style_display_number)) $entry_category = $table_score_data[13];
-    else $entry_category = $style_display_number.": ".$table_score_data[13];
+    if (empty($style_display_number)) $entry_category = h($table_score_data[13]);
+    else $entry_category = $style_display_number.": ".h($table_score_data[13]);
 
     $scoresheet = FALSE;
     $scoresheet_eval = FALSE;
@@ -364,8 +364,8 @@ $totalRows_entry_count = total_paid_received($go,0);
     <tr>
         <td><?php echo $entry_number; ?></td>
         <td><?php echo $judging_number;  ?></td>
-        <td><?php echo $table_score_data[11]; ?></td>
-        <td class="hidden-xs hidden-sm"><?php echo $table_score_data[10]; ?></td>
+        <td><?php echo h($table_score_data[11]); ?></td>
+        <td class="hidden-xs hidden-sm"><?php echo h($table_score_data[10]); ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $entry_category; ?></td>
 
         <?php if ($dbTable != "default") { ?>
@@ -377,7 +377,7 @@ $totalRows_entry_count = total_paid_received($go,0);
         <td><?php echo $mini_bos; ?></td>
         <td>
             <?php if ($dbTable == "default") { ?>
-            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a>&nbsp;<a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a>
+            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo h($table_score_data[10]); ?> scores"><span class="fa fa-lg fa-pencil"></span></a>&nbsp;<a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a>
             <?php echo "&nbsp;";
             }
             echo $entry_actions; ?>
@@ -385,7 +385,7 @@ $totalRows_entry_count = total_paid_received($go,0);
     </tr>
     <?php
         //}
-    } while ($row_scores = mysqli_fetch_assoc($scores)); ?>
+    } ?>
 </tbody>
 </table>
 <?php } // end if ($totalRows_scores > 0)
@@ -466,7 +466,7 @@ $(document).ready(function() {
         
             $style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],$style_display_method);
 
-            do {
+            foreach ($rows_entries as $row_entries) {
 
                 if ($totalRows_entries > 0) {
 
@@ -541,7 +541,7 @@ $(document).ready(function() {
         </td>
     </tr>
     <?php       }
-            } while ($row_entries = mysqli_fetch_assoc($entries));
+            }
         } // end if ($row_entries)
     } // end foreach ?>
 </tbody>

@@ -15,8 +15,8 @@ include (LIB.'output.lib.php');
 
 $table_body = "";
 
-do {
-	
+foreach ($rows_brewer as $row_brewer) {
+
 	include (DB.'output_participant_summary.db.php');
 	
 	$entry_numbers = array();
@@ -29,12 +29,12 @@ do {
 		$judging_numbers_output = "";
 		$entry_numbers_output = "";
 		
-		do {		
-		
+		foreach ($rows_log as $row_log) {
+
 			$entry_numbers[] = sprintf("%06s",$row_log['id']);
 			$judging_numbers[] = sprintf("%06s",$row_log['brewJudgingNumber']);
-			
-		} while ($row_log = mysqli_fetch_assoc($log));
+
+		}
 		
 		$entry_numbers_output = implode(", ",$entry_numbers);
 		$judging_numbers_output = implode(", ",$judging_numbers);
@@ -47,7 +47,7 @@ do {
 		
  	} // END entries section
 
-} while ($row_brewer = mysqli_fetch_assoc($brewer));
+}
 
 ?>    
 <!-- Brewer's Entries -->

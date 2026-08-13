@@ -82,24 +82,23 @@ if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimi
 $entry_limits_by_medal_category = "";
 if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimits']) == 1) && (is_numeric($_SESSION['prefsStyleLimits']))) {
 
-	$query_tables = sprintf("SELECT * FROM %s WHERE tableEntryLimit IS NOT NULL ORDER BY tableName ASC",$prefix."judging_tables");
-	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
-	$row_tables = mysqli_fetch_assoc($tables);
-	$totalRows_tables = mysqli_num_rows($tables);
+	$db_conn->where("tableEntryLimit", NULL, 'IS NOT');
+	$db_conn->orderBy("tableName", "ASC");
+	$rows_tables = $db_conn->get($prefix."judging_tables");
+	$totalRows_tables = $db_conn->count;
 
 	if ($totalRows_tables > 0) {
-		
-		do {
+
+		foreach ($rows_tables as $row_tables) {
 
 			$medal_cat_styles = "<ul class=\"list-inline m-0 p-0\">";
 
 			$a = explode(",", $row_tables['tableStyles']);
 
 			foreach ($a as $value) {
-				
-				$query_style = sprintf("SELECT brewStyle,brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
-				$style = mysqli_query($connection,$query_style);
-				$row_style = mysqli_fetch_assoc($style);
+
+				$db_conn->where("id", $value);
+				$row_style = $db_conn->getOne($styles_db_table, "brewStyle,brewStyleGroup,brewStyleNum");
 
 				if ($row_style) {
 					$medal_cat_styles .= "<li class=\"list-inline-item\">";
@@ -113,8 +112,8 @@ if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimi
 			$medal_cat_styles .= "</ul>";
 
 			$entry_limits_by_medal_category .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$row_tables['tableName'],$medal_cat_styles,$row_tables['tableEntryLimit']);
-		
-		} while ($row_tables = mysqli_fetch_assoc($tables));
+
+		}
 
 	}
 
@@ -340,7 +339,7 @@ $header1_7 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",s
 if ($totalRows_judging == 0) $page_info7 .= sprintf("<p>%s</p>",$entry_info_text_035);
 else {
 	
-	do {
+	foreach ($rows_judging as $row_judging) {
 
 		if ($row_judging['judgingLocType'] < 2) {
 
@@ -418,8 +417,8 @@ else {
 
 		}
 
-	} while ($row_judging = mysqli_fetch_assoc($judging));
-	
+	}
+
 }
 
 if (!empty($page_info16)) {
@@ -454,7 +453,7 @@ if ($row_styles) {
 	$styles_columns = 3;   // number of columns
 	$styles_hloopRow1 = 0; // first row flag
 
-		do {
+		foreach ($rows_styles as $row_styles) {
 
 			if (array_key_exists($row_styles['id'], $styles_selected)) {
 
@@ -486,7 +485,7 @@ if ($row_styles) {
 
 			}
 
-		} while ($row_styles = mysqli_fetch_assoc($styles));
+		}
 
 
 	if ($styles_endRow != 0) {
@@ -534,16 +533,27 @@ if ($show_entries) {
 		$page_info10 .= $_SESSION['contestShippingName'];
 		$page_info10 .= "<br>";
 		$page_info10 .= $_SESSION['contestShippingAddress'];
-		$page_info10 .= "</p>";
-		$page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
+		$page_info10 .= "</p>";		
 
-		if ((ENABLE_MARKDOWN) && (!is_html($contestRulesJSON['competition_packing_shipping']))) {
-			$page_info10 .= Parsedown::instance()
+		if (ENABLE_MARKDOWN) {
+
+			if ((!empty($contestRulesJSON['competition_packing_shipping'])) && (!is_html($contestRulesJSON['competition_packing_shipping']))) {
+				$page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
+				$page_info10 .= Parsedown::instance()
 							->setBreaksEnabled(true) # enables automatic line breaks
 							->text($contestRulesJSON['competition_packing_shipping']); 
+			}
+			
 		}
 		
-		else $page_info10 .= $contestRulesJSON['competition_packing_shipping'];
+		else {
+			
+			if (!empty($contestRulesJSON['competition_packing_shipping'])) {
+				$page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
+				$page_info10 .= $contestRulesJSON['competition_packing_shipping'];
+			}
+			
+		} 
 
 	}
 
@@ -558,7 +568,7 @@ if ($show_entries) {
 		if (!empty($row_contest_dates['contestDropoffDeadline'])) $page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
 		$page_info11 .= "<p>".$dropoff_qualifier_text_001."</p>";
 		
-		do {
+		foreach ($rows_dropoff as $row_dropoff) {
 
 			$page_info11 .= "<p>";
 			if (!empty($row_dropoff['dropLocationWebsite'])) $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a><span class=\"fa fa-sm fa-external-link ms-2\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
@@ -609,8 +619,8 @@ if ($show_entries) {
 				$page_info11 .= "</div>";
 			}
 
-		 } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
-		
+		}
+
 	}
 
 }
@@ -689,7 +699,7 @@ if ($show_entries) {
 }
 
 // Show rules if winner display is active (moved from default page)
-if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
+if (($registration_open == 2) && ($entry_window_open == 2)) {
 	
 	$header1_17 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_rules);
 

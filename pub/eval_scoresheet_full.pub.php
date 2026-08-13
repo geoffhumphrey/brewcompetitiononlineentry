@@ -26,7 +26,7 @@ else $beer = TRUE;
     <div class="mb-3">
         <label class="form-label" for="evalAromaComments"><strong><?php echo $label_comments; ?></strong></label>
         <p><small><?php if ($mead) echo $evaluation_info_081; elseif ($cider) echo $evaluation_info_086; else echo $evaluation_info_076; ?></small></p>
-        <textarea class="form-control" id="evalAromaComments" name="evalAromaComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAromaComments']); ?></textarea>
+        <textarea class="form-control" id="evalAromaComments" name="evalAromaComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo $row_eval['evalAromaComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalAromaComments-words"><?php if (!empty($row_judging_prefs['jPrefsMinWords'])) echo sprintf ("<strong>%s %s</strong>.", $evaluation_info_091, $row_judging_prefs['jPrefsMinWords']); ?></div>
     </div>
@@ -52,7 +52,7 @@ else $beer = TRUE;
     <div class="mb-3">
         <label class="form-label" for="evalAppearanceComments"><strong><?php echo $label_comments; ?></strong></label>
         <p><small><?php if ($mead) echo $evaluation_info_082; elseif ($cider) echo $evaluation_info_085; else echo $evaluation_info_077; ?></small></p>
-        <textarea class="form-control" id="evalAppearanceComments" name="evalAppearanceComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAppearanceComments']); ?></textarea>
+        <textarea class="form-control" id="evalAppearanceComments" name="evalAppearanceComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo $row_eval['evalAppearanceComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalAppearanceComments-words"><?php if (!empty($row_judging_prefs['jPrefsMinWords'])) echo sprintf ("<strong>%s %s</strong>.", $evaluation_info_091, $row_judging_prefs['jPrefsMinWords']); ?></div>
     </div>
@@ -78,7 +78,7 @@ else $beer = TRUE;
     <div class="mb-3">
         <label class="form-label" for="evalFlavorComments"><strong><?php echo $label_comments; ?></strong></label>
         <p><small><?php if ($mead) echo $evaluation_info_083; elseif ($cider) echo $evaluation_info_087; else echo $evaluation_info_078; ?></small></p>
-        <textarea class="form-control" id="evalFlavorComments" name="evalFlavorComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalFlavorComments']); ?></textarea>
+        <textarea class="form-control" id="evalFlavorComments" name="evalFlavorComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo $row_eval['evalFlavorComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalFlavorComments-words"><?php if (!empty($row_judging_prefs['jPrefsMinWords'])) echo sprintf ("<strong>%s %s</strong>.", $evaluation_info_091, $row_judging_prefs['jPrefsMinWords']); ?></div>
     </div>
@@ -105,7 +105,7 @@ else $beer = TRUE;
     <div class="mb-3">
         <label class="form-label" for="evalMouthfeelComments"><strong><?php echo $label_comments; ?></strong></label>
         <p><small><?php echo $evaluation_info_079; ?></small></p>
-        <textarea class="form-control" id="evalMouthfeelComments" name="evalMouthfeelComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalMouthfeelComments']); ?></textarea>
+        <textarea class="form-control" id="evalMouthfeelComments" name="evalMouthfeelComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo $row_eval['evalMouthfeelComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalMouthfeelComments-words"><?php if (!empty($row_judging_prefs['jPrefsMinWords'])) echo sprintf ("<strong>%s %s</strong>.", $evaluation_info_091, $row_judging_prefs['jPrefsMinWords']); ?></div>
     </div>
@@ -133,7 +133,7 @@ else $beer = TRUE;
     <div class="mb-3">
         <label class="form-label" for="evalOverallComments"><strong><?php echo $label_comments; ?></strong></label>
         <p><small><?php if ($mead) echo $evaluation_info_084; elseif ($cider) echo $evaluation_info_088; else echo $evaluation_info_080; ?></small></p>
-        <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
+        <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo $row_eval['evalOverallComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalOverallComments-words"><?php if (!empty($row_judging_prefs['jPrefsMinWords'])) echo sprintf ("<strong>%s %s</strong>.", $evaluation_info_091, $row_judging_prefs['jPrefsMinWords']); ?></div>
     </div>

@@ -23,7 +23,7 @@ $css_common_url = $css_url."common.min.css";
 // Check if bcoem_sys is there. If not, change.
 if (table_exists($prefix."system")) {
 	$query_sys = sprintf("RENAME TABLE `%s` TO `%s`",$prefix."system",$prefix."bcoem_sys");
-	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
+	$sys = $db_conn->rawQuery($query_sys);
 	$system_name_change = TRUE;
 }
 
@@ -34,10 +34,8 @@ require_once (INCLUDES.'headers.inc.php');
 require_once (INCLUDES.'scrubber.inc.php');
 if (HOSTED) require_once (LIB.'hosted.lib.php');
 
-$query_system = sprintf("SELECT version FROM %s", $prefix."bcoem_sys");
 $system_db_table = $prefix."bcoem_sys";
-$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
-$row_system = mysqli_fetch_assoc($system);
+$row_system = $db_conn->getOne($system_db_table, "version");
 $version = $row_system['version'];
 
 // Set timezone globals for the site
@@ -48,12 +46,10 @@ $update_running = FALSE;
 // If so, get time zone set by admin
 if (check_setup($prefix."preferences",$database)) {
 
-	$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
-	$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
-	$row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
-	$totalRows_prefs_tz = mysqli_num_rows($prefs_tz);
+	$db_conn->where('id', '1');
+	$row_prefs_tz = $db_conn->getOne($prefix."preferences", "prefsTimeZone");
 
-	if ($totalRows_prefs_tz > 0) {
+	if ($row_prefs_tz !== null) {
 		$timezone_raw = $row_prefs_tz['prefsTimeZone'];
 	}
 

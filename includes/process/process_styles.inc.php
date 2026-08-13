@@ -10,7 +10,7 @@ else
 */
 $styles_db_table = $prefix."styles";
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($section == "setup"))) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($setup_free_access))) {
 
 	$errors = FALSE;
 	$error_output = array();
@@ -60,10 +60,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					if (isset($_POST['brewStyleAtLimit'.$id])) $brewStyleAtLimit = 1;
 					else $brewStyleAtLimit = NULL;
 
-					$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType, brewStyleAtLimit FROM %s WHERE id='%s'", $styles_db_table, $style_id);
-					$styles_default = mysqli_query($connection,$query_styles_default);
-					$row_styles_default = mysqli_fetch_assoc($styles_default);
-					$totalRows_styles_default = mysqli_num_rows($styles_default);
+					$db_conn->where("id", $style_id);
+					$row_styles_default = $db_conn->getOne($styles_db_table, "id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType, brewStyleAtLimit");
+					$totalRows_styles_default = $db_conn->count;
 
 					if ($row_styles_default) {
 						$update_selected_styles[$row_styles_default['id']] = array(
@@ -194,14 +193,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		$query_log = sprintf("SELECT id FROM $brewing_db_table WHERE brewStyle = '%s'",$_POST['brewStyleOld']);
-		$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
-		$row_log = mysqli_fetch_assoc($log);
-		$totalRows_log = mysqli_num_rows($log);
+		$db_conn->where("brewStyle", $_POST['brewStyleOld']);
+		$rows_log = $db_conn->get($brewing_db_table, null, "id");
+		$totalRows_log = $db_conn->count;
 
 		if ($totalRows_log > 0) {
 
-			do {
+			foreach ($rows_log as $row_log) {
 
 				$update_table = $prefix."brewing";
 				$data = array('brewStyle' => $_POST['brewStyle']);
@@ -212,7 +210,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					$errors = TRUE;
 				}
 
-			} while ($row_log = mysqli_fetch_assoc($log));
+			}
 
 		}
 
@@ -234,9 +232,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			// If adding, look up latest id
 			if ($action == "add") {
 
-				$query_last_style_added = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."styles");
-				$last_style_added = mysqli_query($connection,$query_last_style_added) or die (mysqli_error($connection));
-				$row_last_style_added = mysqli_fetch_assoc($last_style_added);
+				$db_conn->orderBy("id", "DESC");
+				$row_last_style_added = $db_conn->getOne($prefix."styles", "id");
 
 				$id = $row_last_style_added['id'];
 

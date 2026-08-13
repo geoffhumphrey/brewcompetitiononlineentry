@@ -1,19 +1,19 @@
 <?php
-$query_scores = sprintf("SELECT scoreEntry,scorePlace,scoreType FROM %s WHERE eid='%s'",$prefix."judging_scores",$row_sql['id']);
-if (SINGLE) $query_scores .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
-$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-$row_scores = mysqli_fetch_assoc($scores);
+$query_scores = "SELECT scoreEntry,scorePlace,scoreType FROM ".$prefix."judging_scores WHERE eid=?";
+$params_scores = array($row_sql['id']);
+if (SINGLE) { $query_scores .= " AND comp_id=?"; $params_scores[] = $_SESSION['comp_id']; }
+$row_scores = $db_conn->rawQueryOne($query_scores, $params_scores);
 
-$query_flight = sprintf("SELECT * FROM %s WHERE flightEntryID='%s'",$prefix."judging_flights",$row_sql['id']);
-if (SINGLE) $query_flight .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
-$flight = mysqli_query($connection,$query_flight) or die (mysqli_error($connection));
-$row_flight = mysqli_fetch_assoc($flight);
+$query_flight = "SELECT * FROM ".$prefix."judging_flights WHERE flightEntryID=?";
+$params_flight = array($row_sql['id']);
+if (SINGLE) { $query_flight .= " AND comp_id=?"; $params_flight[] = $_SESSION['comp_id']; }
+$row_flight = $db_conn->rawQueryOne($query_flight, $params_flight);
 
-$query_bos = sprintf("SELECT scorePlace FROM %s WHERE eid='%s'",$prefix."judging_scores_bos",$row_sql['id']);
-if (SINGLE) $query_bos .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
-$bos = mysqli_query($connection,$query_bos) or die (mysqli_error($connection));
-$row_bos = mysqli_fetch_assoc($bos);
-$totalRows_bos = mysqli_num_rows($bos);
+$query_bos = "SELECT scorePlace FROM ".$prefix."judging_scores_bos WHERE eid=?";
+$params_bos = array($row_sql['id']);
+if (SINGLE) { $query_bos .= " AND comp_id=?"; $params_bos[] = $_SESSION['comp_id']; }
+$row_bos = $db_conn->rawQueryOne($query_bos, $params_bos);
+$totalRows_bos = $db_conn->count;
 
 if ($totalRows_bos > 0) $bos_place = $row_bos['scorePlace']; else $bos_place = "";
 

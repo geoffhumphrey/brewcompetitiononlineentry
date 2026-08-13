@@ -32,7 +32,7 @@ if ($_SESSION['prefsProEdition'] == 0) {
     <div id="brewerClubsOther" class="form-group">
         <label for="brewerClubsOther" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club_enter; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="" pattern="[^%&\x22\x27]+">
+            <input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo h(html_entity_decode($row_brewer['brewerClubs'], ENT_QUOTES, 'UTF-8')); ?>" placeholder="" pattern="[^%&\x22\x27]+">
             <div class="help-block">
                 <p><?php echo $brewer_text_046; ?></p>
             </div>

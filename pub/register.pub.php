@@ -107,13 +107,13 @@ else { // THIS ELSE ENDS at the end of the script
 
 	if ($totalRows_dropoff > 0) {
 		$dropoff_select = "";
-		do {
+		foreach ($rows_dropoff as $row_dropoff) {
     		$dropoff_select .= "<option value=\"".$row_dropoff['id']."\" ";
 			if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED";
 			if (($msg != "default") && (isset($_COOKIE['brewerDropOff'])) && ($_COOKIE['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED";
 			$dropoff_select .= ">";
 			$dropoff_select .= $row_dropoff['dropLocationName']."</option>\n";
-   		} while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+   		}
 	}
 }
 
@@ -173,11 +173,17 @@ if ($go == "steward") {
 	$judge_hidden = TRUE;
 }
 
-if (($section != "admin") && ($judge_limit)) {
+// A participant who is already a judge/steward must still be able to reach this block to opt
+// back out, even once the competition's judge/steward cap has been reached - otherwise, once
+// the cap is hit, no existing judge/steward could ever remove themselves again.
+$already_judge = (($action == "edit") && ($row_brewer['brewerJudge'] == "Y"));
+$already_steward = (($action == "edit") && ($row_brewer['brewerSteward'] == "Y"));
+
+if (($section != "admin") && ($judge_limit) && (!$already_judge)) {
 	$judge_hidden = TRUE;
 }
 
-if (($section != "admin") && ($steward_limit)) {
+if (($section != "admin") && ($steward_limit) && (!$already_steward)) {
 	$steward_hidden = TRUE;
 }
 
@@ -193,7 +199,8 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 	$club_other = FALSE;
 
 	foreach ($_SESSION['club_array'] as $club) {
-		$club_options .= "<option value=\"".$club."\">".$club."</option>\n";
+		$club_safe = h(html_entity_decode($club, ENT_QUOTES, 'UTF-8'));
+		$club_options .= "<option value=\"".$club_safe."\">".$club_safe."</option>\n";
 	}
 
 }
@@ -244,7 +251,7 @@ $staff_location_avail = "";
 
 if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
-	do { 
+	foreach ($rows_judging3 as $row_judging3) {
 
         $location_yes = "";
         $location_no = "";
@@ -343,9 +350,9 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
                 $steward_location_avail .= "</section>";
             }
 
-        } 
+        }
 
-    }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); 
+    }
 
 }
 
@@ -579,7 +586,7 @@ if ($go == "default") {  ?>
 	<div class="mb-3 row">
 	    <label for="userQuestionAnswer" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_security_answer; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
-	        <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['userQuestionAnswer']))) echo htmlspecialchars($_COOKIE['userQuestionAnswer'], ENT_QUOTES, 'UTF-8'); ?>" required>
+	        <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['userQuestionAnswer']))) echo $_COOKIE['userQuestionAnswer']; ?>" required>
 	        <div class="help-block"><?php echo $register_text_024; ?></div>
 	        <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_023; ?></div>
 	    </div>
@@ -591,14 +598,14 @@ if ($go == "default") {  ?>
 	<div class="mb-3 row">
 	    <label for="brewerFirstName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_first_name; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
-	        <input class="form-control" name="brewerFirstName" id="brewerFirstName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo htmlspecialchars($_COOKIE['brewerFirstName'], ENT_QUOTES, 'UTF-8'); ?>" required>
+	        <input class="form-control" name="brewerFirstName" id="brewerFirstName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerFirstName']; ?>" required>
 	        <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_025; ?></div>
 	    </div>
 	</div>
 	<div class="mb-3 row">
 	    <label for="brewerLastName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_last_name; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
-	        <input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo htmlspecialchars($_COOKIE['brewerLastName'], ENT_QUOTES, 'UTF-8'); ?>" data-error="" required>
+	        <input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerLastName']; ?>" data-error="" required>
 	        <div class="help-block"><?php if ($_SESSION['prefsProEdition'] == 0) echo $brewer_text_000; ?></div>
 	        <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_026; ?></div>
 	    </div>
@@ -625,7 +632,7 @@ if ($go == "default") {  ?>
 	    <div class="mb-3 row">
 	        <label for="brewerAddress" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_street_address; ?></strong></label>
 	        <div class="col-xs-12 col-sm-9 col-lg-10">
-	            <input class="form-control" name="brewerAddress" id="brewerAddress" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAddress']))) echo htmlspecialchars($_COOKIE['brewerAddress'], ENT_QUOTES, 'UTF-8'); ?>" required>
+	            <input class="form-control" name="brewerAddress" id="brewerAddress" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAddress']))) echo $_COOKIE['brewerAddress']; ?>" required>
 	            <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_028; ?></div>
 	        </div>
 	    </div>
@@ -634,7 +641,7 @@ if ($go == "default") {  ?>
 		<div class="mb-3 row">
 		    <label for="brewerCity" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_city; ?></strong></label>
 		    <div class="col-xs-12 col-sm-9 col-lg-10">
-		        <input class="form-control" name="brewerCity" id="brewerCity" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerCity']))) echo htmlspecialchars($_COOKIE['brewerCity'], ENT_QUOTES, 'UTF-8'); ?>" required>
+		        <input class="form-control" name="brewerCity" id="brewerCity" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerCity']))) echo $_COOKIE['brewerCity']; ?>" required>
 		        <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_029; ?></div>
 		    </div>
 		</div>
@@ -643,7 +650,7 @@ if ($go == "default") {  ?>
 			<label for="brewerState" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_state_province; ?></strong></label>
 			<div class="col-xs-12 col-sm-9 col-lg-10">
 				<div id="non-us-state">
-				    <input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerState']))) echo htmlspecialchars($_COOKIE['brewerState'], ENT_QUOTES, 'UTF-8'); ?>" title="<?php echo $label_select_state; ?>" required>
+				    <input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" title="<?php echo $label_select_state; ?>" required>
 				    <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $register_text_030; ?></div>
 				</div>
 		    	<div id="us-state">
@@ -743,7 +750,7 @@ if ($go == "default") {  ?>
     <div id="brewerClubsOther" class="mb-3 row">
         <label for="brewerClubsOther" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_club_enter; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="" pattern="[^%&\x22\x27]+">
+            <input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo h(html_entity_decode($row_brewer['brewerClubs'], ENT_QUOTES, 'UTF-8')); ?>" placeholder="" pattern="[^%&\x22\x27]+">
             <div class="help-block">
                 <p><?php echo $brewer_text_046; ?></p>
             </div>
@@ -890,7 +897,7 @@ if ($go == "default") {  ?>
     <div id="bjcp-id" class="mb-3 row">
         <label for="brewerJudgeID" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_bjcp_id; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerJudgeID']))) echo htmlspecialchars($_COOKIE['brewerJudgeID'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="">
+            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerJudgeID']))) echo $_COOKIE['brewerJudgeID']; ?>" placeholder="">
         </div>
     </div>
 
@@ -1050,7 +1057,7 @@ if ($go == "default") {  ?>
             <label for="brewerJudgeLikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
             <p class="mb-1 small text-danger"><strong><?php echo $brewer_text_012; ?></strong></p>
-                <?php do {
+                <?php foreach ($rows_styles as $row_styles) {
                     $style_display = "";
                     if ($_SESSION['prefsStyleSet'] == "BA") {
                         if ($row_styles['brewStyleOwn'] == "bcoe") $style_display .= $row_styles['brewStyleCategory'].": ".$row_styles['brewStyle'];
@@ -1063,7 +1070,7 @@ if ($go == "default") {  ?>
                         <input class="form-check-input" name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php if (isset($row_brewer['brewerJudgeLikes'])) { $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>>
                         <label class="form-check-label"><?php echo $style_display; ?></label>
                     </div>
-                <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -1081,7 +1088,7 @@ if ($go == "default") {  ?>
             <label for="brewJudgeDislikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
                 <p class="mb-1 small text-danger"><strong><?php echo $brewer_text_014; ?></strong></p>
-                <?php do {
+                <?php foreach ($rows_styles2 as $row_styles2) {
                     $style_display = "";
                     if ($_SESSION['prefsStyleSet'] == "BA") {
                         if ($row_styles2['brewStyleOwn'] == "bcoe") $style_display .= $row_styles2['brewStyleCategory'].": ".$row_styles2['brewStyle'];
@@ -1094,7 +1101,7 @@ if ($go == "default") {  ?>
                         <input class="form-check-input" name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>">
                         <label class="form-check-label"><?php echo $style_display; ?></label>
                     </div>
-                <?php } while ($row_styles2 = mysqli_fetch_assoc($styles2)); ?>
+                <?php } ?>
                 <!-- </div> -->
             </div>
         </div>
@@ -1175,7 +1182,7 @@ if ($go == "default") {  ?>
             <span class="help-block mt-1"><?php if ($_SESSION['prefsProEdition'] == 1) echo $brewer_text_051; else echo $brewer_text_055; ?></span>
             </div>
         </div>
-        <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
+        <input name="allOrgs" type="hidden" value="<?php echo h(html_entity_decode($org_array, ENT_QUOTES, 'UTF-8')); ?>">
         <div id="brewerAssignmentOther" class="mb-3 row">
             <label for="brewerAssignmentOther" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $participant_orgs_label." &ndash; ".$label_other; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">

@@ -1,13 +1,18 @@
 <?php
 
-if ($action == "edit") $query_sponsors = "SELECT * FROM $sponsors_db_table WHERE id='$id'"; 
-else {
+if ($action == "edit") {
+	$db_conn->where("id", $id);
+} else {
 	if ($dbTable == "default") $sponsors_db_table = $prefix."sponsors";
-	if ($dbTable != "default") $sponsors_db_table = $dbTable;
-	$query_sponsors = sprintf("SELECT * FROM %s ORDER BY sponsorLevel, sponsorName ASC", $sponsors_db_table);	
+	if ($dbTable != "default") {
+		$dbTable_clean = preg_replace("/[^a-zA-Z0-9_]+/", "", $dbTable);
+		$sponsors_db_table = $dbTable_clean;
+	}
+	$db_conn->orderBy("sponsorLevel", "ASC");
+	$db_conn->orderBy("sponsorName", "ASC");
 }
-$sponsors = mysqli_query($connection,$query_sponsors) or die (mysqli_error($connection));
-$row_sponsors = mysqli_fetch_assoc($sponsors);
-$totalRows_sponsors = mysqli_num_rows($sponsors);
+$rows_sponsors = $db_conn->get($sponsors_db_table);
+$row_sponsors = ($rows_sponsors && count($rows_sponsors) > 0) ? $rows_sponsors[0] : null;
+$totalRows_sponsors = $db_conn->count;
 
 ?>

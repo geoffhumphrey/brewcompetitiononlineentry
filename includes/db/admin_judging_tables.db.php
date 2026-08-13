@@ -1,37 +1,36 @@
 <?php
 
-$query_table_number = sprintf("SELECT tableNumber FROM %s ORDER BY tableNumber",$judging_tables_db_table);
-$table_number = mysqli_query($connection,$query_table_number) or die (mysqli_error($connection));
-$row_table_number = mysqli_fetch_assoc($table_number);
-$totalRows_table_number = mysqli_num_rows($table_number);
+$db_conn->orderBy('tableNumber', 'ASC');
+$row_table_number = $db_conn->getOne($judging_tables_db_table, "tableNumber");
+$totalRows_table_number = $db_conn->count;
 
 if ($action == "add") {
 
 	$with_received_entries =  explode(",",received_entries());
 
-	if (SINGLE) $query_table_number_last = sprintf("SELECT tableNumber FROM  WHERE comp_id='%s' ORDER BY tableNumber DESC LIMIT 1", $judging_tables_db_table, $_SESSION['comp_id']);
-	else $query_table_number_last = sprintf("SELECT tableNumber FROM %s ORDER BY tableNumber DESC LIMIT 1",$judging_tables_db_table);
-	$table_number_last = mysqli_query($connection,$query_table_number_last) or die (mysqli_error($connection));
-	$row_table_number_last = mysqli_fetch_assoc($table_number_last);
-
-	$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$brewing_db_table);
-	$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
-	$row = mysqli_fetch_array($result);
+	// Note: the SINGLE-mode query previously had a malformed FROM clause (missing the table name)
+	// that also failed to bind $_SESSION['comp_id'] due to a sprintf() arg/placeholder mismatch —
+	// this branch would have thrown a SQL syntax error whenever SINGLE mode hit this "add" action.
+	// Fixed to what the ELSE branch's structure clearly intended.
+	if (SINGLE) {
+		$query_table_number_last = "SELECT tableNumber FROM ".$judging_tables_db_table." WHERE comp_id=? ORDER BY tableNumber DESC LIMIT 1";
+		$row_table_number_last = $db_conn->rawQueryOne($query_table_number_last, array($_SESSION['comp_id']));
+	}
+	else {
+		$query_table_number_last = "SELECT tableNumber FROM ".$judging_tables_db_table." ORDER BY tableNumber DESC LIMIT 1";
+		$row_table_number_last = $db_conn->rawQueryOne($query_table_number_last);
+	}
 
 }
 
-$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$brewing_db_table);
-if ($action == "default") $query_entry_count .= " WHERE brewReceived='1'";
-$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
-$row_entry_count = mysqli_fetch_array($result);
+if ($action == "default") $db_conn->where('brewReceived', '1');
+$row_entry_count = $db_conn->getOne($brewing_db_table, "COUNT(*) as 'count'");
 
 // Check and see if scores have been entered for this table already
-$query_table_scores = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'",$judging_scores_db_table, $id);
-$table_scores = mysqli_query($connection,$query_table_scores) or die (mysqli_error($connection));
-$row_table_scores = mysqli_fetch_assoc($table_scores);
+$db_conn->where('scoreTable', $id);
+$row_table_scores = $db_conn->getOne($judging_scores_db_table, "COUNT(*) as 'count'");
 if ($row_table_scores['count'] > 0) $already_scored = TRUE; else $already_scored = FALSE;
 
-$query_flights = sprintf("SELECT id FROM %s", $judging_flights_db_table);
-$flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
-$totalRows_flights = mysqli_num_rows($flights);
+$rows_flights = $db_conn->get($judging_flights_db_table, null, "id");
+$totalRows_flights = $db_conn->count;
 ?>

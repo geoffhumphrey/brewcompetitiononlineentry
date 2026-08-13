@@ -69,11 +69,10 @@ if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
 	$user_entries = [];
 
 	// Check whether user is "authorized" to edit the entry in DB
-	$query_brews = sprintf("SELECT id FROM $brewing_db_table WHERE brewBrewerId = '%s'", $_SESSION['user_id']);
-	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
-	$row_brews = mysqli_fetch_assoc($brews);
+	$db_conn->where('brewBrewerId', $_SESSION['user_id']);
+	$rows_brews = $db_conn->get($brewing_db_table, null, "id");
 
-	do { $user_entries[] = $row_brews['id'];  } while ($row_brews = mysqli_fetch_assoc($brews));
+	foreach ($rows_brews as $row_brews) { $user_entries[] = $row_brews['id']; }
 
 	if (!in_array($id,$user_entries)) {
 		$edit_entry_disable = TRUE; echo "<p>You are only able to edit your own entries.</p>";
@@ -134,7 +133,7 @@ $styles_dropdown_count = 0;
 $styles_disabled_count = 0;
 $style_types_warning = 0;
 
-do {
+foreach ($rows_styles as $row_styles) {
 
 	if (array_key_exists($row_styles['id'], $styles_selected)) {
 
@@ -204,7 +203,7 @@ do {
 
 	}
 
-} while ($row_styles = mysqli_fetch_assoc($styles));
+}
 
 if (($style_types_warning >= $styles_dropdown_count) && ($_SESSION['userLevel'] > 1)) $add_entry_disable = TRUE;
 if (($styles_disabled_count >= $styles_dropdown_count) && ($_SESSION['userLevel'] > 1)) $add_entry_disable = TRUE;

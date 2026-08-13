@@ -65,7 +65,7 @@ function mod_info($info,$method) {
 }
 
  ?>
-<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Custom Module"; elseif ($action == "edit") echo ": Edit a Custom Module"; else echo " Custom Modules";  ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add a Custom Module"; elseif ($action == "edit") echo ": Edit a Custom Module"; else echo " Custom Modules";  ?></p>
 
 <div class="bcoem-admin-element hidden-print">
 <?php if (($action == "add") || ($action == "edit")) { ?>
@@ -127,23 +127,23 @@ function mod_info($info,$method) {
      </tr>
      </thead>
      <tbody>
-     <?php do { ?>
+     <?php foreach ($rows_mods as $row_mods) { ?>
      <tr>
-      <td><?php echo $row_mods['mod_name']; ?></td>
+      <td><?php echo h($row_mods['mod_name']); ?></td>
       <td><?php echo $row_mods['mod_description']; ?></td>
       <td><?php echo mod_info($row_mods['mod_type'],1); ?></td>
       <td><?php echo mod_info($row_mods['mod_extend_function'],2); ?></td>
-      <td><?php echo ucfirst(str_replace("_"," ",$row_mods['mod_extend_function_admin'])); ?></td>
-      <td><?php echo $row_mods['mod_filename']; if (!file_exists(MODS.$row_mods['mod_filename'])) echo "<br><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> file does not exist in mods directory</span>"; ?></td>
+      <td><?php echo h(ucfirst(str_replace("_"," ",$row_mods['mod_extend_function_admin']))); ?></td>
+      <td><?php echo h($row_mods['mod_filename']); if (!file_exists(MODS.$row_mods['mod_filename'])) echo "<br><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> file does not exist in mods directory</span>"; ?></td>
       <td><?php echo mod_info($row_mods['mod_permission'],3); ?></td>
       <td><?php echo mod_info($row_mods['mod_display_rank'],4); ?></td>
       <td><input id="mod_enable" type="checkbox" name="mod_enable<?php echo $row_mods['id']; ?>" value="1" <?php if ($row_mods['mod_enable'] == 1) echo 'checked="checked"'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_mods['id']; ?>" /></td>
       <td nowrap="nowrap">
-      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_mods['mod_name']; ?>"><span class="fa fa-pencil"></span></a>
-      <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $mods_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_mods['mod_name']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_mods['mod_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-trash-o"></span></a>
+      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo h($row_mods['mod_name']); ?>"><span class="fa fa-pencil"></span></a>
+      <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $mods_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo h($row_mods['mod_name']); ?>" data-confirm="Are you sure you want to delete <?php echo h($row_mods['mod_name']); ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-trash-o"></span></a>
       </td>
      </tr>
-    <?php } while($row_mods = mysqli_fetch_assoc($mods)) ?>
+    <?php } ?>
      </tbody>
     </table>
 <div class="bcoem-admin-element hidden-print">
@@ -168,7 +168,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<div class="col-lg-3 col-md-4 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="mod_name" name="mod_name" type="text" value="<?php if ($action == "edit") echo $row_mods['mod_name']; ?>" placeholder="" autofocus>
+			<input class="form-control" id="mod_name" name="mod_name" type="text" value="<?php if ($action == "edit") echo h($row_mods['mod_name']); ?>" placeholder="" autofocus>
 			<span class="input-group-addon" id="mod_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 	</div>
@@ -179,7 +179,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 	<div class="col-lg-3 col-md-4 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="mod_filename" name="mod_filename" type="text" value="<?php if ($action == "edit") echo $row_mods['mod_filename']; ?>" placeholder="your_file_name.php">
+			<input class="form-control" id="mod_filename" name="mod_filename" type="text" pattern="^[A-Za-z0-9_\-]+\.php$" data-error="File name must contain only letters, numbers, underscores, or hyphens, and end in .php" value="<?php if ($action == "edit") echo h($row_mods['mod_filename']); ?>" placeholder="your_file_name.php">
 			<span class="input-group-addon" id="mod_filename-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 	</div>
@@ -189,7 +189,7 @@ if (($action == "add") || ($action == "edit")) { ?>
     <label for="mod_description" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
     <div class="col-lg-4 col-md-4 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <textarea id="mod_description" class="form-control" name="mod_description" rows="8"><?php if ($action == "edit") echo trim($row_mods['mod_description']); ?></textarea>
+        <textarea id="mod_description" class="form-control" name="mod_description" rows="8"><?php if ($action == "edit") echo h(trim($row_mods['mod_description'])); ?></textarea>
      </div>
 </div><!-- ./Form Group -->
 

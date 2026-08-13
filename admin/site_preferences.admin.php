@@ -65,19 +65,6 @@ if (($action == "default") || ($action == "entries")) {
         // array and show/hide the list as each are selected via jQuery.
         $styles_db_table = $prefix."styles";
 
-        /*
-        if ($style_set['style_set_name'] == "BJCP2025") $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
-        elseif ($style_set['style_set_name'] == "AABC2025") $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
-        else $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
-        
-        if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleType,brewStyleGroup,brewStyle ASC";
-        elseif (strpos($style_set['style_set_name'],"AABC") !== false) $query_styles_all .= " ORDER BY brewStyleGroup,brewStyleNum,brewStyle ASC";
-        else $query_styles_all .= " ORDER BY brewStyleType,brewStyleGroup,brewStyleNum,brewStyle ASC";
-        
-        $styles_all = mysqli_query($connection,$query_styles_all) or die ("A database error occurred.");
-        $row_styles_all = mysqli_fetch_assoc($styles_all);
-        */
-        
         $cols = array("id","brewStyleGroup","brewStyleNum","brewStyle","brewStyleVersion","brewStyleOwn");
         $db_conn->returnType = 'array';
         if ($style_set['style_set_name'] == "BJCP2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", array("BJCP2025","2","BJCP2021","2","custom"));
@@ -95,8 +82,8 @@ if (($action == "default") || ($action == "entries")) {
                 if (isset($row_styles_all['id'])) {
                     $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
                     if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
-                    if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
-                    else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
+                    if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= h($style_set['style_set_categories'][$row_styles_all['brewStyleGroup']])." - ".h($row_styles_all['brewStyle'])."</label></div>\n";
+                    else $all_exceptions_USCLEx .= " ".h($row_styles_all['brewStyle'])."</label></div>\n";
                 }   
                 
             } 
@@ -203,9 +190,9 @@ if (($action == "default") || ($action == "entries")) {
 
 
 if ($section == "step3") {
-    $query_prefs = sprintf("SHOW COLUMNS FROM %s", $prefix."preferences");
-    $prefs = mysqli_query($connection,$query_prefs) or die ("A database error occurred.");
-    while($row_prefs_setup = mysqli_fetch_array($prefs)){
+    $db_conn->returnType = "array";
+    $prefs_columns = $db_conn->rawQuery(sprintf("SHOW COLUMNS FROM %s", $prefix."preferences"));
+    foreach ($prefs_columns as $row_prefs_setup) {
         $row_prefs[$row_prefs_setup['Field']] = "";
     }
 }
@@ -231,7 +218,7 @@ if (($section == "admin") && ($go == "preferences")) {
         if ($row_styles) {
 
             // Generate the default sub-style exception list (current settings)
-            do {
+            foreach ($rows_styles as $row_styles) {
 
                 if (array_key_exists($row_styles['id'], $styles_selected)) {
 
@@ -247,12 +234,12 @@ if (($section == "admin") && ($go == "preferences")) {
 
                     if ($row_styles['id'] != "") {
                         $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
-                        $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
+                        $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".h($row_styles['brewStyle'])."</label></div>\n";
                     }
 
                 }
 
-            } while ($row_styles = mysqli_fetch_assoc($styles));
+            }
 
         }
 
@@ -267,7 +254,7 @@ if (($section == "admin") && ($go == "preferences")) {
 ?>
 
 <?php if ($section == "admin") { ?>
-<p class="lead"><?php echo $_SESSION['contestName'].": Set Preferences"; ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']).": Set Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
         <a class="btn btn-<?php if ($action == "default") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> General Preferences</a>
         <a class="btn btn-<?php if ($action == "entries") echo "primary disabled"; else echo "primary"; ?>" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries"><span class="fa fa-beer"></span> Entry Preferences</a>
@@ -288,16 +275,16 @@ if ((!empty($row_prefs['prefsEmailHost'])) && (!empty($row_prefs['prefsEmailFrom
 if ($row_prefs['prefsEmailSMTP'] == 3) $email_previous_no_creds = 1;
 ?>
 <script type="text/javascript">
-var email_sending_enable = "<?php echo $row_prefs['prefsEmailSMTP']; ?>"; 
-var email_password_hash = "<?php if (!empty($row_prefs['prefsEmailPassword'])) echo $row_prefs['prefsEmailPassword']; ?>";
-var email_disabled_all_creds = "<?php echo $email_disabled_all_creds; ?>";
+var email_sending_enable = "<?php echo h($row_prefs['prefsEmailSMTP']); ?>";
+var email_password_set = <?php echo !empty($row_prefs['prefsEmailPassword']) ? 'true' : 'false'; ?>;
+var email_disabled_all_creds = "<?php echo h($email_disabled_all_creds); ?>";
 var email_previous_no_creds = "<?php echo $email_previous_no_creds; ?>";
 
 $(document).ready(function(){
 
     <?php if ($view == "test-email") { ?>
     $.fancybox.open({
-        src  : '<?php echo $base_url; ?>/admin/send_test_email.admin.php',
+        src  : '<?php echo $base_url; ?>/admin/send_test_email.admin.php?csrf=<?php echo urlencode($_SESSION['user_session_token'] ?? ''); ?>',
         type : 'iframe',
         opts : {
             iframe : {
@@ -310,7 +297,7 @@ $(document).ready(function(){
     });
     <?php } ?>
 
-    if (((email_password_hash.length === 0) && (email_sending_enable == 0)) || (email_sending_enable == 3)) $("#change-email-password").show();
+    if (((!email_password_set) && (email_sending_enable == 0)) || (email_sending_enable == 3)) $("#change-email-password").show();
     else $("#change-email-password").hide();
 
     $("#send-test-email-show").hide();
@@ -381,7 +368,7 @@ $(document).ready(function(){
         else {
             $("#change-email-password").hide("fast");
             $("input[name='prefsEmailPassword']").prop("required", false);
-            $("input[name='prefsEmailPassword']").val(email_password_hash);
+            $("input[name='prefsEmailPassword']").val('');
         }
     });
 
@@ -1297,7 +1284,7 @@ $(document).ready(function(){
         <?php } ?>
         <div class="help-block">
         <?php if (HOSTED) { ?>
-            <p class="text-primary"><strong>If enabled, emails sent from your hosted installation will originate from the <?php echo $_SESSION['prefsEmailFrom']; ?> address. This address is not monitored and all emails generated will contain a disclaimer stating as such.</strong></p>
+            <p class="text-primary"><strong>If enabled, emails sent from your hosted installation will originate from the <?php echo h($_SESSION['prefsEmailFrom']); ?> address. This address is not monitored and all emails generated will contain a disclaimer stating as such.</strong></p>
         <?php } else { ?>
             <p class="text-primary"><strong>If enabled, you will need to provide a valid email address and associated information to send emails via the <a href="https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol" target="_blank">Simple Mail Transfer Protocol</a> (SMTP).</strong></p>
             <p>See your webhost's or email service's documentation for the necessary settings to set up sending emails using SMTP. If you would like to use a Gmail email address, you'll need to set up Gmail SMTP. <a href="https://mailtrap.io/blog/gmail-smtp/#Step-1-Enabling-SMTP-in-Gmail-settings" target="_blank">This guide</a> will help you get the necessary settings.</p>
@@ -1311,16 +1298,16 @@ $(document).ready(function(){
         <label for="prefsEmailSMTP-port" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Settings Test</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12"> 
             <div class="input-group">
-                <a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader btn btn-primary" href="<?php echo $base_url; ?>/admin/send_test_email.admin.php"><?php if (HOSTED) echo "Send Test Email"; else echo "Test Current Email Sending Settings"; ?></a>  
+                <a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader btn btn-primary" href="<?php echo $base_url; ?>/admin/send_test_email.admin.php?csrf=<?php echo urlencode($_SESSION['user_session_token'] ?? ''); ?>"><?php if (HOSTED) echo "Send Test Email"; else echo "Test Current Email Sending Settings"; ?></a>  
             </div>
             <?php if (!HOSTED) { ?>
             <div class="help-block">
-                <p>Send a test email to <?php echo $_SESSION['user_name']; ?> using the current settings as reflected in the database:</p>
+                <p>Send a test email to <?php echo h($_SESSION['user_name']); ?> using the current settings as reflected in the database:</p>
                 <ul class="small">
-                    <li><strong>Originating Email:</strong> <?php echo $row_prefs['prefsEmailFrom']; ?></li>
-                    <li><strong>Username:</strong> <?php echo $row_prefs['prefsEmailUsername']; ?></li>
+                    <li><strong>Originating Email:</strong> <?php echo h($row_prefs['prefsEmailFrom']); ?></li>
+                    <li><strong>Username:</strong> <?php echo h($row_prefs['prefsEmailUsername']); ?></li>
                     <li><strong>Password:</strong> <em>*not displayed for security reasons*</em></li>
-                    <li><strong>Host:</strong> <?php echo $row_prefs['prefsEmailHost']; ?></li>
+                    <li><strong>Host:</strong> <?php echo h($row_prefs['prefsEmailHost']); ?></li>
                     <li><strong>Encryption:</strong> <?php echo $row_prefs['prefsEmailEncrypt']; ?></li>
                     <li><strong>Port:</strong> <?php echo $row_prefs['prefsEmailPort']; ?></li>
                 </ul>
@@ -1331,7 +1318,7 @@ $(document).ready(function(){
     <div class="form-group">
         <label for="prefsEmailFrom" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Originating Email Address</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
-                <input class="form-control" id="prefsEmailFrom" name="prefsEmailFrom" type="email" value="<?php if ($section == "step3") echo "";  if (($section != "step3") && (!empty($row_prefs['prefsEmailFrom']))) echo $row_prefs['prefsEmailFrom'];  ?>" data-error="An email address is required." placeholder="name@yourdomain.com" onChange="AjaxFunction(this.value);">
+                <input class="form-control" id="prefsEmailFrom" name="prefsEmailFrom" type="email" value="<?php if ($section == "step3") echo "";  if (($section != "step3") && (!empty($row_prefs['prefsEmailFrom']))) echo h($row_prefs['prefsEmailFrom']);  ?>" data-error="An email address is required." placeholder="name@yourdomain.com" onChange="AjaxFunction(this.value);">
             <div class="help-block with-errors"></div>
             <div class="help-block">Enter the properly set up, functioning, and accessible email address. Participants will reply to this email if needed.</div>
             <div id="msg_email" class="help-block"></div>
@@ -1340,7 +1327,7 @@ $(document).ready(function(){
     <div class="form-group">
         <label for="prefsEmailUsername" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Username</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
-                <input class="form-control" id="prefsEmailUsername" name="prefsEmailUsername" type="text" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailUsername']))) echo $row_prefs['prefsEmailUsername']; ?>" data-error="The email address username is required. Typically, it's the email address itself." placeholder="name@yourdomain.com">
+                <input class="form-control" id="prefsEmailUsername" name="prefsEmailUsername" type="text" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailUsername']))) echo h($row_prefs['prefsEmailUsername']); ?>" data-error="The email address username is required. Typically, it's the email address itself." placeholder="name@yourdomain.com">
             <div class="help-block with-errors"></div>
             <div class="help-block">As outlined in your webhost's or email service's documentation - typically, it's the email address itself, but methods may vary.</div>
         </div>
@@ -1376,7 +1363,7 @@ $(document).ready(function(){
     <div class="form-group">
         <label for="prefsEmailHost" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">SMTP Host</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
-                <input class="form-control" id="prefsEmailHost" name="prefsEmailHost" type="text" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailHost']))) echo $row_prefs['prefsEmailHost']; ?>" data-error="The SMTP email host name is required." placeholder="mail.yourdomain.com">
+                <input class="form-control" id="prefsEmailHost" name="prefsEmailHost" type="text" value="<?php if ($section == "step3") echo ""; if (($section != "step3") && (!empty($row_prefs['prefsEmailHost']))) echo h($row_prefs['prefsEmailHost']); ?>" data-error="The SMTP email host name is required." placeholder="mail.yourdomain.com">
             <div class="help-block with-errors"></div>
             <div class="help-block">As outlined in your webhost's or email service's documentation - e.g., mail.yourdomain.com.</div>
         </div>
@@ -1442,7 +1429,7 @@ $(document).ready(function(){
                     <input type="radio" name="send-test-email" value="0" id="send-test-email_0" checked/> No
                 </label>
             </div>
-            <div class="help-block">After setting preferences, send a test email to <?php echo $_SESSION['user_name']; ?> using the settings input above.</div>
+            <div class="help-block">After setting preferences, send a test email to <?php echo h($_SESSION['user_name']); ?> using the settings input above.</div>
         </div>
     </section>
     <?php } ?>
@@ -1991,19 +1978,19 @@ if (isset($row_contest_info['contestEntryFeePassword'])) $contestEntryFeePasswor
 if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
     $st_arr = array();
     $st_count = 0;
-    do {
+    foreach ($rows_style_type as $row_style_type) {
         $st_arr[] = $row_style_type['id'];
         $st_count++;
 ?>
 <div class="form-group">
-    <label for="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit &ndash; <?php echo $row_style_type['styleTypeName']; ?></label>
+    <label for="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit &ndash; <?php echo h($row_style_type['styleTypeName']); ?></label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" name="styleTypeEntryLimit-<?php echo $row_style_type['id']; ?>" type="number" min="0" value="<?php echo $row_style_type['styleTypeEntryLimit']; ?>" placeholder="">
         <div class="help-block"><?php if ($st_count == $totalRows_style_type) echo "Individual style type entry limits above are only for those that have BOS enabled. <a href='".$base_url."index.php?section=admin&amp;go=style_types'>Manage your competition style types</a> to specify entry limits for others."; ?></div>
     </div>
 </div>
 <?php 
-    } while ($row_style_type = mysqli_fetch_assoc($style_type)); 
+    }
 }
 ?>
 <input name="style_type_entry_limits" type="hidden" value="<?php if (!empty($st_arr)) echo implode(",", $st_arr); ?>">
@@ -2269,7 +2256,7 @@ if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
     <label for="prefsCheckPayee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Checks Payee</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         
-        <input class="form-control" id="prefsCheckPayee" name="prefsCheckPayee" type="text" value="<?php echo $row_prefs['prefsCheckPayee']; ?>" data-error="A check payee is required." placeholder="">
+        <input class="form-control" id="prefsCheckPayee" name="prefsCheckPayee" type="text" value="<?php echo h($row_prefs['prefsCheckPayee']); ?>" data-error="A check payee is required." placeholder="">
     <div class="help-block with-errors"></div>
     </div>
 </div>
@@ -2290,7 +2277,7 @@ if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
     <div class="form-group">
         <label for="prefsPaypalAccount" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">PayPal Account Email</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">            
-            <input class="form-control" id="prefsPaypalAccount" name="prefsPaypalAccount" type="text" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>" data-error="An email associated with a PayPal account is required if using PayPal to collect entry payments." placeholder="">
+            <input class="form-control" id="prefsPaypalAccount" name="prefsPaypalAccount" type="text" value="<?php echo h($row_prefs['prefsPaypalAccount']); ?>" data-error="An email associated with a PayPal account is required if using PayPal to collect entry payments." placeholder="">
             <div class="help-block with-errors"></div>
             <div class="help-block">
             <div class="btn-group" role="group" aria-label="payPalPrintModal">

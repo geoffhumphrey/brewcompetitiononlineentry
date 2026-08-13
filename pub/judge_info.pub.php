@@ -73,7 +73,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
       Check all styles that you <em>prefer</em> to judge.<p><span class="required"><strong>For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it &ndash; there's no need to check all that you are available to judge.</span></p>
       	<table class="dataTableCompact">
         		<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
-				do {
+				foreach ($rows_styles as $row_styles) {
     			if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
 				if (!empty($row_styles['brewStyleGroup'])) {
     			?>
@@ -87,7 +87,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
   				<?php $endRow = 0;
   				}
 				}
-				} while ($row_styles = mysqli_fetch_assoc($styles));
+				}
 				if ($endRow != 0) {
 				while ($endRow < $columns) {
    				echo("<td>&nbsp;</td>");
@@ -105,7 +105,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
       Check all styles that you <em>do not wish</em> to judge.<p><span class="required">There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table  where you have entries.</span></p>
       	<table class="dataTableCompact">
         	<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
-				do {
+				foreach ($rows_styles2 as $row_styles2) {
     			if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
 				if (!empty($row_styles2['brewStyleGroup'])) {
     			?>
@@ -119,7 +119,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
   				<?php $endRow = 0;
   				}
 				}
-				} while ($row_styles2 = mysqli_fetch_assoc($styles2));
+				}
 				if ($endRow != 0) {
 				while ($endRow < $columns) {
    				echo("<td>&nbsp;</td>");

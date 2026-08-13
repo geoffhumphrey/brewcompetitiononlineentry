@@ -18,8 +18,12 @@ if (!HOSTED) {
 
 $admin = FALSE;
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2)) {
-  
+$csrf_posted = isset($_GET['csrf']) ? sterilize($_GET['csrf']) : '';
+$csrf_session = (string) ($_SESSION['user_session_token'] ?? '');
+$csrf_valid = (($csrf_posted !== '') && ($csrf_session !== '') && (hash_equals($csrf_session, $csrf_posted)));
+
+if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2) && ($csrf_valid)) {
+
     $admin = TRUE;
 
     function send_test_message($mail,$smtp_password) {
@@ -111,7 +115,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2)) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-    <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
+    <title><?php echo h($_SESSION['contestName']); ?> - Brew Competition Online Entry &amp; Management</title>
 
     <!-- Load Bootstrap and jQuery -->
     <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->
@@ -134,14 +138,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2)) {
     <div class="container-fluid">
     <?php if ($admin) { ?>
     	<h2>Test Email</h2>
-    	<p class="lead">Sending a test email to <?php echo $_SESSION['user_name']; ?>
+    	<p class="lead">Sending a test email to <?php echo h($_SESSION['user_name']); ?>
     	<p>
     		<ul class="list-unstyled">
-    			<li><strong>Originating Email Address:</strong> <?php echo $_SESSION['prefsEmailFrom']; ?></li>
-    			<li><strong>Host:</strong> <?php echo $_SESSION['prefsEmailHost']; ?></li>
-    			<li><strong>Username:</strong> <?php echo $_SESSION['prefsEmailUsername']; ?></li>
-    			<li><strong>Encryption:</strong> <?php echo $_SESSION['prefsEmailEncrypt']; ?></li>
-    			<li><strong>Port:</strong> <?php echo $_SESSION['prefsEmailPort']; ?></li>
+    			<li><strong>Originating Email Address:</strong> <?php echo h($_SESSION['prefsEmailFrom']); ?></li>
+    			<li><strong>Host:</strong> <?php echo h($_SESSION['prefsEmailHost']); ?></li>
+    			<li><strong>Username:</strong> <?php echo h($_SESSION['prefsEmailUsername']); ?></li>
+    			<li><strong>Encryption:</strong> <?php echo h($_SESSION['prefsEmailEncrypt']); ?></li>
+    			<li><strong>Port:</strong> <?php echo h($_SESSION['prefsEmailPort']); ?></li>
             </ul>
         </p>
         <p>If there are any errors sending your email with the credentials you provided, they will be displayed below. Close this window and check your settings, especially your password.</p>

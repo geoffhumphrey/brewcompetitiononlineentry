@@ -16,7 +16,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Prep Vars
 			$eid = blank_to_null(sterilize($_POST['eid'.$score_id]));
-			$bid = blank_to_null(sterilize($_POST['bid'.$score_id])),
+			$bid = blank_to_null(sterilize($_POST['bid'.$score_id]));
 			$scoreEntry = blank_to_null(sterilize($_POST['scoreEntry'.$score_id]));
 			$scorePlace = blank_to_null(sterilize($_POST['scorePlace'.$score_id]));
 			$scoreType = blank_to_null(sterilize($_POST['scoreType'.$score_id]));

@@ -236,7 +236,7 @@ $header1_7 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",s
 if ($totalRows_judging == 0) $page_info7 .= sprintf("<p>%s</p>",$entry_info_text_035);
 else {
 	
-	do {
+	foreach ($rows_judging as $row_judging) {
 		$page_info7 .= "<p>";
 
 		if ($row_judging['judgingLocName'] != "") $page_info7 .= "<strong>".$row_judging['judgingLocName']."</strong>";
@@ -271,8 +271,8 @@ else {
 
 		$page_info7 .= "</p>";
 
-	} while ($row_judging = mysqli_fetch_assoc($judging));
-	
+	}
+
 	$page_info7 .= $anchor_top;
 }
 
@@ -300,7 +300,7 @@ $styles_endRow = 0;
 $styles_columns = 3;   // number of columns
 $styles_hloopRow1 = 0; // first row flag
 
-	do {
+	foreach ($rows_styles as $row_styles) {
 
 		if (array_key_exists($row_styles['id'], $styles_selected)) {
 
@@ -367,7 +367,7 @@ $styles_hloopRow1 = 0; // first row flag
 
 		}
 
-	} while ($row_styles = mysqli_fetch_assoc($styles));
+	}
 
 
 if ($styles_endRow != 0) {
@@ -461,7 +461,7 @@ if ($show_entries) {
 		}
 		if (!empty($row_contest_dates['contestDropoffDeadline'])) $page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
 		$page_info11 .= "<p>".$dropoff_qualifier_text_001."</p>";
-		do {
+		foreach ($rows_dropoff as $row_dropoff) {
 
 			$page_info11 .= "<p>";
 			if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
@@ -514,7 +514,7 @@ if ($show_entries) {
 				$page_info11 .= "</div>";
 			}
 
-		 } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+		 }
 		 $page_info11 .= $anchor_top;
 	}
 

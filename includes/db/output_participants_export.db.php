@@ -16,8 +16,8 @@ if  ($section == "loc") $query_sql = "SELECT DISTINCT brewer.uid, brewer.brewerF
 else 
 */
 
-$query_sql = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName ASC";
-$sql = mysqli_query($connection,$query_sql) or die (mysqli_error($connection));
-$row_sql = mysqli_fetch_assoc($sql);
+$db_conn->orderBy('brewerLastName', 'ASC');
+$rows_sql = $db_conn->get($brewer_db_table);
+$row_sql = ($rows_sql && count($rows_sql) > 0) ? $rows_sql[0] : null;
 
 ?>

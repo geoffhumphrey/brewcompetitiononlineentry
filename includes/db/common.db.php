@@ -1,48 +1,56 @@
 <?php
+/**
+ *  2026.05.05:  Conversion to MysqliDB class for prepared statements
+ */
+
 // General vars
 $today = time();
 $url = parse_url($_SERVER['PHP_SELF']);
-mysqli_select_db($connection,$database);
 
 $version = "";
 
 if (check_setup($prefix."system",$database)) {
-	$query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."`system`");
-	$version1 = mysqli_query($connection,$query_version1) or die (mysqli_error($connection));
-	$row_version1 = mysqli_fetch_assoc($version1);
+
+	$db_conn->where ("id", 1);
+	$row_version1 = $db_conn->getOne ($prefix."system");
 	$version = $row_version1['version'];
+
 }
 
 if (check_setup($prefix."bcoem_sys",$database)) {
-	$query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."bcoem_sys");
-	$version1 = mysqli_query($connection,$query_version1) or die (mysqli_error($connection));
-	$row_version1 = mysqli_fetch_assoc($version1);
+
+	$db_conn->where ("id", 1);
+	$row_version1 = $db_conn->getOne ($prefix."bcoem_sys");
 	$version = $row_version1['version'];
+
 }
 
 if (empty($version)) {
-	session_unset();
-	session_destroy();
-	session_write_close();
+	if (session_status() !== PHP_SESSION_NONE) {
+		session_unset();
+		session_destroy();
+		session_write_close();
+	}
 	$redirect = $base_url."setup.php?section=step0";
 	$redirect = prep_redirect_link($redirect);
 	$redirect_go_to = sprintf("Location: %s", $redirect);
 	header($redirect_go_to);
 }
 
-// Provide a variable to signify that the session has been set
-$_SESSION['session_set_'.$prefix_session] = $prefix_session;
-
 // Check to see if the session_set variable is corrupted or hijacked. If so, destroy the session and reset.
 if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_set_'.$prefix_session] != $prefix_session)) || ((!isset($_SESSION['session_set_'.$prefix_session])) || (empty($_SESSION['session_set_'.$prefix_session])))) {
-	session_unset();
-	session_destroy();
-	session_write_close();
+	if (session_status() !== PHP_SESSION_NONE) {
+		session_unset();
+		session_destroy();
+		session_write_close();
+	}
 	session_name($prefix_session);
 	session_start();
 	session_regenerate_id(true);
-	$_SESSION['session_set_'.$prefix_session] = $prefix_session;
 }
+
+// Provide a variable to signify that the session has been set
+$_SESSION['session_set_'.$prefix_session] = $prefix_session;
 
 if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 	if (strstr($url['path'],"index.php")) {
@@ -56,11 +64,9 @@ if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 if ((!isset($_SESSION['contest_info_general'.$prefix_session])) || (empty($_SESSION['contest_info_general'.$prefix_session]))) {
 
 	if (strpos($section, "step") === FALSE) {
-		$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
-		if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
-		else $query_contest_info .= " WHERE id='1'";
-		$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
-		$row_contest_info = mysqli_fetch_assoc($contest_info);
+
+		$db_conn->where ("id", 1);
+		$row_contest_info = $db_conn->getOne ($prefix."contest_info");
 
 		if ($row_contest_info) {
 
@@ -74,17 +80,16 @@ if ((!isset($_SESSION['contest_info_general'.$prefix_session])) || (empty($_SESS
 
 		$_SESSION['contest_info_general'.$prefix_session] = $prefix_session;
 	}
+
 }
 
 if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$prefix_session]))) {
 
 	if (strpos($section, "step") === FALSE) {
 
-		if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$_SESSION['comp_id']);
-		else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
-		$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
-		$row_prefs = mysqli_fetch_assoc($prefs);
-		$totalRows_prefs = mysqli_num_rows($prefs);
+		$db_conn->where ("id", 1);
+		$row_prefs = $db_conn->getOne ($prefix."preferences");
+		$totalRows_prefs = $db_conn->count; 
 
 		if ($totalRows_prefs > 0) {
 			foreach ($row_prefs as $key => $value) {
@@ -92,20 +97,19 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 			}
 		}
 
-		if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
-		else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
-		$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
-		$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);
+		$db_conn->where ("id", 1);
+		$row_judging_prefs = $db_conn->getOne ($prefix."judging_preferences");
+		$totalRows_judging_prefs = $db_conn->count; 
 
-		foreach ($row_judging_prefs as $key => $value) {
-			if ($key != "id") $_SESSION[$key] = $value;
+		if ($totalRows_judging_prefs > 0) {
+			foreach ($row_judging_prefs as $key => $value) {
+				if ($key != "id") $_SESSION[$key] = $value;
+			}
 		}
-
+		
 		// Get counts for common, mostly static items
-		$query_sponsor_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."sponsors");
-		if (SINGLE) $query_sponsor_count .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-		$result_sponsor_count = mysqli_query($connection,$query_sponsor_count) or die (mysqli_error($connection));
-		$row_sponsor_count = mysqli_fetch_assoc($result_sponsor_count);
+		$row_sponsor_count = $db_conn->getOne ($prefix."sponsors", "sum(id), COUNT(*) as count");
+
 		$_SESSION['sponsorCount'] = $row_sponsor_count['count'];
 		$_SESSION['prefs'.$prefix_session] = "1";
 		$_SESSION['prefix'] = $prefix;
@@ -138,10 +142,11 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 
 			include(INCLUDES.'ba_constants.inc.php');
 
-			$query_ba_style = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BA'", $prefix."styles");
-			$ba_style = mysqli_query($connection,$query_ba_style) or die (mysqli_error($connection));
-			$row_ba_style = mysqli_fetch_assoc($ba_style);
-			$totalRows_ba_style = mysqli_num_rows($ba_style);
+			$db_conn->where ('brewStyleVersion', 'BA');
+			$db_conn->returnType = 'array'; 
+			$return_ba_style = $db_conn->get($prefix."styles");
+			$totalRows_ba_style = $db_conn->count;
+
 
 			$ba_styles_arr_data = array();
 
@@ -171,7 +176,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 			$ba_carb_sweet_special = array();
 			$ba_carb_sweet_special_ids = array();
 
-			do {
+			foreach ($return_ba_style as $row_ba_style) {
 
 				if (in_array($row_ba_style['brewStyleGroup'], $ba_beer_categories)) $ba_beer[] = $row_ba_style['id'];
 
@@ -232,7 +237,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 					$ba_carb_sweet_special_ids[] = $row_ba_style['id'];
 				}
 
-			} while ($row_ba_style = mysqli_fetch_assoc($ba_style));
+			}
 
 			$ba_special = array_merge($ba_special_beer,$ba_special_mead_cider);
 			$ba_special_ids = array_merge($ba_special_beer_ids,$ba_special_mead_cider_ids);
@@ -277,12 +282,18 @@ if ((isset($_SESSION['loginUsername'])) && ((!isset($_SESSION['user_info'.$prefi
 
 		if ($section != "setup") {
 
+			$db_conn->where ('user_name', $_SESSION['loginUsername']);
+			$row_user = $db_conn->getOne ($prefix."users");
+			$totalRows_user = $db_conn->count; 
+
+			/*
 			$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
 			$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 			$row_user = mysqli_fetch_assoc($user);
 			$totalRows_user = mysqli_num_rows($user);
+			*/
 
-			if ($row_user) {
+			if ($totalRows_user > 0) {
 
 				foreach ($row_user as $key => $value) {
 					if ($key != "id") $_SESSION[$key] = $value;
@@ -292,11 +303,17 @@ if ((isset($_SESSION['loginUsername'])) && ((!isset($_SESSION['user_info'.$prefi
 
 		    $_SESSION['user_id'] = $row_user['id'];
 
+		    $db_conn->where ('uid', $row_user['id']);
+			$row_name = $db_conn->getOne ($prefix."brewer");
+			$totalRows_name = $db_conn->count; 
+
+			/*
 			$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
 			$brewer_name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
 			$row_name = mysqli_fetch_assoc($brewer_name);
+			*/
 			
-			if ($row_name) {
+			if ($totalRows_name > 0) {
 
 				$name_columns = array_keys($row_name);
 
@@ -318,18 +335,15 @@ if ((isset($_SESSION['loginUsername'])) && ((!isset($_SESSION['user_info'.$prefi
 if (isset($_SESSION['loginUsername'])) {
 
 	if (($go == "make_admin") || (($go == "participants") && ($action == "add"))) {
-		$query_user_level = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $username);
-		$user_level = mysqli_query($connection,$query_user_level) or die (mysqli_error($connection));
-		$row_user_level = mysqli_fetch_assoc($user_level);
-		$totalRows_user_level = mysqli_num_rows($user_level);
+		$db_conn->where ('user_name', $username);
 	}
 
 	elseif (($section == "brewer") && ($action == "edit")) {
-		$query_user_level = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users",$_SESSION['loginUsername']);
-		$user_level = mysqli_query($connection,$query_user_level) or die (mysqli_error($connection));
-		$row_user_level = mysqli_fetch_assoc($user_level);
-		$totalRows_user_level = mysqli_num_rows($user_level);
+		$db_conn->where ('user_name', $_SESSION['loginUsername']);
 	}
+
+	$row_user_level = $db_conn->getOne ($prefix."users");
+	$totalRows_user_level = $db_conn->count; 
 
 }
 
@@ -347,6 +361,12 @@ if ((!isset($_SESSION['prefsLang'.$prefix_session]))|| (empty($_SESSION['prefsLa
 
 if ((!isset($_SESSION['prefsLanguageFolder'.$prefix_session]))|| (empty($_SESSION['prefsLanguageFolder'.$prefix_session]))) {
 
+	// Legacy installs may still have prefsLanguage stored as "English" (pre-locale-code
+	// installs, e.g. via the 2.1.5.0 update) rather than "en-US" - normalize before deriving
+	// the folder, or this falls through to strtolower() producing "english", which doesn't
+	// match the actual "en" folder on disk.
+	if (strtolower($_SESSION['prefsLanguage']) == "english") $_SESSION['prefsLanguage'] = "en-US";
+
 	if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
 		$lang_folder = explode("-",$_SESSION['prefsLanguage']);
 		$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
@@ -362,11 +382,17 @@ if ((check_update("flightPlanning", $prefix."judging_flights")) && ((!isset($_SE
 	// Check judging_flights for any record with a 1 (planning mode);
 	// If found, set as 1, otherwise set as 0
 
+	/*
 	$query_planning = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightPlanning='1'", $prefix."judging_flights");
 	$planning = mysqli_query($connection,$query_planning) or die (mysqli_error($connection));
 	$row_planning = mysqli_fetch_assoc($planning);
+	*/
 
-	if ($row_planning['count'] > 0) $_SESSION['jPrefsTablePlanning'] = 1;
+	$db_conn->where ('flightPlanning', '1');
+	$db_conn->get ($prefix."judging_flights");
+	$totalRows_planning = $db_conn->count;
+
+	if ($totalRows_planning > 0) $_SESSION['jPrefsTablePlanning'] = 1;
 	else $_SESSION['jPrefsTablePlanning'] = 0;
 
 }
@@ -375,9 +401,17 @@ if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section !=
 	
 	// Some limits and dates may need to be changed by admin and propagated instantly to all users
 	// These will be called on every page load instead of being stored in a session variable
+
+	$cols = array("prefsStyleSet", "prefsEntryLimit", "prefsUserEntryLimit", "prefsSpecialCharLimit", "prefsUserSubCatLimit", "prefsUSCLEx", "prefsUSCLExLimit", "prefsEntryLimitPaid", "prefsShowBestBrewer", "prefsShowBestClub", "prefsUserEntryLimitDates");
+	$db_conn->where ("id", 1);
+	$row_limits = $db_conn->getOne ($prefix."preferences", null, $cols);
+	$totalRows_limits = $db_conn->count;
+
+	/*
 	$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer, prefsShowBestClub, prefsUserEntryLimitDates FROM %s WHERE id='1'", $prefix."preferences");
 	$limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
 	$row_limits = mysqli_fetch_assoc($limits);
+	*/
 
 	$incremental = FALSE;
 
@@ -428,99 +462,182 @@ if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section !=
 
 	}
 
+	$cols = array("jprefsCapJudges","jprefsCapStewards");
+	$db_conn->where ("id", 1);
+	$row_judge_limits = $db_conn->getOne ($prefix."judging_preferences", null, $cols);
+
+	/*
 	$query_judge_limits = sprintf("SELECT jprefsCapJudges,jprefsCapStewards FROM %s WHERE id='1'", $prefix."judging_preferences");
 	$judge_limits = mysqli_query($connection,$query_judge_limits) or die (mysqli_error($connection));
 	$row_judge_limits = mysqli_fetch_assoc($judge_limits);
+	*/
 
+	$cols = array("contestCheckInPassword", "contestRegistrationOpen", "contestRegistrationDeadline", "contestJudgeOpen", "contestJudgeDeadline", "contestEntryOpen", "contestEntryDeadline", "contestShippingOpen", "contestShippingDeadline", "contestDropoffOpen", "contestDropoffDeadline", "contestEntryEditDeadline", "contestAwardsLocTime");
+	$db_conn->where ("id", 1);
+	$row_contest_dates = $db_conn->getOne ($prefix."contest_info", null, $cols);
+
+	/*
 	$query_contest_dates = sprintf("SELECT contestCheckInPassword, contestRegistrationOpen, contestRegistrationDeadline, contestJudgeOpen, contestJudgeDeadline, contestEntryOpen, contestEntryDeadline, contestShippingOpen, contestShippingDeadline, contestDropoffOpen, contestDropoffDeadline, contestEntryEditDeadline, contestAwardsLocTime FROM %s WHERE id=1", $prefix."contest_info");
 	$contest_dates = mysqli_query($connection,$query_contest_dates) or die (mysqli_error($connection));
 	$row_contest_dates = mysqli_fetch_assoc($contest_dates);
+	*/
 
 }
 
 // Only used for initial setup of installation
 if ($section == "step4") {
+
+	$cols = array("brewerFirstName","brewerLastName","brewerEmail");
+	$db_conn->where ("uid", 1);
+	$row_name = $db_conn->getOne ($brewer_db_table, null, $cols);
+
+	/*
 	$query_name = "SELECT brewerFirstName,brewerLastName,brewerEmail FROM $brewer_db_table WHERE uid='1'";
 	$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
 	$row_name = mysqli_fetch_assoc($name);
+	*/
+
 }
 
 // Do not rely on session data to populate Competition Info for editing in Admin or in Setup
 if (($section == "admin") && ($go == "contest_info")) {
+
+	$db_conn->where ("id", 1);
+	$row_contest_info = $db_conn->getOne ($prefix."contest_info");
+
+	/*
 	$query_contest_info = sprintf("SELECT * FROM %s WHERE id=1", $prefix."contest_info");
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info);
+	*/
 }
 
 // Do not rely on session data to populate Site Preferences for editing in Admin or in Setup
 if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) {
+
+	$db_conn->where ("id", 1);
+	$row_prefs = $db_conn->getOne ($prefix."preferences");
+	$totalRows_prefs = $db_conn->count;
+
+	/*
 	$query_prefs = sprintf("SELECT * FROM %s WHERE id=1", $prefix."preferences");
 	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
 	$row_prefs = mysqli_fetch_assoc($prefs);
 	$totalRows_prefs = mysqli_num_rows($prefs);
+	*/
+
 }
 
 // If Archive DB table, get pertinent info
 if ($dbTable != "default") {
+	
 	$suffix = strrchr($dbTable,"_");
 	$suffix = ltrim($suffix, "_");
+	$db_conn->where ("archiveSuffix", $suffix);
+	$row_archive_prefs = $db_conn->getOne ($prefix."archive");
+	$totalRows_archive_prefs = $db_conn->count;
+
+	/*
 	$query_archive_prefs = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'", $prefix."archive", $suffix);
 	$archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
 	$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
+	*/
+
 }
 
 if ($section != "admin") {
+
+	$db_conn->orderBy ('archiveSuffix', 'ASC');
+	$row_archive = $db_conn->get ($prefix."archive");
+	$totalRows_archive = $db_conn->count;
+
+	/*
 	$query_archive = sprintf("SELECT * FROM %s ORDER BY archiveSuffix ASC", $prefix."archive");
 	$archive = mysqli_query($connection,$query_archive) or die (mysqli_error($connection));
 	$row_archive = mysqli_fetch_assoc($archive);
 	$totalRows_archive = mysqli_num_rows($archive);
+	*/
+
 }
 
-// Do not rely on session data to populate Judging/Competition Organization Preferences for editing in Admin or in Setup
-if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
-else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
+// Do not rely on session data to populate Judging/Competition Organization Preferences
+
+$db_conn->where ("id", 1);
+$row_judging_prefs = $db_conn->getOne ($prefix."judging_preferences");
+$totalRows_judging_prefs = $db_conn->count; 
+
+/*
+$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 $judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
 $row_judging_prefs = mysqli_fetch_assoc($judging_prefs);
+*/
 
+$db_conn->where ("brewerJudge", "Y");
+$row_judge_count = $db_conn->getOne ($prefix."brewer", "sum(id), COUNT(*) as count");
+
+/*
 $query_judge_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'", $prefix."brewer");
-if (SINGLE) $query_judge_count = sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $judge_count = mysqli_query($connection,$query_judge_count) or die (mysqli_error($connection));
 $row_judge_count = mysqli_fetch_assoc($judge_count);
+*/
 
+$db_conn->where ("brewerSteward", "Y");
+$row_steward_count = $db_conn->getOne ($prefix."brewer", "sum(id), COUNT(*) as count");
+
+/*
 $query_steward_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'", $prefix."brewer");
-if (SINGLE) $query_judge_count = sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $steward_count = mysqli_query($connection,$query_steward_count) or die (mysqli_error($connection));
 $row_steward_count = mysqli_fetch_assoc($steward_count);
+*/
 
 if ($section == "default") {
+
+	$sql = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1",$prefix."judging_locations");
+	$row_check = $db_conn->rawQueryOne($sql);
+
+	/*
 	$query_check = sprintf("SELECT judgingDate FROM %s",$prefix."judging_locations");
-	if (SINGLE) $query_check .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
 	$query_check .= " ORDER BY judgingDate DESC LIMIT 1";
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 	$row_check = mysqli_fetch_assoc($check);
+	*/
+
 }
 
-if (SINGLE) $query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='%s'", $prefix."contest_info",$_SESSION['comp_id']);
-else $query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
+$db_conn->where ("id", 1);
+$row_contest_rules = $db_conn->getOne ($prefix."contest_info", null, "contestRules");
+
+/*
+$query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
 $contest_rules = mysqli_query($connection,$query_contest_rules) or die (mysqli_error($connection));
 $row_contest_rules = mysqli_fetch_assoc($contest_rules);
-
-if ($section == "volunteers") {
-	$query_contest_info = sprintf("SELECT contestVolunteers FROM %s", $prefix."contest_info");
-	if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_SESSION['comp_id']);
-	else $query_contest_info .= " WHERE id='1'";
-	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
-	$row_contest_info = mysqli_fetch_assoc($contest_info);
-}
+*/
 
 if (($section == "admin") && ($go == "default")) {
-	if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$_SESSION['comp_id']);
-	else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
+
+	$db_conn->where ("id", 1);
+	$row_prefs = $db_conn->getOne ($prefix."preferences");
+	$totalRows_prefs = $db_conn->count;
+
+	/*
+	$query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
 	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
 	$row_prefs = mysqli_fetch_assoc($prefs);
 	$totalRows_prefs = mysqli_num_rows($prefs);
+	*/
+
 }
 
 $prefs_barcode_labels = array("N","C","2","0","3","4");
+
+
+/*
+if ($section == "volunteers") {
+	$query_contest_info = sprintf("SELECT contestVolunteers FROM %s", $prefix."contest_info");
+	$query_contest_info .= " WHERE id='1'";
+	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
+	$row_contest_info = mysqli_fetch_assoc($contest_info);
+}
+*/
 
 ?>

@@ -3,17 +3,17 @@
 
 if ($winner_method == 0) {
 
-	$query_scores = sprintf("SELECT a.eid, a.scorePlace, b.id, b.brewBrewerID, b.brewCoBrewer, b.brewName, b.brewStyle, b.brewCategorySort, b.brewCategory, b.brewSubCategory, b.brewBrewerFirstName, b.brewBrewerLastName, b.brewJudgingNumber, c.uid, c.brewerFirstName, c.brewerLastName, c.brewerClubs, c.brewerEmail, c.brewerAddress, c.brewerCity, c.brewerState, c.brewerZip, c.brewerCountry, c.brewerPhone1, c.brewerBreweryName, c.brewerBreweryInfo FROM %s a, %s b, %s c WHERE a.scoreTable='%s' AND a.eid = b.id AND b.brewBrewerID = c.uid", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $row_sql['id']);
+	$query_scores = "SELECT a.eid, a.scorePlace, b.id, b.brewBrewerID, b.brewCoBrewer, b.brewName, b.brewStyle, b.brewCategorySort, b.brewCategory, b.brewSubCategory, b.brewBrewerFirstName, b.brewBrewerLastName, b.brewJudgingNumber, c.uid, c.brewerFirstName, c.brewerLastName, c.brewerClubs, c.brewerEmail, c.brewerAddress, c.brewerCity, c.brewerState, c.brewerZip, c.brewerCountry, c.brewerPhone1, c.brewerBreweryName, c.brewerBreweryInfo FROM ".$prefix."judging_scores".$archive_suffix." a, ".$prefix."brewing".$archive_suffix." b, ".$prefix."brewer".$archive_suffix." c WHERE a.scoreTable=? AND a.eid = b.id AND b.brewBrewerID = c.uid";
+	$params_scores = array($row_sql['id']);
 
-	if (SINGLE) $query_scores .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+	if (SINGLE) { $query_scores .= " AND comp_id=?"; $params_scores[] = $_SESSION['comp_id']; }
 	$query_scores .= " ORDER BY a.scorePlace ASC";
-	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-	$row_scores = mysqli_fetch_assoc($scores);
-	$totalRows_scores = mysqli_num_rows($scores);
+	$rows_scores = $db_conn->rawQuery($query_scores, $params_scores);
+	$totalRows_scores = $db_conn->count;
 
 	if ($totalRows_scores > 0) {
-		 
-		do {
+
+		foreach ($rows_scores as $row_scores) {
 
 			if ((isset($row_scores['scorePlace'])) && (!empty($row_scores['scorePlace']))) {
 
@@ -128,9 +128,9 @@ if ($winner_method == 0) {
 					}
 				}
 
-			}		
+			}
 
-		} while ($row_scores = mysqli_fetch_assoc($scores));
+		}
 	}
 }
 
@@ -160,22 +160,26 @@ if ($winner_method == 1) {
 
 			$style_pad = sprintf("%02d", $style);
 
-			if ($winner_style_set == "BA") $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategory='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style);
+			if ($winner_style_set == "BA") {
+				$query_scores = "SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM ".$prefix."judging_scores".$archive_suffix." a, ".$prefix."brewing".$archive_suffix." b, ".$prefix."brewer".$archive_suffix." c WHERE b.brewCategory=? AND a.eid = b.id AND c.uid = b.brewBrewerID";
+				$params_scores = array($style);
+			}
 
-			else $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style_pad);
+			else {
+				$query_scores = "SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM ".$prefix."judging_scores".$archive_suffix." a, ".$prefix."brewing".$archive_suffix." b, ".$prefix."brewer".$archive_suffix." c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID";
+				$params_scores = array($style_pad);
+			}
 
 			$query_scores .= " AND a.scorePlace IS NOT NULL";
 			$query_scores .= " ORDER BY b.brewCategory,a.scorePlace ASC";
 
-			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-			$row_scores = mysqli_fetch_assoc($scores);
-			$totalRows_scores = mysqli_num_rows($scores);
+			$rows_scores = $db_conn->rawQuery($query_scores, $params_scores);
+			$totalRows_scores = $db_conn->count;
 
-			do {
+			foreach ($rows_scores as $row_scores) {
 
-				$query_table_name = sprintf("SELECT tableName,tableNumber from %s WHERE id = '%s'", $prefix."judging_tables".$archive_suffix, $row_scores['scoreTable']);
-				$table_name = mysqli_query($connection,$query_table_name) or die (mysqli_error($connection));
-				$row_table_name = mysqli_fetch_assoc($table_name);
+				$db_conn->where('id', $row_scores['scoreTable']);
+				$row_table_name = $db_conn->getOne($prefix."judging_tables".$archive_suffix, "tableName,tableNumber");
 
 				if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'];
 
@@ -291,10 +295,10 @@ if ($winner_method == 1) {
 
 				}				
 
-			} while ($row_scores = mysqli_fetch_assoc($scores));			
-		
+			}
+
 		}
-	
+
 	}
 
 } // end if ($winner_method == 1)
@@ -323,30 +327,32 @@ if ($winner_method == 2) {
 
 		if ($row_entry_count['count'] > 0) {
 
-			if ($_SESSION['prefsStyleSet'] != "BA") $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style[0], $style[1]);
+			// Note: the non-BA branch below concatenates $archive_suffix onto the brewer table name
+			// TWICE (pre-existing bug, e.g. "..._brewer_2024_2024" instead of "..._brewer_2024") —
+			// preserved exactly since this pass only parameterizes queries, it doesn't fix logic.
+			if ($_SESSION['prefsStyleSet'] != "BA") {
+				$query_scores = "SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM ".$prefix."judging_scores".$archive_suffix." a, ".$prefix."brewing".$archive_suffix." b, ".$prefix."brewer".$archive_suffix." c WHERE b.brewCategorySort=? AND b.brewSubCategory=? AND a.eid = b.id  AND c.uid = b.brewBrewerID";
+				$params_scores = array($style[0], $style[1]);
+			}
 
-			else $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix.$archive_suffix, $style[1]);
-
-			/*
-			if ($_SESSION['prefsStyleSet'] != "BA") $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerEmail FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
-			else $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerEmail FROM %s a, %s b, %s c WHERE b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[1]);
-			*/
+			else {
+				$query_scores = "SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM ".$prefix."judging_scores".$archive_suffix." a, ".$prefix."brewing".$archive_suffix." b, ".$prefix."brewer".$archive_suffix.$archive_suffix." c WHERE b.brewSubCategory=? AND a.eid = b.id  AND c.uid = b.brewBrewerID";
+				$params_scores = array($style[1]);
+			}
 
 			$query_scores .= " AND a.scorePlace IS NOT NULL";
 			if ($_SESSION['prefsStyleSet'] == "BA") $query_scores .= " ORDER BY b.brewStyle,a.scorePlace ASC";
 			else $query_scores .= " ORDER BY b.brewCategory,b.brewSubCategory,a.scorePlace";
 
 			// echo $query_scores."<br><br>";
-			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-			$row_scores = mysqli_fetch_assoc($scores);
-			$totalRows_scores = mysqli_num_rows($scores);
+			$rows_scores = $db_conn->rawQuery($query_scores, $params_scores);
+			$totalRows_scores = $db_conn->count;
 
-			do {
+			foreach ($rows_scores as $row_scores) {
 
 				if ((isset($row_scores['scoreTable'])) && (!empty($row_scores['scoreTable']))) {
-					$query_table_name = sprintf("SELECT tableName,tableNumber from %s WHERE id = '%s'",$prefix."judging_tables".$archive_suffix,$row_scores['scoreTable']);
-					$table_name = mysqli_query($connection,$query_table_name) or die (mysqli_error($connection));
-					$row_table_name = mysqli_fetch_assoc($table_name);
+					$db_conn->where('id', $row_scores['scoreTable']);
+					$row_table_name = $db_conn->getOne($prefix."judging_tables".$archive_suffix, "tableName,tableNumber");
 				}
 
 				if (!empty($row_scores['scorePlace'])) {
@@ -464,7 +470,7 @@ if ($winner_method == 2) {
 					}
 				}
 
-			} while ($row_scores = mysqli_fetch_assoc($scores));
+			}
 		}
 	}
 } // end if ($winner_method == 2)

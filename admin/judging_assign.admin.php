@@ -86,49 +86,50 @@ $styles_db_table = $prefix."styles";
 
 foreach ($table_styles as $table_style) {
 
-  $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $table_style);
-  $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-  $row_style = mysqli_fetch_assoc($style);
+  $db_conn->where ("id", $table_style);
+  $db_conn->returnType = "array";
+  $row_style = $db_conn->getOne ($styles_db_table, "brewStyleGroup,brewStyleNum");
 
   if ($_SESSION['prefsProEdition'] == 0) {
 
-    $query_co_brewers = sprintf("SELECT brewCoBrewer FROM %s WHERE brewCoBrewer IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$row_style['brewStyleGroup'],$row_style['brewStyleNum']);
-    if ($_SESSION['jPrefsTablePlanning'] == 0) $query_co_brewers .= " AND brewReceived='1'";
-    $co_brewers = mysqli_query($connection,$query_co_brewers) or die (mysqli_error($connection));
-    $row_co_brewers = mysqli_fetch_assoc($co_brewers);
-    $totalRows_co_brewers = mysqli_num_rows($co_brewers);
+    $db_conn->where ("brewCoBrewer", NULL, 'IS NOT');
+    $db_conn->where ("brewCategorySort", $row_style['brewStyleGroup']);
+    $db_conn->where ("brewSubCategory", $row_style['brewStyleNum']);
+    if ($_SESSION['jPrefsTablePlanning'] == 0) $db_conn->where ("brewReceived", 1);
+    $db_conn->returnType = "array"; 
+    $row_co_brewers = $db_conn->get($prefix."brewing");
+    $totalRows_co_brewers = $db_conn->count;
 
     if ($totalRows_co_brewers > 0) {
       
-      do {
+      foreach ($row_co_brewers as $row_co_brewers) {
         $co_brewers_table[] = $row_co_brewers['brewCoBrewer'];
-      } while ($row_co_brewers = mysqli_fetch_assoc($co_brewers));
+      }
     
     }
 
   }
 
-
-  if ($_SESSION['prefsProEdition'] == 1) $query_ind_aff = sprintf("SELECT a.brewBrewerID, b.brewerBreweryName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerBreweryName IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing", $prefix."brewer", $row_style['brewStyleGroup'], $row_style['brewStyleNum']);
-  else $query_ind_aff = sprintf("SELECT a.brewBrewerID, b.brewerLastName, b.brewerFirstName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerLastName IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing", $prefix."brewer", $row_style['brewStyleGroup'], $row_style['brewStyleNum']);
-  $ind_aff = mysqli_query($connection,$query_ind_aff) or die (mysqli_error($connection));
-  $row_ind_aff = mysqli_fetch_assoc($ind_aff);
-  $totalRows_ind_aff = mysqli_num_rows($ind_aff);
+  if ($_SESSION['prefsProEdition'] == 1) $sql = sprintf("SELECT a.brewBrewerID, b.brewerBreweryName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerBreweryName IS NOT NULL AND brewCategorySort=? AND brewSubCategory=?",$prefix."brewing", $prefix."brewer");
+  else $sql = sprintf("SELECT a.brewBrewerID, b.brewerLastName, b.brewerFirstName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerLastName IS NOT NULL AND brewCategorySort=? AND brewSubCategory=?",$prefix."brewing", $prefix."brewer");
+  $db_conn->returnType = "array";
+  $row_ind_aff = $db_conn->rawQuery($sql, array($row_style['brewStyleGroup'], $row_style['brewStyleNum']));
+  $totalRows_ind_aff = $db_conn->count;
 
   if ($totalRows_ind_aff > 0) {
     
-    do {
+    foreach ($row_ind_aff as $row_ind_aff) {
       if ($_SESSION['prefsProEdition'] == 1) $industry_affliations[] = $row_ind_aff['brewerBreweryName'];
       else $industry_affliations[] = $row_ind_aff['brewerFirstName']." ".$row_ind_aff['brewerLastName'];
-    } while ($row_ind_aff = mysqli_fetch_assoc($ind_aff));
+    }
   
   }
     
 }
 
 if ($totalRows_brewer > 0) {
-  
-  do {
+
+  foreach ($rows_brewer as $row_brewer) {
 
     $table_location = "Y-".$row_tables_edit['tableLocation'];
   	$judge_info = judge_info($row_brewer['uid']);
@@ -190,12 +191,15 @@ if ($totalRows_brewer > 0) {
     $head_judge_role_display = "";
 
     // Determine if this participant is assigned to this table
-    $query_table_assignments = sprintf("SELECT id,bid FROM %s WHERE assignTable='%s' AND bid='%s'",$prefix."judging_assignments",$row_tables_edit['id'],$row_brewer['uid']);
-    $table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
-    $row_table_assignments = mysqli_fetch_assoc($table_assignments);
+    $cols = array("id","bid");
+    $db_conn->where ("assignTable", $row_tables_edit['id']);
+    $db_conn->where ("bid", $row_brewer['uid']);
+    $row_table_assignments = $db_conn->getOne ($prefix."judging_assignments");
 
     // If so, see if there are any entry conflicts
-    if ($row_table_assignments) $entry_conflict = entry_conflict($row_table_assignments['bid'],$row_tables_edit['tableStyles']);
+    if ($row_table_assignments) {
+      $entry_conflict = entry_conflict($row_table_assignments['bid'],$row_tables_edit['tableStyles']);
+    }
 
     // If the participant has an entry conflict, unassign them from the table.
     // Increase the entry_conflict_count var
@@ -208,10 +212,10 @@ if ($totalRows_brewer > 0) {
     }
 
     // Get role from judging_assignments table
-    $query_judge_roles = sprintf("SELECT assignRoles FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s')", $prefix."judging_assignments", $row_brewer['uid'], $row_tables_edit['id'], $row_flights['flightRound']);
-    $judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
-    $row_judge_roles = mysqli_fetch_assoc($judge_roles);
-
+    $db_conn->where ("bid", $row_brewer['uid']);
+    $db_conn->where ("assignTable", $row_tables_edit['id']);
+    $db_conn->where ("assignRound", $row_flights['flightRound']);
+    $row_judge_roles = $db_conn->getOne ($prefix."judging_assignments", null, "assignRoles");
   
     if ($_SESSION['jPrefsQueued'] == "N") {
 
@@ -353,7 +357,7 @@ if ($totalRows_brewer > 0) {
 
       // Name Column
   		$output_datatables_body .= "<td>";
-  		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>";
+  		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".h($judge_info[0])." ".h($judge_info[1])."&rsquo;s account info\">".h($judge_info[1]).", ".h($judge_info[0])."</a>";
       //if ($ind_aff_flag) $output_datatables_body .= "<br>Affiliation Flag";
       if ($filter == "judges") {
         $output_datatables_body .= "<br><strong>Comps Judged:</strong> ";
@@ -469,8 +473,8 @@ if ($totalRows_brewer > 0) {
 
   	} // end if (in_array($table_location,$locations))
 
-  } while ($row_brewer = mysqli_fetch_assoc($brewer));
-  
+  }
+
 } // end if ($totalRows_brewer > 0)
 
 $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url,"default");
@@ -519,9 +523,9 @@ $(document).ready(function() {
             Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Another Table... <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <?php do { ?>
-            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=<?php echo $filter; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a></li>
-            <?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
+            <?php foreach ($rows_tables as $row_tables) { ?>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=<?php echo $filter; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".h($row_tables['tableNumber']).": ".h($row_tables['tableName']); ?></a></li>
+            <?php } ?>
         </ul>
     </div>
     <div class="btn-group" role="group" aria-label="modals">
@@ -545,7 +549,7 @@ $(document).ready(function() {
 	<li>No <?php echo rtrim($filter,"s"); ?> indicated that they are available for this table's location. To make <?php echo $filter; ?> available, you will need to edit their preferences via the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">participants list</a>.</li>
 </ol>
 <?php } ?>
-<h4>Assign <span class="text-capitalize"><?php echo $filter; ?></span> to Table <?php echo $row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?><br><small><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></small></h4>
+<h4>Assign <span class="text-capitalize"><?php echo $filter; ?></span> to Table <?php echo h($row_tables_edit['tableNumber'])." &ndash; ".h($row_tables_edit['tableName']); $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?><br><small><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></small></h4>
 <!-- Table stats snapshot -->
 <div class="well small">
   <div class="row">
@@ -725,7 +729,7 @@ $(document).ready(function() {
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="atTableModalLabel"><span class="text-capitalize"><?php echo $filter; ?></span> Assigned to Table <?php echo $row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?> </h4>
+                <h4 class="modal-title" id="atTableModalLabel"><span class="text-capitalize"><?php echo $filter; ?></span> Assigned to Table <?php echo h($row_tables_edit['tableNumber'])." &ndash; ".h($row_tables_edit['tableName']); $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?> </h4>
             </div>
             <div class="modal-body">
             	<?php if ($filter == "judges") { ?>
@@ -863,7 +867,7 @@ select.custom-hj-dropdown {
 	<?php echo $output_datatables_body; ?>
 </tbody>
 </table>
-<p><input type="submit" class="btn btn-primary" name="Submit" value="Assign to Table <?php echo $row_tables_edit['tableNumber']; ?>" /></p>
+<p><input type="submit" class="btn btn-primary" name="Submit" value="Assign to Table <?php echo h($row_tables_edit['tableNumber']); ?>" /></p>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$row_tables_edit['id']); if ($msg != "default") echo "&id=".$row_tables_edit['id']; ?>">
 <?php } else { ?>

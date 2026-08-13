@@ -8,7 +8,10 @@ ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
 error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
-if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+// CSRF: require a same-origin Referer for this session-authenticated write action.
+$referrer_ok = (isset($_SERVER['HTTP_REFERER'])) && (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === $_SERVER['SERVER_NAME']);
+
+if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1) && ($referrer_ok)) {
 
 	$score_count = 0;
 	$not_imported_count = 0;
@@ -22,13 +25,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	$styles_db_table = $prefix."styles";
 
 	// First, query DB to see if any evaluations have been recorded
-
-	/*
-	$query_eval = sprintf("SELECT * FROM %s",$prefix."evaluation");
-	$eval = mysqli_query($connection,$query_eval) or die (mysqli_error($connection));
-	$row_eval = mysqli_fetch_assoc($eval);
-	$totalRows_eval = mysqli_num_rows($eval);
-	*/
 
 	$row_eval = $db_conn->get($prefix."evaluation");
 	$totalRows_eval = $db_conn->count;
@@ -44,14 +40,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	// If there are records, update the scores DB table with scores recorded by judges
 	else {
 
-		/*
-		$query_scored = sprintf("SELECT * FROM %s",$prefix."judging_scores");
-		$scored = mysqli_query($connection,$query_scored) or die (mysqli_error($connection));
-		$row_scored = mysqli_fetch_assoc($scored);
-		$totalRows_scored = mysqli_num_rows($scored);
-		*/
-
-		$db_conn->returnType = 'array'; 
+		$db_conn->returnType = 'array';
 		$row_scored = $db_conn->get($prefix."judging_scores");
 		$totalRows_scored = $db_conn->count;
 
@@ -92,23 +81,10 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			$update_miniBOS = FALSE;
 
 			// Query the evaluation table and return the evaluations associated with the entry
-			/*
-			$query_evals = sprintf("SELECT * FROM %s WHERE eid='%s'",$prefix."evaluation",$value);
-			$evals = mysqli_query($connection,$query_evals) or die (mysqli_error($connection));
-			$row_evals = mysqli_fetch_assoc($evals);
-			$totalRows_evals = mysqli_num_rows($evals);
-			*/
-
-			$db_conn->returnType = 'array'; 
+			$db_conn->returnType = 'array';
 			$db_conn->where ('eid', $value);
 			$row_evals = $db_conn->get($prefix."evaluation");
 			$totalRows_evals = $db_conn->count;
-
-			/*
-			$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'",$styles_db_table,$row_evals['evalStyle']);
-			$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
-			$row_style_type = mysqli_fetch_assoc($style_type);
-			*/
 
 			// First, check if the score has been recorded already.
 			// If it has, check that any places OR mini-BOS has been recorded or changed
@@ -121,12 +97,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				// If there is a record, update the record in the scores DB
 				// Loop through and compare each final score. 
 				foreach ($row_evals as $row_evals) {
-
-					/*
-					$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle']);
-					$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
-					$row_style_type = mysqli_fetch_assoc($style_type);
-					*/
 
 					$db_conn->where ('id', $row_evals['evalStyle']);
 					$row_style_type = $db_conn->getOne ($styles_db_table, null, "brewStyleType");
@@ -238,12 +208,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					// Loop through and compare each final score. 
 					foreach ($row_evals as $row_evals)  {
 
-						/*
-						$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_evals['evalStyle']);
-						$style_type = mysqli_query($connection,$query_style_type);
-						$row_style_type = mysqli_fetch_assoc($style_type);
-						*/
-
 						$db_conn->where ('id', $row_evals['evalStyle']);
 						$row_style_type = $db_conn->getOne ($styles_db_table, null, "brewStyleType");
 
@@ -272,12 +236,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					if ((is_array($evalPlace)) && (!empty($evalPlace))) $evalPlace = max($evalPlace);
 					if ((is_numeric($evalPlace)) && ($evalPlace > 0)) $evalPlace = $evalPlace;
 					else $evalPlace = "";
-
-					/*
-					$query_eval_max = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE eid='%s' AND evalFinalScore='%s'",$prefix."evaluation",$value,$final_score);
-					$eval_max = mysqli_query($connection,$query_eval_max) or die (mysqli_error($connection));
-					$row_eval_max = mysqli_fetch_assoc($eval_max);
-					*/
 
 					$db_conn->where ('eid', $value);
 					$db_conn->where ('evalFinalScore', $final_score);

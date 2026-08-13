@@ -161,7 +161,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
     <!-- Aroma Comments -->
     <div class="mb-3">
         <label class="form-label" for="evalAromaComments"><strong><?php echo $label_comments; ?></strong></label>
-        <textarea class="form-control" id="evalAromaComments" name="evalAromaComments" rows="6" placeholder="" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAromaComments']); ?></textarea>
+        <textarea class="form-control" id="evalAromaComments" name="evalAromaComments" rows="6" placeholder="" required><?php if ($action == "edit") echo $row_eval['evalAromaComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalAromaComments-words"></div>
     </div>
@@ -295,7 +295,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
     <!-- Appearance Comments -->
     <div class="mb-3">
         <label class="form-label" for="evalAppearanceComments"><strong><?php echo $label_comments; ?></strong></label>
-        <textarea class="form-control" id="evalAppearanceComments" name="evalAppearanceComments" rows="6" placeholder="" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAppearanceComments']); ?></textarea>
+        <textarea class="form-control" id="evalAppearanceComments" name="evalAppearanceComments" rows="6" placeholder="" required><?php if ($action == "edit") echo $row_eval['evalAppearanceComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalAppearanceComments-words"></div>
     </div>
@@ -515,7 +515,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
     <!-- Flavor Comments -->
     <div class="mb-3">
         <label class="form-label" for="evalFlavorComments"><strong><?php echo $label_flavor; ?></strong></label>
-        <textarea class="form-control" id="evalFlavorComments" name="evalFlavorComments" rows="6" placeholder=""  required><?php if ($action == "edit") echo htmlentities($row_eval['evalFlavorComments']); ?></textarea>
+        <textarea class="form-control" id="evalFlavorComments" name="evalFlavorComments" rows="6" placeholder=""  required><?php if ($action == "edit") echo $row_eval['evalFlavorComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalFlavorComments-words"></div>
     </div>
@@ -698,7 +698,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 
     <div class="mb-3">
         <label for="evalMouthfeelComments"><strong><?php echo $label_comments; ?></strong></label>
-        <textarea class="form-control" id="evalMouthfeelComments" name="evalMouthfeelComments" rows="6" placeholder="" required><?php if ($action == "edit") echo htmlentities($row_eval['evalMouthfeelComments']); ?></textarea>
+        <textarea class="form-control" id="evalMouthfeelComments" name="evalMouthfeelComments" rows="6" placeholder="" required><?php if ($action == "edit") echo $row_eval['evalMouthfeelComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalMouthfeelComments-words"></div>
     </div>
@@ -758,7 +758,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 
     <div class="mb-3">
         <label class="form-label" for="evalOverallComments"><strong><?php echo $label_comments; ?></strong></label>
-        <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
+        <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" required><?php if ($action == "edit") echo $row_eval['evalOverallComments']; ?></textarea>
         <div class="help-block small invalid-feedback text-danger"><?php echo $evaluation_info_061; ?></div>
         <div class="help-block small" id="evalOverallComments-words"></div>
     </div>

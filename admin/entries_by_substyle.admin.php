@@ -26,23 +26,35 @@ include (DB.'styles.db.php');
 
 $subcats = array();
 
-do {
+foreach ($rows_styles as $row_styles) {
 
 	if (array_key_exists($row_styles['id'], $styles_selected)) {
 		$subcats[] = array($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$row_styles['brewStyle'],$row_styles['brewStyleCategory'],$row_styles['brewStyleActive']);
 	}
-	
-} while ($row_styles = mysqli_fetch_assoc($styles));
+
+}
 
 foreach ($subcats as $key => $value) {
 
 	$substyle = $value;
 
-	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0]);
-	else $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0],$substyle[1]);
+	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) {
+		$query_substyle_count = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'";
+		$params_substyle_count = array($substyle[0]);
+	}
+	else {
+		$query_substyle_count = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewSubCategory=? AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'";
+		$params_substyle_count = array($substyle[0], $substyle[1]);
+	}
 
-	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing",$substyle[0],$substyle[1]);
-	else $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1'",$prefix."brewing",$substyle[0],$substyle[1]);
+	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) {
+		$query_substyle_count_logged = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewConfirmed='1'";
+		$params_substyle_count_logged = array($substyle[0]);
+	}
+	else {
+		$query_substyle_count_logged = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewSubCategory=? AND brewConfirmed='1'";
+		$params_substyle_count_logged = array($substyle[0], $substyle[1]);
+	}
 
 	include (DB.'entries_by_substyle.db.php');
 
@@ -185,7 +197,7 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
 }
 
 ?>
-<p class="lead"><?php echo $_SESSION['contestName']; ?> entry count by broken down by sub-style.</p>
+<p class="lead"><?php echo h($_SESSION['contestName']); ?> entry count by broken down by sub-style.</p>
 <?php if ($action != "print") { ?>
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="add-custom-winning">

@@ -33,6 +33,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$redirect = $base_url."index.php?msg=98";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
+			header($redirect_go_to);
+			exit();
 
 		}
 
@@ -45,6 +47,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		        $redirect = $base_url."index.php?msg=98";
 		        $redirect = prep_redirect_link($redirect);
 		        $redirect_go_to = sprintf("Location: %s", $redirect);
+		        header($redirect_go_to);
+		        exit();
 		    }
 		}
 
@@ -53,6 +57,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		    $redirect = $base_url."index.php?view=your+mom&msg=19";
 		    $redirect = prep_redirect_link($redirect);
 		    $redirect_go_to = sprintf("Location: %s", $redirect);
+		    header($redirect_go_to);
+		    exit();
 		}
 
 		// Timing analysis - check if form was filled too quickly or slowly
@@ -60,6 +66,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		    $redirect = $base_url."index.php?msg=98";
 		   	$redirect = prep_redirect_link($redirect);
 		    $redirect_go_to = sprintf("Location: %s", $redirect);
+		    header($redirect_go_to);
+		    exit();
 		}
 
 		else {
@@ -73,14 +81,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			    $redirect = $base_url."index.php?view=your+mom&msg=19";
 			    $redirect = prep_redirect_link($redirect);
 			    $redirect_go_to = sprintf("Location: %s", $redirect);
+			    header($redirect_go_to);
+			    exit();
 			}
 
 			if ($time_taken > MAX_SUBMISSION_TIME) {
 			    $redirect = $base_url."index.php?msg=3";
 			    $redirect = prep_redirect_link($redirect);
 			    $redirect_go_to = sprintf("Location: %s", $redirect);
+			    header($redirect_go_to);
+			    exit();
 			}
-		
+
 		}
 
 		// Check for spam patterns
@@ -103,6 +115,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$redirect = $base_url."index.php?view=your+mom&msg=19";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
+			header($redirect_go_to);
+			exit();
 		}
 
 		// Human interaction checks
@@ -114,6 +128,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		    $redirect = $base_url."index.php?view=your+mom&msg=19";
 		    $redirect = prep_redirect_link($redirect);
 		    $redirect_go_to = sprintf("Location: %s", $redirect);
+		    header($redirect_go_to);
+		    exit();
 		}
 
 		// Validate email
@@ -124,6 +140,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$redirect = $base_url."index.php?msg=98";
 		    	$redirect = prep_redirect_link($redirect);
 		    	$redirect_go_to = sprintf("Location: %s", $redirect);
+		    	header($redirect_go_to);
+		    	exit();
 			}
 		}
 
@@ -151,9 +169,23 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				// Verify reCAPTCHA response
 				if ($captcha_type == 1) {
-					$response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
+
+					$recaptcha_data = array(
+						'secret' => $private_captcha_key,
+						'response' => $_POST['g-recaptcha-response']
+					);
+
+					$verify = curl_init();
+					curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+					curl_setopt($verify, CURLOPT_POST, true);
+					curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($recaptcha_data));
+					curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+
+					$response = curl_exec($verify);
+					curl_close($verify);
 					$response_data = json_decode($response);
-					if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;	
+
+					if ((!empty($response_data)) && ($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
 				}
 
 				// Verify hCAPTCHA response
@@ -194,14 +226,15 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$redirect = $base_url."index.php?msg=20";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
+			header($redirect_go_to);
+			exit();
 
 		}
 
 		if ($mail_use_smtp) {
 
-			$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", sterilize($_POST['to']));
-			$contact = mysqli_query($connection,$query_contact) or die (mysqli_error($connection));
-			$row_contact = mysqli_fetch_assoc($contact);
+			$db_conn->where("id", sterilize($_POST['to']));
+			$row_contact = $db_conn->getOne($contacts_db_table);
 
 			$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
 			$to_name = html_entity_decode($to_name);
@@ -282,7 +315,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	} // end if ($action == "email")
 
-	elseif ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
+	elseif ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) {
 
 		$contactFirstName = sterilize($_POST['contactFirstName']);
 		$contactFirstName = standardize_name($purifier->purify($contactFirstName));

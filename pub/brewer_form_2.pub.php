@@ -1,8 +1,14 @@
 <?php
 
-if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
+// A participant who is already a judge/steward must still be able to reach this block to opt
+// back out, even once the competition's judge/steward cap has been reached - otherwise, once
+// the cap is hit, no existing judge/steward could ever remove themselves again.
+$already_judge = (($action == "edit") && ($row_brewer['brewerJudge'] == "Y"));
+$already_steward = (($action == "edit") && ($row_brewer['brewerSteward'] == "Y"));
 
-    if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { 
+if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
+
+    if (((!$judge_limit || $already_judge) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) {
 
         $styles_selected = array();
         $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
@@ -304,7 +310,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 </section><!-- ./ judge-preferences -->
 <?php } // end if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
 
-<?php if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
+<?php if (((!$steward_limit || $already_steward) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
 <a name="steward-info"></a>
 <section id="steward-preferences">
     <div class="mb-3 row">

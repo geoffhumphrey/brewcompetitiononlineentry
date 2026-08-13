@@ -148,7 +148,7 @@ if ($filter == "staff") {
     </tr>
     </thead>
     <tbody>
-    <?php do {
+    <?php foreach ($rows_assignments as $row_assignments) {
     	$judge_info = "";
     	$table_info = "";
     	$location_info = "";
@@ -184,7 +184,7 @@ if ($filter == "staff") {
         <td><?php echo $row_assignments['assignFlight']; ?></td>
 		<?php } ?>
     </tr>
-    <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
+    <?php } ?>
     </tbody>
     </table>
     <div style="page-break-after: always;"></div>
@@ -201,35 +201,36 @@ else {
 
 	foreach ($judging_sessions as $key => $value) {
 
-		$query_brewer = sprintf("SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,b.uid,b.staff_judge,b.staff_steward,b.staff_staff,b.staff_organizer,c.assignLocation FROM %s a, %s b, %s c WHERE a.uid = b.uid AND a.uid = c.bid",$prefix."brewer",$prefix."staff",$prefix."judging_assignments");
-		if (SINGLE) $query_brewer .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
+		$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,b.uid,b.staff_judge,b.staff_steward,b.staff_staff,b.staff_organizer,c.assignLocation FROM ".$prefix."brewer"." a, ".$prefix."staff"." b, ".$prefix."judging_assignments"." c WHERE a.uid = b.uid AND a.uid = c.bid";
+		$params_brewer = array();
+		if (SINGLE) { $query_brewer .= " AND comp_id=?"; $params_brewer[] = $_SESSION['comp_id']; }
 		if ($filter == "S") $query_brewer .= " AND b.staff_steward='1'";
-		else $query_brewer .= " AND b.staff_judge='1'"; 
+		else $query_brewer .= " AND b.staff_judge='1'";
 		$query_brewer .= " ORDER BY a.brewerLastName ASC";
-		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-		$row_brewer = mysqli_fetch_assoc($brewer);
-		$totalRows_brewer = mysqli_num_rows($brewer);
+		$rows_brewer = (!empty($params_brewer)) ? $db_conn->rawQuery($query_brewer, $params_brewer) : $db_conn->rawQuery($query_brewer);
+		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
+		$totalRows_brewer = $db_conn->count;
 
 		$list_tbody = "";
 
 
 		if ($totalRows_brewer > 0) {
 
-		do {
+		foreach ($rows_brewer as $row_brewer) {
 
 			if ($row_brewer['assignLocation'] == $value['loc-id']) {
 				$list_tbody .= "<tr class=\"show-me-hide-me\">";
 				$list_tbody .= "<td nowrap=\"nowrap\">".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
 				if ($filter == "J") $list_tbody .= "<td>".strtoupper(strtr($row_brewer['brewerJudgeID'],$bjcp_num_replace))."</td>";
 				$list_tbody .= "<td>";
-				if ($row_brewer['brewerJudgeWaiver'] == "Y") $list_tbody .= $label_yes; 
+				if ($row_brewer['brewerJudgeWaiver'] == "Y") $list_tbody .= $label_yes;
 				else $list_tbody .= $label_no;
 				$list_tbody .= "</td>";
 				$list_tbody .= "<td>&nbsp;</td>";
 				$list_tbody .= "</tr>";
 			}
 
-		} while($row_brewer = mysqli_fetch_assoc($brewer));
+		}
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {

@@ -359,7 +359,7 @@
 <!-- Overall Impression -->
 <h5><?php echo $label_summary_overall_impression; ?></h5>
 <hr>
-<p class="tick-row"><?php echo htmlentities($row_eval['evalOverallComments']); ?></p>
+<p class="tick-row"><?php echo $row_eval['evalOverallComments']; ?></p>
 <h5><?php echo $label_judge. " ". $label_score; ?><span class="pull-right"><?php echo $score; ?> <small>/ 50</small></span></h5>
 
 <!-- Scoring Guide -->

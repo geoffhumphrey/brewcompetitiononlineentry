@@ -1,4 +1,13 @@
 <?php
+
+// Redirect if directly accessed without authenticated session
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
+    $redirect = "../../403.php";
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 $suggested_open = FALSE;
 $suggested_close = FALSE;
 $judging_open_date = "";
@@ -13,20 +22,19 @@ if ($_SESSION['prefsEval'] == 1) {
 
     // Check whether any judging sessions have been defined. 
     // If so, loop through and find the earliest and the latest dates.
-    $query_judging_locations = sprintf("SELECT id, judgingDate, judgingDateEnd FROM %s WHERE judgingLocType <= '1';", $prefix."judging_locations");
-    $judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
-    $row_judging_locations = mysqli_fetch_assoc($judging_locations);
-    $totalRows_judging_locations = mysqli_num_rows($judging_locations);
+    
+    $cols = array("id", "judgingDate", "judgingDateEnd");
+    $db_conn->where ("judgingLocType", "1", "<=");
+    $db_conn->returnType = "array"; 
+    $row_judging_locations = $db_conn->get($prefix."judging_locations", null, $cols);
+    $totalRows_judging_locations = $db_conn->count;
 
     if ($totalRows_judging_locations > 0) {
 
-        do {
-
+        foreach ($row_judging_locations as $row_judging_locations) {
             if (!empty($row_judging_locations['judgingDate'])) $judging_dates[] = $row_judging_locations['judgingDate'];
             if (!empty($row_judging_locations['judgingDateEnd'])) $judging_dates[] = $row_judging_locations['judgingDateEnd'];
-
-
-        } while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+        }
 
         $judging_earliest_date = min($judging_dates);
         if ((max($judging_dates) > $judging_earliest_date)) $judging_latest_date = max($judging_dates);
@@ -129,17 +137,6 @@ if ($_SESSION['prefsEval'] == 1) {
     
     }
 
-    /*
-    echo "Judging Earliest Date: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_earliest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>";
-    echo "Judging Open Date Session Var: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
-    echo "Open Date to Display: ".$judging_open_date."<br>";
-    echo "---------<br>";
-    if (!empty($judging_latest_date)) echo "Judging Latest Date: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_latest_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
-    else echo "No Judging Latest Date<br>";
-    echo "Judging Closed Date Session Var: " . getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system")."<br>"; 
-    echo "Closed Date to Display: ".$judging_close_date."<br>";
-    */
-
 }
 
 /*
@@ -151,7 +148,8 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
 */
 
 ?>
-<p class="lead"><?php echo $_SESSION['contestName']." Competition-Related Dates"; ?></p>
+
+<p class="lead"><?php echo h($_SESSION['contestName'])." Competition-Related Dates"; ?></p>
 <p>All competition-related dates for various functions are listed below. Useful when resetting the software for another competition instance after archiving or purging or to adjust any function's date/time for the current competition iteration.</p>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=dates&amp;dbTable=default">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
@@ -291,7 +289,7 @@ if ($totalRows_judging_locs > 0) {
 
 $judging_session_js = ""; 
     
-    do { 
+    foreach ($rows_judging_locs as $row_judging_locs) {
 
         $judging_date = "";
         $judging_end_date = "";
@@ -307,19 +305,19 @@ $judging_session_js = "";
 ?>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
     <input type="hidden" name="id[]" value="<?php echo $row_judging_locs['id']; ?>">
-    <label for="judgingDate-<?php echo $row_judging_locs['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $row_judging_locs['judgingLocName']; ?> - Session Start</label>
+    <label for="judgingDate-<?php echo $row_judging_locs['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo h($row_judging_locs['judgingLocName']); ?> - Session Start</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group date has-warning">
             <!-- Input Here -->
             <input class="form-control date-time-picker-system" id="judgingDate-<?php echo $row_judging_locs['id']; ?>" name="judgingDate<?php echo $row_judging_locs['id']; ?>" type="text" value="<?php echo $judging_date; ?>" placeholder="" required>
             <span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
-        <span class="help-block">Provide a start date and time for the session.<br>Session type is set to <strong><?php echo $session_type; ?></strong>. To change the type or other information, <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_judging_locs['id']; ?>">edit the <?php echo $row_judging_locs['judgingLocName']; ?> session</a>.</span>
+        <span class="help-block">Provide a start date and time for the session.<br>Session type is set to <strong><?php echo $session_type; ?></strong>. To change the type or other information, <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=<?php echo $row_judging_locs['id']; ?>">edit the <?php echo h($row_judging_locs['judgingLocName']); ?> session</a>.</span>
     </div>
 </div><!-- ./Form Group -->
 <?php if ($row_judging_locs['judgingLocType'] == "1") { ?>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-    <label for="judgingDateEnd-<?php echo $row_judging_locs['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $row_judging_locs['judgingLocName']; ?> - Session End</label>
+    <label for="judgingDateEnd-<?php echo $row_judging_locs['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo h($row_judging_locs['judgingLocName']); ?> - Session End</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group date has-warning">
             <!-- Input Here -->
@@ -331,7 +329,7 @@ $judging_session_js = "";
 </div><!-- ./Form Group -->
 <?php       } // END if ($row_judging_locs['judgingLocType'] == "1")
         }  // END if ($row_judging_locs['judgingLocType'] < 2)
-    } while($row_judging_locs = mysqli_fetch_assoc($judging_locs)); 
+    }
 } // end if ($totalRows_judging_locs > 0) 
 ?>
 
@@ -394,8 +392,8 @@ $judging_session_js = "";
 
 if ($totalRows_judging > 0) {
     
-    do { 
-        
+    foreach ($rows_judging as $row_judging) {
+
         $judging_date = "";
         $judging_end_date = "";
         $judging_date .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
@@ -407,7 +405,7 @@ if ($totalRows_judging > 0) {
 ?>
 <div class="form-group">
     <input type="hidden" name="id[]" value="<?php echo $row_judging['id']; ?>">
-    <label for="judgingDate-<?php echo $row_judging['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $row_judging['judgingLocName']; ?> - Session Start</label>
+    <label for="judgingDate-<?php echo $row_judging['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo h($row_judging['judgingLocName']); ?> - Session Start</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group date has-warning">
             <!-- Input Here -->
@@ -419,7 +417,7 @@ if ($totalRows_judging > 0) {
 </div>
 <?php
         } // END if ($row_judging['judgingLocType'] == 2)
-    } while($row_judging = mysqli_fetch_assoc($judging)); 
+    } 
 } // end if ($totalRows_judging > 0)
 if ($non_judging_count == 0) echo "<p>No non-judging sessions have been defined. <a href=\"".$base_url."index.php?section=admin&amp;go=non-judging&amp;action=add\">Add a non-judging session</a>?</p>"; 
 ?>

@@ -1,29 +1,35 @@
 <?php
 require_once ('paths.php');
-require_once (CONFIG.'bootstrap.php');
 require_once (INCLUDES.'url_variables.inc.php');
+// Build array - used in language files, so it needs to be before bootstrap.php
+$checked_in_numbers = array();
+if (strpos($view, "^") !== FALSE) $checked_in_numbers = explode("^",$view);
+elseif (strpos($view, "%5E") !== FALSE) $checked_in_numbers = explode("%5E",$view);
+require_once (CONFIG.'bootstrap.php');
 require_once (LIB.'common.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');
-if ($view != "default") $checked_in_numbers = explode("^",$view);
 
-$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
-if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
-else $query_contest_info .= " WHERE id='1'";
-$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
-$row_contest_info = mysqli_fetch_assoc($contest_info);
+if (SINGLE) $db_conn->where("id", $_POST['comp_id']);
+else $db_conn->where("id", 1);
+$row_contest_info = $db_conn->getOne($prefix."contest_info");
 
-if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$row_contest_info['id']);
-else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
-$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
-$row_prefs = mysqli_fetch_assoc($prefs);
-$totalRows_prefs = mysqli_num_rows($prefs);
+if (SINGLE) $db_conn->where("comp_id", $row_contest_info['id']);
+else $db_conn->where("id", 1);
+$row_prefs = $db_conn->getOne($prefix."preferences");
+$totalRows_prefs = $db_conn->count;
 
 $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
+
+// Legacy installs may still have prefsLanguage stored as "English" (pre-locale-code
+// installs, e.g. via the 2.1.5.0 update) rather than "en-US" - normalize before deriving
+// the folder, or this falls through to strtolower() producing "english", which doesn't
+// match the actual "en" folder on disk.
+if (strtolower($_SESSION['prefsLanguage']) == "english") $_SESSION['prefsLanguage'] = "en-US";
 
 if (($action != "update") && ($action != "password-check")) csrf_token_generate(false);
 
 // Check if variation used (demarked with a dash)
-if (strpos($row_prefs['prefsLanguage'], '-') !== FALSE) {
+if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
 	$lang_folder = explode("-",$_SESSION['prefsLanguage']);
 	$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
 }
@@ -67,13 +73,11 @@ if ($action == "password-check") {
 
 		else {
 
-			mysqli_real_escape_string($connection,$password);
 			$password = md5($password);
 
 			// Check user input against DB
-			$query_qr_password = sprintf("SELECT contestCheckInPassword FROM %s WHERE id = '1'",$prefix."contest_info");
-			$qr_password = mysqli_query($connection,$query_qr_password) or die (mysqli_error($connection));
-			$row_qr_password = mysqli_fetch_assoc($qr_password);
+			$db_conn->where("id", 1);
+			$row_qr_password = $db_conn->getOne($prefix."contest_info", "contestCheckInPassword");
 
 			// if no password set up, redirect
 			if (!isset($row_qr_password['contestCheckInPassword'])) {
@@ -127,10 +131,9 @@ if (($go == "default") && ($id != "default") && ($process_allowed)) {
 	$checkin_redirect = $base_url."qr.php?action=default&go=success";
 	
 	// Check to see if the entry is in the DB
-	$query_entry = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewSubCategory,brewPaid,brewJudgingNumber FROM %s WHERE id='%s'",$prefix."brewing",$id);
-	$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-	$row_entry = mysqli_fetch_assoc($entry);
-	$totalRows_entry = mysqli_num_rows($entry);
+	$db_conn->where("id", $id);
+	$row_entry = $db_conn->getOne($prefix."brewing", "id,brewName,brewStyle,brewCategory,brewSubCategory,brewPaid,brewJudgingNumber");
+	$totalRows_entry = $db_conn->count;
 	
 	if ($totalRows_entry == 1) {
 
@@ -185,10 +188,10 @@ if (($go == "default") && ($id != "default") && ($process_allowed)) {
 				$brewJudgingNumber = strtolower($brewJudgingNumber); // judging numbers are stored in all lower case
 
 				// Check to see if judging number has already been assigned
-				$query_judging_number = sprintf("SELECT id FROM %s WHERE brewJudgingNumber='%s' AND id <> %s ",$prefix."brewing",$brewJudgingNumber,$id);
-				$judging_number = mysqli_query($connection,$query_judging_number) or die (mysqli_error($connection));
-				$row_judging_number = mysqli_fetch_assoc($judging_number);
-				$totalRows_judging_number = mysqli_num_rows($judging_number);
+				$db_conn->where("brewJudgingNumber", $brewJudgingNumber);
+				$db_conn->where("id", $id, "<>");
+				$row_judging_number = $db_conn->getOne($prefix."brewing", "id");
+				$totalRows_judging_number = $db_conn->count;
 
 				// If so, redirect with message
 				if ($totalRows_judging_number > 0) {

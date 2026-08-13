@@ -19,13 +19,15 @@ if ($section == "step4") {
         $currency_code = "USD";
     }
 
-    $query_brewer = sprintf("SELECT brewerFirstName,brewerLastName,brewerEmail FROM %s ORDER BY id ASC LIMIT 1",$prefix."brewer");
-    $brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-    $row_brewer = mysqli_fetch_assoc($brewer);
+    $db_conn->returnType = "array";
+    $db_conn->orderBy("id", "ASC");
+    $row_brewer = $db_conn->getOne($prefix."brewer", "brewerFirstName,brewerLastName,brewerEmail");
+    if (empty($row_brewer)) $row_brewer = array();
 
-    $query_comp_info = sprintf("SELECT COUNT(*) as 'count' FROM %s ORDER BY id ASC LIMIT 1",$prefix."contest_info");
-    $comp_info = mysqli_query($connection,$query_comp_info) or die (mysqli_error($connection));
-    $row_comp_info = mysqli_fetch_assoc($comp_info);
+    $db_conn->returnType = "array";
+    $db_conn->orderBy("id", "ASC");
+    $row_comp_info = $db_conn->getOne($prefix."contest_info", "COUNT(*) as 'count'");
+    if (empty($row_comp_info)) $row_comp_info = array();
 
     if ($row_comp_info['count'] >= 1) {
         $action = "edit";
@@ -319,7 +321,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
             <span class="input-group-addon" id="contactEmail-addon1"><span class="fa fa-envelope"></span></span>
             
-            <input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php echo $row_brewer['brewerEmail']; ?>" placeholder="" aria-describedby="helpBlock" required>
+            <input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php echo h($row_brewer['brewerEmail']); ?>" placeholder="" aria-describedby="helpBlock" required>
             <span class="input-group-addon" id="contactEmail-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <span id="helpBlock" class="help-block">You will be able to enter more contact names after setup.</span>
@@ -342,11 +344,11 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP Competition ID</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if (($section != "step4") && (time() < $later_date)) echo $row_contest_info['contestID']; ?>" placeholder="Current competition iteration BJCP ID.">
+        <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if (($section != "step4") && (time() < $later_date)) echo h($row_contest_info['contestID']); ?>" placeholder="Current competition iteration BJCP ID.">
     	<span id="helpBlock" class="help-block">
         <?php if (time() >= $later_date) { ?>
         <p>The field above is blank because it has been 60 days or more since the latest date in the system associated with an entry window, judging sessions, or awards.</p>
-        <p>The ID currently in the system is <strong><?php echo $row_contest_info['contestID']; ?></strong>. If this is incorrect, enter the BJCP ID for the <strong>CURRENT</strong> competition iteration. If correct, re-enter the number. Please note that the BJCP will reject any XML report with a missing or incorrect ID number.</p>
+        <p>The ID currently in the system is <strong><?php echo h($row_contest_info['contestID']); ?></strong>. If this is incorrect, enter the BJCP ID for the <strong>CURRENT</strong> competition iteration. If correct, re-enter the number. Please note that the BJCP will reject any XML report with a missing or incorrect ID number.</p>
         <?php } else { ?>
         <p>Be sure to enter the BJCP ID for the <strong>CURRENT</strong> competition iteration. Please note that the BJCP will reject any XML report with a missing or incorrect ID number.</p>
         <?php } ?>
@@ -400,14 +402,14 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestHostWebsite" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host Website Address</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestHostWebsite" name="contestHostWebsite" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHostWebsite']; ?>" placeholder="http://www.yoursite.com">
+        <input class="form-control" id="contestHostWebsite" name="contestHostWebsite" type="text" maxlength="255" value="<?php if ($section != "step4") echo h($row_contest_info['contestHostWebsite']); ?>" placeholder="http://www.yoursite.com">
     </div>
 </div>
 
 <div class="form-group">
     <label for="contestWinnerLink" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Link to Past Winners</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestWinnerLink" name="contestWinnerLink" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestWinnerLink']; ?>" placeholder="http://www.yoursite.com">
+        <input class="form-control" id="contestWinnerLink" name="contestWinnerLink" type="text" maxlength="255" value="<?php if ($section != "step4") echo h($row_contest_info['contestWinnerLink']); ?>" placeholder="http://www.yoursite.com">
     <span id="helpBlock" class="help-block">Website or URL of a previous winner list for this competition. <?php if (!HOSTED) echo " This will be listed in addition to any previous winners list from archived data associated with this installation."; ?></span>
     </div>
 </div>
@@ -631,9 +633,9 @@ $(document).ready(function(){
                     $rules = strip_tags($rules);
                     echo $rules;
                 }
-                else echo $contestRulesJSON['competition_rules'];
+                else echo h($contestRulesJSON['competition_rules']);
             }
-            else echo $contestRulesJSON['competition_rules'];
+            else echo h($contestRulesJSON['competition_rules']);
         }
 
         ?></textarea>
@@ -702,9 +704,9 @@ $(document).ready(function(){
                     $packing_shipping_rules = strip_tags($packing_shipping_rules);
                     echo $packing_shipping_rules;
                 }
-                else echo $contestRulesJSON['competition_packing_shipping'];
+                else echo h($contestRulesJSON['competition_packing_shipping']);
             }
-            else echo $contestRulesJSON['competition_packing_shipping'];
+            else echo h($contestRulesJSON['competition_packing_shipping']);
         }
 
         ?></textarea>
