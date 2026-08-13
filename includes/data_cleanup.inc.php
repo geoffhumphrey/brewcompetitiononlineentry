@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 $count_results = 0;
 $date_threshold = "";
 

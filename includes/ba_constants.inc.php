@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 $ba_category_names = array(
 	"1" => "British Origin Ales",
 	"2" => "Irish Origin Ales",

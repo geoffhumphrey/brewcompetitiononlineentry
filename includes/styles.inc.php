@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * UPDATE June 13, 2023
  * - Deprecated BJCP 2015

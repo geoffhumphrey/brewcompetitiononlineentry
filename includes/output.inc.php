@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      output.inc.php
  * Description: This module does all the heavy lifting for any data downloads,
@@ -18,7 +19,7 @@ require (INCLUDES.'url_variables.inc.php');
 require (LANG.'language.lang.php');
 require (INCLUDES.'constants_post_lang.inc.php');
 
-function convert_to_entities($input) {
+function convert_to_entities(string $input): string {
     $output = preg_replace_callback("/(&#[0-9]+;)/", function($m) { 
         return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES"); 
     }, $input);

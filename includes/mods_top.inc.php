@@ -1,4 +1,4 @@
-<?php 
+<?php declare(strict_types=1);
 if (isset($_SESSION['loginUsername'])) $user_level_mods = $_SESSION['userLevel']; 
 else $user_level_mods = "2";
 
