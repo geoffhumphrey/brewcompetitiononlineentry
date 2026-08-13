@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * -------- User Judging/Evaluation Dashboard --------
  * 
@@ -48,17 +50,17 @@ $latest_updated = array();
 $date_updated = array();
 $diff = 600; // Differential of seconds (10 minutes)
 
-function find_next($arr,$needle,$diff) {
+function find_next(array $arr,int $needle,int $diff): int {
 	$last = 0;
 	foreach ($arr as $key => $value) {
 		if ($value > ($needle-$diff))  {
-			return $value;
+			return (int)$value;
 		}
 	}
 	return $last;
 }
 
-function count_past($arr,$needle,$diff) {
+function count_past(array $arr,int $needle,int $diff): int {
 	$count = 0;
 	foreach ($arr as $key => $value) {
 		if ($value < ($needle-$diff))  {
@@ -68,7 +70,7 @@ function count_past($arr,$needle,$diff) {
 	return $count;
 }
 
-function count_future($arr,$needle,$diff) {
+function count_future(array $arr,int $needle,int $diff): int {
 	$count = 0;
 	foreach ($arr as $key => $value) {
 		if ($value > ($needle-$diff)) {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      pay.sec.php
  * Description: This module dispays payment information based upon the competition-

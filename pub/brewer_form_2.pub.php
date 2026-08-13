@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 // A participant who is already a judge/steward must still be able to reach this block to opt
 // back out, even once the competition's judge/steward cap has been reached - otherwise, once

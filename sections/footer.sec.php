@@ -1,4 +1,5 @@
 <?php 
+declare(strict_types=1);
 /**
  * Module:      footer.sec.php 
  * Description: This module houses the footer displayed on all pages. 

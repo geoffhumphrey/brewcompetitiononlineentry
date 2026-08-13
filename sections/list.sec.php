@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Module:      list.sec.php
  * Description: This module displays user-related data including personal information,
@@ -19,17 +21,19 @@ $user_remaining_entries = 0;
 if (!empty($row_limits['prefsUserEntryLimit'])) $user_remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
 else $user_remaining_entries = 1;
 
-function pay_to_print($prefs_pay,$entry_paid) {
+function pay_to_print(string $prefs_pay,string $entry_paid): bool {
 	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
 	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
 	elseif ($prefs_pay == "N") return TRUE;
+	return FALSE;
 }
 
 if (NHC) {
-	function certificate_type($score) {
+	function certificate_type(float $score): string {
 		if (($score >= 25) && ($score <= 29.9)) $return = "Bronze Certificate";
 		elseif (($score >= 30) && ($score <= 37.9))	$return = "Silver Certificate";
 		elseif (($score >= 38) && ($score <= 50))	$return = "Gold Certificate";
+		if (!isset($return)) $return = "";
 		return $return;
 	}
 }

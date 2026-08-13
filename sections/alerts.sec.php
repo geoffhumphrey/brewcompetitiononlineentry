@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 // Redirect if directly accessed
 if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$prefix_session])) && (!isset($base_url)))) {

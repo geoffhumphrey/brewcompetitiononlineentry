@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      brewer_entries.sec.php
  * Description: This module displays the user's entries and related data

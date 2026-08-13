@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      user.sec.php 
  * Description: This module houses the functionality for users to add/update enter their

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /*
 // Redirect if directly accessed without authenticated session
