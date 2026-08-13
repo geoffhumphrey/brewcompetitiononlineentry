@@ -187,7 +187,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (HOSTED) $prefsCAPTCHA = 1;
 			else $prefsCAPTCHA = sterilize($_POST['prefsCAPTCHA']);
 
-			if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = strtotime(sterilize($_POST['prefsWinnerDelay']));
+			if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = to_utc_epoch(sterilize($_POST['prefsWinnerDelay']), $timezone_raw);
 			else $prefsWinnerDelay = 2145916800;
 
 			$data_1 = array(
