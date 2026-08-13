@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Module:      judging_locations.admin.php

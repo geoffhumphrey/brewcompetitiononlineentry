@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      participants.admin.php
  * Description: This module houses all participant (brewer) related functionality

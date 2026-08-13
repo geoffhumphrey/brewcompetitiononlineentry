@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      special_best_data.admin.php
  * Description: Add, edit, and delete any custom "best of" categories for a comp.
