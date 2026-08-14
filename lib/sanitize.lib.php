@@ -37,14 +37,11 @@ function sterilize(mixed $sterilize = null): mixed {
     elseif (empty($sterilize)) return $sterilize;
     else {
         $sterilize = trim($sterilize);
-        if (is_numeric($sterilize)) {
-            if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-            if (is_int($sterilize)) {
-                if ($sterilize == 0) $sterilize = 0;
-                else $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
-            }            
-        }
-        else $sterilize = filter_var($sterilize,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        // After trim() the value is always a string; is_float()/is_int()
+        // on a string always evaluate false, so the numeric-string path
+        // falls through to FULL_SPECIAL_CHARS (which leaves digits, '.',
+        // and ',' intact). This matches the pre-existing behavior.
+        $sterilize = filter_var($sterilize, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $sterilize = strip_tags($sterilize);
         $sterilize = stripcslashes($sterilize);
         $sterilize = stripslashes($sterilize);
