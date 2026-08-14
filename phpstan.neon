@@ -38,6 +38,8 @@ parameters:
         - site/dbObject.php
         - site/bootstrap.php
     tmpDir: var/phpstan
+    scanFiles:
+        - site/MysqliDb.php
     treatPhpDocTypesAsCertain: false
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
@@ -46,6 +48,9 @@ parameters:
         -
             message: '#Parameter \$mail of function sendPHPMailerMessage\(\) has invalid type PHPMailer#'
             path: lib/email.lib.php
+        -
+            message: '#Parameter \$mail of function send_test_message\(\) has invalid type PHPMailer#'
+            path: admin/send_test_email.admin.php
 
 includes:
     - phpstan-baseline.neon
