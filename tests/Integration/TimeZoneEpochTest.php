@@ -37,7 +37,12 @@ final class TimeZoneEpochTest extends TestCase
                 define($const, false);
             }
         }
-        require_once LIB . 'date_time.lib.php';
+        // common.lib.php includes date_time.lib.php; load it so get_timezone,
+        // to_utc_epoch, and getTimeZoneDateTime are all defined exactly once
+        // regardless of which test loads the libs first in the same process.
+        if (!function_exists('to_utc_epoch')) {
+            require_once LIB . 'common.lib.php';
+        }
     }
 
     /**
