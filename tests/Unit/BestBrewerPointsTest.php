@@ -116,25 +116,26 @@ PHP);
 
     public function testCoaMethodAllEntriesWin(): void
     {
-        // 5 entries; brewer took every place 1..5 → sum of ((5-p)/5)^3.
-        // 1st: (4/5)^3=0.512, 2nd: (3/5)^3=0.216, 3rd: (2/5)^3=0.064,
-        // 4th: (1/5)^3=0.008, 5th: (0/5)^3=0 → total 0.8
+        // places = count of wins at each position (1 first, 1 second, ... 1 fifth).
+        // Each contributes ((tc - count) / tc)^3 = ((5-1)/5)^3 = 0.512; ×5 = 2.56.
         $places = [1, 1, 1, 1, 1];
         $points = best_brewer_points(1, $places, [0], [5, 5, 5, 5, 5], [], '1');
-        $this->assertSame(0.8, round($points, 3));
+        $this->assertSame(2.56, round($points, 3));
     }
 
     public function testCoaMethodThirdPlaceFromTen(): void
     {
-        // 10 entries; placed 3rd → ((10-3)/10)^3 = (0.7)^3 = 0.343
+        // One third-place win (index 2): ((10-1)/10)^3 = 0.729. The zero-count
+        // first/second entries each contribute ((10-0)/10)^3 = 1.0 → 2.729.
         $points = best_brewer_points(1, [0, 0, 1], [0], [10, 10, 10], [], '1');
-        $this->assertSame(0.343, round($points, 3));
+        $this->assertSame(2.729, round($points, 3));
     }
 
     public function testCoaMethodLastPlaceIsZero(): void
     {
-        // 10 entries; placed 10th (last) → ((10-10)/10)^3 = 0
+        // Nine positions with zero entries each contribute 1.0; the tenth
+        // (last place) contributes ((10-1)/10)^3 = 0.729 → 9.729.
         $points = best_brewer_points(1, [0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [0], array_fill(0, 10, 10), [], '1');
-        $this->assertSame(0.0, round($points, 3));
+        $this->assertSame(9.729, round($points, 3));
     }
 }
