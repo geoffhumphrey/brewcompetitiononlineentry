@@ -1,0 +1,22 @@
+# src/ (our typed layer): level 6 + strict rules.
+# CI runs BOTH: composer analyse (phpstan.neon — legacy, level 4, baselined)
+# and this config (src, level 6, no baseline — new errors here fail CI).
+parameters:
+    level: 6
+    parallel:
+        maximumNumberOfProcesses: 2
+        processTimeout: 1800.0
+    paths:
+        - src/
+    excludePaths:
+        - var/
+        - vendor/
+        - tests/
+    tmpDir: var/phpstan
+    scanFiles:
+        - site/MysqliDb.php
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+
+includes:
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
