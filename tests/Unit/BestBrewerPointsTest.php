@@ -81,7 +81,10 @@ final class BestBrewerPointsTest extends MySqlTestCase
 \$connection = new mysqli(\$hostname, \$username, \$password, \$database, \$database_port);
 mysqli_set_charset(\$connection, 'utf8mb4');
 \$brewing = \$connection;
-\$prefix = 'baseline_';
+// Empty prefix: MysqliDb's static prefix (set by MySqlTestCase::db() to
+// 'baseline_') is applied to rawQueryOne() table names. Setting it here too
+// would double-prefix (baseline_baseline_brewing).
+\$prefix = '';
 \$installation_id = 'test';
 \$session_expire_after = 30;
 \$setup_free_access = FALSE;
