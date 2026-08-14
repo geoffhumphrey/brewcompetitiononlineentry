@@ -1346,7 +1346,7 @@ if ($recently_updated) {
                                 </div>
                             </div>
                             <?php } ?>
-                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+                            <?php if (($_SESSION['userLevel'] == 0) || ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Scores</strong>
