@@ -4757,9 +4757,9 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
 
 /**
  * ----------------------------------------------- 3.1.0 ----------------------------------------------
- * Code-only remediation release (no schema changes). Extends the 3.0.4 double/triple HTML-entity-
- * encoding cleanup to additional tables, closes gaps found in the archive process, and corrects
- * several notice-level and logic bugs surfaced during a full QA pass.
+ * Extends the 3.0.4 double/triple HTML-entity-encoding cleanup to additional tables, closes gaps
+ * found in the archive process, corrects several notice-level and logic bugs surfaced during a full
+ * QA pass, and widens the entry fee columns to better support foreign currencies (#1714).
  */
 
 $v3100_update = "";
@@ -4787,6 +4787,24 @@ $v3100_update .= "<li>Corrected several notices affecting archived judging table
 $v3100_update .= "<li>Corrected an issue where opting out of the judge or steward registration cap could lock an account out of registration.</li>";
 $v3100_update .= "<li>Corrected legacy \"English\" language preference values to normalize to the current language folder.</li>";
 $v3100_update .= "<li>Minor bug fixes and security hardening.</li>";
+
+if ((check_mysql_data_type("contestEntryFee",$prefix."contest_info")) != 246) {
+
+	// Change the data type (246 is DECIMAL/NEWDECIMAL).
+	// Widened from float(6,2)/int(11) to decimal(9,2) to better support foreign currencies. #1714
+	$sql = sprintf("ALTER TABLE `%s`
+		CHANGE `contestEntryFee` `contestEntryFee` DECIMAL(9,2) DEFAULT NULL,
+		CHANGE `contestEntryFee2` `contestEntryFee2` DECIMAL(9,2) DEFAULT NULL,
+		CHANGE `contestEntryFeePasswordNum` `contestEntryFeePasswordNum` DECIMAL(9,2) DEFAULT NULL;",
+		$prefix."contest_info");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Entry fee columns widened to better support foreign currencies.</li>";
+	else {
+		$v3100_update .= "<li class=\"text-danger\">Entry fee columns NOT widened to better support foreign currencies.</li>";
+		$error_count++;
+	}
+
+}
 
 if (!$setup_running) $v3100_update .= "</ul>";
 
