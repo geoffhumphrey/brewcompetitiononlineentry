@@ -99,22 +99,33 @@ function bos_entry_info($eid,$table_id,$filter) {
 		$brewer_db_table = $prefix."brewer";
 	}
 
-	$local_db_conn->where("id", $eid);
-	$row_entries_1 = $local_db_conn->getOne($entry_db_table, "id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID");
+	// Each table below may point at an archived competition (via $filter), and any one of them
+	// may no longer exist - rawQuery()-family calls throw rather than fail gracefully in that case.
+	$row_entries_1 = null;
+	if (table_exists($entry_db_table)) {
+		$local_db_conn->where("id", $eid);
+		$row_entries_1 = $local_db_conn->getOne($entry_db_table, "id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID");
+	}
 	// $row_entries_1 can legitimately come back null against an archive - a scored record in
 	// judging_scores_<suffix> whose entry id has no corresponding row in brewing_<suffix> (e.g.
 	// orphaned by a partial archive or an entry deleted after being scored). Every field pulled
 	// from it below is guarded rather than assumed present.
 	$style = (isset($row_entries_1['brewCategorySort']) ? $row_entries_1['brewCategorySort'] : "").(isset($row_entries_1['brewSubCategory']) ? $row_entries_1['brewSubCategory'] : "");
 
-	$local_db_conn->where("id", $table_id);
-	$row_tables_1 = $local_db_conn->getOne($judging_tables_db_table, "id,tableName,tableNumber");
+	$row_tables_1 = null;
+	if (table_exists($judging_tables_db_table)) {
+		$local_db_conn->where("id", $table_id);
+		$row_tables_1 = $local_db_conn->getOne($judging_tables_db_table, "id,tableName,tableNumber");
+	}
 
-	$local_db_conn->where("eid", $eid);
-	$row_bos_place_1 = $local_db_conn->getOne($bos_scores_db_table, "id,scorePlace,scoreEntry");
+	$row_bos_place_1 = null;
+	if (table_exists($bos_scores_db_table)) {
+		$local_db_conn->where("eid", $eid);
+		$row_bos_place_1 = $local_db_conn->getOne($bos_scores_db_table, "id,scorePlace,scoreEntry");
+	}
 
 	$row_brewer = null;
-	if (isset($row_entries_1['brewBrewerID'])) {
+	if ((isset($row_entries_1['brewBrewerID'])) && (table_exists($brewer_db_table))) {
 		$local_db_conn->where("uid", $row_entries_1['brewBrewerID']);
 		$row_brewer = $local_db_conn->getOne($brewer_db_table, "brewerLastName,brewerFirstName,brewerBreweryName");
 	}
@@ -167,10 +178,13 @@ function style_type_info($type,$suffix="default") {
 	if ($suffix == "default") $dbTable = $prefix."style_types";
 	else $dbTable = $prefix."style_types_".$suffix;
 
-	$db_conn->where('id', $type);
-	$row_style_type = $db_conn->getOne($dbTable);
+	$row_style_type = null;
+	if (table_exists($dbTable)) {
+		$db_conn->where('id', $type);
+		$row_style_type = $db_conn->getOne($dbTable);
+	}
 
-	$return = $row_style_type['styleTypeBOS']."^".$row_style_type['styleTypeBOSMethod']."^".$row_style_type['styleTypeName'];
+	$return = (isset($row_style_type['styleTypeBOS']) ? $row_style_type['styleTypeBOS'] : "")."^".(isset($row_style_type['styleTypeBOSMethod']) ? $row_style_type['styleTypeBOSMethod'] : "")."^".(isset($row_style_type['styleTypeName']) ? $row_style_type['styleTypeName'] : "");
 	return $return;
 }
 
@@ -855,8 +869,13 @@ function table_score_data($eid,$score_table,$suffix) {
 	// so it's allow-listed to word characters since it's spliced rather than bound.
 	if ($suffix != "default") $suffix = "_".preg_replace("/[^a-zA-Z0-9_]+/", "", $suffix); else $suffix = "";
 
-	$db_conn->where('id', $eid);
-	$row_entries = $db_conn->getOne($prefix."brewing".$suffix, "id, brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID");
+	// Each table below may point at an archived competition (via $suffix), and any one of them
+	// may no longer exist - rawQuery()-family calls throw rather than fail gracefully in that case.
+	$row_entries = null;
+	if (table_exists($prefix."brewing".$suffix)) {
+		$db_conn->where('id', $eid);
+		$row_entries = $db_conn->getOne($prefix."brewing".$suffix, "id, brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID");
+	}
 	// $row_entries can legitimately come back null against an archive - a scored record in
 	// judging_scores<suffix> whose entry id has no corresponding row in brewing<suffix> (e.g.
 	// orphaned by a partial archive or an entry deleted after being scored). Every field pulled
@@ -865,12 +884,15 @@ function table_score_data($eid,$score_table,$suffix) {
 
 	$style_name = isset($row_entries['brewStyle']) ? $row_entries['brewStyle'] : "";
 
-	$db_conn->where('id', $score_table);
-	$row_tables = $db_conn->getOne($prefix."judging_tables".$suffix, "id,tableName,tableNumber");
+	$row_tables = null;
+	if (table_exists($prefix."judging_tables".$suffix)) {
+		$db_conn->where('id', $score_table);
+		$row_tables = $db_conn->getOne($prefix."judging_tables".$suffix, "id,tableName,tableNumber");
+	}
 	$totalRows_tables = $db_conn->count;
 
 	$row_brewer = null;
-	if (isset($row_entries['brewBrewerID'])) {
+	if ((isset($row_entries['brewBrewerID'])) && (table_exists($prefix."brewer".$suffix))) {
 		$db_conn->where('uid', $row_entries['brewBrewerID']);
 		$row_brewer = $db_conn->getOne($prefix."brewer".$suffix, "brewerLastName,brewerFirstName,brewerBreweryName");
 	}

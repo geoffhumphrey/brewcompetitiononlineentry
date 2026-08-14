@@ -52,7 +52,7 @@ function has_double_encoded_data($db_conn) {
 
 	$tables_columns = array(
 		$brewer_db_table => array('brewerJudgeID', 'brewerBreweryName', 'brewerJudgeNotes', 'brewerFirstName', 'brewerLastName', 'brewerAddress', 'brewerCity', 'brewerState', 'brewerBreweryInfo'),
-		$brewing_db_table => array('brewName', 'brewComments', 'brewCoBrewer', 'brewPossAllergens', 'brewAdminNotes', 'brewStaffNotes', 'brewBoxNum', 'brewPouringNotes', 'brewInfo', 'brewInfoOptional'),
+		$brewing_db_table => array('brewName', 'brewComments', 'brewCoBrewer', 'brewPossAllergens', 'brewAdminNotes', 'brewStaffNotes', 'brewBoxNum', 'brewPouring', 'brewInfo', 'brewInfoOptional'),
 		$judging_tables_db_table => array('tableName'),
 		$style_types_db_table => array('styleTypeName'),
 		$preferences_db_table => array('prefsBestBrewerTitle', 'prefsBestClubTitle'),
@@ -376,7 +376,7 @@ function purge_entries($type, $interval) {
 	if ($type == "unpaid") {
 
 		$db_conn->where("(brewPaid='0' OR brewPaid IS NULL)");
-		if ($interval > 0) $db_conn->where('a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)');
+		if ($interval > 0) $db_conn->where('brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)');
 		$rows_check = $db_conn->get($prefix."brewing", null, "id");
 		$totalRows_check = $db_conn->count;
 
@@ -829,6 +829,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		$rows_users = $db_conn->get($prefix."users", null, "id,user_name");
 		$totalRows_users = $db_conn->count;
 
+		$user_id_1 = array();
 		foreach ($rows_users as $row_users) { $user_id_1[] = $row_users['id']; }
 		sort($user_id_1);
 
@@ -936,6 +937,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		$rows_users = $db_conn->get($prefix."users", null, "id,user_name");
 		$totalRows_users = $db_conn->count;
 
+		$user_id_1 = array();
 		foreach ($rows_users as $row_users) { $user_id_1[] = $row_users['id']; }
 		sort($user_id_1);
 
@@ -998,6 +1000,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 		$rows_users = $db_conn->get($prefix."users", null, "id,user_name");
 		$totalRows_users = $db_conn->count;
 
+		$user_id_2 = array();
 		foreach ($rows_users as $row_users) { $user_id_2[] = $row_users['id']; }
 		sort($user_id_2);
 
@@ -1185,6 +1188,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 		$rows_users = $db_conn->get($prefix."users", null, "id,user_name");
 		$totalRows_users = $db_conn->count;
 
+		$user_id_2 = array();
 		foreach ($rows_users as $row_users) { $user_id_2[] = $row_users['id']; }
 		sort($user_id_2);
 
@@ -2153,14 +2157,17 @@ function score_count($table_id,$method,$dbTable) {
 		$suffix = "_".preg_replace("/[^a-zA-Z0-9]+/", "", $dbTable);
 	}
 
-	$db_conn->where('scoreTable', $table_id);
-	$row_scores = $db_conn->getOne($prefix."judging_scores".$suffix, "COUNT(*) as 'count'");
+	$row_scores = null;
+	if (table_exists($prefix."judging_scores".$suffix)) {
+		$db_conn->where('scoreTable', $table_id);
+		$row_scores = $db_conn->getOne($prefix."judging_scores".$suffix, "COUNT(*) as 'count'");
+	}
 
 	switch($method) {
-		case "1": if ($row_scores['count'] > 0) return true; else return false;
+		case "1": if ((isset($row_scores['count'])) && ($row_scores['count'] > 0)) return true; else return false;
 		break;
 
-		case "2": return $row_scores['count'];
+		case "2": return isset($row_scores['count']) ? $row_scores['count'] : 0;
 		break;
 	}
 
@@ -2417,12 +2424,18 @@ function brewer_info($uid,$filter="default") {
 		$brewer_db_table = $prefix."brewer_".$filter_clean;
 	}
 
-	$local_db_conn->where("uid", $uid);
-	$row_brewer_info = $local_db_conn->getOne($brewer_db_table);
+	$row_brewer_info = null;
 
-	if (!$row_brewer_info) {
-		$local_db_conn->where("id", $uid);
+	if (table_exists($brewer_db_table)) {
+
+		$local_db_conn->where("uid", $uid);
 		$row_brewer_info = $local_db_conn->getOne($brewer_db_table);
+
+		if (!$row_brewer_info) {
+			$local_db_conn->where("id", $uid);
+			$row_brewer_info = $local_db_conn->getOne($brewer_db_table);
+		}
+
 	}
 
 	$tbb = array();
@@ -2481,6 +2494,9 @@ function get_entry_count($method,$filter="") {
 	if ($method == "unconfirmed") $local_db_conn->where("brewConfirmed", "1", "<>");
 	if ($method == "placing-entries") { $local_db_conn->where("scorePlace IS NOT NULL"); $table = $judging_scores_db_table; }
 	if ($method == "scored") $table = $judging_scores_db_table;
+	// $table may point at an archived competition's table (via $filter), which may no longer
+	// exist - rawQuery()-family calls throw rather than fail gracefully in that case.
+	if (!table_exists($table)) return 0;
 	$row_paid = $local_db_conn->getOne($table, "COUNT(*) as 'count'");
 	$r = $row_paid['count'];
 	return $r;
@@ -2537,16 +2553,25 @@ function get_participant_count($type,$filter="") {
 	if ($type == 'received-entrant') { $table = $brewing_db_table; $cols = "COUNT(DISTINCT brewBrewerID) as 'count'"; $local_db_conn->where("brewReceived", "1"); }
 	if ($type == 'with-entries') { $table = $prefix."brewing"; $cols = "COUNT(DISTINCT brewBrewerId) as 'count'"; }
 
+	// The tables below may point at an archived competition (via $filter), which may no longer
+	// exist - rawQuery()-family calls throw rather than fail gracefully in that case.
 	if ($type == 'organizer-assigned') {
-		$sql_participant_count = sprintf("SELECT a.uid, b.brewerFirstName, b.brewerLastName, b.uid FROM %s a, %s b WHERE a.staff_organizer=1 AND a.uid = b.uid LIMIT 1", $staff_db_table, $brewer_db_table);
-		$row_participant_count = $local_db_conn->rawQueryOne($sql_participant_count);
+		if ((!table_exists($staff_db_table)) || (!table_exists($brewer_db_table))) $row_participant_count = null;
+		else {
+			$sql_participant_count = sprintf("SELECT a.uid, b.brewerFirstName, b.brewerLastName, b.uid FROM %s a, %s b WHERE a.staff_organizer=1 AND a.uid = b.uid LIMIT 1", $staff_db_table, $brewer_db_table);
+			$row_participant_count = $local_db_conn->rawQueryOne($sql_participant_count);
+		}
 	}
 	elseif ($type == 'received-club') {
-		$sql_participant_count = sprintf("SELECT COUNT(DISTINCT b.brewerClubs) as 'count' FROM %s a, %s b WHERE b.uid = a.brewBrewerID AND b.brewerClubs IS NOT NULL", $brewing_db_table, $brewer_db_table);
-		$row_participant_count = $local_db_conn->rawQueryOne($sql_participant_count);
+		if ((!table_exists($brewing_db_table)) || (!table_exists($brewer_db_table))) $row_participant_count = null;
+		else {
+			$sql_participant_count = sprintf("SELECT COUNT(DISTINCT b.brewerClubs) as 'count' FROM %s a, %s b WHERE b.uid = a.brewBrewerID AND b.brewerClubs IS NOT NULL", $brewing_db_table, $brewer_db_table);
+			$row_participant_count = $local_db_conn->rawQueryOne($sql_participant_count);
+		}
 	}
 	else {
-		$row_participant_count = $local_db_conn->getOne($table, $cols);
+		if (!table_exists($table)) $row_participant_count = null;
+		else $row_participant_count = $local_db_conn->getOne($table, $cols);
 	}
 
 	// Get sum total of participants. The following only aggregates, does not distinguish those that are both entrants AND have indicated
@@ -3502,6 +3527,11 @@ function get_archive_count($table) {
 	// also can't bind the identifier as a parameter, so it's allow-listed to word characters
 	// since callers may pass request-derived values.
 	$table = preg_replace("/[^a-zA-Z0-9_]+/", "", $table);
+	// rawQueryOne() throws (rather than returning null) when the target table doesn't exist -
+	// mysqli_prepare() fails at prepare time for an unknown table, before any row-level error
+	// handling applies. Checked unconditionally here too, regardless of whether the caller
+	// already did, so a stale/partially-cleaned-up archive can't crash the request.
+	if (!table_exists($table)) return 0;
 	$row_archive_count = $db_conn->rawQueryOne("SELECT COUNT(*) as 'count' FROM `$table`");
 	return $row_archive_count['count'];
 }
@@ -3823,6 +3853,7 @@ function styles_active($method,$archive="") {
 
 	if ($method == 1) { // Style Types
 
+		if (!table_exists($style_types_db.$archive)) return 0;
 		$db_conn->where('styleTypeBOS', 'Y');
 		$row_style_types_active = $db_conn->getOne($style_types_db.$archive, "COUNT(*) as 'count'");
 

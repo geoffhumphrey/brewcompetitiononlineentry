@@ -104,6 +104,36 @@ $totalRows_table_assignments = $db_conn->count;
 
 $eval_no_evaluations = array();
 
+$row_eval_sub = $db_conn->get($prefix."evaluation");
+$totalRows_eval_sub = $db_conn->count;
+
+$eval_scores = array();
+
+if ($totalRows_eval_sub > 0) {
+
+	foreach ($row_eval_sub as $row_eval_sub_row) {
+
+		$judge_score = $row_eval_sub_row['evalAromaScore'] + $row_eval_sub_row['evalAppearanceScore'] + $row_eval_sub_row['evalFlavorScore'] + $row_eval_sub_row['evalMouthfeelScore'] + $row_eval_sub_row['evalOverallScore'];
+
+		$eval_scores[] = array(
+			"id" => $row_eval_sub_row['id'],
+			"eid" => $row_eval_sub_row['eid'],
+			"judge_id" => $row_eval_sub_row['evalJudgeInfo'],
+			"judge_score" => $judge_score,
+			"consensus_score" => $row_eval_sub_row['evalFinalScore'],
+			"table" => $row_eval_sub_row['evalTable'],
+			"place" => $row_eval_sub_row['evalPlace'],
+			"ordinal_position" => $row_eval_sub_row['evalPosition'],
+			"date_added" => $row_eval_sub_row['evalInitialDate'],
+			"date_updated" => $row_eval_sub_row['evalUpdatedDate'],
+			"scoresheet" => $row_eval_sub_row['evalScoresheet'],
+			"mini_bos" => $row_eval_sub_row['evalMiniBOS']
+		);
+
+	}
+
+}
+
 if ($totalRows_table_assignments > 0) {
 
 	$table_assignment_start = array();

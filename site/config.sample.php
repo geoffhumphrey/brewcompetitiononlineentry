@@ -1,17 +1,32 @@
-<?php
+﻿<?php
 /**
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
- * Last Modified: March 26, 2024
+ * Last Modified: 12 August 2026
+ *
+ * ******************************************************************************
+ * SETUP INSTRUCTIONS - READ BEFORE UPLOADING
+ * ******************************************************************************
+ * This is a template file. Before uploading to your server:
+ *
+ *   1. Fill in your own database connection details and any other settings
+ *      below (look for the blank '' values with instructions above them).
+ *   2. Rename this file from "config.sample.php" to "config.php".
+ *   3. Upload/keep the renamed "config.php" in this same "site" folder on
+ *      your server.
+ *
+ * Do NOT upload this file as "config.sample.php" - the application looks
+ * for "config.php" specifically. Once renamed and filled in, this file
+ * contains your real credentials and should never be committed to a public
+ * repository or shared publicly.
+ * ******************************************************************************
  */
 
 /**
  * ******************************************************************************
  * Set up MySQL connection variables
  * ******************************************************************************
- */
-
-/**
+ *
  * Generally, 'localhost' will work for most environments. 
  * However, some environments may require another hostname.
  * *** This has been confirmed for GO DADDY shared hosting users.         
@@ -33,7 +48,6 @@ $hostname = 'localhost';
 
 $username = '';
 
-
 /**
  * INSERT YOUR PASSWORD BETWEEN THE SINGLE-QUOTATION MARKS ('').
  * For example, if your password is flintstone then the line should read 
@@ -49,7 +63,6 @@ $password = '';
  */
 
 $database = '';
-
 
 /**
  * If the database port is different from the default then overwrite as the 

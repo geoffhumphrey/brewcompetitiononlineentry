@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
 
 if (!function_exists('check_update')) {
 	$redirect = "../../403.php";
@@ -41,7 +41,8 @@ if (!NHC) {
 		) ENGINE=MyISAM;";
 		$result = $db_conn->rawQuery($updateSQL);
 		//echo $updateSQL."<br>";
-		$output .= "<li>Staff table created.</li>";
+		if ($db_conn->getLastErrno() === 0) $output .= "<li>Staff table created.</li>";
+		else $output .= "<li class=\"text-danger\">Error: Staff table NOT created. ".$db_conn->getLastError()."</li>";
 	
 	// -----------------------------------------------------------
 	// Create Table: mods
@@ -66,8 +67,9 @@ if (!NHC) {
 			) ENGINE=MyISAM;";
 		$result = $db_conn->rawQuery($updateSQL);
 		//echo $updateSQL."<br>";
-	
-	$output .=  "<li>Custom Modules table created.</li>";
+
+	if ($db_conn->getLastErrno() === 0) $output .=  "<li>Custom Modules table created.</li>";
+	else $output .= "<li class=\"text-danger\">Error: Custom Modules table NOT created. ".$db_conn->getLastError()."</li>";
 	
 } // end if (!NHC)
 
@@ -75,52 +77,64 @@ if (!NHC) {
 // Alter Tables: Preferences
 // -----------------------------------------------------------
 
+$block_ok = TRUE;
+
 if (!NHC) {
-	
+
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUserEntryLimit`  VARCHAR(4) NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUserSubCatLimit` VARCHAR(4) NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory';"; 
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUSCLEx` VARCHAR(255) NULL DEFAULT NULL COMMENT 'Array of exceptions corresponding to id in styles table';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUSCLExLimit` VARCHAR(4) NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory that has been excepted';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsPayToPrint`  CHAR(1) NULL DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsHideRecipe` CHAR(1) NULL DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsUseMods` CHAR(1) NULL DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD `prefsSEF` CHAR(1) NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 
 }
 
 $updateSQL = "ALTER TABLE  `".$prefix."preferences` ADD  `prefsSpecialCharLimit` INT(3) NULL DEFAULT NULL COMMENT 'Character limit for special ingredients field';";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 
 if (NHC) $updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='Y', prefsHideRecipe='Y', prefsUseMods='Y', prefsSEF='N', prefsSpecialCharLimit='50' WHERE id='1'";
 else $updateSQL = "UPDATE ".$prefix."preferences SET prefsPayToPrint='N', prefsHideRecipe='N', prefsUseMods='N', prefsSEF='N', prefsSpecialCharLimit='50' WHERE id='1'"; 
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 			
-$output .=  "<li>Site Preferences table updated.</li>";
+if ($block_ok) $output .= "<li>Site Preferences table updated.</li>";
 
 // -----------------------------------------------------------
 // Alter Tables: Brewer
@@ -129,13 +143,16 @@ $output .=  "<li>Site Preferences table updated.</li>";
 if (!NHC) {
 	$updateSQL = "ALTER TABLE  `".$prefix."brewer` ADD `brewerDropOff` INT(4) NULL DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table';";
 	$result = $db_conn->rawQuery($updateSQL);
+	$block_ok = TRUE;
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 	
 	$updateSQL = "UPDATE `".$prefix."brewer` SET `brewerDropOff` = '0';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 	
-	$output .=  "<li>Brewer table updated.</li>";
+	if ($block_ok) $output .= "<li>Brewer table updated.</li>";
 }
 
 // -----------------------------------------------------------
@@ -146,17 +163,21 @@ if (!NHC) {
 
 	$updateSQL = "ALTER TABLE  `".$prefix."judging_scores` ADD `scoreMiniBOS` TINYINT(1) NULL DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No';";
 	$result = $db_conn->rawQuery($updateSQL);
+	$block_ok = TRUE;
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 	
 	$updateSQL = "UPDATE `".$prefix."judging_scores` SET `scoreMiniBOS` = '0';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."judging_scores` CHANGE  `scoreEntry`  `scoreEntry` FLOAT NULL DEFAULT NULL COMMENT  'Numerical score assigned by judges';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>"; 
 	
-	$output .=  "<li>Judging Scores table updated.</li>"; 
+	if ($block_ok) $output .= "<li>Judging Scores table updated.</li>"; 
 
 }
 
@@ -176,46 +197,58 @@ if (!NHC) {
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewMead1` `brewMead1` VARCHAR(25) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+$block_ok = TRUE;
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewMead2` `brewMead2` VARCHAR(25) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewMead3` `brewMead3` VARCHAR(25) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeast` `brewYeast` VARCHAR(100) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastMan` `brewYeastMan` VARCHAR(100) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastForm` `brewYeastForm` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastType` `brewYeastType` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastNutrients` `brewYeastNutrients` text;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewFinings` `brewFinings` text;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewWaterNotes` `brewWaterNotes` text;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewCarbonationMethod` `brewCarbonationMethod` CHAR(1) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 // -----------------------------------------------------------
@@ -232,71 +265,93 @@ $result = $db_conn->rawQuery($updateSQL);
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewBoilHours` `brewBoilHours` VARCHAR(5) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewBoilMins` `brewBoilMins` VARCHAR(5) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewOG` `brewOG` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewFG` `brewFG` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewPrimary` `brewPrimary` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewPrimaryTemp` `brewPrimaryTemp` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewSecondary` `brewSecondary` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewSecondaryTemp` `brewSecondaryTemp` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewOther` `brewOther` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewOtherTemp` `brewOtherTemp` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewCarbonationVol` `brewCarbonationVol` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeast` `brewYeast` VARCHAR(100) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastMan` `brewYeastMan` VARCHAR(100) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastForm` `brewYeastForm` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastType` `brewYeastType` VARCHAR(10) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewYeastAmount` `brewYeastAmount` VARCHAR(25) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewBrewerID` `brewBrewerID` VARCHAR(8) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewFinings` `brewFinings` TEXT NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewWaterNotes` `brewWaterNotes` TEXT NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewComments` `brewComments` TEXT NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewCarbonationNotes` `brewCarbonationNotes` TEXT NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 for ($i=1; $i <= 5; $i++) {
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewExtract".$i."Use` `brewExtract".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 }
@@ -305,50 +360,62 @@ for ($i=1; $i <= 9; $i++) {
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewGrain".$i."` `brewGrain".$i."` VARCHAR(100) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewGrain".$i."Use` `brewGrain".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewGrain".$i."Weight` `brewGrain".$i."Weight` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewAddition".$i."` `brewAddition".$i."` VARCHAR(100) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewAddition".$i."Amt` `brewAddition".$i."Amt` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewAddition".$i."Use` `brewAddition".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."` `brewHops".$i."` VARCHAR(100) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."IBU` `brewHops".$i."IBU` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."Time` `brewHops".$i."Time` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."Use` `brewHops".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."Type` `brewHops".$i."Type` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewHops".$i."Form` `brewHops".$i."Form` VARCHAR(10) NULL DEFAULT NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 		
 }
@@ -359,6 +426,7 @@ if (!NHC) {
 	
 	$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewBoxNum` VARCHAR(10) NULL DEFAULT NULL COMMENT 'The box where the entry is located after sorting';";
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 	//echo $updateSQL."<br>";
 	
 	// Add additional ingredient columns
@@ -371,58 +439,71 @@ if (!NHC) {
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewGrain".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewGrain".$one_less."`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewGrain".$i."Weight` VARCHAR(10) NULL DEFAULT NULL AFTER `brewGrain".$one_less."Weight`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewGrain".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewGrain".$one_less."Use`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		// Additions, Adjucnts, etc.
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewAddition".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewAddition".$one_less."`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewAddition".$i."Amt` VARCHAR(25) NULL DEFAULT NULL AFTER `brewAddition".$one_less."Amt`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewAddition".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewAddition".$one_less."Use`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		// Hops
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewHops".$one_less."`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Weight` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Weight`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Use` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Use`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."IBU` VARCHAR(6) NULL DEFAULT NULL AFTER `brewHops".$one_less."IBU`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Time` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Time`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Type` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Type`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewHops".$i."Form` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Form`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 	}
@@ -432,6 +513,7 @@ if (!NHC) {
 	for ($i=1; $i <= 5; $i++) {
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewMashStep".$i."Name` `brewMashStep".$i."Name` VARCHAR(100) NULL DEFAULT NULL;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 	}
 	
@@ -441,14 +523,17 @@ if (!NHC) {
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewMashStep".$i."Name` VARCHAR(100) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Name`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewMashStep".$i."Temp` CHAR(3) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Temp`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 		$updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD `brewMashStep".$i."Time` CHAR(3) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Time`;";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//echo $updateSQL."<br>";
 		
 	}
@@ -508,20 +593,23 @@ if ($totalRows_log > 0) {
 		$db_conn->where('id', $row_log['id']);
 		$result = $db_conn->update($prefix."brewing", $data);
 	}
-	$output .= "<li>All entry data updated.</li>";
+	if ($block_ok) $output .= "<li>All entry data updated.</li>";
 }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` 
 CHANGE  `brewPaid`  `brewPaid` TINYINT( 1 ) NULL DEFAULT NULL COMMENT '1=true; 0=false';";
 $result = $db_conn->rawQuery($updateSQL); 
+$block_ok = TRUE;
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewReceived`  `brewReceived` TINYINT( 1 ) NULL DEFAULT NULL COMMENT '1=true; 0=false';";
 $result = $db_conn->rawQuery($updateSQL);  
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 //$output .= $updateSQL."<br>";
 
-$output .= "<li>Conversion of paid and received rows to new schema in brewing table completed.</li>";
+if ($block_ok) $output .= "<li>Conversion of paid and received rows to new schema in brewing table completed.</li>";
 
 $output .=  "<li>Brewing table updated.</li>";
 
@@ -539,82 +627,102 @@ $output .=  "<li>Brewing table updated.</li>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleReqSpec` TINYINT(1) NULL DEFAULT NULL COMMENT 'Does the style require special ingredients be input? 1=yes 0=no';";
 $result = $db_conn->rawQuery($updateSQL);
+$block_ok = TRUE;
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '0'";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 // Designate all BJCP styles that require special ingredients
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 21;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 59;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 65;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 74;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 75;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 76;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 78;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 79;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 80;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 86;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 87;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 89;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 94;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 95;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 96;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 97;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
 $updateSQL = "UPDATE `".$prefix."styles` SET `brewStyleReqSpec` = '1' WHERE `id` = 98;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //echo $updateSQL."<br>";
 
-$output .=  "<li>Styles table updated.</li>";
+if ($block_ok) $output .= "<li>Styles table updated.</li>";
 
 // -----------------------------------------------------------
 // Alter Table
@@ -636,6 +744,8 @@ if (!NHC) {
 
 	$a_current = array();
 
+	$block_ok = TRUE;
+
 	if ($totalRows_archive_current > 0) {
 
 		foreach ($rows_archive_current as $row_archive_current) { $a_current[] = $row_archive_current['archiveSuffix']; }
@@ -652,16 +762,19 @@ if (!NHC) {
 				$updateSQL = "ALTER TABLE  `".$prefix."judging_scores".$suffix_current."` ADD `scoreMiniBOS` INT(4) NULL DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No';";
 				
 				$result = $db_conn->rawQuery($updateSQL);
-				//echo $updateSQL."<br>"; 
-			
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+				//echo $updateSQL."<br>";
+
 				$updateSQL = "ALTER TABLE  `".$prefix."judging_scores".$suffix_current."` CHANGE  `scoreEntry`  `scoreEntry` DECIMAL( 11, 2 ) NULL DEFAULT NULL COMMENT  'Numerical score assigned by judges';";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 			}
 			
 			if (check_setup($prefix."brewer".$suffix_current,$database)) {
 				$updateSQL = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` ADD `brewerDropOff` INT(4) NULL DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table';";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>";
 			}
 			
@@ -669,89 +782,110 @@ if (!NHC) {
 				
 				$updateSQL = "ALTER TABLE `".$prefix."brewing".$suffix_current."` ADD `brewBoxNum` VARCHAR(10) NULL DEFAULT NULL COMMENT 'The box where the entry is located after sorting';";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>";  
 			
 				// Update character counts for ingredient columns to keep under 65000 threshold
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewMead1` `brewMead1` VARCHAR(25) NULL DEFAULT NULL;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewMead2` `brewMead2` VARCHAR(25) NULL DEFAULT NULL;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewMead3` `brewMead3` VARCHAR(25) NULL DEFAULT NULL;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeast` `brewYeast` VARCHAR(100) NULL DEFAULT NULL;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeastMan` `brewYeastMan` VARCHAR(100) NULL DEFAULT NULL;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeastForm` `brewYeastForm` VARCHAR(10) NULL DEFAULT NULL;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeastType` `brewYeastType` VARCHAR(10) NULL DEFAULT NULL;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewYeastNutrients` `brewYeastNutrients` text;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewFinings` `brewFinings` text;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewWaterNotes` `brewWaterNotes` text;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>"; 
 				
 				$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewCarbonationMethod` `brewCarbonationMethod` CHAR(1) NULL DEFAULT NULL;";
 				$result = $db_conn->rawQuery($updateSQL);
+				if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 				//echo $updateSQL."<br>";
 				
 				for ($i=1; $i <= 9; $i++) {
 			
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewGrain".$i."` `brewGrain".$i."` VARCHAR(100) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewAddition".$i."` `brewAddition".$i."` VARCHAR(100) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewAddition".$i."Amt` `brewAddition".$i."Amt` VARCHAR(10) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."` `brewHops".$i."` VARCHAR(100) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."IBU` `brewHops".$i."IBU` VARCHAR(10) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 				
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."Time` `brewHops".$i."Time` VARCHAR(10) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."Use` `brewHops".$i."Use` VARCHAR(10) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."Type` `brewHops".$i."Type` VARCHAR(10) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewHops".$i."Form` `brewHops".$i."Form` VARCHAR(10) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 						
 				}
@@ -764,58 +898,71 @@ if (!NHC) {
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewGrain".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewGrain".$one_less."`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewGrain".$i."Weight` VARCHAR(10) NULL DEFAULT NULL AFTER `brewGrain".$one_less."Weight`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewGrain".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewGrain".$one_less."Use`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					// Additions, Adjucnts, etc.
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewAddition".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewAddition".$one_less."`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewAddition".$i."Amt` VARCHAR(25) NULL DEFAULT NULL AFTER `brewAddition".$one_less."Amt`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewAddition".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewAddition".$one_less."Use`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					// Hops
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."` VARCHAR(100) NULL DEFAULT NULL AFTER `brewHops".$one_less."`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Weight` VARCHAR(10) NULL DEFAULT NULL AFTER `brewHops".$one_less."Weight`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Use` VARCHAR(25) NULL DEFAULT NULL AFTER `brewHops".$one_less."Use`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."IBU` VARCHAR(6) NULL DEFAULT NULL AFTER `brewHops".$one_less."IBU`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Time` VARCHAR(25) NULL DEFAULT NULL AFTER `brewHops".$one_less."Time`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Type` VARCHAR(25) NULL DEFAULT NULL AFTER `brewHops".$one_less."Type`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewHops".$i."Form` VARCHAR(25) NULL DEFAULT NULL AFTER `brewHops".$one_less."Form`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					
@@ -824,6 +971,7 @@ if (!NHC) {
 				for ($i=1; $i <= 5; $i++) {
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` CHANGE  `brewMashStep".$i."Name` `brewMashStep".$i."Name` VARCHAR(100) NULL DEFAULT NULL;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 				}
 				
@@ -833,14 +981,17 @@ if (!NHC) {
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewMashStep".$i."Name` VARCHAR(100) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Name`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewMashStep".$i."Temp` VARCHAR(10) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Temp`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 					$updateSQL = "ALTER TABLE  `".$prefix."brewing".$suffix_current."` ADD `brewMashStep".$i."Time` VARCHAR(10) NULL DEFAULT NULL AFTER `brewMashStep".$one_less."Time`;";
 					$result = $db_conn->rawQuery($updateSQL);
+					if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 					//echo $updateSQL."<br>";
 					
 				}
@@ -851,7 +1002,7 @@ if (!NHC) {
 		
 	}
 	
-	$output .=  "<li>All archive entry data updated.</li>";
+	if ($block_ok) $output .= "<li>All archive entry data updated.</li>";
 } // end if (!NHC)
 
 

@@ -23,22 +23,26 @@ $output .= "<ul>";
 if (!check_update("prefsLanguage", $prefix."preferences")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsLanguage` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."preferences");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 if (!check_update("prefsSpecific", $prefix."preferences")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsSpecific` TINYINT(1) NULL;",$prefix."preferences");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 // Sanity Check - see if 2.1.0 column names are present - if not, add
 if (!check_update("prefsEntryLimitPaid", $prefix."preferences")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL;",$prefix."preferences");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 if (!check_update("prefsEmailRegConfirm", $prefix."preferences")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 // -----------------------------------------------------------
@@ -48,16 +52,19 @@ if (!check_update("prefsEmailRegConfirm", $prefix."preferences")) {
 if (!check_update("jPrefsCapJudges", $prefix."judging_preferences")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL;", $prefix."judging_preferences");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 if (!check_update("jPrefsCapStewards", $prefix."judging_preferences")) {
 	$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL;",	$prefix."judging_preferences");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 if (!check_update("jPrefsBottleNum", $prefix."judging_preferences")) {
 	$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;",$prefix."judging_preferences");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 // -----------------------------------------------------------
@@ -68,6 +75,7 @@ if (!check_update("jPrefsBottleNum", $prefix."judging_preferences")) {
 if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
 	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."contest_info");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 // -----------------------------------------------------------
@@ -78,11 +86,13 @@ if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
 if (!check_update("brewStyleEntry", $prefix."styles")) {
 	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 if (!check_update("brewStyleComEx", $prefix."styles")) {
 	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
 	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>";
 }
 
 
@@ -256,6 +266,7 @@ if (!empty($tabs)) {
 			if ($set) {
 
 				$db_conn->rawQuery("ALTER TABLE {$tab} MODIFY {$name} COLLATE {$target_collate}");
+				$output .= MysqlError($connection);
 				$count[] = 1;
 
 			}
@@ -288,11 +299,13 @@ if (!empty($tabs)) {
 
 		// set default collate
 		$db_conn->rawQuery("ALTER TABLE {$tab}  DEFAULT CHARACTER SET {$target_charset} COLLATE {$target_collate}");
+		$output .= MysqlError($connection);
 		$count[] = 1;
 	}
 
 	// set database charset
 	$db_conn->rawQuery("ALTER DATABASE {$database} DEFAULT CHARACTER SET {$target_charset} COLLATE {$target_collate}");
+	$output .= MysqlError($connection);
 	$count[] = 1;
 
 }
@@ -301,18 +314,23 @@ if (!empty($tabs)) {
 // Data Update: preferences
 // -----------------------------------------------------------
 
+$block_ok = TRUE;
+
 $updateSQL = sprintf("UPDATE %s SET prefsSpecific = '1';",$prefix."preferences");
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = sprintf("UPDATE %s SET prefsLanguage = '%s';",$prefix."preferences","English");
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
-$output .= "<li>Preferences data updated.</li>";
+if ($block_ok) $output .= "<li>Preferences data updated.</li>";
 
 $updateSQL = sprintf("UPDATE %s SET brewStyle = '%s' WHERE id = %s",$prefix."styles","Czech Premium Pale Lager","107");
 $result = $db_conn->rawQuery($updateSQL);
 
-$output .= "<li>Style data updated.</li>";
+if ($db_conn->getLastErrno() === 0) $output .= "<li>Style data updated.</li>";
+else $output .= "<li class=\"text-danger\">Error: Style data NOT updated. ".$db_conn->getLastError()."</li>";
 
 // -----------------------------------------------------------
 // Data Update: Update Version in System Table
@@ -321,7 +339,8 @@ $output .= "<li>Style data updated.</li>";
 $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$system_db_table,"2.1.5.0","2016-08-31");
 $result = $db_conn->rawQuery($updateSQL);
 
-$output .= "<li>Version updated in system table.</li>";
+if ($db_conn->getLastErrno() === 0) $output .= "<li>Version updated in system table.</li>";
+else $output .= "<li class=\"text-danger\">Error: Version NOT updated in system table. ".$db_conn->getLastError()."</li>";
 
 $output .= "</ul>";
 ?>

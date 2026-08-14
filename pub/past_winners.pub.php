@@ -30,7 +30,11 @@ $judging_scores_db_table = $prefix."judging_scores_".$filter_clean;
 $brewing_db_table = $prefix."brewing_".$filter_clean;
 $brewer_db_table = $prefix."brewer_".$filter_clean;
 
-	if (!empty($archive_alert_display)) {
+// $filter is a separate request parameter from $go (the archive suffix already validated
+// upstream), so it isn't guaranteed to point at tables that actually exist.
+$archive_tables_exist = (table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table));
+
+	if ((!empty($archive_alert_display)) && ($archive_tables_exist)) {
 
 		include (DB.'score_count.db.php');
 

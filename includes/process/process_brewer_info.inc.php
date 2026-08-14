@@ -53,7 +53,7 @@ if (isset($_POST['brewerJudgeID'])) {
 
 if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);
 if (isset($_POST['brewerJudgeCider'])) $brewerJudgeCider = sterilize($_POST['brewerJudgeCider']);
-if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = sterilize($_POST['brewerJudgeRank']);
+if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
 if (isset($_POST['brewerAHA'])) $brewerAHA = sterilize($_POST['brewerAHA']);
 if (isset($_POST['brewerMHP'])) $brewerMHP = sterilize($_POST['brewerMHP']);
 if (isset($_POST['brewerProAm'])) $brewerProAm = sterilize($_POST['brewerProAm']);

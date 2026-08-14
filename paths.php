@@ -164,7 +164,8 @@ function is_https() {
  */
 
 function sterilize($sterilize = NULL) {
-    if ($sterilize == NULL) return NULL;
+    if (is_array($sterilize)) return array_map('sterilize', $sterilize);
+    elseif ($sterilize == NULL) return NULL;
     elseif (empty($sterilize)) return $sterilize;
     else {
         $sterilize = trim($sterilize);

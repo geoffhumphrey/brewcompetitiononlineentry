@@ -59,7 +59,7 @@ if ($row_scored_entries['count'] > 0) {
 
 			if ($totalRows_styles == 0) $missing_style = TRUE;
 
-			else {
+			elseif (table_exists($brewing_db_table)) {
 				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
 				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
 				$db_conn->where('brewReceived', '1');

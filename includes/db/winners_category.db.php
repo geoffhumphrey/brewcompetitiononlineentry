@@ -20,18 +20,30 @@ else {
 if ($winner_style_set == "BA") $db_conn->where("brewCategory", $style);
 else $db_conn->where("brewCategorySort", $style_pad);
 $db_conn->where("brewReceived", "1");
-$row_entry_count = $db_conn->getOne($brewing_db_table, "COUNT(*) as 'count'");
 
-if ($winner_style_set == "BA") {
-	$sql_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategory=? AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
-	$score_count_params = array($style);
+$row_entry_count = array('count' => 0);
+$row_score_count = array('count' => 0);
+
+// $brewing_db_table/$judging_scores_db_table/$brewer_db_table may point at an archived
+// competition whose tables no longer exist - guard before querying either.
+if (table_exists($brewing_db_table)) {
+	$row_entry_count = $db_conn->getOne($brewing_db_table, "COUNT(*) as 'count'");
 }
-else {
-	$sql_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
-	$score_count_params = array($style_pad);
+
+if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+
+	if ($winner_style_set == "BA") {
+		$sql_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategory=? AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
+		$score_count_params = array($style);
+	}
+	else {
+		$sql_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
+		$score_count_params = array($style_pad);
+	}
+	if (($action == "print") && ($view == "winners")) $sql_score_count .= " AND a.scorePlace IS NOT NULL";
+	if (($action == "default") && ($view == "default")) $sql_score_count .= " AND a.scorePlace IS NOT NULL";
+	$row_score_count = $db_conn->rawQueryOne($sql_score_count, $score_count_params);
+
 }
-if (($action == "print") && ($view == "winners")) $sql_score_count .= " AND a.scorePlace IS NOT NULL";
-if (($action == "default") && ($view == "default")) $sql_score_count .= " AND a.scorePlace IS NOT NULL";
-$row_score_count = $db_conn->rawQueryOne($sql_score_count, $score_count_params);
 
 ?>

@@ -121,7 +121,7 @@ elseif ($section == "admin") {
 			if ($dbTable != "default") {
 
 				$dbTable_clean = preg_replace("/[^a-zA-Z0-9_]+/", "", $dbTable);
-				$brewing_db_table = $dbTable_clean;
+				if (table_exists($dbTable_clean)) $brewing_db_table = $dbTable_clean;
 				$archive_array = array();
 
 				// Check Archives DB table. If suffix is there good to go

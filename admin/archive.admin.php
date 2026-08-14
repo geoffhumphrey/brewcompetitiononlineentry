@@ -22,9 +22,12 @@ $style_set_dropdown = "";
 $results_data = FALSE;
 
 if ($action == "edit") {
-    
-    $row_results_recorded = $db_conn->getOne ($prefix."judging_scores_".$row_archive['archiveSuffix'], "sum(id), COUNT(*) as count");
-    if ($row_results_recorded['count'] > 0) $results_data = TRUE;
+
+    $judging_scores_archive_table = $prefix."judging_scores_".$row_archive['archiveSuffix'];
+    if (table_exists($judging_scores_archive_table)) {
+        $row_results_recorded = $db_conn->getOne ($judging_scores_archive_table, "sum(id), COUNT(*) as count");
+        if ($row_results_recorded['count'] > 0) $results_data = TRUE;
+    }
 
 }
 

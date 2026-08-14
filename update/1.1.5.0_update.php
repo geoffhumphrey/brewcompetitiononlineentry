@@ -12,26 +12,36 @@ $output .= "<h4>Version 1.1.5.0</h4>";
 if (!check_update("sponsorLevel", $prefix."sponsors")) {
 	
 	$output .= "<ul>";
-	$updateSQL = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorLevel` TINYINT( 1 ) NULL;"; 
+	$updateSQL = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorLevel` TINYINT( 1 ) NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
-	$output .= "<li>Update to sponsors table completed.</li>";
-	
-	$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."contacts` (`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY , `contactFirstName` VARCHAR( 255 ) NULL ,
-	`contactLastName` VARCHAR( 255 ) NULL , `contactPosition` VARCHAR( 255 ) NULL , `contactEmail` VARCHAR( 255 ) NULL) ENGINE = MYISAM ;"; 
-	$result = $db_conn->rawQuery($updateSQL);
-	$output .= "<li>Contacts table added.</li>";
-	
-	$updateSQL = "ALTER TABLE `".$prefix."drop_off` ADD `dropLocationNotes` VARCHAR( 255 ) NULL;"; 
-	$result = $db_conn->rawQuery($updateSQL);
-	$output .= "<li>Updates to the drop off table completed.</li>";
 
-	$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsEntryForm` CHAR( 1 ) NULL ;"; 
+	if ($db_conn->getLastErrno() === 0) $output .= "<li>Update to sponsors table completed.</li>";
+	else $output .= "<li class=\"text-danger\">Error: Sponsors table NOT updated. ".$db_conn->getLastError()."</li>";
+
+	$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."contacts` (`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY , `contactFirstName` VARCHAR( 255 ) NULL ,
+	`contactLastName` VARCHAR( 255 ) NULL , `contactPosition` VARCHAR( 255 ) NULL , `contactEmail` VARCHAR( 255 ) NULL) ENGINE = MYISAM ;";
 	$result = $db_conn->rawQuery($updateSQL);
-	
-	$updateSQL = "UPDATE `".$prefix."preferences` SET `prefsEntryForm` = 'B' WHERE `id` =1 ;"; 
+
+	if ($db_conn->getLastErrno() === 0) $output .= "<li>Contacts table added.</li>";
+	else $output .= "<li class=\"text-danger\">Error: Contacts table NOT added. ".$db_conn->getLastError()."</li>";
+
+	$updateSQL = "ALTER TABLE `".$prefix."drop_off` ADD `dropLocationNotes` VARCHAR( 255 ) NULL;";
 	$result = $db_conn->rawQuery($updateSQL);
-	
-	$output .= "<li>Updates to preferences table completed.</li>";
+
+	if ($db_conn->getLastErrno() === 0) $output .= "<li>Updates to the drop off table completed.</li>";
+	else $output .= "<li class=\"text-danger\">Error: Drop off table NOT updated. ".$db_conn->getLastError()."</li>";
+
+	$block_ok = TRUE;
+
+	$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsEntryForm` CHAR( 1 ) NULL ;";
+	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+
+	$updateSQL = "UPDATE `".$prefix."preferences` SET `prefsEntryForm` = 'B' WHERE `id` =1 ;";
+	$result = $db_conn->rawQuery($updateSQL);
+	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+
+	if ($block_ok) $output .= "<li>Updates to preferences table completed.</li>";
 	$output .= "</ul>";
 	
 	// Update user levels of top admins to 0

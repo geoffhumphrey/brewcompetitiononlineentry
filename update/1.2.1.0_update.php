@@ -29,19 +29,25 @@ ADD  `contestVolunteers` TEXT NULL ;
 ";
 $result = $db_conn->rawQuery($updateSQL);
 //$output .= $updateSQL."<br>";
-$output .= "<li>Competition info table updated.</li>";
+if ($db_conn->getLastErrno() === 0) $output .= "<li>Competition info table updated.</li>";
+else $output .= "<li class=\"text-danger\">Error: Competition info table NOT updated. ".$db_conn->getLastError()."</li>";
  
 // -----------------------------------------------------------
 // Alter Table: brewing
 //   Add table rows to house creation and last access data.
 // -----------------------------------------------------------
 
+$block_ok = TRUE;
+
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD  `brewUpdated` TIMESTAMP NULL DEFAULT NULL COMMENT  'Timestamp of when the entry was last updated';";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` ADD  `brewConfirmed` TINYINT( 1 ) NULL DEFAULT NULL COMMENT '1=true - 2=false';";
 $result = $db_conn->rawQuery($updateSQL);
-$output .= "<li>Brewing table updated.</li>";
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+
+if ($block_ok) $output .= "<li>Brewing table updated.</li>";
 // -----------------------------------------------------------
 // Alter Table: users
 //   Add table rows to house creation and last access data.
@@ -50,7 +56,8 @@ $output .= "<li>Brewing table updated.</li>";
 $updateSQL = "ALTER TABLE  `".$prefix."users` ADD  `userCreated` TIMESTAMP NULL DEFAULT NULL COMMENT  'Timestamp of when the user was created.';";
 $result = $db_conn->rawQuery($updateSQL);
 //$output .= $updateSQL."<br>";
-$output .= "<li>Date created and last access timestamp rows added to users table.</li>";
+if ($db_conn->getLastErrno() === 0) $output .= "<li>Date created and last access timestamp rows added to users table.</li>";
+else $output .= "<li class=\"text-danger\">Error: Users table NOT updated. ".$db_conn->getLastError()."</li>";
 
 // -----------------------------------------------------------
 // Alter Table: preferences
@@ -68,27 +75,37 @@ ADD  `prefsGoogleAccount` VARCHAR (255) NULL DEFAULT NULL COMMENT  'Google Merch
 ADD  `prefsWinnerDelay` INT(11) NULL DEFAULT NULL COMMENT  'Hours after last judging date beginning time to delay displaying winners' AFTER `prefsDisplayWinners`,
 ADD  `prefsWinnerMethod` INT NULL DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category' AFTER `prefsWinnerDelay` ;
 ";
+$block_ok = TRUE;
+
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
 
-$updateSQL = "UPDATE  `".$prefix."preferences` SET `prefsRecordLimit` =  '9999',  `prefsTimeZone` =  '-5.000', `prefsEntryLimit` =  NULL, `prefsDateFormat` =  '1',  `prefsTimeFormat` =  '0', `prefsGoogle` = 'N', `prefsWinnerDelay` = '24', `prefsWinnerMethod` = '0' WHERE `id` = '1';"; 
+$updateSQL = "UPDATE  `".$prefix."preferences` SET `prefsRecordLimit` =  '9999',  `prefsTimeZone` =  '-5.000', `prefsEntryLimit` =  NULL, `prefsDateFormat` =  '1',  `prefsTimeFormat` =  '0', `prefsGoogle` = 'N', `prefsWinnerDelay` = '24', `prefsWinnerMethod` = '0' WHERE `id` = '1';";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
-$output .= "<li>Preferences table updated.</li>";
+
+if ($block_ok) $output .= "<li>Preferences table updated.</li>";
 
 // -----------------------------------------------------------
 // Alter Table: judging locations
 //   Change/add rows to accomodate new time schema.
 // -----------------------------------------------------------
 
-$updateSQL = "ALTER TABLE  `".$prefix."judging_locations` CHANGE  `judgingDate` `judgingDate` VARCHAR( 255 ) NULL DEFAULT NULL;"; 
+$block_ok = TRUE;
+
+$updateSQL = "ALTER TABLE  `".$prefix."judging_locations` CHANGE  `judgingDate` `judgingDate` VARCHAR( 255 ) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
 
-$updateSQL = "ALTER TABLE `".$prefix."judging_locations` CHANGE  `judgingTime` `judgingTime` VARCHAR( 255 ) NULL DEFAULT NULL;"; 
+$updateSQL = "ALTER TABLE `".$prefix."judging_locations` CHANGE  `judgingTime` `judgingTime` VARCHAR( 255 ) NULL DEFAULT NULL;";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
-$output .= "<li>Judging Locations table updated.</li>";
+
+if ($block_ok) $output .= "<li>Judging Locations table updated.</li>";
 
 // -----------------------------------------------------------
 // Alter Table: brewer
@@ -121,6 +138,7 @@ $output .= "<li>Row names changed successfully in archive table.</li>";
 $query_archive = "SELECT archiveSuffix FROM $archive_db_table";
 $rows_archive = $db_conn->rawQuery($query_archive);
 $totalRows_archive = count($rows_archive);
+$block_ok = TRUE;
 if ($totalRows_archive > 0) {
 
 	foreach ($rows_archive as $row_archive) {
@@ -130,23 +148,27 @@ if ($totalRows_archive > 0) {
 
 		$updateSQL = "ALTER TABLE `".$prefix."users_".$row_archive['archiveSuffix']."` ADD  `userCreated` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.';";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//$output .= $updateSQL."<br>";
 
 
 		$updateSQL = "ALTER TABLE `".$prefix."brewing_".$row_archive['archiveSuffix']."` ADD  `brewUpdated` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was updated.';";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//$output .= $updateSQL."<br>";
 
 
 		$updateSQL = "ALTER TABLE `".$prefix."brewing_".$row_archive['archiveSuffix']."` ADD  `brewConfirmed` TINYINT(1) NULL DEFAULT NULL COMMENT '0 = false; 1 = true';";
 		$result = $db_conn->rawQuery($updateSQL);
+		if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 		//$output .= $updateSQL."<br>";
 
 
 	}
 
-$output .= "<li>All archive table schemas updated successfully.</li>";
 }
+
+if ($block_ok) $output .= "<li>All archive table schemas updated successfully.</li>";
 #========================================================================================================================================================
 // -----------------------------------------------------------
 // Create Table: system
@@ -161,13 +183,18 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."bcoem_sys` (
 	`setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
 	PRIMARY KEY (`id`)
 ) ENGINE=MyISAM";
+$block_ok = TRUE;
+
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
 
 $updateSQL = "INSERT INTO `".$prefix."bcoem_sys` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.2.1.1', '2012-09-01', NOW( ),'1');";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
-$output .= "<li>System table created.</li>";
+
+if ($block_ok) $output .= "<li>System table created.</li>";
 // -----------------------------------------------------------
 // Create Tables: special_best_info, special_best_data
 //  Tables to house custom "best of" categories and data.
@@ -183,7 +210,10 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."special_best_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM ;
 "; 
+$block_ok = TRUE;
+
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
 
 $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."special_best_data` (
@@ -197,8 +227,9 @@ $updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."special_best_data` (
 ) ENGINE=MyISAM ;
 ";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
-$output .= "<li>Custom &ldquo;best of&rdquo; tables created.</li>";
+if ($block_ok) $output .= "<li>Custom &ldquo;best of&rdquo; tables created.</li>";
 
 #========================================================================================================================================================
 // -----------------------------------------------------------
@@ -227,15 +258,20 @@ if ($totalRows_log > 0) {
 	$output .= "<li>All entry data updated.</li>";
 }
 
-$updateSQL = "ALTER TABLE  `".$prefix."brewing` 
+$block_ok = TRUE;
+
+$updateSQL = "ALTER TABLE  `".$prefix."brewing`
 CHANGE  `brewPaid`  `brewPaid` TINYINT( 1 ) NULL DEFAULT NULL COMMENT '1=true; 0=false';";
 $result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
 
 $updateSQL = "ALTER TABLE  `".$prefix."brewing` CHANGE  `brewReceived`  `brewReceived` TINYINT( 1 ) NULL DEFAULT NULL COMMENT '1=true; 0=false';";
-$result = $db_conn->rawQuery($updateSQL); 
+$result = $db_conn->rawQuery($updateSQL);
+if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
 //$output .= $updateSQL."<br>";
-$output .= "<li>Conversion of paid and received rows to new schema in brewing table completed.</li>";
+
+if ($block_ok) $output .= "<li>Conversion of paid and received rows to new schema in brewing table completed.</li>";
 #========================================================================================================================================================
 // -----------------------------------------------------------
 // Data Updates: Other tables
