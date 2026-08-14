@@ -52,6 +52,10 @@ define('EVALUATION', true);
 // exercise production code rather than a re-implementation.
 require_once LIB . 'sanitize.lib.php';
 
+// MysqliDb is not PSR-4 autoloadable (vendor file); load it so the typed
+// data layer (src/Connection.php, repositories) works under PHPUnit.
+require_once CONFIG . 'MysqliDb.php';
+
 // -- session --------------------------------------------------------------
 
 if (session_status() !== PHP_SESSION_ACTIVE) {

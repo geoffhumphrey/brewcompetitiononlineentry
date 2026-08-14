@@ -25,9 +25,11 @@ abstract class MySqlTestCase extends TestCase
     protected function setUp(): void
     {
         if (!self::databaseAvailable()) {
-            self::markTestSkipped('MySQL not available (set BCOEM_TEST_DB=1 and run with a MySQL service)');
+            self::markTestSkipped('MySQL not available: ' . self::$connectError);
         }
     }
+
+    private static ?string $connectError = null;
 
     protected static function db(): MysqliDb
     {
@@ -54,7 +56,8 @@ abstract class MySqlTestCase extends TestCase
         try {
             self::db()->connect();
             return true;
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            self::$connectError = $e->getMessage();
             return false;
         }
     }
