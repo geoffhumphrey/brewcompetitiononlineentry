@@ -52,13 +52,6 @@ define('EVALUATION', true);
 // exercise production code rather than a re-implementation.
 require_once LIB . 'sanitize.lib.php';
 
-if (!function_exists('prep_redirect_link')) {
-    function prep_redirect_link(string $link): string
-    {
-        return $link;
-    }
-}
-
 // -- session --------------------------------------------------------------
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
