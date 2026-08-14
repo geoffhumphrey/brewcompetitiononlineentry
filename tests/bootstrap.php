@@ -54,9 +54,11 @@ require_once LIB . 'sanitize.lib.php';
 
 // MysqliDb is not PSR-4 autoloadable (vendor file); load it so the typed
 // data layer (src/Connection.php, repositories) works under PHPUnit.
-require_once CONFIG . 'MysqliDb.php';
-
 // -- session --------------------------------------------------------------
+// Start the session BEFORE loading MysqliDb: the vendor class emits a PHP 8.4
+// deprecation notice at definition time (insertMulti() implicit nullable),
+// which would count as output and break session_start() ("headers already
+// sent").
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     $tmp = sys_get_temp_dir() . '/bcoem-test-sessions-' . getmypid();
@@ -65,6 +67,20 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     }
     session_save_path($tmp);
     session_start();
+}
+
+// -- vendor libs ----------------------------------------------------------
+
+// MysqliDb is not PSR-4 autoloadable (vendor file); load it so the typed
+// data layer (src/Connection.php, repositories) works under PHPUnit. The
+// known insertMulti() deprecation is silenced only for this require.
+set_error_handler(static function (int $severity, string $message, string $file): bool {
+    return str_contains($message, 'Implicitly marking parameter $dataKeys as nullable');
+});
+try {
+    require_once CONFIG . 'MysqliDb.php';
+} finally {
+    restore_error_handler();
 }
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
