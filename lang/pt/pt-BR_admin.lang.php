@@ -117,6 +117,24 @@ $label_not_archived = "Não Arquivado";
 
 // -------------------- Barcode Check-In --------------------
 
+// -------------------- Hero Images --------------------
+
+$admin_hero_images_title = "Imagens de Banner";
+$admin_hero_images_description = "Selecione quais imagens de banner são exibidas na página inicial. As imagens são selecionadas aleatoriamente com base nos tipos de estilo aceitos pela sua competição.";
+$admin_hero_images_saved = "Preferências de imagens de banner salvas com sucesso.";
+$admin_hero_images_error = "Erro ao salvar as preferências de imagens de banner.";
+$admin_hero_category_misc = "Diversos";
+$admin_hero_category_beer = "Cerveja";
+$admin_hero_category_cider = "Sidra";
+$admin_hero_category_mead = "Hidromel";
+$admin_hero_category_shown_all = "Mostrado em todas as páginas";
+$admin_hero_category_shown_beer = "Mostrado quando a categoria de cerveja está ativa";
+$admin_hero_category_shown_cider = "Mostrado quando a categoria de sidra está ativa";
+$admin_hero_category_shown_mead = "Mostrado quando a categoria de hidromel está ativa";
+$admin_hero_no_images = "Nenhuma imagem encontrada";
+$admin_hero_save_button = "Salvar Alterações";
+
+// -------------------- Barcode Check-In --------------------
 
 
 // -------------------- Navigation --------------------

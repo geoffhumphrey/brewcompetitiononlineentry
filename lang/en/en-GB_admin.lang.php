@@ -88,6 +88,61 @@ $archive_text_011 = "Alpha numeric characters only - all others will be omitted.
 $archive_text_012 = "Check the information you would like to retain for use in future competition instances.";
 $archive_text_013 = "Are you sure you want to archive current data?";
 $archive_text_014 = "Then, choose what data you would like to retain.";
+
+// -------------------- Hero Images --------------------
+
+$hero_images_text_001 = "Banner Images";
+$admin_hero_images_title = "Banner Images";
+$admin_hero_images_description = "Select which banner images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types.";
+$admin_hero_images_saved = "Banner image preferences saved successfully.";
+$admin_hero_images_error = "Error saving banner image preferences.";
+$admin_hero_how_it_works_title = "How it works";
+$admin_hero_how_it_works_body = "Banner images appear as a large background strip at the top of the competition homepage. One image is picked at random each time a visitor loads the page. Images are grouped by category &mdash; Miscellaneous images can appear at any time, while Beer, Cider, and Mead images only appear when your competition accepts entries in those categories. Use the checkboxes below to choose which images are in the rotation, then click <strong>Save Changes</strong>. To add a new image, use the upload panel above and choose the matching category.";
+$admin_hero_upload_note_title = "File naming";
+$admin_hero_upload_note_body = "The uploaded file is automatically renamed using the selected category as a prefix &mdash; for example, uploading <em>sunset.jpg</em> in the Beer category saves as <code>beer-sunset.jpg</code>. You do not need to rename the file before uploading.";
+$admin_hero_upload_note_size_title = "Size &amp; format";
+$admin_hero_upload_note_size_body = "Recommended 3000&times;500 px (6:1 ratio). Minimum width 1200 px with at least a 3.5:1 aspect ratio. Accepted formats: JPG, PNG, GIF, WebP. Maximum file size: 2 MB.";
+$admin_hero_category_misc = "Miscellaneous";
+$admin_hero_category_beer = "Beer";
+$admin_hero_category_cider = "Cider";
+$admin_hero_category_mead = "Mead";
+$admin_hero_category_shown_all = "Shown on all pages";
+$admin_hero_category_shown_beer = "Shown when beer category is active";
+$admin_hero_category_shown_cider = "Shown when cider category is active";
+$admin_hero_category_shown_mead = "Shown when mead category is active";
+$admin_hero_no_images = "No images found";
+$admin_hero_save_button = "Save Changes";
+
+// Old strings kept for backwards compatibility
+$hero_images_text_002 = "Upload New Banner Image";
+$hero_images_text_003 = "Upload background images for the competition homepage. Recommended size: 3000x500 pixels (6:1 ratio). Acceptable formats: JPG, PNG, GIF, WebP. Maximum file size: 2 MB.";
+$hero_images_text_004 = "Image File";
+$hero_images_text_005 = "Choose File";
+$hero_images_text_006 = "No file chosen...";
+$hero_images_text_007 = "Category";
+$hero_images_text_008 = "Select a category...";
+$hero_images_text_009 = "Images are randomly selected based on your competition's accepted style types. Miscellaneous images appear on all pages.";
+$hero_images_text_010 = "Active";
+$hero_images_text_011 = "Include this image in the homepage rotation";
+$hero_images_text_012 = "Upload Image";
+$hero_images_text_013 = "Guidelines";
+$hero_images_text_014 = "Size";
+$hero_images_text_015 = "Ratio";
+$hero_images_text_016 = "Formats";
+$hero_images_text_017 = "Categories";
+$hero_images_text_018 = "Existing Banner Images";
+$hero_images_text_019 = "Preview";
+$hero_images_text_020 = "File Name";
+$hero_images_text_021 = "Actions";
+$hero_images_text_022 = "Click to enlarge";
+$hero_images_text_023 = "Yes";
+$hero_images_text_024 = "No";
+$hero_images_text_025 = "Delete";
+$hero_images_text_026 = "Are you sure? This will remove the image named";
+$hero_images_text_027 = "from the server.";
+$hero_images_text_028 = "Error updating image. Please try again.";
+$hero_images_text_029 = "Error deleting image. Please try again.";
+$hero_images_text_030 = "No hero images have been uploaded yet. Upload your first image above.";
 $archive_text_015 = "This will delete the archive called";
 $archive_text_016 = "All associated records will be removed as well.";
 
