@@ -145,10 +145,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			} else {
 
-				// Add the user's creds to the "users" table			
-				$entered_password = md5($_POST['password']);
-				$hasher = new PasswordHash(8, false);
-				$hash = $hasher->HashPassword($entered_password);
+				// Add the user's creds to the "users" table
+				$hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
 				$hasher_question = new PasswordHash(8, false);
 				$hash_question = $hasher_question->HashPassword(sterilize($userQuestionAnswer));
 

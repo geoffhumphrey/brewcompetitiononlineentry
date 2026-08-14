@@ -23,9 +23,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (strstr($username,'@'))  {
 
 		require(CLASSES.'phpass/PasswordHash.php');
-		$hasher = new PasswordHash(8, false);
-		$entered_password = md5($_POST['password']);
-		$hash = $hasher->HashPassword($entered_password);
+		$hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
 		$hasher_question = new PasswordHash(8, false);
 		$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
 

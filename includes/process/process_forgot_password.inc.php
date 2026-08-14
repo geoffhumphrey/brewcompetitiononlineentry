@@ -30,9 +30,7 @@ if ($action == "reset") {
 		if ((sterilize($_POST['newPassword1']) == sterilize($_POST['newPassword2']))) {
 			
 			// Hash
-			$entered_password = md5(sterilize($_POST['newPassword1']));
-			$hasher = new PasswordHash(8, false);
-			$hash = $hasher->HashPassword($entered_password);
+			$hash = password_hash(sterilize($_POST['newPassword1']), PASSWORD_BCRYPT);
 
 			// Insert the hash into the database
 			$update_table = $prefix."users";

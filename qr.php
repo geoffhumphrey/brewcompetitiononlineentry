@@ -62,9 +62,6 @@ if ($action == "password-check") {
 		header('Cache-Control: post-check=0, pre-check=0', false);
 		header('Pragma: no-cache');
 
-		require(CLASSES.'phpass/PasswordHash.php');
-		$hasher = new PasswordHash(8, false);
-
 		$password = sterilize($_POST['inputPassword']);
 
 		if (strlen($password) > 72) {
@@ -72,8 +69,6 @@ if ($action == "password-check") {
 		}
 
 		else {
-
-			$password = md5($password);
 
 			// Check user input against DB
 			$db_conn->where("id", 1);
@@ -85,15 +80,15 @@ if ($action == "password-check") {
 			}
 
 			else {
-				
+
 				$stored_hash = $row_qr_password['contestCheckInPassword'];
-				$check = 0;
-				$check = $hasher->CheckPassword($password, $stored_hash);
+				$check = password_verify_legacy($password, $stored_hash);
+				if (($check == 1) && (password_needs_legacy_upgrade($stored_hash))) upgrade_legacy_password_hash($db_conn, $prefix."contest_info", "id", 1, $password);
 
 				// If successful, register a session variable and set the redirect
 				if ($check == 1) {
 					$password_redirect .= "&msg=2";
-					$_SESSION['qrPasswordOK'] = $password;
+					$_SESSION['qrPasswordOK'] = TRUE;
 					csrf_token_generate(true);
 				}
 

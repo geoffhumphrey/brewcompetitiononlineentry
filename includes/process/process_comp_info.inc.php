@@ -120,10 +120,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$hash = NULL;
 
 		if (isset($_POST['contestCheckInPassword'])) {
-			require(CLASSES.'phpass/PasswordHash.php');
-			$hasher = new PasswordHash(8, false);
-			$entered_password = md5(sterilize($_POST['contestCheckInPassword']));
-			$hash = $hasher->HashPassword($entered_password);
+			$hash = password_hash(sterilize($_POST['contestCheckInPassword']), PASSWORD_BCRYPT);
 		}
 
 		$update_table = $prefix."contest_info";
@@ -226,10 +223,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if (isset($_POST['contestCheckInPassword'])) {
 
-				require(CLASSES.'phpass/PasswordHash.php');
-				$hasher = new PasswordHash(8, false);
-				$entered_password = md5(sterilize($_POST['contestCheckInPassword']));
-				$hash = $hasher->HashPassword($entered_password);
+				$hash = password_hash(sterilize($_POST['contestCheckInPassword']), PASSWORD_BCRYPT);
 
 				$update_table = $prefix."contest_info";
 				$data = array('contestCheckInPassword' => $hash);

@@ -87,6 +87,45 @@ function has_double_encoded_data($db_conn) {
 	return false;
 }
 
+/**
+ * Verifies a plaintext password against a stored hash, transparently
+ * supporting both the current scheme (password_hash() over the raw
+ * plaintext, "$2y$" prefix) and the legacy scheme used before this fix
+ * (phpass HashPassword() over md5($plaintext), always "$2a$" prefix).
+ * Returns 1 on match, 0 otherwise, matching this codebase's existing
+ * $check convention.
+ */
+function password_verify_legacy($entered_password, $stored_hash) {
+	if (empty($stored_hash)) return 0;
+	if (password_verify($entered_password, $stored_hash)) return 1;
+	if ((strpos($stored_hash, '$2a$') === 0) && (password_verify(md5($entered_password), $stored_hash))) return 1;
+	return 0;
+}
+
+/**
+ * A stored hash needs upgrading if it was produced by the legacy
+ * md5-then-phpass scheme, identifiable by its "$2a$" prefix (phpass in
+ * this codebase is always configured to produce "$2a$" bcrypt hashes,
+ * never the portable "$P$" format). New hashes from password_hash()
+ * use PASSWORD_BCRYPT, which produces a "$2y$" prefix.
+ */
+function password_needs_legacy_upgrade($stored_hash) {
+	return (strpos($stored_hash, '$2a$') === 0);
+}
+
+/**
+ * Replaces a legacy password hash with a freshly-computed one now that
+ * the plaintext password is available (a successful login/verification
+ * is the only time the plaintext is ever in hand). Called after
+ * password_verify_legacy() succeeds via the legacy branch, so each
+ * account is upgraded once, on its next successful login.
+ */
+function upgrade_legacy_password_hash($db_conn, $table, $id_column, $id_value, $plaintext_password) {
+	$new_hash = password_hash($plaintext_password, PASSWORD_BCRYPT);
+	$db_conn->where($id_column, $id_value);
+	$db_conn->update($table, array('password' => $new_hash));
+}
+
 /** ------------------ VERSION CHECK ------------------
  * Change version in system table if does not match in DB
  * If there are NO database structure or data updates for the current version,
