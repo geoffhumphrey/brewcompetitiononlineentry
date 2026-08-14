@@ -58,8 +58,11 @@ jobs:
             php -l "$file" > /dev/null
           done < <(git ls-files '*.php')
 
-      - name: PHPStan
+      - name: PHPStan (legacy, level 4)
         run: composer analyse
+
+      - name: PHPStan (src, level 6 + strict rules)
+        run: vendor/bin/phpstan analyse -c phpstan.src.neon --no-progress
 
       - name: PHPUnit
         run: composer test

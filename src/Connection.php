@@ -53,6 +53,8 @@ final class Connection
 
     /**
      * Fetch one row by primary key, typed.
+     *
+     * @return array<string, mixed>|null
      */
     public static function one(string $table, int $id): ?array
     {
@@ -93,6 +95,8 @@ final class Connection
 
     /**
      * Insert a row; returns the new id, or null on failure.
+     *
+     * @param array<string, mixed> $data
      */
     public static function insert(string $table, array $data): ?int
     {
@@ -106,6 +110,8 @@ final class Connection
     /**
      * Update rows matching the given where column/value.
      * Returns affected row count (0 if none matched).
+     *
+     * @param array<string, mixed> $data
      */
     public static function update(string $table, array $data, string $whereColumn, int|string $whereValue): int
     {
@@ -123,6 +129,8 @@ final class Connection
 
     /**
      * Map a raw assoc row to the Domain Row class for a table.
+     *
+     * @param array<string, mixed> $data
      */
     public static function row(string $table, array $data): object
     {
