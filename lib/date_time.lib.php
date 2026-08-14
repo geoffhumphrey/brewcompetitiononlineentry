@@ -102,16 +102,16 @@ function to_utc_epoch($datetime_string, $timezone_offset) {
 
 	if (empty($datetime_string)) return false;
 
-	// Parse the datetime in the admin's timezone
+	// Parse the datetime in the admin's timezone. strtotime() with
+	// date_default_timezone_set() to the admin's TZ already yields the
+	// true UTC Unix epoch for that instant (PHP resolves DST internally),
+	// so no manual offset arithmetic is needed — adding the raw offset here
+	// double-subtracts it whenever DST is in effect (e.g. NY stored -5.000
+	// but EDT is -4 in summer → a 1-hour shift per save).
 	$tz = get_timezone($timezone_offset);
 	date_default_timezone_set($tz);
-	$local_epoch = strtotime($datetime_string);
-	if ($local_epoch === false) return false;
-
-	// Convert to UTC epoch by subtracting the signed offset
-	// e.g. America/New_York (-5.000) at 14:00 local → UTC is 14:00 + 5h = 19:00 UTC
-	// UTC epoch = local_epoch + (offset_hours * 3600) where offset is negative for west of UTC
-	$utc_epoch = $local_epoch + ($timezone_offset * 3600);
+	$utc_epoch = strtotime($datetime_string);
+	if ($utc_epoch === false) return false;
 
 	// Restore to a safe default
 	date_default_timezone_set('UTC');
