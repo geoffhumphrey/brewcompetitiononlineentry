@@ -120,21 +120,21 @@ PHP);
         // 1st: (4/5)^3=0.512, 2nd: (3/5)^3=0.216, 3rd: (2/5)^3=0.064,
         // 4th: (1/5)^3=0.008, 5th: (0/5)^3=0 → total 0.8
         $places = [1, 1, 1, 1, 1];
-        $points = best_brewer_points(1, $places, [0], [5], [], '1');
+        $points = best_brewer_points(1, $places, [0], [5, 5, 5, 5, 5], [], '1');
         $this->assertSame(0.8, round($points, 3));
     }
 
     public function testCoaMethodThirdPlaceFromTen(): void
     {
         // 10 entries; placed 3rd → ((10-3)/10)^3 = (0.7)^3 = 0.343
-        $points = best_brewer_points(1, [0, 0, 1], [0], [10], [], '1');
+        $points = best_brewer_points(1, [0, 0, 1], [0], [10, 10, 10], [], '1');
         $this->assertSame(0.343, round($points, 3));
     }
 
     public function testCoaMethodLastPlaceIsZero(): void
     {
         // 10 entries; placed 10th (last) → ((10-10)/10)^3 = 0
-        $points = best_brewer_points(1, [0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [0], [10], [], '1');
+        $points = best_brewer_points(1, [0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [0], array_fill(0, 10, 10), [], '1');
         $this->assertSame(0.0, round($points, 3));
     }
 }
