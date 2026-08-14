@@ -1291,7 +1291,41 @@ function update_table_total(element_id) {
 
     }
 
-}  
+}
+
+function syncSelectAllStyles($selectAll, $group) {
+  const allChecked = $group.length === $group.filter(':checked').length;
+  $selectAll.prop('checked', allChecked);
+}
+
+function handleSelectAllStyles($selectAll, $group) {
+  const allChecked = $group.length === $group.filter(':checked').length;
+  $group.prop('checked', !allChecked);
+  $selectAll.prop('checked', !allChecked);
+}
+
+$(document).ready(function () {
+
+  const $selectAllStyles = $('#select-all-styles');
+  const $styleBoxes      = $('#sortable tbody input[name="tableStyles[]"]');
+
+  // Select-all checkbox click handler
+  $selectAllStyles.on('change', function () {
+    handleSelectAllStyles($selectAllStyles, $styleBoxes);
+    // Recalculate the running total for every affected style checkbox
+    $styleBoxes.each(function () {
+      update_table_total($(this).val());
+    });
+  });
+
+  // Individual style checkboxes — keep the select-all box in sync
+  $styleBoxes.on('change', function () {
+    syncSelectAllStyles($selectAllStyles, $styleBoxes);
+  });
+
+  syncSelectAllStyles($selectAllStyles, $styleBoxes);
+
+});
 
 </script>
 <div id="sticky-total" class="alert bg-primary"><strong>Total for this Table:</strong> <span id="table-total"><?php echo $table_total; ?></span></div>
@@ -1368,7 +1402,7 @@ function update_table_total(element_id) {
 			<table class="table table-responsive table-bordered small" id="sortable">
 				<thead>
 				<tr>
-					<th width="1%">&nbsp;</th>
+					<th width="1%"><input type="checkbox" id="select-all-styles" title="Select/deselect all styles"></th>
 					<?php if ($_SESSION['prefsStyleSet'] != "BA") { ?><th width="1%">#</th><?php } ?>
                     <th>Category</th>
 					<th>Style</th>
@@ -1473,7 +1507,7 @@ function update_table_total(element_id) {
 			<table class="table table-responsive table-bordered small" id="sortable">
 				<thead>
 				<tr>
-					<th width="1%">&nbsp;</th>
+					<th width="1%"><input type="checkbox" id="select-all-styles" title="Select/deselect all styles"></th>
 					<?php if ($_SESSION['prefsStyleSet'] != "BA") { ?><th width="1%">#</th><?php } ?>
 					<th>Category</th>
 					<th>Style</th>
