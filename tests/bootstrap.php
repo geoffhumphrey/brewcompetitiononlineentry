@@ -47,16 +47,10 @@ define('EVALUATION', true);
 
 // -- stubs ---------------------------------------------------------------
 
-if (!function_exists('sterilize')) {
-    /**
-     * Test stub of lib/common.lib.php sterilize().
-     * Mirrors the production contract: escape a value for DB insertion.
-     */
-    function sterilize(string $str): string
-    {
-        return addslashes($str);
-    }
-}
+// sterilize() + is_https() live in lib/sanitize.lib.php (extracted from
+// paths.php); load the real production implementations so unit tests
+// exercise production code rather than a re-implementation.
+require_once LIB . 'sanitize.lib.php';
 
 if (!function_exists('prep_redirect_link')) {
     function prep_redirect_link(string $link): string
