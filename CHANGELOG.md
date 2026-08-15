@@ -38,3 +38,8 @@ repository.
 - Competition times no longer shift during DST: `to_utc_epoch()` returns the
   true UTC epoch without double-applying the timezone offset (upstream issue
   #1716 / PR #1718).
+- The 3.1.0 upgrade backfills already-stored competition timestamps
+  (`contest_info`, `judging_preferences`, `judging_locations`,
+  `preferences.prefsWinnerDelay`) to UTC epochs via
+  `normalize_competition_ts()`, so pre-3.1.0 data agrees with new
+  timezone-consistent storage. Archived competitions are left untouched.
