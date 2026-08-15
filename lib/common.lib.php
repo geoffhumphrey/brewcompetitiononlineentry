@@ -2722,6 +2722,7 @@ function entry_info($id): string {
 
 function get_suffix($dbTable): string {
 	$suffix = strrchr($dbTable, "_");
+	if ($suffix === false) return "";
 	$suffix = ltrim($suffix, "_");
 	return $suffix;
 }
