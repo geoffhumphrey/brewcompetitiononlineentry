@@ -415,8 +415,12 @@ if (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs)) {
     if (!empty($parsed_name['initials'])) $first_name .= " ".$parsed_name['initials'];
     
     $last_name = "";
-    if (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs)) $last_name .= standardize_name($parsed_name['lname']);
-    else $last_name .= $parsed_name['lname']; 
+    // Rebuild the last name from the compound particle(s) (preserved as entered,
+    // e.g. "van der", "de") plus the fix-cased base surname, rather than the
+    // fully fix-cased "lname" which would capitalize the particle(s).
+    if (!empty($parsed_name['lname_compound'])) $last_name .= $parsed_name['lname_compound']." ";
+    if (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs)) $last_name .= standardize_name($parsed_name['lname_base']);
+    else $last_name .= $parsed_name['lname_base'];
     if (!empty($parsed_name['suffix'])) $last_name .= " ".$parsed_name['suffix'];
 
 }
