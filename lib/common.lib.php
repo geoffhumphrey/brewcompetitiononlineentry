@@ -2578,7 +2578,7 @@ function get_evaluation_count(string $method,string $table_id="default"): int {
 	return $row['count'];
 }
 
-function get_participant_count(string $type,string $filter=""): array|string {
+function get_participant_count(string $type,string $filter=""): array|string|int {
 	require(CONFIG.'config.php');
 	$local_db_conn = new MysqliDb($connection);
 
