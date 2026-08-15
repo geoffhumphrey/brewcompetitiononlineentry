@@ -1,0 +1,40 @@
+# Changelog
+
+All notable changes to this repository are documented here.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to the versioning used by the upstream
+[brewcompetitiononlineentry](https://github.com/geoffhumphrey/brewcompetitiononlineentry)
+repository.
+
+## [Unreleased] — modernization branch
+
+### Added
+- PHPUnit test suite (`tests/`) — 50 tests / 245 assertions covering
+  sanitization, session prefs, best-brewer CoA scoring, repository
+  round-trips, contact-token URL round-trips, and timezone/DST epoch
+  conversion; MySQL-gated integration tests run against a MySQL 8.0 service
+  in CI on PHP 8.2 and 8.4.
+- Composer-based tooling: `composer.json` (PHP ^8.2), PHPStan configs
+  (`phpstan.neon` legacy level 4, `phpstan.src.neon` level 6 + strict rules),
+  PHPUnit config, and a CI workflow (`.github/workflows/ci.yml`).
+- Typed domain layer under `src/`: 24 readonly row classes
+  (`src/Domain/`), 24 repositories (`src/Repository/`), a `Connection`
+  wrapper, and a typed session prefs accessor (`src/Session/Prefs.php`).
+- `tools/` generator scripts that produce the row classes and repositories
+  from `sql/bcoem_baseline_3.0.X.sql` (maintainers only; not part of the
+  runtime deployment).
+
+### Changed
+- Documented PHP floor raised to 8.2 (`README.txt`, `README.md`,
+  `.htaccess`); the codebase is modernized for PHP 8.2/8.4.
+- Merged upstream v3.1.0 (MysqliDb protocol conversion, `a8092f18`).
+
+### Fixed
+- PHP 8-removed functions: `each()`, `eregi()`, `mysql_*`, and
+  `FILTER_SANITIZE_STRING` usages removed.
+- Contact-token URLs no longer corrupt tokens containing `+`, `/`, or `=`
+  (`rawurlencode` on the token link; upstream issue #1708).
+- Competition times no longer shift during DST: `to_utc_epoch()` returns the
+  true UTC epoch without double-applying the timezone offset (upstream issue
+  #1716 / PR #1718).
