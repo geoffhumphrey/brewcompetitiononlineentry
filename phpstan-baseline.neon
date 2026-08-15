@@ -19911,6 +19911,11 @@ parameters:
 			path: lib/process.lib.php
 
 		-
+			message: "#^Function normalize_competition_ts\\(\\) never returns false so it can be removed from the return type\\.$#"
+			count: 1
+			path: lib/update.lib.php
+
+		-
 			message: "#^Variable \\$connection might not be defined\\.$#"
 			count: 11
 			path: lib/update.lib.php
@@ -43047,7 +43052,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 635
+			count: 640
 			path: update/run_update.php
 
 		-
@@ -43097,7 +43102,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
-			count: 348
+			count: 353
 			path: update/run_update.php
 
 		-

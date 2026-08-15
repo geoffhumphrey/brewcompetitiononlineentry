@@ -84,4 +84,45 @@ function check_mysql_data_type(string $column_name, string $table_name): int {
 
 }
 
+/**
+ * Re-base a single competition timestamp to a true UTC epoch.
+ *
+ * Used by the 3.1.0 update backfill. Before 3.1.0, competition date fields
+ * were stored via bare strtotime() (interpreted in the PHP server's default
+ * timezone) rather than the admin's prefsTimeZone. This helper re-interprets
+ * a stored epoch as wall time in the admin's timezone and returns the correct
+ * UTC epoch, mirroring what to_utc_epoch() does on save (3.1.0+).
+ *
+ * Values that are empty, zero, not a 10-digit Unix epoch, or the
+ * prefsWinnerDelay "never" sentinel (2145916800) are returned unchanged.
+ *
+ * @param string|int|null $value           Stored value from the DB.
+ * @param float           $timezone_offset prefsTimeZone offset (e.g. -5.0).
+ * @return string|int|false|null           Normalized UTC epoch, or the
+ *                                         original value when it should not
+ *                                         (or cannot) be re-based.
+ */
+function normalize_competition_ts($value, float $timezone_offset) {
+
+	if (($value === null) || ($value === '')) return $value;
+
+	$old = (int) $value;
+
+	// Only re-base genuine 10-digit Unix epochs.
+	if (($old <= 0) || (strlen((string) $old) !== 10)) return $value;
+
+	// The "no winner date" sentinel is not a real date.
+	if ($old == 2145916800) return $value;
+
+	if (!function_exists('to_utc_epoch')) return $value;
+
+	$local = date('Y-m-d H:i', $old);
+	$new = to_utc_epoch($local, $timezone_offset);
+
+	if (($new === false) || ($new === $old)) return $value;
+
+	return $new;
+
+}
+
 ?>
