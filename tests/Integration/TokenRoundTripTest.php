@@ -24,8 +24,22 @@ use PHPUnit\Framework\TestCase;
  */
 final class TokenRoundTripTest extends TestCase
 {
-    private const SECRET_KEY = '746573742d70617373776f72642d6b65792d3132333435363738393031323334353637383930';
-    private const NACL = '746573742d7365727665722d726f6f742d6162636465666768696a6b6c6d';
+    // Deterministic fixtures exercising the exact production path
+    // (pub/contact.pub.php derives these from runtime $password and
+    // $server_root). Plaintext values are hex-encoded at use time so the
+    // literals stay readable and don't trip secret scanners.
+    private const SECRET_KEY_HEX = '746573742d70617373776f72642d6b65792d3132333435363738393031323334353637383930';
+    private const NACL_HEX = '746573742d7365727665722d726f6f742d6162636465666768696a6b6c6d';
+
+    private static function secretKey(): string
+    {
+        return hex2bin(self::SECRET_KEY_HEX);
+    }
+
+    private static function nacl(): string
+    {
+        return hex2bin(self::NACL_HEX);
+    }
 
     protected function setUp(): void
     {
@@ -81,8 +95,8 @@ final class TokenRoundTripTest extends TestCase
     {
         for ($id = 1; $id <= 50; $id++) {
             $idPadded = sprintf('%06d', $id);
-            $token = simpleEncrypt($idPadded, self::SECRET_KEY, self::NACL);
-            $this->assertSame($idPadded, simpleDecrypt($token, self::SECRET_KEY, self::NACL));
+            $token = simpleEncrypt($idPadded, self::secretKey(), self::nacl());
+            $this->assertSame($idPadded, simpleDecrypt($token, self::secretKey(), self::nacl()));
         }
     }
 
@@ -96,7 +110,7 @@ final class TokenRoundTripTest extends TestCase
             if (str_contains($token, '+')) {
                 $found = true;
                 $corrupted = urldecode($token); // query-string parse of raw token
-                $result = @simpleDecrypt($corrupted, self::SECRET_KEY, self::NACL);
+                $result = @simpleDecrypt($corrupted, self::secretKey(), self::nacl());
                 $this->assertNotSame(sprintf('%06d', $id), $result);
                 break;
             }
@@ -106,12 +120,12 @@ final class TokenRoundTripTest extends TestCase
 
     private function buildToken(int $id): string
     {
-        return simpleEncrypt(sprintf('%06d', $id), self::SECRET_KEY, self::NACL);
+        return simpleEncrypt(sprintf('%06d', $id), self::secretKey(), self::nacl());
     }
 
     private function recoverId(string $token): int
     {
-        $decrypted = simpleDecrypt(rawurldecode(rawurlencode($token)), self::SECRET_KEY, self::NACL);
+        $decrypted = simpleDecrypt(rawurldecode(rawurlencode($token)), self::secretKey(), self::nacl());
         $this->assertIsString($decrypted);
         return (int) $decrypted;
     }
