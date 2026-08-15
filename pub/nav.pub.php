@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      nav.pub.php
  * Description: This module houses the main navigation.

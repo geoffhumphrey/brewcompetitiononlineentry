@@ -1,3 +1,3 @@
-<?php declare(strict_types=1);
+<?php
 $version = "1.1.4.0";
 ?>

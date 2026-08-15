@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 $query_scores = "SELECT scoreEntry,scorePlace,scoreType FROM ".$prefix."judging_scores WHERE eid=?";
 $params_scores = array($row_sql['id']);
 if (SINGLE) { $query_scores .= " AND comp_id=?"; $params_scores[] = $_SESSION['comp_id']; }

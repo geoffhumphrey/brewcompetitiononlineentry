@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 // BY TABLE
 
 if ($winner_method == 0) {

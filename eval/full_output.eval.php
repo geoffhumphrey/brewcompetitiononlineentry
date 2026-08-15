@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 if ($tb != "default") {
      echo "<style>body {font-size:13px;}.descriptor {font-size:.85em;}.footer-descriptor{font-size:.85em;}</style>";

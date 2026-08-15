@@ -1,5 +1,4 @@
 <?php 
-declare(strict_types=1);
 /**
  * Module:      footer.pub.php 
  * Description: This module houses the footer displayed on all pages. 

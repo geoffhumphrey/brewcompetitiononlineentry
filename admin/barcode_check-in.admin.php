@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      barcode_check-in.admin.php
  * Description: Originally deployed as a "mod" for NHC 2013.

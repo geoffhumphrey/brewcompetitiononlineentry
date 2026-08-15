@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      sponsors.sec.php
  * Description: This module displays sponsors information housed in the

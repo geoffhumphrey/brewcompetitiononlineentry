@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Module:      admin_common.db.php

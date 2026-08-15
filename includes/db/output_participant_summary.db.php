@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 // Check for Entries
 $db_conn->where('brewBrewerID', $row_brewer['uid']);
 $db_conn->where('brewReceived', '1');

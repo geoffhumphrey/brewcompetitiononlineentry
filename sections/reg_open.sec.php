@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      reg_open.sec.php
  * Description: This module houses information regarding registering for the competition,

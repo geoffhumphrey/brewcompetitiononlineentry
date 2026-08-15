@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 $db_conn->where('id', '1');
 $row_bb_prefs = $db_conn->getOne($prefix."preferences", "prefsBestBrewerTitle, prefsBestClubTitle, prefsFirstPlacePts, prefsSecondPlacePts, prefsThirdPlacePts, prefsFourthPlacePts, prefsHMPts, prefsTieBreakRule1, prefsTieBreakRule2, prefsTieBreakRule3, prefsTieBreakRule4, prefsTieBreakRule5, prefsTieBreakRule6, prefsBestUseBOS, prefsScoringCOA, prefsWinnerMethod");
 

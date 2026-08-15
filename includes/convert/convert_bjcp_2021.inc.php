@@ -1,5 +1,4 @@
 <?php 
-declare(strict_types=1);
 /**
  * Get all ids from db of BJCP 2015 and BJCP 2021 styles.
  * Map ids from 2015 to 2021.

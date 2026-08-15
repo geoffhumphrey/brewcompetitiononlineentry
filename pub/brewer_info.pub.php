@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      brewer_info.sec.php
  * Description: This module displays user-related data including personal information,

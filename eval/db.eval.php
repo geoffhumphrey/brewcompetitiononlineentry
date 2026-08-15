@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Code is executed when rendering a scoresheet.

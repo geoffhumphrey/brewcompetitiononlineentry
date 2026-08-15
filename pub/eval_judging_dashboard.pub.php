@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  ************************************** 
  * Judging Dashboard (for Judges Only)

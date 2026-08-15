@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      bestbrewer.sec.php
  * Description: This module displays the best brewers, ordered by the sum of points obtained for his entries

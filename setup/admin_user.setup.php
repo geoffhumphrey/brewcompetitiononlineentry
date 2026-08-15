@@ -1,4 +1,3 @@
-<?php declare(strict_types=1); ?>
 <script type="text/javascript">
 var username_url = "<?php echo $ajax_url; ?>username.ajax.php";
 var email_url="<?php echo $ajax_url; ?>valid_email.ajax.php";

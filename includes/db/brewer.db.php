@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      brewer.db.php
  * Description: This module houses all participant (brewer) related queries

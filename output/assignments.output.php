@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 if (NHC) $base_url = "../";
 if ($filter == "stewards") $filter = "S"; 

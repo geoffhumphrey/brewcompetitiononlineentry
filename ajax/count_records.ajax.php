@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 ob_start();
 // Set headers to prevent caching and specify JSON response

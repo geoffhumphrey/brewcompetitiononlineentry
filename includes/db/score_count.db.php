@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 if ($section == "past-winners") {
 	$go_clean = preg_replace("/[^a-zA-Z0-9]+/", "", $go);

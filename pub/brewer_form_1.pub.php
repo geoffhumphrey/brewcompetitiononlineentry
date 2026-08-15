@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 $org_array_lower = array();
 foreach ($org_array as $value) {

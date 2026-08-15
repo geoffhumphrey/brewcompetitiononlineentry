@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 ob_start();
 require (INCLUDES.'db_tables.inc.php');
 require (CLASSES.'phpass/PasswordHash.php');

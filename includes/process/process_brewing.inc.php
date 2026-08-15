@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      process_brewing.inc.php
  * Description: This module does all the heavy lifting for adding entries to the DB

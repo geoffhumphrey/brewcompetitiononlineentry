@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 // @single
 // Query based upon unique variable (id of record from "judging_locations" table)
 $db_conn->where('id', $location);

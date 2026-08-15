@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 // $order is restricted to 2 hardcoded literal column names below, never user input - safe to splice as identifier text
 if ($view == "entry") $order = "b.id";

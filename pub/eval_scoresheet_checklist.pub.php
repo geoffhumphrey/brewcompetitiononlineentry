@@ -1,5 +1,4 @@
 <?php 
-declare(strict_types=1);
 
 $checklist_factors = array($label_none,$label_low,$label_med,$label_high); 
 

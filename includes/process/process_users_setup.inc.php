@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /*
  * Module:      process_users_setup.inc.php
  * Description: This module does all the heavy lifting for adding an admin user to the DB (Setup ONLY)

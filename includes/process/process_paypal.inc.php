@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 // PayPal settings
 // The payee address must come from the competition's own configured setting, never from the

@@ -1,4 +1,3 @@
-<?php declare(strict_types=1); ?>
 <!-- Admin Pages -->
 <div style="height: 40px;"></div>
 <div class="container-fluid">

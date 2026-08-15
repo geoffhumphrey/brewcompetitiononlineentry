@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 foreach ($eval_scores as $key => $value) {
 
 	$disable_add_edit_otf = FALSE;

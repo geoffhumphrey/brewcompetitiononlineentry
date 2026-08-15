@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 $show_partners_orgs = FALSE;
 

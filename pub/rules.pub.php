@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      rules.pub.php
  * Description: This module houses the intallation's landing page that includes

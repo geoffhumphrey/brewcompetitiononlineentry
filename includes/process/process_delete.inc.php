@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /*
  * Module:      process_delete.inc.php
  * Description: This module does all the heavy lifting for all DB deletes: new entries,

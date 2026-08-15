@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');

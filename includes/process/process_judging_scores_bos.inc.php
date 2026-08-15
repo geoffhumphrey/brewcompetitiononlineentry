@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /*
  * Module:      process_judging_bos.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_scores_bos" table

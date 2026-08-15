@@ -1,5 +1,4 @@
 <?php	
-declare(strict_types=1);
 if ($section == "list") $db_conn->where('id', $row_brewer['brewerStewardLocation']);
 if (($section == "brewer") || ($section == "admin") || ($section == "register")) {
 	$db_conn->orderBy('judgingDate', 'ASC');

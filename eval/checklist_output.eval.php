@@ -1,4 +1,3 @@
-<?php declare(strict_types=1); ?>
 <!-- Aroma -->
 <h5>Aroma<span class="pull-right"><?php echo $row_eval['evalAromaScore']; ?> <small>/ 12</small></span></h5>
 <hr>

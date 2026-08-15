@@ -1,5 +1,4 @@
 <?php 
-declare(strict_types=1);
 /**
  * Module:      judge.sec.php 
  * Description: This module houses the functionality for users to enter their

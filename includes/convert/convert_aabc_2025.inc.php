@@ -1,5 +1,4 @@
 <?php 
-declare(strict_types=1);
 /**
  * Get all ids from db of AABC 2022 and AABC 2025 styles.
  * Map ids from 2022 to 2025.

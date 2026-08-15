@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 if ($bid != "") {
 	$query_judging = "SELECT judgingLocName FROM ".$prefix."judging_locations WHERE id=?";

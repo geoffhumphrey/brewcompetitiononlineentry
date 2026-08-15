@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 $query_style_type = "SELECT * FROM $style_types_db_table";
 $params_style_type = array();

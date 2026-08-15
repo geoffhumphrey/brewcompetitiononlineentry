@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      contact.sec.php
  * Description: This module displays the contact mechanism for user feedback.
