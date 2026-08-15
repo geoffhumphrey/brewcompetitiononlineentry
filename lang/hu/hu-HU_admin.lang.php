@@ -133,6 +133,8 @@ $admin_hero_category_shown_cider = "Megjelenítve, ha az almabor kategória akt�
 $admin_hero_category_shown_mead = "Megjelenítve, ha a mézbor kategória aktív";
 $admin_hero_no_images = "Nem található kép";
 $admin_hero_save_button = "Módosítások Mentése";
+$admin_hero_select_all = "Összes Kijelölése";
+$admin_hero_deselect_all = "Kijelölés Törlése";
 
 // -------------------- Barcode Check-In --------------------
 

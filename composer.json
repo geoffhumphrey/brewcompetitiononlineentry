@@ -1,0 +1,11 @@
+{
+    "name": "geoffhumphrey/brewcompetitiononlineentry",
+    "description": "Brew Competition Online Entry & Management (BCOE&M) - dev tooling only. The application itself has no runtime dependencies managed here.",
+    "type": "project",
+    "require-dev": {
+        "phpstan/phpstan": "^2.2"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

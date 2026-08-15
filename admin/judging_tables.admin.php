@@ -349,8 +349,8 @@ if (($action == "default") && ($filter == "default")) {
             
 
             // Set js cookies of initial judge / steward available counts for each location
-            $table_location_js_cookies[] .= "Cookies.set('delete-stewards-".$table_location_class."', '".$steward_avail."', { expires: 1 });\n";
-            $table_location_js_cookies[] .= "Cookies.set('delete-judges-".$table_location_class."', '".$judge_avail."', { expires: 1 });\n";
+            $table_location_js_cookies[] = "Cookies.set('delete-stewards-".$table_location_class."', '".$steward_avail."', { expires: 1 });\n";
+            $table_location_js_cookies[] = "Cookies.set('delete-judges-".$table_location_class."', '".$judge_avail."', { expires: 1 });\n";
 
             if ($dbTable == "default") {
                 $manage_tables_default_tbody .= "<td nowrap class=\"hidden-print\">";

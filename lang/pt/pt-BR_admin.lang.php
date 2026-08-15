@@ -133,6 +133,8 @@ $admin_hero_category_shown_cider = "Mostrado quando a categoria de sidra está a
 $admin_hero_category_shown_mead = "Mostrado quando a categoria de hidromel está ativa";
 $admin_hero_no_images = "Nenhuma imagem encontrada";
 $admin_hero_save_button = "Salvar Alterações";
+$admin_hero_select_all = "Selecionar Tudo";
+$admin_hero_deselect_all = "Desmarcar Tudo";
 
 // -------------------- Barcode Check-In --------------------
 

@@ -686,6 +686,7 @@ if ($setup_free_access == TRUE) {
 			`prefsSpecific` tinyint(1) DEFAULT NULL,
 			`prefsDropOff` tinyint(1) DEFAULT NULL,
 			`prefsShipping` tinyint(1) DEFAULT NULL,
+			`prefsHeroImages` mediumtext COLLATE utf8mb4_unicode_ci COMMENT 'JSON map of hero banner image filename to active flag',
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		", $preferences_db_table);
@@ -766,7 +767,8 @@ if ($setup_free_access == TRUE) {
 			'prefsTieBreakRule6' => NULL,
 			'prefsShowBestClub' => '0',
 			'prefsBestClubTitle' => NULL,
-			'prefsCAPTCHA' => '0'
+			'prefsCAPTCHA' => '0',
+			'prefsHeroImages' => NULL
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {

@@ -2837,11 +2837,11 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,$archive="defau
 		$r[] = "";
 			switch($method) {
 				case "1": //
-					if ($row_staff_check['staff_organizer'] == "1") $r[] .= strtolower($label_organizer);
-					if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS";
-					if ($row_staff_check['staff_judge'] == "1") $r[] .= $label_judge;
-					if ($row_staff_check['staff_steward'] == "1") $r[] .= $label_steward;
-					if ($row_staff_check['staff_staff'] == "1") $r[] .= $label_staff;
+					if ($row_staff_check['staff_organizer'] == "1") $r[] = strtolower($label_organizer);
+					if ($row_staff_check['staff_judge_bos'] == "1") $r[] = "BOS";
+					if ($row_staff_check['staff_judge'] == "1") $r[] = $label_judge;
+					if ($row_staff_check['staff_steward'] == "1") $r[] = $label_steward;
+					if ($row_staff_check['staff_staff'] == "1") $r[] = $label_staff;
 				break;
 				case "staff_judge": // for $filter URL variable
 					if ($row_staff_check['staff_judge'] == "1") $r = "CHECKED";
@@ -5274,7 +5274,7 @@ function display_array_content_style($arrayname,$method,$base_url) {
 	include (LANG.'language.lang.php');
 	$a = "";
 	sort($arrayname);
-	while(list($key, $value) = each($arrayname)) {
+	foreach ($arrayname as $key => $value) {
 
 		if (is_array($value)) {
 			$c = display_array_content($value,'');

@@ -112,6 +112,8 @@ $admin_hero_category_shown_cider = "Shown when cider category is active";
 $admin_hero_category_shown_mead = "Shown when mead category is active";
 $admin_hero_no_images = "No images found";
 $admin_hero_save_button = "Save Changes";
+$admin_hero_select_all = "Select All";
+$admin_hero_deselect_all = "Deselect All";
 
 // Old strings kept for backwards compatibility
 $hero_images_text_002 = "Upload New Banner Image";

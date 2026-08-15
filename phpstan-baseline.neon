@@ -1,0 +1,823 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Instantiated class Markdownify\\Converter not found\.$#'
+			identifier: class.notFound
+			count: 10
+			path: admin/competition_info.admin.php
+
+		-
+			message: '#^Caught class PHPMailer\\PHPMailer\\Exception not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: admin/send_test_email.admin.php
+
+		-
+			message: '#^Instantiated class PHPMailer\\PHPMailer\\PHPMailer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: admin/send_test_email.admin.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: admin/upload.admin.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: admin/upload_scoresheets.admin.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: ajax/account_checks.ajax.php
+
+		-
+			message: '#^Function is_email not found\.$#'
+			identifier: function.notFound
+			count: 3
+			path: ajax/account_checks.ajax.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: ajax/account_checks.ajax.php
+
+		-
+			message: '#^Instantiated class PHPMailer\\PHPMailer\\PHPMailer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: ajax/account_checks.ajax.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: ajax/account_checks.ajax.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: ajax/practice_session.ajax.php
+
+		-
+			message: '#^Function is_email not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: ajax/valid_email.ajax.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: eval/process.eval.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: eval/process.eval.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: eval/scoresheet_output.eval.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: handle.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value 12 \("12", "12"\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: includes/constants_post_lang.inc.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''C1\-D'' \("C1\-D", "C1\-D"\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: includes/db/styles_special.db.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: includes/db/styles_special.db.php
+
+		-
+			message: '#^Call to sprintf contains 1 placeholder, 2 values given\.$#'
+			identifier: argument.sprintf
+			count: 3
+			path: includes/headers.inc.php
+
+		-
+			message: '#^Call to sprintf contains 1 placeholder, 2 values given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: includes/logincheck.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_archive.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_archive.inc.php
+
+		-
+			message: '#^Instantiated class InputBeerXML not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_beerxml.inc.php
+
+		-
+			message: '#^Path in include\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\includes\\beerXML/input_beer_xml\.inc\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: includes/process/process_beerxml.inc.php
+
+		-
+			message: '#^Call to sprintf contains 1 placeholder, 2 values given\.$#'
+			identifier: argument.sprintf
+			count: 2
+			path: includes/process/process_brewer.inc.php
+
+		-
+			message: '#^Instantiated class PHPMailer\\PHPMailer\\PHPMailer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_brewer.inc.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_brewer.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_brewer_info.inc.php
+
+		-
+			message: '#^Instantiated class FullNameParser not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_brewer_info.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_brewer_info.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_brewing.inc.php
+
+		-
+			message: '#^Instantiated class FullNameParser not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_brewing.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_brewing.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_comp_info.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_comp_info.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_contacts.inc.php
+
+		-
+			message: '#^Function is_email not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: includes/process/process_contacts.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_contacts.inc.php
+
+		-
+			message: '#^Instantiated class PHPMailer\\PHPMailer\\PHPMailer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_contacts.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_drop_off.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_drop_off.inc.php
+
+		-
+			message: '#^Instantiated class PHPMailer\\PHPMailer\\PHPMailer not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: includes/process/process_email.inc.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_forgot_password.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_judging_locations.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_judging_locations.inc.php
+
+		-
+			message: '#^Instantiated class PHPMailer\\PHPMailer\\PHPMailer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_judging_preferences.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_judging_tables.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_judging_tables.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_mods.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_mods.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_prefs.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_prefs.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_special_best.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_special_best.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_special_best_info.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_special_best_info.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_sponsors.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_sponsors.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_style_types.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_style_types.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_styles.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_styles.inc.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_users.inc.php
+
+		-
+			message: '#^Instantiated class PHPMailer\\PHPMailer\\PHPMailer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_users_register.inc.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: includes/process/process_users_register.inc.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_users_setup.inc.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_users_setup.inc.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: includes/process/process_users_setup.inc.php
+
+		-
+			message: '#^Instantiated class Parsedown not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: index.legacy.php
+
+		-
+			message: '#^Path in include\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\sections\\custom_competition_info\.sec\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: index.legacy.php
+
+		-
+			message: '#^Path in require_once\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\lib\\hosted\.lib\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: index.php
+
+		-
+			message: '#^Instantiated class Parsedown not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: index.pub.php
+
+		-
+			message: '#^Instantiated class MysqliDb not found\.$#'
+			identifier: class.notFound
+			count: 37
+			path: lib/admin.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''Ä'' \(''Ä'', ''Ä''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''Å'' \(''Å'', ''Å''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''Æ'' \(''Æ'', ''Æ''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''Ö'' \(''Ö'', ''Ö''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''Ø'' \(''Ø'', ''Ø''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''Ü'' \(''Ü'', ''Ü''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''ß'' \(''ß'', ''ß''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''ä'' \(''ä'', ''ä''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''å'' \(''å'', ''å''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''æ'' \(''æ'', ''æ''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''ö'' \(''ö'', ''ö''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''ø'' \(''ø'', ''ø''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''ü'' \(''ü'', ''ü''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''Đ'' \(''Đ'', ''Đ''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''đ'' \(''đ'', ''đ''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Deprecated in PHP 8\.0\: Required parameter \$base_url follows optional parameter \$id\.$#'
+			identifier: parameter.requiredAfterOptional
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Deprecated in PHP 8\.0\: Required parameter \$dbTable follows optional parameter \$method\.$#'
+			identifier: parameter.requiredAfterOptional
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Deprecated in PHP 8\.0\: Required parameter \$sef follows optional parameter \$id\.$#'
+			identifier: parameter.requiredAfterOptional
+			count: 1
+			path: lib/common.lib.php
+
+		-
+			message: '#^Instantiated class MysqliDb not found\.$#'
+			identifier: class.notFound
+			count: 50
+			path: lib/common.lib.php
+
+		-
+			message: '#^Instantiated class MysqliDb not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/date_time.lib.php
+
+		-
+			message: '#^Caught class PHPMailer\\PHPMailer\\Exception not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/email.lib.php
+
+		-
+			message: '#^Instantiated class MysqliDb not found\.$#'
+			identifier: class.notFound
+			count: 15
+			path: lib/output.lib.php
+
+		-
+			message: '#^Instantiated class MysqliDb not found\.$#'
+			identifier: class.notFound
+			count: 7
+			path: lib/process.lib.php
+
+		-
+			message: '#^Instantiated class MysqliDb not found\.$#'
+			identifier: class.notFound
+			count: 4
+			path: lib/update.lib.php
+
+		-
+			message: '#^Instantiated class MysqliDb not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: output/bos_mat.output.php
+
+		-
+			message: '#^Instantiated class qRClas not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: output/bottle_label.output.php
+
+		-
+			message: '#^Instantiated class easyTable not found\.$#'
+			identifier: class.notFound
+			count: 29
+			path: output/export.output.php
+
+		-
+			message: '#^Instantiated class exFPDF not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: output/export.output.php
+
+		-
+			message: '#^Instantiated class PDF_Label not found\.$#'
+			identifier: class.notFound
+			count: 25
+			path: output/labels.output.php
+
+		-
+			message: '#^Instantiated class MysqliDb not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: output/participant_summary.output.php
+
+		-
+			message: '#^Function spritf not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: output/styles.output.php
+
+		-
+			message: '#^Call to sprintf contains 2 placeholders, 3 values given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: pub/at-a-glance.pub.php
+
+		-
+			message: '#^Call to sprintf contains 4 placeholders, 6 values given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: pub/default.pub.php
+
+		-
+			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
+			identifier: class.notFound
+			count: 6
+			path: pub/entry_info.pub.php
+
+		-
+			message: '#^Path in include\(\) "judge_info\.sec\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: pub/judge.pub.php
+
+		-
+			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
+			identifier: class.notFound
+			count: 1
+			path: pub/reg_closed.pub.php
+
+		-
+			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
+			identifier: class.notFound
+			count: 2
+			path: pub/reg_open.pub.php
+
+		-
+			message: '#^Call to sprintf contains 1 placeholder, 3 values given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: pub/volunteers.pub.php
+
+		-
+			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
+			identifier: class.notFound
+			count: 1
+			path: pub/volunteers.pub.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: pub/volunteers.pub.php
+
+		-
+			message: '#^Call to sprintf contains 0 placeholders, 1 value given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: pub/winners.pub.php
+
+		-
+			message: '#^Call to sprintf contains 0 placeholders, 1 value given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: pub/winners_category.pub.php
+
+		-
+			message: '#^Call to sprintf contains 0 placeholders, 1 value given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: pub/winners_subcategory.pub.php
+
+		-
+			message: '#^Call to sprintf contains 4 placeholders, 6 values given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: sections/default.sec.php
+
+		-
+			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
+			identifier: class.notFound
+			count: 6
+			path: sections/entry_info.sec.php
+
+		-
+			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
+			identifier: class.notFound
+			count: 1
+			path: sections/reg_closed.sec.php
+
+		-
+			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
+			identifier: class.notFound
+			count: 2
+			path: sections/reg_open.sec.php
+
+		-
+			message: '#^Call to sprintf contains 1 placeholder, 3 values given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: sections/volunteers.sec.php
+
+		-
+			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
+			identifier: class.notFound
+			count: 1
+			path: sections/volunteers.sec.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: sections/volunteers.sec.php
+
+		-
+			message: '#^Call to sprintf contains 0 placeholders, 1 value given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: sections/winners.sec.php
+
+		-
+			message: '#^Call to sprintf contains 0 placeholders, 1 value given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: sections/winners_category.sec.php
+
+		-
+			message: '#^Call to sprintf contains 0 placeholders, 1 value given\.$#'
+			identifier: argument.sprintf
+			count: 1
+			path: sections/winners_subcategory.sec.php
+
+		-
+			message: '#^File begins with UTF\-8 BOM character\. This may cause problems when running the code in the web browser\.$#'
+			identifier: whitespace.bom
+			count: 1
+			path: update/1.2.0.0_update.php
+
+		-
+			message: '#^File begins with UTF\-8 BOM character\. This may cause problems when running the code in the web browser\.$#'
+			identifier: whitespace.bom
+			count: 1
+			path: update/1.3.0.0_update.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: update/1.3.0.0_update.php
+
+		-
+			message: '#^File begins with UTF\-8 BOM character\. This may cause problems when running the code in the web browser\.$#'
+			identifier: whitespace.bom
+			count: 1
+			path: update/1.3.2.0_update.php
+
+		-
+			message: '#^File begins with UTF\-8 BOM character\. This may cause problems when running the code in the web browser\.$#'
+			identifier: whitespace.bom
+			count: 1
+			path: update/2.0.0.0_update.php
+
+		-
+			message: '#^File begins with UTF\-8 BOM character\. This may cause problems when running the code in the web browser\.$#'
+			identifier: whitespace.bom
+			count: 1
+			path: update/2.1.0.0_update.php
+
+		-
+			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: update/run_update.php
+
+		-
+			message: '#^Instantiated class FullNameParser not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: update/run_update.php
+
+		-
+			message: '#^Instantiated class HTMLPurifier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: update/run_update.php
+
+		-
+			message: '#^Instantiated class PasswordHash not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: update/run_update.php

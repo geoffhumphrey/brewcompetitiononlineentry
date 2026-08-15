@@ -1,0 +1,35 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    phpVersion: 80300
+    level: 0
+
+    paths:
+        - admin
+        - ajax
+        - eval
+        - includes
+        - lib
+        - output
+        - pub
+        - sections
+        - setup
+        - update
+        - awards.php
+        - handle.php
+        - index.legacy.php
+        - index.php
+        - index.pub.php
+        - qr.php
+        - update.php
+
+    excludePaths:
+        - classes/*
+        - vendor/*
+
+    scanDirectories:
+        - classes
+
+    bootstrapFiles:
+        - phpstan-bootstrap.php

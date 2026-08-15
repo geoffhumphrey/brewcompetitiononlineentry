@@ -254,7 +254,7 @@ if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
 				$place = floor($bb_row_bos_scores['scorePlace']);
 				if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] += 1;
 				$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
-				$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][] += 1;
+				$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][] = 1;
 
 				// Compile separate vars for clubs
 				if (!empty($bb_row_bos_scores['brewerClubs'])) {

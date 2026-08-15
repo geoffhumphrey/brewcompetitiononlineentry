@@ -22,13 +22,13 @@ $category_prefixes = array(
 
 $allowed_extensions = array("jpg", "jpeg", "png", "gif", "webp");
 $allowed_mime_types = array("image/jpeg", "image/png", "image/gif", "image/webp");
-$max_upload_bytes = 2 * 1024 * 1024; // 2 MB
+$max_upload_bytes = 5 * 1024 * 1024; // 5 MB
 
 function is_valid_hero_token() {
     return (
         isset($_POST['user_session_token']) &&
         isset($_SESSION['user_session_token']) &&
-        ($_POST['user_session_token'] === $_SESSION['user_session_token'])
+        (hash_equals($_SESSION['user_session_token'], $_POST['user_session_token']))
     );
 }
 
@@ -138,7 +138,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
 }
 
 $all_images = get_all_available_hero_images();
-$hero_prefs = load_hero_images_preferences($all_images);
+$hero_prefs = load_hero_images_preferences($db_conn, $prefix, $all_images);
 
 if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset($_POST['action'])) && ($_POST['action'] == "delete")) {
     if (!is_valid_hero_token()) {
@@ -167,10 +167,10 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
             }
             else {
                 unset($hero_prefs[$delete_image]);
-                save_hero_images_preferences($connection, $prefix, $hero_prefs);
+                save_hero_images_preferences($db_conn, $prefix, $hero_prefs);
                 $save_message = "Banner image deleted successfully.";
                 $all_images = get_all_available_hero_images();
-                $hero_prefs = load_hero_images_preferences($all_images);
+                $hero_prefs = load_hero_images_preferences($db_conn, $prefix, $all_images);
             }
         }
     }
@@ -192,7 +192,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
             }
         }
 
-        if (save_hero_images_preferences($connection, $prefix, $images_to_save)) {
+        if (save_hero_images_preferences($db_conn, $prefix, $images_to_save)) {
             $save_message = isset($lang['admin_hero_images_saved']) ? $lang['admin_hero_images_saved'] : "Hero images preferences saved successfully.";
             $hero_prefs = $images_to_save;
         }
@@ -268,10 +268,10 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                 </button>
             </form>
             <div class="help-block" style="margin-top:12px;">
-                <strong><?php echo isset($lang['admin_hero_upload_note_title']) ? $lang['admin_hero_upload_note_title'] : "File naming"; ?>:</strong>
-                <?php echo isset($lang['admin_hero_upload_note_body']) ? $lang['admin_hero_upload_note_body'] : "The uploaded file is automatically renamed using the selected category as a prefix &mdash; for example, uploading <em>sunset.jpg</em> in the Beer category saves as <code>beer-sunset.jpg</code>. You do not need to rename the file before uploading."; ?>
-                <br><strong><?php echo isset($lang['admin_hero_upload_note_size_title']) ? $lang['admin_hero_upload_note_size_title'] : "Size &amp; format"; ?>:</strong>
-                <?php echo isset($lang['admin_hero_upload_note_size_body']) ? $lang['admin_hero_upload_note_size_body'] : "Recommended 3000&times;500 px (6:1 ratio). Minimum width 1200 px with at least a 3.5:1 aspect ratio. Accepted formats: JPG, PNG, GIF, WebP. Maximum file size: 2 MB."; ?>
+                <p><strong><?php echo isset($lang['admin_hero_upload_note_title']) ? $lang['admin_hero_upload_note_title'] : "File naming"; ?>:</strong>
+                <?php echo isset($lang['admin_hero_upload_note_body']) ? $lang['admin_hero_upload_note_body'] : "The uploaded file is automatically renamed using the selected category as a prefix &mdash; for example, uploading <em>sunset.jpg</em> in the Beer category saves as <code>beer-sunset.jpg</code>. You do not need to rename the file before uploading."; ?></p>
+                <p><strong><?php echo isset($lang['admin_hero_upload_note_size_title']) ? $lang['admin_hero_upload_note_size_title'] : "Size &amp; format"; ?>:</strong> 
+                <?php echo isset($lang['admin_hero_upload_note_size_body']) ? $lang['admin_hero_upload_note_size_body'] : "Recommended 3000&times;500 px (6:1 ratio). Minimum width 1200 px with at least a 3.5:1 aspect ratio. Accepted formats: JPG, PNG, GIF, WebP. Maximum file size: 5 MB."; ?></p>
             </div>
         </div>
     </div>
@@ -307,14 +307,26 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         ?>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4 class="panel-title"><?php echo $meta['title']; ?></h4>
-                <small><?php echo $meta['help']; ?></small>
+                <div class="hero-panel-heading-row">
+                    <div>
+                        <h4 class="panel-title"><?php echo $meta['title']; ?></h4>
+                        <small><?php echo $meta['help']; ?></small>
+                    </div>
+                    <?php if (!empty($all_images[$category])): ?>
+                    <button type="button" class="btn btn-primary btn-xs hero-toggle-all-button"
+                        data-hero-category="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>"
+                        data-label-select="<?php echo htmlspecialchars(isset($lang['admin_hero_select_all']) ? $lang['admin_hero_select_all'] : "Select All", ENT_QUOTES, 'UTF-8'); ?>"
+                        data-label-deselect="<?php echo htmlspecialchars(isset($lang['admin_hero_deselect_all']) ? $lang['admin_hero_deselect_all'] : "Deselect All", ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php echo isset($lang['admin_hero_deselect_all']) ? $lang['admin_hero_deselect_all'] : "Deselect All"; ?>
+                    </button>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="panel-body">
                 <?php if (empty($all_images[$category])): ?>
                     <p class="text-muted"><?php echo isset($lang['admin_hero_no_images']) ? $lang['admin_hero_no_images'] : "No images found"; ?></p>
                 <?php else: ?>
-                    <div class="hero-images-grid">
+                    <div class="hero-images-grid" data-hero-category-grid="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>">
                         <?php foreach ($all_images[$category] as $image):
                             $checkbox_name = "hero_image_".preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
                             $is_checked = (isset($hero_prefs[$image])) ? $hero_prefs[$image] : false;
@@ -326,7 +338,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                                     <span class="image-name"><?php echo htmlspecialchars($image); ?></span>
                                 </label>
                             </div>
-                            <img src="<?php echo $images_url.$image; ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
+                            <img src="<?php echo htmlspecialchars($images_url.$image, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
                             <button type="button" class="btn btn-link btn-xs hero-image-delete-button" data-hero-image="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>">
                                 <span class="glyphicon glyphicon-trash"></span> <?php echo isset($lang['delete']) ? $lang['delete'] : "Delete"; ?>
                             </button>
@@ -461,6 +473,22 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     color: #999;
     margin-top: 3px;
 }
+
+#hero_images_admin .hero-panel-heading-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#hero_images_admin .hero-panel-heading-row .panel-title {
+    margin: 0;
+}
+
+#hero_images_admin .hero-toggle-all-button {
+    flex-shrink: 0;
+}
 </style>
 
 <script>
@@ -548,5 +576,48 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
             closeDeleteModal();
         }
     });
+})();
+
+(function () {
+    var toggleButtons = document.querySelectorAll('.hero-toggle-all-button');
+
+    function categoryCheckboxes(category) {
+        var grid = document.querySelector('.hero-images-grid[data-hero-category-grid="' + category + '"]');
+        return grid ? grid.querySelectorAll('input[type="checkbox"]') : [];
+    }
+
+    function allChecked(checkboxes) {
+        if (!checkboxes.length) return false;
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (!checkboxes[i].checked) return false;
+        }
+        return true;
+    }
+
+    function updateButtonLabel(button, checkboxes) {
+        button.textContent = allChecked(checkboxes) ? button.getAttribute('data-label-deselect') : button.getAttribute('data-label-select');
+    }
+
+    for (var i = 0; i < toggleButtons.length; i++) {
+        (function (button) {
+            var checkboxes = categoryCheckboxes(button.getAttribute('data-hero-category'));
+
+            updateButtonLabel(button, checkboxes);
+
+            button.addEventListener('click', function () {
+                var checkAll = !allChecked(checkboxes);
+                for (var j = 0; j < checkboxes.length; j++) {
+                    checkboxes[j].checked = checkAll;
+                }
+                updateButtonLabel(button, checkboxes);
+            });
+
+            for (var k = 0; k < checkboxes.length; k++) {
+                checkboxes[k].addEventListener('change', function () {
+                    updateButtonLabel(button, checkboxes);
+                });
+            }
+        })(toggleButtons[i]);
+    }
 })();
 </script>

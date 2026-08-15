@@ -69,8 +69,8 @@
     // Try to get images from /images using saved JSON preferences
     $hero_background = "";
 
-    if ((isset($connection)) && (isset($prefix)) && (function_exists('get_active_hero_images'))) {
-        $pref_images = get_active_hero_images($connection, $prefix, $_SESSION['bg_hero_image_types']);
+    if ((isset($db_conn)) && (isset($prefix)) && (function_exists('get_active_hero_images'))) {
+        $pref_images = get_active_hero_images($db_conn, $prefix, $_SESSION['bg_hero_image_types']);
         if (!empty($pref_images)) {
             // Randomly select from preference images
             $i = rand(0, count($pref_images)-1);
@@ -263,7 +263,7 @@
     /* Hero background (random via php script) */
     
     .layout-hero {
-        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('<?php echo $images_url.$hero_background; ?>');
+        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('<?php echo htmlspecialchars($images_url.$hero_background, ENT_QUOTES, 'UTF-8'); ?>');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center top;

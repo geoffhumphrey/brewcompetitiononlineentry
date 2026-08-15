@@ -133,6 +133,8 @@ $admin_hero_category_shown_cider = "Zobrazeno, když je kategorie cidry aktivní
 $admin_hero_category_shown_mead = "Zobrazeno, když je kategorie medu aktivní";
 $admin_hero_no_images = "Nebyly nalezeny žádné obrázky";
 $admin_hero_save_button = "Uložit Změny";
+$admin_hero_select_all = "Vybrat Vše";
+$admin_hero_deselect_all = "Zrušit Výběr";
 
 // -------------------- Barcode Check-In --------------------
 

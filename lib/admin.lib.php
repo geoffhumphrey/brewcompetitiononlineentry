@@ -1145,7 +1145,7 @@ function at_table($bid,$tid) {
 
 	if (!empty($rows_assignments)) {
 		foreach ($rows_assignments as $row_assignments) {
-			$a[] .= $row_assignments['assignTable'];
+			$a[] = $row_assignments['assignTable'];
 		}
 	}
 
@@ -1636,7 +1636,7 @@ function not_assigned($method) {
 
 		$user[] = "";
 
-		foreach ($rows_brewer as $row_brewer) { $user[] .= $row_brewer['uid']; }
+		foreach ($rows_brewer as $row_brewer) { $user[] = $row_brewer['uid']; }
 
 		foreach($user as $bid) {
 

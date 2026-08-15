@@ -114,7 +114,7 @@ function parseCSVComments($comments) {
 	$comments = preg_replace("/[\n\r]/","",$comments);
 
 	// Check if any commas or new lines
-	if(eregi(",", $comments) or eregi("\n", $comments) or eregi("\t", $comments) or eregi("\r", $comments) or eregi("\v", $comments)) {
+	if(str_contains($comments, ",") or str_contains($comments, "\n") or str_contains($comments, "\t") or str_contains($comments, "\r") or str_contains($comments, "\v")) {
 
 		// If new lines or commas and escape them
 		return '"'.$comments.'"';

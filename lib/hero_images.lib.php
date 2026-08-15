@@ -3,46 +3,30 @@
 /**
  * Hero Images Library Functions
  *
- * Manages hero background image preferences stored in a JSON file.
+ * Manages hero background image preferences stored in the
+ * prefsHeroImages column of the preferences table.
  */
-
-$hero_images_last_error = "";
-
-function set_hero_images_last_error($message) {
-    global $hero_images_last_error;
-    $hero_images_last_error = (string)$message;
-}
-
-function hero_images_last_error() {
-    global $hero_images_last_error;
-    return $hero_images_last_error;
-}
 
 /**
- * Return the absolute path to the hero image preferences JSON file.
+ * Load preferences from the preferences table.
+ * Returns defaults when no stored value exists or it contains invalid JSON.
  */
-function hero_images_prefs_file_path() {
-    return USER_DOCS."hero_images_prefs.json";
-}
-
-/**
- * Load preferences from JSON file.
- * Returns defaults when file does not exist or contains invalid JSON.
- */
-function load_hero_images_preferences($all_images) {
+function load_hero_images_preferences($db_conn, $prefix, $all_images) {
     $default_prefs = get_default_hero_preferences($all_images);
-    $prefs_file = hero_images_prefs_file_path();
 
-    if (!file_exists($prefs_file)) {
+    try {
+        $db_conn->where('id', 1);
+        $row_prefs = $db_conn->getOne($prefix."preferences", "prefsHeroImages");
+    }
+    catch (Exception $e) {
         return $default_prefs;
     }
 
-    $json = @file_get_contents($prefs_file);
-    if ($json === false) {
+    if ((!$row_prefs) || (empty($row_prefs['prefsHeroImages']))) {
         return $default_prefs;
     }
 
-    $decoded = json_decode($json, true);
+    $decoded = json_decode($row_prefs['prefsHeroImages'], true);
     if (!is_array($decoded)) {
         return $default_prefs;
     }
@@ -174,10 +158,10 @@ function get_all_available_hero_images() {
 /**
  * Return active hero images allowed for the currently selected style types.
  */
-function get_active_hero_images($connection, $prefix, $style_types = array()) {
+function get_active_hero_images($db_conn, $prefix, $style_types = array()) {
     $active_images = array();
     $all_images = get_all_available_hero_images();
-    $hero_prefs = load_hero_images_preferences($all_images);
+    $hero_prefs = load_hero_images_preferences($db_conn, $prefix, $all_images);
     if (!is_array($hero_prefs)) return $active_images;
 
     $allowed_types = array("0");
@@ -201,32 +185,9 @@ function get_active_hero_images($connection, $prefix, $style_types = array()) {
 }
 
 /**
- * Save hero image preferences JSON to disk.
+ * Save hero image preferences to the preferences table.
  */
-function save_hero_images_preferences($connection, $prefix, $images_array) {
-    set_hero_images_last_error("");
-
-    $prefs_file = hero_images_prefs_file_path();
-    $prefs_dir = dirname($prefs_file);
-    if (!is_dir($prefs_dir)) {
-        @mkdir($prefs_dir, 0755, true);
-    }
-
-    if (!is_dir($prefs_dir)) {
-        set_hero_images_last_error("Preferences directory does not exist: ".$prefs_dir);
-        return false;
-    }
-
-    if (file_exists($prefs_file) && !is_writable($prefs_file)) {
-        set_hero_images_last_error("Preferences file is not writable: ".$prefs_file);
-        return false;
-    }
-
-    if (!file_exists($prefs_file) && !is_writable($prefs_dir)) {
-        set_hero_images_last_error("Preferences directory is not writable: ".$prefs_dir);
-        return false;
-    }
-
+function save_hero_images_preferences($db_conn, $prefix, $images_array) {
     $json_flags = JSON_PRETTY_PRINT;
     if (defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
         $json_flags |= JSON_INVALID_UTF8_SUBSTITUTE;
@@ -234,23 +195,24 @@ function save_hero_images_preferences($connection, $prefix, $images_array) {
 
     $json_data = json_encode($images_array, $json_flags);
     if ($json_data === false) {
-        set_hero_images_last_error("JSON encode failed: ".json_last_error_msg());
         return false;
     }
 
-    $result = @file_put_contents($prefs_file, $json_data, LOCK_EX);
-    if ($result === false) {
-        set_hero_images_last_error("Unable to write preferences file: ".$prefs_file);
+    try {
+        $db_conn->where('id', 1);
+        return $db_conn->update($prefix."preferences", array('prefsHeroImages' => $json_data));
     }
-    return ($result !== false);
+    catch (Exception $e) {
+        return false;
+    }
 }
 
 /**
  * Initialize preferences with all discovered hero images enabled.
  */
-function initialize_hero_images_preferences($connection, $prefix) {
+function initialize_hero_images_preferences($db_conn, $prefix) {
     $all_images = get_all_available_hero_images();
     $images_array = get_default_hero_preferences($all_images);
 
-    return save_hero_images_preferences($connection, $prefix, $images_array);
+    return save_hero_images_preferences($db_conn, $prefix, $images_array);
 }

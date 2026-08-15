@@ -4806,6 +4806,18 @@ if ((check_mysql_data_type("contestEntryFee",$prefix."contest_info")) != 246) {
 
 }
 
+if (!check_update("prefsHeroImages", $prefix."preferences")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `prefsHeroImages` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'JSON map of hero banner image filename to active flag';",$prefix."preferences");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Hero banner image preferences column added to the preferences table.</li>";
+	else {
+		$v3100_update .= "<li class=\"text-danger\">Hero banner image preferences column NOT added to the preferences table.</li>";
+		$error_count++;
+	}
+
+}
+
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];

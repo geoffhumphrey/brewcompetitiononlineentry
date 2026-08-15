@@ -1196,14 +1196,14 @@ if (isset($_SESSION['loginUsername'])) {
 		$other = array();
 		$other_ranks = "";
 
-		if (!empty($mast_cicerone))  $cicerone[] .= $mast_cicerone;
-		elseif ((empty($mast_cicerone)) && (empty($cert_cicerone)) && (!empty($adv_cicerone))) $cicerone[] .= $adv_cicerone;
-		elseif ((empty($mast_cicerone)) && (empty($adv_cicerone)) && (!empty($cert_cicerone))) $cicerone[] .= $cert_cicerone;
-		else $cicerone[] .= "";
+		if (!empty($mast_cicerone))  $cicerone[] = $mast_cicerone;
+		elseif ((empty($mast_cicerone)) && (empty($cert_cicerone)) && (!empty($adv_cicerone))) $cicerone[] = $adv_cicerone;
+		elseif ((empty($mast_cicerone)) && (empty($adv_cicerone)) && (!empty($cert_cicerone))) $cicerone[] = $cert_cicerone;
+		else $cicerone[] = "";
 		
-		if (!empty($mead)) $other[] .= $mead;
-		if (!empty($cider)) $other[] .= $cider;
-		if (!empty($pro)) $other[] .= $pro;
+		if (!empty($mead)) $other[] = $mead;
+		if (!empty($cider)) $other[] = $cider;
+		if (!empty($pro)) $other[] = $pro;
 
 		if ((!empty($cicerone)) && (!empty($other))) $other_combined = array_merge($cicerone, $other);
 		elseif ((!empty($cicerone)) && (empty($other))) $other_combined = $cicerone;
