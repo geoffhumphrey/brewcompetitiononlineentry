@@ -272,7 +272,7 @@ function build_form_action(string $base_url,string $section,string $go,string $a
 	return $return;
 }
 
-function build_public_url(string $section="default",string $go="default",string $action="default",string $id="default",string $sef="",string $base_url="",string $view="default"): string {
+function build_public_url(string $section="default",string $go="default",string $action="default",string $id="default",mixed $sef="",string $base_url="",string $view="default"): string {
 	
 	if ($_SESSION['prefsSEF'] == 'Y') {
 		$url = $base_url."";
