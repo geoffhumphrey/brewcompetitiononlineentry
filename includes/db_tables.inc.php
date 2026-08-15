@@ -16,6 +16,14 @@ Checked Single
 if ((isset($dbTable)) && ($dbTable != "default")) $dbTable = $dbTable;
 else $dbTable = "default";
 
+// A non-default $dbTable is an archive table name (e.g. "brewer_2024"), which
+// always contains an underscore. A base table name (e.g. "brewer", passed by
+// the participant edit form's POST action) has no underscore and must map to
+// the current competition's default tables. Treating a bare base-table name
+// as an archive identifier produced a bogus "brewer_" table and fataled the
+// edit-save path.
+if (($dbTable != "default") && (strpos($dbTable, "_") === false)) $dbTable = "default";
+
 if ($dbTable == "default") {
 	$archive_db_table = $prefix."archive";
 	$brewer_db_table = $prefix."brewer";
