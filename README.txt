@@ -8,7 +8,7 @@ Release 3.1.0, 2026-08-13
 
 Developed utilizing a number of extensions and functions, with gratitude to their
 respective developers and online communities. Tested with the following versions:
-- PHP 8.2.X through 8.4.X         http://www.php.net
+- PHP 8.3.X through 8.5.X         http://www.php.net
   -- PHP's Fileinfo extension must be installed and enabled
   -- see http://php.net/manual/en/fileinfo.setup.php
 - MySQL 8.0                          http://www.mysql.com
@@ -55,7 +55,7 @@ application.
 Step-by-step installation instructions are available at
 http://brewingcompetitions.com/install-instructions.
 
-This software requires PHP 8.2 or newer and MySQL 5.7 or newer to process and store data.
+This software requires PHP 8.3 or newer and MySQL 5.7 or newer to process and store data.
 
 Your web server needs both of these installed, configured, and ready for use.
 
