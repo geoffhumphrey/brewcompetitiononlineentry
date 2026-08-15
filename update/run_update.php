@@ -4805,6 +4805,71 @@ if ((check_mysql_data_type("contestEntryFee",$prefix."contest_info")) != 246) {
 	}
 
 }
+/**
+ * Normalize competition timestamps saved before the to_utc_epoch() fix.
+ *
+ * Prior to 3.1.0, competition date fields were stored via bare strtotime()
+ * which interpreted form input in the PHP server's default timezone rather
+ * than the admin's prefsTimeZone. New saves (3.1.0+) use to_utc_epoch() and
+ * store a true UTC Unix epoch. This one-time backfill re-interprets each
+ * previously stored epoch as wall time in the admin's prefsTimeZone and
+ * re-stores the correct UTC epoch, so old and new records agree.
+ *
+ * Only live tables are migrated; archived competitions are frozen snapshots
+ * and are intentionally left untouched. Values that are empty, zero, or not
+ * a 10-digit Unix epoch (e.g. the prefsWinnerDelay "never" sentinel
+ * 2145916800) are skipped.
+ */
+
+$v310_timezone_raw = 0.0;
+$v310_row_prefs = $db_conn->rawQueryOne(sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences"));
+if ((is_array($v310_row_prefs)) && (isset($v310_row_prefs['prefsTimeZone'])) && ($v310_row_prefs['prefsTimeZone'] !== '') && ($v310_row_prefs['prefsTimeZone'] !== null)) {
+	$v310_timezone_raw = (float) $v310_row_prefs['prefsTimeZone'];
+}
+
+$v310_normalize_ts = function ($value) use ($v310_timezone_raw) {
+	return normalize_competition_ts($value, $v310_timezone_raw);
+};
+
+$v310_ts_migrate = function ($db_conn, $table, $columns) use ($v310_normalize_ts) {
+	$changed = 0;
+	$rows = $db_conn->get($table);
+	foreach ($rows as $row) {
+		$updates = array();
+		foreach ($columns as $col) {
+			if (!array_key_exists($col, $row)) continue;
+			$normalized = $v310_normalize_ts($row[$col]);
+			if ($normalized !== $row[$col]) $updates[$col] = $normalized;
+		}
+		if (!empty($updates)) {
+			$changed++;
+			$db_conn->where('id', $row['id']);
+			$db_conn->update($table, $updates);
+		}
+	}
+	return $changed;
+};
+
+$v310_changed = 0;
+$v310_changed += $v310_ts_migrate($db_conn, $prefix."contest_info", array(
+	'contestRegistrationOpen', 'contestRegistrationDeadline',
+	'contestEntryOpen', 'contestEntryDeadline', 'contestEntryEditDeadline',
+	'contestJudgeOpen', 'contestJudgeDeadline', 'contestAwardsLocDate',
+	'contestShippingOpen', 'contestShippingDeadline',
+	'contestDropoffOpen', 'contestDropoffDeadline'
+));
+$v310_changed += $v310_ts_migrate($db_conn, $prefix."judging_preferences", array(
+	'jPrefsJudgingOpen', 'jPrefsJudgingClosed'
+));
+$v310_changed += $v310_ts_migrate($db_conn, $prefix."judging_locations", array(
+	'judgingDate', 'judgingDateEnd'
+));
+$v310_changed += $v310_ts_migrate($db_conn, $prefix."preferences", array(
+	'prefsWinnerDelay'
+));
+
+if ($v310_changed > 0) $v3100_update .= "<li>Normalized ".$v310_changed." stored competition timestamp(s) to UTC epoch (timezone-consistent storage).</li>";
+
 
 if (!$setup_running) $v3100_update .= "</ul>";
 
