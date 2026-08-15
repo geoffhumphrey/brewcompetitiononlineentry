@@ -10,12 +10,12 @@ repository.
 ## [Unreleased] — modernization branch
 
 ### Added
-- PHPUnit test suite (`tests/`) — 50 tests / 245 assertions covering
+- PHPUnit test suite (`tests/`) — 59 tests / 233 assertions covering
   sanitization, session prefs, best-brewer CoA scoring, repository
-  round-trips, contact-token URL round-trips, and timezone/DST epoch
-  conversion; MySQL-gated integration tests run against a MySQL 8.0 service
-  in CI on PHP 8.2 and 8.4.
-- Composer-based tooling: `composer.json` (PHP ^8.2), PHPStan configs
+  round-trips, contact-token URL round-trips, timezone/DST epoch
+  conversion, and the 3.1.0 timestamp backfill; MySQL-gated integration
+  tests run against a MySQL 8.0 service in CI on PHP 8.3, 8.4, and 8.5.
+- Composer-based tooling: `composer.json` (PHP ^8.3), PHPStan configs
   (`phpstan.neon` legacy level 4, `phpstan.src.neon` level 6 + strict rules),
   PHPUnit config, and a CI workflow (`.github/workflows/ci.yml`).
 - Typed domain layer under `src/`: 24 readonly row classes
@@ -26,8 +26,9 @@ repository.
   runtime deployment).
 
 ### Changed
-- Documented PHP floor raised to 8.2 (`README.txt`, `README.md`,
-  `.htaccess`); the codebase is modernized for PHP 8.2/8.4.
+- Documented PHP floor raised to 8.3 (`README.txt`, `README.md`,
+  `.htaccess`); the codebase is modernized for PHP 8.3/8.4/8.5, with the
+  live deployment target (PHP 8.3) and 8.4/8.5 exercised in CI.
 - Merged upstream v3.1.0 (MysqliDb protocol conversion, `a8092f18`).
 
 ### Fixed

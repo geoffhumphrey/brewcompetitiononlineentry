@@ -40,7 +40,7 @@ Step by step [installation](https://info.brewingcompetitions.com/install-instruc
 After configuration to your environment, installation is a breeze via the online setup interface.
 
 ## Requirements
-- PHP 8.2 or newer (PHP 8.2 and 8.4 are exercised in CI).
+- PHP 8.3 or newer (PHP 8.3, 8.4, and 8.5 are exercised in CI).
 - MySQL 5.7 or newer (integration tests run against MySQL 8.0).
 - [Composer](https://getcomposer.org) is required to install dependencies; the `vendor/` directory is part of the deployment.
 

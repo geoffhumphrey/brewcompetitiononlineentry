@@ -4,7 +4,7 @@
     "type": "project",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "^8.2"
+        "php": "^8.3"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.11",
