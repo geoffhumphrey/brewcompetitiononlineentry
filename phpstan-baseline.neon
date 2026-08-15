@@ -727,7 +727,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$base_url might not be defined\\.$#"
-			count: 247
+			count: 248
 			path: admin/default.admin.php
 
 		-
@@ -1454,6 +1454,31 @@ parameters:
 			message: "#^Variable \\$substyle in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: admin/entries_by_substyle.admin.php
+
+		-
+			message: "#^Offset 'mime' on array\\{0\\: int\\<0, max\\>, 1\\: int\\<0, max\\>, 2\\: int, 3\\: string, mime\\: string, channels\\?\\: int, bits\\?\\: int\\} in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: admin/hero_images.admin.php
+
+		-
+			message: "#^Variable \\$connection might not be defined\\.$#"
+			count: 2
+			path: admin/hero_images.admin.php
+
+		-
+			message: "#^Variable \\$images_url might not be defined\\.$#"
+			count: 1
+			path: admin/hero_images.admin.php
+
+		-
+			message: "#^Variable \\$prefix might not be defined\\.$#"
+			count: 2
+			path: admin/hero_images.admin.php
+
+		-
+			message: "#^Variable \\$section might not be defined\\.$#"
+			count: 1
+			path: admin/hero_images.admin.php
 
 		-
 			message: "#^Variable \\$base_url might not be defined\\.$#"
@@ -14526,17 +14551,7 @@ parameters:
 			path: includes/load_local_libraries_public.inc.php
 
 		-
-			message: "#^Call to method CheckPassword\\(\\) on an unknown class PasswordHash\\.$#"
-			count: 2
-			path: includes/logincheck.inc.php
-
-		-
 			message: "#^Call to sprintf contains 1 placeholder, 2 values given\\.$#"
-			count: 1
-			path: includes/logincheck.inc.php
-
-		-
-			message: "#^Instantiated class PasswordHash not found\\.$#"
 			count: 1
 			path: includes/logincheck.inc.php
 
@@ -14547,12 +14562,12 @@ parameters:
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 10
+			count: 12
 			path: includes/logincheck.inc.php
 
 		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
-			count: 4
+			count: 6
 			path: includes/logincheck.inc.php
 
 		-
@@ -15781,11 +15796,6 @@ parameters:
 			path: includes/process/process_brewing.inc.php
 
 		-
-			message: "#^Call to method HashPassword\\(\\) on an unknown class PasswordHash\\.$#"
-			count: 2
-			path: includes/process/process_comp_info.inc.php
-
-		-
 			message: "#^Call to method purify\\(\\) on an unknown class HTMLPurifier\\.$#"
 			count: 16
 			path: includes/process/process_comp_info.inc.php
@@ -15798,11 +15808,6 @@ parameters:
 		-
 			message: "#^Instantiated class HTMLPurifier not found\\.$#"
 			count: 1
-			path: includes/process/process_comp_info.inc.php
-
-		-
-			message: "#^Instantiated class PasswordHash not found\\.$#"
-			count: 2
 			path: includes/process/process_comp_info.inc.php
 
 		-
@@ -16456,13 +16461,8 @@ parameters:
 			path: includes/process/process_email.inc.php
 
 		-
-			message: "#^Call to method HashPassword\\(\\) on an unknown class PasswordHash\\.$#"
-			count: 1
-			path: includes/process/process_forgot_password.inc.php
-
-		-
 			message: "#^Instantiated class PasswordHash not found\\.$#"
-			count: 2
+			count: 1
 			path: includes/process/process_forgot_password.inc.php
 
 		-
@@ -17431,18 +17431,13 @@ parameters:
 			path: includes/process/process_styles.inc.php
 
 		-
-			message: "#^Call to method CheckPassword\\(\\) on an unknown class PasswordHash\\.$#"
+			message: "#^Call to method HashPassword\\(\\) on an unknown class PasswordHash\\.$#"
 			count: 1
 			path: includes/process/process_users.inc.php
 
 		-
-			message: "#^Call to method HashPassword\\(\\) on an unknown class PasswordHash\\.$#"
-			count: 4
-			path: includes/process/process_users.inc.php
-
-		-
 			message: "#^Instantiated class PasswordHash not found\\.$#"
-			count: 4
+			count: 1
 			path: includes/process/process_users.inc.php
 
 		-
@@ -17532,7 +17527,7 @@ parameters:
 
 		-
 			message: "#^Call to method HashPassword\\(\\) on an unknown class PasswordHash\\.$#"
-			count: 3
+			count: 2
 			path: includes/process/process_users_register.inc.php
 
 		-
@@ -17557,7 +17552,7 @@ parameters:
 
 		-
 			message: "#^Instantiated class PasswordHash not found\\.$#"
-			count: 3
+			count: 2
 			path: includes/process/process_users_register.inc.php
 
 		-
@@ -17952,7 +17947,7 @@ parameters:
 
 		-
 			message: "#^Call to method HashPassword\\(\\) on an unknown class PasswordHash\\.$#"
-			count: 2
+			count: 1
 			path: includes/process/process_users_setup.inc.php
 
 		-
@@ -17972,7 +17967,7 @@ parameters:
 
 		-
 			message: "#^Instantiated class PasswordHash not found\\.$#"
-			count: 2
+			count: 1
 			path: includes/process/process_users_setup.inc.php
 
 		-
@@ -18077,7 +18072,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$go might not be defined\\.$#"
-			count: 40
+			count: 41
 			path: index.legacy.php
 
 		-
@@ -19784,6 +19779,16 @@ parameters:
 			message: "#^Variable \\$username_help_title might not be defined\\.$#"
 			count: 1
 			path: lib/help.lib.php
+
+		-
+			message: "#^Offset 0 on array\\{0\\: int\\<0, max\\>, 1\\: int\\<0, max\\>, 2\\: int, 3\\: string, mime\\: string, channels\\?\\: int, bits\\?\\: int\\} in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: lib/hero_images.lib.php
+
+		-
+			message: "#^Offset 1 on array\\{0\\: int\\<0, max\\>, 1\\: int\\<0, max\\>, 2\\: int, 3\\: string, mime\\: string, channels\\?\\: int, bits\\?\\: int\\} in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: lib/hero_images.lib.php
 
 		-
 			message: "#^Binary operation \"/\" between string and 100 results in an error\\.$#"
@@ -22926,11 +22931,6 @@ parameters:
 			path: output/table_cards.output.php
 
 		-
-			message: "#^Call to function is_float\\(\\) with numeric\\-string will always evaluate to false\\.$#"
-			count: 1
-			path: paths.php
-
-		-
 			message: "#^If condition is always false\\.$#"
 			count: 2
 			path: paths.php
@@ -23257,7 +23257,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$go might not be defined\\.$#"
-			count: 31
+			count: 32
 			path: pub/admin.pub.php
 
 		-
@@ -34011,18 +34011,8 @@ parameters:
 			path: pub/winners_subcategory.pub.php
 
 		-
-			message: "#^Call to method CheckPassword\\(\\) on an unknown class PasswordHash\\.$#"
-			count: 1
-			path: qr.php
-
-		-
 			message: "#^If condition is always false\\.$#"
 			count: 3
-			path: qr.php
-
-		-
-			message: "#^Instantiated class PasswordHash not found\\.$#"
-			count: 1
 			path: qr.php
 
 		-
@@ -34052,7 +34042,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 18
+			count: 19
 			path: qr.php
 
 		-
@@ -34117,7 +34107,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
-			count: 6
+			count: 7
 			path: qr.php
 
 		-
@@ -43057,7 +43047,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 633
+			count: 635
 			path: update/run_update.php
 
 		-
@@ -43107,7 +43097,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
-			count: 346
+			count: 348
 			path: update/run_update.php
 
 		-
