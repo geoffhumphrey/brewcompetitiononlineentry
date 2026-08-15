@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 $totalRows_entry_count = total_paid_received("",0);
 

@@ -1,5 +1,4 @@
 <?php 
-declare(strict_types=1);
 /**
  * Module:      volunteers.sec.php 
  * Description: This module displays the public-facing competition volunteers

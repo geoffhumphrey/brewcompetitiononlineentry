@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      mods.admin.php
  * Description: Add, edit, and delete any custom modules that extend core functions.

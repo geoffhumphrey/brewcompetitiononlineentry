@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 $rows_bos = array();
 $totalRows_bos = 0;
 

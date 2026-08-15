@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 if ((strpos($styleSet,"BABDB") !== false) && ($style < 35)) $category_sort = "brewCategory";
 else $category_sort = "brewCategorySort";
 

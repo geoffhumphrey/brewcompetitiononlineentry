@@ -315,7 +315,7 @@ function build_form_action(string $base_url,string $section,string $go,string $a
 	return $return;
 }
 
-function build_public_url(string $section="default",string $go="default",string $action="default",string $id="default",string $sef="",string $base_url="",string $view="default"): string {
+function build_public_url(string $section="default",string $go="default",string $action="default",string $id="default",mixed $sef="",string $base_url="",string $view="default"): string {
 	
 	if ($_SESSION['prefsSEF'] == 'Y') {
 		$url = $base_url."";
@@ -2644,7 +2644,7 @@ function get_evaluation_count(string $method,string $table_id="default"): int {
 	return $row['count'];
 }
 
-function get_participant_count(string $type,string $filter=""): array|string {
+function get_participant_count(string $type,string $filter=""): array|string|int {
 	require(CONFIG.'config.php');
 	$local_db_conn = new MysqliDb($connection);
 
@@ -2788,6 +2788,7 @@ function entry_info($id): string {
 
 function get_suffix($dbTable): string {
 	$suffix = strrchr($dbTable, "_");
+	if ($suffix === false) return "";
 	$suffix = ltrim($suffix, "_");
 	return $suffix;
 }
@@ -3683,7 +3684,7 @@ function open_or_closed($now,$date1,$date2): int {
 
 }
 
-function limit_subcategory(string $style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid): bool {
+function limit_subcategory(?string $style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid): bool {
 
 	/**
 	 * @param $style = Style category and subcategory number
@@ -3702,8 +3703,10 @@ function limit_subcategory(string $style,$pref_num,$pref_exception_sub_num,$pref
 	$styles_db_table = $prefix."styles";
 
 	$limit_reached = FALSE;
+	if ($style === null || $style === '') return $limit_reached;
 	$style_break = explode("-",$style);
-	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
+	if (empty($pref_exception_sub_array)) $pref_exception_sub_array = array();
+	else $pref_exception_sub_array = explode(",",$pref_exception_sub_array);
 
 	// Check if first character is "C", "M", or "P" for ciders, meads, and provisional styles
     if (preg_match("/[C,M,P,L]/", $style_break[0])) $style_num = $style_break[0];

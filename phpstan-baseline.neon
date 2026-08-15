@@ -1461,8 +1461,8 @@ parameters:
 			path: admin/hero_images.admin.php
 
 		-
-			message: "#^Variable \\$connection might not be defined\\.$#"
-			count: 2
+			message: "#^Variable \\$db_conn might not be defined\\.$#"
+			count: 4
 			path: admin/hero_images.admin.php
 
 		-
@@ -1472,7 +1472,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
-			count: 2
+			count: 4
 			path: admin/hero_images.admin.php
 
 		-
@@ -3367,7 +3367,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$row_limits might not be defined\\.$#"
-			count: 5
+			count: 6
 			path: admin/site_preferences.admin.php
 
 		-
@@ -4456,7 +4456,7 @@ parameters:
 			path: awards.php
 
 		-
-			message: "#^Comparison operation \"\\>\" between array\\|string and 0 results in an error\\.$#"
+			message: "#^Comparison operation \"\\>\" between array\\|int\\|string and 0 results in an error\\.$#"
 			count: 4
 			path: awards.php
 
@@ -16901,6 +16901,11 @@ parameters:
 			path: includes/process/process_judging_tables.inc.php
 
 		-
+			message: "#^Call to method purify\\(\\) on an unknown class HTMLPurifier\\.$#"
+			count: 2
+			path: includes/process/process_mods.inc.php
+
+		-
 			message: "#^Call to static method createDefault\\(\\) on an unknown class HTMLPurifier_Config\\.$#"
 			count: 1
 			path: includes/process/process_mods.inc.php
@@ -16921,13 +16926,18 @@ parameters:
 			path: includes/process/process_mods.inc.php
 
 		-
+			message: "#^Variable \\$connection might not be defined\\.$#"
+			count: 2
+			path: includes/process/process_mods.inc.php
+
+		-
 			message: "#^Variable \\$data might not be defined\\.$#"
 			count: 2
 			path: includes/process/process_mods.inc.php
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 10
+			count: 8
 			path: includes/process/process_mods.inc.php
 
 		-
@@ -19802,7 +19812,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$connection might not be defined\\.$#"
-			count: 15
+			count: 16
 			path: lib/output.lib.php
 
 		-
@@ -19917,12 +19927,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$connection might not be defined\\.$#"
-			count: 11
-			path: lib/update.lib.php
-
-		-
-			message: "#^Variable \\$database might not be defined\\.$#"
-			count: 2
+			count: 4
 			path: lib/update.lib.php
 
 		-
@@ -22949,6 +22954,11 @@ parameters:
 			message: "#^Variable \\$session_expire_after might not be defined\\.$#"
 			count: 1
 			path: paths.php
+
+		-
+			message: "#^Call to function is_float\\(\\) with numeric\\-string will always evaluate to false\\.$#"
+			count: 1
+			path: phpstan-bootstrap.php
 
 		-
 			message: "#^Access to property \\$Body on an unknown class PHPMailer\\\\PHPMailer\\\\PHPMailer\\.$#"
@@ -39277,6 +39287,56 @@ parameters:
 
 		-
 			message: "#^If condition is always false\\.$#"
+			count: 2
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^Variable \\$archive might not be defined\\.$#"
+			count: 1
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^Variable \\$connection might not be defined\\.$#"
+			count: 2
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^Variable \\$go might not be defined\\.$#"
+			count: 16
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^Variable \\$past_winners_text_000 might not be defined\\.$#"
+			count: 1
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^Variable \\$prefix might not be defined\\.$#"
+			count: 12
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^Variable \\$row_archive might not be defined\\.$#"
+			count: 4
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^Variable \\$section might not be defined\\.$#"
+			count: 1
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^Variable \\$totalRows_archive might not be defined\\.$#"
+			count: 1
+			path: sections/past_winners.sec.php
+
+		-
+			message: "#^If condition is always false\\.$#"
 			count: 1
 			path: sections/pay.sec.php
 
@@ -42651,8 +42711,8 @@ parameters:
 			path: update/1.2.0.0_update.php
 
 		-
-			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 142
+			message: "#^Variable \\$connection might not be defined\\.$#"
+			count: 143
 			path: update/1.2.0.0_update.php
 
 		-
@@ -42756,13 +42816,13 @@ parameters:
 			path: update/1.3.0.0_update.php
 
 		-
-			message: "#^Variable \\$database might not be defined\\.$#"
-			count: 3
+			message: "#^Variable \\$connection might not be defined\\.$#"
+			count: 439
 			path: update/1.3.0.0_update.php
 
 		-
-			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 435
+			message: "#^Variable \\$database might not be defined\\.$#"
+			count: 3
 			path: update/1.3.0.0_update.php
 
 		-
@@ -42786,6 +42846,11 @@ parameters:
 			path: update/1.3.0.0_update.php
 
 		-
+			message: "#^Variable \\$row_log might not be defined\\.$#"
+			count: 4
+			path: update/1.3.0.0_update.php
+
+		-
 			message: "#^Variable \\$staff_db_table might not be defined\\.$#"
 			count: 1
 			path: update/1.3.0.0_update.php
@@ -42806,8 +42871,13 @@ parameters:
 			path: update/1.3.2.0_update.php
 
 		-
-			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 65
+			message: "#^Variable \\$connection might not be defined\\.$#"
+			count: 94
+			path: update/1.3.2.0_update.php
+
+		-
+			message: "#^Variable \\$database might not be defined\\.$#"
+			count: 22
 			path: update/1.3.2.0_update.php
 
 		-
@@ -42836,11 +42906,6 @@ parameters:
 			path: update/1.3.2.0_update.php
 
 		-
-			message: "#^Variable \\$a_current might not be defined\\.$#"
-			count: 1
-			path: update/2.0.0.0_update.php
-
-		-
 			message: "#^Variable \\$archive_db_table might not be defined\\.$#"
 			count: 1
 			path: update/2.0.0.0_update.php
@@ -42851,18 +42916,18 @@ parameters:
 			path: update/2.0.0.0_update.php
 
 		-
+			message: "#^Variable \\$connection might not be defined\\.$#"
+			count: 150
+			path: update/2.0.0.0_update.php
+
+		-
 			message: "#^Variable \\$contest_info_db_table might not be defined\\.$#"
 			count: 4
 			path: update/2.0.0.0_update.php
 
 		-
 			message: "#^Variable \\$database might not be defined\\.$#"
-			count: 1
-			path: update/2.0.0.0_update.php
-
-		-
-			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 113
+			count: 38
 			path: update/2.0.0.0_update.php
 
 		-
@@ -42886,13 +42951,18 @@ parameters:
 			path: update/2.0.0.0_update.php
 
 		-
+			message: "#^Variable \\$connection might not be defined\\.$#"
+			count: 124
+			path: update/2.1.0.0_update.php
+
+		-
 			message: "#^Variable \\$current_version might not be defined\\.$#"
 			count: 1
 			path: update/2.1.0.0_update.php
 
 		-
-			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 93
+			message: "#^Variable \\$database might not be defined\\.$#"
+			count: 31
 			path: update/2.1.0.0_update.php
 
 		-
@@ -43052,7 +43122,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 640
+			count: 642
 			path: update/run_update.php
 
 		-
@@ -43102,7 +43172,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
-			count: 353
+			count: 355
 			path: update/run_update.php
 
 		-
@@ -43201,11 +43271,6 @@ parameters:
 			path: update/styles_aabc_2025_update.php
 
 		-
-			message: "#^Array has 2 duplicate keys with value 'brewStyleLink' \\('brewStyleLink', 'brewStyleLink'\\)\\.$#"
-			count: 122
-			path: update/styles_aabc_update.php
-
-		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
 			count: 2
 			path: update/styles_aabc_update.php
@@ -43224,11 +43289,6 @@ parameters:
 			message: "#^Variable \\$v21190_update might not be defined\\.$#"
 			count: 2
 			path: update/styles_aabc_update.php
-
-		-
-			message: "#^Array has 2 duplicate keys with value 'brewStyleLink' \\('brewStyleLink', 'brewStyleLink'\\)\\.$#"
-			count: 6
-			path: update/styles_ba_2020_update.php
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
@@ -43289,11 +43349,6 @@ parameters:
 			message: "#^Variable \\$v2600_update might not be defined\\.$#"
 			count: 2
 			path: update/styles_ba_2023_update.php
-
-		-
-			message: "#^Array has 2 duplicate keys with value 'brewStyleLink' \\('brewStyleLink', 'brewStyleLink'\\)\\.$#"
-			count: 180
-			path: update/styles_ba_update.php
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"

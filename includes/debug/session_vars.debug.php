@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 // ---------------- DEBUG SESSION VARS --------------------
 // echo phpinfo();
 $table_body = "";

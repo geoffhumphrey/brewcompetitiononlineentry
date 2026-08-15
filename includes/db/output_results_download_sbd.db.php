@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 if ($filter == "default") {
 	$special_best_data_db_table = $prefix."special_best_data";
 	$brewing_db_table = $prefix."brewing";

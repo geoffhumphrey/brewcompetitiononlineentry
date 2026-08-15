@@ -402,7 +402,7 @@ if (ENABLE_MARKDOWN) {
 
 <?php if ($section == "competition") { ?>
     <section id="custom-competition-info" class="landing-page-section pb-3">
-        <?php include (PUB.'custom_competition_info.pub.php'); ?>
+        <?php if (file_exists(PUB.'custom_competition_info.pub.php')) include (PUB.'custom_competition_info.pub.php'); ?>
     </section>
 <?php } ?>
 

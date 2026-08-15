@@ -14,7 +14,7 @@ function random_judging_num_generator(): string {
 
 }
 
-function check_http(string $input): ?string {
+function check_http(?string $input): ?string {
 
 	if ($input != "") {
 

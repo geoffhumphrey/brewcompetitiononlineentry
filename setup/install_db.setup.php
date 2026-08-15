@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 if ($setup_free_access == TRUE) {
 

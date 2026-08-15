@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 // Get maximum point values based upon number of entries
 $organ_max_points = number_format(total_points($total_entries_received,"Organizer"), 1);
 $staff_max_points = number_format(total_points($total_entries_received,"Staff"), 1);

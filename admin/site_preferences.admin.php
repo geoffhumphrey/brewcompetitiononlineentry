@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
     $redirect = "../../403.php";
@@ -226,7 +225,7 @@ if (($section == "admin") && ($go == "preferences")) {
                     $checked = "";
 
                     if ($go == "preferences") {
-                        $a = explode(",", $row_limits['prefsUSCLEx']);
+                        $a = ($row_limits['prefsUSCLEx']) ? explode(",", $row_limits['prefsUSCLEx']) : array();
                         $b = $row_styles['id'];
                         foreach ($a as $value) {
                             if ($value == $b) $checked = "CHECKED";

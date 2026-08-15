@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 

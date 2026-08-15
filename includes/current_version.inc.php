@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 // For storage in DB and update script use
 $current_version = "3.1.0.0";
 

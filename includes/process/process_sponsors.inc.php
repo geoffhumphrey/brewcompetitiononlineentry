@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /*
  * Module:      process_styles_edit.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "sponsors" table

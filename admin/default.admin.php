@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      default.admin.php
  * Description: This module houses links to all administration functions.

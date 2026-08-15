@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      mods.db.php
  * Description: This module houses all custom module related queries

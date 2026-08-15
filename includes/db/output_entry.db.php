@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 $db_conn->where('id', 1);
 $contest_info = $db_conn->getOne($prefix."contest_info");
 

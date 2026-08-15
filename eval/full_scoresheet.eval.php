@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 if ($row_style['brewStyleType'] == 2) $cider = TRUE;
 elseif ($row_style['brewStyleType'] == 3) $mead = TRUE;

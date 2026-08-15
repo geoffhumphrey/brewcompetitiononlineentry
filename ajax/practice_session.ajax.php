@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 ob_start();
 require_once ('../paths.php');
 require_once (CONFIG.'bootstrap.php');

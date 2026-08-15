@@ -1,5 +1,4 @@
 <?php 
-declare(strict_types=1);
 /**
  * Get all ids from db of BJCP 2008 and BJCP 2015 styles
  * Map ids from 2008 to 2015

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /*
  * Module:      process_users_register.inc.php
  * Description: This module does all the heavy lifting for adding a user's info to the "users" and

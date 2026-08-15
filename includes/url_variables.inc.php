@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * The get_magic_quotes_gpc() function is deprecated in php 7.2
  * and elimnated in php 8.0.

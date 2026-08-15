@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      reg_closed.sec.php
  * Description: This module houses information that will be displayed

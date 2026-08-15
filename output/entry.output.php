@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 $entry_forms = array("0","1","2","E","C");
 

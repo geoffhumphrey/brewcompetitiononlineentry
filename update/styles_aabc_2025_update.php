@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Install BJCP 2025 cider styles.

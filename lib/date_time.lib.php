@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 function get_timezone($offset) {
 	
-	$offset = number_format($offset,3);
+	$offset = number_format((float)$offset,3);
 	
 	$timezones = array(
         '-12.000' => 'Pacific/Kwajalein',

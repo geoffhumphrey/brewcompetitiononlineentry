@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 $northwest = FALSE;
 if (($_SESSION['jPrefsScoresheet'] == 4) || ($sort == 4)) $northwest = TRUE;

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Module:      headers.inc.php
  * Description: This module defines all header text for the application based

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 $count_beer = TRUE;
 $count_mead = FALSE;
 $count_mead_cider = FALSE;

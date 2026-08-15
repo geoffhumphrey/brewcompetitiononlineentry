@@ -1,5 +1,4 @@
 <?php 
-declare(strict_types=1);
 require_once ("../paths.php");
 require_once (CONFIG.'bootstrap.php');
 require_once (LIB.'process.lib.php');

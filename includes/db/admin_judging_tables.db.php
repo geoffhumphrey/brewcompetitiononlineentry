@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 $db_conn->orderBy('tableNumber', 'ASC');
 $row_table_number = $db_conn->getOne($judging_tables_db_table, "tableNumber");
