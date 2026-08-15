@@ -4,15 +4,15 @@
 # of the application's search engine friendly URLs.
 
 # OPTIONAL: Declare PHP Version
-# Tested 7.4.X through 8.4.X
+# Tested 8.2.X through 8.4.X
 # If experiencing issues, you should first determine whether
 # you can change PHP versions via your webhost's configuration
 # options. Only uncomment one of the following lines to 
-# explicitly declare PHP 7.4 or 8.4 here via lightspeed.
+# explicitly declare PHP 8.2 or 8.4 here via lightspeed.
 # 
 <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
 # SetHandler application/x-lsphp84
-# SetHandler application/x-lsphp74
+# SetHandler application/x-lsphp82
 </FilesMatch>
 
 # No indexing
