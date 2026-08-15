@@ -4456,7 +4456,7 @@ parameters:
 			path: awards.php
 
 		-
-			message: "#^Comparison operation \"\\>\" between array\\|string and 0 results in an error\\.$#"
+			message: "#^Comparison operation \"\\>\" between array\\|int\\|string and 0 results in an error\\.$#"
 			count: 4
 			path: awards.php
 
