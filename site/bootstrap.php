@@ -84,7 +84,7 @@ if ($setup_success) {
 				'expires' => time() + (86400 * 30),
 				'path' => '/',
 				'httponly' => true,
-				'secure' => true,
+				'secure' => is_https(),
 				'samesite' => 'Lax',
 			]);
 			// Also update $_COOKIE so language.lang.php sees the new value

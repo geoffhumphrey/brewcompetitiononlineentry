@@ -131,9 +131,7 @@ if ($logged_in) {
 	                global $enable_language_toggle;
 	                if (isset($enable_language_toggle) && $enable_language_toggle && count($languages) > 1) {
 	                    // Build the current page URL (without existing ?lang= param)
-	                    $current_url = htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
-	                    // Strip any existing ?lang= parameter
-	                    $current_url = preg_replace('/[?&]lang=[^&]+/', '', $current_url);
+	                    $current_url = preg_replace('/[?&]lang=[^&]+/', '', $_SERVER['REQUEST_URI']);
 	                    // Determine separator (? or &)
 	                    $lang_sep = (strpos($current_url, '?') !== false) ? '&' : '?';
 	                ?>
@@ -146,7 +144,7 @@ if ($logged_in) {
 	                            $lang_active = (isset($_SESSION['prefsLanguage']) && $_SESSION['prefsLanguage'] == $lang_code);
 	                        ?>
 	                        <li class="small">
-	                            <a class="dropdown-item <?php if ($lang_active) echo "active"; ?>" href="<?php echo $current_url . $lang_sep . 'lang=' . $lang_code; ?>">
+	                            <a class="dropdown-item <?php if ($lang_active) echo "active"; ?>" href="<?php echo htmlspecialchars($current_url . $lang_sep . 'lang=' . $lang_code, ENT_QUOTES, 'UTF-8'); ?>">
 	                                <?php if ($lang_active) { ?><i class="fa fa-check text-success me-1"></i><?php } ?>
 	                                <?php echo htmlspecialchars($lang_name, ENT_QUOTES, 'UTF-8'); ?>
 	                            </a>
