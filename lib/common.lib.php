@@ -3639,7 +3639,8 @@ function limit_subcategory(?string $style,$pref_num,$pref_exception_sub_num,$pre
 	$limit_reached = FALSE;
 	if ($style === null || $style === '') return $limit_reached;
 	$style_break = explode("-",$style);
-	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
+	if (empty($pref_exception_sub_array)) $pref_exception_sub_array = array();
+	else $pref_exception_sub_array = explode(",",$pref_exception_sub_array);
 
 	// Check if first character is "C", "M", or "P" for ciders, meads, and provisional styles
     if (preg_match("/[C,M,P,L]/", $style_break[0])) $style_num = $style_break[0];

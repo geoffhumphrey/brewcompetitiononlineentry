@@ -225,7 +225,7 @@ if (($section == "admin") && ($go == "preferences")) {
                     $checked = "";
 
                     if ($go == "preferences") {
-                        $a = explode(",", $row_limits['prefsUSCLEx']);
+                        $a = ($row_limits['prefsUSCLEx']) ? explode(",", $row_limits['prefsUSCLEx']) : array();
                         $b = $row_styles['id'];
                         foreach ($a as $value) {
                             if ($value == $b) $checked = "CHECKED";
