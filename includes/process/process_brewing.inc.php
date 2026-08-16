@@ -148,8 +148,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			    if (!empty($parsed_name['initials'])) $first_name .= " ".$parsed_name['initials'];
 			    
 			    $last_name = "";
-			    if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs))) $last_name .= standardize_name($parsed_name['lname']);
-			    else $last_name .= $parsed_name['lname']; 
+			    if (!empty($parsed_name['lname_compound'])) $last_name .= $parsed_name['lname_compound']." ";
+			    if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs))) $last_name .= standardize_name($parsed_name['lname_base']);
+			    else $last_name .= $parsed_name['lname_base']; 
 			    if (!empty($parsed_name['suffix'])) $last_name .= " ".$parsed_name['suffix']; 
 
 			    $brewCoBrewer = $first_name." ".$last_name;
