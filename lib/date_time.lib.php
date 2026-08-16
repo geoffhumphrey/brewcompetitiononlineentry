@@ -99,7 +99,7 @@ function convert_timestamp(string $time_string, $timezone, $offset, $method) {
  * @param float   $timezone_offset  prefsTimeZone float from preferences table, e.g. -5.000
  * @return int|false                UTC Unix epoch, or false on failure
  */
-function to_utc_epoch(string $datetime_string, float $timezone_offset): int|false {
+function to_utc_epoch(?string $datetime_string, float $timezone_offset): int|false {
 
 	if (empty($datetime_string)) return false;
 

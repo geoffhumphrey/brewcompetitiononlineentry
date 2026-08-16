@@ -3618,7 +3618,7 @@ function open_or_closed($now,$date1,$date2): int {
 
 }
 
-function limit_subcategory(string $style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid): bool {
+function limit_subcategory(?string $style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid): bool {
 
 	/**
 	 * @param $style = Style category and subcategory number
@@ -3637,6 +3637,7 @@ function limit_subcategory(string $style,$pref_num,$pref_exception_sub_num,$pref
 	$styles_db_table = $prefix."styles";
 
 	$limit_reached = FALSE;
+	if ($style === null || $style === '') return $limit_reached;
 	$style_break = explode("-",$style);
 	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
 
