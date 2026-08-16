@@ -4790,6 +4790,65 @@ $v3100_update .= "<li>Corrected an issue where opting out of the judge or stewar
 $v3100_update .= "<li>Corrected legacy \"English\" language preference values to normalize to the current language folder.</li>";
 $v3100_update .= "<li>Minor bug fixes and security hardening.</li>";
 
+/**
+ * Activate the BJCP 2021 21C Hazy IPA style.
+ *
+ * The 21C Hazy IPA style was seeded with brewStyleActive='N' in the
+ * BJCP 2021 style seed, so it never appeared in the entry style dropdown
+ * on installs that seeded styles after that style set was introduced.
+ * Activate it for the current (and future) style set and, for style-set
+ * switching, the stored prefsSelectedStyles JSON list of active styles.
+ */
+
+$v310_style_row = $db_conn->rawQueryOne(sprintf(
+	"SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM %s WHERE brewStyle='Hazy IPA' AND brewStyleGroup='21' AND brewStyleNum='C' AND brewStyleVersion='BJCP2021'",
+	$styles_db_table
+));
+
+if (is_array($v310_style_row) && !empty($v310_style_row['id'])) {
+
+	$update_table = $prefix."styles";
+	$data = array('brewStyleActive' => 'Y');
+	$db_conn->where ('id', $v310_style_row['id']);
+	$result = $db_conn->update ($update_table, $data);
+
+	if ($db_conn->getLastErrno() === 0) {
+		$v3100_update .= "<li>21C Hazy IPA style enabled.</li>";
+	} else {
+		$v3100_update .= "<li class=\"text-danger\">21C Hazy IPA style NOT enabled. Error: ".$db_conn->getLastError()."</li>";
+		$error_count++;
+	}
+
+	// Ensure 21C is present in the prefsSelectedStyles JSON list of active styles.
+	$v310_row_prefs_styles = $db_conn->rawQueryOne(sprintf("SELECT prefsSelectedStyles FROM %s WHERE id='1'", $prefix."preferences"));
+	$v310_selected_styles = is_array($v310_row_prefs_styles) ? json_decode($v310_row_prefs_styles['prefsSelectedStyles'], true) : null;
+
+	if (is_array($v310_selected_styles) && !array_key_exists($v310_style_row['id'], $v310_selected_styles)) {
+
+		$v310_selected_styles[$v310_style_row['id']] = array(
+			'id' => (string) $v310_style_row['id'],
+			'brewStyle' => sterilize($v310_style_row['brewStyle']),
+			'brewStyleGroup' => sterilize($v310_style_row['brewStyleGroup']),
+			'brewStyleNum' => sterilize($v310_style_row['brewStyleNum']),
+			'brewStyleVersion' => sterilize($v310_style_row['brewStyleVersion']),
+			'brewStyleType' => $v310_style_row['brewStyleType']
+		);
+
+		$update_table = $prefix."preferences";
+		$data = array('prefsSelectedStyles' => blank_to_null(json_encode($v310_selected_styles)));
+		$db_conn->where ('id', 1);
+		$result = $db_conn->update ($update_table, $data);
+		if ($db_conn->getLastErrno() === 0) {
+			$v3100_update .= "<li>21C Hazy IPA added to the accepted styles list.</li>";
+		} else {
+			$v3100_update .= "<li class=\"text-danger\">21C Hazy IPA NOT added to the accepted styles list. Error: ".$db_conn->getLastError()."</li>";
+			$error_count++;
+		}
+
+	}
+
+}
+
 if ((check_mysql_data_type("contestEntryFee",$prefix."contest_info")) != 246) {
 
 	// Change the data type (246 is DECIMAL/NEWDECIMAL).
