@@ -86,6 +86,40 @@ function convert_timestamp($time_string, $timezone, $offset, $method) {
 
 }
 
+/**
+ * Convert a datetime string displayed by getTimeZoneDateTime() back to a
+ * UTC Unix epoch integer for consistent storage.
+ *
+ * The form displays a datetime in the admin's current prefsTimeZone.
+ * This helper parses it in that timezone, then converts to UTC epoch so
+ * the stored value is timezone-independent.
+ *
+ * @param string  $datetime_string   Raw POST value, e.g. "2025-06-15 14:00"
+ * @param float   $timezone_offset  prefsTimeZone float from preferences table, e.g. -5.000
+ * @return int|false                UTC Unix epoch, or false on failure
+ */
+function to_utc_epoch($datetime_string, $timezone_offset) {
+
+	if (empty($datetime_string)) return false;
+
+	// Parse the datetime in the admin's timezone. strtotime() with
+	// date_default_timezone_set() to the admin's TZ already yields the
+	// true UTC Unix epoch for that instant (PHP resolves DST internally),
+	// so no manual offset arithmetic is needed — adding the raw offset here
+	// double-subtracts it whenever DST is in effect (e.g. NY stored -5.000
+	// but EDT is -4 in summer → a 1-hour shift per save).
+	$tz = get_timezone($timezone_offset);
+	date_default_timezone_set($tz);
+	$utc_epoch = strtotime($datetime_string);
+	if ($utc_epoch === false) return false;
+
+	// Restore to a safe default
+	date_default_timezone_set('UTC');
+
+	return $utc_epoch;
+
+}
+
 function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_format, $display_format, $return_format) {
 
 	$tz = get_timezone($timezone_offset); // convert offset number to PHP timezone
