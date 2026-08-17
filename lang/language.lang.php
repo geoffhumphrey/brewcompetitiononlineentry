@@ -43,25 +43,26 @@ $prefsLanguage = "en-US";
 $prefsLanguageFolder = "en";
 
 /**
- * Per-session language override. 
+ * Per-session language override.
  *
  * Allows users to switch languages independently of the site-wide default
  * set in Site Preferences. The cookie is set by the language toggle in
  * the navigation bar (pub/nav.pub.php) via the ?lang=XX URL parameter
  * handled in bootstrap.php.
  *
- * To enable this feature, set $enable_language_toggle = TRUE in config.php.
- * By default, this feature is disabled and the site-wide preference is
- * used exclusively (backwards-compatible with existing installations).
+ * Enabled via Preferences -> General -> Localization -> Runtime Language
+ * Toggle. By default, this feature is disabled and the site-wide
+ * preference is used exclusively (backwards-compatible with existing
+ * installations).
  *
  * The site-wide preference (from the DB) remains the default when
  * no cookie is set. This runs on every page load, so the override
  * takes effect immediately and persists across sessions (30-day cookie).
  */
-global $enable_language_toggle;
-if (isset($enable_language_toggle) && $enable_language_toggle
+if ((isset($_SESSION['prefsLanguageToggle'])) && ($_SESSION['prefsLanguageToggle'] == "Y")
     && isset($_COOKIE['userLanguage']) && isset($languages) && is_array($languages)) {
-  $valid_langs = array_keys($languages);
+  $valid_langs = json_decode($_SESSION['prefsLanguageOptions'] ?? '', true);
+  if (!is_array($valid_langs)) $valid_langs = get_available_language_codes();
   if (in_array($_COOKIE['userLanguage'], $valid_langs)) {
     $_SESSION['prefsLanguage'] = $_COOKIE['userLanguage'];
     $lang_folder_parts = explode("-", $_COOKIE['userLanguage']);

@@ -190,6 +190,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = to_utc_epoch(sterilize($_POST['prefsWinnerDelay']), $timezone_raw);
 			else $prefsWinnerDelay = 2145916800;
 
+			// Restrict the selected languages to known, valid codes regardless of
+			// what was posted, and never allow the list to end up empty.
+			// get_available_language_codes() (lib/common.lib.php, already loaded
+			// by includes/process.inc.php) derives valid codes from the lang/
+			// directory, so there's no separate list to keep in sync here.
+			$posted_language_options = ((isset($_POST['prefsLanguageOptions'])) && (is_array($_POST['prefsLanguageOptions']))) ? $_POST['prefsLanguageOptions'] : array();
+			$prefsLanguageOptions = array_values(array_intersect(get_available_language_codes(), $posted_language_options));
+			if (empty($prefsLanguageOptions)) $prefsLanguageOptions = array('en-US');
+
 			$data_1 = array(
 
 				'prefsProEdition' => sterilize($_POST['prefsProEdition']),
@@ -206,6 +215,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'prefsShipping' => sterilize($_POST['prefsShipping']),
 				'prefsAutoPurge' => sterilize($_POST['prefsAutoPurge']),
 				'prefsLanguage' => sterilize($_POST['prefsLanguage']),
+				'prefsLanguageToggle' => sterilize($_POST['prefsLanguageToggle']),
+				'prefsLanguageOptions' => blank_to_null(json_encode($prefsLanguageOptions)),
 				'prefsDateFormat' => sterilize($_POST['prefsDateFormat']),
 				'prefsTimeZone' => sterilize($_POST['prefsTimeZone']),
 				'prefsTimeFormat' => sterilize($_POST['prefsTimeFormat']),

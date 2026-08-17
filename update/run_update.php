@@ -4885,6 +4885,56 @@ if (!check_update("prefsHeroImages", $prefix."preferences")) {
 
 }
 
+if (!check_update("prefsLanguageToggle", $prefix."preferences")) {
+
+	$sql = sprintf("ALTER TABLE `%s`
+		ADD `prefsLanguageToggle` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Allow visitors to switch their own display language at runtime',
+		ADD `prefsLanguageOptions` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'JSON array of language codes selectable via the runtime language toggle';",
+		$prefix."preferences");
+	$result = $db_conn->rawQuery($sql);
+
+	if ($db_conn->getLastErrno() === 0) {
+
+		$v3100_update .= "<li>Runtime language toggle preference columns added to the preferences table.</li>";
+
+		// Carry forward any existing config.php-based settings, so installs that
+		// already turned this on via $enable_language_toggle don't silently lose
+		// it on upgrade. From here on this is fully superseded by the DB-backed
+		// prefsLanguageToggle / prefsLanguageOptions preferences - config.php is
+		// no longer consulted at runtime.
+		$v310_lang_toggle = ((isset($enable_language_toggle)) && ($enable_language_toggle)) ? 'Y' : 'N';
+
+		if ((isset($override_languages)) && (is_array($override_languages)) && (!empty($override_languages))) {
+			$v310_lang_options = json_encode(array_keys($override_languages));
+		}
+		else {
+			$v310_lang_options = json_encode(array("pt-BR","cs-CZ","en-GB","en-US","fr-FR","hu-HU","es-419"));
+		}
+
+		$update_table = $prefix."preferences";
+		$data = array(
+			'prefsLanguageToggle' => $v310_lang_toggle,
+			'prefsLanguageOptions' => $v310_lang_options
+		);
+		$db_conn->where ('id', 1);
+		$result = $db_conn->update ($update_table, $data);
+
+		if ($db_conn->getLastErrno() === 0) {
+			$v3100_update .= "<li>Runtime language toggle preferences initialized".(($v310_lang_toggle == 'Y') ? " (carried forward from config.php)" : "").".</li>";
+		}
+		else {
+			$v3100_update .= "<li class=\"text-danger\">Runtime language toggle preferences NOT initialized. Error: ".$db_conn->getLastError()."</li>";
+			$error_count++;
+		}
+
+	}
+	else {
+		$v3100_update .= "<li class=\"text-danger\">Runtime language toggle preference columns NOT added to the preferences table.</li>";
+		$error_count++;
+	}
+
+}
+
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];

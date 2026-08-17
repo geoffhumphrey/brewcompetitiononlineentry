@@ -122,14 +122,17 @@ if ($logged_in) {
 	                <?php
 	                // --- Per-Session Language Toggle ---
 	                // Shows a globe icon dropdown with available languages.
-	                // Only displayed when multi-language support is explicitly
-	                // enabled via $enable_language_toggle = TRUE in config.php
-	                // AND more than one language is available.
+	                // Only displayed when enabled via Preferences -> General ->
+	                // Localization -> Runtime Language Toggle, AND more than one
+	                // language is available for selection.
 	                // Users' selection is stored in a 30-day cookie (see bootstrap.php).
 	                // Links to the current page URL with ?lang= appended so users
 	                // don't lose their place when switching languages.
-	                global $enable_language_toggle;
-	                if (isset($enable_language_toggle) && $enable_language_toggle && count($languages) > 1) {
+	                $nav_language_options = json_decode($_SESSION['prefsLanguageOptions'] ?? '', true);
+	                if (!is_array($nav_language_options)) $nav_language_options = get_available_language_codes();
+	                $nav_languages = array_intersect_key($languages, array_flip($nav_language_options));
+
+	                if ((isset($_SESSION['prefsLanguageToggle'])) && ($_SESSION['prefsLanguageToggle'] == "Y") && (count($nav_languages) > 1)) {
 	                    // Build the current page URL (without existing ?lang= param)
 	                    $current_url = preg_replace('/[?&]lang=[^&]+/', '', $_SERVER['REQUEST_URI']);
 	                    // Determine separator (? or &)
@@ -140,7 +143,7 @@ if ($logged_in) {
 	                        <i class="fa fa-lg fa-fw fa-globe"></i>
 	                    </a>
 	                    <ul class="dropdown-menu dropdown-menu-end" data-bs-theme="dark">
-	                        <?php foreach ($languages as $lang_code => $lang_name) {
+	                        <?php foreach ($nav_languages as $lang_code => $lang_name) {
 	                            $lang_active = (isset($_SESSION['prefsLanguage']) && $_SESSION['prefsLanguage'] == $lang_code);
 	                        ?>
 	                        <li class="small">

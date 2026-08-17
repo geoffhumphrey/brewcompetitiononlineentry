@@ -126,6 +126,34 @@ function upgrade_legacy_password_hash($db_conn, $table, $id_column, $id_value, $
 	$db_conn->update($table, array('password' => $new_hash));
 }
 
+/**
+ * The single source of truth for which language codes actually exist,
+ * derived from the lang/ directory rather than a manually-maintained list -
+ * so nothing needs to be kept in sync by hand when a language is added or
+ * removed. Each locale's subfolder (e.g. lang/en/) holds three files per
+ * code - "{code}.lang.php", "{code}_admin.lang.php", "{code}_help.lang.php" -
+ * and a folder can hold more than one code (lang/en/ has both en-US and
+ * en-GB), so this scans individual files rather than folder names, keeping
+ * only each locale's base file and skipping its _admin/_help companions.
+ *
+ * Note: this only validates that a code is a real, available language - it
+ * doesn't provide a display name (e.g. "English (US)"), which still comes
+ * from $languages (includes/constants.inc.php) since that can't be derived
+ * from a filename.
+ */
+function get_available_language_codes() {
+	$codes = array();
+	$files = glob(LANG.'*'.DIRECTORY_SEPARATOR.'*.lang.php');
+	if ($files !== false) {
+		foreach ($files as $file) {
+			$basename = basename($file, '.lang.php');
+			if (preg_match('/^[a-z]{2}-[A-Za-z0-9]+$/', $basename)) $codes[] = $basename;
+		}
+	}
+	sort($codes);
+	return $codes;
+}
+
 /** ------------------ VERSION CHECK ------------------
  * Change version in system table if does not match in DB
  * If there are NO database structure or data updates for the current version,

@@ -423,7 +423,22 @@ $(document).ready(function(){
             $("#mhp-display").show("fast");
         }
     });
-    
+
+    $("#language-options-section").hide();
+
+    <?php if ($row_prefs['prefsLanguageToggle'] == "Y") { ?>
+    $("#language-options-section").show();
+    <?php } ?>
+
+    $("input[name='prefsLanguageToggle']").click(function() {
+        if ($(this).val() == "Y") {
+            $("#language-options-section").show("fast");
+        }
+        else {
+            $("#language-options-section").hide("fast");
+        }
+    });
+
 });
 </script>
 <?php } if ((($section == "admin") || ($section == "step3")) && ($go == "preferences") && ($action == "entries")) { 
@@ -1132,6 +1147,37 @@ $(document).ready(function(){
     </div>
 </div>
 <div class="form-group">
+    <label for="prefsLanguageToggle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Runtime Language Toggle</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <label class="radio-inline">
+                <input type="radio" name="prefsLanguageToggle" value="Y" id="prefsLanguageToggle_0" <?php if ($row_prefs['prefsLanguageToggle'] == "Y") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsLanguageToggle" value="N" id="prefsLanguageToggle_1" <?php if ($row_prefs['prefsLanguageToggle'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
+            </label>
+        </div>
+        <div class="help-block">Let visitors switch their own display language independently of the <strong>Language</strong> setting above, via a menu in the navigation bar. Locking the site to a single language (Disable) is unaffected either way.</div>
+    </div>
+</div>
+<div class="form-group" id="language-options-section">
+    <label for="prefsLanguageOptions" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Available Languages</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <?php
+        $prefs_language_options = json_decode($row_prefs['prefsLanguageOptions'], true);
+        if (!is_array($prefs_language_options)) $prefs_language_options = array_keys($languages);
+        ?>
+        <?php foreach ($languages as $lang => $lang_name) { ?>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="prefsLanguageOptions[]" value="<?php echo $lang; ?>" <?php if (in_array($lang, $prefs_language_options)) echo "checked"; ?>> <?php echo $lang_name; ?>
+            </label>
+        </div>
+        <?php } ?>
+        <div class="help-block">Which languages visitors may choose from when the runtime language toggle above is enabled. At least one must remain selected.</div>
+    </div>
+</div>
+<div class="form-group">
     <label for="prefsDateFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date Format</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">            
@@ -1175,9 +1221,13 @@ $(document).ready(function(){
             <option value="-6.000" <?php if ($row_prefs['prefsTimeZone'] == "-6.000") echo "SELECTED"; ?>>(GMT -6:00) Central Time (US &amp; Canada), Central America</option>
             <option value="-6.001" <?php if ($row_prefs['prefsTimeZone'] == "-6.001") echo "SELECTED"; ?>>(GMT -6:00) Sonora, Mexico (No Daylight Savings)</option>
             <option value="-6.002" <?php if ($row_prefs['prefsTimeZone'] == "-6.002") echo "SELECTED"; ?>>(GMT -6:00) Canada Central Time (No Daylight Savings)</option>
-            <option value="-5.000" <?php if ($row_prefs['prefsTimeZone'] == "-5.000") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-            <option value="-4.000" <?php if ($row_prefs['prefsTimeZone'] == "-4.000") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz, Santiago, Thule</option>
+            <option value="-5.000" <?php if ($row_prefs['prefsTimeZone'] == "-5.000") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada)</option>
+            <option value="-5.001" <?php if ($row_prefs['prefsTimeZone'] == "-5.001") echo "SELECTED"; ?>>(GMT -5:00) Bogota, Lima (No Daylight Savings)</option>
+            <option value="-4.000" <?php if ($row_prefs['prefsTimeZone'] == "-4.000") echo "SELECTED"; ?>>(GMT -4:00) Caracas, La Paz, Virgin Islands (No Daylight Savings)</option>
             <option value="-4.001" <?php if ($row_prefs['prefsTimeZone'] == "-4.001") echo "SELECTED"; ?>>(GMT -4:00) Paraguay (No Daylight Savings)</option>
+            <option value="-4.002" <?php if ($row_prefs['prefsTimeZone'] == "-4.002") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada)</option>
+            <option value="-4.003" <?php if ($row_prefs['prefsTimeZone'] == "-4.003") echo "SELECTED"; ?>>(GMT -4:00) Santiago, Chile</option>
+            <option value="-4.004" <?php if ($row_prefs['prefsTimeZone'] == "-4.004") echo "SELECTED"; ?>>(GMT -4:00) Thule, Greenland</option>
             <option value="-3.500" <?php if ($row_prefs['prefsTimeZone'] == "-3.500") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
             <option value="-3.000" <?php if ($row_prefs['prefsTimeZone'] == "-3.000") echo "SELECTED"; ?>>(GMT -3:00) Buenos Aires, Georgetown, Greenland</option>
             <option value="-3.001" <?php if ($row_prefs['prefsTimeZone'] == "-3.001") echo "SELECTED"; ?>>(GMT -3:00) Brazil (Brasilia - No Daylight Savings)</option>
@@ -1197,7 +1247,8 @@ $(document).ready(function(){
             <option value="7.000" <?php if ($row_prefs['prefsTimeZone'] == "7.000") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
             <option value="8.000" <?php if ($row_prefs['prefsTimeZone'] == "8.000") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Singapore, Hong Kong</option>
             <option value="8.001" <?php if ($row_prefs['prefsTimeZone'] == "8.001") echo "SELECTED"; ?>>(GMT +8:00) Perth, Western Australia (No Daylight Savings)</option>
-            <option value="9.000" <?php if ($row_prefs['prefsTimeZone'] == "9.000") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+            <option value="9.000" <?php if ($row_prefs['prefsTimeZone'] == "9.000") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Osaka, Sapporo, Yakutsk</option>
+            <option value="9.001" <?php if ($row_prefs['prefsTimeZone'] == "9.001") echo "SELECTED"; ?>>(GMT +9:00) Seoul, South Korea</option>
             <option value="9.500" <?php if ($row_prefs['prefsTimeZone'] == "9.500") echo "SELECTED"; ?>>(GMT +9:30) Adelaide, Darwin, the Northern Territory</option>
             <option value="10.000" <?php if ($row_prefs['prefsTimeZone'] == "10.000") echo "SELECTED"; ?>>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
             <option value="10.001" <?php if ($row_prefs['prefsTimeZone'] == "10.001") echo "SELECTED"; ?>>(GMT +10:00) Brisbane, Queensland (No Daylight Savings)</option>

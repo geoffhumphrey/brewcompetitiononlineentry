@@ -73,12 +73,12 @@ if ($setup_success) {
 	// the current page. The cookie is checked on every subsequent page
 	// load in language.lang.php.
 	//
-	// This feature is disabled by default. To enable, set:
-	//   $enable_language_toggle = TRUE;
-	// in config.php. When disabled, ?lang= is ignored entirely.
-	global $enable_language_toggle;
-	if (isset($enable_language_toggle) && $enable_language_toggle && isset($_GET['lang'])) {
-		$valid_langs = array_keys($languages);
+	// This feature is disabled by default. Enable it via Preferences ->
+	// General -> Localization -> Runtime Language Toggle. When disabled,
+	// ?lang= is ignored entirely.
+	if ((isset($_SESSION['prefsLanguageToggle'])) && ($_SESSION['prefsLanguageToggle'] == "Y") && (isset($_GET['lang']))) {
+		$valid_langs = json_decode($_SESSION['prefsLanguageOptions'] ?? '', true);
+		if (!is_array($valid_langs)) $valid_langs = get_available_language_codes();
 		if (in_array($_GET['lang'], $valid_langs)) {
 			setcookie('userLanguage', $_GET['lang'], [
 				'expires' => time() + (86400 * 30),
