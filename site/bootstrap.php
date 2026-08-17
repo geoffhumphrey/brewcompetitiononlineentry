@@ -66,6 +66,39 @@ if ($setup_success) {
 	require (DB.'brewer.db.php');
 	require (DB.'entries.db.php');
 	require (INCLUDES.'constants.inc.php');
+
+	// ---------------------------- Per-Session Language Override ----------------------------
+	// Handle ?lang=XX URL parameter to switch the user's display language.
+	// Sets a 30-day cookie and session variable, then continues rendering
+	// the current page. The cookie is checked on every subsequent page
+	// load in language.lang.php.
+	//
+	// This feature is disabled by default. To enable, set:
+	//   $enable_language_toggle = TRUE;
+	// in config.php. When disabled, ?lang= is ignored entirely.
+	global $enable_language_toggle;
+	if (isset($enable_language_toggle) && $enable_language_toggle && isset($_GET['lang'])) {
+		$valid_langs = array_keys($languages);
+		if (in_array($_GET['lang'], $valid_langs)) {
+			setcookie('userLanguage', $_GET['lang'], [
+				'expires' => time() + (86400 * 30),
+				'path' => '/',
+				'httponly' => true,
+				'secure' => is_https(),
+				'samesite' => 'Lax',
+			]);
+			// Also update $_COOKIE so language.lang.php sees the new value
+			// immediately on this same page load (setcookie only affects
+			// the response header; $_COOKIE still holds the old request value).
+			$_COOKIE['userLanguage'] = $_GET['lang'];
+			$_SESSION['prefsLanguage'] = $_GET['lang'];
+			$lang_folder_parts = explode("-", $_GET['lang']);
+			$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder_parts[0]);
+		}
+		// No redirect — continue rendering the current page with the new language.
+		// The ?lang= parameter is simply ignored on this page load.
+	}
+
 	require (LANG.'language.lang.php');
 	require (INCLUDES.'headers.inc.php');
 	require (INCLUDES.'scrubber.inc.php');
