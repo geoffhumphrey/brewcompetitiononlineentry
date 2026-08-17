@@ -910,7 +910,7 @@ function currency_info(string $input,$method): string|array {
 
 }
 
-function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id): int {
+function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id): float {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -1083,7 +1083,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 	return 0;
 }
 
-function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id): int {
+function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id): float {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	// echo "<br>entry_fee:".$entry_fee."<br>entry_fee_discount:".$entry_fee_discount."<br>entry_discount:".$entry_discount."<br>entry_discount_number:".$entry_discount_number."<br>cap_no:".$cap_no."<br>special_discount_amount:".$special_discount_number."<br>bid:".$bid."<br>filter:".$filter."<br>";
