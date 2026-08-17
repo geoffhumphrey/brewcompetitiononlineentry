@@ -16,8 +16,12 @@ function get_timezone($offset) {
 				'-6.001' => 'America/Hermosillo', // No DST in this area of Mexico
 				'-6.002' => 'America/Regina', // No DST in this area of Canada
         '-5.000' => 'America/New_York',
-        '-4.000' => 'America/Virgin',
+        '-5.001' => 'America/Bogota', // No DST for Colombia, Peru
+        '-4.000' => 'America/Virgin', // No DST; matches Caracas, La Paz
         '-4.001' => 'America/Asuncion', // DST observed in Paraguay
+        '-4.002' => 'America/Halifax', // DST observed in Atlantic Canada
+        '-4.003' => 'America/Santiago', // DST observed in Chile (Southern Hemisphere pattern)
+        '-4.004' => 'America/Thule', // DST observed in Greenland (Thule/Pituffik)
         '-3.500' => 'America/St_Johns',
         '-3.000' => 'America/Argentina/Buenos_Aires',
 				'-3.001' => 'America/Sao_Paulo', // No DST for region of Brazil
@@ -38,6 +42,7 @@ function get_timezone($offset) {
         '8.000' => 'Asia/Singapore',
 				'8.001' => 'Australia/Perth', // No DST for this part of Australia
         '9.000' => 'Asia/Tokyo',
+        '9.001' => 'Asia/Seoul', // South Korea (same offset as Tokyo, no DST, but a distinct region/abbreviation)
         '9.500' => 'Australia/Darwin',
         '10.000' => 'Pacific/Guam',
 				'10.001' => 'Australia/Brisbane', // No DST for this part of Australia
@@ -60,26 +65,29 @@ function convert_timestamp($time_string, $timezone, $offset, $method) {
 	// Method 1: convert to GMT for storage in DB
 	if ($method == 1) {
 
-		// 1. convert the time string specified in the current timezone to UTC (GMT) using built in PHP functions
-		date_default_timezone_set($timezone);
-		$timestamp = strtotime($time_string);
+		// Parse the time string as wall time in the given timezone, then read
+		// off the UTC Unix epoch. Uses an explicit DateTimeZone rather than
+		// date_default_timezone_set() so this never mutates PHP's global
+		// default timezone for whatever else runs later in the request.
+		try {
+			$dt = new DateTime($time_string, new DateTimeZone($timezone));
+		}
+		catch (Exception $e) {
+			return false;
+		}
 
-		// 2. return the value
-		return $timestamp;
+		return $dt->getTimestamp();
 
 	}
 
 	// Method 2: convert from GMT to selected timezone
 	if ($method == 2) {
-		
-		// GMT date/time is always stored in DB
-		// 1. make sure the timezone is UTC (GMT)
-		date_default_timezone_set('UTC');
 
-		// 2. convert the GMT timestamp to the desired timezone using the provided offset
+		// GMT date/time is always stored in DB. Apply the provided offset
+		// (in hours) to get the "local" epoch representation. Pure integer
+		// arithmetic - no timezone state involved.
 		$timestamp = $time_string += ($offset * 3600);
 
-		// 3. return the value
 		return $timestamp;
 
 	}
@@ -102,93 +110,99 @@ function to_utc_epoch($datetime_string, $timezone_offset) {
 
 	if (empty($datetime_string)) return false;
 
-	// Parse the datetime in the admin's timezone. strtotime() with
-	// date_default_timezone_set() to the admin's TZ already yields the
-	// true UTC Unix epoch for that instant (PHP resolves DST internally),
-	// so no manual offset arithmetic is needed — adding the raw offset here
-	// double-subtracts it whenever DST is in effect (e.g. NY stored -5.000
-	// but EDT is -4 in summer → a 1-hour shift per save).
+	// Parse the datetime as wall time in the admin's timezone, then read off
+	// the UTC Unix epoch. Uses an explicit DateTimeZone rather than
+	// date_default_timezone_set() so this never mutates PHP's global default
+	// timezone for whatever else runs later in the request - PHP resolves
+	// DST internally either way, so no manual offset arithmetic is needed.
 	$tz = get_timezone($timezone_offset);
-	date_default_timezone_set($tz);
-	$utc_epoch = strtotime($datetime_string);
-	if ($utc_epoch === false) return false;
 
-	// Restore to a safe default
-	date_default_timezone_set('UTC');
+	try {
+		$dt = new DateTime($datetime_string, new DateTimeZone($tz));
+	}
+	catch (Exception $e) {
+		return false;
+	}
 
-	return $utc_epoch;
+	return $dt->getTimestamp();
 
 }
 
 function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_format, $display_format, $return_format) {
 
 	$tz = get_timezone($timezone_offset); // convert offset number to PHP timezone
-  
-  date_default_timezone_set($tz);
+
+	// Render via an explicit DateTime/DateTimeZone rather than
+	// date_default_timezone_set() + date(), so this never mutates PHP's
+	// global default timezone for whatever else runs later in the request.
+	// The "@timestamp" form always constructs in UTC regardless of the
+	// timezone passed to the constructor, so it's set explicitly after.
+	$dt = new DateTime('@'.$timestamp);
+	$dt->setTimezone(new DateTimeZone($tz));
 
 	switch($display_format) {
-		
+
 		// Long Format
 		case "long":
-			if ($date_format == "1") $date = date('l, F j, Y', $timestamp);
-			else $date = date('l j F, Y', $timestamp);
+			if ($date_format == "1") $date = $dt->format('l, F j, Y');
+			else $date = $dt->format('l j F, Y');
 		break;
 
 		// Short Format
 		case "short":
-			if ($date_format == 1) $date = date('m/d/Y', $timestamp);
-			elseif ($date_format == 2) $date = date('d/m/Y',$timestamp);
-			elseif ($date_format == 999) $date = date('Y-m-d H:i:s',$timestamp);
-			else $date = date('Y/m/d', $timestamp);
+			if ($date_format == 1) $date = $dt->format('m/d/Y');
+			elseif ($date_format == 2) $date = $dt->format('d/m/Y');
+			elseif ($date_format == 999) $date = $dt->format('Y-m-d H:i:s');
+			else $date = $dt->format('Y/m/d');
 		break;
 
 		// MySQL Format
 		case "system":
-			$date = date('Y-m-d', $timestamp);
+			$date = $dt->format('Y-m-d');
 		break;
 
 		// XML Report Format
 		case "xml":
-			$date = date('l j F Y', $timestamp);
+			$date = $dt->format('l j F Y');
 		break;
-	
+
 	}
 
-	if ($time_format == "1") $time = date('H:i',$timestamp);
-	else $time = date('g:i A',$timestamp);
+	if ($time_format == "1") $time = $dt->format('H:i');
+	else $time = $dt->format('g:i A');
 
 	switch($return_format) {
-		
+
 		case "date-time":
-			$return = $date." ".$time.", ".date('T',$timestamp);
+			$return = $date." ".$time.", ".$dt->format('T');
 		break;
-		
+
 		case "date-time-no-gmt":
 			$return = $date." ".$time;
 		break;
-		
+
 		case "date-time-system":
 			$return = $date." ".$time;
 		break;
-		
+
 		case "date-no-gmt":
 			$return = $date;
 		break;
-		
+
 		case "time-gmt":
-			$return = $time.", ".date('T',$timestamp);
+			$return = $time.", ".$dt->format('T');
 		break;
-		
+
 		case "time":
 			$return = $time;
 		break;
 
 		case "year":
-			$return = date('Y', $timestamp);
+			$return = $dt->format('Y');
 		break;
-		
+
 		default: $return = $date;
-	
+
 	}
 
 	return $return;

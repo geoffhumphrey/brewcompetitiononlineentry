@@ -114,14 +114,15 @@ function normalize_competition_ts($value, $timezone_offset) {
 
 	if (!function_exists('to_utc_epoch')) return $value;
 
-	// Read the stored epoch back as wall time in the admin's timezone.
-	// to_utc_epoch() leaves the ambient default timezone set to UTC when it
-	// returns, so don't rely on whatever is ambient here — set the source
-	// timezone ourselves so every field in a multi-field migration pass is
-	// interpreted consistently regardless of call order.
+	// Read the stored epoch back as wall time in the admin's timezone, via an
+	// explicit DateTime/DateTimeZone rather than date_default_timezone_set()
+	// + date(), so this never depends on (or mutates) PHP's global default
+	// timezone. Each field in a multi-field migration pass is interpreted
+	// consistently this way, regardless of call order.
 	$tz = get_timezone($timezone_offset);
-	date_default_timezone_set($tz);
-	$local = date('Y-m-d H:i', $old);
+	$dt = new DateTime('@'.$old);
+	$dt->setTimezone(new DateTimeZone($tz));
+	$local = $dt->format('Y-m-d H:i');
 	$new = to_utc_epoch($local, $timezone_offset);
 
 	if (($new === false) || ($new === $old)) return $value;
