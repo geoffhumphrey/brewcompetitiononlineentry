@@ -331,31 +331,43 @@ if (!$style_primary_key) {
 }
 
 // Make sure styles table is auto increment
-$sql = sprintf("ALTER TABLE `%s` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;",$styles_db_table);
-$result = $db_conn->rawQuery($sql);
-if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Styles table set to auto increment.</li>";
-else {
-	$v2180_update .= "<li class=\"text-danger\">Styles table was not set to auto increment.</li>";
-	$error_count++;
+$row_id_column = $db_conn->rawQueryOne(sprintf("SHOW FULL COLUMNS FROM `%s` LIKE 'id';",$styles_db_table));
+$style_id_auto_increment = ((isset($row_id_column['Extra'])) && (stripos($row_id_column['Extra'], 'auto_increment') !== FALSE));
+
+if (!$style_id_auto_increment) {
+
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;",$styles_db_table);
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Styles table set to auto increment.</li>";
+	else {
+		$v2180_update .= "<li class=\"text-danger\">Styles table was not set to auto increment.</li>";
+		$error_count++;
+	}
+
 }
 
 $v2180_update .= "<li>Updating styles table with current sub-style information.";
 $v2180_update .= "<ul>";
 
 $update_table = $styles_db_table;
-$data = array(
-	'brewStyle' => 'Historical Beer',
-	'brewStyleTags' => 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented',
-	'brewStyleEntry' => 'Catch-all category for other historical beers that have NOT been defined by the BJCP. The entrant must provide a description for the judges of the historical style that is NOT one of the currently defined historical style examples provided by the BJCP. Currently defined examples are: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it.'
-);
-$db_conn->where ('id', 184);
-$db_conn->update ($update_table,$data);
 
-$data = array(
-	'brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%%, standard: 5.0-7.5%%, double: 7.5-9.5%%); if no strength is specified, standard will be assumed. This subcategory is a catch-all for entries that DO NOT fit into one of the defined BJCP Specialty IPA types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, or Red IPA. Entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). If the entry falls into one of the currently defined types (Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA), it should be entered into that salient subcategory type.'
-);
-$db_conn->where ('id', 163);
-$db_conn->update ($update_table,$data);
+if (!$style_id_auto_increment) {
+
+	$data = array(
+		'brewStyle' => 'Historical Beer',
+		'brewStyleTags' => 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented',
+		'brewStyleEntry' => 'Catch-all category for other historical beers that have NOT been defined by the BJCP. The entrant must provide a description for the judges of the historical style that is NOT one of the currently defined historical style examples provided by the BJCP. Currently defined examples are: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it.'
+	);
+	$db_conn->where ('id', 184);
+	$db_conn->update ($update_table,$data);
+
+	$data = array(
+		'brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%%, standard: 5.0-7.5%%, double: 7.5-9.5%%); if no strength is specified, standard will be assumed. This subcategory is a catch-all for entries that DO NOT fit into one of the defined BJCP Specialty IPA types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, or Red IPA. Entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). If the entry falls into one of the currently defined types (Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA), it should be entered into that salient subcategory type.'
+	);
+	$db_conn->where ('id', 163);
+	$db_conn->update ($update_table,$data);
+
+}
 
 // Add new specialty IPA and historical styles to styles table if not present
 if (!check_new_style("27","A1","Gose")) {

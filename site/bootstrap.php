@@ -59,7 +59,21 @@ if ($setup_success) {
 	if (SINGLE) require_once(SSO.'sso.inc.php');
 	require (LIB.'common.lib.php');
 	require (INCLUDES.'db_tables.inc.php');
-	if ($force_update) include (UPDATE.'run_update.php');
+	if ($force_update) {
+
+		// Named lock scoped to this install's table prefix, so concurrent requests
+		// don't all re-run the full update chain against the same tables at once.
+		// Tied to the DB connection, so it releases on its own if this request
+		// dies mid-update rather than leaving the site stuck "updating" forever.
+		$update_lock_name = "bcoem_update_".$prefix;
+		$row_update_lock = $db_conn->rawQueryOne("SELECT GET_LOCK(?, 0) AS lock_acquired", array($update_lock_name));
+
+		if ($row_update_lock['lock_acquired'] == 1) {
+			include (UPDATE.'run_update.php');
+			$db_conn->rawQuery("SELECT RELEASE_LOCK(?)", array($update_lock_name));
+		}
+
+	}
 	require (LIB.'help.lib.php');
 	require (INCLUDES.'styles.inc.php'); // Establishing session vars depends upon arrays here
 	require (DB.'common.db.php');
