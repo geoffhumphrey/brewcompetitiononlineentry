@@ -37,18 +37,18 @@
 
     // Hardcoded fallback array for backwards compatibility
     $bg_hero_images_fallback = array(
-        "0-a" => "misc-cropped-bottles_3000x500.jpg",
-        "0-b" => "misc-brussels-bottles_3000x500.jpg",
-        "0-c" => "misc-plzen-fermenters_3000x500.jpg",
-        "0-d" => "misc-bottles_3000x500.jpg",
-        "1-a" => "beer-barley-malt_3000x500.jpg",
-        "1-b" => "beer-brussels-barrels_3000x500.jpg",
-        "1-c" => "beer-hop-cones_3000x500.jpg",
-        "1-d" => "beer-kegs_3000x500.jpg",
-        "1-e" => "beer-munich-mugs_3000x500.jpg",
-        "1-f" => "beer-on-bar_3000x500.jpg",
-        "2-a" => "cider-bottles_3000x500.jpg",
-        "3-a" => "mead-bottles_3000x500.jpg",     
+        "0-a" => "misc-cropped-bottles_3000x500.webp",
+        "0-b" => "misc-brussels-bottles_3000x500.webp",
+        "0-c" => "misc-plzen-fermenters_3000x500.webp",
+        "0-d" => "misc-bottles_3000x500.webp",
+        "1-a" => "beer-barley-malt_3000x500.webp",
+        "1-b" => "beer-brussels-barrels_3000x500.webp",
+        "1-c" => "beer-hop-cones_3000x500.webp",
+        "1-d" => "beer-kegs_3000x500.webp",
+        "1-e" => "beer-munich-mugs_3000x500.webp",
+        "1-f" => "beer-on-bar_3000x500.webp",
+        "2-a" => "cider-bottles_3000x500.webp",
+        "3-a" => "mead-bottles_3000x500.webp",     
     );
 
     // Get session style types for filtering
