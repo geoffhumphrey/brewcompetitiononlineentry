@@ -4447,13 +4447,16 @@ if (!check_update("prefsEmailPort", $prefix."preferences")) {
 		include (CONFIG.'config.mail.php');
 		if (!empty($mail_default_from)) $mail_default_from = sterilize($mail_default_from);
 		if (!empty($smtp_host)) $smtp_host = sterilize($smtp_host);
-		if (!empty($smtp_username)) $smtp_username = sterilize($smtp_username);
+		// Credential fields (username, password) are used verbatim for SMTP auth, never
+		// rendered as HTML - sterilize() would HTML-encode special characters like &
+		// into "&amp;", corrupting the actual username/password once decrypted.
+		if (!empty($smtp_username)) $smtp_username = trim($smtp_username);
 		if (!empty($smtp_secure)) $smtp_secure = sterilize($smtp_secure);
 		if (!empty($smtp_port)) $smtp_port = sterilize($smtp_port);
 
 		// Need to encrypt the password for storage in DB
 		if (!empty($smtp_password)) {
-			$smtp_password = sterilize($smtp_password);
+			$smtp_password = trim($smtp_password);
 			$smtp_password = simpleEncrypt($smtp_password, $secretKey, $nacl);
 		}
 

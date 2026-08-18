@@ -91,11 +91,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2) && ($csr
     else {
         $message .= "<p>A request to send a test email to this address was made from the ".$from_name." using the following settings:</p>";
         $message .= "<ul>";
-        $message .= "<li><strong>Originating Email Address:</strong> ".$_SESSION['prefsEmailFrom']."</li>";
-        $message .= "<li><strong>Host:</strong> ".$_SESSION['prefsEmailHost']."</li>";
-        $message .= "<li><strong>Username:</strong> ".$_SESSION['prefsEmailUsername']."</li>";
-        $message .= "<li><strong>Encryption:</strong> ".$_SESSION['prefsEmailEncrypt']."</li>";
-        $message .= "<li><strong>Port:</strong> ".$_SESSION['prefsEmailPort']."</li>";
+        $message .= "<li><strong>Originating Email Address:</strong> ".h($_SESSION['prefsEmailFrom'])."</li>";
+        $message .= "<li><strong>Host:</strong> ".h($_SESSION['prefsEmailHost'])."</li>";
+        $message .= "<li><strong>Username:</strong> ".h($_SESSION['prefsEmailUsername'])."</li>";
+        $message .= "<li><strong>Encryption:</strong> ".h($_SESSION['prefsEmailEncrypt'])."</li>";
+        $message .= "<li><strong>Port:</strong> ".h($_SESSION['prefsEmailPort'])."</li>";
         $message .= "</li>";
         $message .= "</ul>";
         $message .= "<p>If you're reading this, your settings are correct and emails are being generated successfully.</p>";
