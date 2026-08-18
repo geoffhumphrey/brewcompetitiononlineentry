@@ -10,9 +10,12 @@ use PHPUnit\Framework\TestCase;
  * Backfill logic for the 3.1.0 competition-timestamp migration.
  *
  * Before 3.1.0, competition date fields were stored via bare strtotime()
- * (interpreted in the PHP server's default timezone) instead of the admin's
- * prefsTimeZone. normalize_competition_ts() re-interprets a stored epoch as
- * wall time in the admin's timezone and returns the correct UTC epoch.
+ * after process.inc.php set the default timezone from prefsTimeZone
+ * (date_default_timezone_set(get_timezone($timezone_raw))), so stored
+ * epochs were already the true UTC instant of the wall time the admin
+ * entered in their timezone. normalize_competition_ts() is the 3.1.0
+ * one-time migration: it must leave already-correct epochs unchanged
+ * (identity) and never shift them by the timezone offset.
  *
  * These tests are pure (no MySQL): they load lib/update.lib.php and
  * lib/date_time.lib.php directly and exercise the real production function.
@@ -45,34 +48,32 @@ final class TimestampMigrationTest extends TestCase
     }
 
     /**
-     * The migration must re-base an old-style epoch to the true UTC epoch
-     * for the wall time the admin meant in their timezone.
+     * Correctly-stored epochs (pre-3.1.0 save path) must pass through
+     * unchanged: re-encoding the instant is the identity, never a shift
+     * by the timezone offset.
      *
-     * @dataProvider migrationProvider
+     * @dataProvider storedEpochProvider
      */
-    public function testRebasesOldEpochToUtc(string $wallTime, float $offset, string $expectedUtcWall): void
+    public function testStoredEpochsPassThroughUnchanged(string $wallTime, float $offset, string $expectedUtcWall): void
     {
         $previous = date_default_timezone_get();
-        date_default_timezone_set('UTC'); // server-default context at save time
+        date_default_timezone_set(get_timezone($offset)); // pre-3.1.0 save-time context
 
-        // Old code stored this wall time as if it were UTC (server default).
+        // Pre-3.1.0 strtotime() in the admin's tz produced the true UTC instant.
         $old = strtotime($wallTime);
+        self::assertNotFalse($old, 'fixture wall time must parse');
 
-        // The admin entered $wallTime in their prefsTimeZone ($offset).
-        $expected = to_utc_epoch($wallTime, $offset);
         $normalized = normalize_competition_ts($old, $offset);
 
-        self::assertNotSame($old, $normalized, 'old-style epoch should be re-based when offsets differ');
-        self::assertSame($expected, $normalized);
+        self::assertSame($old, $normalized, 'correctly-stored epoch must pass through unchanged');
 
-        // Round-trip: rendering the migrated epoch in the admin TZ must
-        // reproduce the wall time they entered.
-        self::assertSame($expectedUtcWall, gmdate('Y-m-d H:i', (int) $normalized));
+        // The stored instant still represents the wall time the admin entered.
+        self::assertSame($expectedUtcWall, gmdate('Y-m-d H:i', (int) $old));
 
         date_default_timezone_set($previous);
     }
 
-    public static function migrationProvider(): array
+    public static function storedEpochProvider(): array
     {
         return [
             // NY winter (UTC-5, no DST): 14:00 EST == 19:00 UTC.
