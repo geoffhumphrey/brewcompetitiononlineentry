@@ -135,16 +135,22 @@ function get_all_available_hero_images() {
         "3" => array(),
     );
 
-    $files = glob(IMAGES.'*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
-    if ($files !== false) {
-        foreach ($files as $path) {
-            $file = basename($path);
-            if (!is_hero_image_candidate($file)) continue;
+    // GLOB_BRACE isn't defined on every platform (e.g. musl-based Linux such as Alpine),
+    // and referencing an undefined constant is a fatal error since PHP 8.0 - glob per
+    // extension instead so this doesn't depend on GLOB_BRACE being available.
+    $files = array();
+    foreach (array('jpg', 'jpeg', 'png', 'gif', 'webp') as $extension) {
+        $matches = glob(IMAGES.'*.'.$extension);
+        if ($matches !== false) $files = array_merge($files, $matches);
+    }
 
-            $category = hero_image_category_from_filename($file);
-            if (($category !== null) && isset($hero_images[$category])) {
-                $hero_images[$category][] = $file;
-            }
+    foreach ($files as $path) {
+        $file = basename($path);
+        if (!is_hero_image_candidate($file)) continue;
+
+        $category = hero_image_category_from_filename($file);
+        if (($category !== null) && isset($hero_images[$category])) {
+            $hero_images[$category][] = $file;
         }
     }
 

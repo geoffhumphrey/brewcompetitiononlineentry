@@ -440,7 +440,7 @@ if ($totalRows_log > 0) {
 
 			$multi_print_link = "";
 
-			if (($print_bottle_labels) && (!$judging_started)) {
+			if (($print_bottle_labels) && (!$judging_started) && ($registration_open < 2)) {
 				$entry_output .= "<td class=\"d-print-none\">";
 				
 				if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) {

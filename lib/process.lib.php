@@ -2,7 +2,7 @@
 
 function random_judging_num_generator(){
 	
-	srand ((double) microtime() * 10000000);
+	srand ((float) microtime() * 10000000);
 
 	$random_generator = "";
 	

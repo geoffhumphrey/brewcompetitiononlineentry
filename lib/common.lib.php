@@ -471,7 +471,7 @@ function purge_entries($type, $interval) {
 
 // function to generate random number
 function random_generator($digits,$method){
-	srand ((double) microtime() * 10000000);
+	srand ((float) microtime() * 10000000);
 
 	//Array of alphabet
 	if ($method == "1") $input = array ("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","t","d","y","u","b","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9");
