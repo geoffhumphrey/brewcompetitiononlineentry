@@ -3372,7 +3372,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$row_prefs might not be defined\\.$#"
-			count: 145
+			count: 154
 			path: admin/site_preferences.admin.php
 
 		-
@@ -19636,11 +19636,6 @@ parameters:
 			path: lib/common.lib.php
 
 		-
-			message: "#^Binary operation \"\\+\\=\" between string and int results in an error\\.$#"
-			count: 1
-			path: lib/date_time.lib.php
-
-		-
 			message: "#^Variable \\$connection might not be defined\\.$#"
 			count: 1
 			path: lib/date_time.lib.php
@@ -31811,6 +31806,11 @@ parameters:
 			path: pub/nav.pub.php
 
 		-
+			message: "#^Variable \\$languages might not be defined\\.$#"
+			count: 1
+			path: pub/nav.pub.php
+
+		-
 			message: "#^Variable \\$logged_in might not be defined\\.$#"
 			count: 1
 			path: pub/nav.pub.php
@@ -43051,6 +43051,11 @@ parameters:
 			path: update/run_update.php
 
 		-
+			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: update/run_update.php
+
+		-
 			message: "#^If condition is always false\\.$#"
 			count: 11
 			path: update/run_update.php
@@ -43122,7 +43127,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 642
+			count: 648
 			path: update/run_update.php
 
 		-
@@ -43172,7 +43177,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
-			count: 355
+			count: 358
 			path: update/run_update.php
 
 		-
