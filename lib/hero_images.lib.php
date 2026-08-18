@@ -137,12 +137,11 @@ function get_all_available_hero_images() {
         "3" => array(),
     );
 
-    // GLOB_BRACE isn't defined on every platform (e.g. musl-based Linux such as Alpine),
-    // and referencing an undefined constant is a fatal error since PHP 8.0 - glob per
-    // extension instead so this doesn't depend on GLOB_BRACE being available.
+    // GLOB_BRACE is undefined on PHP 8.4+ (removed), so glob each supported
+    // extension separately instead of using a brace pattern.
     $files = array();
-    foreach (array('jpg', 'jpeg', 'png', 'gif', 'webp') as $extension) {
-        $matches = glob(IMAGES.'*.'.$extension);
+    foreach (array('jpg', 'jpeg', 'png', 'gif', 'webp') as $ext) {
+        $matches = glob(IMAGES.'*.'.$ext);
         if ($matches !== false) $files = array_merge($files, $matches);
     }
 
