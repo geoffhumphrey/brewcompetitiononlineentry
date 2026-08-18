@@ -875,8 +875,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$adv_cicerone = "";
 				$mast_cicerone = "";
 
-				$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
-				if ($j > 0) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
+				if (validate_bjcp_id($row_brewer['brewerJudgeID'])) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
 				else $judge_id = "";
 				$rank .= strtoupper($judge_id);
 
@@ -1178,8 +1177,7 @@ if (isset($_SESSION['loginUsername'])) {
 		$adv_cicerone = "";
 		$mast_cicerone = "";
 
-		$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
-		if ($j > 0) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
+		if (validate_bjcp_id($row_brewer['brewerJudgeID'])) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
 		else $judge_id = "";
 		$rank .= strtoupper($judge_id);
 

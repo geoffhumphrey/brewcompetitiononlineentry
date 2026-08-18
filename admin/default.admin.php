@@ -55,6 +55,7 @@ $ps_loc_judging_mbos = "";
 $cards_loc_rnd = "";
 
 $organizer_assigned = get_participant_count('organizer-assigned');
+$bjcp_entry_count = get_bjcp_entry_count();
 
 if ($totalRows_judging > 0) {
 
@@ -2991,6 +2992,17 @@ if ($recently_updated) {
                     <p><strong>The competition Organizer designated in the system is <span class="text-danger"><?php echo $organizer_assigned['first_name']."  ".$organizer_assigned['last_name']; ?></span>.</strong> If this is incorrect, go to the Admin Dashboard > Entries and Participants > <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=staff">Assign Staff</a> function and choose the current Organizer's name from the drop-down list near the top of the screen. If the Organizer's name is not present in the drop-down, an account will need to be created for them.</p>
                     <div style="font-size:1.1em; margin-bottom: 10px;"><strong>Submittal</strong></div>
                     <p>Once your XML report is generated, you can submit it via the <a class="hide-loader" href="https://app.bjcp.org/competitions/report" target="_blank">BJCP's Competition Report site</a>.</p>
+                <?php } ?>
+
+                <div style="font-size:1.1em; margin-bottom: 10px;"><strong>Entries Reported</strong></div>
+                <?php if ($bjcp_entry_count['basis'] == "judged") { ?>
+                    <p>This report will show <strong><?php echo $bjcp_entry_count['count']; ?> entries</strong>, based on entries that have been judged. This is what the BJCP expects to see.</p>
+                <?php } elseif ($bjcp_entry_count['basis'] == "received") { ?>
+                    <p class="text-danger">This report will show <strong><?php echo $bjcp_entry_count['count']; ?> entries</strong>, based on entries marked as received - no entries have been scored yet. Consider waiting until judging is complete so the report reflects judged entries instead.</p>
+                <?php } elseif ($bjcp_entry_count['basis'] == "paid") { ?>
+                    <p class="text-danger">This report will show <strong><?php echo $bjcp_entry_count['count']; ?> entries</strong>, based on paid entries - no entries have been marked as received or judged yet. This report should not be generated until judging is complete.</p>
+                <?php } else { ?>
+                    <p class="text-danger">This report will show <strong><?php echo $bjcp_entry_count['count']; ?> entries</strong> - the total entries on record, since none are marked as paid, received, or judged yet. This report should not be generated until judging is complete.</p>
                 <?php } ?>
             </div>
             <div class="modal-footer">

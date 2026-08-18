@@ -288,6 +288,9 @@ function total_flights() {
 }
 
 function validate_bjcp_id($input) {
+	// BJCP also issues "TEMPDDDD" ids (judges who passed the online exam but not
+	// yet the tasting exam) alongside the standard single-letter + 4-digit ids
+	if (preg_match('/^TEMP\d{4}$/i', (string) $input)) return TRUE;
 	$length = strlen($input);
 	if ($length != 5) return FALSE;
 	elseif (!preg_match('([a-zA-Z])',$input)) return FALSE;
@@ -355,7 +358,7 @@ function total_points($total_entries,$method) {
 
 function judge_points($user_id,$judge_max_points) {
 
-	/*
+	/**
 	 * To figure out judge points, need to assess:
 	 *  - Which sessions the judge was assigned to
 	 *  - Which day those sessions were on
@@ -372,7 +375,6 @@ function judge_points($user_id,$judge_max_points) {
 	require (INCLUDES.'db_tables.inc.php');
 	require (DB.'judging_locations.db.php');
 
-	$possible_judging_days = array();
 	$days_judged = array();
 
 	$points = 0;
@@ -387,7 +389,6 @@ function judge_points($user_id,$judge_max_points) {
 			// Get date and determine 24 hour window where it falls based upon the time zone
 			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
 			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
-			$possible_judging_days[] = $timestamp_curr_day_midnight;	
 
 			/**
 			 * Edited the query below to only take into account Round 1 of the assignment. 
@@ -418,37 +419,38 @@ function judge_points($user_id,$judge_max_points) {
 
 	}
 
-	$possible_judging_days = array_unique($possible_judging_days);
-
 	if (!empty($days_judged)) {
 
-		foreach ($possible_judging_days as $judging_day) {
+		// Traditional-type sessions are tallied per calendar day (multiple judging_locations
+		// rows can share a date - e.g. two rooms running concurrently - so all of a judge's
+		// points for that day must be summed before the 1.5/day cap is applied, not capped
+		// per row). Distributed sessions aren't tied to a single date - each stands on its
+		// own and gets its own 1.5 cap.
+		$daily_totals = array();
+		$distributed_totals = array();
 
-			foreach ($days_judged as $day) {
+		foreach ($days_judged as $day) {
 
-				$point_day = 0;
-
-				// Treat each distributed session as it's own "day"
-				if ($day['distributed'] == 1) {
-
-					$point_day += $day['points'];
-					if ($point_day > 1.5) $points += 1.5;
-					else $points += $point_day;
-
-				}
-
-				else {
-
-					if ($day['day_midnight'] == $judging_day) $point_day += $day['points'];
-					if ($point_day > 1.5) $points += 1.5;
-					else $points += $point_day;
-
-				}
-				
+			if ($day['distributed'] == 1) {
+				$distributed_totals[] = $day['points'];
 			}
-		
+
+			else {
+				$key = $day['day_midnight'];
+				if (!isset($daily_totals[$key])) $daily_totals[$key] = 0;
+				$daily_totals[$key] += $day['points'];
+			}
+
 		}
-	
+
+		foreach ($daily_totals as $day_total) {
+			$points += ($day_total > 1.5) ? 1.5 : $day_total;
+		}
+
+		foreach ($distributed_totals as $session_total) {
+			$points += ($session_total > 1.5) ? 1.5 : $session_total;
+		}
+
 	}
 
 	// Cannot exceed the maximum allowable points for judges for the competition
@@ -465,14 +467,14 @@ function judge_points($user_id,$judge_max_points) {
 
 function steward_points($user_id) {
 
-	/*
+	/**
 	 * To figure out steward points, need to assess:
 	 *  - Which sessions the steward was assigned to
 	 *  - Which day those sessions were on
 	 *  - For each day:
 	 *    - Determine how many sessions the steward was assigned to and award 0.5 points for each
-	 *    - Make sure that number is a minimum of 0.5 and a maximum of 1.0 for the entire competition
 	 *  - Sum up the daily points
+	 *  - Maximum of 1.0 points for the entire competition (BJCP states no daily minimum for stewards)
 	 */
 
 	require (CONFIG.'config.php');

@@ -2429,11 +2429,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $mead_cider_total = $mead_styles_total + $cider_styles_total;
             $all_styles_total = $beer_styles_total + $mead_styles_total + $cider_styles_total;
 
-            $total_entries_scored = get_entry_count("scored");
-
-            // Possiblity of more scored entries than marked as received. Slim, but could happen.
-            // Best to go with what has presumably been judged.
-            if ($total_entries_scored > $total_entries_received) $total_entries_received = $total_entries_scored;
+            // Get the number of entries for BJCP compliance reporting: judged
+            // entries take precedence whenever any judging has happened, falling back
+            // through received, then paid, then every entry on record. $total_entries_received
+            // keeps its name for the many downstream uses below (the <CompEntries> tag and
+            // the BOS 30-entry eligibility checks), but now holds this cascaded value.
+            $bjcp_entry_count = get_bjcp_entry_count($filter);
+            $total_entries_received = $bjcp_entry_count['count'];
 
             if ($total_entries_received >= 30) {
                 if (($beer_styles_total >= 5) || ($mead_cider_total >= 3)) $bos_judge_points = 0.5;
@@ -2618,7 +2620,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     foreach (array_unique($bos_judge_no_assignment) as $uid) {
 
-                        if (($total_entries_received >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
+                        if (($total_entries_received >= 30) && (($beer_styles_total >= 5) || ($mead_cider_total >= 3))) {
 
                             $judge_info = explode("^",brewer_info($uid));
                             $judge_bjcp_id = "";
@@ -2649,7 +2651,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                             } // end if (!empty($uid))
 
-                        } // end if (($total_entries_received >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3)))
+                        } // end if (($total_entries_received >= 30) && (($beer_styles_total >= 5) || ($mead_cider_total >= 3)))
 
                     } // end foreach
 
@@ -2840,40 +2842,52 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $a = array(1,2,3,4); 
                     
                     $bos_data = array();
-                    
-                    foreach ($a as $type) {
-                        
-                        $style_type_info = style_type_info($type,"default");
-                        $style_type_info = explode("^",$style_type_info);
-                        
-                        if ($style_type_info[0] == "Y") {
 
-                            if ($style_type_info[2] == "Mead/Cider") $mead_cider_combined = TRUE;
-    
-                            $query_bos = "SELECT id FROM ".$prefix."judging_scores";
-                            $params_bos = array();
-                            if ($mead_cider_combined) $query_bos .= " WHERE (scoreType='2' OR scoreType='3')";
-                            else { $query_bos .= " WHERE scoreType=?"; $params_bos[] = $type; }
-                            if ($style_type_info[1] == "1") $query_bos .= " AND scorePlace='1'";
-                            if ($style_type_info[1] == "2") $query_bos .= " AND (scorePlace='1' OR scorePlace='2')";
-                            if ($style_type_info[1] == "3") $query_bos .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3')";
-                            $rows_bos = (!empty($params_bos)) ? $db_conn->rawQuery($query_bos, $params_bos) : $db_conn->rawQuery($query_bos);
-                            $row_bos = ($rows_bos && count($rows_bos) > 0) ? $rows_bos[0] : null;
-                            $totalRows_bos = $db_conn->count;
+                    // The counts below are winners (1st/2nd/3rd place per category), which
+                    // exist for any competition once regular judging is scored - they say nothing
+                    // about whether a Best of Show panel actually ran. Many non-US competitions
+                    // don't judge BOS at all, so verify actual BOS scores exist before reporting
+                    // any BOS entry counts; otherwise every competition looks like it ran a BOS.
+                    $db_conn->get($prefix."judging_scores_bos".$archive_suffix, 1, "id");
+                    $bos_judging_occurred = ($db_conn->count > 0);
 
-                            if ($totalRows_bos > 0) {
+                    if ($bos_judging_occurred) {
 
-                                if ($type == 1) $bos_data['BOSBeer'] = $totalRows_bos;
-                                if ($mead_cider_combined) $bos_data['BOSMeadCider'] = $totalRows_bos;
-                                else {
-                                    if ($type == 2) $bos_data['BOSCider'] = $totalRows_bos;
-                                    if ($type == 3) $bos_data['BOSMead'] = $totalRows_bos;
+                        foreach ($a as $type) {
+
+                            $style_type_info = style_type_info($type,"default");
+                            $style_type_info = explode("^",$style_type_info);
+
+                            if ($style_type_info[0] == "Y") {
+
+                                if ($style_type_info[2] == "Mead/Cider") $mead_cider_combined = TRUE;
+
+                                $query_bos = "SELECT id FROM ".$prefix."judging_scores";
+                                $params_bos = array();
+                                if ($mead_cider_combined) $query_bos .= " WHERE (scoreType='2' OR scoreType='3')";
+                                else { $query_bos .= " WHERE scoreType=?"; $params_bos[] = $type; }
+                                if ($style_type_info[1] == "1") $query_bos .= " AND scorePlace='1'";
+                                if ($style_type_info[1] == "2") $query_bos .= " AND (scorePlace='1' OR scorePlace='2')";
+                                if ($style_type_info[1] == "3") $query_bos .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3')";
+                                $rows_bos = (!empty($params_bos)) ? $db_conn->rawQuery($query_bos, $params_bos) : $db_conn->rawQuery($query_bos);
+                                $row_bos = ($rows_bos && count($rows_bos) > 0) ? $rows_bos[0] : null;
+                                $totalRows_bos = $db_conn->count;
+
+                                if ($totalRows_bos > 0) {
+
+                                    if ($type == 1) $bos_data['BOSBeer'] = $totalRows_bos;
+                                    if ($mead_cider_combined) $bos_data['BOSMeadCider'] = $totalRows_bos;
+                                    else {
+                                        if ($type == 2) $bos_data['BOSCider'] = $totalRows_bos;
+                                        if ($type == 3) $bos_data['BOSMead'] = $totalRows_bos;
+                                    }
+
                                 }
 
                             }
 
                         }
-                    
+
                     }
 
                     $st_running_total = 0;
@@ -2972,7 +2986,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     // Loner BOS Judges (no assignment to any table)
                     foreach (array_unique($bos_judge_no_assignment) as $uid) {
                         
-                        if (($total_entries_received >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
+                        if (($total_entries_received >= 30) && (($beer_styles_total >= 5) || ($mead_cider_total >= 3))) {
                             
                             $judge_info = explode("^",brewer_info($uid));
 
@@ -3194,7 +3208,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     // Loner BOS Judges (no assignment to any table) WITHOUT properly formatted BJCP IDs
                     foreach (array_unique($bos_judge_no_assignment) as $uid) {
                         
-                        if (($total_entries_received >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
+                        if (($total_entries_received >= 30) && (($beer_styles_total >= 5) || ($mead_cider_total >= 3))) {
 
                             $judge_info = explode("^",brewer_info($uid));
 

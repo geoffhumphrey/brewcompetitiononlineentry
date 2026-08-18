@@ -2586,6 +2586,30 @@ function get_entry_count($method,$filter="") {
 	return $r;
 }
 
+/**
+ * BJCP's canonical "how many entries does this competition have" figure,
+ * used for both the exported XML report and the BOS judge-points 30-entry
+ * threshold: for the purposes of this app, judged entries take precedence 
+ * if any exist, else received, else paid, else every entry on record.
+ *
+ * @return array{count: int, basis: string} basis is "judged"|"received"|"paid"|"total"
+ */
+function get_bjcp_entry_count($filter = "default") {
+
+	$judged = get_entry_count("scored", $filter);
+	if ($judged > 0) return array('count' => $judged, 'basis' => 'judged');
+
+	$received = get_entry_count("received", $filter);
+	if ($received > 0) return array('count' => $received, 'basis' => 'received');
+
+	$paid = get_entry_count("paid", $filter);
+	if ($paid > 0) return array('count' => $paid, 'basis' => 'paid');
+
+	$total = get_entry_count("none", $filter);
+	return array('count' => $total, 'basis' => 'total');
+
+}
+
 function get_evaluation_count($method,$table_id="default") {
 
 	require(CONFIG.'config.php');
