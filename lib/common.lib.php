@@ -33,6 +33,21 @@ function h($value) {
 }
 
 /**
+ * Canonical normalization for an email address used as a login username.
+ * Must produce byte-identical output everywhere a username is captured,
+ * stored, or looked up (registration, login, password reset, archive/reset,
+ * etc.) - matches the pipeline already used at registration (process_users_register.inc.php).
+ * Using sterilize() (HTML-entity encoding, meant for values headed to HTML
+ * output) instead of this anywhere in that chain makes the stored value and
+ * the lookup value diverge for any address containing & < > " ' or non-ASCII
+ * characters, or for capitalization differences - silently locking the
+ * account out rather than raising a clear error.
+ */
+function normalize_email_username($value) {
+	return strtolower(trim(filter_var((string) $value, FILTER_SANITIZE_EMAIL)));
+}
+
+/**
  * Checks whether any field affected by the historical purify()-then-sterilize() double/triple
  * HTML-entity-encoding bug (see cleanup_double_encoding.php) still holds un-cleaned data. The
  * fingerprint substrings below (e.g. "&amp;amp;") only ever result from that bug - a single,

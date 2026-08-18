@@ -10,8 +10,11 @@ header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
-$loginUsername = sterilize($_POST['loginUsername']);
-$entered_password = sterilize($_POST['loginPassword']);
+// Credential fields must never be transformed - sterilize() HTML-encodes
+// special characters for output, which would make the value compared here
+// diverge from what was actually hashed/stored at registration.
+$loginUsername = normalize_email_username($_POST['loginUsername']);
+$entered_password = (string) $_POST['loginPassword'];
 $location = $base_url."index.php?section=login";
 
 if (strlen($entered_password) > 72) {
@@ -19,8 +22,6 @@ if (strlen($entered_password) > 72) {
 	header(sprintf("Location: %s", $base_url."index.php?msg=11"));
 	exit;
 }
-
-$loginUsername = strtolower($loginUsername);
 
 /**
  * ONLY for 1.3.0.0 release; evaluate for deletion in future releases

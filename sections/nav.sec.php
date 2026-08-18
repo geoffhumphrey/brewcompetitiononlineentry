@@ -394,7 +394,7 @@ $(document).ready(function(){
             <li id="user-menu-enable" class="dropdown">
                 <a href="#" class="my-dropdown" data-toggle="dropdown"><span class="fa fa-user"></span> <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                	<li class="dropdown-header"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && (!empty($_SESSION['brewerBreweryName']))) echo $_SESSION['brewerBreweryName']; else echo $_SESSION['loginUsername']; ?></strong></li>
+                	<li class="dropdown-header"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && (!empty($_SESSION['brewerBreweryName']))) echo h($_SESSION['brewerBreweryName']); else echo h($_SESSION['loginUsername']); ?></strong></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>
                     <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1"><?php echo $label_edit_account; ?></a></li>

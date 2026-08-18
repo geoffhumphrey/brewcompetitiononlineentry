@@ -3,6 +3,7 @@
 ob_start();
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
+require(CLASSES.'is_email/is_email.php');
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
 error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
@@ -17,8 +18,8 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 	if ((isset($_POST['user_name'])) && (strlen($_POST['user_name']) >= 3)) {
 
-		$user_name = strtolower(sterilize($_POST['user_name']));
-		$user_name = filter_var($user_name, FILTER_VALIDATE_EMAIL);
+		$user_name = normalize_email_username($_POST['user_name']);
+		if (!is_email($user_name)) $user_name = false;
 
 		$db_conn->where("user_name",$user_name);
 		$user = $db_conn->getOne ($prefix."users");

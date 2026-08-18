@@ -68,7 +68,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	$confirm_to_email_address = "PayPal IPN Confirmation <".$paypal_email_address.">";
 	$confirm_to_email_address = mb_convert_encoding($confirm_to_email_address, "UTF-8");
 
-	$confirm_from_email_address = $row_logo['contestName']." Server <".$from_email.">";
+	$confirm_from_email_address = mime_encode_header_name($row_logo['contestName']." Server")." <".$from_email.">";
 
 	if (!isset($mail_use_smtp)) $mail_use_smtp = FALSE;
 
@@ -170,7 +170,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 
 			$to_email = filter_var($row_user_info['brewerEmail'],FILTER_SANITIZE_EMAIL);
 			$to_email = mb_convert_encoding($to_email, "UTF-8");
-			$to_email_formatted = $to_recipient." <".$to_email.">";
+			$to_email_formatted = mime_encode_header_name($to_recipient)." <".$to_email.">";
 
 			$from_email = filter_var($from_email,FILTER_SANITIZE_EMAIL);
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
@@ -181,11 +181,13 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 
 			$cc_email = mb_convert_encoding($data['payer_email'], "UTF-8");
 
+			$from_name = html_entity_decode($row_logo['contestName'])." Server";
+
 			$headers  = "MIME-Version: 1.0"."\r\n";
 			$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-			$headers .= "From: ".html_entity_decode($row_logo['contestName'])." Server <".$from_email.">"."\r\n";
-			$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
-			$headers .= "Bcc: ".$cc_recipient. " <".$cc_email.">"."\r\n";
+			$headers .= "From: ".mime_encode_header_name($from_name)." <".$from_email.">"."\r\n";
+			$headers .= "Reply-To: ".mime_encode_header_name($from_name)." <".$from_email.">"."\r\n";
+			$headers .= "Bcc: ".mime_encode_header_name($cc_recipient)." <".$cc_email.">"."\r\n";
 
 			$message_top = "";
 			$message_body = "";

@@ -36,6 +36,7 @@ if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUserna
 	$verify_form_display = TRUE;
 	if ($username == "default") $username_check = $_POST['loginUsername'];
 	else $username_check = $username;
+	$username_check = normalize_email_username($username_check);
 
 	$db_conn->where("user_name", $username_check);
 	$row_userCheck = $db_conn->getOne($prefix."users");
@@ -179,7 +180,7 @@ echo $primary_links;
 				<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_submit; ?></button>
 			</div>
 		</div><!-- Form Group -->
-	<input type="hidden" name="loginUsername" value="<?php echo $username_check; ?>">
+	<input type="hidden" name="loginUsername" value="<?php echo h($username_check); ?>">
 	</form>
 <?php 
 	} // end if ((empty($message2)) || (empty($msg)))

@@ -80,10 +80,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!isset($_POST['keepParticipants'])) {
 
 			// Gather current User's information from the current "users" AND current "brewer" tables and store in variables
-			$db_conn->where("user_name", sterilize($_SESSION['loginUsername']));
+			// $_SESSION['loginUsername'] and the fetched user_name are already the canonical
+			// stored value - sterilize() would HTML-encode them and break this lookup for any
+			// address containing & < > " ' or non-ASCII characters.
+			$db_conn->where("user_name", $_SESSION['loginUsername']);
 			$row_user = $db_conn->getOne($prefix."users");
 
-			$user_name = sterilize($row_user['user_name']);
+			$user_name = $row_user['user_name'];
 			$user_password = $row_user['password'];
 			$userLevel = $row_user['userLevel'];
 			$userQuestion = $purifier->purify($row_user['userQuestion']);
@@ -518,7 +521,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$_SESSION['prefs'.$prefix_session] = "1";
 				$_SESSION['prefix'] = $prefix;
 
-				$db_conn->where("user_name", sterilize($_SESSION['loginUsername']));
+				$db_conn->where("user_name", $_SESSION['loginUsername']);
 				$row_user = $db_conn->getOne($prefix."users");
 
 				$_SESSION['user_id'] = $row_user['id'];

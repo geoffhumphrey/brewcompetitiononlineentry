@@ -434,7 +434,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$totalRows_user = $db_conn->count;
 		$row_user = $user_result ? $user_result[0] : null;
 
-		$brewerEmail = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
+		// Lowercased to match the canonical pipeline used everywhere else user_name is
+		// written (registration, setup, admin add/edit) - without it, a mixed-case email
+		// entered here would store a user_name that login's normalization can never match.
+		$brewerEmail = normalize_email_username($_POST['brewerEmail']);
 		$uid = sterilize($_POST['uid']);
 
 		if ($totalRows_user == 0) {
@@ -534,7 +537,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	// --------------------------------------- Editing a Participant ----------------------------------------
 	if ($action == "edit") {
 
-		$brewerEmail = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
+		// Kept lowercased/consistent with the "add" path above, so this never drifts out
+		// of sync with the matching users.user_name value used for login.
+		$brewerEmail = normalize_email_username($_POST['brewerEmail']);
 		$uid = sterilize($_POST['uid']);
 
 		// Check for and clear assignments in staff DB table and judge assignments table if entrant

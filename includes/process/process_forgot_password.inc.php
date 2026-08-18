@@ -6,8 +6,7 @@ $hasher = new PasswordHash(8, false);
 
 if ($action == "reset") {
 
-	$user_name = sterilize($_POST['loginUsername']);
-	$user_name = filter_var($user_name, FILTER_SANITIZE_EMAIL);
+	$user_name = normalize_email_username($_POST['loginUsername']);
 	
 	// First, check if the sanitized email entered corresponds to the token provided
 	$db_conn->where('user_name', $user_name);
@@ -27,10 +26,10 @@ if ($action == "reset") {
 		
 		// Check and see if both entered passwords match
 		// If so, hash and insert hash into DB
-		if ((sterilize($_POST['newPassword1']) == sterilize($_POST['newPassword2']))) {
-			
+		if (((string) $_POST['newPassword1'] === (string) $_POST['newPassword2'])) {
+
 			// Hash
-			$hash = password_hash(sterilize($_POST['newPassword1']), PASSWORD_BCRYPT);
+			$hash = password_hash($_POST['newPassword1'], PASSWORD_BCRYPT);
 
 			// Insert the hash into the database
 			$update_table = $prefix."users";

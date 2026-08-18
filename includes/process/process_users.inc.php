@@ -294,8 +294,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		if ($go == "password") {
 
 			// Check if old password is correct; if not redirect
-			$password_old = sterilize($_POST['passwordOld']);
-			$password_new = sterilize($_POST['password']);
+			$password_old = (string) $_POST['passwordOld'];
+			$password_new = (string) $_POST['password'];
 
 			$db_conn->where("id", $id);
 			$row_userPass = $db_conn->getOne($users_db_table, "password");
@@ -336,7 +336,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		// --------------------------- If an admin is changing their password ------------------------------- //
 		if (($go == "change_user_password") && ($_SESSION['userLevel'] <= 1)) {
 
-			$hash_new = password_hash(sterilize($_POST['password']), PASSWORD_BCRYPT);
+			$hash_new = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
 			$update_table = $prefix."users";
 			$data = array(

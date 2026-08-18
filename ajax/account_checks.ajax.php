@@ -160,7 +160,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 				$to_name = $first_name." ".$last_name;
 				$to_name = html_entity_decode($to_name);
 				$to_name = mb_convert_encoding($to_name, "UTF-8");
-				$to_email_formatted = $to_name." <".$to_email.">";
+				$to_email_formatted = mime_encode_header_name($to_name)." <".$to_email.">";
 				
 				$subject = sprintf("%s: %s",$contestName,"Password Reset Request");
 				$subject = html_entity_decode($subject);
@@ -185,8 +185,8 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 				$headers  = "MIME-Version: 1.0"."\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-				$headers .= "From: ".$from_name." Server <".$from_email.">"."\r\n";
-				$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
+				$headers .= "From: ".mime_encode_header_name($from_name)." <".$from_email.">"."\r\n";
+				$headers .= "Reply-To: ".mime_encode_header_name($from_name)." <".$from_email.">"."\r\n";
 
 				/*
 				echo "<pre>".htmlspecialchars($headers)."</pre>";
