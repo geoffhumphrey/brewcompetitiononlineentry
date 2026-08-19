@@ -758,11 +758,16 @@ class MysqliDb
             return $this;
         }
 
-        $stmt->execute();
-        $this->_stmtError = $stmt->error;
-        $this->_stmtErrno = $stmt->errno;
-        $res = $this->_dynamicBindResults($stmt);
-        $this->reset();
+        try {
+            $stmt->execute();
+            $this->_stmtError = $stmt->error;
+            $this->_stmtErrno = $stmt->errno;
+            $res = $this->_dynamicBindResults($stmt);
+        } finally {
+            // Always clear bind/where state, even when execute() or result
+            // binding throws, so a failed query cannot poison the next one.
+            $this->reset();
+        }
 
         return $res;
     }
@@ -1973,7 +1978,14 @@ class MysqliDb
      */
     protected function _prepareQuery()
     {
-        $stmt = $this->mysqli()->prepare($this->_query);
+        try {
+            $stmt = $this->mysqli()->prepare($this->_query);
+        } catch (mysqli_sql_exception $e) {
+            // Strict mysqli mode throws before the $stmt === false path below
+            // can run; leave the instance clean for the next query.
+            $this->reset();
+            throw $e;
+        }
 
         if ($stmt !== false) {
             if ($this->traceEnabled)
