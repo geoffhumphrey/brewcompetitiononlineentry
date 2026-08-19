@@ -298,33 +298,33 @@ if ((isset($_SESSION['loginUsername'])) && ((!isset($_SESSION['user_info'.$prefi
 				foreach ($row_user as $key => $value) {
 					if ($key != "id") $_SESSION[$key] = $value;
 				}
+				
+				$_SESSION['user_id'] = $row_user['id'];
 
-			}
+				$db_conn->where ('uid', $row_user['id']);
+				$row_name = $db_conn->getOne ($prefix."brewer");
+				$totalRows_name = $db_conn->count; 
 
-		    $_SESSION['user_id'] = $row_user['id'];
+				/*
+				$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
+				$brewer_name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
+				$row_name = mysqli_fetch_assoc($brewer_name);
+				*/
+				
+				if ($totalRows_name > 0) {
 
-		    $db_conn->where ('uid', $row_user['id']);
-			$row_name = $db_conn->getOne ($prefix."brewer");
-			$totalRows_name = $db_conn->count; 
+					$name_columns = array_keys($row_name);
 
-			/*
-			$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
-			$brewer_name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
-			$row_name = mysqli_fetch_assoc($brewer_name);
-			*/
+					foreach ($row_name as $key => $value) {
+						if ($key != "id") $_SESSION[$key] = $value;
+					}
 
-			if ($totalRows_name > 0) {
-
-				$name_columns = array_keys($row_name);
-
-			    foreach ($row_name as $key => $value) {
-					if ($key != "id") $_SESSION[$key] = $value;
+					$_SESSION['brewerID'] = $row_name['id'];
 				}
 
-			}
+				$_SESSION['user_info'.$prefix_session] = $prefix_session;
 
-		    $_SESSION['brewerID'] = $row_name['id'];
-			$_SESSION['user_info'.$prefix_session] = $prefix_session;
+			}
 
 		}
 
