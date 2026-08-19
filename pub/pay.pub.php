@@ -93,7 +93,7 @@ else {
 	if (($_SESSION['prefsTransFee'] == "Y") && ($total_to_pay_user > 0)) $primary_page_info .= "<strong><span class=\"text-primary-emphasis\">*</span></strong>";
 	$primary_page_info .= ".</small></p>";
 
-	if (($total_not_paid == 0) || ($total_to_pay_user == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"me-1 fa fa-fw fa-lg fa-check-circle text-success-emphasis\"></span> %s</p></small></p>",$pay_text_010);
+	if (($total_not_paid === 0) || ($total_to_pay_user == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"me-1 fa fa-fw fa-lg fa-check-circle text-success-emphasis\"></span> %s</p></small></p>",$pay_text_010);
 
 
 	else {
@@ -151,10 +151,10 @@ else {
 			 * deducted from the paid total.
 			 * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1317
 			 */
-			
+
 			if ($_SESSION['prefsTransFee'] == "Y") {
-				
-				$pp_fixed_fees_arr = array(
+
+				$pp_fixed_fees_arr = [
 					"$" => 0.49,
 					"R$" => 2.90,
 					"pound" => 0.39,
@@ -178,7 +178,7 @@ else {
 					"skr" => 4.09,
 					"sfranc" => 0.49,
 					"baht" => 15.00,
-				);
+				];
 
 				if ((isset($_SESSION['prefsCurrency'])) && (array_key_exists($_SESSION['prefsCurrency'],$pp_fixed_fees_arr))) $pp_fixed_fee = $pp_fixed_fees_arr[$_SESSION['prefsCurrency']];
 				else $pp_fixed_fee = 0;
@@ -194,7 +194,7 @@ else {
 			// Online
 			$header1_3 .= "<h3>PayPal</h3>";
 			$header1_3 .= "<h4 class=\"text-primary-emphasis\"><i class=\"fa-brands fa-paypal me-2\"></i><i class=\"fa fa-credit-card me-2\"></i><i class=\"fa fa-money-check me-2\"></i><i class=\"fa-brands fa-cc-visa me-2\"></i><i class=\"fa-brands fa-cc-mastercard me-2\"></i><i class=\"fa-brands fa-cc-discover me-2\"></i><i class=\"fa-brands fa-cc-amex me-2\"></i></h4>";
-			
+
 			$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$paypal_env."\" method=\"post\">\n";
 			$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
 			$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n";
@@ -233,7 +233,7 @@ else {
 			$page_info4 .= "<div class=\"modal-dialog\">";
 			$page_info4 .= "<div class=\"modal-content\">";
 			$page_info4 .= "<div class=\"modal-header\">";
-			
+
 
 			if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $page_info4 .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_031);
 			else $page_info4 .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_022);
@@ -259,7 +259,7 @@ else {
 
 	}
 
-	if (($row_brewer['brewerDiscount'] != "Y") && ($_SESSION['contestEntryFeePassword'] != "") && ((($total_entry_fees_user > 0) && ($total_entry_fees_user != $total_paid_entry_fees_user)))) {
+	if (($row_brewer['brewerDiscount'] != "Y") && ($_SESSION['contestEntryFeePassword'] != "") && ((($total_entry_fees_user > 0) && ($total_entry_fees_user !== $total_paid_entry_fees_user)))) {
 		$header1_7 .= sprintf("<a name=\"pay-verify\"></a><h3>%s</h3>",$label_fee_discount);
 		$page_info7 .= sprintf("<p>%s</p>",$pay_text_023);
 		$page_info7 .= sprintf("<form action=\"%sincludes/process.inc.php?action=check_discount&amp;dbTable=%s&amp;id=%s\" method=\"POST\" name=\"form1\" id=\"form1\">",$base_url,$brewer_db_table,$row_brewer['uid']);
@@ -304,7 +304,7 @@ else {
 		echo $header1_2;
 		echo $page_info2;
 		echo "</div>";
-		
+
 	} // end if ($total_entry_fees_user > 0)
 
 

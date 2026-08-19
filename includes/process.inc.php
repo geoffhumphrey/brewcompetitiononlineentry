@@ -9,7 +9,7 @@ ob_start();
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '0');
 
-require ('../paths.php');
+require (__DIR__ . '/../paths.php');
 require (INCLUDES.'url_variables.inc.php');
 require (INCLUDES.'styles.inc.php');
 include (INCLUDES.'scrubber.inc.php');
@@ -100,7 +100,7 @@ if ((isset($_SESSION['prefsSEF'])) && ($_SESSION['prefsSEF'] == "Y")) $sef = TRU
  */
 
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
-$bypass_token = array("login","logout","forgot","reset","paypal");
+$bypass_token = ["login","logout","forgot","reset","paypal"];
 
 if (($request_method === "POST") && (!in_array($action,$bypass_token))) {
 
@@ -166,7 +166,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	
 	if (isset($_POST['relocate'])) {
 
-		if (strpos($_POST['relocate'],"?") === false) {
+		if (!str_contains($_POST['relocate'],"?")) {
 			$insertGoTo .= $_POST['relocate']."?msg=1";
 			$updateGoTo .= $_POST['relocate']."?msg=2";
 			$errorGoTo .= $_POST['relocate']."?msg=3";
@@ -267,7 +267,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 		if (sterilize($_POST['brewerDiscount']) == $contestEntryFeePassword) {
 			$db_conn->where('uid', $id);
-			$result = $db_conn->update($brewer_db_table, array('brewerDiscount' => 'Y'));
+			$result = $db_conn->update($brewer_db_table, ['brewerDiscount' => 'Y']);
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&bid=".$id."&msg=15");
 		}
 
@@ -289,7 +289,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
 
 			$db_conn->where('id', '1');
-			$result = $db_conn->update($prefix."preferences", array('prefsStyleSet' => 'BJCP2015'));
+			$result = $db_conn->update($prefix."preferences", ['prefsStyleSet' => 'BJCP2015']);
 
 		}
 
@@ -298,7 +298,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
 
 			$db_conn->where('id', '1');
-			$result = $db_conn->update($prefix."preferences", array('prefsStyleSet' => 'BJCP2021'));
+			$result = $db_conn->update($prefix."preferences", ['prefsStyleSet' => 'BJCP2021']);
 
 		}
 
@@ -307,7 +307,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			include (INCLUDES.'convert/convert_bjcp_2025.inc.php');
 
 			$db_conn->where('id', '1');
-			$result = $db_conn->update($prefix."preferences", array('prefsStyleSet' => 'BJCP2025'));
+			$result = $db_conn->update($prefix."preferences", ['prefsStyleSet' => 'BJCP2025']);
 
 		}
 		
@@ -338,26 +338,26 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	elseif ($action == "publish") {
 
 		$db_conn->where('id', '1');
-		$result = $db_conn->update($prefix."preferences", array('prefsDisplayWinners' => 'Y', 'prefsWinnerDelay' => time()));
+		$result = $db_conn->update($prefix."preferences", ['prefsDisplayWinners' => 'Y', 'prefsWinnerDelay' => time()]);
 
 		if ($_SESSION['contestRegistrationDeadline'] > time()) {
 			$db_conn->where('id', '1');
-			$result = $db_conn->update($prefix."contest_info", array('contestRegistrationDeadline' => time()));
+			$result = $db_conn->update($prefix."contest_info", ['contestRegistrationDeadline' => time()]);
 		}
 
 		if ($_SESSION['contestEntryDeadline'] > time()) {
 			$db_conn->where('id', '1');
-			$result = $db_conn->update($prefix."contest_info", array('contestEntryDeadline' => time()));
+			$result = $db_conn->update($prefix."contest_info", ['contestEntryDeadline' => time()]);
 		}
 
 		if ($_SESSION['contestJudgeDeadline'] > time()) {
 			$db_conn->where('id', '1');
-			$result = $db_conn->update($prefix."contest_info", array('contestJudgeDeadline' => time()));
+			$result = $db_conn->update($prefix."contest_info", ['contestJudgeDeadline' => time()]);
 		}
 
 		if ($_SESSION['jPrefsJudgingClosed'] > time()) {
 			$db_conn->where('id', '1');
-			$result = $db_conn->update($prefix."judging_preferences", array('jPrefsJudgingClosed' => time()));
+			$result = $db_conn->update($prefix."judging_preferences", ['jPrefsJudgingClosed' => time()]);
 		}
 
 		$rows_judging_locations = $db_conn->get($prefix."judging_locations", null, "id,judgingDate");
@@ -371,7 +371,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 				if ($row_judging_locations['judgingDate'] > time()) {
 
 					$db_conn->where('id', $row_judging_locations['id']);
-					$result = $db_conn->update($prefix."judging_locations", array('judgingDate' => time()));
+					$result = $db_conn->update($prefix."judging_locations", ['judgingDate' => time()]);
 
 				}
 
@@ -380,7 +380,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		}
 
 		$db_conn->where('judgingLocType', '1');
-		$result = $db_conn->update($prefix."judging_locations", array('judgingDateEnd' => time()));
+		$result = $db_conn->update($prefix."judging_locations", ['judgingDateEnd' => time()]);
 
 		if (session_status() === PHP_SESSION_NONE) {
 			session_name($prefix_session);

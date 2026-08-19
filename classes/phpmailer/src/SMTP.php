@@ -418,7 +418,7 @@ class SMTP
         if ($streamok) {
             $socket_context = stream_context_create($options);
             set_error_handler(function () {
-                call_user_func_array([$this, 'errorHandler'], func_get_args());
+                call_user_func_array($this->errorHandler(...), func_get_args());
             });
             $connection = stream_socket_client(
                 $host . ':' . $port,
@@ -435,7 +435,7 @@ class SMTP
                 self::DEBUG_CONNECTION
             );
             set_error_handler(function () {
-                call_user_func_array([$this, 'errorHandler'], func_get_args());
+                call_user_func_array($this->errorHandler(...), func_get_args());
             });
             $connection = fsockopen(
                 $host,
@@ -466,10 +466,10 @@ class SMTP
 
         //SMTP server can take longer to respond, give longer timeout for first read
         //Windows does not have support for this timeout function
-        if (strpos(PHP_OS, 'WIN') !== 0) {
+        if (!str_starts_with(PHP_OS, 'WIN')) {
             $max = (int)ini_get('max_execution_time');
             //Don't bother if unlimited, or if set_time_limit is disabled
-            if (0 !== $max && $timeout > $max && strpos(ini_get('disable_functions'), 'set_time_limit') === false) {
+            if (0 !== $max && $timeout > $max && !str_contains(ini_get('disable_functions'), 'set_time_limit')) {
                 @set_time_limit($timeout);
             }
             stream_set_timeout($connection, $timeout, 0);
@@ -503,7 +503,7 @@ class SMTP
 
         //Begin encrypted connection
             set_error_handler(function () {
-                call_user_func_array([$this, 'errorHandler'], func_get_args());
+                call_user_func_array($this->errorHandler(...), func_get_args());
             });
         $crypto_ok = stream_socket_enable_crypto(
             $this->smtp_conn,
@@ -673,7 +673,7 @@ class SMTP
                     }
                     //If the server answers with 334, send an empty line and wait for a 235
                     if (
-                        substr($this->last_reply, 0, 3) === '334'
+                        str_starts_with($this->last_reply, '334')
                         && $this->sendCommand('AUTH End', '', 235)
                     ) {
                         return false;
@@ -808,7 +808,7 @@ class SMTP
 
         $field = substr($lines[0], 0, strpos($lines[0], ':'));
         $in_headers = false;
-        if (!empty($field) && strpos($field, ' ') === false) {
+        if (!empty($field) && !str_contains($field, ' ')) {
             $in_headers = true;
         }
 
@@ -884,7 +884,7 @@ class SMTP
         }
 
         //Some servers shut down the SMTP service here (RFC 5321)
-        if (substr($this->helo_rply, 0, 3) == '421') {
+        if (str_starts_with($this->helo_rply, '421')) {
             return false;
         }
 
@@ -933,7 +933,7 @@ class SMTP
                 continue;
             }
             $fields = explode(' ', $s);
-            if (!empty($fields)) {
+            if ($fields !== []) {
                 if (!$n) {
                     $name = $type;
                     $fields = $fields[0];
@@ -1030,11 +1030,11 @@ class SMTP
             $dsn = strtoupper($dsn);
             $notify = [];
 
-            if (strpos($dsn, 'NEVER') !== false) {
+            if (str_contains($dsn, 'NEVER')) {
                 $notify[] = 'NEVER';
             } else {
                 foreach (['SUCCESS', 'FAILURE', 'DELAY'] as $value) {
-                    if (strpos($dsn, $value) !== false) {
+                    if (str_contains($dsn, $value)) {
                         $notify[] = $value;
                     }
                 }
@@ -1098,7 +1098,7 @@ class SMTP
             return false;
         }
         //Reject line breaks in all commands
-        if ((strpos($commandstring, "\n") !== false) || (strpos($commandstring, "\r") !== false)) {
+        if ((str_contains($commandstring, "\n")) || (str_contains($commandstring, "\r"))) {
             $this->setError("Command '$command' contained line breaks");
 
             return false;
@@ -1230,7 +1230,7 @@ class SMTP
             $this->edebug('CLIENT -> SERVER: ' . $data, self::DEBUG_CLIENT);
         }
         set_error_handler(function () {
-            call_user_func_array([$this, 'errorHandler'], func_get_args());
+            call_user_func_array($this->errorHandler(...), func_get_args());
         });
         $result = fwrite($this->smtp_conn, $data);
         restore_error_handler();
@@ -1335,7 +1335,7 @@ class SMTP
             //Must pass vars in here as params are by reference
             //solution for signals inspired by https://github.com/symfony/symfony/pull/6540
             set_error_handler(function () {
-                call_user_func_array([$this, 'errorHandler'], func_get_args());
+                call_user_func_array($this->errorHandler(...), func_get_args());
             });
             $n = stream_select($selR, $selW, $selW, $this->Timelimit);
             restore_error_handler();

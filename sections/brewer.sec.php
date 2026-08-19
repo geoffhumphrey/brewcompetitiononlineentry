@@ -157,7 +157,7 @@ foreach ($us_state_abbrevs_names as $key => $value) {
         $us_state = strtolower($value);
         $us_state_abb = strtolower($key);
         $us_state_user = strtolower($row_brewer['brewerState']);
-        if (($row_brewer['brewerState'] == $key) || ($us_state == $us_state_user) || ($us_state_abb == $us_state_user)) $us_state_select .= "SELECTED";
+        if (($row_brewer['brewerState'] == $key) || ($us_state === $us_state_user) || ($us_state_abb === $us_state_user)) $us_state_select .= "SELECTED";
     }
     $us_state_select .= ">";
     $us_state_select .= $value." [".$key."]</option>\n";
@@ -170,7 +170,7 @@ foreach ($ca_state_abbrevs_names as $key => $value) {
         $ca_state = strtolower($value);
         $ca_state_abb = strtolower($key);
         $ca_state_user = strtolower($row_brewer['brewerState']);
-        if (($row_brewer['brewerState'] == $key) || ($ca_state == $ca_state_user) || ($ca_state_abb == $ca_state_user)) $ca_state_select .= "SELECTED";
+        if (($row_brewer['brewerState'] == $key) || ($ca_state === $ca_state_user) || ($ca_state_abb === $ca_state_user)) $ca_state_select .= "SELECTED";
     }
     $ca_state_select .= ">";
     $ca_state_select .= $value." [".$key."]</option>\n";
@@ -183,7 +183,7 @@ foreach ($aus_state_abbrevs_names as $key => $value) {
         $aus_state = strtolower($value);
         $aus_state_abb = strtolower($key);
         $aus_state_user = strtolower($row_brewer['brewerState']);
-        if (($row_brewer['brewerState'] == $key) || ($aus_state == $aus_state_user) || ($aus_state_abb == $aus_state_user)) $aus_state_select .= "SELECTED";
+        if (($row_brewer['brewerState'] == $key) || ($aus_state === $aus_state_user) || ($aus_state_abb === $aus_state_user)) $aus_state_select .= "SELECTED";
     }
     $aus_state_select .= ">";
     $aus_state_select .= $value." [".$key."]</option>\n";
@@ -212,25 +212,25 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
         $a = explode(",", $row_brewer['brewerJudgeLocation']); 
         $b = "N-".$row_judging3['id']; 
         foreach ($a as $value) { 
-            if ($value == $b) $location_no = " SELECTED"; 
+            if ($value === $b) $location_no = " SELECTED"; 
         }
 
         $c = explode(",", $row_brewer['brewerJudgeLocation']); 
         $d = "Y-".$row_judging3['id']; 
         foreach ($c as $value) { 
-            if ($value == $d) $location_yes = " SELECTED";
+            if ($value === $d) $location_yes = " SELECTED";
         }
 
         $e = explode(",", $row_brewer['brewerStewardLocation']); 
         $f = "N-".$row_judging3['id']; 
         foreach ($e as $value) { 
-            if ($value == $f) $location_steward_no = " SELECTED";
+            if ($value === $f) $location_steward_no = " SELECTED";
         }
 
         $g = explode(",", $row_brewer['brewerStewardLocation']); 
         $h = "Y-".$row_judging3['id']; 
         foreach ($g as $value) { 
-            if ($value == $h) $location_steward_yes = " SELECTED";
+            if ($value === $h) $location_steward_yes = " SELECTED";
         }
 
         if ($row_judging3['judgingLocType'] == 2) {

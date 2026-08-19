@@ -28,26 +28,26 @@ $table_assignment_entries = "";
 $dt_js = "";
 $assign_score_mismatch = "";
 $jscore_disparity = "";
-$assigned_score_mismatch = array();
-$judge_score_disparity = array();
-$table_places_alert = array();
+$assigned_score_mismatch = [];
+$judge_score_disparity = [];
+$table_places_alert = [];
 $places_alert = "";
 $dup_judge_evals_alert = "";
-$duplicate_judge_evals_alert = array();
-$entries_evaluated = array();
-$mini_bos_mismatch = array();
+$duplicate_judge_evals_alert = [];
+$entries_evaluated = [];
+$mini_bos_mismatch = [];
 $mini_bos_mismatch_alert = "";
 $total_evals_alert = "";
 $single_eval = "";
-$single_evaluation = array();
-$table_assignments_user = array();
+$single_evaluation = [];
+$table_assignments_user = [];
 $on_the_fly_display = "";
 $on_the_fly_display_tbody = "";
 $roles = "";
-$latest_submitted = array();
-$date_submitted = array();
-$latest_updated = array();
-$date_updated = array();
+$latest_submitted = [];
+$date_submitted = [];
+$latest_updated = [];
+$date_updated = [];
 $diff = 600; // Differential of seconds (10 minutes)
 $admin_add_eval = "";
 
@@ -137,10 +137,10 @@ $totalRows_table_assignments = $db_conn->count;
 $row_eval_sub = $db_conn->get($prefix."evaluation");
 $totalRows_eval_sub = $db_conn->count;
 
-$eval_scores = array();
-$eval_judge_evaluations = array();
-$eval_judge_tables = array();
-$eval_no_evaluations = array();
+$eval_scores = [];
+$eval_judge_evaluations = [];
+$eval_judge_tables = [];
+$eval_no_evaluations = [];
 
 if ($totalRows_eval_sub > 0) {
 
@@ -150,18 +150,18 @@ if ($totalRows_eval_sub > 0) {
 
 		if (!$admin) {
 			
-			$eval_judge_evaluations[] = array(
+			$eval_judge_evaluations[] = [
 				"entry_id" => $row_eval_sub['eid']
-			);
+			];
 
-			$eval_judge_tables[] = array(
+			$eval_judge_tables[] = [
 				"judge_id" => $row_eval_sub['evalJudgeInfo'],
 				"table_id" => $row_eval_sub['evalTable']
-			);
+			];
 
 		}
 
-		$eval_scores[] = array(
+		$eval_scores[] = [
 			"id" => $row_eval_sub['id'],
 			"eid" => $row_eval_sub['eid'],
 			"judge_id" => $row_eval_sub['evalJudgeInfo'],
@@ -174,7 +174,7 @@ if ($totalRows_eval_sub > 0) {
 			"date_updated" => $row_eval_sub['evalUpdatedDate'],
 			"scoresheet" => $row_eval_sub['evalScoresheet'],
 			"mini_bos" => $row_eval_sub['evalMiniBOS']
-		);
+		];
 
 	}
 	
@@ -189,11 +189,11 @@ $status_sidebar_js_timing = 0;
 
 if ($totalRows_table_assignments > 0) {
 
-	$table_assignment_start = array();
+	$table_assignment_start = [];
 
 	foreach ($row_table_assignments as $row_table_assignments) {
 
-		$table_places = array();
+		$table_places = [];
 		$table_places_display = "";
 		$disable_add_edit = FALSE;
 		$table_entries_count = 0;
@@ -203,13 +203,13 @@ if ($totalRows_table_assignments > 0) {
 		$flight_scored_entries_count = 0;
 		$user_flight_scored_entries_count = 0;
 		$table_assignment_stats = "";
-		$table_judges = array();
-		
+		$table_judges = [];
+
 		$tbl_id = $row_table_assignments['id'];
 		$tbl_name_disp = $row_table_assignments['tableName'];
 		$tbl_loc_disp = $row_table_assignments['tableLocation'];
 		$tbl_num_disp = $row_table_assignments['tableNumber'];
-		
+
 		$table_location = get_table_info($tbl_loc_disp,"location",$tbl_id,"default","default");
 		$table_location = explode("^", $table_location);
 
@@ -231,16 +231,16 @@ if ($totalRows_table_assignments > 0) {
 
 			$random = random_generator(7,2);
 			$assigned_judges = assigned_judges($tbl_id,$dbTable,$judging_assignments_db_table,1);
-			
+
 			$table_start_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $location_start_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 
 			if (isset($table_location[1])) {
 
 				if (empty($table_location[1])) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s <br><small>%s &#8226; %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time);
-				
+
 				else {
 					$table_end_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $table_location[1], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-					
+
 					if (time() < $table_location[1]) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s &#8226; %s %s %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time,$entry_info_text_001,$table_end_time);
 
 					else $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s &#8226; %s %s <span class=\"text-warning\">%s</span> - %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time,$entry_info_text_001,$table_end_time,strtolower($evaluation_info_028));
@@ -253,7 +253,7 @@ if ($totalRows_table_assignments > 0) {
 			$table_assignment_post = "";
 
 			if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 0)) || (!isset($_SESSION['jPrefsTablePlanning']))) {
-				
+
 				$table_assignment_pre .= "<table id=\"table-".$random."\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 				$table_assignment_pre .= "<thead>";
 				$table_assignment_pre .= "<tr>";
@@ -283,7 +283,7 @@ if ($totalRows_table_assignments > 0) {
 						]
 					});
 				";
-				
+
 				if ($admin) {
 					$a = explode(",", $row_table_assignments['tableStyles']);
 				}
@@ -297,7 +297,7 @@ if ($totalRows_table_assignments > 0) {
 					$a = explode(",", $row_tables['tableStyles']);
 
 				}
-				
+
 				sort($a);
 
 				foreach (array_unique($a) as $value) {
@@ -333,16 +333,16 @@ if ($totalRows_table_assignments > 0) {
 				        		$actions = "";
 				        		$eval_place_actions = "";
 				        		$count_evals = 0;
-				        		$assigned_score = array();
-				        		$judge_score = array();
-								$eval_places = array();
+				        		$assigned_score = [];
+				        		$judge_score = [];
+								$eval_places = [];
 								$eval_place = "";
 								$score_entry_data = score_entry_data($row_entries['id']);
 								$score_entry_data = explode("^",$score_entry_data);
-								$eval_all_judges = array();
-								$ordinal_position = array();
+								$eval_all_judges = [];
+								$ordinal_position = [];
 								$ord_position = "";
-								
+
 								// Classic
 								if ($row_judging_prefs['jPrefsScoresheet'] == 1) {
 									$output_form = "full-scoresheet";
@@ -376,9 +376,9 @@ if ($totalRows_table_assignments > 0) {
 										$output_form = "full-scoresheet";
 										$scoresheet_form = "full_scoresheet.eval.php";
 									}
-									
+
 								}
-								
+
 				        		$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 								$style_display = $style." ".$row_entries['brewStyle'];
 
@@ -393,7 +393,7 @@ if ($totalRows_table_assignments > 0) {
 								$sweetness_level_display = "";
 								$strength_display = "";
 								$additional_info = 0;
-								
+
 								if (!empty($row_entries['brewInfo'])) {
 									$additional_info++;
 									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= "<strong>".$label_regional_variation; 
@@ -415,14 +415,14 @@ if ($totalRows_table_assignments > 0) {
 
 									$additional_info++;
 									$sweetness_json = json_decode($row_entries['brewSweetnessLevel'],true);
-									
+
 									if (json_last_error() === JSON_ERROR_NONE) {
 
 										if (!empty($sweetness_json['OG'])) $sweetness_level_display .= "<li><strong>".$label_original_gravity.":</strong> ".$sweetness_json['OG']."</li>";
 										if (!empty($sweetness_json['FG'])) $sweetness_level_display .= "<li><strong>".$label_final_gravity.":</strong> ".$sweetness_json['FG']."</li>";
 
 									}
-									
+
 									else {
 										$sweetness_level_display .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
 									}
@@ -438,7 +438,7 @@ if ($totalRows_table_assignments > 0) {
 									$additional_info++;
 									$allergen_display .= "<strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens'];
 								}
-								
+
 								if (!empty($row_entries['brewABV'])) {
 									$additional_info++;
 									$abv_display .= "<strong>".$label_abv.":</strong> ".number_format($row_entries['brewABV'],1);
@@ -473,9 +473,9 @@ if ($totalRows_table_assignments > 0) {
 									$juice_src_disp = rtrim($juice_src_disp,", ");
 
 									$juice_src_display .= "<strong>".$label_juice_source.":</strong> ".$juice_src_disp;
-								
+
 								}
-								
+
 				        		// Admin: Entry Evaluations
 				        		if ($admin) {
 				        			$add_link = $base_url."index.php?section=admin&amp;go=evaluation&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
@@ -487,7 +487,7 @@ if ($totalRows_table_assignments > 0) {
 				        			$add_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
 				        			include (EVALS.'judging_dashboard.eval.php');
 				        		}
-					            
+
 					            // Build table data
 					            if (($judging_open) || ($admin) || ((!$judging_open) && ($scored_by_user))) {
 						            if ($add_disabled) $table_assignment_data .= "<tr class=\"text-muted\">";
@@ -497,7 +497,7 @@ if ($totalRows_table_assignments > 0) {
 						        	$table_assignment_data .= "<td class=\"hidden-xs\">";
 						        	$table_assignment_data .= $style_display;
 						        	$table_assignment_data .= "</td>";
-						        	
+
 						        	$table_assignment_data .= "<td>";
 						        	if ($additional_info > 0) {
 						        		$table_assignment_data .= "<small><ul class=\"list-unstyled\">";
@@ -521,11 +521,11 @@ if ($totalRows_table_assignments > 0) {
 
 						        // Check to see if any judges have more than one evaluation for this
 						        // entry. If so, add to duplicate judges alert array.
-						        if (!empty($eval_all_judges)) {
+						        if ($eval_all_judges !== []) {
 						        	$all_judges_count = array_count_values($eval_all_judges);
 						        	foreach ($all_judges_count as $key => $value) {
 						        		if ($value > 1) {
-						        			$duplicate_judge_evals_alert[] = array(
+						        			$duplicate_judge_evals_alert[] = [
 						        				"table_id" => $tbl_id,
 												"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
 												"id" => $row_entries['id'],
@@ -533,7 +533,7 @@ if ($totalRows_table_assignments > 0) {
 												"brewCategorySort" => $row_entries['brewCategorySort'],
 												"brewSubCategory" => $row_entries['brewSubCategory'],
 												"brewStyle" => $row_entries['brewStyle']
-						        			);
+						        			];
 						        		}
 						        	}
 						        }
@@ -547,7 +547,7 @@ if ($totalRows_table_assignments > 0) {
 				} // end foreach
 
 				if (empty($table_assignment_data)) $table_assignment_data .= "<tr><td colspan=\"4\">".$evaluation_info_016."</td></tr>";
-				
+
 				$table_assignment_post .= "</tbody>";
 				$table_assignment_post .= "</table>";
 
@@ -555,11 +555,11 @@ if ($totalRows_table_assignments > 0) {
 			}
 
 			// If places have been awarded at the table, but there are duplicates, list them for admins
-			if (($admin) && (!empty($table_places))) {
+			if (($admin) && ($table_places !== [])) {
 
-				$places_table_flag_arr = array();
+				$places_table_flag_arr = [];
 				$table_places_display_ul = "";
-				
+
 				foreach ($table_places as $key => $value) {
 					foreach ($value as $k => $v) {
 						$places_table_flag_arr[] = $v;
@@ -568,17 +568,17 @@ if ($totalRows_table_assignments > 0) {
 				}
 
 				if (($_SESSION['prefsWinnerMethod'] == "0") && (count(array_unique($places_table_flag_arr)) < count($places_table_flag_arr))) {
-					
+
 					$table_places_display .= "<div class=\"alert alert-danger\">";
 					$table_places_display .=sprintf("<p><strong><i class=\"fa fa-exclamation-circle\"></i> %s</strong></p><p>%s:</p>",$label_attention,ucfirst(strtolower($label_places_awarded_duplicate)));
 					$table_places_display .= "<ul id=\"places-awarded-table-".$tbl_id."\">";
 					$table_places_display .= $table_places_display_ul;
 					$table_places_display .= "</ul>";		
 					$table_places_display .= "</div>";
-					$table_places_alert[] = array(
+					$table_places_alert[] = [
 						"table_id" => $tbl_id,
 						"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
-					);
+					];
 
 				}
 
@@ -595,7 +595,7 @@ if ($totalRows_table_assignments > 0) {
 				 */
 
 				$table_scored_entries_count = get_evaluation_count("table-unique",$tbl_id);
-				
+
 				$tbl_name_disp = truncate($tbl_name_disp,"25","...");
 				$status_sidebar_timing = $status_sidebar_js_timing += 2000;
 				$status_sidebar_js .= sprintf("
@@ -626,7 +626,7 @@ if ($totalRows_table_assignments > 0) {
 				 * -------------------------------------------
 				 */
 
-				if ($table_entries_count == $table_scored_entries_count) {
+				if ($table_entries_count === $table_scored_entries_count) {
 					$table_assignment_stats .= "<div class=\"alert alert-success\">";
 					if ((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) {
 						$table_assignment_stats .= "<i class=\"fa fa-lg fa-info-circle\"></i> <strong>Tables Planning Mode enabled.</strong> Tables Competition Mode must be enabled view or entry evaluations at this table.";
@@ -634,7 +634,7 @@ if ($totalRows_table_assignments > 0) {
 					else $table_assignment_stats .= sprintf("<i class=\"fa fa-lg fa-check-circle\"></i> <strong>%s</strong>",$evaluation_info_037);
 					$table_assignment_stats .= "</div>";
 				}
-				
+
 				$table_assignment_stats .= "<div class=\"row small bcoem-account-info\">";
 				$table_assignment_stats .= "<div class=\"col col-lg-8 col-md-10 col-sm-12 col-xs-12\">";
 
@@ -643,15 +643,15 @@ if ($totalRows_table_assignments > 0) {
 				if ($assigned_judges > 0) {
 
 					$sql = "SELECT a.brewerFirstName,a.brewerLastName, b.assignment FROM ".$prefix."brewer"." a, ".$prefix."judging_assignments"." b WHERE b.assignTable=? AND a.uid = b.bid AND b.assignment='J' ORDER BY a.brewerLastName, a.brewerFirstName ASC";
-					$row_assigned_judge_names = $db_conn->rawQuery ($sql, array($tbl_id));
+					$row_assigned_judge_names = $db_conn->rawQuery ($sql, [$tbl_id]);
 					$totalRows_entries = $db_conn->count;
-					
+
 					foreach ($row_assigned_judge_names as $row_assigned_judge_names) {
 						$assigned_judge_names_display .= $row_assigned_judge_names['brewerFirstName']." ".$row_assigned_judge_names['brewerLastName'].", ";
 					}
 
 					$assigned_judge_names_display = rtrim($assigned_judge_names_display, ", ");
-				
+
 				}
 
 				$table_assignment_stats .= "<section class=\"row\">";
@@ -669,7 +669,7 @@ if ($totalRows_table_assignments > 0) {
 					$columns = array_column($table_judges, "tj_last_name");
 					array_multisort($columns, SORT_ASC, $table_judges);
 					$table_judges = array_unique($table_judges, SORT_REGULAR);
-					
+
 					$judge_names = "";
 					foreach ($table_judges as $key => $value) {
 						$judge_names .= $value['tj_first_name']." ".$value['tj_last_name'].", ";
@@ -716,7 +716,7 @@ if ($totalRows_table_assignments > 0) {
 			}
 
 			$table_assignment_entries .= $table_places_display.$table_assignment_stats.$table_assignment_pre.$table_assignment_data.$table_assignment_post;
-			
+
 		} // end if (time() > $table_location[0])
 
 	} 
@@ -736,7 +736,7 @@ if ($totalRows_table_assignments > 0) {
 	 */
 	
 	// Judge Score Disparity Alert
-	if (!empty($judge_score_disparity)) {
+	if ($judge_score_disparity !== []) {
 		$jscore_disparity .= "<div class=\"alert alert-warning alert-dismissible\">";
 		$jscore_disparity .= sprintf("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><p><strong><i class=\"fa fa-exclamation-circle\"></i> %s %s</strong></p><p> %s</p>",$label_attention,$evaluation_info_036,$evaluation_info_018);
 		$jscore_disparity .= "<ul>";
@@ -754,7 +754,7 @@ if ($totalRows_table_assignments > 0) {
 	}
 
 	// Assigned Score Mismatch Alert
-	if (!empty($assigned_score_mismatch)) {
+	if ($assigned_score_mismatch !== []) {
 		$assign_score_mismatch .= "<div class=\"alert alert-warning alert-dismissible\">";
 		$assign_score_mismatch .= sprintf("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><p><strong><i class=\"fa fa-exclamation-circle\"></i> %s %s</strong></p><p> %s</p>",$label_attention,$evaluation_info_017,$evaluation_info_018);
 		$assign_score_mismatch .= "<ul>";
@@ -772,7 +772,7 @@ if ($totalRows_table_assignments > 0) {
 	}
 
 	// Build assigned score mismatch alert
-	if (!empty($duplicate_judge_evals_alert)) {
+	if ($duplicate_judge_evals_alert !== []) {
 		$dup_judge_evals_alert .= "<div class=\"alert alert-warning alert-dismissible\">";
 		$dup_judge_evals_alert .= sprintf("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><p><strong><i class=\"fa fa-exclamation-circle\"></i> %s %s</strong> %s</p><p> %s</p>",$label_attention,$evaluation_info_032,$evaluation_info_033,$evaluation_info_018);
 		$dup_judge_evals_alert .= "<ul>";
@@ -790,7 +790,7 @@ if ($totalRows_table_assignments > 0) {
 	}
 
 	// Build single evaluation list alert
-	if (!empty($single_evaluation)) {	
+	if ($single_evaluation !== []) {	
 		$single_eval .= "<div class=\"alert alert-warning alert-dismissible\">";
 		$single_eval .= sprintf("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><p><strong><i class=\"fa fa-exclamation-circle\"></i> %s</strong></p><p>%s</p>",$label_attention,$evaluation_info_019);
 		$single_eval .= "<ul>";
@@ -807,7 +807,7 @@ if ($totalRows_table_assignments > 0) {
 	}
 
 	// Build duplicate places at table alert
-	if (!empty($table_places_alert)) {
+	if ($table_places_alert !== []) {
 		$places_alert .= "<div class=\"alert alert-danger alert-dismissible\">";
 		$places_alert .= sprintf("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><p><strong><i class=\"fa fa-exclamation-circle\"></i> %s</strong></p><p>%s</p>",$label_attention,$evaluation_info_029);
 		$places_alert .= "<ul>";
@@ -822,7 +822,7 @@ if ($totalRows_table_assignments > 0) {
 	}
 
 	// Build mini-bos mismatch alert
-	if (!empty($mini_bos_mismatch)) {
+	if ($mini_bos_mismatch !== []) {
 		$mini_bos_mismatch_alert .= "<div class=\"alert alert-info alert-dismissible\">";
 		$mini_bos_mismatch_alert .= sprintf("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><p><strong><i class=\"fa fa-info-circle\"></i> %s</strong></p><p>%s</p>",$label_please_note,$evaluation_info_105);
 		$mini_bos_mismatch_alert .= "<ul>";
@@ -864,9 +864,9 @@ if ($totalRows_table_assignments > 0) {
 	if (($admin) && ($totalRows_eval_sub > 0)) {
 
 		//$top_alert .= sprintf("<i style=\"padding-right: 5px;\" class=\"fa fa-comments-o\"></i><strong>%s</strong> %s %s %s, %s.", $totalRows_eval_sub, $evaluation_info_031, strtolower($reg_closed_text_005), $current_time, $current_date_display);
-		
+
 		if (($judging_open && (time() > $two_days)) && ($count_none > 0)) {
-			if ($count_none == 1) $top_alert .= sprintf(" <button type=\"button\" style=\"margin-bottom: 15px;\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entry_without_eval);
+			if ($count_none === 1) $top_alert .= sprintf(" <button type=\"button\" style=\"margin-bottom: 15px;\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entry_without_eval);
 			else $top_alert .= sprintf(" <button type=\"button\" style=\"margin-bottom: 15px;\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entries_without_eval);
 			$top_alert .= "<section style=\"margin-bottom: 15px;\" class=\"collapse small\" id=\"no-eval\">";
 			$top_alert .= sprintf("<p>%s:</p>",$evaluation_info_049);
@@ -989,7 +989,7 @@ if (!$admin) {
 }
 
 $show_alerts = TRUE;
-if ((empty($total_evals_alert)) && (empty($places_alert)) && (empty($judge_score_disparity)) && (empty($assign_score_mismatch)) && (empty($dup_judge_evals_alert)) && (empty($single_evaluation)) && (empty($mini_bos_mismatch_alert))) $show_alerts = FALSE;
+if ((empty($total_evals_alert)) && (empty($places_alert)) && ($judge_score_disparity === []) && (empty($assign_score_mismatch)) && (empty($dup_judge_evals_alert)) && ($single_evaluation === []) && (empty($mini_bos_mismatch_alert))) $show_alerts = FALSE;
 
 // Counts Sidebar
 
@@ -1080,10 +1080,10 @@ if ($show_alerts) {
 	$left_side .= "<div id=\"all-alerts\" class=\"collapse in\">";
 	if (!empty($total_evals_alert)) $left_side .= $total_evals_alert;
 	if (!empty($places_alert)) $left_side .= $places_alert;
-	if (!empty($judge_score_disparity)) $left_side .= $jscore_disparity;
+	if ($judge_score_disparity !== []) $left_side .= $jscore_disparity;
 	if (!empty($assign_score_mismatch)) $left_side .= $assign_score_mismatch;
 	if (!empty($dup_judge_evals_alert)) $left_side .= $dup_judge_evals_alert;
-	if (!empty($single_evaluation)) $left_side .= $single_eval;
+	if ($single_evaluation !== []) $left_side .= $single_eval;
 	if (!empty($mini_bos_mismatch_alert)) $left_side .= $mini_bos_mismatch_alert;
 	$left_side .= "</div>";
 }

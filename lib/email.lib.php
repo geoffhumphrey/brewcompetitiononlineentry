@@ -44,7 +44,7 @@ function sendPHPMailerMessage(\PHPMailer\PHPMailer\PHPMailer $mail): void {
         $mail->Port       = $smtp_port;
         $mail->isHTML(true);
         $mail->send();
-    } catch (Exception $e) {
+    } catch (Exception) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }

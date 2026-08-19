@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
-<?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
+<?php if ((($section == "admin") || (str_contains($section, 'step'))) && (in_array($go,$tinymce_load))) { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
 <?php if (ENABLE_MARKDOWN) { ?>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/css/bootstrap-markdown-editor.css">
@@ -47,11 +47,11 @@
   <?php } ?>
 <?php } ?>
 
-<?php if (($logged_in) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) && (strpos($section, 'step') === FALSE)) { ?>
+<?php if (($logged_in) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) && (!str_contains($section, 'step'))) { ?>
     <!-- Load Jasny Off-Canvas Menu for Admin / http://www.jasny.net/bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
-  <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
+  <?php if ((($section == "admin") || (str_contains($section, 'step'))) && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
     <!-- Load DropZone / http://www.dropzonejs.com -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>

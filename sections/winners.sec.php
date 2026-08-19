@@ -17,7 +17,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 */
 
 $winners_by_table = "";
-$order_by = array();
+$order_by = [];
 
 if ($section == "past-winners") {
 	// $go is restricted to alphanumeric characters before use in table-name identifiers
@@ -165,7 +165,7 @@ if ($row_scored_entries['count'] > 0) {
 						if ($tb == "scores") {
 							$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
 							if (!empty($row_scores['scoreEntry'])) {
-								if (strpos($row_scores['scoreEntry'], '.') !== false) $winners_table_body_1 .= rtrim(number_format($row_scores['scoreEntry'],2),"0"); 
+								if (str_contains($row_scores['scoreEntry'], '.')) $winners_table_body_1 .= rtrim(number_format($row_scores['scoreEntry'],2),"0"); 
 								else $winners_table_body_1 .= $row_scores['scoreEntry'];
 							}
 							else $winners_table_body_1 .= "&nbsp;";
@@ -233,19 +233,19 @@ if ($row_scored_entries['count'] > 0) {
 		} // end if ($entry_count > 0);
 
 		if (($psort == "table-numbers") || ($psort == "default")) {
-			$order_by[] = array(
+			$order_by[] = [
 				'id' => $row_tables['tableNumber'],
 				'table_name' => $row_tables['tableName'],
 				'data' => $winners_table_all
-			);
+			];
 		}
 
 		if (($psort == "table-entry-count-asc") || ($psort == "table-entry-count-desc")) {
-			$order_by[] = array(
+			$order_by[] = [
 				'id' => $entry_count,
 				'table_name' => $row_tables['tableName'],
 				'data' => $winners_table_all
-			);
+			];
 		}
 
 	}

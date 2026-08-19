@@ -1,25 +1,25 @@
 <?php
  
 
-$checklist_factors = array($label_none,$label_low,$label_med,$label_high); 
+$checklist_factors = [$label_none,$label_low,$label_med,$label_high]; 
 
-$cl_ar_desc_malt = array($label_grainy,$label_caramel,$label_bready,$label_rich,$label_dark_fruit,$label_toasty,$label_roasty,$label_burnt);
-$cl_ar_desc_hops = array($label_citrusy,$label_earthy,$label_floral,$label_grassy,$label_herbal,$label_piney,$label_spicy,$label_woody);
-$cl_ar_desc_esters = array($label_fruity,$label_apple_pear,$label_banana,$label_berry,$label_citrus,$label_dried_fruit,$label_grape,$label_stone_fruit);
-$cl_ar_desc_other  = array($label_brettanomyces,$label_fruit,$label_lactic,$label_smoke,$label_spice,$label_vinous,$label_wood);
+$cl_ar_desc_malt = [$label_grainy,$label_caramel,$label_bready,$label_rich,$label_dark_fruit,$label_toasty,$label_roasty,$label_burnt];
+$cl_ar_desc_hops = [$label_citrusy,$label_earthy,$label_floral,$label_grassy,$label_herbal,$label_piney,$label_spicy,$label_woody];
+$cl_ar_desc_esters = [$label_fruity,$label_apple_pear,$label_banana,$label_berry,$label_citrus,$label_dried_fruit,$label_grape,$label_stone_fruit];
+$cl_ar_desc_other  = [$label_brettanomyces,$label_fruit,$label_lactic,$label_smoke,$label_spice,$label_vinous,$label_wood];
 
-$cl_ap_desc_color = array($label_straw,$label_yellow,$label_gold,$label_amber,$label_copper,$label_brown,$label_black);
-$cl_ap_desc_head  = array($label_white,$label_ivory,$label_cream,$label_beige,$label_tan,$label_brown);
-$cl_ap_desc_other = array($label_flat,$label_lacing,$label_legs,$label_opaque);
+$cl_ap_desc_color = [$label_straw,$label_yellow,$label_gold,$label_amber,$label_copper,$label_brown,$label_black];
+$cl_ap_desc_head  = [$label_white,$label_ivory,$label_cream,$label_beige,$label_tan,$label_brown];
+$cl_ap_desc_other = [$label_flat,$label_lacing,$label_legs,$label_opaque];
 
-$cl_fl_desc_malt = array($label_grainy,$label_caramel,$label_bready,$label_rich,$label_dark_fruit,$label_toasty,$label_roasty,$label_burnt);
-$cl_fl_desc_hops = array($label_citrusy,$label_earthy,$label_floral,$label_grassy,$label_herbal,$label_piney,$label_spicy,$label_woody);
-$cl_fl_desc_esters = array($label_fruity,$label_apple_pear,$label_banana,$label_berry,$label_citrus,$label_dried_fruit,$label_grape,$label_stone_fruit);
-$cl_fl_desc_other = array($label_brettanomyces,$label_fruit,$label_lactic,$label_smoke,$label_spice,$label_vinous,$label_wood);
-$cl_fl_desc_bal = array($label_malty,$label_hoppy,$label_even);
+$cl_fl_desc_malt = [$label_grainy,$label_caramel,$label_bready,$label_rich,$label_dark_fruit,$label_toasty,$label_roasty,$label_burnt];
+$cl_fl_desc_hops = [$label_citrusy,$label_earthy,$label_floral,$label_grassy,$label_herbal,$label_piney,$label_spicy,$label_woody];
+$cl_fl_desc_esters = [$label_fruity,$label_apple_pear,$label_banana,$label_berry,$label_citrus,$label_dried_fruit,$label_grape,$label_stone_fruit];
+$cl_fl_desc_other = [$label_brettanomyces,$label_fruit,$label_lactic,$label_smoke,$label_spice,$label_vinous,$label_wood];
+$cl_fl_desc_bal = [$label_malty,$label_hoppy,$label_even];
 
-$cl_mf_desc_flaws = array($label_flat,$label_gushed,$label_hot,$label_harsh,$label_slick);
-$cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$label_biting);
+$cl_mf_desc_flaws = [$label_flat,$label_gushed,$label_hot,$label_harsh,$label_slick];
+$cl_mf_desc_finish = [$label_cloying,$label_sweet,$label_med,$label_dry,$label_biting];
 ?>
 <!-- Checklist Evaluation Form -->
 <input type="hidden" name="evalFormType" value="2">
@@ -57,7 +57,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_malt.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalAromaMalt" id="evalAromaMalt<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalAromaMalt" id="evalAromaMalt<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -72,7 +72,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_hops.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalAromaHops" id="evalAromaHops<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalAromaHops" id="evalAromaHops<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -87,7 +87,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_esters.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalAromaEsters" id="evalAromaEsters<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalAromaEsters" id="evalAromaEsters<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -102,7 +102,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_phenols.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalAromaPhenols" id="evalAromaPhenols<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalAromaPhenols" id="evalAromaPhenols<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -117,7 +117,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_alcohol.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalAromaAlcohol" id="evalAromaAlcohol<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalAromaAlcohol" id="evalAromaAlcohol<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -132,7 +132,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_sweetness.": ".$value; 
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalAromaSweetness" id="evalAromaSweetness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalAromaSweetness" id="evalAromaSweetness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -147,7 +147,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_acidity.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalAroma<?php echo $label_acidity; ?>" id="evalAromaAcidity<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalAroma<?php echo $label_acidity; ?>" id="evalAromaAcidity<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -174,7 +174,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalAromaChecklistDesc[]" id="evalAromaMaltDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalAromaChecklistDesc[]" id="evalAromaMaltDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -189,7 +189,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalAromaChecklistDesc[]" id="evalAromaHopsDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalAromaChecklistDesc[]" id="evalAromaHopsDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -204,7 +204,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalAromaChecklistDesc[]" id="evalAromaEstersDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalAromaChecklistDesc[]" id="evalAromaEstersDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -219,7 +219,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalAromaChecklistDesc[]" id="evalAromaOtherDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalAromaChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalAromaChecklistDesc[]" id="evalAromaOtherDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalAromaChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -262,7 +262,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 $cl_value = $label_clarity.": ".$value;
                 ?>
                 <label class="radio-inline">
-                    <input type="radio" name="evalAppearanceClarity" id="evalAppearanceClarity<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAppearanceChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="radio" name="evalAppearanceClarity" id="evalAppearanceClarity<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAppearanceChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 <?php } ?>
                 <div class="help-block small with-errors"></div>
@@ -277,7 +277,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 $cl_value = $label_head_size.": ".$value;
                 ?>
                 <label class="radio-inline">
-                    <input type="radio" name="evalAppearanceHeadSize" id="evalAppearanceHeadSize<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAppearanceChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="radio" name="evalAppearanceHeadSize" id="evalAppearanceHeadSize<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAppearanceChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 <?php } ?>
                 <div class="help-block small with-errors"></div>
@@ -292,7 +292,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 $cl_value = $label_head_retention.": ".$value;
                 ?>
                 <label class="radio-inline">
-                    <input type="radio" name="evalAppearanceHeadRetention" id="evalAppearanceHeadRetention<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalAppearanceChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="radio" name="evalAppearanceHeadRetention" id="evalAppearanceHeadRetention<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalAppearanceChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 <?php } ?>
                 <div class="help-block small with-errors"></div>
@@ -319,7 +319,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                     ?>
                     <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="evalAppearanceChecklistDesc[]" id="evalAppearanceColorDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalAppearanceChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                        <input type="checkbox" name="evalAppearanceChecklistDesc[]" id="evalAppearanceColorDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalAppearanceChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                     </label>
                     </div>
                     <?php } ?>
@@ -334,7 +334,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                     ?>
                     <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="evalAppearanceChecklistDesc[]" id="evalAppearanceHeadDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalAppearanceChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                        <input type="checkbox" name="evalAppearanceChecklistDesc[]" id="evalAppearanceHeadDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalAppearanceChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                     </label>
                     </div>
                     <?php } ?>
@@ -349,7 +349,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                     ?>
                     <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="evalAppearanceChecklistDesc[]" id="evalAppearanceOtherDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalAppearanceChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                        <input type="checkbox" name="evalAppearanceChecklistDesc[]" id="evalAppearanceOtherDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalAppearanceChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                     </label>
                     </div>
                     <?php } ?>
@@ -394,7 +394,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_malt.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorMalt" id="evalFlavorMalt<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorMalt" id="evalFlavorMalt<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -409,7 +409,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_hops.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorHops" id="evalFlavorHops<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorHops" id="evalFlavorHops<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -424,7 +424,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_esters.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorEsters" id="evalFlavorEsters<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorEsters" id="evalFlavorEsters<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -439,7 +439,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_phenols.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorPhenols" id="evalFlavorPhenols<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorPhenols" id="evalFlavorPhenols<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -454,7 +454,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_sweetness.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorSweetness" id="evalFlavorSweetness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorSweetness" id="evalFlavorSweetness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -469,7 +469,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_bitterness.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorBitterness" id="evalFlavorBitterness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorBitterness" id="evalFlavorBitterness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -484,7 +484,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_alcohol.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorAlcohol" id="evalFlavorAlcohol<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorAlcohol" id="evalFlavorAlcohol<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -499,7 +499,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_acidity.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorAcidity" id="evalFlavorAcidity<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorAcidity" id="evalFlavorAcidity<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -514,7 +514,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_harshness.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalFlavorHarshness" id="evalFlavorHarshness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalFlavorHarshness" id="evalFlavorHarshness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -541,7 +541,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorMaltDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorMaltDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -556,7 +556,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorHopsDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorHopsDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -571,7 +571,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorEstersDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorEstersDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -586,7 +586,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorOtherDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorOtherDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -601,7 +601,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorBalanceDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalFlavorChecklistDesc[]" id="evalFlavorBalanceDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalFlavorChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -646,7 +646,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_body.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalMouthfeelBody" id="evalMouthfeelBody<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalMouthfeelChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalMouthfeelBody" id="evalMouthfeelBody<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalMouthfeelChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -661,7 +661,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_carbonation.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalMouthfeelCarbonation" id="evalMouthfeelCarbonation<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalMouthfeelChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalMouthfeelCarbonation" id="evalMouthfeelCarbonation<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalMouthfeelChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -676,7 +676,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_warmth.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalMouthfeelWarmth" id="evalMouthfeelWarmth<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalMouthfeelChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalMouthfeelWarmth" id="evalMouthfeelWarmth<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalMouthfeelChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -691,7 +691,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_creaminess.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalMouthfeelCreaminess" id="evalMouthfeelCreaminess<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalMouthfeelChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalMouthfeelCreaminess" id="evalMouthfeelCreaminess<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalMouthfeelChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -706,7 +706,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             $cl_value = $label_astringency.": ".$value;
             ?>
             <label class="radio-inline">
-                <input type="radio" name="evalMouthfeelAstringency" id="evalMouthfeelAstringency<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalMouthfeelChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                <input type="radio" name="evalMouthfeelAstringency" id="evalMouthfeelAstringency<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (str_contains($row_eval['evalMouthfeelChecklist'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
             <div class="help-block small with-errors"></div>
@@ -734,7 +734,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalMouthfeelChecklistDesc[]" id="evalMouthfeelChecklistDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalMouthfeelChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalMouthfeelChecklistDesc[]" id="evalMouthfeelChecklistDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalMouthfeelChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -749,7 +749,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
                 ?>
                 <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalMouthfeelChecklistDesc[]" id="evalMouthfeelChecklistDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalMouthfeelChecklistDesc'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+                    <input type="checkbox" name="evalMouthfeelChecklistDesc[]" id="evalMouthfeelChecklistDesc<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalMouthfeelChecklistDesc'],$cl_value)) echo "checked"; } ?>> <?php echo $value; ?>
                 </label>
                 </div>
                 <?php } ?>
@@ -876,14 +876,14 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
         <div class="col col-sm-3">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalFlaws[]" id="evalFlaws<?php echo str_replace(' ', '', $flaw).$id_value++; ?>" value="<?php echo $label_aroma.": ".$flaw; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalFlaws'],$label_aroma.": ".$flaw) !== false) echo "checked"; } ?>> <?php echo $label_aroma; ?>
+                    <input type="checkbox" name="evalFlaws[]" id="evalFlaws<?php echo str_replace(' ', '', $flaw).$id_value++; ?>" value="<?php echo $label_aroma.": ".$flaw; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalFlaws'],$label_aroma.": ".$flaw)) echo "checked"; } ?>> <?php echo $label_aroma; ?>
                 </label>
             </div>
         </div>
         <div class="col col-sm-3">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalFlaws[]" id="evalFlaws<?php echo str_replace(' ', '', $flaw).$id_value++; ?>" value="<?php echo $label_flavor.": ".$flaw; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalFlaws'],$label_flavor.": ".$flaw) !== false) echo "checked"; } ?>> <?php echo $label_flavor; ?>
+                    <input type="checkbox" name="evalFlaws[]" id="evalFlaws<?php echo str_replace(' ', '', $flaw).$id_value++; ?>" value="<?php echo $label_flavor.": ".$flaw; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalFlaws'],$label_flavor.": ".$flaw)) echo "checked"; } ?>> <?php echo $label_flavor; ?>
                 </label>
             </div>
         </div>
@@ -891,7 +891,7 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
             <?php if (in_array($flaw, $flaws_mouthfeel)) { ?>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="evalFlaws[]" id="evalFlaws<?php echo str_replace(' ', '', $flaw).$id_value++; ?>" value="<?php echo $label_mouthfeel.": ".$flaw; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw) !== false) echo "checked"; } ?>> <?php echo $label_mouthfeel; ?>
+                    <input type="checkbox" name="evalFlaws[]" id="evalFlaws<?php echo str_replace(' ', '', $flaw).$id_value++; ?>" value="<?php echo $label_mouthfeel.": ".$flaw; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw)) echo "checked"; } ?>> <?php echo $label_mouthfeel; ?>
                 </label>
             </div>
           <?php } ?>

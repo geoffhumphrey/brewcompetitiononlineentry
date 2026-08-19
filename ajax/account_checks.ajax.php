@@ -3,7 +3,7 @@
 ob_start();
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '0');
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require_once (CONFIG.'bootstrap.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -20,18 +20,18 @@ $error_output = "";
 if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 	if ($action == "username") {
-		
+
 		if (isset($_POST['user_name'])) {
-			
+
 			$user_name_entered = filter_var($_POST['user_name'],FILTER_SANITIZE_EMAIL);
 			$user_name_entered = $purifier->purify($user_name_entered);
 
-			$cols = array("user_name","userQuestion");
+			$cols = ["user_name","userQuestion"];
 			$db_conn->where ("user_name", $user_name_entered);
 			$row_user_name = $db_conn->getOne ($prefix."users", null, $cols);
 
 			if ($go == "forgot") {
-				
+
 				if ($row_user_name) {
 
 					if (is_email($user_name_entered)) {
@@ -48,7 +48,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 					}
 
 					else $display_security_question = $login_text_030;
-					
+
 					echo sprintf("<p class=\"text-success\"><i class=\"fas fa-check-circle pe-2\"></i><strong>%s</strong>. %s</p><p class=\"alert alert-primary\">%s</p>",$label_verified,$login_text_011,$display_security_question);
 				}
 
@@ -56,43 +56,43 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 			}
 
 			if ($go == "change") {
-				
+
 				$user_name_found = 0;
 				if ($row_user_name) $user_name_found = 1;
 				if (!is_email($user_name_entered)) $user_name_found = 2;
 
-				$change_email_array = array(
+				$change_email_array = [
 					"user_name_entered" => $user_name_entered,
 					"user_name_found" => $user_name_found
-				);
+				];
 
 				echo json_encode($change_email_array);
 			}
-			
+
 			if ($go == "default") {
 				if ($row_user_name) echo sprintf("<p class=\"text-danger\"><i class=\"fas fa-exclamation-triangle pe-2\"></i><strong>%s</strong></p>",$alert_email_in_use);
 				else echo sprintf("<p class=\"text-success\"><i class=\"fas fa-check-circle pe-2\"></i><strong>%s</strong></p>",$alert_email_not_in_use);
 			}
-			
+
 		}
-		
+
 	} // end if ($action == "username")
 
 	if ($action == "email") {
-		
+
 		$email = filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
 		$email = $purifier->purify($email);
-		
+
 		if (is_email($email)) echo sprintf("<p class=\"text-success\"><i class=\"fas fa-check-circle pe-2\"></i><strong>%s</strong></p>",$alert_email_valid);
 		else echo sprintf("<p class=\"text-danger\"><i class=\"fas fa-exclamation-triangle pe-2\"></i><strong>%s</strong></p>",$alert_email_not_valid);
-		
+
 	} // end if ($action == "email")
 
 	if ($action == "check_answer") {
 
 		$email = filter_var($_SESSION['user_name_entered'],FILTER_SANITIZE_EMAIL);
 		$email = $purifier->purify($email);
-		
+
 		$answer = sterilize($_POST['user_question_answer']);
 		$answer = $purifier->purify($answer);
 
@@ -100,12 +100,12 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 		$hasher = new PasswordHash(8, false);
 
 		$sql = sprintf("SELECT a.id, a.user_name, a.userQuestion, a.userQuestionAnswer, b.brewerFirstName, b.brewerLastName FROM %s a, %s b WHERE a.user_name=? AND a.id = b.uid;",$prefix."users",$prefix."brewer");
-		$row_user_question = $db_conn->rawQuery($sql, array($email));
+		$row_user_question = $db_conn->rawQuery($sql, [$email]);
 		$totalRows_user_question = $db_conn->count;
 
 		// MysqliDB returns a multi-dimentional array for rawQuery calls
 		$stored_hash = $row_user_question[0]['userQuestionAnswer'];
-		
+
 		$check = 0;
 		if ($totalRows_user_question > 0) $check = $hasher->CheckPassword($answer, $stored_hash);
 
@@ -116,13 +116,13 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 			// and onvert the binary data into hexadecimal representation
 			$token = openssl_random_pseudo_bytes(16);
 			$token = bin2hex($token);
-			
+
 			// Update the users table with token and the time token was generated
 			$update_table = $prefix."users";
-			$data = array(
+			$data = [
 				'userToken' => $token,
 				'userTokenTime' => time()
-			);
+			];
 			$db_conn->where ('id', $row_user_question[0]['id']);
 			$result = $db_conn->update ($update_table, $data);
 
@@ -135,7 +135,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 				$reset_url = $base_url."index.php?section=login&go=password&action=reset-password&token=".$token;
 
 				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-				
+
 				if (HOSTED) {
 					include (CONFIG.'config.mail.php');
 					if ((!isset($mail_default_from)) || (trim($mail_default_from) === '')) $from_email = $_SESSION['prefsEmailFrom'];
@@ -146,7 +146,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 					if ($mail_use_smtp) $from_email = $_SESSION['prefsEmailFrom'];
 					else $from_email = "noreply@".$url;
 				}
-				
+
 				$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 				$contestName = $_SESSION['contestName'];
@@ -161,7 +161,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 				$to_name = html_entity_decode($to_name);
 				$to_name = mb_convert_encoding($to_name, "UTF-8");
 				$to_email_formatted = mime_encode_header_name($to_name)." <".$to_email.">";
-				
+
 				$subject = sprintf("%s: %s",$contestName,"Password Reset Request");
 				$subject = html_entity_decode($subject);
 				$subject = mb_convert_encoding($subject, "UTF-8");
@@ -209,7 +209,7 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 				// Fallback for password recovery only - attempt to email using mail() function
 				else {
-					
+
 					$fallback_mail = mail($to_email_formatted, $subject, $message, $headers);
 					if (!$fallback_mail) $error_output .= "Sending email via the PHP mail() function failed. Contact the competition officials to reset your password.";
 

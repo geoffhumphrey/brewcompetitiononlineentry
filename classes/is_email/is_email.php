@@ -180,7 +180,7 @@ if (!defined('ISEMAIL_VALID')) {
  * 					$errorlevel = 0
  * @param array		$parsedata	If passed, returns the parsed address components
  */
-/*.mixed.*/ function is_email($email, $checkDNS = false, $errorlevel = false, &$parsedata = array()) {
+/*.mixed.*/ function is_email($email, $checkDNS = false, $errorlevel = false, &$parsedata = []) {
 	// Check that $email is a valid address. Read the following RFCs to understand the constraints:
 	// 	(https://tools.ietf.org/html/rfc5321)
 	// 	(https://tools.ietf.org/html/rfc5322)
@@ -197,31 +197,31 @@ if (!defined('ISEMAIL_VALID')) {
 	} else {
 		$diagnose	= true;
 
-		switch ((int) $errorlevel) {
-		case E_WARNING:	$threshold	= ISEMAIL_THRESHOLD;	break;	// For backward compatibility
-		case E_ERROR:	$threshold	= ISEMAIL_VALID;	break;	// For backward compatibility
-		default:	$threshold	= (int) $errorlevel;
-		}
+		$threshold = match ((int) $errorlevel) {
+            E_WARNING => ISEMAIL_THRESHOLD,
+            E_ERROR => ISEMAIL_VALID,
+            default => (int) $errorlevel,
+        };
 	}
 
-	$return_status = array(ISEMAIL_VALID);
+	$return_status = [ISEMAIL_VALID];
 
 	// Parse the address into components, character by character
 	$raw_length	= strlen($email);
 	$context	= ISEMAIL_COMPONENT_LOCALPART;	// Where we are
-	$context_stack	= array($context);		// Where we have been
+	$context_stack	= [$context];		// Where we have been
 	$context_prior	= ISEMAIL_COMPONENT_LOCALPART;	// Where we just came from
 	$token		= '';				// The current character
 	$token_prior	= '';				// The previous character
-	$parsedata	= array(
+	$parsedata	= [
 				ISEMAIL_COMPONENT_LOCALPART	=> '',
 				ISEMAIL_COMPONENT_DOMAIN	=> ''
-			       );			// For the components of the address
+			       ];			// For the components of the address
 
-	$atomlist	= array(
-				ISEMAIL_COMPONENT_LOCALPART	=> array(''),
-				ISEMAIL_COMPONENT_DOMAIN	=> array('')
-			       );			// For the dot-atom elements of the address
+	$atomlist	= [
+				ISEMAIL_COMPONENT_LOCALPART	=> [''],
+				ISEMAIL_COMPONENT_DOMAIN	=> ['']
+			       ];			// For the dot-atom elements of the address
 	$element_count	= 0;
 	$element_len	= 0;
 	$hyphen_flag	= false;			// Hyphen cannot occur at the end of a subdomain
@@ -346,7 +346,7 @@ if (!defined('ISEMAIL_VALID')) {
 
 				// Clear everything down for the domain parsing
 				$context	= ISEMAIL_COMPONENT_DOMAIN;	// Where we are
-				$context_stack	= array($context);		// Where we have been
+				$context_stack	= [$context];		// Where we have been
 				$element_count	= 0;
 				$element_len	= 0;
 				$end_or_die	= false;			// CFWS can only appear at the end of the element
@@ -646,7 +646,7 @@ if (!defined('ISEMAIL_VALID')) {
 					// filter_var() validates IPv6 address inconsistently (up to PHP 5.3.3
 					// at least) -- see https://bugs.php.net/bug.php?id=53236 for example
 					$max_groups	= 8;
-					$matchesIP	= array();
+					$matchesIP	= [];
 			/*.mixed.*/	$index		= false;
 					$addressliteral	= $parsedata[ISEMAIL_COMPONENT_LITERAL];
 

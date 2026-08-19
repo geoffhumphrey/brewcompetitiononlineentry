@@ -14,7 +14,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
      */
     public function __construct($varParser = null)
     {
-        $this->varParser = $varParser ? $varParser : new HTMLPurifier_VarParser_Native();
+        $this->varParser = $varParser ?: new HTMLPurifier_VarParser_Native();
     }
 
     /**
@@ -43,7 +43,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
             $interchange->name = $info['name'];
         }
 
-        $files = array();
+        $files = [];
         $dh = opendir($dir);
         while (false !== ($file = readdir($dh))) {
             if (!$file || $file[0] == '.' || strrchr($file, '.') !== '.txt') {
@@ -87,8 +87,8 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
         if (!isset($hash['ID'])) {
             throw new HTMLPurifier_ConfigSchema_Exception('Hash does not have any ID');
         }
-        if (strpos($hash['ID'], '.') === false) {
-            if (count($hash) == 2 && isset($hash['DESCRIPTION'])) {
+        if (!str_contains($hash['ID'], '.')) {
+            if (count($hash) === 2 && isset($hash['DESCRIPTION'])) {
                 $hash->offsetGet('DESCRIPTION'); // prevent complaining
             } else {
                 throw new HTMLPurifier_ConfigSchema_Exception('All directives must have a namespace');
@@ -130,7 +130,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
                     $directive->typeAllowsNull
                 );
             } catch (HTMLPurifier_VarParserException $e) {
-                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in DEFAULT in directive hash '$id'");
+                throw new HTMLPurifier_ConfigSchema_Exception($e->getMessage() . " in DEFAULT in directive hash '$id'", $e->getCode(), $e);
             }
         }
 
@@ -189,7 +189,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
      */
     protected function lookup($array)
     {
-        $ret = array();
+        $ret = [];
         foreach ($array as $val) {
             $ret[$val] = true;
         }

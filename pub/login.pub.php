@@ -28,7 +28,7 @@ if (($action == "reset-password") && ($token != "default")) {
 	$token_valid = verify_token($token,time());
 	
 	// If valid, show the password reset with token form
-	if ($token_valid == 0) { 
+	if ($token_valid === 0) { 
 		
 		if (!isset($_SESSION['loginUsername'])) {
 			$reset_token_form_display = TRUE;
@@ -38,10 +38,10 @@ if (($action == "reset-password") && ($token != "default")) {
 	}
 	
 	// If not valid, show an error
-	if ($token_valid == 1) $message3 .= sprintf("<p class=\"lead\">%s</p>",$login_text_020);
+	if ($token_valid === 1) $message3 .= sprintf("<p class=\"lead\">%s</p>",$login_text_020);
 	
 	// If expired, show an error
-	if ($token_valid == 2) $message3 .= sprintf("<p class=\"lead\">%s</p>",$login_text_021);
+	if ($token_valid === 2) $message3 .= sprintf("<p class=\"lead\">%s</p>",$login_text_021);
 
 
 

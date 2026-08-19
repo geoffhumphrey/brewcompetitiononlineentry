@@ -37,11 +37,11 @@ foreach ($eval_scores as $key => $value) {
 		$latest_updated[$value['eid']] = $value['date_updated'];
 		if (!empty($value['consensus_score'])) $latest_consensus[$value['eid']] = $value['consensus_score'];
 		else $latest_consensus[$value['eid']] = "";
-		$table_judges[] = array(
+		$table_judges[] = [
 			"tj_first_name" => $eval_judge[0],
 			"tj_last_name" => $eval_judge[1],
 			"tj_uid" => $eval_judge[7]
-		);
+		];
 
 		if (!empty($score)) $judge_score[] = $score;
 		if (!empty($value['consensus_score'])) $assigned_score[] = $value['consensus_score'];
@@ -83,7 +83,7 @@ if (($mini_bos_count > 0) && ($eval_count > $mini_bos_count)) $mini_bos_count_fl
 if ($mini_bos_count_flag) {
 	$mini_bos_alert_css = "text-danger";
 	$mini_bos_alert_icon = " <i class=\"fa fa-exclamation-triangle\"></i>";
-	$mini_bos_mismatch[] = array(
+	$mini_bos_mismatch[] = [
 	"table_id" => $tbl_id,
 	"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
 	"id" => $row_entries['id'],
@@ -91,7 +91,7 @@ if ($mini_bos_count_flag) {
 	"brewCategorySort" => $row_entries['brewCategorySort'],
 	"brewSubCategory" => $row_entries['brewSubCategory'],
 	"brewStyle" => $row_entries['brewStyle']
-	);
+	];
 }
 
 if ($mini_bos_count == 0) $mini_bos_checked_no = "CHECKED";
@@ -103,12 +103,12 @@ if (!empty($eval_places)) {
 
 	if  (count(array_unique($eval_places)) === 1) {
 		$eval_place = $eval_places[0];
-		$table_places[] = array($number => $eval_places[0]);
+		$table_places[] = [$number => $eval_places[0]];
 	}
 
 	if  (count(array_unique($eval_places)) > 1) {
 		foreach ($eval_places as $value) {
-			 $table_places[] = array($number => $value);
+			 $table_places[] = [$number => $value];
 		}
 		
 	}
@@ -116,7 +116,7 @@ if (!empty($eval_places)) {
 }
 
 if (!empty($ordinal_position)) {
-	$op_arr = array();
+	$op_arr = [];
 	foreach ($ordinal_position as $value) {
 		$op = explode(",",$value);
 		$op_arr[] = $op[0];
@@ -192,7 +192,7 @@ if ($count_evals == 0) {
 }
 
 if ($count_evals == 1) {
-	$single_evaluation[] = array(
+	$single_evaluation[] = [
 		"table_id" => $tbl_id,
 		"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
 		"id" => $row_entries['id'],
@@ -200,12 +200,12 @@ if ($count_evals == 1) {
 		"brewCategorySort" => $row_entries['brewCategorySort'],
 		"brewSubCategory" => $row_entries['brewSubCategory'],
 		"brewStyle" => $row_entries['brewStyle']
-	);
+	];
 }
 
 if ($count_evals > 0) {
 
-	$date_submitted[] = array(
+	$date_submitted[] = [
 		"table_id" => $tbl_id,
 		"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
 		"id" => $row_entries['id'],
@@ -216,7 +216,7 @@ if ($count_evals > 0) {
 		"brewSubCategory" => $row_entries['brewSubCategory'],
 		"brewStyle" => $row_entries['brewStyle'],
 		"consensus_score" => $latest_consensus[$row_entries['id']]
-	);
+	];
 
 	if (!empty($score_entry_data[3])) {
 		$notes .= "<div style=\"margin-bottom:5px;\" class=\"text-success\"><strong>";
@@ -235,7 +235,7 @@ if ($count_evals > 0) {
 
 			$notes .= "<div style=\"margin-bottom:5px;\" class=\"text-danger\"><strong>".$evaluation_info_036."</strong></div>";
 
-			$judge_score_disparity[] = array(
+			$judge_score_disparity[] = [
 				"table_id" => $tbl_id,
 				"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
 				"id" => $row_entries['id'],
@@ -243,7 +243,7 @@ if ($count_evals > 0) {
 				"brewCategorySort" => $row_entries['brewCategorySort'],
 				"brewSubCategory" => $row_entries['brewSubCategory'],
 				"brewStyle" => $row_entries['brewStyle']
-			);
+			];
 
 		}
 
@@ -260,7 +260,7 @@ if ($count_evals > 0) {
 				$notes .= rtrim(display_array_content($assigned_score,2),", ");
 				$notes .= "</strong></div>";
 
-				$assigned_score_mismatch[] = array(
+				$assigned_score_mismatch[] = [
 					"table_id" => $tbl_id,
 					"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
 					"id" => $row_entries['id'],
@@ -268,7 +268,7 @@ if ($count_evals > 0) {
 					"brewCategorySort" => $row_entries['brewCategorySort'],
 					"brewSubCategory" => $row_entries['brewSubCategory'],
 					"brewStyle" => $row_entries['brewStyle']
-				);
+				];
 			}
 		}
 	}

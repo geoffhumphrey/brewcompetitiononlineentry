@@ -32,20 +32,20 @@ class TTFParser
 	public $underlineThickness;
 	public $isFixedPitch;
 
-	function __construct($file)
+	public function __construct($file)
 	{
 		$this->f = fopen($file, 'rb');
 		if(!$this->f)
 			$this->Error('Can\'t open file: '.$file);
 	}
 
-	function __destruct()
+	public function __destruct()
 	{
 		if(is_resource($this->f))
 			fclose($this->f);
 	}
 
-	function Parse()
+	public function Parse()
 	{
 		$this->ParseOffsetTable();
 		$this->ParseHead();
@@ -60,7 +60,7 @@ class TTFParser
 		$this->ParsePost();
 	}
 
-	function ParseOffsetTable()
+	public function ParseOffsetTable()
 	{
 		$version = $this->Read(4);
 		if($version=='OTTO')
@@ -69,18 +69,18 @@ class TTFParser
 			$this->Error('Unrecognized file format');
 		$numTables = $this->ReadUShort();
 		$this->Skip(3*2); // searchRange, entrySelector, rangeShift
-		$this->tables = array();
+		$this->tables = [];
 		for($i=0;$i<$numTables;$i++)
 		{
 			$tag = $this->Read(4);
 			$checkSum = $this->Read(4);
 			$offset = $this->ReadULong();
 			$length = $this->ReadULong();
-			$this->tables[$tag] = array('offset'=>$offset, 'length'=>$length, 'checkSum'=>$checkSum);
+			$this->tables[$tag] = ['offset'=>$offset, 'length'=>$length, 'checkSum'=>$checkSum];
 		}
 	}	
 
-	function ParseHead()
+	public function ParseHead()
 	{
 		$this->Seek('head');
 		$this->Skip(3*4); // version, fontRevision, checkSumAdjustment
@@ -98,41 +98,41 @@ class TTFParser
 		$this->indexToLocFormat = $this->ReadShort();
 	}
 
-	function ParseHhea()
+	public function ParseHhea()
 	{
 		$this->Seek('hhea');
 		$this->Skip(4+15*2);
 		$this->numberOfHMetrics = $this->ReadUShort();
 	}
 
-	function ParseMaxp()
+	public function ParseMaxp()
 	{
 		$this->Seek('maxp');
 		$this->Skip(4);
 		$this->numGlyphs = $this->ReadUShort();
 	}
 
-	function ParseHmtx()
+	public function ParseHmtx()
 	{
 		$this->Seek('hmtx');
-		$this->glyphs = array();
+		$this->glyphs = [];
 		for($i=0;$i<$this->numberOfHMetrics;$i++)
 		{
 			$advanceWidth = $this->ReadUShort();
 			$lsb = $this->ReadShort();
-			$this->glyphs[$i] = array('w'=>$advanceWidth, 'lsb'=>$lsb);
+			$this->glyphs[$i] = ['w'=>$advanceWidth, 'lsb'=>$lsb];
 		}
 		for($i=$this->numberOfHMetrics;$i<$this->numGlyphs;$i++)
 		{
 			$lsb = $this->ReadShort();
-			$this->glyphs[$i] = array('w'=>$advanceWidth, 'lsb'=>$lsb);
+			$this->glyphs[$i] = ['w'=>$advanceWidth, 'lsb'=>$lsb];
 		}
 	}
 
-	function ParseLoca()
+	public function ParseLoca()
 	{
 		$this->Seek('loca');
-		$offsets = array();
+		$offsets = [];
 		if($this->indexToLocFormat==0)
 		{
 			// Short format
@@ -152,7 +152,7 @@ class TTFParser
 		}
 	}
 
-	function ParseGlyf()
+	public function ParseGlyf()
 	{
 		$tableOffset = $this->tables['glyf']['offset'];
 		foreach($this->glyphs as &$glyph)
@@ -165,7 +165,7 @@ class TTFParser
 					// Composite glyph
 					$this->Skip(4*2); // xMin, yMin, xMax, yMax
 					$offset = 5*2;
-					$a = array();
+					$a = [];
 					do
 					{
 						$flags = $this->ReadUShort();
@@ -191,7 +191,7 @@ class TTFParser
 		}
 	}
 
-	function ParseCmap()
+	public function ParseCmap()
 	{
 		$this->Seek('cmap');
 		$this->Skip(2); // version
@@ -208,11 +208,11 @@ class TTFParser
 		if($offset31==0)
 			$this->Error('No Unicode encoding found');
 
-		$startCount = array();
-		$endCount = array();
-		$idDelta = array();
-		$idRangeOffset = array();
-		$this->chars = array();
+		$startCount = [];
+		$endCount = [];
+		$idDelta = [];
+		$idRangeOffset = [];
+		$this->chars = [];
 		fseek($this->f, $this->tables['cmap']['offset']+$offset31, SEEK_SET);
 		$format = $this->ReadUShort();
 		if($format!=4)
@@ -259,7 +259,7 @@ class TTFParser
 		}
 	}
 
-	function ParseName()
+	public function ParseName()
 	{
 		$this->Seek('name');
 		$tableOffset = $this->tables['name']['offset'];
@@ -288,16 +288,16 @@ class TTFParser
 			$this->Error('PostScript name not found');
 	}
 
-	function ParseOS2()
+	public function ParseOS2()
 	{
 		$this->Seek('OS/2');
 		$version = $this->ReadUShort();
 		$this->Skip(3*2); // xAvgCharWidth, usWeightClass, usWidthClass
 		$fsType = $this->ReadUShort();
-		$this->embeddable = ($fsType!=2) && ($fsType & 0x200)==0;
+		$this->embeddable = ($fsType!=2) && ($fsType & 0x200) === 0;
 		$this->Skip(11*2+10+4*4+4);
 		$fsSelection = $this->ReadUShort();
-		$this->bold = ($fsSelection & 32)!=0;
+		$this->bold = ($fsSelection & 32) !== 0;
 		$this->Skip(2*2); // usFirstCharIndex, usLastCharIndex
 		$this->typoAscender = $this->ReadShort();
 		$this->typoDescender = $this->ReadShort();
@@ -310,7 +310,7 @@ class TTFParser
 			$this->capHeight = 0;
 	}
 
-	function ParsePost()
+	public function ParsePost()
 	{
 		$this->Seek('post');
 		$version = $this->ReadULong();
@@ -324,8 +324,8 @@ class TTFParser
 			// Extract glyph names
 			$this->Skip(4*4); // min/max usage
 			$this->Skip(2); // numberOfGlyphs
-			$glyphNameIndex = array();
-			$names = array();
+			$glyphNameIndex = [];
+			$names = [];
 			$numNames = 0;
 			for($i=0;$i<$this->numGlyphs;$i++)
 			{
@@ -352,11 +352,11 @@ class TTFParser
 			$this->glyphNames = false;
 	}
 
-	function Subset($chars)
+	public function Subset($chars)
 	{
-		$this->subsettedGlyphs = array();
+		$this->subsettedGlyphs = [];
 		$this->AddGlyph(0);
-		$this->subsettedChars = array();
+		$this->subsettedChars = [];
 		foreach($chars as $char)
 		{
 			if(isset($this->chars[$char]))
@@ -367,7 +367,7 @@ class TTFParser
 		}
 	}
 
-	function AddGlyph($id)
+	public function AddGlyph($id)
 	{
 		if(!isset($this->glyphs[$id]['ssid']))
 		{
@@ -381,7 +381,7 @@ class TTFParser
 		}
 	}
 
-	function Build()
+	public function Build()
 	{
 		$this->BuildCmap();
 		$this->BuildHhea();
@@ -393,39 +393,40 @@ class TTFParser
 		return $this->BuildFont();
 	}
 
-	function BuildCmap()
+	public function BuildCmap()
 	{
-		if(!isset($this->subsettedChars))
+		if($this->subsettedChars === null)
 			return;
 
 		// Divide charset in contiguous segments
 		$chars = $this->subsettedChars;
 		sort($chars);
-		$segments = array();
-		$segment = array($chars[0], $chars[0]);
-		for($i=1;$i<count($chars);$i++)
+		$segments = [];
+		$segment = [$chars[0], $chars[0]];
+        $counter = count($chars);
+		for($i=1;$i<$counter;$i++)
 		{
 			if($chars[$i]>$segment[1]+1)
 			{
 				$segments[] = $segment;
-				$segment = array($chars[$i], $chars[$i]);
+				$segment = [$chars[$i], $chars[$i]];
 			}
 			else
 				$segment[1]++;
 		}
 		$segments[] = $segment;
-		$segments[] = array(0xFFFF, 0xFFFF);
+		$segments[] = [0xFFFF, 0xFFFF];
 		$segCount = count($segments);
 
 		// Build a Format 4 subtable
-		$startCount = array();
-		$endCount = array();
-		$idDelta = array();
-		$idRangeOffset = array();
+		$startCount = [];
+		$endCount = [];
+		$idDelta = [];
+		$idRangeOffset = [];
 		$glyphIdArray = '';
 		for($i=0;$i<$segCount;$i++)
 		{
-			list($start, $end) = $segments[$i];
+			[$start, $end] = $segments[$i];
 			$startCount[] = $start;
 			$endCount[] = $end;
 			if($start!=$end)
@@ -452,9 +453,9 @@ class TTFParser
 		}
 		$entrySelector = 0;
 		$n = $segCount;
-		while($n!=1)
+		while($n !== 1)
 		{
-			$n = $n>>1;
+			$n >>= 1;
 			$entrySelector++;
 		}
 		$searchRange = (1<<$entrySelector)*2;
@@ -478,7 +479,7 @@ class TTFParser
 		$this->SetTable('cmap', $data);
 	}
 
-	function BuildHhea()
+	public function BuildHhea()
 	{
 		$this->LoadTable('hhea');
 		$numberOfHMetrics = count($this->subsettedGlyphs);
@@ -486,7 +487,7 @@ class TTFParser
 		$this->SetTable('hhea', $data);
 	}
 
-	function BuildHmtx()
+	public function BuildHmtx()
 	{
 		$data = '';
 		foreach($this->subsettedGlyphs as $id)
@@ -497,7 +498,7 @@ class TTFParser
 		$this->SetTable('hmtx', $data);
 	}
 
-	function BuildLoca()
+	public function BuildLoca()
 	{
 		$data = '';
 		$offset = 0;
@@ -516,7 +517,7 @@ class TTFParser
 		$this->SetTable('loca', $data);
 	}
 
-	function BuildGlyf()
+	public function BuildGlyf()
 	{
 		$tableOffset = $this->tables['glyf']['offset'];
 		$data = '';
@@ -539,7 +540,7 @@ class TTFParser
 		$this->SetTable('glyf', $data);
 	}
 
-	function BuildMaxp()
+	public function BuildMaxp()
 	{
 		$this->LoadTable('maxp');
 		$numGlyphs = count($this->subsettedGlyphs);
@@ -547,7 +548,7 @@ class TTFParser
 		$this->SetTable('maxp', $data);
 	}
 
-	function BuildPost()
+	public function BuildPost()
 	{
 		$this->Seek('post');
 		if($this->glyphNames)
@@ -582,10 +583,10 @@ class TTFParser
 		$this->SetTable('post', $data);
 	}
 
-	function BuildFont()
+	public function BuildFont()
 	{
-		$tags = array();
-		foreach(array('cmap', 'cvt ', 'fpgm', 'glyf', 'head', 'hhea', 'hmtx', 'loca', 'maxp', 'name', 'post', 'prep') as $tag)
+		$tags = [];
+		foreach(['cmap', 'cvt ', 'fpgm', 'glyf', 'head', 'hhea', 'hmtx', 'loca', 'maxp', 'name', 'post', 'prep'] as $tag)
 		{
 			if(isset($this->tables[$tag]))
 				$tags[] = $tag;
@@ -603,9 +604,9 @@ class TTFParser
 		// Build offset table
 		$entrySelector = 0;
 		$n = $numTables;
-		while($n!=1)
+		while($n !== 1)
 		{
-			$n = $n>>1;
+			$n >>= 1;
 			$entrySelector++;
 		}
 		$searchRange = 16*(1<<$entrySelector);
@@ -634,7 +635,7 @@ class TTFParser
 		return $font;
 	}
 
-	function LoadTable($tag)
+	public function LoadTable($tag)
 	{
 		$this->Seek($tag);
 		$length = $this->tables[$tag]['length'];
@@ -644,7 +645,7 @@ class TTFParser
 		$this->tables[$tag]['data'] = $this->Read($length);
 	}
 
-	function SetTable($tag, $data)
+	public function SetTable($tag, $data)
 	{
 		$length = strlen($data);
 		$n = $length % 4;
@@ -655,30 +656,30 @@ class TTFParser
 		$this->tables[$tag]['checkSum'] = $this->CheckSum($data);
 	}
 
-	function Seek($tag)
+	public function Seek($tag)
 	{
 		if(!isset($this->tables[$tag]))
 			$this->Error('Table not found: '.$tag);
 		fseek($this->f, $this->tables[$tag]['offset'], SEEK_SET);
 	}
 
-	function Skip($n)
+	public function Skip($n)
 	{
 		fseek($this->f, $n, SEEK_CUR);
 	}
 
-	function Read($n)
+	public function Read($n)
 	{
 		return $n>0 ? fread($this->f, $n) : '';
 	}
 
-	function ReadUShort()
+	public function ReadUShort()
 	{
 		$a = unpack('nn', fread($this->f,2));
 		return $a['n'];
 	}
 
-	function ReadShort()
+	public function ReadShort()
 	{
 		$a = unpack('nn', fread($this->f,2));
 		$v = $a['n'];
@@ -687,13 +688,13 @@ class TTFParser
 		return $v;
 	}
 
-	function ReadULong()
+	public function ReadULong()
 	{
 		$a = unpack('NN', fread($this->f,4));
 		return $a['N'];
 	}
 
-	function CheckSum($s)
+	public function CheckSum($s)
 	{
 		$n = strlen($s);
 		$high = 0;
@@ -706,7 +707,7 @@ class TTFParser
 		return pack('nn', $high+($low>>16), $low);
 	}
 
-	function Error($msg)
+	public function Error($msg)
 	{
 		throw new Exception($msg);
 	}

@@ -1,7 +1,7 @@
 <?php 
 
 // Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!str_contains($section, "step")) && ($_SESSION['userLevel'] > 0))) {
     $redirect = "../../403.php";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
@@ -22,12 +22,12 @@ if ($section == "step4") {
     $db_conn->returnType = "array";
     $db_conn->orderBy("id", "ASC");
     $row_brewer = $db_conn->getOne($prefix."brewer", "brewerFirstName,brewerLastName,brewerEmail");
-    if (empty($row_brewer)) $row_brewer = array();
+    if (empty($row_brewer)) $row_brewer = [];
 
     $db_conn->returnType = "array";
     $db_conn->orderBy("id", "ASC");
     $row_comp_info = $db_conn->getOne($prefix."contest_info", "COUNT(*) as 'count'");
-    if (empty($row_comp_info)) $row_comp_info = array();
+    if (empty($row_comp_info)) $row_comp_info = [];
 
     if ($row_comp_info['count'] >= 1) {
         $action = "edit";

@@ -56,9 +56,9 @@ $header1_17 = "";
 $page_info17 = "";
 $style_info_modals = "";
 
-$ba_accepted_styles = array();
+$ba_accepted_styles = [];
 $anchor_links_nav = "";
-$anchor_links = array();
+$anchor_links = [];
 $anchor_top = "<p class=\"d-print-none\"><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
 
 $entry_limits_by_style = "";
@@ -80,7 +80,7 @@ if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimi
 // Check if style limits by Medal Category or Table are in place.
 // If so, display.
 $entry_limits_by_medal_category = "";
-if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimits']) == 1) && (is_numeric($_SESSION['prefsStyleLimits']))) {
+if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimits']) === 1) && (is_numeric($_SESSION['prefsStyleLimits']))) {
 
 	$db_conn->where("tableEntryLimit", NULL, 'IS NOT');
 	$db_conn->orderBy("tableName", "ASC");
@@ -159,7 +159,7 @@ if ($show_entries) {
 
 			$anchor_links[] = $label_entry_limit;
 			$anchor_name = str_replace(" ", "-", $label_entry_limit);
-			
+
 			$header1_5 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_limits);
 
 			if (($_SESSION['prefsProEdition'] == 0) && ((!empty($row_limits['prefsEntryLimit'])) || (!empty($row_limits['prefsEntryLimitPaid'])))) {
@@ -172,7 +172,7 @@ if ($show_entries) {
 			}
 
 			if (!empty($style_type_entry_count_display)) {
-				
+
 				$page_info5 .= "<h3>".str_replace(":","",ucwords($entry_info_text_053))."</h3>";
 				$page_info5 .= "<table class='table table-bordered border-dark-subtle'>";
 				$page_info5 .= "<thead class='table-dark'>";
@@ -186,7 +186,7 @@ if ($show_entries) {
 						else $page_info5 .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td>", $key, $value[1], $value[0]);
 					}
 				}
-				
+
 				$page_info5 .= "</tbody>";
 				$page_info5 .= "</table>";
 
@@ -215,16 +215,16 @@ if ($show_entries) {
 				$page_info5 .= "<tbody>";
 
 				$page_info5 .= $entry_limits_by_medal_category;
-				
+
 				$page_info5 .= "</tbody>";
 				$page_info5 .= "</table>";
 
 			}
-			
+
 		}
 
 		if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserSubCatLimit'])) || (!empty($row_limits['prefsUSCLExLimit'])) || ($incremental)) {
-			
+
 			$anchor_links[] = $label_entry_per_entrant;
 			$anchor_name = str_replace(" ", "-", $label_entry_per_entrant);
 			$page_info5 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h3>%s</h3>",strtolower($anchor_name),$label_entry_per_entrant);
@@ -240,7 +240,7 @@ if ($show_entries) {
 				else  $page_info5 .= "<tr>";
 				$page_info5 .= sprintf("<td>%s %s</td><td>%s</td>",$incremental_limits[1]['limit-number'], $label_entries, getTimeZoneDateTime($_SESSION['prefsTimeZone'], $limit_date_1, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "$sidebar_date_format", "date-time"));
 				$page_info5 .= "</tr>";
-				
+
 				if (!empty($limit_date_2)) {
 					if ($current_limit == 2) $page_info5 .= "<tr class='table-info border-dark-subtle'>";
 					else $page_info5 .= "<tr>";
@@ -295,12 +295,12 @@ if ($show_entries) {
 			}
 
 			if ((!empty($row_limits['prefsUSCLExLimit'])) && (!empty($row_limits['prefsUSCLEx']))) {
-				
+
 				$excepted_styles = explode(",",$row_limits['prefsUSCLEx']);
-				
-				if (count($excepted_styles) == 1) $sub = $entry_info_text_027; 
+
+				if (count($excepted_styles) === 1) $sub = $entry_info_text_027; 
 				else $sub = $entry_info_text_028;
-				
+
 				$page_info5 .= "<dl class=\"row\">";
 				$page_info5 .= sprintf("<dt class=\"col-7 col-md-4 col-lg-3\">%s:</dt><dd class=\"col-5 col-md-8 col-lg-9\">%s</dd>", $label_entry_limit_exception, $row_limits['prefsUSCLExLimit']);
 				$page_info5 .= sprintf("<dt class=\"col-12 col-md-4 col-lg-3\">%s:</dt>",$label_style_excepted);
@@ -338,7 +338,7 @@ $anchor_name = str_replace(" ", "-", $label_admin_judging_loc);
 $header1_7 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_admin_judging_loc);
 if ($totalRows_judging == 0) $page_info7 .= sprintf("<p>%s</p>",$entry_info_text_035);
 else {
-	
+
 	foreach ($rows_judging as $row_judging) {
 
 		if ($row_judging['judgingLocType'] < 2) {
@@ -457,7 +457,7 @@ if ($row_styles) {
 
 			if (array_key_exists($row_styles['id'], $styles_selected)) {
 
-				if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
+				if (($styles_endRow === 0) && ($styles_hloopRow1++ !== 0)) $page_info8 .= "<tr>";
 
 				$page_info8 .= "<td width=\"33%\">";
 
@@ -488,7 +488,7 @@ if ($row_styles) {
 		}
 
 
-	if ($styles_endRow != 0) {
+	if ($styles_endRow !== 0) {
 			while ($styles_endRow < $styles_columns) {
 				$page_info8 .= "<td>&nbsp;</td>";
 				$styles_endRow++;
@@ -504,7 +504,7 @@ if ($show_entries) {
 
 	// Show bottle acceptance, shipping location, and dropoff locations if open
 	// Bottle Acceptance
-	
+
 	if (!empty($_SESSION['jPrefsBottleNum'])) $page_info9 .= sprintf("<p><strong>%s: %s</strong></p>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
 
 	if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
@@ -516,7 +516,7 @@ if ($show_entries) {
 						   ->setMarkupEscaped(true) # escapes markup (HTML)
 						   ->text($row_contest_info['contestBottles']); 
 		}
-		
+
 		else $page_info9 .= $row_contest_info['contestBottles'];
 
 	}
@@ -525,7 +525,7 @@ if ($show_entries) {
 	if ((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2) && ($_SESSION['prefsShipping'] == 1)) {
 
 		if (!empty($shipping_open)) $entry_info_text_001 = "&mdash;";
-		
+
 		$header1_10 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_shipping_info);
 		if (!empty($row_contest_dates['contestShippingDeadline'])) $page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_037);
@@ -543,16 +543,16 @@ if ($show_entries) {
 							->setBreaksEnabled(true) # enables automatic line breaks
 							->text($contestRulesJSON['competition_packing_shipping']); 
 			}
-			
+
 		}
-		
+
 		else {
-			
+
 			if (!empty($contestRulesJSON['competition_packing_shipping'])) {
 				$page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
 				$page_info10 .= $contestRulesJSON['competition_packing_shipping'];
 			}
-			
+
 		} 
 
 	}
@@ -567,14 +567,14 @@ if ($show_entries) {
 
 		if (!empty($row_contest_dates['contestDropoffDeadline'])) $page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
 		$page_info11 .= "<p>".$dropoff_qualifier_text_001."</p>";
-		
+
 		foreach ($rows_dropoff as $row_dropoff) {
 
 			$page_info11 .= "<p>";
 			if (!empty($row_dropoff['dropLocationWebsite'])) $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a><span class=\"fa fa-sm fa-external-link ms-2\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
 			else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 			$page_info11 .= "<br />";
-			
+
 			if (empty($row_dropoff['dropLocationNotes'])) {
 
 				$address = rtrim($row_dropoff['dropLocation'],"&amp;KeepThis=true");
@@ -627,7 +627,7 @@ if ($show_entries) {
 
 // Best of Show
 if (isset($row_contest_info['contestBOSAward'])) {
-	
+
 	$header1_12 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_bos);
 
 	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestBOSAward']))) { 
@@ -636,14 +636,14 @@ if (isset($row_contest_info['contestBOSAward'])) {
 					   ->setMarkupEscaped(true) # escapes markup (HTML)
 					   ->text($row_contest_info['contestBOSAward']); 
 	}
-	
+
 	else $page_info12 .= $row_contest_info['contestBOSAward'];
 
 }
 
 // Awards and Awards Ceremony Location
 if (isset($row_contest_info['contestAwards'])) {
-	
+
 	$header1_13 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_awards);
 	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestAwards']))) { 
 		$page_info13 .= Parsedown::instance()
@@ -678,10 +678,10 @@ if (isset($_SESSION['contestAwardsLocName'])) {
 }
 
 if ($show_entries) {
-	
+
 	// Circuit Qualification
 	if (isset($row_contest_info['contestCircuit'])) {
-		
+
 		$anchor_links[] = $label_circuit;
 		$anchor_name = str_replace(" ", "-", $label_circuit);
 		$header1_15 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_circuit);
@@ -692,7 +692,7 @@ if ($show_entries) {
 					   ->setMarkupEscaped(true) # escapes markup (HTML)
 					   ->text($row_contest_info['contestCircuit']);
 		}
-		
+
 		else $page_info15 .= $row_contest_info['contestCircuit'];
 
 	}
@@ -700,7 +700,7 @@ if ($show_entries) {
 
 // Show rules if winner display is active (moved from default page)
 if (($registration_open == 2) && ($entry_window_open == 2)) {
-	
+
 	$header1_17 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_rules);
 
 	if ((ENABLE_MARKDOWN) && (!is_html($contestRulesJSON['competition_rules']))) {

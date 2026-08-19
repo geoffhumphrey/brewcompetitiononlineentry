@@ -43,15 +43,15 @@ exit();
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 	$_SESSION['barcode_entry_list'] = "";
 	$_SESSION['flag_jnum'] = "";
 	$_SESSION['flag_enum'] = "";
 
-	$entries_updated = array();
-	$flag_jnum = array();
-	$flag_enum = array();
+	$entries_updated = [];
+	$flag_jnum = [];
+	$flag_enum = [];
 
 	foreach ($_POST['id'] as $id) {
 
@@ -118,12 +118,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (isset($_POST['box'.$id])) $box_number = sterilize($_POST['box'.$id]);
 
 				$update_table = $prefix."brewing";
-				$data = array(
+				$data = [
 					'brewReceived' => '1',
 					'brewJudgingNumber' => blank_to_null($judging_number),
 					'brewBoxNum' => blank_to_null($box_number),
 					'brewPaid' => blank_to_null($paid)
-				);			
+				];			
 				$db_conn->where ('id', $eid);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -149,7 +149,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	exit();
 	*/
 
-	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+	if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 	$redirect = $base_url."index.php?section=admin&go=checkin";
 	if ($go != "default") $redirect .= "&filter=".$go;

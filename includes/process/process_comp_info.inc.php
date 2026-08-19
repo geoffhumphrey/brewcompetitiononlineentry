@@ -11,7 +11,7 @@ if (!isset($timezone_raw)) $timezone_raw = 0;
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))) || ($setup_free_access))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	// Instantiate HTMLPurifier
@@ -103,15 +103,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$contestClubs = json_encode($contestClubs);
 		}
 
-		$contestRules = array(
+		$contestRules = [
 			"competition_rules" => $competition_rules,
 			"competition_packing_shipping" => $competition_packing_shipping
-		);
+		];
 
 		$contestRules = json_encode($contestRules);
 
 		if (isset($_POST['contestWinnerLink'])) $contestWinnerLink = check_http(sterilize($_POST['contestWinnerLink']));
-		
+
 	} // end if ($go == "default")
 
 	/**
@@ -127,7 +127,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$update_table = $prefix."contest_info";
-		$data = array(
+		$data = [
 			'id' => 1,
 			'contestName' => blank_to_null($contestName),
 			'contestHost' => blank_to_null($contestHost),
@@ -161,7 +161,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'contestID' => blank_to_null($contestID),
 			'contestClubs' => blank_to_null($contestClubs),
 			'contestWinnerLink' => blank_to_null($contestWinnerLink)
-		);
+		];
 
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -170,12 +170,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$update_table = $prefix."contacts";
-		$data = array(
+		$data = [
 			'contactFirstName' => sterilize($_POST['contactFirstName']),
 			'contactLastName' => sterilize($_POST['contactLastName']),
 			'contactPosition' => sterilize($_POST['contactPosition']),
 			'contactEmail' => sterilize($_POST['contactEmail'])
-		);
+		];
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -189,7 +189,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($row_comp_info_check['count'] == 1) {
 
 			$update_table = $prefix."bcoem_sys";
-			$data = array('setup_last_step' => '4');
+			$data = ['setup_last_step' => '4'];
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -207,7 +207,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if ($errors) $insertGoTo = $base_url."setup.php?section=step4&msg=3";
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
@@ -229,7 +229,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$hash = password_hash(sterilize($_POST['contestCheckInPassword']), PASSWORD_BCRYPT);
 
 				$update_table = $prefix."contest_info";
-				$data = array('contestCheckInPassword' => $hash);
+				$data = ['contestCheckInPassword' => $hash];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -248,11 +248,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			 * Will trigger the session to reset the variables in 
 			 * common.db.php upon reload after redirect.
 			 */
-			
+
 			unset($_SESSION['contest_info_general'.$prefix_session]);
 
 			$update_table = $prefix."contest_info";
-			$data = array(
+			$data = [
 				'contestName' => blank_to_null($contestName),
 				'contestHost' => blank_to_null($contestHost),
 				'contestHostWebsite' => blank_to_null($contestHostWebsite),
@@ -285,7 +285,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'contestID' => blank_to_null($contestID),
 				'contestClubs' => blank_to_null($contestClubs),
 				'contestWinnerLink' => blank_to_null($contestWinnerLink)
-			);
+			];
 
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
@@ -297,7 +297,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if ($section == "setup") {
 
 				$update_table = $prefix."bcoem_sys";
-				$data = array('setup_last_step' => '4');
+				$data = ['setup_last_step' => '4'];
 				$db_conn->where ('id', 1);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -312,7 +312,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $updateGoTo = sterilize($_POST['relocate']."&msg=3");
 		else $updateGoTo = sterilize($_POST['relocate']."&msg=2");

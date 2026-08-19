@@ -162,24 +162,24 @@ function renderClass(string $className, string $tableName, array $columns): stri
 
     $paramBlock   = implode("\n", $params);
     $fromArrayBlock = implode("\n", $fromArray);
-    $ynHelper = $hasEnum ? <<<'PHP'
-
-    /**
-     * Cast a raw DB value to a 'Y'|'N' flag. Assert guards the invariant;
-     * PHPStan narrows the type via the in_array assertion.
-     *
-     * @param array<string, mixed> $row
-     */
-    private static function yn(array $row, string $key): 'Y'|'N'|null
-    {
-        if (!isset($row[$key])) {
-            return null;
+    $ynHelper = $hasEnum ? <<<'PHP_WRAP'
+    
+        /**
+         * Cast a raw DB value to a 'Y'|'N' flag. Assert guards the invariant;
+         * PHPStan narrows the type via the in_array assertion.
+         *
+         * @param array<string, mixed> $row
+         */
+        private static function yn(array $row, string $key): 'Y'|'N'|null
+        {
+            if (!isset($row[$key])) {
+                return null;
+            }
+            $v = (string) $row[$key];
+            assert(in_array($v, ['Y', 'N'], true));
+            return $v;
         }
-        $v = (string) $row[$key];
-        assert(in_array($v, ['Y', 'N'], true));
-        return $v;
-    }
-PHP : '';
+    PHP_WRAP : '';
 
     return <<<PHP
 <?php

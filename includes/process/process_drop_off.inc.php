@@ -5,7 +5,7 @@
  */
 
 $errors = FALSE;
-$error_output = array();
+$error_output = [];
 $_SESSION['error_output'] = "";
 
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($setup_free_access))) {
@@ -33,13 +33,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($go != "skip") {
 
 			$update_table = $prefix."drop_off";
-			$data = array(
+			$data = [
 				'dropLocationName' => blank_to_null($dropLocationName),
 				'dropLocation' => blank_to_null($dropLocation),
 				'dropLocationPhone' => blank_to_null($dropLocationPhone),
 				'dropLocationWebsite' => blank_to_null($dropLocationWebsite),
 				'dropLocationNotes' => blank_to_null($dropLocationNotes)
-			);
+			];
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -51,7 +51,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($section == "setup") {
 
 			$update_table = $prefix."bcoem_sys";
-			$data = array('setup_last_step' => 6);
+			$data = ['setup_last_step' => 6];
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -67,7 +67,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		else $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=1";
 		if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=3";
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
@@ -77,13 +77,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ($action == "edit") {
 
 		$update_table = $prefix."drop_off";
-		$data = array(
+		$data = [
 			'dropLocationName' => blank_to_null($dropLocationName),
 			'dropLocation' => blank_to_null($dropLocation),
 			'dropLocationPhone' => blank_to_null($dropLocationPhone),
 			'dropLocationWebsite' => blank_to_null($dropLocationWebsite),
 			'dropLocationNotes' => blank_to_null($dropLocationNotes)
-		);
+		];
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -91,7 +91,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		$updateGoTo = $base_url."index.php?section=admin&go=dropoff&msg=2";
 		if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=dropoff&msg=3";

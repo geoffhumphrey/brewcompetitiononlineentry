@@ -38,7 +38,7 @@ if ($section != "admin") {
     }
 
     // Hardcoded fallback array for backwards compatibility
-    $bg_hero_images_fallback = array(
+    $bg_hero_images_fallback = [
         "0-a" => "misc-cropped-bottles_3000x500.webp",
         "0-b" => "misc-brussels-bottles_3000x500.webp",
         "0-c" => "misc-plzen-fermenters_3000x500.webp",
@@ -51,14 +51,14 @@ if ($section != "admin") {
         "1-f" => "beer-on-bar_3000x500.webp",
         "2-a" => "cider-bottles_3000x500.webp",
         "3-a" => "mead-bottles_3000x500.webp",     
-    );
+    ];
 
     // Get session style types for filtering
     if ((!isset($_SESSION['bg_hero_image_types'])) || (empty($_SESSION['bg_hero_image_types']))) {
-        $_SESSION['bg_hero_image_types'] = array();
+        $_SESSION['bg_hero_image_types'] = [];
 
         $a = json_decode($_SESSION['prefsSelectedStyles'],true);
-        $actual_styles_types = array();
+        $actual_styles_types = [];
         $actual_styles_types[] = 0;
 
         foreach ($a as $key => $value) {
@@ -75,7 +75,7 @@ if ($section != "admin") {
         $pref_images = get_active_hero_images($db_conn, $prefix, $_SESSION['bg_hero_image_types']);
         if (!empty($pref_images)) {
             // Randomly select from preference images
-            $i = rand(0, count($pref_images)-1);
+            $i = random_int(0, count($pref_images)-1);
             $hero_background = $pref_images[$i];
         }
     }
@@ -83,7 +83,7 @@ if ($section != "admin") {
     // Fall back to hardcoded array if preference images not available
     if (empty($hero_background)) {
         if ((!isset($_SESSION['bg_hero_image_display'])) || (empty($_SESSION['bg_hero_image_display']))) {
-            $_SESSION['bg_hero_image_display'] = array();
+            $_SESSION['bg_hero_image_display'] = [];
 
             foreach ($bg_hero_images_fallback as $key => $value) {
                 $image_style_type = explode("-",$key);
@@ -92,7 +92,7 @@ if ($section != "admin") {
         }
         
         if (!empty($_SESSION['bg_hero_image_display'])) {
-            $i = rand(0, count($_SESSION['bg_hero_image_display'])-1);
+            $i = random_int(0, count($_SESSION['bg_hero_image_display'])-1);
             $hero_background = $_SESSION['bg_hero_image_display'][$i];
         }
     }
@@ -104,7 +104,7 @@ if ($section != "admin") {
     } 
 
     $salutation = "";
-    if (($section != "default") && ($section != "competition") && ($section != "maintenance") && (!is_numeric($section))) {
+    if (!in_array($section, ["default", "competition", "maintenance"]) && (!is_numeric($section))) {
         $salutation .= "<h1 class='fw-bold animate__animated animate__fadeInDown'>".$_SESSION['contestName']."</h1>";
         if ($logged_in) $salutation .= sprintf("<p class='landing-page-salutation animate__animated animate__fadeInUp animate__delay-3s'><small>%s %s!</small></p>",$default_page_text_006,$_SESSION['brewerFirstName']);
     }
@@ -194,10 +194,10 @@ if ($section != "admin") {
     if ($archive_alert) {
 
         if ((isset($_SESSION['contestWinnerLink'])) && (!empty($_SESSION['contestWinnerLink']))) {
-            if ($archive_alert_count == 0) $archive_alert_content .= sprintf("<li class=\"nav-item\"><a class=\"nav-link\" href=\"%s\" target=\"_blank\">%s<i class=\"fa fa-fw fa-external-link-alt ms-2\"></i></a></li>",$_SESSION['contestWinnerLink'],$label_view);
+            if ($archive_alert_count === 0) $archive_alert_content .= sprintf("<li class=\"nav-item\"><a class=\"nav-link\" href=\"%s\" target=\"_blank\">%s<i class=\"fa fa-fw fa-external-link-alt ms-2\"></i></a></li>",$_SESSION['contestWinnerLink'],$label_view);
             else $archive_alert_content .= sprintf("<li class=\"nav-item\"><i class=\"fa fa-fw fa-external-link-alt text-gold me-2\"></i><a class=\"nav-link\" href=\"%s\" target=\"_blank\">%s</a></li>",$_SESSION['contestWinnerLink'],$label_more_info);
         }
-        
+
         $archive_alert_display .= "<div class=\"offcanvas offcanvas-end\" data-bs-scroll=\"true\" data-bs-theme=\"dark\" tabindex=\"-1\" id=\"archive-list\" aria-labelledby=\"archive-list-label\">";
         $archive_alert_display .= "<div class=\"offcanvas-header\">";
         $archive_alert_display .= sprintf("<h4 class=\"offcanvas-title\" id=\"archive-list-label\">%s</h4>",$label_past_winners);

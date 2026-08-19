@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 ob_start();
-require_once ('paths.php');
+require_once (__DIR__ . '/paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
 require_once (INCLUDES.'styles.inc.php');
 if (SINGLE) require_once(SSO.'sso.inc.php');
@@ -28,7 +28,7 @@ if ((DEBUG) || (TESTING)) {
    
     $css_common_url = str_replace(".min", "", $css_common_url);
     
-    if (strpos($base_url, 'test.brewingcompetitions.com') !== false) {
+    if (str_contains($base_url, 'test.brewingcompetitions.com')) {
         $js_app_url = $base_url."js_source/app.js";
     }
     
@@ -41,7 +41,7 @@ $jprefs_set = FALSE;
 
 if ($section == "default") $section = "setup";
 
-if (($section == "step4") || ($section == "step5") || ($section == "step6") || ($section == "step7")) {
+if (in_array($section, ["step4", "step5", "step6", "step7"])) {
 	
 	unset($_SESSION['prefs'.$prefix_session]);
 	$db_conn->where('id', '1');
@@ -82,7 +82,7 @@ if (empty($_SESSION['prefsLang'.$prefix_session])) {
     $_SESSION['prefsLanguage'] = "en-US";
 
     // Check if variation used (demarked with a dash)
-    if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
+    if (str_contains($_SESSION['prefsLanguage'], '-')) {
         $lang_folder = explode("-",$_SESSION['prefsLanguage']);
         $_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
     }
@@ -166,7 +166,7 @@ else {
 	
 }
 
-$security_question = array($label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27);
+$security_question = [$label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27];
 
 /**
  * Ensure setup forms reuse the same CSRF token across page loads.

@@ -7,7 +7,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	if (($action == "add") || ($action == "edit")) {
@@ -58,7 +58,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ((!empty($_POST['scoreEntry'.$score_id])) || (!empty($_POST['scoreMiniBOS'.$score_id])) || (!empty($_POST['scorePlace'.$score_id]))) {
 
 				$update_table = $prefix."judging_scores";
-				$data = array(
+				$data = [
 					'eid' => blank_to_null($eid),
 					'bid' => blank_to_null($bid),
 					'scoreTable' => blank_to_null($scoreTable),
@@ -66,7 +66,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					'scorePlace' => blank_to_null($scorePlace),
 					'scoreType' => blank_to_null($scoreType),
 					'scoreMiniBOS' => blank_to_null($scoreMiniBOS)
-				);
+				];
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -74,10 +74,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				}
 
 			} // end if ((!empty($_POST['scoreEntry'.$score_id])) || (!empty($_POST['scoreMiniBOS'.$score_id])) || (!empty($_POST['scorePlace'.$score_id])))
-		
+
 		} // end foreach
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 		$insertGoTo = prep_redirect_link($insertGoTo);

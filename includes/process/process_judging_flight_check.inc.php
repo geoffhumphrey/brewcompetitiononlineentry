@@ -8,7 +8,7 @@ $styles_db_table = $prefix."styles";
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	$db_conn->where('brewReceived', '1');
@@ -42,28 +42,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				// First, get the id of the entry's style category/subcategory
 				if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 				    $first_character = mb_substr($row_check_received['brewCategorySort'], 0, 1);
-				    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+				    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 				    else $chosen_style_set = "BJCP2021";
 				}
 
 				else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 				$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-				$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']));
+				$row_style = $db_conn->rawQueryOne($query_style, [$chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']]);
 
 				// Then, get the id of the user defined judging table
 				$query_table = "SELECT id FROM ".$judging_tables_db_table." WHERE FIND_IN_SET(?,tableStyles) > 0";
-				$row_table = $db_conn->rawQueryOne($query_table, array($row_style['id']));
+				$row_table = $db_conn->rawQueryOne($query_table, [$row_style['id']]);
 				$totalRows_table = $db_conn->count;
 				//echo $query_table."<br>";
 
 				if ($totalRows_table > 0) {
-					
+
 					// Finally, update the table information into the judging_flights DB table
 					// IF there is a judging table with the entry's subcategory
 
 					$update_table = $prefix."judging_flights";
-					$data = array('flightTable' => $row_table['id']);
+					$data = ['flightTable' => $row_table['id']];
 					$db_conn->where ('flightEntryID', $row_check_received['id']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -85,31 +85,31 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// First, get the id of the entry's style category/subcategory
 			if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 			    $first_character = mb_substr($row_check_received['brewCategorySort'], 0, 1);
-			    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+			    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 			    else $chosen_style_set = "BJCP2021";
 			}
 
 			else $chosen_style_set = $_SESSION['prefsStyleSet'];
-			
+
 			$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-			$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']));
+			$row_style = $db_conn->rawQueryOne($query_style, [$chosen_style_set, $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']]);
 
 			// Then, get the id of the user defined judging table
 			$query_table = "SELECT id FROM ".$judging_tables_db_table." WHERE FIND_IN_SET(?,tableStyles) > 0";
-			$row_table = $db_conn->rawQueryOne($query_table, array($row_style['id']));
+			$row_table = $db_conn->rawQueryOne($query_table, [$row_style['id']]);
 			$totalRows_table = $db_conn->count;
 
 			if ($totalRows_table > 0) {
-				
+
 				// Finally, insert the information into the judging_flights DB table
 				// IF there is a judging table with the entry's subcategory
 				$update_table = $prefix."judging_flights";
-				$data = array(
+				$data = [
 					'flightTable' => $row_table['id'],
 					'flightNumber' => 1,
 					'flightEntryID' => $row_check_received['id'],
 					'flightRound' => 1
-				);
+				];
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -137,7 +137,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=3";
 	}
 
-	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+	if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 	$updateGoTo = prep_redirect_link($updateGoTo);
 	$redirect_go_to = sprintf("Location: %s", $updateGoTo);

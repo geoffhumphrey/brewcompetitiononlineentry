@@ -7,7 +7,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	if ($action == "enter") {
@@ -24,13 +24,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y")) {
 
 				$update_table = $prefix."judging_scores_bos";
-				$data = array(
+				$data = [
 					'eid' => $eid,
 					'bid' => $bid,
 					'scoreEntry' => $scoreEntry,
 					'scorePlace' => $scorePlace,
 					'scoreType' => $scoreType
-				);
+				];
 				$db_conn->where ('id', sterilize($_POST['id'.$score_id]));
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -43,13 +43,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "N")) {
 
 				$update_table = $prefix."judging_scores_bos";
-				$data = array(
+				$data = [
 					'eid' => $eid,
 					'bid' => $bid,
 					'scoreEntry' => $scoreEntry,
 					'scorePlace' => $scorePlace,
 					'scoreType' => $scoreType
-				);
+				];
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -72,7 +72,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		} // end foreach
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
 		$updateGoTo = prep_redirect_link($updateGoTo);

@@ -55,9 +55,9 @@ $page_info16 = "";
 $header1_17 = "";
 $page_info17 = "";
 $style_info_modals = "";
-$ba_accepted_styles = array();
+$ba_accepted_styles = [];
 $anchor_links_nav = "";
-$anchor_links = array();
+$anchor_links = [];
 $anchor_top = "<p class=\"hidden-print\"><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
 
 $contestRulesJSON = json_decode($row_contest_info['contestRules'],true);
@@ -191,7 +191,7 @@ if ($show_entries) {
 
 			if (!empty($row_limits['prefsUSCLExLimit'])) {
 			$excepted_styles = explode(",",$row_limits['prefsUSCLEx']);
-			if (count($excepted_styles) == 1) $sub = $entry_info_text_027; else $sub = $entry_info_text_028;
+			if (count($excepted_styles) === 1) $sub = $entry_info_text_027; else $sub = $entry_info_text_028;
 				if ($row_limits['prefsUSCLExLimit'] == 1) $page_info16 .= sprintf("<p>%s to %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_029,$sub);
 				else $page_info16 .= sprintf("<p>%s %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_030,$sub);
 
@@ -304,7 +304,7 @@ $styles_hloopRow1 = 0; // first row flag
 
 		if (array_key_exists($row_styles['id'], $styles_selected)) {
 
-			if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
+			if (($styles_endRow === 0) && ($styles_hloopRow1++ !== 0)) $page_info8 .= "<tr>";
 
 			$page_info8 .= "<td width=\"33%\">";
 
@@ -370,7 +370,7 @@ $styles_hloopRow1 = 0; // first row flag
 	}
 
 
-if ($styles_endRow != 0) {
+if ($styles_endRow !== 0) {
 		while ($styles_endRow < $styles_columns) {
 			$page_info8 .= "<td>&nbsp;</td>";
 			$styles_endRow++;

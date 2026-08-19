@@ -1,7 +1,7 @@
 <?php
 
 // Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!str_contains($section, "step")) && ($_SESSION['userLevel'] > 0))) {
     $redirect = "../../403.php";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
@@ -19,13 +19,13 @@ $judging_close_date = "";
 
 if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
 
-    $judging_dates = array();
+    $judging_dates = [];
     $judging_earliest_date = "";
     $judging_latest_date = "";
 
     // Check whether any judging sessions have been defined. 
     // If so, loop through and find the earliest and the latest dates.
-    $cols = array("id", "judgingDate", "judgingDateEnd");
+    $cols = ["id", "judgingDate", "judgingDateEnd"];
     $db_conn->where ("judgingLocType", "1", "<=");
     $db_conn->returnType = "array"; 
     $row_judging_locations = $db_conn->get($prefix."judging_locations", null, $cols);
@@ -66,7 +66,7 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
         $j_open_date = $_SESSION['jPrefsJudgingOpen'];
         if ((!empty($judging_earliest_date)) && ($judging_earliest_date < $_SESSION['jPrefsJudgingOpen'])) $j_open_date = $judging_earliest_date;
         $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $j_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
-    
+
     }
 
     else {
@@ -78,10 +78,10 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
         $suggested_open = TRUE;
 
     }
-    
+
 
     if ((isset($_SESSION['jPrefsJudgingClosed'])) && (!empty($_SESSION['jPrefsJudgingClosed']))) {
-    
+
         // If the opening date is defined...
         if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) {
 
@@ -93,7 +93,7 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
                 if ((!empty($judging_latest_date)) && ($judging_latest_date > $_SESSION['jPrefsJudgingClosed'])) $j_closed_date = $judging_latest_date;
 
             }
-            
+
             else {
 
                 if (empty($judging_earliest_date)) $j_closed_date = $_SESSION['jPrefsJudgingOpen'] + 86400; // open plus 1 day
@@ -108,7 +108,7 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
             }
 
         }
-           
+
         // If not...
         else {
 
@@ -118,7 +118,7 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
             }
 
             else $j_closed_date = $judging_latest_date;
-                
+
         }
 
         $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $j_closed_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
@@ -137,7 +137,7 @@ if (($_SESSION['prefsEval'] == 1) || ($section == "step8")) {
 
         $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
         $suggested_close = TRUE;
-    
+
     }
 
     /*
@@ -195,7 +195,7 @@ $(document).ready(function() {
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <select class="selectpicker" name="jPrefsBottleNum" id="jPrefsBottleNum" data-size="10" data-width="auto">
             <?php for ($i=1; $i <= 15; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsBottleNum'])) && ($_SESSION['jPrefsBottleNum'] == $i)) echo "SELECTED"; else { if ($i == 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
+            <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsBottleNum'])) && ($_SESSION['jPrefsBottleNum'] == $i)) echo "SELECTED"; else { if ($i === 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
             <?php } ?>
             </select>
             <span id="helpBlock" class="help-block"><p>Most competitions require at least two bottles.</span>
@@ -367,7 +367,7 @@ $(document).ready(function() {
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <select class="selectpicker" name="jPrefsScoreDispMax" id="jPrefsScoreDispMax" data-size="10" data-width="auto">
         <?php for ($i=1; $i <= 10; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsScoreDispMax'])) && ($_SESSION['jPrefsScoreDispMax'] == $i)) echo "SELECTED"; else { if ($i == 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
+        <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsScoreDispMax'])) && ($_SESSION['jPrefsScoreDispMax'] == $i)) echo "SELECTED"; else { if ($i === 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
         <?php } ?>
         </select>
         <div id="helpBlock" class="help-block">
@@ -474,7 +474,7 @@ $(document).ready(function() {
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <select class="selectpicker" name="jPrefsFlightEntries" id="jPrefsFlightEntries" data-size="10" data-width="auto">
                 <?php for ($i=1; $i <= 50; $i++) { ?>
-                <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsFlightEntries'])) && ($_SESSION['jPrefsFlightEntries'] == $i)) echo "SELECTED"; else { if ($i == 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
+                <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsFlightEntries'])) && ($_SESSION['jPrefsFlightEntries'] == $i)) echo "SELECTED"; else { if ($i === 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
                 <?php } ?>
                 </select>
             <span id="helpBlock" class="help-block"><p>The maximum number of entries a judge pair will be assigned to evaluate in the system per flight. This generally applies to the traditional (non-queued) judging methodology.</span>
@@ -486,7 +486,7 @@ $(document).ready(function() {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <select class="selectpicker" name="jPrefsRounds" id="jPrefsRounds" data-size="10" data-width="auto">
         <?php for ($i=1; $i <= 5; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsRounds'])) && ($_SESSION['jPrefsRounds'] == $i)) echo "SELECTED"; else { if ($i == 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
+        <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsRounds'])) && ($_SESSION['jPrefsRounds'] == $i)) echo "SELECTED"; else { if ($i === 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
         <?php } ?>
         </select>
         <span id="helpBlock" class="help-block"><p>The maximum number of judging rounds for each <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">defined judging session</a>.</span>
@@ -497,7 +497,7 @@ $(document).ready(function() {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <select class="selectpicker" name="jPrefsMaxBOS" id="jPrefsMaxBOS" data-size="10" data-width="auto">
             <?php for ($i=1; $i <= 4; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsMaxBOS'])) && ($_SESSION['jPrefsMaxBOS'] == $i)) echo "SELECTED"; else { if (!isset($_SESSION['jPrefsMaxBOS']) && $i == 3) echo "SELECTED"; }?>><?php echo $i; ?></option>
+            <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsMaxBOS'])) && ($_SESSION['jPrefsMaxBOS'] == $i)) echo "SELECTED"; else { if (!isset($_SESSION['jPrefsMaxBOS']) && $i === 3) echo "SELECTED"; }?>><?php echo $i; ?></option>
             <?php } ?>
         </select>
         <span id="helpBlock" class="help-block"><p>The maximum number of places available to award and display for each style type. Number does not include Honorable Mention. Of course, all places do not need to be awarded by BOS judges.</p><p>This is <strong>NOT</strong> the number of entries for staff to pull for the BOS round. That methodology is determined for each <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">style type</a> individually.</span>

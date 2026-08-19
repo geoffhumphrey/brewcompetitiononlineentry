@@ -567,7 +567,7 @@ else {
 			</div>
 			<div class="col-md-3 col-sm-12 col-xs-12 small">
 				<div style="margin-left: 10px">
-					<input class="form-control" type="text" id="<?php echo $value; ?>" name="<?php echo $value; ?>" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php if (strpos($key, $label_body) !== false) echo $label_thin; else echo $label_none; ?>", "", "<?php if (strpos($key, $label_body) === false) echo $label_low; ?>", "", "", "<?php echo $label_med; ?>", "", "", "", "", "<?php if (strpos($key, $label_body) !== false) echo $label_full; else echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data[$value]; ?>" data-slider-tooltip="hide" required>
+					<input class="form-control" type="text" id="<?php echo $value; ?>" name="<?php echo $value; ?>" data-provide="slider" data-slider-ticks="[0,1,2,3,4,5,6,7,8,9,10]" data-slider-ticks-labels='["<?php if (str_contains($key, $label_body)) echo $label_thin; else echo $label_none; ?>", "", "<?php if (!str_contains($key, $label_body)) echo $label_low; ?>", "", "", "<?php echo $label_med; ?>", "", "", "", "", "<?php if (str_contains($key, $label_body)) echo $label_full; else echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data[$value]; ?>" data-slider-tooltip="hide" required>
 				</div>
 			</div>
 			<div class="col-md-2 col-sm-12 col-xs-12 small">
@@ -680,9 +680,9 @@ else {
 		$flaw_med = FALSE;
 		$flaw_high = FALSE;
 		if ($action == "edit") { 
-			if (strpos($row_eval['evalFlaws'],$flaw." Low") !== false) $flaw_low = TRUE;
-			elseif (strpos($row_eval['evalFlaws'],$flaw." Medium") !== false) $flaw_med = TRUE;
-			elseif (strpos($row_eval['evalFlaws'],$flaw." High") !== false) $flaw_high = TRUE;
+			if (str_contains($row_eval['evalFlaws'],$flaw." Low")) $flaw_low = TRUE;
+			elseif (str_contains($row_eval['evalFlaws'],$flaw." Medium")) $flaw_med = TRUE;
+			elseif (str_contains($row_eval['evalFlaws'],$flaw." High")) $flaw_high = TRUE;
 			else $flaw_none = TRUE;
 		}
 	?>

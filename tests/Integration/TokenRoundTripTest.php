@@ -28,12 +28,12 @@ final class TokenRoundTripTest extends TestCase
     // (pub/contact.pub.php derives these from runtime $password and
     // $server_root). Obviously-fake, low-entropy values derived at runtime
     // so no static hex/base64 secret-shaped literal lives in the source.
-    private static function secretKey(): string
+    private function secretKey(): string
     {
         return 'test-password-key-12345678901234567890';
     }
 
-    private static function nacl(): string
+    private function nacl(): string
     {
         return 'test-server-root-abcdefghijklm';
     }
@@ -92,8 +92,8 @@ final class TokenRoundTripTest extends TestCase
     {
         for ($id = 1; $id <= 50; $id++) {
             $idPadded = sprintf('%06d', $id);
-            $token = simpleEncrypt($idPadded, self::secretKey(), self::nacl());
-            $this->assertSame($idPadded, simpleDecrypt($token, self::secretKey(), self::nacl()));
+            $token = simpleEncrypt($idPadded, $this->secretKey(), $this->nacl());
+            $this->assertSame($idPadded, simpleDecrypt($token, $this->secretKey(), $this->nacl()));
         }
     }
 
@@ -107,7 +107,7 @@ final class TokenRoundTripTest extends TestCase
             if (str_contains($token, '+')) {
                 $found = true;
                 $corrupted = urldecode($token); // query-string parse of raw token
-                $result = @simpleDecrypt($corrupted, self::secretKey(), self::nacl());
+                $result = @simpleDecrypt($corrupted, $this->secretKey(), $this->nacl());
                 $this->assertNotSame(sprintf('%06d', $id), $result);
                 break;
             }
@@ -117,12 +117,12 @@ final class TokenRoundTripTest extends TestCase
 
     private function buildToken(int $id): string
     {
-        return simpleEncrypt(sprintf('%06d', $id), self::secretKey(), self::nacl());
+        return simpleEncrypt(sprintf('%06d', $id), $this->secretKey(), $this->nacl());
     }
 
     private function recoverId(string $token): int
     {
-        $decrypted = simpleDecrypt(rawurldecode(rawurlencode($token)), self::secretKey(), self::nacl());
+        $decrypted = simpleDecrypt(rawurldecode(rawurlencode($token)), $this->secretKey(), $this->nacl());
         $this->assertIsString($decrypted);
         return (int) $decrypted;
     }

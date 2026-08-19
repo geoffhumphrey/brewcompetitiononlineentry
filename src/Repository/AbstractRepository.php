@@ -60,7 +60,7 @@ abstract class AbstractRepository
         if (!is_array($rows)) {
             return [];
         }
-        return array_map(fn(array $r): object => $this->hydrate($r), array_values($rows));
+        return array_map($this->hydrate(...), array_values($rows));
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class AbstractRepository
         if (!is_array($rows)) {
             return [];
         }
-        return array_map(fn(array $r): object => $this->hydrate($r), array_values($rows));
+        return array_map($this->hydrate(...), array_values($rows));
     }
 
     /**

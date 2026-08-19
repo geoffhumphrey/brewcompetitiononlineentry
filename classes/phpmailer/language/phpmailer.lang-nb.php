@@ -1,6 +1,8 @@
 <?php
 
-/**
+declare(strict_types=1);
+
+ /**
  * Norwegian Bokmål PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
  * @author Wera AS <wordpress@wera.no>

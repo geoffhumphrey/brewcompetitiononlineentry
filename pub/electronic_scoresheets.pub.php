@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $container_eval = $container_main;
 
 include (LIB.'admin.lib.php');

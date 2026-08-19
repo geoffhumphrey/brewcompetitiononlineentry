@@ -13,7 +13,7 @@ require(LIB.'email.lib.php');
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($setup_free_access))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	if (isset($_POST['jPrefsBottleNum'])) $jPrefsBottleNum = sterilize($_POST['jPrefsBottleNum']);
@@ -45,7 +45,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		unset($_SESSION['prefs'.$prefix_session]);
 
 		$update_table = $prefix."judging_preferences";
-		$data = array(
+		$data = [
 			'jPrefsQueued' => $jPrefsQueued,
 			'jPrefsFlightEntries' => $jPrefsFlightEntries,
 			'jPrefsMaxBOS' => $jPrefsMaxBOS,
@@ -53,7 +53,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'jPrefsBottleNum' => $jPrefsBottleNum,
 			'jPrefsCapStewards' => $jPrefsCapStewards,
 			'jPrefsCapJudges' => $jPrefsCapJudges
-		);
+		];
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -62,10 +62,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$update_table = $prefix."preferences";
-		$data = array(
+		$data = [
 			'prefsEval' => sterilize($_POST['prefsEval']),
 			'prefsDisplaySpecial' => sterilize($_POST['prefsDisplaySpecial']),
-		);
+		];
 		$db_conn->where ('id', 1);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -138,7 +138,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			}
 
-			$judging_dates = array();
+			$judging_dates = [];
 			$judging_earliest_date = "";
 			$judging_latest_date = "";
 			$jPrefsJudgingOpen = "";
@@ -245,13 +245,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$jPrefsScoreDispMax = blank_to_null(sterilize($_POST['jPrefsScoreDispMax']));
 			
 			$update_table = $prefix."judging_preferences";
-			$data = array(
+			$data = [
 				'jPrefsScoresheet' => $jPrefsScoresheet,
 				'jPrefsMinWords' => $jPrefsMinWords,
 				'jPrefsJudgingOpen' => blank_to_null($jPrefsJudgingOpen),
 				'jPrefsJudgingClosed' => blank_to_null($jPrefsJudgingClosed),
 				'jPrefsScoreDispMax' => $jPrefsScoreDispMax
-			);
+			];
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -292,10 +292,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			session_regenerate_id(true);
 
 			$update_table = $prefix."bcoem_sys";
-			$data = array(
+			$data = [
 				'setup_last_step' => 8,
 				'setup' => 1
-			);
+			];
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -349,7 +349,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	} // end if (($action == "edit") || ($section == "setup"))
 
-	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+	if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 } else {
 

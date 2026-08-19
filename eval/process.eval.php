@@ -8,7 +8,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	$eid = "";
@@ -53,16 +53,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if (isset($_POST['evalAppearanceScore'])) $evalAppearanceScore = sterilize($_POST['evalAppearanceScore']);
 	if (isset($_POST['evalFlavorScore'])) $evalFlavorScore = sterilize($_POST['evalFlavorScore']);
 	if (isset($_POST['evalMouthfeelScore'])) $evalMouthfeelScore = sterilize($_POST['evalMouthfeelScore']);
-	
+
 	// All scoresheets require an overall and consensus score
 	$evalOverallScore = sterilize($_POST['evalOverallScore']);
 	$evalFinalScore = sterilize($_POST['evalFinalScore']);
-	
+
 	if (isset($_POST['evalStyleAccuracy'])) $evalStyleAccuracy = sterilize($_POST['evalStyleAccuracy']);
 	if (isset($_POST['evalTechMerit'])) $evalTechMerit = sterilize($_POST['evalTechMerit']);
 	if (isset($_POST['evalDrinkability'])) $evalDrinkability = sterilize($_POST['evalDrinkability']);
 	$evalTable = sterilize($_POST['evalTable']);
-	
+
 
 	if ($action == "edit") $id = sterilize($id);
 	if (isset($_POST['eid'])) $eid = sterilize($_POST['eid']);
@@ -105,7 +105,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	}
 
-	$exceptions = array(
+	$exceptions = [
 		"evalSpecialIngredients",
 		"evalOtherNotes",
 		"evalAromaScore",
@@ -127,18 +127,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		"eid",
 		"uid",
 		"token"
-	);
+	];
 
 	if ($section == "process-eval-structured") {
 
 		// The data from the structured scoresheet form is stored in json format in
 		// the respective Checklist columns (evalAromaChecklist, etc.).
 
-		$evalAroma = array();
-		$evalAppearance = array();
-		$evalFlavor = array();
-		$evalMouthfeel = array();
-		$evalFlaws = array();
+		$evalAroma = [];
+		$evalAppearance = [];
+		$evalFlavor = [];
+		$evalMouthfeel = [];
+		$evalFlaws = [];
 
 		foreach ($_POST as $key => $value) {
 
@@ -148,7 +148,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				elseif (is_array($value)) {
 
-					$new_value = array();
+					$new_value = [];
 
 					foreach ($value as $v) {
 						if (is_numeric($v)) $v = sterilize($v);
@@ -167,7 +167,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Build Aroma Insert
-			if ((strpos($key, "evalAroma") !== FALSE) && (!in_array($key, $exceptions))) {
+			if ((str_contains($key, "evalAroma")) && (!in_array($key, $exceptions))) {
 				$key = sterilize($key);
 				$evalAroma[$key] = $value;
 			}
@@ -175,7 +175,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// Build Appearance Insert
 			// When processing NW, convert evalAppearanceColorChoice to evalAppearanceColor
 			// If evalAppearanceColorChoice is "Other", convert evalAppearanceColorOther to evalAppearanceColor
-			if ((strpos($key, "evalAppearance") !== FALSE) && (!in_array($key, $exceptions))) {
+			if ((str_contains($key, "evalAppearance")) && (!in_array($key, $exceptions))) {
 				$key = sterilize($key);
 				if ($key == "evalAppearanceColorChoice") {
 					$key = "evalAppearanceColor";
@@ -186,19 +186,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Build Flavor Insert
-			if ((strpos($key, "evalFlavor") !== FALSE) && (!in_array($key, $exceptions))) {
+			if ((str_contains($key, "evalFlavor")) && (!in_array($key, $exceptions))) {
 				$key = sterilize($key);
 				$evalFlavor[$key] = $value;
 			}
 
 			// Build Mouthfeel Insert
-			if ((strpos($key, "evalMouthfeel") !== FALSE) && (!in_array($key, $exceptions))) {
+			if ((str_contains($key, "evalMouthfeel")) && (!in_array($key, $exceptions))) {
 				$key = sterilize($key);
 				$evalMouthfeel[$key] = $value;
 			}
 
 			// Build Flaws Insert
-			if (strpos($key, "evalFlaws") !== FALSE) {
+			if (str_contains($key, "evalFlaws")) {
 				if (!empty($value)) $evalFlaws[] = $value;
 			}
 
@@ -208,7 +208,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$evalAppearanceChecklist = json_encode($evalAppearance);
 		$evalFlavorChecklist = json_encode($evalFlavor);
 		$evalMouthfeelChecklist = json_encode($evalMouthfeel);
-		if ((is_array($evalFlaws)) && (!empty($evalFlaws))) $evalFlaws = implode(", ",$evalFlaws); 
+		if ((is_array($evalFlaws)) && ($evalFlaws !== [])) $evalFlaws = implode(", ",$evalFlaws); 
 		else $evalFlaws = "";
 
 		/*
@@ -223,7 +223,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (($action == "add") || ($action == "edit")) {
 
 			$update_table = $prefix."evaluation";
-			$data = array(
+			$data = [
 				'eid' => $eid,
 				'uid' => $uid,
 				'evalJudgeInfo' => $evalJudgeInfo, 
@@ -254,7 +254,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'evalBottle' => $evalBottle,
 				'evalBottleNotes' => $evalBottleNotes,
 				'evalPosition' => $evalPosition
-			);
+			];
 
 		}
 
@@ -266,8 +266,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-			
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
+
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
@@ -285,7 +285,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
@@ -298,13 +298,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	}
 
 	if ($section == "process-eval-full") {
-		
+
 		if ((!empty($_POST['evalDescriptors'])) && (is_array($_POST['evalDescriptors']))) $evalDescriptors = implode(", ",$_POST['evalDescriptors']);
 
 		if (($action == "add") || ($action == "edit")) {
 
 			$update_table = $prefix."evaluation";
-			$data = array(
+			$data = [
 				'eid' => $eid,
 				'uid' => $uid,
 				'evalJudgeInfo' => $evalJudgeInfo, 
@@ -340,20 +340,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'evalBottleNotes' => $evalBottleNotes,
 				'evalPosition' => $evalPosition,
 				'evalDescriptors' => $evalDescriptors
-			);
+			];
 
 		}
-		
+
 		if ($action == "add") {
-			
+
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-			
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
+
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
@@ -372,7 +372,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
@@ -392,16 +392,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$evalMouthfeelChecklistDesc = "";
 		$evalOverallChecklistDesc = "";
 		$evalFlaws = "";
-		
+
 		if ((!empty($_POST['evalAromaChecklistDesc'])) && (is_array($_POST['evalAromaChecklistDesc']))) $evalAromaChecklistDesc = implode(", ",$_POST['evalAromaChecklistDesc']); 
 		if ((!empty($_POST['evalAppearanceChecklistDesc'])) && (is_array($_POST['evalAppearanceChecklistDesc']))) $evalAppearanceChecklistDesc = implode(", ",$_POST['evalAppearanceChecklistDesc']);
 		if ((!empty($_POST['evalFlavorChecklistDesc'])) && (is_array($_POST['evalFlavorChecklistDesc']))) $evalFlavorChecklistDesc = implode(", ",$_POST['evalFlavorChecklistDesc']);
 		if ((!empty($_POST['evalMouthfeelChecklistDesc'])) && (is_array($_POST['evalMouthfeelChecklistDesc']))) $evalMouthfeelChecklistDesc = implode(", ",$_POST['evalMouthfeelChecklistDesc']);
 		if ((!empty($_POST['evalOverallChecklistDesc'])) && (is_array($_POST['evalOveralllChecklistDesc']))) $evalOverallChecklistDesc = implode(", ",$_POST['evalOverallChecklistDesc']);
 		if ((!empty($_POST['evalFlaws'])) && (is_array($_POST['evalFlaws']))) $evalFlaws = implode(", ",$_POST['evalFlaws']);
-		
+
 		// Aroma
-		$evalAromaCheck = array();
+		$evalAromaCheck = [];
 		$evalAromaCheck[] = $_POST['evalAromaMalt'];
 		$evalAromaCheck[] = $_POST['evalAromaHops'];
 		$evalAromaCheck[] = $_POST['evalAromaEsters'];
@@ -410,16 +410,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$evalAromaCheck[] = $_POST['evalAromaSweetness'];
 		$evalAromaCheck[] = $_POST['evalAromaAcidity'];
 		$evalAromaChecklist = implode(", ",$evalAromaCheck);
-		
+
 		// Appearance
-		$evalAppearanceCheck = array();
+		$evalAppearanceCheck = [];
 		$evalAppearanceCheck[] = $_POST['evalAppearanceClarity'];
 		$evalAppearanceCheck[] = $_POST['evalAppearanceHeadSize'];
 		$evalAppearanceCheck[] = $_POST['evalAppearanceHeadRetention'];
 		$evalAppearanceChecklist = implode(", ",$evalAppearanceCheck);
-		
+
 		// Flavor
-		$evalFlavorCheck = array();
+		$evalFlavorCheck = [];
 		$evalFlavorCheck[] = $_POST['evalFlavorMalt'];
 		$evalFlavorCheck[] = $_POST['evalFlavorHops'];
 		$evalFlavorCheck[] = $_POST['evalFlavorEsters'];
@@ -430,16 +430,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$evalFlavorCheck[] = $_POST['evalFlavorAcidity'];
 		$evalFlavorCheck[] = $_POST['evalFlavorHarshness'];
 		$evalFlavorChecklist = implode(", ",$evalFlavorCheck);
-		
+
 		// Mouthfeel
-		$evalMouthfeelCheck = array();
+		$evalMouthfeelCheck = [];
 		$evalMouthfeelCheck[] = $_POST['evalMouthfeelBody'];
 		$evalMouthfeelCheck[] = $_POST['evalMouthfeelCarbonation'];
 		$evalMouthfeelCheck[] = $_POST['evalMouthfeelWarmth'];
 		$evalMouthfeelCheck[] = $_POST['evalMouthfeelCreaminess'];
 		$evalMouthfeelCheck[] = $_POST['evalMouthfeelAstringency'];
 		$evalMouthfeelChecklist = implode(", ",$evalMouthfeelCheck);
-		
+
 		/*
 		// echo $_POST['evalBeerName']."<br>";
 		echo $evalAromaChecklist."<br>";
@@ -457,7 +457,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (($action == "add") || ($action == "edit")) {
 
 			$update_table = $prefix."evaluation";
-			$data = array(
+			$data = [
 				'eid' => $eid,
 				'uid' => $uid,
 				'evalJudgeInfo' => $evalJudgeInfo, 
@@ -498,10 +498,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'evalBottleNotes' => $evalBottleNotes,
 				'evalPosition' => $evalPosition,
 				'evalDrinkability' => $evalDrinkability
-			);
+			];
 
 		}
-		
+
 		if ($action == "add") {
 
 			$result = $db_conn->insert ($update_table, $data);
@@ -510,8 +510,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-			
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
+
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
@@ -529,7 +529,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);

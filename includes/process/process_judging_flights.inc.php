@@ -5,7 +5,7 @@
  */
 
 $errors = FALSE;
-$error_output = array();
+$error_output = [];
 $_SESSION['error_output'] = "";
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
@@ -22,12 +22,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$flightRound = 1;
 
 			$update_table = $prefix."judging_flights";
-			$data = array(
+			$data = [
 				'flightTable' => blank_to_null($flightTable),
 				'flightNumber' => blank_to_null($flightNumber),
 				'flightEntryID' => blank_to_null($flightEntryID),
 				'flightRound' => blank_to_null($flightRound),
-			);
+			];
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -54,10 +54,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($id <= "999999") {
 
 				$update_table = $prefix."judging_flights";
-				$data = array(
+				$data = [
 					'flightTable' => blank_to_null($flightTable),
 					'flightNumber' => blank_to_null($flightNumber)
-				);
+				];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -72,11 +72,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$flightEntryID = sterilize($_POST['flightEntryID'.$id]);
 
 				$update_table = $prefix."judging_flights";
-				$data = array(
+				$data = [
 					'flightTable' => blank_to_null($flightTable),
 					'flightNumber' => blank_to_null($flightNumber),
 					'flightEntryID' => blank_to_null($flightEntryID)
-				);
+				];
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -134,7 +134,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 					// Update with single WHERE
 					$update_table = $prefix."judging_flights";
-					$data = array('flightRound' => sterilize($_POST['flightRound'.$a]));
+					$data = ['flightRound' => sterilize($_POST['flightRound'.$a])];
 					$db_conn->where ('id', $row_flights['id']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {

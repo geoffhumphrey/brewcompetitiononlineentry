@@ -1,13 +1,13 @@
 <?php
+
 /*
  * Module:      process_users_setup.inc.php
  * Description: This module does all the heavy lifting for adding an admin user to the DB (Setup ONLY)
  */
-
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($setup_free_access))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	// Instantiate HTMLPurifier
@@ -31,7 +31,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($_POST['userLevel'] == 0) $userAdminObfuscate = 0;
 
 		$update_table = $prefix."users";
-		$data = array(
+		$data = [
 			'user_name' => $username,
 			'userLevel' => sterilize($_POST['userLevel']),
 			'password' => $hash,
@@ -39,7 +39,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'userQuestionAnswer' => $hash_question,
 			'userCreated' =>  date('Y-m-d H:i:s', time()),
 			'userAdminObfuscate' => $userAdminObfuscate
-		);
+		];
 
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -54,7 +54,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($row_user_check['count'] == 1) {
 
 			$update_table = $prefix."bcoem_sys";
-			$data = array('setup_last_step' => 1);
+			$data = ['setup_last_step' => 1];
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -69,34 +69,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		else $insertGoTo = $base_url."setup.php?section=step1&go=".$username."&msg=99";
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 		header($redirect_go_to);
 		exit();
 
-	} // end if (strstr($username,'@'))
-
-	else {
-
-		$redirect = $base_url."setup.php?section=step1&msg=1";
-		$redirect = prep_redirect_link($redirect);
-		$redirect_go_to = sprintf("Location: %s", $redirect);
-		header($redirect_go_to);
-		exit();
-
 	}
+    $redirect = $base_url."setup.php?section=step1&msg=1";
+    $redirect = prep_redirect_link($redirect);
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
 
 }
-
-else {
-
-	$redirect = $base_url."index.php?msg=98";
-	$redirect = prep_redirect_link($redirect);
-	$redirect_go_to = sprintf("Location: %s", $redirect);
-	header($redirect_go_to);
-	exit();
-
-}
-?>
+$redirect = $base_url."index.php?msg=98";
+$redirect = prep_redirect_link($redirect);
+$redirect_go_to = sprintf("Location: %s", $redirect);
+header($redirect_go_to);
+exit();

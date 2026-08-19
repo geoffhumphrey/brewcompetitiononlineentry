@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require('paths.php');
+require(__DIR__ . '/paths.php');
 require(INCLUDES.'url_variables.inc.php');
 require(LIB.'common.lib.php');
 
@@ -15,12 +15,12 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "pdf-download")) {
 	// can't turn this into a way to read arbitrary files on the server.
 	$pdf_path = NULL;
 
-	if ((preg_match('/^[a-zA-Z0-9._-]+$/', $id)) && (strpos($id, '..') === FALSE)) {
+	if ((preg_match('/^[a-zA-Z0-9._-]+$/', $id)) && (!str_contains($id, '..'))) {
 
 		$user_docs_real = realpath(USER_DOCS);
 		$candidate_real = realpath(USER_DOCS.$id.".pdf");
 
-		if (($user_docs_real !== FALSE) && ($candidate_real !== FALSE) && (strncmp($candidate_real, $user_docs_real.DIRECTORY_SEPARATOR, strlen($user_docs_real.DIRECTORY_SEPARATOR)) === 0)) {
+		if (($user_docs_real !== FALSE) && ($candidate_real !== FALSE) && (str_starts_with($candidate_real, $user_docs_real.DIRECTORY_SEPARATOR))) {
 			$pdf_path = $candidate_real;
 		}
 
@@ -52,18 +52,18 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0) && 
 
 	// Allowable file mime types and extensions for images
 	if (($action == "default") || ($action == "html")) {	
-		$file_mimes_allowed = array('image/jpeg','image/jpg','image/gif','image/png','image/webp','image/svg+xml');
-		$file_extensions_allowed  = array('.jpeg','.jpg','.png','.gif','.webp','.svg');
+		$file_mimes_allowed = ['image/jpeg','image/jpg','image/gif','image/png','image/webp','image/svg+xml'];
+		$file_extensions_allowed  = ['.jpeg','.jpg','.png','.gif','.webp','.svg'];
 	}
 
 	// Allowable file and mime types for documents (PDF only)
 	else {
-		$file_mimes_allowed = array('application/pdf');
-		$file_extensions_allowed = array('.pdf');
+		$file_mimes_allowed = ['application/pdf'];
+		$file_extensions_allowed = ['.pdf'];
 	}
 
 	// Restricted file extensions
-	$backlist = array('php', 'php3', 'php4', 'phtml', 'exe');
+	$backlist = ['php', 'php3', 'php4', 'phtml', 'exe'];
 
 	$restrict_upload = FALSE;
 		

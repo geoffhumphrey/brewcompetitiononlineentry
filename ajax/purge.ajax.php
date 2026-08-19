@@ -1,13 +1,13 @@
 <?php
 
 ob_start();
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require(CONFIG.'bootstrap.php');
 ini_set('display_errors', 1); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 1); // Change to 0 for prod; change to 1 for testing.
 error_reporting(E_ALL); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
-$return_json = array();
+$return_json = [];
 $status = 0;
 $sql = "";
 $display_date = "";
@@ -65,13 +65,13 @@ else {
 }  // END if session is set
 
 if (($go == "judge-assignments") || ($go == "steward-assignments")) {
-	$return_json = array(
+	$return_json = [
 		"status" => "$status"
-	);
+	];
 }
 
 else {
-	$return_json = array(
+	$return_json = [
 		"status" => "$status",
 		"query" => "$sql",
 		"date" => "$display_date",
@@ -90,7 +90,7 @@ else {
 		"dom_total_fees" => "$dom_total_fees",
 		"dom_total_fees_paid" => "$dom_total_fees_paid",
 		"dom_ct_eval" => "$dom_ct_eval"
-	);
+	];
 }
 
 echo json_encode($return_json);

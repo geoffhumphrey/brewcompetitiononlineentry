@@ -10,7 +10,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 
     if (((!$judge_limit || $already_judge) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) {
 
-        $styles_selected = array();
+        $styles_selected = [];
         $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
         if (!empty($styles_selected)) {
@@ -21,8 +21,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             $j_likes_form_elements = "";
             $j_dislikes_form_elements = "";
 
-            $a = array();
-            $b = array();
+            $a = [];
+            $b = [];
 
             if (isset($row_brewer['brewerJudgeLikes'])) { 
                 $a = explode(",", $row_brewer['brewerJudgeLikes']);
@@ -35,7 +35,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             foreach($styles_selected as $key => $value) {
 
                 if ((isset($value['id'])) && (!empty($value['id']))) {
-                    
+
                     $style_display = "";
                     $style_selected_likes = "";
                     if (in_array($value['id'], $a)) $style_selected_likes = "CHECKED";
@@ -46,7 +46,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                     if ($_SESSION['prefsStyleSet'] == "BA") {
                         $style_display .= $value['brewStyle'];
                     }
-                    
+
                     else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
 
                     $j_likes_form_elements .= "<div class=\"checkbox\">\n";
@@ -62,13 +62,13 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                     $j_dislikes_form_elements .= $style_display;
                     $j_dislikes_form_elements .= "\n</label>\n";
                     $j_dislikes_form_elements .= "</div>\n";
-                
+
                 }
-                
+
             }
 
         }
-        
+
 
         $judge_checked = FALSE;
         if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
@@ -267,7 +267,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <?php if (!empty($styles_selected)) { ?>
-        
+
         <div class="mb-3 row">
             <label for="brewerJudgeLikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judge_preferred; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-md-6 d-grid">
@@ -329,7 +329,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     </div>
 
     <?php if (($judging_location_count == 1) && (($go != "admin") && ($filter == "default"))) echo $steward_single_option; ?>
-   
+
     <?php if (($judging_location_count > 1) || (($go == "admin") && ($filter != "default"))) { ?>
     <div id="brewerStewardFields">
         <?php if (!empty($steward_location_avail)) { ?>

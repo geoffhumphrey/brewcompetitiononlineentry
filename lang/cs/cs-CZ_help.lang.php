@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $list_help_title = "Nápověda ke mému účtu";
 $list_help_body = "<p>Toto je komplexní přehled informací o vašem účtu.</p>";
 $list_help_body .= "<p>Zde můžete zobrazit své osobní údaje, včetně jména, adresy, telefonního čísla, klubů, členského čísla AHA, identifikačního čísla BJCP, hodnosti BJCP soudce, preference ohledně hodnocení a preference ohledně sluhování.</p>";

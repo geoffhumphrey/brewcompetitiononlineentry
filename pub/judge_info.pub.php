@@ -74,7 +74,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
       	<table class="dataTableCompact">
         		<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
 				foreach ($rows_styles as $row_styles) {
-    			if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
+    			if (($endRow === 0) && ($hloopRow1++ !== 0)) echo "<tr>";
 				if (!empty($row_styles['brewStyleGroup'])) {
     			?>
             	<td width="1%"><input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
@@ -88,7 +88,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
   				}
 				}
 				}
-				if ($endRow != 0) {
+				if ($endRow !== 0) {
 				while ($endRow < $columns) {
    				echo("<td>&nbsp;</td>");
     			$endRow++;
@@ -106,7 +106,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
       	<table class="dataTableCompact">
         	<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
 				foreach ($rows_styles2 as $row_styles2) {
-    			if (($endRow == 0) && ($hloopRow1++ != 0)) echo "<tr>";
+    			if (($endRow === 0) && ($hloopRow1++ !== 0)) echo "<tr>";
 				if (!empty($row_styles2['brewStyleGroup'])) {
     			?>
             	<td width="1%"><input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
@@ -120,7 +120,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
   				}
 				}
 				}
-				if ($endRow != 0) {
+				if ($endRow !== 0) {
 				while ($endRow < $columns) {
    				echo("<td>&nbsp;</td>");
     			$endRow++;

@@ -30,7 +30,7 @@ else {
     $nav_container = "navbar-dark"; 
 }
 
-$security_question = array($label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27);
+$security_question = [$label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27];
 
 if ($section == "past-winners") {
 
@@ -59,10 +59,10 @@ if ($section == "past-winners") {
 if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['update_date'] >= (time() - 86400))) {
     $recently_updated = TRUE;
     $_SESSION['update_summary'] = $row_system['update_summary'];
-    if (strpos($row_system['update_summary'], 'Warning: Errors') !== false) $_SESSION['update_errors'] = 1;
+    if (str_contains($row_system['update_summary'], 'Warning: Errors')) $_SESSION['update_errors'] = 1;
 }
 
-$style_types_translations = array(
+$style_types_translations = [
     1 => $label_beer,
     2 => $label_cider,
     3 => $label_mead,
@@ -72,9 +72,9 @@ $style_types_translations = array(
     7 => $label_spirits,
     8 => $label_kombucha,
     9 => $label_pulque
-);
+];
 
-$packaging_display = array(
+$packaging_display = [
     "750" => "750 ml ".$label_bottle,
     "500" => "500 ml ".$label_bottle,
     "375" => "375 ml ".$label_bottle,
@@ -85,5 +85,5 @@ $packaging_display = array(
     "16" => "16 oz ".$label_can,
     "12" => "12 oz ".$label_can,
     "Other-Can" => $label_can." - ".$label_other_size
-);
+];
 ?>

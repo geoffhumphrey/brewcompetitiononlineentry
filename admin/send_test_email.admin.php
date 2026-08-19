@@ -1,5 +1,5 @@
 <?php 
-require_once ("../paths.php");
+require_once (__DIR__ . "/../paths.php");
 require_once (CONFIG.'bootstrap.php');
 require_once (LIB.'process.lib.php');
 
@@ -54,7 +54,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2) && ($csr
             $mail->isHTML(true);
             $mail->send();
               
-        } catch (Exception $e) {
+        } catch (Exception) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
 

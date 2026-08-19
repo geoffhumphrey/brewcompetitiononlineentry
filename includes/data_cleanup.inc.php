@@ -8,7 +8,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		if ((isset($_POST['dateThreshold'])) && (!empty($_POST['dateThreshold']))) $date_threshold = sterilize($_POST['dateThreshold']); 
 		if ((!isset($_POST['dateThreshold']) && ($view != "default"))) $date_threshold = sterilize($view);
 	}
-		
+
 	$sql = "action=".$action."&go=".$go;
 	if (!empty($date_threshold)) $sql .= "&view=".$view;
 
@@ -16,7 +16,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 		// Purge unpaid entries
 		if ($go == "unpaid") {
-			
+
 			$unpaid = purge_entries("unpaid", 0);
 
 			$redirect = $base_url."index.php?section=admin&go=entries&purge=true";
@@ -40,7 +40,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			if (($uncon) && ($spec)) $status = 1;
 
 		} // END if ($go == "unconfirmed")
-		
+
 		if (($go == "scoresheets") || ($go == "purge-all")) {
 
 			require(LIB.'process.lib.php');
@@ -58,7 +58,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			if (!empty($date_threshold)) {
 
 				$query_purge_entries = "SELECT id,brewJudgingNumber FROM ".$prefix."brewing WHERE brewUpdated < ? OR brewUpdated IS NULL";
-				$rows_purge_entries = $db_conn->rawQuery($query_purge_entries, array($date_threshold));
+				$rows_purge_entries = $db_conn->rawQuery($query_purge_entries, [$date_threshold]);
 				$totalRows_purge_entries = $db_conn->count;
 
 				// echo $totalRows_purge_entries;
@@ -69,7 +69,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 				else {
 
-					$purge_array = array($judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
+					$purge_array = [$judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table];
 					if (table_exists($prefix."evaluation")) $purge_array[] = $prefix."evaluation";
 
 					foreach ($rows_purge_entries as $row_purge_entries) {
@@ -111,28 +111,28 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 				} // end else
 
-				if ($count_results == $count_results_actual) $status = 1;
-			
+				if ($count_results === $count_results_actual) $status = 1;
+
 			} // end if (!empty($date_threshold))
 
 			// Purge all entries
 			else {
 
-				$purge_array = array($brewing_db_table,$judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
+				$purge_array = [$brewing_db_table,$judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table];
 				if (table_exists($prefix."evaluation")) $purge_array[] = $prefix."evaluation";
 				if (table_exists($prefix."payments")) $purge_array[] = $prefix."payments";
 
 				foreach ($purge_array as $db_table) {
 
 					if (SINGLE) {	
-							
+
 						$db_conn->where ('comp_id', $_SESSION['comp_id']);
 						$result = $db_conn->delete ($db_table);
 						if ($result) {
 							$count_results += 1;
 							$count_results_actual += 1;
 						}
-					
+
 					}
 
 					else {
@@ -143,19 +143,19 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 							$count_results += 1;
 							$count_results_actual += 1;
 						}
-					
+
 					}
 
 				}
 
 				// Clear judging preferences
 				$update_table = $prefix."brewer";
-				$data = array(
+				$data = [
 					'brewerJudge' => 'N',
 					'brewerSteward' => 'N',
 					'brewerJudgeLocation' => NULL,
 					'brewerStewardLocation' => NULL
-				);
+				];
 				if (SINGLE)	$db_conn->where ('comp_id', $_SESSION['comp_id']);
 				$result = $db_conn->update ($update_table, $data);
 				if ($result) $count_results += 1;
@@ -165,8 +165,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$redirect = $base_url."index.php?section=admin&msg=26";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
-			
-			if ($count_results == $count_results_actual) $status = 1;
+
+			if ($count_results === $count_results_actual) $status = 1;
 
 			if (!empty($date_threshold)) $date_threshold = strtotime($date_threshold);
 
@@ -182,7 +182,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$rows_admin = $db_conn->get($prefix."users", null, "id");
 			$totalRows_admin = $db_conn->count;
 
-			$admin_ids = array();
+			$admin_ids = [];
 
 			if ($totalRows_admin > 0) {
 
@@ -195,7 +195,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$query_non_admin = "SELECT id FROM ".$prefix."users WHERE userLevel='2'";
 			if (!empty($date_threshold)) {
 				$query_non_admin .= " AND userCreated < ? OR userCreated IS NULL";
-				$rows_non_admin = $db_conn->rawQuery($query_non_admin, array($date_threshold));
+				$rows_non_admin = $db_conn->rawQuery($query_non_admin, [$date_threshold]);
 			}
 			else $rows_non_admin = $db_conn->rawQuery($query_non_admin);
 			$totalRows_non_admin = $db_conn->count;
@@ -288,7 +288,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			} // end if ($totalRows_non_admin > 0)
 
-			if ($count_results == $count_results_actual) $status = 1;
+			if ($count_results === $count_results_actual) $status = 1;
 
 			if (!empty($date_threshold)) $date_threshold = strtotime($date_threshold);
 
@@ -303,25 +303,25 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			$count_results_actual = 0;
 
-			$purge_array = array($judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
+			$purge_array = [$judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table];
 
 			foreach ($purge_array as $db_table) {
 
 				$sql_purge = sprintf("TRUNCATE %s",$db_table);
 				if (SINGLE) {
 					$sql_purge .= " WHERE comp_id=?";
-					$db_conn->rawQuery($sql_purge, array($_SESSION['comp_id']));
+					$db_conn->rawQuery($sql_purge, [$_SESSION['comp_id']]);
 				}
 				else $db_conn->rawQuery($sql_purge);
 				if ($db_conn->getLastErrno() === 0) {
 					$count_results += 1;
 					$count_results_actual += 1;
 				}
-			
+
 			}
 
-			if ($count_results == $count_results_actual) $status = 1;
-			
+			if ($count_results === $count_results_actual) $status = 1;
+
 			$redirect = $base_url."index.php?section=admin&msg=26";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
@@ -333,14 +333,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			$count_results_actual = 0;
 
-			$purge_array = array($judging_tables_db_table,$judging_assignments_db_table,$judging_flights_db_table,$judging_scores_db_table,$special_best_data_db_table);
+			$purge_array = [$judging_tables_db_table,$judging_assignments_db_table,$judging_flights_db_table,$judging_scores_db_table,$special_best_data_db_table];
 
 			foreach ($purge_array as $db_table) {
 
 				$sql_purge = sprintf("TRUNCATE %s",$db_table);
 				if (SINGLE) {
 					$sql_purge .= " WHERE comp_id=?";
-					$db_conn->rawQuery($sql_purge, array($_SESSION['comp_id']));
+					$db_conn->rawQuery($sql_purge, [$_SESSION['comp_id']]);
 				}
 				else $db_conn->rawQuery($sql_purge);
 				if ($db_conn->getLastErrno() === 0) {
@@ -350,7 +350,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			}
 
-			if ($count_results == $count_results_actual) $status = 1;
+			if ($count_results === $count_results_actual) $status = 1;
 
 			$redirect = $base_url."index.php?section=admin&msg=26";
 			$redirect = prep_redirect_link($redirect);
@@ -399,7 +399,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				if ($result) $status = 1;
 
 			}
-			
+
 			else {
 
 				$db_conn->where ('assignment', 'S');
@@ -418,14 +418,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			$count_results_actual = 0;
 
-			$purge_array = array($special_best_info_db_table,$special_best_data_db_table);
+			$purge_array = [$special_best_info_db_table,$special_best_data_db_table];
 
 			foreach ($purge_array as $db_table) {
 
 				$sql_purge = sprintf("TRUNCATE %s",$db_table);
 				if (SINGLE) {
 					$sql_purge .= " WHERE comp_id=?";
-					$db_conn->rawQuery($sql_purge, array($_SESSION['comp_id']));
+					$db_conn->rawQuery($sql_purge, [$_SESSION['comp_id']]);
 				}
 				else $db_conn->rawQuery($sql_purge);
 				if ($db_conn->getLastErrno() === 0) {
@@ -435,7 +435,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			}
 
-			if ($count_results == $count_results_actual) $status = 1;
+			if ($count_results === $count_results_actual) $status = 1;
 
 			$redirect = $base_url."index.php?section=admin&msg=26";
 			$redirect = prep_redirect_link($redirect);
@@ -448,12 +448,12 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$count_results_actual = 0;
 
 			$update_table = $prefix."brewer";
-			$data = array(
+			$data = [
 				'brewerJudge' => 'N',
 				'brewerSteward' => 'N',
 				'brewerStaff' => 'N',
 				'brewerAssignment' => NULL
-			);
+			];
 			if (SINGLE) $db_conn->where ('comp_id', $_SESSION['comp_id']);
 			$result = $db_conn->update ($update_table, $data);
 			if ($result) {
@@ -464,12 +464,12 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			if (SINGLE) {
 
 				$update_table = $prefix."staff";
-				$data = array(
+				$data = [
 					'staff_judge' => 0,
 					'staff_steward' => 0,
 					'staff_judge_bos' => 0,
 					'staff_staff' => 0
-				);
+				];
 				$db_conn->where ('comp_id', $_SESSION['comp_id']);
 				$result = $db_conn->update ($update_table, $data);
 				if ($result) {
@@ -480,7 +480,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			}
 
 			else {
-				
+
 				$sql_purge = sprintf("TRUNCATE %s",$prefix."staff");
 				$db_conn->rawQuery($sql_purge);
 				if ($db_conn->getLastErrno() === 0) {
@@ -494,7 +494,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$rows_judge_locations = $db_conn->get($judging_locations_db_table, null, "id");
 			$totalRows_judge_locations = $db_conn->count;
 
-			$locations = array();
+			$locations = [];
 
 			if ($totalRows_judge_locations > 0) {
 
@@ -509,10 +509,10 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$locations_all = implode(",",$locations);
 
 					$update_table = $prefix."brewer";
-					$data = array(
+					$data = [
 						'brewerJudgeLocation' => $locations_all,
 						'brewerStewardLocation' => $locations_all
-					);
+					];
 					if (SINGLE) $db_conn->where ('comp_id', $_SESSION['comp_id']);
 					$result = $db_conn->update ($update_table, $data);
 					if ($result) {
@@ -558,8 +558,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			}
 
-			if ($count_results == $count_results_actual) $status = 1;
-			
+			if ($count_results === $count_results_actual) $status = 1;
+
 			$redirect = $base_url."index.php?section=admin&msg=26";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
@@ -584,7 +584,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			// Purge back from posted date
 			if (!empty($date_threshold)) {
-				
+
 				$date_threshold = strtotime($date_threshold);
 
 				if (SINGLE) {
@@ -629,7 +629,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			}
 
-			if ($count_results == $count_results_actual) $status = 1;
+			if ($count_results === $count_results_actual) $status = 1;
 			$redirect = $base_url."index.php?section=admin&msg=26";
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
@@ -640,7 +640,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 	// User initiated triggering of data integrity check
 	if ($action == "cleanup") {
-		
+
 		$data_int = data_integrity_check();
 		if ($data_int) $status = 1;
 		$redirect = $base_url."index.php?section=admin&purge=cleanup";
@@ -652,7 +652,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 	if ($action == "confirmed") {
 
 		$update_table = $prefix."brewing";
-		$data = array('brewConfirmed' => 1);
+		$data = ['brewConfirmed' => 1];
 		$result = $db_conn->update ($update_table, $data);
 		if ($result) $status = 1;
 

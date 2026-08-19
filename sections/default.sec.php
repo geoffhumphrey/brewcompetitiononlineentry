@@ -84,7 +84,7 @@ else {
 		$contact_count = get_contact_count();
 		// Competition Officials
 		if ($contact_count > 0) {
-			if ($contact_count == 1) $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_013."</h2>";
+			if ($contact_count === 1) $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_013."</h2>";
 			else $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_014."</h2>";
 			if ($action != "print") $page_info10 .= sprintf("<p>%s <a href='%s'>%s</a>.</p>",$default_page_text_015,build_public_url("contact","default","default","default",$sef,$base_url,"default"),$label_contact);
 			$page_info10 .= "<ul>";
@@ -105,7 +105,7 @@ else {
 		}
 	}
 
-		
+
 }
 
 
@@ -186,11 +186,11 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 else {
 
 	if ($section != "past-winners") {
-		
+
 		echo $page_info;
 
 		if ((($registration_open == 2) && ($entry_window_open == 2)) || ($comp_entry_limit) || ($comp_paid_entry_limit)) include (SECTIONS.'reg_closed.sec.php');
-		else include('reg_open.sec.php');
+		else include(__DIR__ . '/reg_open.sec.php');
 
 		// Display Competition Official(s)
 		echo $header1_10;
@@ -208,7 +208,7 @@ else {
 if ($section == "past-winners") {
 
 	if ($archive_winner_display) {
-		
+
 		include (DB.'score_count.db.php');
 
 		echo $header1_10;

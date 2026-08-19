@@ -11,7 +11,7 @@ require(LIB.'email.lib.php');
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($setup_free_access))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	if ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 2)) {
@@ -79,11 +79,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if ($filter == "judges") {
 
 				if ((isset($_POST['staff_judge'.$uid])) && ($_POST['staff_judge'.$uid] == "1")) {
-					
+
 					if ($row_staff['count'] == 0) {
-						
+
 						$update_table = $prefix."staff";
-						$data = array('uid' => $uid,'staff_judge' => '1');
+						$data = ['uid' => $uid,'staff_judge' => '1'];
 						$result = $db_conn->insert ($update_table, $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
@@ -91,11 +91,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						}
 
 					}
-					
+
 					else {
 
 						$update_table = $prefix."staff";
-						$data = array('staff_judge' => '1');			
+						$data = ['staff_judge' => '1'];			
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -104,7 +104,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						}
 
 					}
-					
+
 				}
 
 				if (!isset($_POST['staff_judge'.$uid])) {
@@ -112,7 +112,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					if ($row_staff['count'] > 0) {
 
 						$update_table = $prefix."staff";
-						$data = array('staff_judge' => '0');			
+						$data = ['staff_judge' => '0'];			
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -155,7 +155,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					if ($row_staff['count'] == 0) {
 						$update_table = $prefix."staff";
-						$data = array('uid' => $uid,'staff_steward' => '1');
+						$data = ['uid' => $uid,'staff_steward' => '1'];
 						$result = $db_conn->insert ($update_table, $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
@@ -166,7 +166,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					else {
 
 						$update_table = $prefix."staff";
-						$data = array('staff_steward' => '1');			
+						$data = ['staff_steward' => '1'];			
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -183,7 +183,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					if ($row_staff['count'] > 0) {
 
 						$update_table = $prefix."staff";
-						$data = array('staff_steward' => '0');			
+						$data = ['staff_steward' => '0'];			
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -226,7 +226,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					if ($row_staff['count'] == 0) {
 						$update_table = $prefix."staff";
-						$data = array('uid' => $uid,'staff_staff' => '1');
+						$data = ['uid' => $uid,'staff_staff' => '1'];
 						$result = $db_conn->insert ($update_table, $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
@@ -238,7 +238,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					else {
 
 						$update_table = $prefix."staff";
-						$data = array('staff_staff' => '1');			
+						$data = ['staff_staff' => '1'];			
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -255,7 +255,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					if ($row_staff['count'] > 0) {
 
 						$update_table = $prefix."staff";
-						$data = array('staff_staff' => '0');			
+						$data = ['staff_staff' => '0'];			
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -274,9 +274,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				if ((isset($_POST['staff_judge_bos'.$uid])) && ($_POST['staff_judge_bos'.$uid] == "1")) {
 
 					if ($row_staff['count'] == 0) {
-						
+
 						$update_table = $prefix."staff";
-						$data = array('uid' => $uid,'staff_judge_bos' => '1');
+						$data = ['uid' => $uid,'staff_judge_bos' => '1'];
 						$result = $db_conn->insert ($update_table, $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
@@ -284,11 +284,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						}
 
 					}
-					
+
 					else {
 
 						$update_table = $prefix."staff";
-						$data = array('staff_judge_bos' => '1');			
+						$data = ['staff_judge_bos' => '1'];			
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -305,7 +305,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					if ($row_staff['count'] > 0) {
 
 						$update_table = $prefix."staff";
-						$data = array('staff_judge_bos' => '0');			
+						$data = ['staff_judge_bos' => '0'];			
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -335,7 +335,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				// Clear any Organizer assignments
 				$update_table = $prefix."staff";
-				$data = array('staff_organizer' => 0);
+				$data = ['staff_organizer' => 0];
 				$result = $db_conn->update ($update_table, $data);
 
 				// If the posted UID is not in the DB, add and make the Org
@@ -343,13 +343,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				if ($totalRows_org == 0) {
 
 					$update_table = $prefix."staff";
-					$data = array(
+					$data = [
 						'staff_organizer' => 1,
 						'staff_staff' => 0,
 						'staff_judge' => 0,
 						'staff_judge_bos' => 0,
 						'uid' => $uid
-					);
+					];
 					$result = $db_conn->insert ($update_table, $data);
 					if (!$result) {
 						$error_output[] = $db_conn->getLastError();
@@ -366,12 +366,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					if ($uid == $row_org['uid']) {
 
 						$update_table = $prefix."staff";
-						$data = array(
+						$data = [
 							'staff_organizer' => 1,
 							'staff_staff' => 0,
 							'staff_judge' => 0,
 							'staff_judge_bos' => 0,
-						);
+						];
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -389,13 +389,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			else {
 
 				$update_table = $prefix."staff";
-				$data = array(
+				$data = [
 					'staff_organizer' => '1',
 					'staff_staff' => '0',
 					'staff_judge' => '0',
 					'staff_judge_bos' => '0',
 					'uid' => $uid
-				);
+				];
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -407,7 +407,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		} // end if (($filter == "staff") && ($_POST['Organizer'] != ""))
 
 		$update_table = $prefix."brewer";
-		$data = array('brewerJudgeWaiver' => 'Y');
+		$data = ['brewerJudgeWaiver' => 'Y'];
 		$db_conn->where ('brewerJudge', 'Y');
 		$db_conn->orWhere ('brewerSteward', 'Y');
 		$result = $db_conn->update ($update_table, $data);
@@ -416,7 +416,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($filter == "clear") $redirect = $base_url."index.php?section=admin&go=participants&msg=9";
 		else $redirect = $base_url."index.php?section=admin&action=assign&go=judging&filter=".$filter."&msg=9";
@@ -443,7 +443,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($totalRows_user == 0) {
 
 			$update_table = $prefix."users";
-			$data = array('user_name' => $brewerEmail);
+			$data = ['user_name' => $brewerEmail];
 			$db_conn->where ('id', $uid);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) $error_output[] = $db_conn->getLastError();
@@ -453,7 +453,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		else {
 
 			$update_table = $prefix."brewer";
-			$data = array(
+			$data = [
 				'uid' => $uid,
 				'brewerFirstName' => blank_to_null($first_name),
 				'brewerLastName' => blank_to_null($last_name),
@@ -487,7 +487,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'brewerBreweryName' => blank_to_null($brewerBreweryName),
 				'brewerBreweryInfo' => blank_to_null($brewerBreweryInfo),
 				'brewerAssignment' => blank_to_null($brewerAssignment)
-			);
+			];
 
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
@@ -504,7 +504,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				if ($row_brewer_check['count'] == 1) {
 
 					$update_table = $prefix."bcoem_sys";
-					$data = array('setup_last_step' => '2');			
+					$data = ['setup_last_step' => '2'];			
 					$db_conn->where ('id', 1);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) $error_output[] = $db_conn->getLastError();
@@ -524,7 +524,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			elseif (($go == "judge") && ($filter != "default")) $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=1";
 			else $insertGoTo = $insertGoTo;
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 			$insertGoTo = prep_redirect_link($insertGoTo);
@@ -654,16 +654,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (($filter == "quick-no-judge") || ($filter == "quick-no-steward")){
 
 			$id = sterilize($_POST['id']);
-			$data = array(
+			$data = [
 				'uid' => $uid, 
 				'brewerSteward' => blank_to_null($brewerSteward), 
 				'brewerJudge' => blank_to_null($brewerJudge)
-			);
+			];
 		} 
 			
 		
 		else 
-		$data = array(
+		$data = [
 			'uid' => $uid,
 			'brewerFirstName' => blank_to_null($first_name),
 			'brewerLastName' => blank_to_null($last_name),
@@ -697,7 +697,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewerBreweryName' => blank_to_null($brewerBreweryName),
 			'brewerBreweryInfo' => blank_to_null($brewerBreweryInfo),
 			'brewerAssignment' => blank_to_null($brewerAssignment)
-		);
+		];
 
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
@@ -709,7 +709,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ((isset($_POST['userQuestion'])) && ($_POST['changeSecurity'] == "Y")) {
 
 			$update_table = $prefix."users";
-			$data = array('userQuestion' => $purifier->purify($_POST['userQuestion']));
+			$data = ['userQuestion' => $purifier->purify($_POST['userQuestion'])];
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -749,7 +749,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			}
 
 			$update_table = $prefix."users";
-			$data = array('userQuestionAnswer' => $hash_question);
+			$data = ['userQuestionAnswer' => $hash_question];
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -760,7 +760,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$update_table = $prefix."users";
-		$data = array('userCreated' => date('Y-m-d H:i:s', time()));
+		$data = ['userCreated' => date('Y-m-d H:i:s', time())];
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -769,7 +769,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		$update_table = $prefix."brewer";
-		$data = array('brewerJudgeWaiver' => 'Y');
+		$data = ['brewerJudgeWaiver' => 'Y'];
 		$db_conn->where ('brewerJudge', 'Y');
 		$db_conn->orWhere ('brewerSteward', 'Y');
 		$result = $db_conn->update ($update_table, $data);
@@ -785,7 +785,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		elseif ($go == "default") $updateGoTo = $base_url."index.php?section=list&go=".$go."&filter=default&msg=2";
 		else $updateGoTo = $updateGoTo;
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 		$updateGoTo = prep_redirect_link($updateGoTo);
@@ -799,7 +799,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$last_name = $row_brewer_id['brewerLastName'];
 			
 			$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-			if (strpos($url, 'brewingcompetitions.com') !== false) $from_email = $default_from."@brewingcompetitions.com";
+			if (str_contains($url, 'brewingcompetitions.com')) $from_email = $default_from."@brewingcompetitions.com";
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$contestName = $_SESSION['contestName'];

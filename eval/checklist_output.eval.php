@@ -153,13 +153,13 @@
     </div>
 </div><!-- ./ scoring guide -->
 <?php if (!empty($row_eval['evalFlaws'])) { 
-$flaw_1_arr = array($label_acetaldehyde,$label_light_struck,$label_sour_acidic);
-$flaw_2_arr = array($label_alcohol,$label_medicinal,$label_smoky);
-$flaw_3_arr = array($label_astringent,$label_metallic,$label_spicy);
-$flaw_4_arr = array($label_diacetyl,$label_musty,$label_sulfur);
-$flaw_5_arr = array($label_dms,$label_oxidized,$label_vegetal);
-$flaw_6_arr = array($label_estery,$label_plastic,$label_vinegary);
-$flaw_7_arr = array($label_grassy,$label_solvent,$label_yeasty);
+$flaw_1_arr = [$label_acetaldehyde,$label_light_struck,$label_sour_acidic];
+$flaw_2_arr = [$label_alcohol,$label_medicinal,$label_smoky];
+$flaw_3_arr = [$label_astringent,$label_metallic,$label_spicy];
+$flaw_4_arr = [$label_diacetyl,$label_musty,$label_sulfur];
+$flaw_5_arr = [$label_dms,$label_oxidized,$label_vegetal];
+$flaw_6_arr = [$label_estery,$label_plastic,$label_vinegary];
+$flaw_7_arr = [$label_grassy,$label_solvent,$label_yeasty];
 ?>
 <h5 style="padding-bottom: 10px"><?php echo $label_flaws; ?></h5>
 <table class="table-bordered table-condensed descriptor" width="100%">
@@ -183,10 +183,10 @@ $flaw_7_arr = array($label_grassy,$label_solvent,$label_yeasty);
 	<tr>
         <?php foreach ($flaw_1_arr as $flaw) { ?>
         <td><?php echo $flaw; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_aroma.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_flavor.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_aroma.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_flavor.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php if (in_array($flaw, $flaws_mouthfeel)) { ?>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php } else { ?>
         <td width="8%">&nbsp;</td>
         <?php } ?>
@@ -195,10 +195,10 @@ $flaw_7_arr = array($label_grassy,$label_solvent,$label_yeasty);
     <tr>
         <?php foreach ($flaw_2_arr as $flaw) { ?>
         <td><?php echo $flaw; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_aroma.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_flavor.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_aroma.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_flavor.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php if (in_array($flaw, $flaws_mouthfeel)) { ?>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php } else { ?>
         <td width="8%">&nbsp;</td>
         <?php } ?>
@@ -207,10 +207,10 @@ $flaw_7_arr = array($label_grassy,$label_solvent,$label_yeasty);
     <tr>
         <?php foreach ($flaw_3_arr as $flaw) { ?>
         <td><?php echo $flaw; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_aroma.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_flavor.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_aroma.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_flavor.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php if (in_array($flaw, $flaws_mouthfeel)) { ?>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php } else { ?>
         <td width="8%">&nbsp;</td>
         <?php } ?>
@@ -219,10 +219,10 @@ $flaw_7_arr = array($label_grassy,$label_solvent,$label_yeasty);
     <tr>
         <?php foreach ($flaw_4_arr as $flaw) { ?>
         <td><?php echo $flaw; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_aroma.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_flavor.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_aroma.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_flavor.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php if (in_array($flaw, $flaws_mouthfeel)) { ?>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php } else { ?>
         <td width="8%">&nbsp;</td>
         <?php } ?>
@@ -231,10 +231,10 @@ $flaw_7_arr = array($label_grassy,$label_solvent,$label_yeasty);
     <tr>
         <?php foreach ($flaw_5_arr as $flaw) { ?>
         <td><?php echo $flaw; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_aroma.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_flavor.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_aroma.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_flavor.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php if (in_array($flaw, $flaws_mouthfeel)) { ?>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php } else { ?>
         <td width="8%">&nbsp;</td>
         <?php } ?>
@@ -243,10 +243,10 @@ $flaw_7_arr = array($label_grassy,$label_solvent,$label_yeasty);
     <tr>
         <?php foreach ($flaw_6_arr as $flaw) { ?>
         <td><?php echo $flaw; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_aroma.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_flavor.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_aroma.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_flavor.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php if (in_array($flaw, $flaws_mouthfeel)) { ?>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php } else { ?>
         <td width="8%">&nbsp;</td>
         <?php } ?>
@@ -255,10 +255,10 @@ $flaw_7_arr = array($label_grassy,$label_solvent,$label_yeasty);
     <tr>
         <?php foreach ($flaw_7_arr as $flaw) { ?>
         <td><?php echo $flaw; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_aroma.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_flavor.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_aroma.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_flavor.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php if (in_array($flaw, $flaws_mouthfeel)) { ?>
-        <td width="8%"><?php if (strpos($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw) !== false) echo "<span class=\"fa fa-check\"></span>"; ?></td>
+        <td width="8%"><?php if (str_contains($row_eval['evalFlaws'],$label_mouthfeel.": ".$flaw)) echo "<span class=\"fa fa-check\"></span>"; ?></td>
         <?php } else { ?>
         <td width="8%">&nbsp;</td>
         <?php } ?>

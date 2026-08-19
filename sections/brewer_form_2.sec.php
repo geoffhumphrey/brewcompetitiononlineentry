@@ -3,11 +3,11 @@
 $show_partners_orgs = FALSE;
 
 if ($_SESSION['prefsProEdition'] == 1) {
-    
+
     $participant_orgs_label = $label_industry_affiliations;
     $show_partners_orgs = TRUE;
 
-    $org_array_lower = array();
+    $org_array_lower = [];
     foreach ($org_array as $value) {
         $org_array_lower[] = strtolower($value);
     }
@@ -17,7 +17,7 @@ if ($_SESSION['prefsProEdition'] == 1) {
 
 else $participant_orgs_label = $label_brewing_partners;
 
-$styles_selected = array();
+$styles_selected = [];
 $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
 if (!empty($styles_selected)) {
@@ -28,8 +28,8 @@ if (!empty($styles_selected)) {
     $j_likes_form_elements = "";
     $j_dislikes_form_elements = "";
 
-    $a = array();
-    $b = array();
+    $a = [];
+    $b = [];
 
     if (isset($row_brewer['brewerJudgeLikes'])) { 
         $a = explode(",", $row_brewer['brewerJudgeLikes']);
@@ -52,7 +52,7 @@ if (!empty($styles_selected)) {
             if ($_SESSION['prefsStyleSet'] == "BA") {
                 $style_display .= $value['brewStyle'];
             }
-            
+
             else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
 
             $j_likes_form_elements .= "<div class=\"checkbox\">\n";
@@ -69,13 +69,13 @@ if (!empty($styles_selected)) {
             $j_dislikes_form_elements .= "\n</label>\n";
             $j_dislikes_form_elements .= "</div>\n";
         }
-        
+
     }
 
 }
 
 if (!$entrant_type_brewery) { 
-        
+
     $judge_checked = FALSE;
     if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
     if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
@@ -101,7 +101,7 @@ if (!$entrant_type_brewery) {
     <div id="bjcp-id" class="form-group">
         <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            
+
             <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
         </div>
     </div>
@@ -273,7 +273,7 @@ if (!$entrant_type_brewery) {
             <span class="help-block"><?php echo $brewer_text_011; ?></span>
             </div>
         </div>
-        
+
         <?php if (!empty($styles_selected)) { ?>
         <div class="form-group">
             <label for="brewerJudgeLikes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
@@ -317,7 +317,7 @@ if (!$entrant_type_brewery) {
         <label for="brewerSteward" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
-                
+
                 <label class="radio-inline">
                     <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "checked"; ?>> <?php echo $label_yes; ?>
                 </label>

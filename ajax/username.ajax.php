@@ -1,7 +1,7 @@
 <?php
 
 ob_start();
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require(CONFIG.'bootstrap.php');
 require(CLASSES.'is_email/is_email.php');
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
@@ -62,11 +62,11 @@ else {
 
 if ($action == "json") {
 
-	$return_json = array(
+	$return_json = [
 		"status" => "$status",
 		"message" => "$message",
 		"errors" => "$errors"
-	);
+	];
 
 	echo json_encode($return_json);
 

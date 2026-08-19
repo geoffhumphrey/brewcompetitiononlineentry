@@ -9,7 +9,7 @@
 $header_output = "";
 $output = "";
 $output_extend = "";
-if (strpos($section, "step") === FALSE) {
+if (!str_contains($section, "step")) {
 	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
 }
 
@@ -202,13 +202,13 @@ switch($section) {
 		if ($action == "add") $header_output = $label_add_entry;
 		else $header_output = $label_edit_entry;
 		
-		switch ($msg) {
-			case "1": $output = sprintf("<strong>%s</strong>",$header_text_005); break;
-			case "2": $output = sprintf("<strong>%s</strong><br>",$header_text_006); break;
-			case "3": $output = sprintf("<strong>%s</strong> %s<br>",$header_text_007,$header_text_008); break;
-			case "4": $output = sprintf("<strong>%s</strong><br>",$header_text_108); break;
-			default: $output = sprintf("<strong>%s</strong> %s",$header_text_105,$header_text_106); break;
-		}
+		$output = match ($msg) {
+            "1" => sprintf("<strong>%s</strong>",$header_text_005),
+            "2" => sprintf("<strong>%s</strong><br>",$header_text_006),
+            "3" => sprintf("<strong>%s</strong> %s<br>",$header_text_007,$header_text_008),
+            "4" => sprintf("<strong>%s</strong><br>",$header_text_108),
+            default => sprintf("<strong>%s</strong> %s",$header_text_105,$header_text_106),
+        };
 
 		if ((strstr($msg,"1-")) && ($_SESSION['prefsAutoPurge'] == 1)) $output .= " Unconfirmed entries may be deleted from the system without warning.";
 	break;

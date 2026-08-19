@@ -5,7 +5,7 @@ function get_timezone($offset) {
 	
 	$offset = number_format((float)$offset,3);
 	
-	$timezones = array(
+	$timezones = [
         '-12.000' => 'Pacific/Kwajalein',
         '-11.000' => 'Pacific/Midway',
         '-10.000' => 'Pacific/Honolulu',
@@ -52,7 +52,7 @@ function get_timezone($offset) {
         '11.000' => 'Asia/Magadan',
         '12.000' => 'Asia/Kamchatka',
 				'13.000' => 'Pacific/Tongatapu',
-    );
+    ];
 
 	$timezone = $timezones[$offset];
 	
@@ -74,7 +74,7 @@ function convert_timestamp($time_string, $timezone, $offset, $method) {
 		try {
 			$dt = new DateTime($time_string, new DateTimeZone($timezone));
 		}
-		catch (Exception $e) {
+		catch (Exception) {
 			return false;
 		}
 
@@ -93,6 +93,7 @@ function convert_timestamp($time_string, $timezone, $offset, $method) {
 		return $timestamp;
 
 	}
+    return null;
 
 }
 
@@ -122,7 +123,7 @@ function to_utc_epoch($datetime_string, $timezone_offset) {
 	try {
 		$dt = new DateTime($datetime_string, new DateTimeZone($tz));
 	}
-	catch (Exception $e) {
+	catch (Exception) {
 		return false;
 	}
 
@@ -173,39 +174,16 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 	if ($time_format == "1") $time = $dt->format('H:i');
 	else $time = $dt->format('g:i A');
 
-	switch($return_format) {
-
-		case "date-time":
-			$return = $date." ".$time.", ".$dt->format('T');
-		break;
-
-		case "date-time-no-gmt":
-			$return = $date." ".$time;
-		break;
-
-		case "date-time-system":
-			$return = $date." ".$time;
-		break;
-
-		case "date-no-gmt":
-			$return = $date;
-		break;
-
-		case "time-gmt":
-			$return = $time.", ".$dt->format('T');
-		break;
-
-		case "time":
-			$return = $time;
-		break;
-
-		case "year":
-			$return = $dt->format('Y');
-		break;
-
-		default: $return = $date;
-
-	}
+	$return = match ($return_format) {
+        "date-time" => $date." ".$time.", ".$dt->format('T'),
+        "date-time-no-gmt" => $date." ".$time,
+        "date-time-system" => $date." ".$time,
+        "date-no-gmt" => $date,
+        "time-gmt" => $time.", ".$dt->format('T'),
+        "time" => $time,
+        "year" => $dt->format('Y'),
+        default => $date,
+    };
 
 	return $return;
 
@@ -216,8 +194,7 @@ function greaterDate($start_date, $end_date) {
   $start = strtotime($start_date);
   $end = strtotime($end_date);
   
-  if ($start > $end) return TRUE;
-  else return FALSE;
+  return $start > $end;
 
 }
 

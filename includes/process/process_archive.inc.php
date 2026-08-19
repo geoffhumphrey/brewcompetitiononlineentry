@@ -3,15 +3,15 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	require (INCLUDES.'scrubber.inc.php');
 	require (INCLUDES.'db_tables.inc.php');
-	
+
 	$eval_db_exist = FALSE;
 	if (check_setup($prefix."evaluation",$database)) $eval_db_exist = TRUE;
-	
+
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
@@ -25,7 +25,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$suffix = sterilize($suffix);
 
 	// Rename current tables and recreate new ones based upon user input
-	$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
+	$tables_array = [$brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table];
 
 	// Only rename evaluation away (emptying the live table) when it's not being kept - when
 	// it is, the block below copies it into the archive instead, leaving the live table alone,
@@ -44,21 +44,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			header($redirect_go_to);
 			exit();
 		}
-		
+
 		/**
 		 * Check if any documents are in the user_docs folder
 		 * If so, create a directory with the suffix name.
 		 * Move the files to that folder. 
 		 * Erase all files with certain mime types in the user_docs directory.
 		 */
-		
+
 		if (!is_dir_empty(USER_DOCS)) {
 
 			// Define directories and run the move function
 			$src = USER_DOCS;
 			$dest = USER_DOCS.$suffix;
 			rmove($src, $dest);
-			
+
 			// Run the delete function
 			rdelete(USER_DOCS,"");
 
@@ -66,9 +66,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Clear BJCP ID from "contest_info"
 		$update_table = $prefix."contest_info";
-		$data = array(
+		$data = [
 			'contestID' => NULL
-		);
+		];
 		$db_conn->where ('id', 1);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -137,7 +137,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!isset($_POST['keepSponsors'])) $tables_array[] = $sponsors_db_table;
 
-		$truncate_tables_array = array();
+		$truncate_tables_array = [];
 		if (!isset($_POST['keepDropoff'])) $truncate_tables_array[] = $drop_off_db_table;
 		if (!isset($_POST['keepSponsors'])) $truncate_tables_array[] = $sponsors_db_table;
 		if (!isset($_POST['keepLocations'])) $truncate_tables_array[] = $judging_locations_db_table;
@@ -181,7 +181,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		if (isset($_POST['keepSpecialBest'])) {
-			
+
 			$sql = "CREATE TABLE ".$special_best_info_db_table."_".$suffix." LIKE ".$special_best_info_db_table.";";
 			$db_conn->rawQuery($sql);
 			if ($db_conn->getLastErrno() !== 0) {
@@ -229,7 +229,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 		}
-		
+
 		if (($eval_db_exist) && (isset($_POST['keepEvaluations']))) {
 
 			$evaluation_table = $prefix."evaluation";
@@ -306,7 +306,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!isset($_POST['keepParticipants']))  {
 
 			$update_table = $prefix."users";
-			$data = array(
+			$data = [
 				'id' => 1, 
 				'user_name' => $user_name, 
 				'password' => $user_password,	
@@ -314,7 +314,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'userQuestion' => $userQuestion, 
 				'userQuestionAnswer' => $userQuestionAnswer, 
 				'userCreated' => date('Y-m-d H:i:s', time())
-			);
+			];
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -322,7 +322,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			$update_table = $prefix."brewer";
-			$data = array(
+			$data = [
 				'id' => '1',
 				'uid' => '1',
 				'brewerFirstName' => blank_to_null($brewerFirstName),
@@ -357,7 +357,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'brewerDropOff' => '999',
 				'brewerBreweryName' => blank_to_null($brewerBreweryName),
 				'brewerBreweryInfo' => NULL
-			);
+			];
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -370,14 +370,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$styleSet = $_SESSION['prefsStyleSet'];
 
 		$update_table = $prefix."archive";
-		$data = array(
+		$data = [
 			'archiveSuffix' => $suffix,
 			'archiveProEdition' => blank_to_null($_SESSION['prefsProEdition']),
 			'archiveStyleSet' => blank_to_null($styleSet),
 			'archiveScoresheet' => blank_to_null($_SESSION['prefsDisplaySpecial']),
 			'archiveWinnerMethod' => blank_to_null($_SESSION['prefsWinnerMethod']),
 			'archiveDisplayWinners' => blank_to_null($_SESSION['prefsDisplayWinners'])
-		);
+		];
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -389,14 +389,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// First, clear judging preferences and discounts
 			$update_table = $prefix."brewer";
-			$data = array(
+			$data = [
 				'brewerJudge' => 'N',
 				'brewerSteward' => 'N',
 				'brewerJudgeLocation' => NULL,
 				'brewerStewardLocation' => NULL,
 				'brewerDropOff' => '999',
 				'brewerDiscount' => NULL
-			);
+			];
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -410,16 +410,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		else {
 
 			// First, clear judging preferences and discounts for remaining users
-				
+
 			$update_table = $prefix."brewer";
-			$data = array(
+			$data = [
 				'brewerJudge' => 'N',
 				'brewerSteward' => 'N',
 				'brewerJudgeLocation' => NULL,
 				'brewerStewardLocation' => NULL,
 				'brewerDropOff' => '999',
 				'brewerDiscount' => NULL
-			);
+			];
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -571,16 +571,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			else {
 
 				if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-				
+
 				// If the username/password combo is incorrect or not found, relocate to the login error page
 				$redirect = $base_url."index.php?msg=1";
 				$redirect = prep_redirect_link($redirect);
 				$redirect_go_to = sprintf("Location: %s", $redirect);
-				
+
 				session_destroy();
 
 			}
-			
+
 		}
 
 	} // end if ($go == "add")
@@ -588,7 +588,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($go == "edit") {
 
-		$tables_array = array(
+		$tables_array = [
 			$brewing_db_table, 
 			$judging_assignments_db_table, 
 			$judging_flights_db_table, 
@@ -602,10 +602,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$style_types_db_table,
 			$users_db_table,
 			$sponsors_db_table
-		);
+		];
 
 		if ($eval_db_exist) $tables_array[] = $prefix."evaluation";
-		
+
 		// If the user changed the archive suffix name
 		// Need to loop through each possible archive
 		// DB table and change its name
@@ -617,7 +617,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$table_new = $table."_".$suffix;
 
 				if (check_setup($table_old,$database)) {
-					
+
 					$sql = sprintf("RENAME TABLE %s TO %s;", $table_old, $table_new);
 					$db_conn->rawQuery($sql);
 					if ($db_conn->getLastErrno() !== 0) {
@@ -630,7 +630,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			$update_table = $prefix."archive";
-			$data = array('archiveSuffix' => $suffix);
+			$data = ['archiveSuffix' => $suffix];
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -641,13 +641,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // end if ($filter != $suffix)
 
 		$update_table = $prefix."archive";
-		$data = array( 
+		$data = [ 
 			'archiveProEdition' => sterilize($_POST['archiveProEdition']),
 			'archiveStyleSet' => sterilize($_POST['archiveStyleSet']),
 			'archiveScoresheet' => sterilize($_POST['archiveScoresheet']),
 			'archiveWinnerMethod' => sterilize($_POST['archiveWinnerMethod']),
 			'archiveDisplayWinners' => sterilize($_POST['archiveDisplayWinners'])
-			);
+			];
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -655,7 +655,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		$redirect = $base_url."index.php?section=admin&go=archive&msg=2";
 		$redirect = prep_redirect_link($redirect);

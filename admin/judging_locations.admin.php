@@ -9,7 +9,7 @@
  */
 
 // Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 1))) {
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!str_contains($section, "step")) && ($_SESSION['userLevel'] > 1))) {
     $redirect = "../../403.php";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
@@ -99,12 +99,12 @@ if ($filter == "bos") {
 
 // Judging Locations & Dates List
 if ($section != "step5") {
-	
+
 	if (($action == "default") && ($totalRows_judging_locs > 0)) {
-		
+
 		$output_datatables_aaSorting = "[2,'asc']";
 		$output_datatables_aoColumns = "null, null, null, null, null, null, null, { \"asSorting\": [  ] }";
-		
+
 		$output_datatables_head .= "<tr>";
 		$output_datatables_head .= "<th>Name</th>";
 		$output_datatables_head .= "<th width=\"5%\" nowrap class=\"hidden-xs hidden-sm\">Type</th>";
@@ -231,14 +231,14 @@ if ($section != "step5") {
 
 					// Build assignment modal for participants
 					unset($assignment_modal_body);
-					if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {
+					if ((str_contains($brewer_assignment,"Judge")) || (str_contains($brewer_assignment,"Steward")) ) {
 
-						if (strpos($brewer_assignment,"Judge") !== false) {
+						if (str_contains($brewer_assignment,"Judge")) {
 							if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".h($table_assign_judge)."<p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
 						}
 
-						if (strpos($brewer_assignment,"Steward") !== false) {
+						if (str_contains($brewer_assignment,"Steward")) {
 							if (!empty($table_assign_steward))  $assignment_modal_body .= "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".h($table_assign_steward)."<p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
 						}
@@ -260,17 +260,17 @@ if ($section != "step5") {
 						$output_assignment_modals .= "\t\t</div><!-- ./modal-content -->\n";
 						$output_assignment_modals .= "\t</div><!-- ./modal-dialog -->\n";
 						$output_assignment_modals .= "</div><!-- ./modal -->\n";
-					
+
 					}
-				
+
 				}
 
 				$assignment_checked = str_replace(", ",",",$brewer_assignment);
 
-				if ((!empty($assignment_checked)) && ($filter == "judges") && (strpos($brewer_assignment,'Judge') !== false)) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
-				elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (strpos($brewer_assignment,'Steward') !== false)) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
-				elseif ((!empty($assignment_checked)) && ($filter == "staff") && (strpos($brewer_assignment,'Staff') !== false)) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
-				elseif ((!empty($assignment_checked)) && ($filter == "bos") && (strpos($brewer_assignment,'BOS') !== false)) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
+				if ((!empty($assignment_checked)) && ($filter == "judges") && (str_contains($brewer_assignment,'Judge'))) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
+				elseif ((!empty($assignment_checked)) && ($filter == "stewards") && (str_contains($brewer_assignment,'Steward'))) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
+				elseif ((!empty($assignment_checked)) && ($filter == "staff") && (str_contains($brewer_assignment,'Staff'))) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
+				elseif ((!empty($assignment_checked)) && ($filter == "bos") && (str_contains($brewer_assignment,'BOS'))) { $checked = "CHECKED"; $copy_paste_emails .= $row_brewer['brewerEmail'].", "; }
 				else $checked = "";
 
 				if ($filter == "bos") {
@@ -286,71 +286,71 @@ if ($section != "step5") {
 					}
 				}
 
-				if (($filter == "judges") || ($filter == "stewards") || ($filter == "staff")) {
+				if (in_array($filter, ["judges", "stewards", "staff"])) {
 
-					$cols = array("id","judgingLocName","judgingLocType");
+					$cols = ["id","judgingLocName","judgingLocType"];
 					if ($filter == "staff") $db_conn->where ("judgingLocType", 2);
 					$row_judging_loc3 = $db_conn->get ($prefix."judging_locations", null, $cols);
-				    
-	                $j_sess_arr = array();
+
+	                $j_sess_arr = [];
 
 	                if ($row_judging_loc3) {
 	                	foreach ($row_judging_loc3 as $row_judging_loc3) {
 	                	    $j_sess_arr[$row_judging_loc3['id']] = $row_judging_loc3['judgingLocName'];
 	                	}
 	                }
-	                
+
 					if (($filter == "judges") || ($filter == "staff")) $exploder = $row_brewer['brewerJudgeLocation'];
 					if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
 					$a = explode(",",$exploder);
 					$output = "";
-					
+
 					if (!empty($exploder)) {
 
 						sort($a);
-						$c = array();
+						$c = [];
 
 						$none_selected = 0;
-						
+
 						foreach ($a as $value) {
-							
+
 							if (!empty($value)) {
-								
+
 								$b = explode("-",$value);
-								
+
 								if (($b[0] == "Y") && (isset($j_sess_arr[$b[1]]))) {
 								    $c[] = $j_sess_arr[$b[1]]."<br>";
 									$none_selected += 1;
 								}
-								
+
 							}
-							
+
 						}
-					
-						if (!empty($c)) {
+
+						if ($c !== []) {
 
 							sort($c);
 							foreach ($c as $value) {
 								if (!empty($value)) $output .= $value;
 							}
-							
+
 							$output = rtrim($output,"<br>");
 						}
 
-					
+
 					}
-						
+
 					if ((isset($none_selected)) && ($none_selected == 0)) {
 						if ($filter != "staff") $output .= "<span class=\"fa fa-sm fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
 					}
-					
+
 					$output_location = $output;
 
 				}
 
 				if (($filter == "bos") && (!empty($bos_judge_eligible))) $output_datatables_body .= "<tr class=\"bg-danger text-danger\">";
 				elseif (($filter == "bos") && (empty($bos_judge_eligible))) {
-					if (strpos($brewer_assignment,'BOS') !== false) $output_datatables_body .= "<tr class=\"bg-info text-info\">";
+					if (str_contains($brewer_assignment,'BOS')) $output_datatables_body .= "<tr class=\"bg-info text-info\">";
 					else $output_datatables_body .= "<tr class=\"bg-success text-success\">";
 				}
 				else $output_datatables_body .= "<tr>\n";
@@ -358,11 +358,11 @@ if ($section != "step5") {
 				$output_datatables_body .= "<input type=\"hidden\" name=\"uid[]\" value=\"".$row_brewer['uid']."\" />";
 
 				$checkbox_disabled = "";
-				
+
 				if ((isset($totalRows_organizer)) && ($totalRows_organizer > 0) && (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid']))) $checkbox_disabled .= " DISABLED";
-				if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $checkbox_disabled .= " DISABLED";
-				if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $checkbox_disabled .= " DISABLED";
-				
+				if (($filter == "stewards") && (str_contains($brewer_assignment,'Judge'))) $checkbox_disabled .= " DISABLED";
+				if (($filter == "judges") && (str_contains($brewer_assignment,'Steward'))) $checkbox_disabled .= " DISABLED";
+
 				if ($filter == "judges") $staff_column = "staff_judge";
 				if ($filter == "stewards") $staff_column = "staff_steward"; 
 				if ($filter == "staff") $staff_column = "staff_staff";
@@ -393,28 +393,28 @@ if ($section != "step5") {
 					$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 					$display_rank = bjcp_rank($bjcp_rank[0],1);
 
-					if (((strpos($display_rank, "Level 0:") !== false)) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $display_rank = "Level 3: Certified Cider or Mead Judge";
+					if (((str_contains($display_rank, "Level 0:"))) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $display_rank = "Level 3: Certified Cider or Mead Judge";
 
 					if ((isset($row_brewer['brewerJudgeMead'])) && ($row_brewer['brewerJudgeMead'] == "Y")) {
 						$display_rank .= "<br /><em>Certified Mead Judge</em>";
 					}
-					
+
 					if ((isset($row_brewer['brewerJudgeCider'])) && ($row_brewer['brewerJudgeCider'] == "Y")) {
 						$display_rank .= "<br /><em>Certified Cider Judge</em>";
 					}
 
 					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".strtoupper($row_brewer['brewerJudgeID'])."</td>";
 					$output_datatables_body .= "<td>".$display_rank;
-					
+
 					if (!empty($bjcp_rank[1])) {
 						$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
 					}
-					
+
 					$output_datatables_body .= "</td>";
-				
+
 				}
 
-				if (($filter == "judges") || ($filter == "stewards") || ($filter == "staff")) {
+				if (in_array($filter, ["judges", "stewards", "staff"])) {
 					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$output_location."</td>";
 				}
 
@@ -846,7 +846,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
+			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (!str_contains($section, "step")) echo $current_date." ".$current_time; ?>" required>
 			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">Provide an start date and time for the session.</span>
@@ -858,7 +858,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingDateEnd" name="judgingDateEnd" type="text" value="<?php if ($action == "edit") echo $judging_end_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>">
+			<input class="form-control" id="judgingDateEnd" name="judgingDateEnd" type="text" value="<?php if ($action == "edit") echo $judging_end_date; ?>" placeholder="<?php if (!str_contains($section, "step")) echo $current_date." ".$current_time; ?>">
 			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">For a distributed session, it is required that you provide an end date and time that will serve as a deadline for judges to submit their evaluations.</span>

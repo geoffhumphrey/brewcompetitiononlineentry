@@ -195,25 +195,11 @@ class DSNConfigurator
                 );
             }
 
-            switch ($key) {
-                case 'AllowEmpty':
-                case 'SMTPAutoTLS':
-                case 'SMTPKeepAlive':
-                case 'SingleTo':
-                case 'UseSendmailOptions':
-                case 'do_verp':
-                case 'DKIM_copyHeaderFields':
-                    $mailer->$key = (bool) $value;
-                    break;
-                case 'Priority':
-                case 'SMTPDebug':
-                case 'WordWrap':
-                    $mailer->$key = (int) $value;
-                    break;
-                default:
-                    $mailer->$key = $value;
-                    break;
-            }
+            $mailer->$key = match ($key) {
+                'AllowEmpty', 'SMTPAutoTLS', 'SMTPKeepAlive', 'SingleTo', 'UseSendmailOptions', 'do_verp', 'DKIM_copyHeaderFields' => (bool) $value,
+                'Priority', 'SMTPDebug', 'WordWrap' => (int) $value,
+                default => $value,
+            };
         }
     }
 
@@ -227,7 +213,7 @@ class DSNConfigurator
      */
     protected function parseUrl($url)
     {
-        if (\PHP_VERSION_ID >= 50600 || false === strpos($url, '?')) {
+        if (\PHP_VERSION_ID >= 50600 || !str_contains($url, '?')) {
             return parse_url($url);
         }
 

@@ -121,19 +121,19 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 		if (empty($row_style_type['brewStyleType'])) $style_type = "other";
 		else $style_type = style_type($row_style_type['brewStyleType'],"2",$source);
 
-		if ($style_type == "Beer") {
+		if ($style_type === "Beer") {
 			$style_beer_count[] = $row_substyle_count['count'];
 			$style_beer_count_logged[] = $row_substyle_count_logged['count'];
 		}
 
-		elseif ($style_type == "Mead") {
+		elseif ($style_type === "Mead") {
 			$style_mead_count[] = $row_substyle_count['count'];
 			$style_mead_count_logged[] = $row_substyle_count_logged['count'];
 			$style_mead_cider_count[] = $row_substyle_count['count'];
 			$style_mead_cider_count_logged[] = $row_substyle_count_logged['count'];
 		}
 
-		elseif ($style_type == "Cider") {
+		elseif ($style_type === "Cider") {
 			$style_cider_count[] = $row_substyle_count['count'];
 			$style_cider_count_logged[] = $row_substyle_count_logged['count'];
 			$style_mead_cider_count[] = $row_substyle_count['count'];

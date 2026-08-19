@@ -254,7 +254,7 @@ class Parser
         }
 
         if ($this->isStartTag && !$this->isEmptyTag) {
-            array_push($this->openTags, $this->tagName);
+            $this->openTags[] = $this->tagName;
             if (in_array($this->tagName, $this->preformattedTags)) {
                 // don't truncate whitespaces for <code> or <pre> contents
                 $this->keepWhitespace++;
@@ -263,7 +263,7 @@ class Parser
 
         if ($this->html[0] == '<') {
             $token = substr($this->html, 0, 9);
-            if (substr($token, 0, 2) == '<?') {
+            if (str_starts_with($token, '<?')) {
                 // xml prolog or other pi's
                 /** TODO **/
                 // trigger_error('this might need some work', E_USER_NOTICE);
@@ -272,7 +272,7 @@ class Parser
 
                 return true;
             }
-            if (substr($token, 0, 4) == '<!--') {
+            if (str_starts_with($token, '<!--')) {
                 // comment
                 $pos = strpos($this->html, '-->');
                 if ($pos === false) {
@@ -288,7 +288,7 @@ class Parser
 
                 return true;
             }
-            if ($token == '<!DOCTYPE') {
+            if ($token === '<!DOCTYPE') {
                 // doctype
                 $this->setNode('doctype', strpos($this->html, '>') + 1);
 
@@ -296,7 +296,7 @@ class Parser
 
                 return true;
             }
-            if ($token == '<![CDATA[') {
+            if ($token === '<![CDATA[') {
                 // cdata, use text node
 
                 // remove leading <![CDATA[
@@ -386,7 +386,7 @@ class Parser
 
             return false;
         }
-        if ($this->noTagsInCode && end($this->openTags) == 'code' && !($tagName == 'code' && !$isStartTag)) {
+        if ($this->noTagsInCode && end($this->openTags) == 'code' && ($tagName !== 'code' || $isStartTag)) {
             // we supress all HTML tags inside code tags
             $this->invalidTag();
 
@@ -401,7 +401,7 @@ class Parser
         while (isset($this->html[$pos + 1])) {
             $pos++;
             // close tag
-            if ($this->html[$pos] == '>' || $this->html[$pos] . $this->html[$pos + 1] == '/>') {
+            if ($this->html[$pos] == '>' || $this->html[$pos] . $this->html[$pos + 1] === '/>') {
                 if ($this->html[$pos] == '/') {
                     $isEmptyTag = true;
                     $pos++;
@@ -444,7 +444,7 @@ class Parser
             $attributes[$currAttrib] = $currAttrib;
         }
         if (!$isStartTag) {
-            if (!empty($attributes) || $tagName != end($this->openTags)) {
+            if ($attributes !== [] || $tagName != end($this->openTags)) {
                 // end tags must not contain any attributes
                 // or maybe we did not expect a different tag to be closed
                 $this->invalidTag();
@@ -518,7 +518,7 @@ class Parser
      */
     protected function match($str)
     {
-        return substr($this->html, 0, strlen($str)) == $str;
+        return str_starts_with($this->html, $str);
     }
 
     /**

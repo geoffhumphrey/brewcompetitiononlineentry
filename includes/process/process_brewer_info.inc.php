@@ -25,7 +25,7 @@ $brewerPhone2 = "";
 $brewerJudgeWaiver = "Y";
 $brewerDropOff = 0;
 $brewerBreweryName = "";
-$brewerBreweryInfo = array();
+$brewerBreweryInfo = [];
 $brewerBreweryTTB = "";
 $brewerBreweryProd = "";
 $brewerBreweryProdMeas = "";
@@ -106,17 +106,17 @@ if (isset($_POST['brewerJudgeNotes'])) {
 if ((isset($_POST['brewerAssignment'])) && (!empty($_POST['brewerAssignment']))) {
 
     $aff = $_POST['brewerAssignment'];
-    $affiliated_cleaned = array();
+    $affiliated_cleaned = [];
     foreach ($aff as $value) {
         $value = $purifier->purify(sterilize($value));
         $affiliated_cleaned[] = $value;
     }
 
-    $affilliated = array("affilliated" => $affiliated_cleaned);
+    $affilliated = ["affilliated" => $affiliated_cleaned];
 
 }
 
-else $affilliated = array();
+else $affilliated = [];
 
 if ((isset($_POST['brewerAssignmentOther'])) && (!empty($_POST['brewerAssignmentOther']))) {
 
@@ -126,7 +126,7 @@ if ((isset($_POST['brewerAssignmentOther'])) && (!empty($_POST['brewerAssignment
     $affilliated_other_arr = str_replace("; ",",",$_POST['brewerAssignmentOther']);
     $affilliated_other_arr = str_replace(";",",",$_POST['brewerAssignmentOther']);
     $affilliated_other_arr = explode(",",$affilliated_other_arr);
-    $affilliated_other = array();
+    $affilliated_other = [];
 
     foreach ($affilliated_other_arr as $value) {
         $value = $purifier->purify(sterilize($value));
@@ -134,23 +134,23 @@ if ((isset($_POST['brewerAssignmentOther'])) && (!empty($_POST['brewerAssignment
         if (!in_array($value,$all_orgs)) $affilliated_other[] = ucwords($value);
     }
 
-    if (!empty($affilliated_other)) $affilliated_other_arr = array("affilliatedOther" => $affilliated_other);
+    if ($affilliated_other !== []) $affilliated_other_arr = ["affilliatedOther" => $affilliated_other];
 
 }
 
-else $affilliated_other_arr = array();
+else $affilliated_other_arr = [];
 
-if ((empty($affilliated)) && (empty($affilliated_other_arr))) {
+if ((empty($affilliated)) && ($affilliated_other_arr === [])) {
     $brewerAssignment = NULL;
 }
 
 else {
-    $brewerAssignment = array();
+    $brewerAssignment = [];
     $brewerAssignment = array_merge($affilliated,$affilliated_other_arr);
     $brewerAssignment = json_encode($brewerAssignment);
 }
 
-if (empty($brewerBreweryInfo)) $brewerBreweryInfo = "";
+if ($brewerBreweryInfo === []) $brewerBreweryInfo = "";
 else $brewerBreweryInfo = json_encode($brewerBreweryInfo);
 
 // print_r($brewerAssignment); exit();
@@ -166,13 +166,13 @@ else $brewerBreweryInfo = json_encode($brewerBreweryInfo);
  */
 
 if (($brewerJudge == "Y") || ($brewerStaff == "Y")) {
-    
+
     if ((isset($_POST['brewerJudgeLocation'])) && (is_array($_POST['brewerJudgeLocation']))) {
-        
+
         foreach ($_POST['brewerJudgeLocation'] as $value) {
-            
+
             $loc = explode("-",$value);
-            
+
             if ($loc[0] == "N") {
 
                 if (!empty($user_id)) {
@@ -190,11 +190,11 @@ if (($brewerJudge == "Y") || ($brewerStaff == "Y")) {
                 } // if (!empty($user_id))
 
             } // end if ($loc[0] == "N")
-       
+
         } // end foreach
 
         $location_pref1 = sterilize(implode(",",$_POST['brewerJudgeLocation']));
-    
+
     } // end if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation'])))
 
     elseif ((isset($_POST['brewerJudgeLocation'])) && (!is_array($_POST['brewerJudgeLocation']))) {
@@ -202,7 +202,7 @@ if (($brewerJudge == "Y") || ($brewerStaff == "Y")) {
         $loc = explode("-",$_POST['brewerJudgeLocation']);
 
         if ($loc[0] == "N") {
-            
+
             if (!empty($user_id)) {
 
                 $update_table = $prefix."judging_assignments";
@@ -298,11 +298,11 @@ if ($brewerSteward == "Y") {
     if ((isset($_POST['brewerStewardLocation'])) && (is_array($_POST['brewerStewardLocation']))) {
 
         foreach ($_POST['brewerStewardLocation'] as $value) {
-            
+
             $loc = explode("-",$value);
-            
+
             if ($loc[0] == "N") {
-                
+
                 if (!empty($user_id)) {
 
                     $update_table = $prefix."judging_assignments";
@@ -330,7 +330,7 @@ if ($brewerSteward == "Y") {
         $loc = explode("-",$_POST['brewerStewardLocation']);
 
         if ($loc[0] == "N") {
-            
+
             if (!empty($user_id)) {
 
                 $update_table = $prefix."judging_assignments";
@@ -445,7 +445,7 @@ $state_province = sterilize($state_province);
 // Set all locations as YES for quick adds
 if ($view == "quick") {
 
-    $locations = array();
+    $locations = [];
 
     $rows_j_locs = $db_conn->get($prefix."judging_locations", null, "id");
 

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $list_help_title = "Ayuda de Mi Cuenta";
 $list_help_body = "<p>Esto es una vista completa de la información de tu cuenta.</p>";
 $list_help_body .= "<p>Aquí puedes ver tu información personal, incluyendo nombre, dirección, número de teléfono(s), clubes, número de miembro de AHA, ID de BJCP, rango de juez de BJCP, preferencias de juicio y preferencias de servicio.</p>";

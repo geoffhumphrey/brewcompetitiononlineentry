@@ -84,12 +84,12 @@ if (!check_update("jPrefsScoresheet", $prefix."judging_preferences")) {
   */
 
   $update_table = $prefix."judging_preferences";
-  $data = array(
+  $data = [
     'jPrefsJudgingOpen' => $timestamp,
     'jPrefsJudgingClosed' => $plus_one_week,
     'jPrefsScoresheet' => 1,
     'jPrefsScoreDispMax' => 7
-  );
+  ];
   $db_conn->where ('id', 1);
   $result = $db_conn->update ($update_table, $data);
 

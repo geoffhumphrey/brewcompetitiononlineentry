@@ -1,5 +1,7 @@
 <?php
-$ba_category_names = array(
+declare(strict_types=1);
+
+$ba_category_names = [
 	"1" => "British Origin Ales",
 	"2" => "Irish Origin Ales",
 	"3" => "North American Origin Ales",
@@ -14,10 +16,10 @@ $ba_category_names = array(
 	"12" => "Mead, Cider, and Perry", // Not officially part of the BA
 	"13" => "Other Origin", // Deprecated in 2018
 	"14" => "Malternative Beverages" // Deprecated in 2018
-);
+];
 
-$ba_beer_categories = array(1,2,3,4,5,6,7,8,9,10,11,13,14);
-$ba_mead_cider_categories = array(12);
+$ba_beer_categories = [1,2,3,4,5,6,7,8,9,10,11,13,14];
+$ba_mead_cider_categories = [12];
 $ba_all_categories = array_merge($ba_beer_categories,$ba_mead_cider_categories);
 
 // 2015 had 14 style categories, 2018 had 12; keeping 14 for backward compatibility

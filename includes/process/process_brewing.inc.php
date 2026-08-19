@@ -12,7 +12,7 @@ exit();
 */
 
 $errors = FALSE;
-$error_output = array();
+$error_output = [];
 $_SESSION['error_output'] = "";
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
@@ -139,14 +139,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewCoBrewer = $purifier->purify(sterilize($_POST['brewCoBrewer']));
 
 			if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs))) {
-		    	
+
 		    	$parsed_name = $name_parser->parse_name($brewCoBrewer);
 
 		    	$first_name = "";
 			    if (!empty($parsed_name['salutation'])) $first_name .= $parsed_name['salutation']." ";
 			    $first_name .= $parsed_name['fname'];
 			    if (!empty($parsed_name['initials'])) $first_name .= " ".$parsed_name['initials'];
-			    
+
 			    $last_name = "";
 			    if (!empty($parsed_name['lname_compound'])) $last_name .= $parsed_name['lname_compound']." ";
 			    if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs))) $last_name .= standardize_name($parsed_name['lname_base']);
@@ -158,7 +158,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 		}
-		
+
 		// Possible Allergens
 		if ((isset($_POST['brewPossAllergens'])) && (!empty($_POST['brewPossAllergens']))) {
 			$brewPossAllergens = $purifier->purify(sterilize($_POST['brewPossAllergens']));
@@ -197,7 +197,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		if ((!empty($brewOriginalGravity)) || (!empty($brewFinalGravity))) {
-			$brewSweetnessLevel = array();
+			$brewSweetnessLevel = [];
 			$brewSweetnessLevel['OG'] = $brewOriginalGravity;
 			$brewSweetnessLevel['FG'] = $brewFinalGravity;
 			$brewSweetnessLevel = json_encode($brewSweetnessLevel);
@@ -211,28 +211,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Juice Source - From multi-select
 		if ((isset($_POST['brewJuiceSource'])) && (!empty($_POST['brewJuiceSource']))) {
-		    $juice_src = array("juice_src" => $_POST['brewJuiceSource']);
+		    $juice_src = ["juice_src" => $_POST['brewJuiceSource']];
 		}
 
-		else $juice_src = array();
+		else $juice_src = [];
 
 		if ((isset($_POST['brewJuiceSourceOther'])) && (!empty($_POST['brewJuiceSourceOther']))) {
-		    $juice_src_other = array("juice_src_other" => $_POST['brewJuiceSourceOther']);
+		    $juice_src_other = ["juice_src_other" => $_POST['brewJuiceSourceOther']];
 		}
 
-		else $juice_src_other = array();
+		else $juice_src_other = [];
 
-		if ((empty($juice_src)) && (empty($juice_src_other))) {
+		if (($juice_src === []) && ($juice_src_other === [])) {
 		    $brewJuiceSource = NULL;
 		}
 
 		else {
-		    $brewJuiceSource = array();
+		    $brewJuiceSource = [];
 		    $brewJuiceSource = array_merge($juice_src,$juice_src_other);
 		    $brewJuiceSource = json_encode($brewJuiceSource);
 		}
 
-		$pouring_instructions = array();
+		$pouring_instructions = [];
 
 		if ((isset($_POST['brewPouringInst'])) && (!empty($_POST['brewPouringInst']))) {
 			$pouring_instructions['pouring'] = sterilize($_POST['brewPouringInst']);		
@@ -295,32 +295,32 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Array from constants.inc.php
 		// Check to see if there are any style limits
 		// If so, check if the 
-		if ((is_array($style_limit_entry_count_display)) && (!empty($style_limit_entry_count_display))) {
+		if ((is_array($style_limit_entry_count_display)) && ($style_limit_entry_count_display !== [])) {
 
 			if ($_SESSION['sprefsStyleSet'] == "BJCP2025") {
 				$first_character = mb_substr($key, 0, 1);
-				if ($first_character == "C") $chosen_style_set = "BJCP2025";
+				if ($first_character === "C") $chosen_style_set = "BJCP2025";
 				else $chosen_style_set = "BJCP2021";
 			}
 
 			else $chosen_style_set = $_SESSION['sprefsStyleSet'];
 
 			$all_style_limits = json_decode($_SESSION['prefsStyleLimits'],true);
-			
+
 			if ((isset($all_style_limits[$style[0]])) && ($all_style_limits[$style[0]] >= $style_limit_entry_count_display[$style[0]])) {
 
 				$update_table_styles = $prefix."styles";
-				$data = array('brewStyleAtLimit' => 1);
+				$data = ['brewStyleAtLimit' => 1];
 				$db_conn->where ('brewStyleGroup', $style[0]);
 				$db_conn->where ('brewStyleVersion', $chosen_style_set);
 				$result = $db_conn->update ($update_table_styles, $data);
-				
+
 			}
 
 			if ((isset($all_style_limits[$style[0]])) && ($all_style_limits[$style[0]] < $style_limit_entry_count_display[$style[0]])) {
 
 				$update_table_styles = $prefix."styles";
-				$data = array('brewStyleAtLimit' => 0);
+				$data = ['brewStyleAtLimit' => 0];
 				$db_conn->where ('brewStyleGroup', $style[0]);
 				$db_conn->where ('brewStyleVersion', $chosen_style_set);
 				$result = $db_conn->update ($update_table_styles, $data);
@@ -334,15 +334,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Determine if the style chosen is a cider - if so, run a different query
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 			$first_character = mb_substr($styleFix, 0, 1);
-			if ($first_character == "C") $style_version = "BJCP2025";
+			if ($first_character === "C") $style_version = "BJCP2025";
 			else $style_version = "BJCP2021";
 		}
 
 		else $style_version = $_SESSION['prefsStyleSet'];
 
-		$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $styleFix, $style[1]));
+		$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", [$style_version, "custom", $styleFix, $style[1]]);
 		$row_style_name = $db_conn->getOne($prefix."styles", "id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType");
-		
+
 		$styleName = $row_style_name['brewStyle'];
 
 		// Mark as paid if free entry fee
@@ -361,27 +361,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
 
 			// If BJCP 2021/5 and 2A, add optional regional variation if present
-			if (($index == "02-A") && (!empty($_POST['regionalVar']))) {
+			if (($index === "02-A") && (!empty($_POST['regionalVar']))) {
 				$brewInfo = $purifier->purify(sterilize($_POST['regionalVar']));
 			}
 
 			// IPA strength for 21B styles
-			if (strlen(strstr($index,"21-B")) > 0) {
-				if ($index == "21-B") $brewInfo .= "^".sterilize($_POST['strengthIPA']);
+			if ((string) strstr($index,"21-B") !== '') {
+				if ($index === "21-B") $brewInfo .= "^".sterilize($_POST['strengthIPA']);
 				else $brewInfo .= sterilize($_POST['strengthIPA']);
 			}
 
 			// Pale or Dark Variant
-			if (($index == "09-A") || ($index == "10-C") || ($index == "07-C"))  $brewInfo = sterilize($_POST['darkLightColor']);
+			if (in_array($index, ["09-A", "10-C", "07-C"]))  $brewInfo = sterilize($_POST['darkLightColor']);
 
 			// Fruit Lambic carb/sweetness
-			if ($index == "23-F") $brewInfo .= "^".sterilize($_POST['sweetnessLambic'])."^".sterilize($_POST['carbLambic']);
+			if ($index === "23-F") $brewInfo .= "^".sterilize($_POST['sweetnessLambic'])."^".sterilize($_POST['carbLambic']);
 
 			// Biere de Garde color
-			if ($index == "24-C") $brewInfo = sterilize($_POST['BDGColor']);
+			if ($index === "24-C") $brewInfo = sterilize($_POST['BDGColor']);
 
 			// Saison strength/color
-			if ($index == "25-B") $brewInfo = sterilize($_POST['strengthSaison'])."^".sterilize($_POST['darkLightColor']);
+			if ($index === "25-B") $brewInfo = sterilize($_POST['strengthSaison'])."^".sterilize($_POST['darkLightColor']);
 
 		}
 
@@ -448,7 +448,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		$update_table = $prefix."brewing";
-		$data = array(
+		$data = [
 			'brewName' => blank_to_null($brewName),
 			'brewStyle' => blank_to_null($styleName),
 			'brewCategory' => blank_to_null($styleTrim),
@@ -479,7 +479,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewPouring' => blank_to_null($brewPouring),
 			'brewStyleType' => blank_to_null($row_style_name['brewStyleType']),
 			'brewPackaging' => blank_to_null(sterilize($brewPackaging))
-		);
+		];
 
 		$result = $db_conn->insert ($update_table, $data);
 
@@ -528,7 +528,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (empty($brewInfo)) {
 
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -556,7 +556,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (empty($brewMead1)) {
 
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -584,7 +584,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (empty($brewMead2)) {
 
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -612,7 +612,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (empty($brewMead3)) {
 
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -636,9 +636,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ((check_carb($styleBreak,$_SESSION['prefsStyleSet'])) && (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) && (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet']))) {
 
 			if ((empty($brewMead1)) || (empty($brewMead2)) || (empty($brewMead3))) {
-				
+
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -689,20 +689,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Determine if the style chosen is a cider - if so, run a different query
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 			$first_character = mb_substr($row_current_style['brewCategorySort'], 0, 1);
-			if ($first_character == "C") $style_version = "BJCP2025";
+			if ($first_character === "C") $style_version = "BJCP2025";
 			else $style_version = "BJCP2021";
 		}
 
 		else $style_version = $_SESSION['prefsStyleSet'];
 
-		$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']));
+		$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", [$style_version, "custom", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']]);
 		$row_current_style_id = $db_conn->getOne($prefix."styles", "id");
 
 		if ($row_user['userLevel'] <= 1) {
 
 			$db_conn->where("uid", sterilize($_POST['brewBrewerID']));
 			$row_brewer = $db_conn->getOne($brewer_db_table);
-			
+
 			$brewBrewerID = $row_brewer['uid'];
 			$brewBrewerLastName = $row_brewer['brewerLastName'];
 			$brewBrewerFirstName = $row_brewer['brewerFirstName'];
@@ -720,7 +720,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewJudgingNumber = strtolower($_POST['brewJudgingNumber']);
 
 		$update_table = $prefix."brewing";
-		$data = array(
+		$data = [
 			'brewName' => $brewName,
 			'brewStyle' => $styleName,
 			'brewCategory' => $styleTrim,
@@ -751,11 +751,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewPouring' => blank_to_null($brewPouring),
 			'brewStyleType' => blank_to_null($row_style_name['brewStyleType']),
 			'brewPackaging' => blank_to_null(sterilize($brewPackaging))
-		);
-		
+		];
+
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
-		
+
 		// When updated, use the table_limit function to check
 		// if there's an entry limit imposed on the table for the
 		// previous style and the current style. If so, adjust
@@ -780,7 +780,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($_POST['brewStyle'] == "0-A") {
 
 			$update_table = $prefix."brewing";
-			$data = array('brewConfirmed' => '0');
+			$data = ['brewConfirmed' => '0'];
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -796,9 +796,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
 
 			if (empty($brewInfo)) {
-				
+
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -824,9 +824,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) {
 
 			if (empty($brewMead1)) {
-				
+
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -851,9 +851,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 if (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
 
 			if (empty($brewMead2)) {
-				
+
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -878,9 +878,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
 
 			if (empty($brewMead3))  {
-				
+
 				$update_table = $prefix."brewing";
-				$data = array('brewConfirmed' => '0');
+				$data = ['brewConfirmed' => '0'];
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -901,7 +901,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) {
 			if ($section == "admin") $updateGoTo = $base_url."index.php?section=admin&msg=3";
@@ -962,14 +962,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ((isset($_POST['brewReceived'.$id])) && ($_POST['brewReceived'.$id] == 1)) $brewReceived = 1;
 
 			$update_table = $prefix."brewing";
-			$data = array(
+			$data = [
 				'brewPaid' => $brewPaid,
 				'brewReceived' => $brewReceived,
 				'brewBoxNum' => $brewBoxNum,
 				'brewJudgingNumber' => strtolower($brewJudgingNumber),
 				'brewAdminNotes' => $brewAdminNotes,
 				'brewStaffNotes' => $brewStaffNotes
-			);			
+			];			
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -979,7 +979,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
 		else $redirect = $base_url."index.php?section=admin&go=entries&msg=9";
@@ -991,14 +991,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "paid") {
 
 		$update_table = $prefix."brewing";
-		$data = array('brewPaid' => '1');
+		$data = ['brewPaid' => '1'];
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
 		else $redirect = $base_url."index.php?section=admin&go=entries&msg=20";
@@ -1010,14 +1010,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "unpaid") {
 
 		$update_table = $prefix."brewing";
-		$data = array('brewPaid' => '0');
+		$data = ['brewPaid' => '0'];
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
 		else $redirect = $base_url."index.php?section=admin&go=entries&msg=34";
@@ -1029,14 +1029,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "received") {
 
 		$update_table = $prefix."brewing";
-		$data = array('brewReceived' => '1');
+		$data = ['brewReceived' => '1'];
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
 		else $redirect = $base_url."index.php?section=admin&go=entries&msg=21";
@@ -1048,14 +1048,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "not-received") {
 
 		$update_table = $prefix."brewing";
-		$data = array('brewReceived' => '0');
+		$data = ['brewReceived' => '0'];
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
 		else $redirect = $base_url."index.php?section=admin&go=entries&msg=35";
@@ -1067,14 +1067,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "confirmed") {
 
 		$update_table = $prefix."brewing";
-		$data = array('brewConfirmed' => '1');
+		$data = ['brewConfirmed' => '1'];
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
 		else $redirect = $base_url."index.php?section=admin&go=entries&msg=22";

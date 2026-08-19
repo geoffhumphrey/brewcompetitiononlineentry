@@ -106,14 +106,14 @@ $output_staff = "";
 $organ_bjcp_id = "";
 $organ_uid = "";
 
-$j = array();
-$s = array();
-$st = array();
+$j = [];
+$s = [];
+$st = [];
 
 if ($view == "default") {
 
 	if ($totalRows_organizer > 0) {
-		
+
 		if ((isset($row_org['brewerJudgeID'])) && (!empty($row_org['brewerJudgeID']))) $organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
 
 		$organ_uid = $row_org['uid'];
@@ -146,7 +146,7 @@ if ($view == "default") {
 			$judge_points = judge_points($uid,$judge_max_points);
 
 			if ($judge_points > 0) {
-				
+
 				if (!empty($judge_info['1'])) {
 
 					$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
@@ -155,11 +155,11 @@ if ($view == "default") {
 
 					$output_judges .= "<tr>";
 					$output_judges .= "<td>".$judge_name."</td>";
-					
+
 					$output_judges .= "<td>";
 					if ((!empty($judge_bjcp_id)) && (validate_bjcp_id($judge_bjcp_id))) $output_judges .= $judge_bjcp_id;
 					$output_judges .= "</td>";
-					
+
 					$output_judges .= "<td>";
 					if ($uid == $organ_uid) $output_judges .= "0.0 (".$label_organizer.")";
 					else {
@@ -186,18 +186,18 @@ if ($view == "default") {
 	foreach (array_unique($bos_judge_no_assignment) as $uid) {
 
 		if (($total_entries_received >= 30) && (($beer_styles_total >= 5) || ($mead_cider_total >= 3))) {
-			
+
 			// Best of Show judges criteria
 			// "BOS Judges are eligible to receive 0.5 Best-of-Show (BOS) Judge Points if they judge in any BOS panel in a competition."
 			// "BOS Judge Points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
 
 			$judge_info = explode("^",brewer_info($uid));
 			$judge_bjcp_id = "";
-            
+
 			if ((!empty($uid)) && (!in_array($uid,$j)) && (!empty($judge_info['1']))) {
 
 				if (!empty($judge_info['4'])) $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
-				
+
 				$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
 				if (!empty($judge_info['4'])) $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 
@@ -219,7 +219,7 @@ if ($view == "default") {
 			}
 
 		}	
-	
+
 	}
 
 	if ($totalRows_stewards > 0) {
@@ -231,10 +231,10 @@ if ($view == "default") {
 		}
 
 		foreach (array_unique($s) as $uid) {
-			
+
 			$steward_points = steward_points($uid);
 			$steward_bjcp_id = "";
-			
+
 			if ($steward_points > 0) {
 				$steward_info = explode("^",brewer_info($uid));
 				if (!empty($steward_info['4'])) $steward_bjcp_id = strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
@@ -265,13 +265,13 @@ if ($view == "default") {
 		}
 
 		$st_running_total = 0;
-		
+
 		foreach (array_unique($st) as $uid) {
-				
+
 			$staff_info = explode("^",brewer_info($uid));
-			
+
 			if (!empty($staff_info['1'])) {
-				
+
 				$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
 				$staff_bjcp_id = "";
 				if (!empty($staff_info['4'])) $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
@@ -295,7 +295,7 @@ if ($view == "default") {
 					$st_running_total += $staff_points;
 
 				}
-					
+
 			}
 
 		}
@@ -303,7 +303,7 @@ if ($view == "default") {
 	} // end if ($totalRows_staff > 0)
 
 ?>
-	
+
 	<div class="page-header">
         	<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$output_text_024); ?> </h1>
     </div>

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // PDF_Label 
 //
@@ -39,7 +41,7 @@
  * @see https://github.com/GSGCorp/pdf-label
  */
 
-require_once('fpdf.php');
+require_once(__DIR__ . '/fpdf.php');
 
 class PDF_Label extends FPDF {
 
@@ -59,8 +61,8 @@ class PDF_Label extends FPDF {
     protected $_COUNTY;                // Current y position
 
     // List of label formats
-    protected $_Avery_Labels = array(
-        '5160' => array(
+    protected $_Avery_Labels = [
+        '5160' => [
             'paper-size'=>'letter',
             'metric'=>'mm',    
             'marginLeft'=>1.762,    
@@ -72,9 +74,9 @@ class PDF_Label extends FPDF {
             'width'=>66.675,    
             'height'=>25.4,        
             'font-size'=>8
-        ),
+        ],
 
-        '5161' => array('paper-size'=>'letter',    
+        '5161' => ['paper-size'=>'letter',    
             'metric'=>'mm',    
             'marginLeft'=>0.967,    
             'marginTop'=>10.7,        
@@ -85,9 +87,9 @@ class PDF_Label extends FPDF {
             'width'=>101.6,        
             'height'=>25.4,        
             'font-size'=>8
-        ),
+        ],
 
-        '5162' => array('paper-size'=>'letter',    
+        '5162' => ['paper-size'=>'letter',    
             'metric'=>'mm',    
             'marginLeft'=>0.97,        
             'marginTop'=>20.224,    
@@ -98,9 +100,9 @@ class PDF_Label extends FPDF {
             'width'=>100.807,    
             'height'=>35.72,    
             'font-size'=>8
-        ),
-        
-        '5163' => array('paper-size'=>'letter',    
+        ],
+
+        '5163' => ['paper-size'=>'letter',    
             'metric'=>'mm',    
             'marginLeft'=>1.762,    
             'marginTop'=>10.7,        
@@ -111,9 +113,9 @@ class PDF_Label extends FPDF {
             'width'=>101.6,        
             'height'=>50.8,        
             'font-size'=>8
-        ),
+        ],
 
-        '5164' => array('paper-size'=>'letter',   
+        '5164' => ['paper-size'=>'letter',   
             'metric'=>'in',    
             'marginLeft'=>0.148,    
             'marginTop'=>0.5,         
@@ -124,9 +126,9 @@ class PDF_Label extends FPDF {
             'width'=>4.0,        
             'height'=>3.33,        
             'font-size'=>12
-        ),
-        
-        '8600' => array(
+        ],
+
+        '8600' => [
             'paper-size'=>'letter',    
             'metric'=>'mm',    
             'marginLeft'=>7.1,         
@@ -138,9 +140,9 @@ class PDF_Label extends FPDF {
             'width'=>66.6,         
             'height'=>25.4,        
             'font-size'=>8
-        ),
+        ],
 
-        'L7163'=> array(
+        'L7163'=> [
             'paper-size'=>'A4',        
             'metric'=>'mm',    
             'marginLeft'=>5,        
@@ -152,9 +154,9 @@ class PDF_Label extends FPDF {
             'width'=>99.1,        
             'height'=>38.1,        
             'font-size'=>9
-        ),
+        ],
 
-        '3422' => array(
+        '3422' => [
             'paper-size'=>'A4',        
             'metric'=>'mm',    
             'marginLeft'=>0,        
@@ -166,9 +168,9 @@ class PDF_Label extends FPDF {
             'width'=>70,       
             'height'=>35,        
             'font-size'=>9
-        ),
+        ],
 
-        '5395' => array(
+        '5395' => [
             'paper-size'=>'letter',
             'metric'=>'mm',
             'marginLeft'=>17.526,
@@ -180,9 +182,9 @@ class PDF_Label extends FPDF {
             'width'=>85.852,
             'height'=>59.182,
             'font-size'=>12
-        ),
+        ],
 
-        'OL32' => array(
+        'OL32' => [
             'paper-size'=>'letter',
             'metric'=>'mm',
             'marginLeft'=>6.35,
@@ -194,9 +196,9 @@ class PDF_Label extends FPDF {
             'width'=>12.7,
             'height'=>12.7,
             'font-size'=>7
-        ),
+        ],
 
-        'OL5275WR' => array(
+        'OL5275WR' => [
             'paper-size'=>'letter',
             'metric'=>'mm',
             'marginLeft'=>15.82,
@@ -208,9 +210,9 @@ class PDF_Label extends FPDF {
             'width'=>19.05,
             'height'=>19.05,
             'font-size'=>7
-        ),
+        ],
 
-        'OL5375' => array(
+        'OL5375' => [
             'paper-size'=>'letter',
             'metric'=>'mm',
             'marginLeft'=>3.97,
@@ -222,9 +224,9 @@ class PDF_Label extends FPDF {
             'width'=>50.8,
             'height'=>50.8,
             'font-size'=>8
-        ),
+        ],
 
-        'OL3012' => array(
+        'OL3012' => [
             'paper-size'=>'letter',
             'metric'=>'mm',
             'marginLeft'=>3.97,
@@ -236,9 +238,9 @@ class PDF_Label extends FPDF {
             'width'=>50.8,
             'height'=>50.8,
             'font-size'=>8
-        ),
+        ],
 
-        '5293' => array(
+        '5293' => [
             'paper-size'=>'letter',
             'metric'=>'mm',
             'marginLeft'=>10.46,
@@ -250,9 +252,9 @@ class PDF_Label extends FPDF {
             'width'=>41.28,
             'height'=>41.28,
             'font-size'=>8
-        ),
+        ],
 
-        'EU30095' => array(
+        'EU30095' => [
             'paper-size'=>'A4',
             'metric'=>'mm',
             'marginLeft'=>12,
@@ -264,10 +266,10 @@ class PDF_Label extends FPDF {
             'width'=>45,
             'height'=>45,
             'font-size'=>9
-        ),
-        
+        ],
+
         // Labels for custom quick sort
-        '5167' => array(
+        '5167' => [
 			'paper-size'=>'letter',		
 			'metric'=>'mm',	
             'marginLeft'=>5.4, 		
@@ -279,11 +281,11 @@ class PDF_Label extends FPDF {
 			'width'=>44.45, 		
 			'height'=>12.7,		
 			'font-size'=>9
-        ),
-    );
+        ],
+    ];
 
     // Constructor
-    function __construct($format, $unit='mm', $posX=1, $posY=1) {
+    public function __construct($format, $unit='mm', $posX=1, $posY=1) {
         if (is_array($format)) {
             // Custom format
             $Tformat = $format;
@@ -304,7 +306,7 @@ class PDF_Label extends FPDF {
         $this->_COUNTY = $posY-1;
     }
 
-    function _Set_Format($format) {
+    public function _Set_Format($format) {
         $this->_Margin_Left    = $this->_Convert_Metric($format['marginLeft'], $format['metric']);
         $this->_Margin_Top    = $this->_Convert_Metric($format['marginTop'], $format['metric']);
         $this->_X_Space     = $this->_Convert_Metric($format['SpaceX'], $format['metric']);
@@ -319,20 +321,19 @@ class PDF_Label extends FPDF {
 
     // convert units (in to mm, mm to in)
     // $src must be 'in' or 'mm'
-    function _Convert_Metric($value, $src) {
+    public function _Convert_Metric($value, $src) {
         $dest = $this->_Metric_Doc;
         if ($src != $dest) {
             $a['in'] = 39.37008;
             $a['mm'] = 1000;
             return $value * $a[$dest] / $a[$src];
-        } else {
-            return $value;
         }
+        return $value;
     }
 
     // Give the line height for a given font size
-    function _Get_Height_Chars($pt) {
-        $a = array(6=>2, 7=>2.5, 8=>3, 9=>4, 10=>5, 11=>6, 12=>7, 13=>8, 14=>9, 15=>10);
+    public function _Get_Height_Chars($pt) {
+        $a = [6=>2, 7=>2.5, 8=>3, 9=>4, 10=>5, 11=>6, 12=>7, 13=>8, 14=>9, 15=>10];
         if (!isset($a[$pt]))
             $this->Error('Invalid font size: '.$pt);
         return $this->_Convert_Metric($a[$pt], 'mm');
@@ -340,13 +341,13 @@ class PDF_Label extends FPDF {
 
     // Set the character size
     // This changes the line height too
-    function Set_Font_Size($pt) {
+    public function Set_Font_Size($pt) {
         $this->_Line_Height = $this->_Get_Height_Chars($pt);
         $this->SetFontSize($pt);
     }
 
     // Print a label
-    function Add_Label($text) {
+    public function Add_Label($text) {
         $this->_COUNTX++;
         if ($this->_COUNTX == $this->_X_Number) {
             // Row full, we start a new one
@@ -365,7 +366,7 @@ class PDF_Label extends FPDF {
         $this->MultiCell($this->_Width - $this->_Padding, $this->_Line_Height, $text, 0, 'L');
     }
 
-    function Next_Label() {
+    public function Next_Label() {
 		$this->_COUNTX++;
 		if ($this->_COUNTX == $this->_X_Number) {
 			// Row full, we start a new one
@@ -385,7 +386,7 @@ class PDF_Label extends FPDF {
 	}
 
 
-    function _putcatalog()
+    public function _putcatalog()
     {
         parent::_putcatalog();
         // Disable the page scaling option in the printing dialog
@@ -393,15 +394,15 @@ class PDF_Label extends FPDF {
     }
 
     // New function for custom quick sort.
-    function SetDash($black=null, $white=null)
+    public function SetDash($black=null, $white=null)
     {
         if($black!==null)
             $s=sprintf('[%.3F %.3F] 0 d',$black*$this->k,$white*$this->k);
         else
             $s='[] 0 d';
         $this->_out($s);
- 
+
     }
- 
+
 
 }

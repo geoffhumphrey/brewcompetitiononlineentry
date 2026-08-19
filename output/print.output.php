@@ -15,8 +15,8 @@ if ((!isset($_SESSION['loginUsername'])) && ($token == "default")) {
 }
 
 if ((isset($_SESSION['loginUsername'])) || ($token != "default")) {
-$role_replace1 = array("HJ","LJ","MBOS",", ");
-$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
+$role_replace1 = ["HJ","LJ","MBOS",", "];
+$role_replace2 = ["<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;"];
 
 // Queries for current data
 if ($filter == "default") {
@@ -87,23 +87,23 @@ else {
 
     // Email contacts IF no form
     if (($section == "contact") && ($token != "default")) {
-    	
+
     	function hide_email(string $email): string {
-    	    
+
     	    $character_set = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
     	    $key = str_shuffle($character_set); 
     	    $cipher_text = ''; 
-    	    $id = 'e'.rand(1,999999999);
+    	    $id = 'e'.random_int(1,999999999);
     	    for ($i=0;$i<strlen($email);$i+=1) {
     	        $cipher_text.= $key[strpos($character_set,$email[$i])];
     	    }
-    	    
+
     	    $script = 'var a="'.$key.'";var b=a.split("").sort().join("");var c="'.$cipher_text.'";var d="";';
     	    $script.= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
     	    $script.= 'document.getElementById("'.$id.'").innerHTML="<a href=\\"mailto:"+d+"\\">"+d+"</a>"';
-    	    $script = "eval(\"".str_replace(array("\\",'"'),array("\\\\",'\"'), $script)."\")"; 
+    	    $script = "eval(\"".str_replace(["\\",'"'],["\\\\",'\"'], $script)."\")"; 
     	    $script = '<script type="text/javascript">/*<![CDATA[*/'.$script.'/*]]>*/</script>';
-    	   
+
     	    return '<span id="'.$id.'">[email address obfuscated]</span>'.$script;
     	}
 
@@ -117,7 +117,7 @@ else {
     	include (DB.'contacts.db.php');
 
     	$page_info = "<div style=\"padding: 25px; min-height:400px\">";
-    	
+
     	if ($row_contact) {
 
     		$page_info .= sprintf("<h2><strong>%s &ndash; %s %s</strong><br><small>%s</small></h2>",$label_contact,h($row_contact['contactFirstName']),h($row_contact['contactLastName']),h($row_contact['contactPosition']));
@@ -134,9 +134,9 @@ else {
 
     	$page_info .= "</div>";
 
-    	
-    	
-    	
+
+
+
 
     	echo $page_info;
 
@@ -161,7 +161,7 @@ else {
 			if ($section == "styles") 					include (OUTPUT.'styles.output.php');
 			if ($section == "shipping-label")		include (OUTPUT.'shipping_label.output.php');
 		}
-		
+
 		// Scoresheets are available without logging in if the $token url var is present.
 		if ($section == "evaluation")					include (EVALS.'scoresheet_output.eval.php');
 
@@ -176,13 +176,13 @@ else {
 			if ($go == "participants") 					include (ADMIN.'participants.admin.php');
 		}
 
-		
+
 
 		?>
     </div><!-- ./container -->
 </body>
 </html>
-<?php if (($tb == "default") || ($tb == "scores") || ($tb == "none") || ($tb == "bos")) { ?>
+<?php if (in_array($tb, ["default", "scores", "none", "bos"])) { ?>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();

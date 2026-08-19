@@ -2,12 +2,12 @@
 declare(strict_types=1);
 function random_judging_num_generator(): string {
 	
-	srand (rand(1,10000000));
+	mt_srand (random_int(1,10000000));
 
 	$random_generator = "";
 	
 	for ($i=1;$i<6+1;$i++) { 
-		$random_generator .= rand(1,9);
+		$random_generator .= random_int(1,9);
 	}
 
 	return $random_generator;
@@ -39,8 +39,7 @@ function check_judging_num($input): bool {
 	$files = array_slice(scandir(USER_DOCS), 2);
 	$scoresheet_file_name_judging = strtolower($input).".pdf";
 
-	if (($row_brewing_styles['count'] == 0) && (!in_array($scoresheet_file_name_judging,$files))) return TRUE;
-	else return FALSE;
+	return ($row_brewing_styles['count'] == 0) && (!in_array($scoresheet_file_name_judging,$files));
 
 }
 
@@ -148,18 +147,18 @@ function clean_up_url(?string $referer): string {
 			$referer = $parts['query'];
 
 			// Remove $msg=X from query string
-			$pattern = array("/[0-9]/", "/&msg=/");
+			$pattern = ["/[0-9]/", "/&msg=/"];
 			$referer = preg_replace($pattern, "", $referer);
 
 			// Remove $id=X from query string
-			$pattern = array("/[0-9]/", "/&id=/");
+			$pattern = ["/[0-9]/", "/&id=/"];
 			$referer = preg_replace($pattern, "", $referer);
 
 			// Remove $pg=X from query string and add back in
-			$pattern = array("/[0-9]/", "/&pg=/");
+			$pattern = ["/[0-9]/", "/&pg=/"];
 			$referer = str_replace($pattern,"",$referer);
 
-			$pattern = array('\'', '"');
+			$pattern = ['\'', '"'];
 			$referer = str_replace($pattern,"",$referer);
 			$referer = stripslashes($referer);
 
@@ -181,7 +180,7 @@ function generate_judging_numbers($brewing_db_table,$method): int {
 
 	$status = 0;
 	
-	$data = array('brewJudgingNumber' => NULL);
+	$data = ['brewJudgingNumber' => NULL];
 	$result = $db_conn->update ($brewing_db_table, $data);
 	if (!$result) $status += 1;
 
@@ -204,7 +203,7 @@ function generate_judging_numbers($brewing_db_table,$method): int {
 
 				if (!in_array($scoresheet_file_name_judging,$files))  {
 
-					$data = array('brewJudgingNumber' => $j_num);
+					$data = ['brewJudgingNumber' => $j_num];
 					$db_conn->where ('id', $row_judging_numbers['id']);
 					$result = $db_conn->update ($brewing_db_table, $data);
 					if (!$result) $status += 1;
@@ -227,7 +226,7 @@ function generate_judging_numbers($brewing_db_table,$method): int {
 
 			$j_num = sprintf("%06s",$row_judging_numbers['id']);
 
-			$data = array('brewJudgingNumber' => $j_num);
+			$data = ['brewJudgingNumber' => $j_num];
 			$db_conn->where ('id', $row_judging_numbers['id']);
 			$result = $db_conn->update ($brewing_db_table, $data);
 			if (!$result) $status += 1;
@@ -242,7 +241,7 @@ function generate_judging_numbers($brewing_db_table,$method): int {
 
 			$j_num = generate_judging_num(2,$row_judging_numbers['brewCategory']);
 
-			$data = array('brewJudgingNumber' => $j_num);
+			$data = ['brewJudgingNumber' => $j_num];
 			$db_conn->where ('id', $row_judging_numbers['id']);
 			$result = $db_conn->update ($brewing_db_table, $data);
 			if (!$result) $status += 1;
@@ -273,17 +272,16 @@ function check_sweetness(string $style,$styleSet): bool {
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 	    $first_character = mb_substr($style_explodies[0], 0, 1);
-	    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 	    else $chosen_style_set = "BJCP2021";
 	}
 
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_brews = "SELECT brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
-	$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	$row_brews = $db_conn->rawQueryOne($query_brews, [$style_0, $style_explodies[1], $chosen_style_set]);
 
-	if ($row_brews['brewStyleSweet'] == 1) return TRUE;
-	else return FALSE;
+	return $row_brews['brewStyleSweet'] == 1;
 
 }
 
@@ -306,17 +304,16 @@ function check_carb(string $style,$styleSet): bool {
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 	    $first_character = mb_substr($style_explodies[0], 0, 1);
-	    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 	    else $chosen_style_set = "BJCP2021";
 	}
 
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_brews = "SELECT brewStyleCarb FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
-	$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	$row_brews = $db_conn->rawQueryOne($query_brews, [$style_0, $style_explodies[1], $chosen_style_set]);
 
-	if ($row_brews['brewStyleCarb'] == 1) return TRUE;
-	else return FALSE;
+	return $row_brews['brewStyleCarb'] == 1;
 
 }
 
@@ -333,17 +330,16 @@ function check_mead_strength(string $style,$styleSet): bool {
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 	    $first_character = mb_substr($style_explodies[0], 0, 1);
-	    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 	    else $chosen_style_set = "BJCP2021";
 	}
 
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_brews = "SELECT brewStyleStrength FROM ".$styles_db_table." WHERE brewStyleGroup = ? AND brewStyleNum = ? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
-	$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	$row_brews = $db_conn->rawQueryOne($query_brews, [$style_0, $style_explodies[1], $chosen_style_set]);
 
-	if ($row_brews['brewStyleStrength'] == 1) return TRUE;
-	else return FALSE;
+	return $row_brews['brewStyleStrength'] == 1;
 
 }
 
@@ -354,20 +350,20 @@ function standardize_name(string $string): string {
 	// Only applies to latin characters
 
 	// Major latin-character languages that will apply the standardization
-	$name_check_langs = array("en", "fr", "es", "pt", "it", "de");
+	$name_check_langs = ["en", "fr", "es", "pt", "it", "de"];
 
 	if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs))) {
 
-		$word_splitters = array(" ", "-", "O'", "L'", "D'", "St.", "Mc", "Mac", ".", "\"");
-		$lowercase_exceptions = array("the", "van", "den", "ter", "von", "und", "des", "der", "de", "da", "of", "and", "l'", "d'", "la", "vit", "dos", "das", "do");
-		$uppercase_exceptions = array("II", "III", "IV", "VI", "VII", "VIII", "IX", "IPA", "DIPA", "NE", "SHV", "NEIPA", "RIS");
+		$word_splitters = [" ", "-", "O'", "L'", "D'", "St.", "Mc", "Mac", ".", "\""];
+		$lowercase_exceptions = ["the", "van", "den", "ter", "von", "und", "des", "der", "de", "da", "of", "and", "l'", "d'", "la", "vit", "dos", "das", "do"];
+		$uppercase_exceptions = ["II", "III", "IV", "VI", "VII", "VIII", "IX", "IPA", "DIPA", "NE", "SHV", "NEIPA", "RIS"];
 
 		$string = strtolower($string);
 
 		foreach ($word_splitters as $delimiter) {
 
 			$words = explode($delimiter, $string);
-			$newwords = array();
+			$newwords = [];
 
 			foreach ($words as $word) {
 				if (in_array(strtoupper($word), $uppercase_exceptions)) $word = strtoupper($word);
@@ -376,7 +372,7 @@ function standardize_name(string $string): string {
 			}
 
 			if (in_array(strtolower($delimiter), $lowercase_exceptions)) $delimiter = strtolower($delimiter);
-			$string = join($delimiter, $newwords);
+			$string = implode($delimiter, $newwords);
 
 		}
 
@@ -413,8 +409,8 @@ function rmove(string $src, string $dest): bool {
 
 function rdelete(string $src, $file_mimes): bool {
 
-	if (empty($file_mimes)) $file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml');
-	else $file_mimes = array('application/pdf');
+	if (empty($file_mimes)) $file_mimes = ['image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml'];
+	else $file_mimes = ['application/pdf'];
 
     // If source is not a directory stop processing
     if(!is_dir($src)) return false;
@@ -434,7 +430,7 @@ function rdelete(string $src, $file_mimes): bool {
  * @return mixed
  */
 function blank_to_null($var) {
-	if ((!isset($var)) || (empty($var))) $var = NULL;
+	if ((!isset($var)) || (empty($var))) return NULL;
 	return $var;
 }
 
@@ -490,15 +486,15 @@ function table_limit($style_id,$planning): bool {
 				foreach (array_unique($exploder) as $value) {
 
 					$update_table = $prefix."styles";
-					$data = array(
+					$data = [
 						'brewStyleAtLimit' => 1
-					);
+					];
 					$db_conn->where ('id', $value);
 					$result = $db_conn->update ($update_table, $data);
 					if ($result) $return += 1;
 
 				} // end foreach
-			
+
 			} // end if ($row_table_entry_limits['tableEntryLimit'] >= $total_table_entries)
 
 			// If the total entries for that table is BELOW the limit,
@@ -511,30 +507,28 @@ function table_limit($style_id,$planning): bool {
 				foreach (array_unique($exploder) as $value) {
 
 					$update_table = $prefix."styles";
-					$data = array(
+					$data = [
 						'brewStyleAtLimit' => NULL
-					);
+					];
 					$db_conn->where ('id', $value);
 					$result = $db_conn->update ($update_table, $data);
 					if ($result) $return += 1;
 
 				} // end foreach
-			
+
 			} // end if ($row_table_entry_limits['tableEntryLimit'] < $total_table_entries)
 
 		} // end if ((!empty($table_id)) && (!empty($table_limit)) && (!empty($table_style_ids)))
 
-		if ($return > 0) return TRUE;
-		else return FALSE;
+		return $return > 0;
 		
-	} // end if ($planning == 1)
-
-	else return FALSE;
+	}
+    return FALSE;
 
 } // end function
 
 // Standardize name languages
-$name_check_langs = array("en", "fr", "es", "pt", "it", "de", "nl");
-$last_name_exception_langs = array("nl", "es", "de");
+$name_check_langs = ["en", "fr", "es", "pt", "it", "de", "nl"];
+$last_name_exception_langs = ["nl", "es", "de"];
 
 ?>

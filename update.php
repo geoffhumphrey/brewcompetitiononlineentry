@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once ('paths.php');
+require_once (__DIR__ . '/paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
 $section = "update";
 
@@ -184,7 +184,7 @@ if (file_exists($filename)) {
 						include (UPDATE.'current_update.php');
 					}
 
-					if (($version == "116") || ($version == "1160") || ($version == "1161")) {
+					if (in_array($version, ["116", "1160", "1161"])) {
 						include (UPDATE.'1.2.0.0_update.php');
 						include (UPDATE.'1.2.0.3_update.php');
 						include (UPDATE.'1.2.1.0_update.php');
@@ -275,7 +275,7 @@ if (file_exists($filename)) {
 
 					if ($version >= "113") {
 
-						if (session_status() == PHP_SESSION_NONE) {
+						if (session_status() === PHP_SESSION_NONE) {
 							$_SESSION['update_complete'] = 1;
 							if (isset($output_run_update)) $_SESSION['update_summary'] = $output_errors.$output_run_update;
 							if ((isset($error_output)) && ($error_count == 1)) $_SESSION['update_errors'] = 1;

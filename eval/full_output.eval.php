@@ -9,7 +9,7 @@ if ($tb != "default") {
 	<div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <p><strong><?php echo $label_descriptor_defs; ?></strong></p>
         <?php foreach ($descriptors as $key => $value) { ?>
-           <p class="descriptor"><span class="fa <?php if (strpos($row_eval['evalDescriptors'],$key) !== false) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span> <strong><?php echo $key; ?></strong> &ndash; <?php echo $value; ?></p>
+           <p class="descriptor"><span class="fa <?php if (str_contains($row_eval['evalDescriptors'],$key)) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span> <strong><?php echo $key; ?></strong> &ndash; <?php echo $value; ?></p>
         <?php } ?>
     </div><!-- /col (overall left column) -->
     <!-- Main Body Right Column -->

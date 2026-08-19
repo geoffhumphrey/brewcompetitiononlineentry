@@ -6,7 +6,7 @@ if ($section == "past-winners") {
 }
 else $score_count_table = $prefix."judging_scores";
 
-$row_scored_entries = array('count' => 0);
+$row_scored_entries = ['count' => 0];
 if (table_exists($score_count_table)) {
 	$db_conn->where("scorePlace IS NOT NULL");
 	$row_scored_entries = $db_conn->getOne($score_count_table, "COUNT(*) as 'count'");

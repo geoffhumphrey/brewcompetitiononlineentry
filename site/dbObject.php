@@ -38,7 +38,7 @@
  * @method string getLastError()
  * @method string getLastQuery()
  */
-class dbObject {
+class dbObject implements \Stringable {
     /**
      * Working instance of MysqliDb created earlier
      *
@@ -76,7 +76,7 @@ class dbObject {
      *
      * @var string
      */
-    private $_with = Array();
+    private $_with = [];
     /**
      * Per page limit for pagination
      *
@@ -116,7 +116,7 @@ class dbObject {
 	/**
 	 * @var array name of the fields that will be skipped during validation, preparing & saving
 	 */
-    protected $toSkip = array();
+    protected $toSkip = [];
 
     /**
      * @param array $data Data to preload on object creation
@@ -124,7 +124,7 @@ class dbObject {
     public function __construct ($data = null) {
         $this->db = MysqliDb::getInstance();
         if (empty ($this->dbTable))
-            $this->dbTable = get_class ($this);
+            $this->dbTable = static::class;
 
         if ($data)
             $this->data = $data;
@@ -136,7 +136,7 @@ class dbObject {
      * @return mixed
      */
     public function __set ($name, $value) {
-        if (property_exists ($this, 'hidden') && array_search ($name, $this->hidden) !== false)
+        if (property_exists ($this, 'hidden') && in_array($name, $this->hidden))
             return;
 	    
         $this->data[$name] = $value;
@@ -150,7 +150,7 @@ class dbObject {
      * @return mixed
      */
     public function __get ($name) {
-        if (property_exists ($this, 'hidden') && array_search ($name, $this->hidden) !== false)
+        if (property_exists ($this, 'hidden') && in_array($name, $this->hidden))
 	    return null;
 		
 	if (isset ($this->data[$name]) && $this->data[$name] instanceof dbObject)
@@ -161,7 +161,7 @@ class dbObject {
             $modelName = $this->relations[$name][1];
             switch ($relationType) {
                 case 'hasone':
-                    $key = isset ($this->relations[$name][2]) ? $this->relations[$name][2] : $name;
+                    $key = $this->relations[$name][2] ?? $name;
                     $obj = new $modelName;
                     $obj->returnType = $this->returnType;
                     return $this->data[$name] = $obj->byId($this->data[$key]);
@@ -190,6 +190,7 @@ class dbObject {
 
         if (property_exists ($this->db, $name))
             return isset ($this->db->$name);
+        return null;
     }
 
     public function __unset ($name) {
@@ -253,7 +254,7 @@ class dbObject {
         if (!empty ($this->primaryKey) && empty ($this->data[$this->primaryKey]))
             $this->data[$this->primaryKey] = $id;
         $this->isNew = false;
-	    $this->toSkip = array();
+	    $this->toSkip = [];
         return $id;
     }
 
@@ -285,7 +286,7 @@ class dbObject {
         
         $this->db->where ($this->primaryKey, $this->data[$this->primaryKey]);
 	    $res = $this->db->update ($this->dbTable, $sqlData);
-	    $this->toSkip = array();
+	    $this->toSkip = [];
         return $res;
     }
 
@@ -311,7 +312,7 @@ class dbObject {
 
         $this->db->where ($this->primaryKey, $this->data[$this->primaryKey]);
         $res = $this->db->delete ($this->dbTable);
-        $this->toSkip = array();
+        $this->toSkip = [];
         return $res;
     }
 
@@ -326,7 +327,7 @@ class dbObject {
 			    $this->toSkip[] = $f;
 		    }
 	    } else if($field === false) {
-	    	$this->toSkip = array();
+	    	$this->toSkip = [];
 	    } else{
 	    	$this->toSkip[] = $field;
 	    }
@@ -413,7 +414,7 @@ class dbObject {
      * @return array Array of dbObjects
      */
     protected function get ($limit = null, $fields = null) {
-        $objects = Array ();
+        $objects =  [];
         $this->processHasOneWith ();
         $results = $this->db->ArrayBuilder()->get ($this->dbTable, $limit, $fields);
         if ($this->db->count == 0)
@@ -429,7 +430,7 @@ class dbObject {
                 $objects[$k] = $item;
             }
         }
-        $this->_with = Array();
+        $this->_with = [];
         if ($this->returnType == 'Object')
             return $objects;
 
@@ -475,7 +476,7 @@ class dbObject {
         if (!$primaryKey)
             $primaryKey = MysqliDb::$prefix . $joinObj->dbTable . "." . $joinObj->primaryKey;
 		
-        if (!strchr ($key, '.'))
+        if (!strstr ($key, '.'))
             $joinStr = MysqliDb::$prefix . $this->dbTable . ".{$key} = " . $primaryKey;
         else
             $joinStr = MysqliDb::$prefix . "{$key} = " . $primaryKey;
@@ -506,7 +507,7 @@ class dbObject {
      */
     private function paginate ($page, $fields = null) {
         $this->db->pageLimit = self::$pageLimit;
-        $objects = Array ();
+        $objects =  [];
         $this->processHasOneWith ();	    
         $res = $this->db->paginate ($this->dbTable, $page, $fields);
         self::$totalPages = $this->db->totalPages;
@@ -523,7 +524,7 @@ class dbObject {
                 $objects[$k] = $item;
             }
         }
-        $this->_with = Array();
+        $this->_with = [];
         if ($this->returnType == 'Object')
             return $objects;
 
@@ -545,9 +546,9 @@ class dbObject {
      */
     public function __call ($method, $arg) {
         if (method_exists ($this, $method))
-            return call_user_func_array (array ($this, $method), $arg);
+            return call_user_func_array ( [$this, $method], $arg);
 
-        call_user_func_array (array ($this->db, $method), $arg);
+        call_user_func_array ( [$this->db, $method], $arg);
         return $this;
     }
 
@@ -563,7 +564,7 @@ class dbObject {
      */
     public static function __callStatic ($method, $arg) {
         $obj = new static;
-        $result = call_user_func_array (array ($obj, $method), $arg);
+        $result = call_user_func_array ( [$obj, $method], $arg);
         if (method_exists ($obj, $method))
             return $result;
         return $obj;
@@ -598,7 +599,7 @@ class dbObject {
      *
      * @return string Converted data
      */
-    public function __toString () {
+    public function __toString (): string {
         return $this->toJson ();
     }
 
@@ -614,7 +615,7 @@ class dbObject {
         foreach ($this->_with as $name => $opts) {
             $relationType = strtolower ($opts[0]);
             $modelName = $opts[1];
-            if ($relationType == 'hasone') {
+            if ($relationType === 'hasone') {
                 $obj = new $modelName;
                 $table = $obj->dbTable;
                 $primaryKey = $obj->primaryKey;
@@ -641,7 +642,7 @@ class dbObject {
                 $data[$name] = $this->$name;
         }
         if ($shouldReset)
-            $this->_with = Array();
+            $this->_with = [];
     }
 
     /*
@@ -656,7 +657,7 @@ class dbObject {
             $key = null;
             if (isset ($opts[2]))
                 $key = $opts[2];
-            if ($relationType == 'hasone') {
+            if ($relationType === 'hasone') {
                 $this->db->setQueryOption ("MYSQLI_NESTJOIN");
                 $this->join ($modelName, $key);
             }
@@ -704,38 +705,26 @@ class dbObject {
             if (isset ($desc[1]) && ($desc[1] == 'required'))
                 $required = true;
 
-            if ($required && strlen ($value) == 0) {
-                $this->errors[] = Array ($this->dbTable . "." . $key => "is required");
+            if ($required && (string) $value === '') {
+                $this->errors[] =  [$this->dbTable . "." . $key => "is required"];
                 continue;
             }
             if ($value == null)
                 continue;
 
-            switch ($type) {
-                case "text":
-                    $regexp = null;
-                    break;
-                case "int":
-                    $regexp = "/^[0-9]*$/";
-                    break;
-                case "double":
-                    $regexp = "/^[0-9\.]*$/";
-                    break;
-                case "bool":
-                    $regexp = '/^(yes|no|0|1|true|false)$/i';
-                    break;
-                case "datetime":
-                    $regexp = "/^[0-9a-zA-Z -:]*$/";
-                    break;
-                default:
-                    $regexp = $type;
-                    break;
-            }
+            $regexp = match ($type) {
+                "text" => null,
+                "int" => "/^[0-9]*$/",
+                "double" => "/^[0-9\.]*$/",
+                "bool" => '/^(yes|no|0|1|true|false)$/i',
+                "datetime" => "/^[0-9a-zA-Z -:]*$/",
+                default => $type,
+            };
             if (!$regexp)
                 continue;
 
             if (!preg_match ($regexp, $value)) {
-                $this->errors[] = Array ($this->dbTable . "." . $key => "$type validation failed");
+                $this->errors[] =  [$this->dbTable . "." . $key => "$type validation failed"];
                 continue;
             }
         }
@@ -743,10 +732,10 @@ class dbObject {
     }
 
     private function prepareData () {
-        $this->errors = Array ();
-        $sqlData = Array();
-        if (count ($this->data) == 0)
-            return Array();
+        $this->errors =  [];
+        $sqlData = [];
+        if (count ($this->data) === 0)
+            return [];
 
         if (method_exists ($this, "preLoad"))
             $this->preLoad ($this->data);
@@ -802,6 +791,6 @@ class dbObject {
             static::$modelPath = $path . "/";
         else
             static::$modelPath = __DIR__ . "/models/";
-        spl_autoload_register ("dbObject::dbObjectAutoload");
+        spl_autoload_register (dbObject::dbObjectAutoload(...));
     }
 }

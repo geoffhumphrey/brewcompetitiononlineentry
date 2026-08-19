@@ -79,7 +79,7 @@ if (isset($_SESSION['user_id'])) {
 		else {
 
 			$sql = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate FROM %s a, %s b WHERE a.brewerEmail = b.user_name", $brewer_db_table, $users_db_table);
-			$params = array();
+			$params = [];
 			if ($id == "default") $sql .= " AND brewerJudge='Y'";
 			if ($id != "default") { $sql .= " AND a.id=?"; $params[] = $id; }
 			$rows_brewer = $db_conn->rawQuery($sql, $params);
@@ -99,7 +99,7 @@ if (isset($_SESSION['user_id'])) {
 		else {
 
 			$sql = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate FROM %s a, %s b WHERE a.brewerEmail = b.user_name", $brewer_db_table, $users_db_table);
-			$params = array();
+			$params = [];
 			if ($id == "default") $sql .= " AND brewerSteward='Y'";
 			if ($id != "default") { $sql .= " AND a.id=?"; $params[] = $id; }
 			$rows_brewer = $db_conn->rawQuery($sql, $params);
@@ -145,7 +145,7 @@ if (isset($_SESSION['user_id'])) {
 		else {
 
 			$db_conn->where("brewerAssignment", "S");
-			if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($view == "default")) $rows_brewer = $db_conn->get($brewer_db_table, array((int) $start, (int) $display));
+			if (($row_participant_count['count'] > $_SESSION['prefsRecordLimit']) && ($view == "default")) $rows_brewer = $db_conn->get($brewer_db_table, [(int) $start, (int) $display]);
 			else $rows_brewer = $db_conn->get($brewer_db_table);
 			$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 			$totalRows_brewer = $db_conn->count;
@@ -189,7 +189,7 @@ if (isset($_SESSION['user_id'])) {
 	// Assign staff query
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "staff")  && ($dbTable == "default") && ($action == "assign")) {
 		$sql = sprintf("SELECT * FROM %s", $brewer_db_table);
-		$params = array();
+		$params = [];
 		if (SINGLE) { $sql .= " WHERE FIND_IN_SET(?,brewerCompParticipant) > 0"; $params[] = $_SESSION['comp_id']; }
 		if ((!SINGLE) && ($view == "yes")) $sql .= " WHERE brewerStaff='Y'";
 		if ((SINGLE) && ($view == "yes")) $sql .= " AND brewerStaff='Y'";
@@ -204,7 +204,7 @@ if (isset($_SESSION['user_id'])) {
 		if ($view == "ranked") $sql = "SELECT * FROM ".$brewer_db_table." WHERE (brewerJudgeRank LIKE 'Recognized%' OR brewerJudgeRank LIKE 'Certified%' OR brewerJudgeRank LIKE 'National%' OR brewerJudgeRank LIKE 'Master%' OR brewerJudgeRank LIKE '%Cicerone' OR brewerJudgeRank LIKE 'Grand%' OR brewerJudgeMead='Y' OR brewerJudgeCider='Y') AND brewerJudge='Y'";
 		else $sql = "SELECT * FROM ".$brewer_db_table." WHERE brewerJudge='Y'";
 
-		$params = array();
+		$params = [];
 		if (SINGLE) { $sql .= " AND brewerJudge=? AND FIND_IN_SET(?,brewerCompParticipant) > 0"; $params[] = "Y-".$_SESSION['comp_id']; $params[] = $_SESSION['comp_id']; }
 		$rows_brewer = $db_conn->rawQuery($sql, $params);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
@@ -215,7 +215,7 @@ if (isset($_SESSION['user_id'])) {
 	// Assigned judges at table query
 	elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "judges") && ($dbTable == "default")) {
 		$sql = "SELECT a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, b.uid FROM ".$brewer_db_table." a, ".$staff_db_table." b WHERE b.staff_judge='1' AND a.uid=b.uid";
-		$params = array();
+		$params = [];
 		if (SINGLE) { $sql .= " AND comp_id=?"; $params[] = $_SESSION['comp_id']; }
 		$sql .= " ORDER BY a.brewerLastName ASC";
 		$rows_brewer = $db_conn->rawQuery($sql, $params);
@@ -226,7 +226,7 @@ if (isset($_SESSION['user_id'])) {
 	// Assigned staff query
 	elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "staff")  && ($dbTable == "default")) {
 		$sql = "SELECT a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, b.uid FROM ".$brewer_db_table." a, ".$staff_db_table." b WHERE b.staff_staff='1' AND a.uid=b.uid";
-		$params = array();
+		$params = [];
 		if (SINGLE) { $sql .= " AND comp_id=?"; $params[] = $_SESSION['comp_id']; }
 		$rows_brewer = $db_conn->rawQuery($sql, $params);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
@@ -236,7 +236,7 @@ if (isset($_SESSION['user_id'])) {
 	// Assigned stewards at table query
 	elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "stewards")  && ($dbTable == "default")) {
 		$sql = "SELECT a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, b.uid FROM ".$brewer_db_table." a, ".$staff_db_table." b WHERE b.staff_steward='1' AND a.uid=b.uid";
-		$params = array();
+		$params = [];
 		if (SINGLE) { $sql .= " AND comp_id=?"; $params[] = $_SESSION['comp_id']; }
 		$rows_brewer = $db_conn->rawQuery($sql, $params);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
@@ -259,7 +259,7 @@ if (isset($_SESSION['user_id'])) {
 
 	}
 
-	elseif (($section == "list") || ($section == "judge") || ($section == "steward")) {
+	elseif (in_array($section, ["list", "judge", "steward"])) {
 		$db_conn->where("uid", $_SESSION['user_id']);
 		$rows_brewer = $db_conn->get($brewer_db_table);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;

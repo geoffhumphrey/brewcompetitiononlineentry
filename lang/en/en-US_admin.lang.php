@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Module:      en-US_admin.lang.php
  * Description: This module houses all display text in the English language.

@@ -22,7 +22,7 @@ else $dbTable = "default";
 // the current competition's default tables. Treating a bare base-table name
 // as an archive identifier produced a bogus "brewer_" table and fataled the
 // edit-save path.
-if (($dbTable != "default") && (strpos($dbTable, "_") === false)) $dbTable = "default";
+if (($dbTable != "default") && (!str_contains($dbTable, "_"))) $dbTable = "default";
 
 if ($dbTable == "default") {
 	$archive_db_table = $prefix."archive";
@@ -79,7 +79,7 @@ else {
 	$users_db_table = $prefix."users".$suffix;
 }
 
-$db_table_array = array(
+$db_table_array = [
 	$archive_db_table,
 	$brewer_db_table,
 	$brewing_db_table,
@@ -103,5 +103,5 @@ $db_table_array = array(
 	$style_types_db_table,
 	$system_db_table,
 	$users_db_table
-);
+];
 ?>

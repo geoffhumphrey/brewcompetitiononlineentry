@@ -64,25 +64,25 @@ function normalize_email_username($value) {
 function has_double_encoded_data($db_conn) {
 	global $brewer_db_table, $brewing_db_table, $judging_tables_db_table, $style_types_db_table, $preferences_db_table, $special_best_info_db_table, $special_best_data_db_table, $mods_db_table, $sponsors_db_table, $prefix;
 
-	$fingerprints = array('%&amp;amp;%', '%&amp;quot;%', '%&amp;#039;%', '%&amp;apos;%', '%&amp;lt;%', '%&amp;gt;%');
+	$fingerprints = ['%&amp;amp;%', '%&amp;quot;%', '%&amp;#039;%', '%&amp;apos;%', '%&amp;lt;%', '%&amp;gt;%'];
 
-	$tables_columns = array(
-		$brewer_db_table => array('brewerJudgeID', 'brewerBreweryName', 'brewerJudgeNotes', 'brewerFirstName', 'brewerLastName', 'brewerAddress', 'brewerCity', 'brewerState', 'brewerBreweryInfo'),
-		$brewing_db_table => array('brewName', 'brewComments', 'brewCoBrewer', 'brewPossAllergens', 'brewAdminNotes', 'brewStaffNotes', 'brewBoxNum', 'brewPouring', 'brewInfo', 'brewInfoOptional'),
-		$judging_tables_db_table => array('tableName'),
-		$style_types_db_table => array('styleTypeName'),
-		$preferences_db_table => array('prefsBestBrewerTitle', 'prefsBestClubTitle'),
-		$special_best_info_db_table => array('sbi_name', 'sbi_description'),
-		$special_best_data_db_table => array('sbd_comments'),
-		$mods_db_table => array('mod_name', 'mod_description'),
-		$sponsors_db_table => array('sponsorName', 'sponsorText'),
-	);
+	$tables_columns = [
+		$brewer_db_table => ['brewerJudgeID', 'brewerBreweryName', 'brewerJudgeNotes', 'brewerFirstName', 'brewerLastName', 'brewerAddress', 'brewerCity', 'brewerState', 'brewerBreweryInfo'],
+		$brewing_db_table => ['brewName', 'brewComments', 'brewCoBrewer', 'brewPossAllergens', 'brewAdminNotes', 'brewStaffNotes', 'brewBoxNum', 'brewPouring', 'brewInfo', 'brewInfoOptional'],
+		$judging_tables_db_table => ['tableName'],
+		$style_types_db_table => ['styleTypeName'],
+		$preferences_db_table => ['prefsBestBrewerTitle', 'prefsBestClubTitle'],
+		$special_best_info_db_table => ['sbi_name', 'sbi_description'],
+		$special_best_data_db_table => ['sbd_comments'],
+		$mods_db_table => ['mod_name', 'mod_description'],
+		$sponsors_db_table => ['sponsorName', 'sponsorText'],
+	];
 
 	// evaluation is conditionally created (only once the scoresheet evaluation feature has
 	// been used), so it's added separately rather than assumed present like the tables above.
 	$evaluation_table = $prefix."evaluation";
 	if (table_exists($evaluation_table)) {
-		$tables_columns[$evaluation_table] = array('evalSpecialIngredients', 'evalOtherNotes', 'evalAromaComments', 'evalAppearanceComments', 'evalFlavorComments', 'evalMouthfeelComments', 'evalOverallComments', 'evalIntangibles', 'evalBottleNotes');
+		$tables_columns[$evaluation_table] = ['evalSpecialIngredients', 'evalOtherNotes', 'evalAromaComments', 'evalAppearanceComments', 'evalFlavorComments', 'evalMouthfeelComments', 'evalOverallComments', 'evalIntangibles', 'evalBottleNotes'];
 	}
 
 	foreach ($tables_columns as $table => $columns) {
@@ -114,7 +114,7 @@ function has_double_encoded_data($db_conn) {
 function password_verify_legacy($entered_password, $stored_hash) {
 	if (empty($stored_hash)) return 0;
 	if (password_verify($entered_password, $stored_hash)) return 1;
-	if ((strpos($stored_hash, '$2a$') === 0) && (password_verify(md5($entered_password), $stored_hash))) return 1;
+	if ((str_starts_with($stored_hash, '$2a$')) && (password_verify(md5($entered_password), $stored_hash))) return 1;
 	return 0;
 }
 
@@ -126,7 +126,7 @@ function password_verify_legacy($entered_password, $stored_hash) {
  * use PASSWORD_BCRYPT, which produces a "$2y$" prefix.
  */
 function password_needs_legacy_upgrade($stored_hash) {
-	return (strpos($stored_hash, '$2a$') === 0);
+	return (str_starts_with($stored_hash, '$2a$'));
 }
 
 /**
@@ -139,7 +139,7 @@ function password_needs_legacy_upgrade($stored_hash) {
 function upgrade_legacy_password_hash($db_conn, $table, $id_column, $id_value, $plaintext_password) {
 	$new_hash = password_hash($plaintext_password, PASSWORD_BCRYPT);
 	$db_conn->where($id_column, $id_value);
-	$db_conn->update($table, array('password' => $new_hash));
+	$db_conn->update($table, ['password' => $new_hash]);
 }
 
 /**
@@ -158,7 +158,7 @@ function upgrade_legacy_password_hash($db_conn, $table, $id_column, $id_value, $
  * from a filename.
  */
 function get_available_language_codes() {
-	$codes = array();
+	$codes = [];
 	$files = glob(LANG.'*'.DIRECTORY_SEPARATOR.'*.lang.php');
 	if ($files !== false) {
 		foreach ($files as $file) {
@@ -182,14 +182,14 @@ function version_check(string $version, string $current_version, string $current
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);;
 
-	if ($version != $current_version) {
+	if ($version !== $current_version) {
 
 		if (check_setup($prefix."system",$database)) $update_table = $prefix."system";
 		else $update_table = $prefix."bcoem_sys";
-		$data = array(
+		$data = [
 			'version' => $current_version,
 			'version_date' => $current_version_date_display
-		);
+		];
 		$db_conn->where ('id', 1);
 		$db_conn->update ($update_table, $data);
     
@@ -215,16 +215,16 @@ function search_array(array $array, $key, $value): array {
     return $result; 
 }
 
-function in_string($haystack,$needle): bool {
-	if (strpos($haystack,$needle) !== false) return TRUE;
-	return FALSE;
+function in_string($haystack, $needle): bool
+{
+    return str_contains($haystack,$needle);
 }
 
 function designations(string $judge_array,string $display): string {
 	$return = "";
 	$rank1 = explode(",",$judge_array);
 	foreach ($rank1 as $rank2) {
-		 if ($rank2 != $display) $return .= "<br />".$rank2."";
+		 if ($rank2 !== $display) $return .= "<br />".$rank2."";
 	}
 	return $return;
 }
@@ -242,7 +242,7 @@ function build_action_link(string $icon,string $base_url,string $section,string 
 		//$return .= "<img src='".$base_url."images/".$icon.".png' border='0' alt='".$alt_title."' title='".$alt_title."'>&nbsp;";
 	}
 
-	if ($icon == "fa-trash-o") {
+	if ($icon === "fa-trash-o") {
 		$return .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$dbTable."&amp;action=".$action."&amp;id=".$id."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\" data-confirm=\"".$alt_title."\">";
 	}
 
@@ -257,10 +257,10 @@ function build_action_link(string $icon,string $base_url,string $section,string 
 
 		else {
 			$return .= "<a href=\"".$base_url."index.php?section=".$section;
-			if ($go != "default") $return .= "&amp;go=".$go;
-			if ($action != "default") $return .= "&amp;action=".$action;
-			if ($filter != "default") $return .= "&amp;filter=".$filter;
-			if ($id != "default") $return .= "&amp;id=".$id;
+			if ($go !== "default") $return .= "&amp;go=".$go;
+			if ($action !== "default") $return .= "&amp;action=".$action;
+			if ($filter !== "default") $return .= "&amp;filter=".$filter;
+			if ($id !== "default") $return .= "&amp;id=".$id;
 			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\">";
 		}
 	}
@@ -286,10 +286,10 @@ function build_output_link(string $icon,string $base_url,string $filename,string
 	$alt_title = h($alt_title);
 
 	$return .= "<a href=\"".$base_url."output/".$filename."?section=".$section;
-	if ($go != "default") $return .= "&amp;go=".$go;
-	if ($action != "default") $return .= "&amp;action=".$action;
-	if ($filter != "default") $return .= "&amp;filter=".$filter;
-	if ($id != "default") $return .= "&amp;id=".$id;
+	if ($go !== "default") $return .= "&amp;go=".$go;
+	if ($action !== "default") $return .= "&amp;action=".$action;
+	if ($filter !== "default") $return .= "&amp;filter=".$filter;
+	if ($id !== "default") $return .= "&amp;id=".$id;
 	$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\"";
 	if ($modal_window) $return .= " data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\"";
 	$return .= ">";
@@ -302,12 +302,12 @@ function build_output_link(string $icon,string $base_url,string $filename,string
 function build_form_action(string $base_url,string $section,string $go,string $action,string $filter,string $id,string $dbTable,bool $check_required): string {
 
 	$return = "";
-	if (strpos($section, 'step') !== FALSE) $section = "setup"; else $section = $section;
+	if (str_contains($section, 'step')) $section = "setup"; else $section = $section;
 	$return .= "<form class=\"form-horizontal\" method=\"post\" id=\"form1\" name=\"form1\" action=\"".$base_url."includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable;
-	if ($go != "default") $return .= "&amp;go=".$go;
-	if ($action != "default") $return .= "&amp;action=".$action;
-	if ($filter != "default") $return .= "&amp;filter=".$filter;
-	if ($id != "default") $return .= "&amp;id=".$id;
+	if ($go !== "default") $return .= "&amp;go=".$go;
+	if ($action !== "default") $return .= "&amp;action=".$action;
+	if ($filter !== "default") $return .= "&amp;filter=".$filter;
+	if ($id !== "default") $return .= "&amp;id=".$id;
 	$return .= "\"";
 	if ($check_required) $return .= " data-toggle=\"validator\" role=\"form\"";
 	$return .= ">";
@@ -319,22 +319,19 @@ function build_public_url(string $section="default",string $go="default",string 
 	
 	if ($_SESSION['prefsSEF'] == 'Y') {
 		$url = $base_url."";
-		if ($section != "default") $url .= $section."/";
-		if ($go != "default") $url .= $go."/";
-		if ($action != "default") $url .= $action."/";
-		if ($view != "default") $url .= $view."/";
-		if ($id != "default") $url .= $id."/";
+		if ($section !== "default") $url .= $section."/";
+		if ($go !== "default") $url .= $go."/";
+		if ($action !== "default") $url .= $action."/";
+		if ($view !== "default") $url .= $view."/";
+		if ($id !== "default") $url .= $id."/";
 		return rtrim($url,"/");
 	}
-	
-	else {
-		$url = $base_url."index.php?section=".$section;
-		if ($go != "default") $url .= "&amp;go=".$go;
-		if ($action != "default") $url .= "&amp;action=".$action;
-		if ($view != "default") $url .= "&amp;view=".$view;
-		if ($id != "default") $url .= "&amp;id=".$id;
-		return $url;
-	}
+    $url = $base_url."index.php?section=".$section;
+    if ($go !== "default") $url .= "&amp;go=".$go;
+    if ($action !== "default") $url .= "&amp;action=".$action;
+    if ($view !== "default") $url .= "&amp;view=".$view;
+    if ($id !== "default") $url .= "&amp;id=".$id;
+    return $url;
 	
 }
 
@@ -381,8 +378,7 @@ function display_array_content(array $arrayname,$method): string {
 
 function addOrdinalNumberSuffix($num): string {
 	if (!is_numeric($num)) return $num;
-	else {
-		if (!in_array(($num % 100),array(11,12,13))) {
+    if (!in_array(($num % 100),[11,12,13])) {
 			switch ($num % 10) {
 				// Handle 1st, 2nd, 3rd
 				case 1:  return $num."st";
@@ -390,8 +386,7 @@ function addOrdinalNumberSuffix($num): string {
 				case 3:  return $num."rd";
 			}
 		}
-		return $num."th";
-	}
+    return $num."th";
 }
 
 function purge_entries(string $type, $interval): bool {
@@ -407,7 +402,7 @@ function purge_entries(string $type, $interval): bool {
 	*/
 	$styles_db_table = $prefix."styles";
 
-	if ($type == "unconfirmed") {
+	if ($type === "unconfirmed") {
 
 		$db_conn->where('brewConfirmed', '0');
 		if ($interval > 0) $db_conn->where('brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)');
@@ -431,13 +426,13 @@ function purge_entries(string $type, $interval): bool {
 
 	}
 
-	if ($type == "special") {
+	if ($type === "special") {
 
-		$params_check = array();
+		$params_check = [];
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND (b.brewStyleVersion = 'BJCP2021' OR b.brewStyleVersion = 'BJCP2025')";
 		else { $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = ?"; $params_check[] = $_SESSION['prefsStyleSet']; }
 		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
-		$rows_check = (!empty($params_check)) ? $db_conn->rawQuery($query_check, $params_check) : $db_conn->rawQuery($query_check);
+		$rows_check = ($params_check !== []) ? $db_conn->rawQuery($query_check, $params_check) : $db_conn->rawQuery($query_check);
 		$totalRows_check = $db_conn->count;
 
 		if ($totalRows_check == 0) $count += 1;
@@ -457,7 +452,7 @@ function purge_entries(string $type, $interval): bool {
 
 	}
 
-	if ($type == "unpaid") {
+	if ($type === "unpaid") {
 
 		$db_conn->where("(brewPaid='0' OR brewPaid IS NULL)");
 		if ($interval > 0) $db_conn->where('brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)');
@@ -481,25 +476,24 @@ function purge_entries(string $type, $interval): bool {
 
 	}
 
-	if ($count > 0) return TRUE;
-	else return FALSE;
+	return $count > 0;
 
 }
 
 // function to generate random number
 function random_generator($digits,$method): string|int {
-	srand ((int) ((double) microtime() * 10000000));
+	mt_srand ((int) ((float) microtime() * 10000000));
 
 	//Array of alphabet
-	if ($method == "1") $input = array ("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","t","d","y","u","b","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9");
-	if ($method == "2") $input = array ("0","1","2","3","4","5","6","7","8","9");
-	if ($method == "3") $input = array ("0","1","2","3","4");
+	if ($method == "1") $input =  ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","t","d","y","u","b","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"];
+	if ($method == "2") $input =  ["0","1","2","3","4","5","6","7","8","9"];
+	if ($method == "3") $input =  ["0","1","2","3","4"];
 
 	$random_generator = "";// Initialize the string to store random numbers
 
 	for ($i=1;$i<$digits+1;$i++) { // Loop the number of times of required digits
 
-		if(rand(1,2) == 1){ // to decide the digit should be numeric or alphabet
+		if(random_int(1,2) === 1){ // to decide the digit should be numeric or alphabet
 			// Add one random alphabet
 			$rand_index = array_rand($input);
 			$random_generator .=$input[$rand_index]; // One char is added
@@ -507,12 +501,12 @@ function random_generator($digits,$method): string|int {
 
 		if ($method == "3") {
 			// Add one numeric digit between 0 and 4
-			$random_generator = rand(1,4); // one number is added
+			$random_generator = random_int(1,4); // one number is added
 		}
 
 		else {
 			// Add one numeric digit between 0 and 9
-			$random_generator .=rand(1,10); // one number is added
+			$random_generator .=random_int(1,10); // one number is added
 		} // end of if else
 
 	} // end of for loop
@@ -529,27 +523,27 @@ function relocate($referer,string $page,string $msg,string $id,string $keep_id="
 	if (isset($parts['query'])) $referer = $parts['query'];
 
 	// Remove $msg=X from query string
-	$pattern = array("/[0-9]/", "/&msg=/");
+	$pattern = ["/[0-9]/", "/&msg=/"];
 	$referer = preg_replace($pattern, "", $referer);
 
 	// Remove $id=X from query string
-	$pattern = array("/[0-9]/", "/&id=/");
+	$pattern = ["/[0-9]/", "/&id=/"];
 	$referer = preg_replace($pattern, "", $referer);
 
-	if ($keep_id != "default") { // Add $id back in if specified
+	if ($keep_id !== "default") { // Add $id back in if specified
 		$referer .= "&id=".$id;
 	}
 
 	// Remove $pg=X from query string
-	$pattern = array("/[0-9]/", "/&pg=/");
+	$pattern = ["/[0-9]/", "/&pg=/"];
 	$referer = str_replace($pattern,"",$referer);
 
 	// Add back $pg back in if present
-	if ($page != "default") {
+	if ($page !== "default") {
 		$referer .= "&pg=".$page;
 	}
 
-	$pattern = array('\'', '"');
+	$pattern = ['\'', '"'];
 	$referer = str_replace($pattern,"",$referer);
 	$referer = stripslashes($referer);
 
@@ -566,8 +560,7 @@ function check_judging_numbers(): bool {
 	$db_conn->where('brewJudgingNumber IS NULL');
 	$row_check = $db_conn->getOne($prefix."brewing", "COUNT(*) as count");
 
-	if ($row_check['count'] == 0) return TRUE;
-	else return FALSE;
+	return $row_check['count'] == 0;
 }
 
 
@@ -643,23 +636,23 @@ function GetSQLValueString($theValue, string $theType, string $theDefinedValue =
 
 	switch ($theType) {
 		case "text":
-		  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+		  $theValue = ($theValue !== "") ? "'" . $theValue . "'" : "NULL";
 		  break;
 		case "long":
 		case "int":
-		  $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+		  $theValue = ($theValue !== "") ? intval($theValue) : "NULL";
 		  break;
 		case "double":
-		  $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
+		  $theValue = ($theValue !== "") ? "'" . floatval($theValue) . "'" : "NULL";
 		  break;
 		case "date":
-		  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+		  $theValue = ($theValue !== "") ? "'" . $theValue . "'" : "NULL";
 		  break;
 		case "defined":
-		  $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+		  $theValue = ($theValue !== "") ? $theDefinedValue : $theNotDefinedValue;
 		  break;
 		case "scrubbed":
-		  $theValue = ($theValue != "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
+		  $theValue = ($theValue !== "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
 	}
 	
 	return $theValue;
@@ -706,7 +699,7 @@ function currency_info(string $input,$method): string|array {
 
 	if ($method == 2) {
 
-	$currency_code = array(
+	return [
 			"$^$ Dollar - U.S.^USD",
 			"R$^R$ Brazilian Real^BRL",
 			"pound^&pound; British Pound^GBP",
@@ -736,7 +729,7 @@ function currency_info(string $input,$method): string|array {
 			"R^R South African Rand^ZAR",
 			"rupee^&#8360; Rupee^INR",
 			"krw^&#8361; Won^KRW"
-		);
+		];
 
 	}
 
@@ -920,7 +913,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		$rows_users = $db_conn->get($prefix."users", null, "id,user_name");
 		$totalRows_users = $db_conn->count;
 
-		$user_id_1 = array();
+		$user_id_1 = [];
 		foreach ($rows_users as $row_users) { $user_id_1[] = $row_users['id']; }
 		sort($user_id_1);
 
@@ -1028,7 +1021,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		$rows_users = $db_conn->get($prefix."users", null, "id,user_name");
 		$totalRows_users = $db_conn->count;
 
-		$user_id_1 = array();
+		$user_id_1 = [];
 		foreach ($rows_users as $row_users) { $user_id_1[] = $row_users['id']; }
 		sort($user_id_1);
 
@@ -1092,7 +1085,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 		$rows_users = $db_conn->get($prefix."users", null, "id,user_name");
 		$totalRows_users = $db_conn->count;
 
-		$user_id_2 = array();
+		$user_id_2 = [];
 		foreach ($rows_users as $row_users) { $user_id_2[] = $row_users['id']; }
 		sort($user_id_2);
 
@@ -1280,7 +1273,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 		$rows_users = $db_conn->get($prefix."users", null, "id,user_name");
 		$totalRows_users = $db_conn->count;
 
-		$user_id_2 = array();
+		$user_id_2 = [];
 		foreach ($rows_users as $row_users) { $user_id_2[] = $row_users['id']; }
 		sort($user_id_2);
 
@@ -1415,15 +1408,15 @@ function total_paid_received(string $go,$id,string $archive=""): int {
 	$archive_suffix = "";
 	// $archive is restricted to alphanumeric characters before use in a table-name identifier
 	// (matching the pattern used elsewhere in the codebase, e.g. includes/db/winners.db.php's $filter_clean).
-	if ((isset($archive)) && (!empty($archive)) && ($archive != "default")) {
+	if ((isset($archive)) && (!empty($archive)) && ($archive !== "default")) {
 		$archive_suffix = "_".preg_replace("/[^a-zA-Z0-9]+/", "", $archive);
 	}
 
 	$query_entry_count = "SELECT COUNT(*) as 'count' FROM ".$prefix."brewing".$archive_suffix;
-	$params_entry_count = array();
-	if (($go == "judging_scores") || ($go == "judging_tables")) $query_entry_count .= " WHERE brewPaid='1' AND brewReceived='1'";
+	$params_entry_count = [];
+	if (($go === "judging_scores") || ($go === "judging_tables")) $query_entry_count .= " WHERE brewPaid='1' AND brewReceived='1'";
 	if (($id > 0) && ($id !="default")) { $query_entry_count .= " WHERE brewBrewerID=? AND brewPaid='1' AND brewReceived='1'"; $params_entry_count[] = $id; }
-	$row = (!empty($params_entry_count)) ? $db_conn->rawQueryOne($query_entry_count, $params_entry_count) : $db_conn->rawQueryOne($query_entry_count);
+	$row = ($params_entry_count !== []) ? $db_conn->rawQueryOne($query_entry_count, $params_entry_count) : $db_conn->rawQueryOne($query_entry_count);
 	return $row['count'];
 }
 
@@ -1441,10 +1434,10 @@ function total_nopay_received(string $go, $id, $comp_id): int {
 	$db_conn = new MysqliDb($connection);
 
 	$query_entry_count = "SELECT COUNT(*) as 'count' FROM ".$prefix."brewing";
-	$params_entry_count = array();
-	if ($go == "entries") $query_entry_count .= " WHERE brewPaid='0' AND brewReceived='1'";
+	$params_entry_count = [];
+	if ($go === "entries") $query_entry_count .= " WHERE brewPaid='0' AND brewReceived='1'";
 	if (($id != "default") && ($id > 0)) { $query_entry_count .= " WHERE brewBrewerID=? AND brewPaid='0' AND brewReceived='1'"; $params_entry_count[] = $id; }
-	$row = (!empty($params_entry_count)) ? $db_conn->rawQueryOne($query_entry_count, $params_entry_count) : $db_conn->rawQueryOne($query_entry_count);
+	$row = ($params_entry_count !== []) ? $db_conn->rawQueryOne($query_entry_count, $params_entry_count) : $db_conn->rawQueryOne($query_entry_count);
 	return $row['count'];
 }
 
@@ -1460,16 +1453,16 @@ function style_convert(string $number,$type,string $base_url="",string $archive=
 	if ($style_set == "BJCP2025") {
 		$first_character = mb_substr($number, 0, 1);
 		$db_conn->where('brewStyleGroup', $number);
-		if ($first_character == "C") $db_conn->where('brewStyleVersion', 'BJCP2025');
+		if ($first_character === "C") $db_conn->where('brewStyleVersion', 'BJCP2025');
 		else $db_conn->where('brewStyleVersion', 'BJCP2021');
 		$row_style = $db_conn->getOne($styles_db_table, "brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn");
 	}
 	else {
 		$query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM ".$styles_db_table." WHERE brewStyleGroup=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
-		$row_style = $db_conn->rawQueryOne($query_style, array($number, $style_set));
+		$row_style = $db_conn->rawQueryOne($query_style, [$number, $style_set]);
 	}
 
-	if ((isset($archive)) && (!empty($archive)) && ($archive != "default")) {
+	if ((isset($archive)) && (!empty($archive)) && ($archive !== "default")) {
 		$db_conn->where('archiveSuffix', $archive);
 		$row_archive_db = $db_conn->getOne($prefix."archive", "archiveStyleSet");
 		if ($row_archive_db) $style_set = $row_archive_db['archiveStyleSet'];
@@ -1660,8 +1653,8 @@ function style_convert(string $number,$type,string $base_url="",string $archive=
 
 		// Used only on My Account page for judges.
 		case "4":
-		$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
-		$replacement2 = array('<strong>Entry Instructions:</strong>','<strong>Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
+		$replacement1 = ['Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state'];
+		$replacement2 = ['<strong>Entry Instructions:</strong>','<strong>Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state'];
 
 		if ($style_set == "BA") $styleSet = "Brewers Association";
 		else $styleSet = str_replace("2"," 2",$style_set);
@@ -1730,7 +1723,7 @@ function style_convert(string $number,$type,string $base_url="",string $archive=
 			</tr>
 			</table>";
 
-			if ($archive == "v3-public") {
+			if ($archive === "v3-public") {
 				if ($style_set == "BA") {
 					$style_convert_1[] = "\n<span title=\"".$label_info.": ".$row_style['brewStyle']."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$row_style['brewStyle']."</a></span>";
 					$modal_title = $styleSet.": ".$row_style['brewStyle'];
@@ -1796,7 +1789,7 @@ function style_convert(string $number,$type,string $base_url="",string $archive=
 		require(CONFIG.'config.php');
 
 		$style_convert = "";
-		$style_convert1 = array();
+		$style_convert1 = [];
 
 		foreach ($a as $value) {
 
@@ -1806,7 +1799,7 @@ function style_convert(string $number,$type,string $base_url="",string $archive=
 
 		}
 		
-		if (!empty($style_convert1)) $style_convert = rtrim(implode(", ",$style_convert1),", ");
+		if ($style_convert1 !== []) $style_convert = rtrim(implode(", ",$style_convert1),", ");
 		break;
 
 		// Used primarily in entry_info.sec.php.
@@ -1868,13 +1861,13 @@ function style_convert(string $number,$type,string $base_url="",string $archive=
 		
 		if ($number[2] == "BJCP2025") {
 			$first_character = mb_substr($number[0], 0, 1);
-			if ($first_character == "C") $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom')";
+			if ($first_character === "C") $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom')";
 			else $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom')";
-			$row_style = $db_conn->rawQueryOne($query_style, array($number[0], $number[1]));
+			$row_style = $db_conn->rawQueryOne($query_style, [$number[0], $number[1]]);
 		}
 		else {
 			$query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
-			$row_style = $db_conn->rawQueryOne($query_style, array($number[0], $number[1], $number[2]));
+			$row_style = $db_conn->rawQueryOne($query_style, [$number[0], $number[1], $number[2]]);
 		}
 
 		// Exception for BJCP2021 2A
@@ -1932,10 +1925,10 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 
 	// Get info about the table from the DB
 	$query_table = "SELECT * FROM ".$judging_tables_db_table;
-	$params_table = array();
+	$params_table = [];
 	if ($table_id != "default") { $query_table .= " WHERE id=?"; $params_table[] = $table_id; }
 	if ($param != "default") { $query_table .= " WHERE tableLocation=?"; $params_table[] = $param; }
-	$rows_table = (!empty($params_table)) ? $db_conn->rawQuery($query_table, $params_table) : $db_conn->rawQuery($query_table);
+	$rows_table = ($params_table !== []) ? $db_conn->rawQuery($query_table, $params_table) : $db_conn->rawQuery($query_table);
 	$row_table = ($rows_table && count($rows_table) > 0) ? $rows_table[0] : null;
 
 	$return = "";
@@ -1957,11 +1950,8 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 		$db_conn->where('id', $input);
 		$row_judging_location = $db_conn->getOne($prefix."judging_locations");
 
-		$return = "";
-
 		if ($row_judging_location) {
-			$return = 
-			$row_judging_location['judgingDate']."^".
+			return $row_judging_location['judgingDate']."^".
 			$row_judging_location['judgingDateEnd']."^".
 			$row_judging_location['judgingLocName']."^".
 			$row_judging_location['judgingLocation']."^".
@@ -1969,7 +1959,7 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 			$row_judging_location['judgingLocNotes'];
 		}
 		
-		return $return;
+		return "";
 	}
 
 	if ($method == "styles") {
@@ -1980,15 +1970,10 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 				$a .= $row_table['tableStyles'].",";
 			}
 			$b = explode(",", $a);
-			if (in_array($input,$b)) return TRUE;
-			else return FALSE;
+			return in_array($input,$b);
 		}
-
-		else {
-			$a = explode(",", $row_table['tableStyles']);
-			if (in_array($input,$a)) return TRUE;
-			else return FALSE;
-		}
+        $a = explode(",", $row_table['tableStyles']);
+        return in_array($input,$a);
 
 	}
 
@@ -2018,7 +2003,7 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 		if (!empty($row_table['tableStyles'])) {
 
 			$a = explode(",", $row_table['tableStyles']);
-			$b = array();
+			$b = [];
 
 				foreach ($a as $value) {
 
@@ -2039,7 +2024,7 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 	// Get count of entries
 	if (($method == "count_total") && ($param == "default")) {
 
-		$c = array();
+		$c = [];
 		$debug = "";
 		
 		if (!empty($row_table)) {
@@ -2082,7 +2067,7 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 
 	if (($method == "count_total") && ($param != "default")) {
 
-		$c = array();
+		$c = [];
 
 		if (!empty($row_table)) {
 
@@ -2168,30 +2153,30 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 } // end get_table_info()
 
 function style_type(string $type,string $method,string $source): string {
-	if ($method == "1") {
-		switch($type) {
-			case "Mead": $type = "3"; break;
-			case "Cider": $type = "2"; break;
-			case "Mixed": $type = "1"; break;
-			case "Ale": $type = "1"; break;
-			case "Lager": $type = "1"; break;
-			default: $type = $type; break;
-		}
+	if ($method === "1") {
+		$type = match ($type) {
+            "Mead" => "3",
+            "Cider" => "2",
+            "Mixed" => "1",
+            "Ale" => "1",
+            "Lager" => "1",
+            default => $type,
+        };
 	}
 
-	if (($method == "2") && ($source == "bcoe")) {
-		switch($type) {
-			case "3": $type = "Mead"; break;
-			case "2": $type = "Cider"; break;
-			case "1": $type = "Beer"; break;
-			case "Lager": $type = "Beer"; break;
-			case "Ale": $type = "Beer"; break;
-			case "Mixed": $type = "Beer"; break;
-			default: $type = $type; break;
-		}
+	if (($method === "2") && ($source === "bcoe")) {
+		$type = match ($type) {
+            "3" => "Mead",
+            "2" => "Cider",
+            "1" => "Beer",
+            "Lager" => "Beer",
+            "Ale" => "Beer",
+            "Mixed" => "Beer",
+            default => $type,
+        };
 	}
 
-	if (($method == "2") && ($source == "custom")) {
+	if (($method === "2") && ($source === "custom")) {
 		require(CONFIG.'config.php');
 		$db_conn = new MysqliDb($connection);
 
@@ -2200,7 +2185,7 @@ function style_type(string $type,string $method,string $source): string {
 		if ($row_style_type) $type = $row_style_type['styleTypeName'];
 	}
 
-	if ($method == "3") {
+	if ($method === "3") {
 		require(CONFIG.'config.php');
 		$db_conn = new MysqliDb($connection);
 
@@ -2235,7 +2220,7 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method):
 	$totalRows_location = $db_conn->count;
 
 	if ($totalRows_location == 1) {
-		$table_location = $row_location['judgingLocName'].", ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt");
+		return $row_location['judgingLocName'].", ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt");
 	}
 
 	return $table_location;
@@ -2248,7 +2233,7 @@ function score_count($table_id,$method,string $dbTable): int|bool {
 	$suffix = "";
 	// $dbTable is used to build a table-name identifier, so it's sanitized to alphanumeric-only
 	// (matching the pattern used elsewhere for this kind of suffix).
-	if ($dbTable != "default") {
+	if ($dbTable !== "default") {
 		$suffix = ltrim(get_suffix($dbTable), "_");
 		$suffix = "_".preg_replace("/[^a-zA-Z0-9]+/", "", $dbTable);
 	}
@@ -2258,16 +2243,11 @@ function score_count($table_id,$method,string $dbTable): int|bool {
 		$db_conn->where('scoreTable', $table_id);
 		$row_scores = $db_conn->getOne($prefix."judging_scores".$suffix, "COUNT(*) as 'count'");
 	}
-
-	switch($method) {
-		case "1": if ((isset($row_scores['count'])) && ($row_scores['count'] > 0)) return true; else return false;
-		break;
-
-		case "2": return isset($row_scores['count']) ? $row_scores['count'] : 0;
-		break;
-	}
-
-	return false;
+    return match ($method) {
+        "1" => (isset($row_scores['count'])) && ($row_scores['count'] > 0),
+        "2" => $row_scores['count'] ?? 0,
+        default => false,
+    };
 }
 
 function best_brewer_points($bid, array $places, array $entry_scores, array $points_prefs, array $tiebreaker, $method="0"): float {
@@ -2303,38 +2283,38 @@ function best_brewer_points($bid, array $places, array $entry_scores, array $poi
 				// points for the number of 1st, 2nd, and 3rd places
 				case "TBTotalPlaces" :
 					$power  += 2;
-					$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power);
+					$pts_tb_num_places = array_sum(array_slice($places,0,3))/10 ** $power;
 					break;
 				// points for the number of 1st, 2nd, 3rd, 4th, HM places
 				case "TBTotalExtendedPlaces" :
 					$power  += 2;
-					$pts_tb_num_places = array_sum($places)/pow(10,$power);
+					$pts_tb_num_places = array_sum($places)/10 ** $power;
 					break;
 				// points for number of first places
 				case "TBFirstPlaces" :
 					$power  += 2;
-					$pts_tb_first_places = $places[0]/pow(10,$power);
+					$pts_tb_first_places = $places[0]/10 ** $power;
 					break;
 				// points for the number of competing entries (the smallest the better, of course)
 				case "TBNumEntries" :
 					$power  += 4;
-					if ($user_number_of_entries > 0) $pts_tb_num_entries = floor(100/$user_number_of_entries)/pow(10,$power);
+					if ($user_number_of_entries > 0) $pts_tb_num_entries = floor(100/$user_number_of_entries)/10 ** $power;
 					else $pts_tb_num_entries = 0;
 					break;
 				// points for the minimum score
 				case "TBMinScore" :
 					$power  += 4;
-					$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power);
+					$pts_tb_min_score = floor(10*min($entry_scores))/10 ** $power;
 					break;
 				// points for the maximum score
 				case "TBMaxScore" :
 					$power  += 4;
-					$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power);
+					$pts_tb_max_score = floor(10*max($entry_scores))/10 ** $power;
 					break;
 				// points for the average score
 				case "TBAvgScore" :
 					$power  += 4;
-					if ($user_number_of_entries > 0) $pts_avg_score = floor(10*array_sum($entry_scores)/$user_number_of_entries)/pow(10,$power);
+					if ($user_number_of_entries > 0) $pts_avg_score = floor(10*array_sum($entry_scores)/$user_number_of_entries)/10 ** $power;
 					else $pts_avg_score = 0;
 					break;
 			}
@@ -2368,7 +2348,7 @@ function best_brewer_points($bid, array $places, array $entry_scores, array $poi
 		foreach ($places as $key => $value) {
 
 			$tc_number_of_entries = $points_prefs[$key];
-			$points += pow((($tc_number_of_entries - $value) / $tc_number_of_entries),3);
+			$points += (($tc_number_of_entries - $value) / $tc_number_of_entries) ** 3;
 			//if ($points <= 0) $points = 0;
 		
 		}
@@ -2383,82 +2363,29 @@ function bjcp_rank(string $rank,$method): string {
 	
 	if ($method == "1") {
 		
-		switch($rank) {
+		$return = match ($rank) {
+            "Experienced" => "Level 0:",
+            "Apprentice", "Provisional", "Rank Pending" => "Level 1:",
+            "Recognized", "Professional Brewer", "Beer Sommelier", "Judge with Sensory Training" => "Level 2:",
+            "Certified", "Certified Cider Guide", "Mead Judge", "Cider Judge" => "Level 3:",
+            "National", "Certified Cicerone", "Certified Pommelier" => "Level 4:",
+            "Master", "Honorary Master", "Master Cicerone" => "Level 5:",
+            "Grand Master", "Honorary Grand Master" => "Level 6:",
+            default => "Level 0:",
+        };
 
-			case "Experienced": 
-			$return = "Level 0:"; 
-			break;
-			
-			case "Apprentice":
-			case "Provisional":
-			case "Rank Pending":
-			$return = "Level 1:"; 
-			break;
-			
-			case "Recognized": 
-			case "Professional Brewer":
-			case "Beer Sommelier":
-			case "Judge with Sensory Training":
-			$return = "Level 2:"; 
-			break;
-
-			case "Certified": 
-			case "Certified Cider Guide":
-			case "Mead Judge":
-			case "Cider Judge": 
-			$return = "Level 3:"; 
-			break;
-			
-			case "National":
-			case "Certified Cicerone":
-			case "Certified Pommelier":
-			$return = "Level 4:"; 
-			break;
-			
-			case "Master":
-			case "Honorary Master":
-			case "Master Cicerone":
-			$return = "Level 5:"; 
-			break;
-			
-			case "Grand Master": 
-			case "Honorary Grand Master":
-			$return = "Level 6:"; 
-			break;
-
-			default: 
-			$return = "Level 0:";
-		
-		}
-
-		if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
+		if (($rank !== "None") && ($rank !== "")) $return .= " ".$rank;
 		else $return .= " Non-BJCP Judge";
 	
 	}
 
 	if ($method == "2") {
 		
-		switch($rank) {
-			case "None":
-			case "":
-			case "Novice";
-			case "Non-BJCP";
-			case "Experienced":
-			$return = "Non-BJCP Judge"; 
-			break;
-			
-			case "Professional Brewer":
-			case "Beer Sommelier":
-			case "Certified Cicerone":
-			case "Master Cicerone":
-			case "Judge with Sensory Training":
-			$return = $rank; 
-			break;
-			
-			default: 
-			$return = "BJCP ".$rank." Judge";
-		
-		}
+		return match ($rank) {
+            "None", "", "Novice", "Non-BJCP", "Experienced" => "Non-BJCP Judge",
+            "Professional Brewer", "Beer Sommelier", "Certified Cicerone", "Master Cicerone", "Judge with Sensory Training" => $rank,
+            default => "BJCP ".$rank." Judge",
+        };
 
 	}
 
@@ -2515,7 +2442,7 @@ function brewer_info($uid,string $filter="default"): string {
 	require(CONFIG.'config.php');
 	$local_db_conn = new MysqliDb($connection);
 
-	if ($filter == "default") $brewer_db_table = $prefix."brewer";
+	if ($filter === "default") $brewer_db_table = $prefix."brewer";
 	else {
 		$filter_clean = preg_replace("/[^a-zA-Z0-9]+/", "", $filter);
 		$brewer_db_table = $prefix."brewer_".$filter_clean;
@@ -2535,7 +2462,7 @@ function brewer_info($uid,string $filter="default"): string {
 
 	}
 
-	$tbb = array();
+	$tbb = [];
 
 	if (($_SESSION['prefsProEdition'] == 1) && (!empty($row_brewer_info['brewerBreweryInfo']))) $ttb = json_decode($row_brewer_info['brewerBreweryInfo'],true);
 
@@ -2571,7 +2498,7 @@ function get_entry_count(string $method,string $filter=""): int {
 	require(CONFIG.'config.php');
 	$local_db_conn = new MysqliDb($connection);
 
-	if (($filter == "default") || (empty($filter))) {
+	if (($filter === "default") || (empty($filter))) {
 		$judging_scores_db_table = $prefix."judging_scores";
 		$brewing_db_table = $prefix."brewing";
 	}
@@ -2583,14 +2510,14 @@ function get_entry_count(string $method,string $filter=""): int {
 	}
 
 	$table = $brewing_db_table;
-	if ($method == "paid") $local_db_conn->where("brewPaid", "1");
-	if ($method == "received") $local_db_conn->where("brewReceived", "1");
-	if ($method == "paid-received") { $local_db_conn->where("brewReceived", "1"); $local_db_conn->where("brewPaid", "1"); }
-	if ($method == "unpaid-received") { $local_db_conn->where("brewReceived", "1"); $local_db_conn->where("brewPaid", "0"); }
-	if ($method == "paid-not-received") { $local_db_conn->where("brewReceived", "0"); $local_db_conn->where("brewPaid", "1"); }
-	if ($method == "unconfirmed") $local_db_conn->where("brewConfirmed", "1", "<>");
-	if ($method == "placing-entries") { $local_db_conn->where("scorePlace IS NOT NULL"); $table = $judging_scores_db_table; }
-	if ($method == "scored") $table = $judging_scores_db_table;
+	if ($method === "paid") $local_db_conn->where("brewPaid", "1");
+	if ($method === "received") $local_db_conn->where("brewReceived", "1");
+	if ($method === "paid-received") { $local_db_conn->where("brewReceived", "1"); $local_db_conn->where("brewPaid", "1"); }
+	if ($method === "unpaid-received") { $local_db_conn->where("brewReceived", "1"); $local_db_conn->where("brewPaid", "0"); }
+	if ($method === "paid-not-received") { $local_db_conn->where("brewReceived", "0"); $local_db_conn->where("brewPaid", "1"); }
+	if ($method === "unconfirmed") $local_db_conn->where("brewConfirmed", "1", "<>");
+	if ($method === "placing-entries") { $local_db_conn->where("scorePlace IS NOT NULL"); $table = $judging_scores_db_table; }
+	if ($method === "scored") $table = $judging_scores_db_table;
 	// $table may point at an archived competition's table (via $filter), which may no longer
 	// exist - rawQuery()-family calls throw rather than fail gracefully in that case.
 	if (!table_exists($table)) return 0;
@@ -2610,16 +2537,16 @@ function get_entry_count(string $method,string $filter=""): int {
 function get_bjcp_entry_count($filter = "default") {
 
 	$judged = get_entry_count("scored", $filter);
-	if ($judged > 0) return array('count' => $judged, 'basis' => 'judged');
+	if ($judged > 0) return ['count' => $judged, 'basis' => 'judged'];
 
 	$received = get_entry_count("received", $filter);
-	if ($received > 0) return array('count' => $received, 'basis' => 'received');
+	if ($received > 0) return ['count' => $received, 'basis' => 'received'];
 
 	$paid = get_entry_count("paid", $filter);
-	if ($paid > 0) return array('count' => $paid, 'basis' => 'paid');
+	if ($paid > 0) return ['count' => $paid, 'basis' => 'paid'];
 
 	$total = get_entry_count("none", $filter);
-	return array('count' => $total, 'basis' => 'total');
+	return ['count' => $total, 'basis' => 'total'];
 
 }
 
@@ -2627,17 +2554,17 @@ function get_evaluation_count(string $method,string $table_id="default"): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
-	if ($method == "total") $row = $db_conn->getOne($prefix."evaluation", "COUNT(*) as 'count'");
+	if ($method === "total") $row = $db_conn->getOne($prefix."evaluation", "COUNT(*) as 'count'");
 
-	if ($method == "unique") $row = $db_conn->getOne($prefix."evaluation", "COUNT(DISTINCT `eid`) as 'count'");
+	if ($method === "unique") $row = $db_conn->getOne($prefix."evaluation", "COUNT(DISTINCT `eid`) as 'count'");
 
-	if ($method == "table") {
-		if ($table_id != "default") $db_conn->where('evalTable', $table_id);
+	if ($method === "table") {
+		if ($table_id !== "default") $db_conn->where('evalTable', $table_id);
 		$row = $db_conn->getOne($prefix."evaluation", "COUNT(*) as 'count'");
 	}
 
-	if ($method == "table-unique") {
-		if ($table_id != "default") $db_conn->where('evalTable', $table_id);
+	if ($method === "table-unique") {
+		if ($table_id !== "default") $db_conn->where('evalTable', $table_id);
 		$row = $db_conn->getOne($prefix."evaluation", "COUNT(DISTINCT `eid`) as 'count'");
 	}
 
@@ -2648,7 +2575,7 @@ function get_participant_count(string $type,string $filter=""): array|string|int
 	require(CONFIG.'config.php');
 	$local_db_conn = new MysqliDb($connection);
 
-	if (($filter == "default") || (empty($filter))) {
+	if (($filter === "default") || (empty($filter))) {
 		$brewer_db_table = $prefix."brewer";
 		$staff_db_table = $prefix."staff";
 		$brewing_db_table = $prefix."brewing";
@@ -2664,25 +2591,25 @@ function get_participant_count(string $type,string $filter=""): array|string|int
 	$table = $brewer_db_table;
 	$cols = "COUNT(*) as 'count'";
 
-	if ($type == 'judge') $local_db_conn->where("brewerJudge", "Y");
-	if ($type == 'judge-assigned') { $table = $staff_db_table; $local_db_conn->where("staff_judge", 1); }
-	if ($type == 'steward-assigned') { $table = $staff_db_table; $local_db_conn->where("staff_steward", 1); }
-	if ($type == 'steward') $local_db_conn->where("brewerSteward", "Y");
-	if ($type == 'staff') $local_db_conn->where("brewerStaff", "Y");
-	if ($type == 'staff-assigned') { $table = $staff_db_table; $local_db_conn->where("staff_staff", 1); }
-	if ($type == 'received-entrant') { $table = $brewing_db_table; $cols = "COUNT(DISTINCT brewBrewerID) as 'count'"; $local_db_conn->where("brewReceived", "1"); }
-	if ($type == 'with-entries') { $table = $prefix."brewing"; $cols = "COUNT(DISTINCT brewBrewerId) as 'count'"; }
+	if ($type === 'judge') $local_db_conn->where("brewerJudge", "Y");
+	if ($type === 'judge-assigned') { $table = $staff_db_table; $local_db_conn->where("staff_judge", 1); }
+	if ($type === 'steward-assigned') { $table = $staff_db_table; $local_db_conn->where("staff_steward", 1); }
+	if ($type === 'steward') $local_db_conn->where("brewerSteward", "Y");
+	if ($type === 'staff') $local_db_conn->where("brewerStaff", "Y");
+	if ($type === 'staff-assigned') { $table = $staff_db_table; $local_db_conn->where("staff_staff", 1); }
+	if ($type === 'received-entrant') { $table = $brewing_db_table; $cols = "COUNT(DISTINCT brewBrewerID) as 'count'"; $local_db_conn->where("brewReceived", "1"); }
+	if ($type === 'with-entries') { $table = $prefix."brewing"; $cols = "COUNT(DISTINCT brewBrewerId) as 'count'"; }
 
 	// The tables below may point at an archived competition (via $filter), which may no longer
 	// exist - rawQuery()-family calls throw rather than fail gracefully in that case.
-	if ($type == 'organizer-assigned') {
+	if ($type === 'organizer-assigned') {
 		if ((!table_exists($staff_db_table)) || (!table_exists($brewer_db_table))) $row_participant_count = null;
 		else {
 			$sql_participant_count = sprintf("SELECT a.uid, b.brewerFirstName, b.brewerLastName, b.uid FROM %s a, %s b WHERE a.staff_organizer=1 AND a.uid = b.uid LIMIT 1", $staff_db_table, $brewer_db_table);
 			$row_participant_count = $local_db_conn->rawQueryOne($sql_participant_count);
 		}
 	}
-	elseif ($type == 'received-club') {
+	elseif ($type === 'received-club') {
 		if ((!table_exists($brewing_db_table)) || (!table_exists($brewer_db_table))) $row_participant_count = null;
 		else {
 			$sql_participant_count = sprintf("SELECT COUNT(DISTINCT b.brewerClubs) as 'count' FROM %s a, %s b WHERE b.uid = a.brewBrewerID AND b.brewerClubs IS NOT NULL", $brewing_db_table, $brewer_db_table);
@@ -2698,21 +2625,20 @@ function get_participant_count(string $type,string $filter=""): array|string|int
 	// they would like to be a judge, steward, or staff
 	// SELECT sum(count) AS total_count FROM ((SELECT COUNT(DISTINCT uid) as count FROM $brewer_db_table WHERE brewerJudge='Y' OR brewerSteward='Y' OR brewerStaff='Y') UNION ALL (SELECT COUNT(DISTINCT brewBrewerID) as count FROM $brewing_db_table))t;
 
-	$return_arr = array();
+	$return_arr = [];
 
 	if ($row_participant_count) {
 		
-		if ($type == 'organizer-assigned') {
-			$return_arr = array(
+		if ($type === 'organizer-assigned') {
+			$return_arr = [
 				'first_name' => $row_participant_count['brewerFirstName'],
 				'last_name' => $row_participant_count['brewerLastName'],
 				'uid' => $row_participant_count['uid']
-			);
+			];
 
 			return $return_arr;
-		} 
-
-		else return $row_participant_count['count'];
+		}
+        return $row_participant_count['count'];
 	}
 
 	return "";
@@ -2728,50 +2654,47 @@ function display_place($place,$method): string {
 	}
 
 	if ($method == "1") {
-		switch($place){
-			case "1": $place = addOrdinalNumberSuffix($place); break;
-			case "2": $place = addOrdinalNumberSuffix($place); break;
-			case "3": $place = addOrdinalNumberSuffix($place); break;
-			case "4": $place = addOrdinalNumberSuffix($place); break;
-			case "5":
-			case "HM": $place = "HM"; break;
-		default: $place = "N/A";
-		}
+		$place = match ($place) {
+            "1" => addOrdinalNumberSuffix($place),
+            "2" => addOrdinalNumberSuffix($place),
+            "3" => addOrdinalNumberSuffix($place),
+            "4" => addOrdinalNumberSuffix($place),
+            "5", "HM" => "HM",
+            default => "N/A",
+        };
 	}
 
 	if ($method == "2") {
-		switch($place){
-			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place); break;
-			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place); break;
-			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
-			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
-			case "5":
-			case "HM": $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> HM"; break;
-			default: $place = "N/A";
-			}
+		$place = match ($place) {
+            "1" => "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place),
+            "2" => "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place),
+            "3" => "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place),
+            "4" => "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place),
+            "5", "HM" => "<span class='fa fa-lg fa-trophy text-forest-green'></span> HM",
+            default => "N/A",
+        };
 	}
 
 	if ($method == "3") {
-		switch($place){
-			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place); break;
-			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place); break;
-			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
-			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
-			case "5":
-			case "HM": $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> HM"; break;
-			default: $place = "<span class='fa fa-lg fa-trophy text-grey'></span> ".addOrdinalNumberSuffix($place);
-			}
+		$place = match ($place) {
+            "1" => "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place),
+            "2" => "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place),
+            "3" => "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place),
+            "4" => "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place),
+            "5", "HM" => "<span class='fa fa-lg fa-trophy text-forest-green'></span> HM",
+            default => "<span class='fa fa-lg fa-trophy text-grey'></span> ".addOrdinalNumberSuffix($place),
+        };
 	}
 
 	if ($method == "4") {
-		switch($place){
-			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place); break;
-			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place); break;
-			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
-			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
-			case "4": $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place); break;
-			default: $place = "<span class='fa fa-lg fa-trophy text-grey'></span> ".addOrdinalNumberSuffix($place);
-		}
+		return match ($place) {
+            "1" => "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place),
+            "2" => "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place),
+            "3" => "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place),
+            "4" => "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place),
+            "4" => "<span class='fa fa-lg fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place),
+            default => "<span class='fa fa-lg fa-trophy text-grey'></span> ".addOrdinalNumberSuffix($place),
+        };
 	}
 
 	return $place;
@@ -2799,10 +2722,8 @@ function score_check($id,$judging_scores_db_table): string {
 
 	$db_conn->where('eid', $id);
 	$row_scores = $db_conn->getOne($judging_scores_db_table, "scoreEntry");
-
-	$r = "";
-	if ($row_scores) $r = $row_scores['scoreEntry'];
-	return $r;
+	if ($row_scores) return $row_scores['scoreEntry'];
+	return "";
 }
 
 function minibos_check($id,$judging_scores_db_table): bool {
@@ -2811,8 +2732,7 @@ function minibos_check($id,$judging_scores_db_table): bool {
 	$db_conn->where('eid', $id);
 	$row_scores = $db_conn->getOne($judging_scores_db_table, "scoreMiniBOS");
 
-	if (($row_scores) && ($row_scores['scoreMiniBOS'] == "1")) return TRUE;
-	else return FALSE;
+	return ($row_scores) && ($row_scores['scoreMiniBOS'] == "1");
 }
 
 function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$method): string {
@@ -2875,14 +2795,14 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 
 				if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 				    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
-				    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+				    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 				    else $chosen_style_set = "BJCP2021";
 				}
 
 				else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 				$query_style = "SELECT brewStyle FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-				$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $row_entry['brewCategorySort'], $row_entry['brewSubCategory']));
+				$row_style = $db_conn->rawQueryOne($query_style, [$chosen_style_set, $row_entry['brewCategorySort'], $row_entry['brewSubCategory']]);
 
 				$r = display_place($row_scores['scorePlace'],1).": ".$row_style['brewStyle']." (".$row_entry['brewCategory'].$row_entry['brewSubCategory'].")";
 
@@ -2901,7 +2821,7 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,string $archive
 	require(LANG.'language.lang.php');
 	$db_conn = new MysqliDb($connection);
 
-	if ($archive != "default") $staff_db_table = $prefix."staff_".$archive;
+	if ($archive !== "default") $staff_db_table = $prefix."staff_".$archive;
 	else $staff_db_table = $prefix."staff";
 
 	$totalRows_staff_check = 0;
@@ -2946,7 +2866,7 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,string $archive
 		elseif ($filter == "stewards") $r = $label_stewards;
 		elseif ($filter == "staff") $r = $label_staff;
 		elseif ($filter == "bos") $r = "BOS ".$label_judges;
-		else $r = "";
+		else $r = [];
 	}
 
 return $r;
@@ -2967,7 +2887,7 @@ function entries_unconfirmed($user_id): array {
 		}
 
 	}
-	else $r = array("0");
+	else $r = ["0"];
 	return $r;
 }
 
@@ -2983,25 +2903,23 @@ function check_special_ingredients(string $style,string $style_version): bool {
 	*/
 	$styles_db_table = $prefix."styles";
 
-	if ($style_version == "BJCP2025") {
+	if ($style_version === "BJCP2025") {
 		$first_character = mb_substr($style, 0, 1);
-		if ($first_character == "C") $chosen_style_version = "BJCP2025";
+		if ($first_character === "C") $chosen_style_version = "BJCP2025";
 		else $chosen_style_version = $style_version;
 	}
 	else $chosen_style_version = $style_version;
 
 	$query_brews = "SELECT brewStyleReqSpec FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-	$row_brews = $db_conn->rawQueryOne($query_brews, array($chosen_style_version, $style_explodies[0], $style_explodies[1]));
+	$row_brews = $db_conn->rawQueryOne($query_brews, [$chosen_style_version, $style_explodies[0], $style_explodies[1]]);
 
 	if ((!empty($row_brews)) && ($row_brews['brewStyleReqSpec'] == 1)) {
 		
 		// Execptions for some selected 2025 cider styles
-		if (($style_version == "BJCP2025") && (($style == "C2-C") || ($style == "C2-D") || ($style == "C4-C"))) return FALSE;
-		else return TRUE;
+		return $style_version !== "BJCP2025" || !(in_array($style, ["C2-C", "C2-D", "C4-C"]));
 	
 	}
-
-	else return FALSE;
+    return FALSE;
 
 }
 
@@ -3016,7 +2934,7 @@ function entries_no_special($user_id): bool {
 	$totalRows_entry_check = 0;
 
 	if (!empty($rows_entry_check)) {
-		$brew_style = array();
+		$brew_style = [];
 		foreach ($rows_entry_check as $row_entry_check) {
 			$brew_style[] = $row_entry_check['brewCategorySort']."-".$row_entry_check['brewSubCategory'];
 		}
@@ -3026,8 +2944,7 @@ function entries_no_special($user_id): bool {
 		}
 	}
 	
-	if ($totalRows_entry_check > 0)	return TRUE;
-	else return FALSE;
+	return $totalRows_entry_check > 0;
 }
 
 function data_integrity_check(): bool {
@@ -3058,7 +2975,7 @@ function data_integrity_check(): bool {
 
 			// Update to the correct uid
 			$update_table = $prefix."brewer";
-			$data = array('uid' => $row_user_check['id']);
+			$data = ['uid' => $row_user_check['id']];
 			$db_conn->where ('id', $row_brewer['id']);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) $errors += 1;
@@ -3074,7 +2991,7 @@ function data_integrity_check(): bool {
 				foreach ($rows_brewer_entries as $row_brewer_entries) {
 
 					$update_table = $prefix."brewing";
-					$data = array('brewBrewerID' => $row_user_check['id']);
+					$data = ['brewBrewerID' => $row_user_check['id']];
 					$db_conn->where ('id', $row_brewer_entries['id']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) $errors += 1;
@@ -3185,13 +3102,12 @@ function data_integrity_check(): bool {
 	}
 
 	$update_table = $prefix."bcoem_sys";
-	$data = array('data_check' => date('Y-m-d H:i:s', time()));
+	$data = ['data_check' => date('Y-m-d H:i:s', time())];
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) $errors += 1;
 
-	if ($errors > 0) return FALSE;
-	else return TRUE;
+	return $errors <= 0;
 
 } // END function
 
@@ -3200,9 +3116,9 @@ function readable_number($a): string {
 
 // http://www.iamcal.com/publish/articles/php/readable_numbers/
 
-	$bits_a = array("thousand", "million", "billion", "trillion", "quadrillion");
-	$bits_b = array("ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety");
-	$bits_c = array("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen");
+	$bits_a = ["thousand", "million", "billion", "trillion", "quadrillion"];
+	$bits_b = ["ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+	$bits_c = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
 
 	if ($a == 0){
 		return 'zero';
@@ -3213,7 +3129,7 @@ function readable_number($a): string {
 	$a = abs($a);
 
 	for($i=count($bits_a); $i>0; $i--) {
-		$p = pow(1000, $i);
+		$p = 1000 ** $i;
 		if ($a > $p){
 			$b = floor($a/$p);
 			$a -= $p * $b;
@@ -3275,8 +3191,7 @@ function table_exists(string $table_name): bool {
 	// protocol, so the table name is allow-listed to word characters and spliced directly.
 	$table_name_clean = preg_replace("/[^a-zA-Z0-9_]+/", "", $table_name);
 	$rows_exists = $db_conn->rawQuery("SHOW TABLES LIKE '".$table_name_clean."'");
-	if (count($rows_exists) > 0) return TRUE;
-	else return FALSE;
+	return count($rows_exists) > 0;
 }
 
 function judge_assignment($uid, $loc_id): array|false {
@@ -3285,7 +3200,7 @@ function judge_assignment($uid, $loc_id): array|false {
 	$db_conn = new MysqliDb($connection);
 
 	$query_judge_assignment = "SELECT assignTable,assignRoles,assignFlight,assignRound,tableName,tableNumber FROM ".$prefix."judging_assignments"." a JOIN ".$prefix."judging_tables"." t on t.id = a.assignTable WHERE a.bid=? AND a.assignLocation=?";
-	$row_judge_assignment = $db_conn->rawQueryOne($query_judge_assignment, array($uid, $loc_id));
+	$row_judge_assignment = $db_conn->rawQueryOne($query_judge_assignment, [$uid, $loc_id]);
 	//$totalRows_table_assignments = mysqli_num_rows($table_assignments);
 
 	return $row_judge_assignment;
@@ -3297,8 +3212,8 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
-	if ($method2 == 2) $output = array();
-	else $output = "";
+	if ($method2 == 2) $output = [];
+	else $output = [];
 
 	$db_conn->where('bid', $uid);
 	$db_conn->where('assignment', $method);
@@ -3324,8 +3239,8 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 					$hj = "<span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
 					$lj = "<span class=\"text-purple\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
 					$mbos = "<span class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
-					$role_replace1 = array("HJ","LJ","MBOS",", ");
-					$role_replace2 = array($hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;");
+					$role_replace1 = ["HJ","LJ","MBOS",", "];
+					$role_replace2 = [$hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;"];
 					$role = str_replace($role_replace1,$role_replace2,$row_table_assignments['assignRoles']);
 				}
 
@@ -3381,7 +3296,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 				}
 
 				else {
-					if (!empty($location)) {
+					if ($location !== []) {
 						$output .= "\t\t\t<td>".$location[2]."</td>\n";
 						$output .= "\t\t\t<td>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
 						$output .= sprintf("\t\t\t<td>%s %s - %s</td>\n",$label_table,$table_info[0],$table_info[1]);
@@ -3396,7 +3311,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	}
 
 	//if (($totalRows_table_assignments == 0) && ($method2 == "1")) $output_extend = "No assignment(s)";
-	if ($method2 == 2) $output = array_unique($output);
+	if ($method2 == 2) return array_unique($output);
 	return $output;
 
 }
@@ -3409,11 +3324,11 @@ function available_at_location(string $location,string $role,$round): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
-	if ($role == "judges") {
+	if ($role === "judges") {
 		$db_conn->where('brewerJudgeLocation IS NOT NULL');
 		$rows_available = $db_conn->get($prefix."brewer", null, "brewerJudgeLocation");
 	}
-	if ($role == "stewards") {
+	if ($role === "stewards") {
 		$db_conn->where('brewerStewardLocation IS NOT NULL');
 		$rows_available = $db_conn->get($prefix."brewer", null, "brewerStewardLocation");
 	}
@@ -3424,8 +3339,8 @@ function available_at_location(string $location,string $role,$round): int {
 	if ($totalRows_available > 0) {
 
 		foreach ($rows_available as $row_available) {
-			if ($role == "judges") $available_location = explode(",",$row_available['brewerJudgeLocation']);
-			if ($role == "stewards") $available_location =  explode(",",$row_available['brewerStewardLocation']);
+			if ($role === "judges") $available_location = explode(",",$row_available['brewerJudgeLocation']);
+			if ($role === "stewards") $available_location =  explode(",",$row_available['brewerStewardLocation']);
 			if (in_array("Y-".$location,$available_location)) $return += 1;
 		}
 
@@ -3435,24 +3350,21 @@ function available_at_location(string $location,string $role,$round): int {
 }
 
 function str_osplit(string $string, int $offset): array|false {
-	return isset($string[$offset]) ? array(substr($string, 0, $offset), substr($string, $offset)) : false;
+	return isset($string[$offset]) ? [substr($string, 0, $offset), substr($string, $offset)] : false;
  }
 
 function readable_judging_number($style,$number): string {
 
-	if (strlen($number) == 5) {
+	if (strlen($number) === 5) {
 		$judging_number = str_osplit($number, 2);
 		return sprintf("%06s",$judging_number[0]."-".$judging_number[1]);
 	}
 
-	if (strlen($number) == 4) {
+	if (strlen($number) === 4) {
 		$judging_number = str_osplit($number, 1);
 		return sprintf("%06s",$judging_number[0]."-".$judging_number[1]);
 	}
-
-	else {
-		return sprintf("%06s",$number);
-	}
+    return sprintf("%06s",$number);
 }
 
 function dropoff_location($input): string {
@@ -3461,9 +3373,13 @@ function dropoff_location($input): string {
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('id', $input);
 	$row_dropoff = $db_conn->getOne($prefix."drop_off", "dropLocationName");
-	if ($input == 0) return $label_shipping_entries;
-	elseif (($input > 0) && ($input < 999))	return $row_dropoff['dropLocationName'];
-	else return $brewer_text_005;
+    if ($input == 0) {
+        return $label_shipping_entries;
+    }
+	if (($input > 0) && ($input < 999)) {
+        return $row_dropoff['dropLocationName'];
+    }
+    return $brewer_text_005;
 }
 
 function judge_steward_availability(string $input,$method,string $prefix): string {
@@ -3472,7 +3388,7 @@ function judge_steward_availability(string $input,$method,string $prefix): strin
 
 	$return = "";
 
-	if (($input == "Y-") || ($input == "")) {
+	if (($input === "Y-") || ($input === "")) {
 		if ($method == "1") $return = strtolower(ucfirst($label_no_availability));
 	}
 	
@@ -3526,10 +3442,9 @@ function judge_steward_availability(string $input,$method,string $prefix): strin
 	$return = rtrim($return,"^");
 
 	if ($method == "1") $return = str_replace("^", "<br>", $return);
-	if (($method == "2") || ($method == "3")) $return = str_replace("^", " | ", $return);
-	else $return = str_replace("^", " ", $return);
+	if (($method == "2") || ($method == "3")) return str_replace("^", " | ", $return);
 
-	return $return;
+	return str_replace("^", " ", $return);
 }
 
 function judge_entries($uid,$method): string {
@@ -3555,15 +3470,13 @@ function judge_entries($uid,$method): string {
 
 		}
 		$return = implode(", ",$entries);
-		$return = rtrim($return,", ");
+		return rtrim($return,", ");
 	}
-	else $return = "";
-	return $return;
+	return "";
 }
 
 function judging_winner_display($display_date): bool {
-	if (time() > $display_date) return TRUE;
-	else return FALSE;
+	return time() > $display_date;
 }
 
 function format_phone_us(string $phone = '', bool $convert = true, bool $trim = true): string|false {
@@ -3579,21 +3492,21 @@ function format_phone_us(string $phone = '', bool $convert = true, bool $trim = 
 
 	// If we have a number longer than 11 digits cut the string down to only 11
 	// This is also only ran if we want to limit only to 11 characters
-	if ($trim == true && strlen($phone)>11) {
+	if ($trim === true && strlen($phone)>11) {
 		$phone = substr($phone, 0, 11);
 	}
 
 	// Do we want to convert phone numbers with letters to their number equivalent?
 	// Samples are: 1-800-TERMINIX, 1-800-FLOWERS, 1-800-Petmeds
-	if ($convert == true && !is_numeric($phone)) {
-		$replace = array('2'=>array('a','b','c'),
-						 '3'=>array('d','e','f'),
-						 '4'=>array('g','h','i'),
-						 '5'=>array('j','k','l'),
-						 '6'=>array('m','n','o'),
-						 '7'=>array('p','q','r','s'),
-						 '8'=>array('t','u','v'),
-						 '9'=>array('w','x','y','z'));
+	if ($convert === true && !is_numeric($phone)) {
+		$replace = ['2'=>['a','b','c'],
+						 '3'=>['d','e','f'],
+						 '4'=>['g','h','i'],
+						 '5'=>['j','k','l'],
+						 '6'=>['m','n','o'],
+						 '7'=>['p','q','r','s'],
+						 '8'=>['t','u','v'],
+						 '9'=>['w','x','y','z']];
 
 		// Replace each letter with a number
 		// Notice this is case insensitive with the str_ireplace instead of str_replace
@@ -3604,20 +3517,16 @@ function format_phone_us(string $phone = '', bool $convert = true, bool $trim = 
 
 	$length = strlen($phone);
 	// Perform phone number formatting here
-	switch ($length) {
-		case 7:
-			// Format: xxx-xxxx
-			return preg_replace("/([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "$1-$2", $phone);
-		case 10:
-			// Format: (xxx) xxx-xxxx
-			return preg_replace("/([0-9a-zA-Z]{3})([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "($1) $2-$3", $phone);
-		case 11:
-			// Format: x(xxx) xxx-xxxx
-			return preg_replace("/([0-9a-zA-Z]{1})([0-9a-zA-Z]{3})([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "$1($2) $3-$4", $phone);
-		default:
-			// Return original phone if not 7, 10 or 11 digits long
-			return $OriginalPhone;
-	}
+	return match ($length) {
+        // Format: xxx-xxxx
+        7 => preg_replace("/([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "$1-$2", $phone),
+        // Format: (xxx) xxx-xxxx
+        10 => preg_replace("/([0-9a-zA-Z]{3})([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "($1) $2-$3", $phone),
+        // Format: x(xxx) xxx-xxxx
+        11 => preg_replace("/([0-9a-zA-Z]{1})([0-9a-zA-Z]{3})([0-9a-zA-Z]{3})([0-9a-zA-Z]{4})/", "$1($2) $3-$4", $phone),
+        // Return original phone if not 7, 10 or 11 digits long
+        default => $OriginalPhone,
+    };
 
 }
 
@@ -3705,7 +3614,7 @@ function limit_subcategory(?string $style,$pref_num,$pref_exception_sub_num,$pre
 	$limit_reached = FALSE;
 	if ($style === null || $style === '') return $limit_reached;
 	$style_break = explode("-",$style);
-	if (empty($pref_exception_sub_array)) $pref_exception_sub_array = array();
+	if (empty($pref_exception_sub_array)) $pref_exception_sub_array = [];
 	else $pref_exception_sub_array = explode(",",$pref_exception_sub_array);
 
 	// Check if first character is "C", "M", or "P" for ciders, meads, and provisional styles
@@ -3715,14 +3624,14 @@ function limit_subcategory(?string $style,$pref_num,$pref_exception_sub_num,$pre
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 	    $first_character = mb_substr($style_break[0], 0, 1);
-	    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 	    else $chosen_style_set = "BJCP2021";
 	}
 
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-	$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $style_num, $style_break[1]));
+	$row_style = $db_conn->rawQueryOne($query_style, [$chosen_style_set, $style_num, $style_break[1]]);
 
 	$style_id = "";
 	if ($row_style) $style_id = $row_style['id'];
@@ -3745,7 +3654,7 @@ function limit_subcategory(?string $style,$pref_num,$pref_exception_sub_num,$pre
 	if ($row_check['count'] >= $pref_num) $limit_reached = TRUE;
 
 	// Check for exceptions
-	if (($limit_reached) && (!empty($pref_exception_sub_array))) {
+	if (($limit_reached) && ($pref_exception_sub_array !== [])) {
 		if (in_array($style_id,$pref_exception_sub_array)) {
 			// if so, check if the amount in the DB is greater than or equal to the "excepted" limit number
 			if ((!empty($pref_exception_sub_num)) && (($row_check['count'] >= $pref_exception_sub_num))) $limit_reached = TRUE;
@@ -3766,7 +3675,7 @@ function highlight_required(string $msg,$method,string $style_version): bool {
 
 	if ($method == "0") { // mead cider sweetness
 
-		if (!empty($explodies)) {
+		if ($explodies !== []) {
 
 			if ((isset($explodies[1])) && (isset($explodies[2]))) {
 				$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
@@ -3783,7 +3692,7 @@ function highlight_required(string $msg,$method,string $style_version): bool {
 
 	if ($method == "1") { // special ingredients REQUIRED beer/mead/cider
 
-		if (!empty($explodies)) {
+		if ($explodies !== []) {
 
 			if ((isset($explodies[1])) && (isset($explodies[2]))) {
 
@@ -3799,7 +3708,7 @@ function highlight_required(string $msg,$method,string $style_version): bool {
 
 	if ($method == "2") { // mead cider carb
 
-		if (!empty($explodies)) {
+		if ($explodies !== []) {
 
 			if ((isset($explodies[1])) && (isset($explodies[2]))) {
 				$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
@@ -3814,7 +3723,7 @@ function highlight_required(string $msg,$method,string $style_version): bool {
 
 	if ($method == "3") { // mead strength
 
-		if (!empty($explodies)) {
+		if ($explodies !== []) {
 
 			if ((isset($explodies[1])) && (isset($explodies[2]))) {
 				$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
@@ -3843,7 +3752,7 @@ function user_check(string $user_name): string {
 	$row_userCheck = $db_conn->getOne($prefix."users");
 	$totalRows_userCheck = $db_conn->count;
 
-	if (!empty($row_userCheck)) $return = $totalRows_userCheck."^".$row_userCheck['userQuestion']."^".$row_userCheck['id'];
+	if (!empty($row_userCheck)) return $totalRows_userCheck."^".$row_userCheck['userQuestion']."^".$row_userCheck['id'];
 
 	return $return;
 
@@ -3858,7 +3767,7 @@ function judging_location_info($id): array {
 	$row_judging_loc3 = $db_conn->getOne($prefix."judging_locations");
 	$totalRows_judging_loc3 = $db_conn->count;
 
-	$return = array();
+	$return = [];
 	
 	if ($totalRows_judging_loc3 > 0) {
 		
@@ -3923,13 +3832,13 @@ function styles_active($method,string $archive=""): array|string|int {
 	*/
 	$styles_db_table = $prefix."styles";
 
-	if ((empty($archive)) || ($archive == "default")) {
+	if ((empty($archive)) || ($archive === "default")) {
 		$style_set = $_SESSION['prefsStyleSet'];
 		$style_types_db = $prefix."style_types";
 		$archive = "";
 	}
 
-	if ((isset($archive)) && (!empty($archive)) && ($archive != "default")) {
+	if ((isset($archive)) && (!empty($archive)) && ($archive !== "default")) {
 
 		$archive_suffix = str_replace("_","",$archive);
 
@@ -3949,17 +3858,17 @@ function styles_active($method,string $archive=""): array|string|int {
 
 	if ($method == 0) { // Active Styles
 
-		$a = array();
+		$a = [];
 
 		if ($style_set == "BJCP2025") {
 			$query_styles = "SELECT DISTINCT brewStyleGroup FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')";
-			$bind_params = array();
+			$bind_params = [];
 		}
 		else {
 			$query_styles = "SELECT DISTINCT brewStyleGroup FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')";
-			$bind_params = array($style_set);
+			$bind_params = [$style_set];
 		}
-		if ((empty($archive)) || ($archive == "default")) $query_styles .= " AND brewStyleActive='Y'";
+		if ((empty($archive)) || ($archive === "default")) $query_styles .= " AND brewStyleActive='Y'";
 		$query_styles .= " ORDER BY brewStyleGroup ASC";
 
 		$rows_styles = $db_conn->rawQuery($query_styles, $bind_params);
@@ -3993,13 +3902,13 @@ function styles_active($method,string $archive=""): array|string|int {
 		else 
 		*/
 		$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')";
-		if ((empty($archive)) || ($archive == "default")) $query_styles .= " AND brewStyleActive='Y'";
+		if ((empty($archive)) || ($archive === "default")) $query_styles .= " AND brewStyleActive='Y'";
 		$query_styles .= " ORDER BY brewStyleGroup,brewStyleNum ASC";
 
-		$rows_styles = $db_conn->rawQuery($query_styles, array($style_set));
+		$rows_styles = $db_conn->rawQuery($query_styles, [$style_set]);
 		$totalRows_styles = $db_conn->count;
 
-		$a = array();
+		$a = [];
 		foreach ($rows_styles as $row_styles) {
 			$a[] = $row_styles['brewStyleGroup']."^".$row_styles['brewStyleNum']."^".$row_styles['brewStyle'];
 		}
@@ -4008,7 +3917,7 @@ function styles_active($method,string $archive=""): array|string|int {
 
 	}
 
-	return array();
+	return [];
 }
 
 function check_exension(string $file_ext): bool {
@@ -4031,10 +3940,9 @@ function check_exension(string $file_ext): bool {
 function open_limit($total,$limit,$registration_open): bool {
 	// Check to see if the limit of entries has been reached
 	if ($limit != "") {
-		if (($total >= $limit) && ($registration_open == "1")) return TRUE;
-		else return FALSE;
+		return ($total >= $limit) && ($registration_open == "1");
 	}
-	else return FALSE;
+    return FALSE;
 }
 
 /**
@@ -4046,8 +3954,8 @@ function open_limit($total,$limit,$registration_open): bool {
 
 function obfuscateURL(string $data,string $key): string {
 
-	$dirty = array("+", "/", "=");
-	$clean = array("_p_", "_s_", "_e_");
+	$dirty = ["+", "/", "="];
+	$clean = ["_p_", "_s_", "_e_"];
 
 	// Remove the base64 encoding from our key
 	$encryption_key = base64_decode($key);
@@ -4065,43 +3973,31 @@ function obfuscateURL(string $data,string $key): string {
 		// Do a little clean up of stuff we don't want in URLs - just in case
 		return str_replace($dirty, $clean, $encrypted_data);
 	}
-	
-	else {
-	
-		if (function_exists('openssl_encrypt')) {
-			// Generate an initialization vector
-			$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-
-			// Encrypt the data using AES 256 encryption in CBC mode using our encryption key and initialization vector.
-			$encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
-
-			// The $iv is just as important as the key for decrypting, so save it with our encrypted data using a unique separator (::)
-			$encrypted_data = base64_encode($encrypted . '::' . $iv);
-
-			// Do a little clean up of stuff we don't want in URLs - just in case
-			return str_replace($dirty, $clean, $encrypted_data);
-		}
-
-		// Use mcrypt if openssl not available; deprecated as of PHP 7.1
-		elseif (function_exists('mcrypt_encrypt')) {
-			$salt = "rdwhahb"; // should be the same as the $salt var in the deobfuscateURL function
-			$encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($salt), str_replace($clean, $dirty, $data), MCRYPT_MODE_CBC, md5(md5($salt))));
-			return $encrypted;
-		}
-
-		// Fallback is simple obfuscation with base64 if allowed by function call params
-		else {
-			return str_replace($dirty, $clean, base64_encode($data));
-		}
-	
-	}
+    if (function_exists('openssl_encrypt')) {
+        // Generate an initialization vector
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        // Encrypt the data using AES 256 encryption in CBC mode using our encryption key and initialization vector.
+        $encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
+        // The $iv is just as important as the key for decrypting, so save it with our encrypted data using a unique separator (::)
+        $encrypted_data = base64_encode($encrypted . '::' . $iv);
+        // Do a little clean up of stuff we don't want in URLs - just in case
+        return str_replace($dirty, $clean, $encrypted_data);
+    }
+    // Use mcrypt if openssl not available; deprecated as of PHP 7.1
+    if (function_exists('mcrypt_encrypt')) {
+        $salt = "rdwhahb";
+        // should be the same as the $salt var in the deobfuscateURL function
+        $encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($salt), str_replace($clean, $dirty, $data), MCRYPT_MODE_CBC, md5(md5($salt))));
+        return $encrypted;
+    }
+    return str_replace($dirty, $clean, base64_encode($data));
 
 }
 
 function deobfuscateURL(string $data,string $key): string|false|null {
 
-	$dirty = array("+", "/", "=");
-	$clean = array("_p_", "_s_", "_e_");
+	$dirty = ["+", "/", "="];
+	$clean = ["_p_", "_s_", "_e_"];
 
 	// Remove the base64 encoding from our key
 	$encryption_key = base64_decode($key);
@@ -4109,32 +4005,24 @@ function deobfuscateURL(string $data,string $key): string|false|null {
 	if (HOSTED) {
 		// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
 		// Get the data "dirty" again and remove base64 encoding
-		list($encrypted_data, $iv) = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
-		$iv = $iv ?? "";
+		[$encrypted_data, $iv] = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
+		$iv ??= "";
 		return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
 	}
-	
-	else {
-		
-		if (function_exists('openssl_encrypt')) {
-			// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
-			// Get the data "dirty" again and remove base64 encoding
-			list($encrypted_data, $iv) = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
-			$iv = $iv ?? "";
-
-			return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
-		}
-
-		elseif (function_exists('mcrypt_decrypt')) {
-			$salt = "rdwhahb"; // should be the same as the $salt var in the encryptString function
-			$decode = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($salt), base64_decode(str_replace($clean, $dirty, $data)), MCRYPT_MODE_CBC, md5(md5($salt))), "\0");
-			return $decode;
-		}
-
-		else {
-			return base64_decode(str_replace($clean, $dirty, $data));
-		}
-	}
+    if (function_exists('openssl_encrypt')) {
+        // To decrypt, split the encrypted data from our IV - our unique separator used was "::"
+        // Get the data "dirty" again and remove base64 encoding
+        [$encrypted_data, $iv] = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
+        $iv ??= "";
+        return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
+    }
+    if (function_exists('mcrypt_decrypt')) {
+        $salt = "rdwhahb";
+        // should be the same as the $salt var in the encryptString function
+        $decode = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($salt), base64_decode(str_replace($clean, $dirty, $data)), MCRYPT_MODE_CBC, md5(md5($salt))), "\0");
+        return $decode;
+    }
+    return base64_decode(str_replace($clean, $dirty, $data));
 
 }
 
@@ -4178,9 +4066,9 @@ function convert_to_ba(): string {
 
 	$return = "";
 
-	$carb = array("Still","Petillant","Sparkling");
-	$sweet = array("Dry","Medium Dry","Medium","Medium Sweet","Sweet");
-	$strength = array("Hydromel","Standard","Sack");
+	$carb = ["Still","Petillant","Sparkling"];
+	$sweet = ["Dry","Medium Dry","Medium","Medium Sweet","Sweet"];
+	$strength = ["Hydromel","Standard","Sack"];
 
 	do {
 
@@ -4247,9 +4135,9 @@ function convert_to_pro(): string {
 
 	$return = "";
 
-	$breweries = array(
+	$breweries = [
 	"10 Barrel Brewing Company","105 West Brewing Company","12 Degree Brewing","14er Brewing Company","3 Freaks Brewery","300 Suns Brewing","38 State Brewing Company","4 Noses Brewing Company","4B&rsquo;s Brewery","7 Hermits Brewing Company","Alpine Dog Brewing Company","Anheuser-Busch","Animas Brewing Company","Asher Brewing Company","Aspen Brewing Company","Avalanche Brewing Company","Avery Brewing Company","Backcountry Brewery","Baere Brewing Company","Banded Oak Brewing Company","Barnett &amp; Son Brewing Company","Barrels &amp; Bottles Brewery","Beer By Design","Berthoud Brewing Company","Beryl&rsquo;s Beer Company","Bierstadt Lagerhaus","BierWerks Brewery","Big Beaver Brewing Company","Big Thompson Brewery","BJ&rsquo;s Restaurant &amp; Brewery ","Black Bottle Brewery","Black Project Spontaneous &amp; Wild Ales","Black Shirt Brewing Company","Black Sky Brewery","Blue Moon Brewing Co. at the Sandlot","Blue Moon Brewing Company","Blue Spruce Brewing Company","Boggy Draw Brewery","Bonfire Brewing","Bootstrap Brewing Company","Bottom Shelf Brewery","BREW Pub &amp; Kitchen","Brewability Lab","Brewery Rickoli","Briar Common Brewery + Eatery","Bristol Brewing Company","Brix Taphouse &amp; Brewery","Broken Compass Brewery","Broken Plow Brewery","BRU Handbuilt Ales &amp; Eats","Brues Alehouse Brewing Company","Bruz Beers","Buckhorn Brewers","Bull &amp; Bush Pub &amp; Brewery","Butcherknife Brewing Company","Call to Arms Brewing Company","Cannonball Creek Brewing Company","Capitol Creek Brewery","Carbondale Beer Works","Carver Brewing Company","Casey Brewing &amp; Blending"," Beer Company","CAUTION: Brewing Company","CB &amp; Potts Restaurant &amp; Brewery Englewood","CB &amp; Potts Restaurant &amp; Brewery Flatirons","CB &amp; Potts Restaurant &amp; Brewery ","CB &amp; Potts Restaurant &amp; Brewery ","CB &amp; Potts Restaurant &amp; Brewery ","Cellar West Artisan Ales","Cerberus Brewing Company","Cerebral Brewing","Chain Reaction Brewing","Cheluna Brewing Company","City Star Brewing","CO-Brew","Cogstone Brewing Company","Colorado Boy Pizzeria &amp; Brewery","Colorado Boy Pub &amp; Brewery","Colorado Mountain Brewery","Colorado Mountain Brewery at the Roundhouse","Colorado Plus Brew Pub","Comrade Brewing Company","CooperSmith&rsquo;s Pub &amp; Brewing Company","Copper Club Brewing Company","Copper Kettle Brewing Company","Crabtree Brewing Company","Crazy Mountain Brewing Company","Crazy Mountain Tap Room","Creede Brewing Company","Crestone Brewing Company","Crooked Stave Artisan Beer Project","Crow Hop Brewing Company","Crystal Springs Brewing Company","Dad &amp; Dude&rsquo;s Breweria","DC Oakes Brewhouse and Eatery","De Steeg Brewing","Dead Hippie Brewing","Declaration Brewing","Deep Draft Brewing Company","Arvada Beer Company","Diebolt Brewing Company","Dillon DAM Brewery","Dodgeton Creek Brewing Company","Dolores River Brewery","Dostal Alley Brewpub &amp; Casino","Dry Dock Brewing Company North","Dry Dock Brewing Company South","Echo Brewing Cask and Barrel","Echo Brewing Company","Eddyline Brewery","El Rancho Brewing Company","Elevation Beer Company","Elk Mountain Brewing Company","Epic Brewing Company","Equinox Brewing Company","Estes Park Brewery","Evergreen Tap House &amp; Brewery","Factotum Brewhouse","FATE Brewing Company","FERMÆNTRA","Fiction Beer Company","Fieldhouse Brewing Company","Finkel &amp; Garf Brewing Company","Floodstage Ale Works","Florence Brewing Company","Fossil Craft Beer Company","Front Range Brewing Company","Funkwerks","Gilded Goat Brewing","Glenwood Canyon Brewing Company","Gold Camp Brewing Company","Goldspot Brewing Company","Gordon Biersch Brewery","Gore Range Brewery","Grand Lake Brewing Tavern","Grandma&rsquo;s House","Gravity Brewing","Great Divide Brewing Company","Great Frontier Brewing Company","Great Storm Brewing","Green Mountain Beer Company","Grimm Brothers Brewhouse Taproom","Grist Brewing Company","Grist Brewing Company Lab","Großen Bart Brewery","Guanella Pass Brewing Company","Gunbarrel Brewing Company","Halfpenny Brewing Company","Hideaway Park Brewery","High Alpine Brewing Company","High Hops Brewery","Hogshead Brewery","Holidaily Brewing Company","Horse and Dragon Brewing Company","Horsefly Brewing Company","Intersect Brewing","Iron Bird Brewing Company","Ironworks Brewery &amp; Pub","J Wells Brewery","J. Fargo&rsquo;s Family Dining &amp; Micro Brewery","Jagged Mountain Craft Brewery","JAKs Brewing Company","James Peak Brewery &amp; Smokehouse","Jessup Farm Barrel House","Joyride Brewing Company","Kannah Creek Brewing Company","Kettle and Spoke Brewery","Kokopelli Beer Company","LandLocked Ales","Lariat Lodge Brewing","Launch Pad Brewery","Left Hand Brewing Company","Liquid Mechanics Brewing Company","Little Machine Beer","Living The Dream Brewing Company","Local Relic","Locavore Beer Works","Lone Tree Brewing Company","Lost Highway Brewing Company","Lowdown Brewery + Kitchen","Lumpy Ridge Brewing Company","Mad Jack&rsquo;s Mountain Brewery","Mahogany Ridge Brewery and Grill","Main Street Brewery &amp; Restaurant","Mancos Brewing Company","Manitou Brewing Company","Mash Lab Brewing","Maxline Brewing","McClellan&rsquo;s Brewing Company","MillerCoors Brewing Company","Mockery Brewing","Moffat Station Restaurant and Brewery","Moonlight Pizza &amp; Brewery","Mother Tucker Brewery","Mountain Sun Pub &amp; Brewery","Mountain Tap Brewery","Mountain Toad Brewing","Nano 108 Brewing Company","Never Summer Brewing Company","New Belgium Brewing Company","New Image Brewing Company","New Terrain Brewing Company","Nighthawk Brewery","Odd13 Brewing","Odell Brewing Company","Odyssey Beerwerks","Old Colorado Brewing Company","Open Door Brewing Company","Oskar Blues Grill &amp; Brew","Oskar Blues Tasty Weasel Tap Room (Main Brewery)","Our Mutual Friend Brewing Company","Ouray Brewery","Ourayle House Brewery (Mr. Grumpy Pants)","Outer Range Brewing Company","Pagosa Brewing Company","Palisade Brewing Company","Paradox Beer Company","Parts and Labor Brewing","PDub Brewing Company","Peak to Peak Tap &amp; Brew","Peaks N Pines Brewing Company","Periodic Brewing","Phantom Canyon Brewing Company","Pikes Peak Brewing Company","Pints Pub Brewery &amp; Freehouse","Pitchers Sports Restaurant","Platt Park Brewing Company","Powder Keg Brewing Company","Prost Brewing Company","Pug Ryan&rsquo;s Brewery","Pumphouse Brewery","Rails End Beer Company","Rally King Brewing","Ratio Beerworks","Red Leg Brewing Company","Renegade Brewing Company","Resolute Brewing Company","Revolution Brewing","Riff Raff Brewing Company","River North Brewery","Roaring Fork Beer Company","Rock Bottom Brewery ","Rock Cut Brewing Company","Rockslide Brewery &amp; Restaurant","Rocky Mountain Brewery","Rockyard American Grill &amp; Brewing Company","Royal Gorge Brewing Company","Saint Patrick&rsquo;s Brewing Company","San Luis Valley Brewing Company","Sanitas Brewing Company","Seedstock Brewery","Shamrock Brewing Company","Shine Brewing Company","Shoes &amp; Brews","Ska Brewing Company","SKEYE Brewing","Smiling Toad Brewery","Smugglers Brewpub","Snowbank Brewing","SomePlace Else Brewery","Something Brewery","Soulcraft Brewing","South Park Brewing","Southern Sun Pub &amp; Brewery","Spangalang Brewery","Spice Trade Brewing Company","Square Peg Brewerks","Station 26 Brewing Company","Steamworks Brewing Company","Storm Peak Brewing Company","Storybook Brewing","Strange Craft Beer Company","Suds Brothers Brewery II","Telluride Brewing Company","The Bakers&rsquo; Brewery","The Brew on Broadway","The Eldo Brewery &amp; Taproom","The Industrial Revolution Brewing Company","The Intrepid Sojourner Beer Project","The Peak Bistro &amp; Brewery","The Post Brewing Company","Three Barrel Brewing Company","Three Four Beer Company","Tivoli Brewing Company","Tommyknocker Brewery &amp; Pub","Trinity Brewing Company","Triple S Brewing Company","TRVE Brewing Company","Twisted Pine Brewing Company","Two Rascals Brewing","Two22 Brew","Upslope Brewing Company","Ursula Brewery","Ute Pass Brewing Company","UTurn BBQ","Vail Brewing Company","Verboten Brewing","Very Nice Brewing Company","Veteran Brothers Brewing Company","Vindication Brewing Company","Vine Street Pub &amp; Brewery","Vision Quest Brewing Company","Walter Brewing Company","WeldWerks Brewing Company","West Flanders Brewing Company","Westbound &amp; Down Brewing Company","WestFax Brewing Company"," Brewing Company","Whistle Pig Brewing Company","White Labs Tasting Room","Wibby Brewing","Wild Woods Brewery","WildEdge Brewing Collective","Wiley Roots Brewing Company","Wit&rsquo;s End Brewing Company","Wolfe Brewing Company","Wonderland Brewing Company","Wynkoop Brewing Company","Yampa Valley Brewing Company","Zephyr Brewing Company","Zuni Street Brewing Company","Zwei Brewing"
-	);
+	];
 
 	do {
 
@@ -4289,7 +4177,7 @@ function remove_sensitive_data(): string {
 
 	$result = "";
 
-	$first_name_array = array(
+	$first_name_array = [
 	"Herbert",
 	"John",
 	"Kvothe",
@@ -4317,9 +4205,9 @@ function remove_sensitive_data(): string {
 	"Zak",
 	"Neil",
 	"Tyson"
-	);
+	];
 
-	$last_name_array = array(
+	$last_name_array = [
 	"Herbert",
 	"Johnson",
 	"Hull",
@@ -4351,13 +4239,13 @@ function remove_sensitive_data(): string {
 	"Humboldt",
 	"Gould",
 	"Frasier"
-	);
+	];
 
 	$query_check_user = sprintf("SELECT * FROM %s", $prefix."users");
 	$check_user = mysqli_query($connection,$query_check_user) or die (mysqli_error($connection));
 	$row_check_user = mysqli_fetch_assoc($check_user);
 
-	$user_array = "";
+	$user_array = [];
 	$user_name = $default_to."@brewingcompetitions.com";
 
 	do {
@@ -4475,32 +4363,16 @@ function tiebreak_rule(string $rule): string {
 
 	require (LANG.'language.lang.php');
 
-	switch ($rule) {
-		case "TBTotalPlaces" :
-			$return = $best_brewer_text_006;
-			break;
-		case "TBTotalExtendedPlaces" :
-			$return = $best_brewer_text_007;
-			break;
-		case "TBFirstPlaces" :
-			$return = $best_brewer_text_008;
-			break;
-		case "TBNumEntries" :
-			$return = $best_brewer_text_009;
-			break;
-		case "TBMinScore" :
-			$return = $best_brewer_text_010;
-			break;
-		case "TBMaxScore" :
-			$return = $best_brewer_text_011;
-			break;
-		case "TBAvgScore" :
-			$return = $best_brewer_text_012;
-			break;
-		default:
-			$return = $best_brewer_text_013;
-			break;
-	}
+	$return = match ($rule) {
+        "TBTotalPlaces" => $best_brewer_text_006,
+        "TBTotalExtendedPlaces" => $best_brewer_text_007,
+        "TBFirstPlaces" => $best_brewer_text_008,
+        "TBNumEntries" => $best_brewer_text_009,
+        "TBMinScore" => $best_brewer_text_010,
+        "TBMaxScore" => $best_brewer_text_011,
+        "TBAvgScore" => $best_brewer_text_012,
+        default => $best_brewer_text_013,
+    };
 
 	return $return;
 }
@@ -4509,7 +4381,7 @@ if (!function_exists('mime_content_type')) {
 
 	function mime_content_type(string $filename): string {
 
-		$mime_types = array(
+		$mime_types = [
 			'txt' => 'text/plain',
 			'png' => 'image/png',
 			'jpe' => 'image/jpeg',
@@ -4553,24 +4425,19 @@ if (!function_exists('mime_content_type')) {
 			'eps' => 'application/postscript',
 			'ps' => 'application/postscript',
 			*/
-		);
+		];
 
 		$ext = strtolower(array_pop(explode('.',$filename)));
+        if (array_key_exists($ext, $mime_types)) {
+            return $mime_types[$ext];
+        }
 
-		if (array_key_exists($ext, $mime_types)) {
-			return $mime_types[$ext];
-		}
-
-		elseif (function_exists('finfo_open')) {
-			$finfo = finfo_open(FILEINFO_MIME);
-			$mimetype = finfo_file($finfo, $filename);
-			finfo_close($finfo);
-			return $mimetype;
-		}
-
-		else {
-			return 'application/octet-stream';
-		}
+		if (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME);
+            $mimetype = finfo_file($finfo, $filename);
+            return $mimetype;
+        }
+        return 'application/octet-stream';
 
 	}
 
@@ -4604,11 +4471,15 @@ function style_number_const(string $style_category_number,string $style_sub,$sty
 	switch ($method) {
 		case 0:
 			if (isset($_SESSION['prefsStyleSet'])) {
-				if ($_SESSION['prefsStyleSet'] == "BA") return "";
-				elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
-				else return $style_category_number.$style_set_display_separator.$style_sub;
+				if ($_SESSION['prefsStyleSet'] == "BA") {
+                    return "";
+                }
+                if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
+                    return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
+                }
+                return $style_category_number.$style_set_display_separator.$style_sub;
 			}
-			else return "";
+            return "";
 		break;
 
 		case 1:
@@ -4659,10 +4530,10 @@ function flight_count_info($eid,$method): array {
 	$db_conn = new MysqliDb($connection);
 
 	// Get the flight where entry is assigned
-	$r = array(
+	$r = [
 		"total_flight_entries" => 0,
 		"total_flight_evals" => 0
-	);
+	];
 
 	$db_conn->where('flightEntryID', $eid);
 	$row_flight_assign = $db_conn->getOne($prefix."judging_flights", "flightNumber,flightTable");
@@ -4678,7 +4549,7 @@ function flight_count_info($eid,$method): array {
 
 		// Get eids of ALL entries in that flight
 
-		$flight_entry_ids = array();
+		$flight_entry_ids = [];
 		$flight_evals = 0;
 
 		if ($totalRows_flight_info > 0) {
@@ -4694,10 +4565,10 @@ function flight_count_info($eid,$method): array {
 			$flight_evals =+ $totalRows_flight_evals;
 		}
 
-		$r = array(
+		$r = [
 			"total_flight_entries" => $totalRows_flight_info,
 			"total_flight_evals" => $flight_evals
-		);
+		];
 		
 	}
 	
@@ -4720,7 +4591,7 @@ function user_submitted_eval($uid,$eid): array|string {
 	$totalRows_eval_sub = $db_conn->count;
 
 	if ($totalRows_eval_sub > 0) return $row_eval_sub;
-	else return "";
+    return "";
 
 }
 
@@ -4729,9 +4600,9 @@ function eval_exits($eid="default",$method="default",string $dbTable=""): array 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
-	if ($dbTable == "default") $dbTable = $prefix."evaluation";
+	if ($dbTable === "default") $dbTable = $prefix."evaluation";
 
-	$evals = array();
+	$evals = [];
 
 	if ($eid == "default") $rows_eval_exists = $db_conn->get($dbTable, null, "DISTINCT eid");
 	else {
@@ -4777,7 +4648,7 @@ function remove_accents(string $string): string {
 
     if (!preg_match('/[\x80-\xff]/', $string)) return $string;
 
-    $chars = array(
+    $chars = [
 	    // Decompositions for Latin-1 Supplement
 		chr(194).chr(170) => 'a', chr(194).chr(186) => 'o',
 		chr(195).chr(128) => 'A', chr(195).chr(129) => 'A',
@@ -5294,7 +5165,7 @@ function remove_accents(string $string): string {
 		'l·l' => 'll',
 		'Đ' => 'DJ',
 		'đ' => 'dj',
-	);
+	];
 
     $string = strtr($string, $chars);
 
@@ -5317,25 +5188,16 @@ function truncate_string(string $string, int $limit, string $break=".", string $
 	return $string;
 }
 
-function place_heirarchy(string $place): string|false {
-	switch ($place) {
-		case "1": return "5";
-			break;
-
-		case "2": return "4";
-			break;
-
-		case "3": return "3";
-			break;
-
-		case "4": return "2";
-			break;
-
-		case "5": return "1";
-			break;
-	}
-
-	return false;
+function place_heirarchy(string $place): string|false
+{
+    return match ($place) {
+        "1" => "5",
+        "2" => "4",
+        "3" => "3",
+        "4" => "2",
+        "5" => "1",
+        default => false,
+    };
 }
 
 function normalizeClubs(string $string): string {
@@ -5353,7 +5215,7 @@ function clean_up_text(string $text): string {
 }
 
 function prep_redirect_link(string $link): string {
-	$pattern = array('\'', '"');
+	$pattern = ['\'', '"'];
 	$link = str_replace($pattern, "", $link);
 	$link = sterilize($link);
 	$link = stripslashes($link);
@@ -5395,14 +5257,14 @@ function display_array_content_style(array $arrayname,$method,string $base_url):
 function admin_relocate($user_level,string $go,string $referrer): string {
 	$list = FALSE;
 	if (strstr($referrer,"list")) $list = TRUE;
-	if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
-	elseif (($user_level <= 1) && ($go == "entries") && ($list)) $output = "list";
+	if (($user_level <= 1) && ($go === "entries") && (!$list)) $output = "admin";
+	elseif (($user_level <= 1) && ($go === "entries") && ($list)) $output = "list";
 	else $output = "list";
 	return $output;
 }
 
 function scrub_filename(string $filename): string {
-	$scrub_characters = array("&" => "", "?" => "", "=" => "", "%" => "", "\"" => "", "'" => "", "$" => "", "*" => "");
+	$scrub_characters = ["&" => "", "?" => "", "=" => "", "%" => "", "\"" => "", "'" => "", "$" => "", "*" => ""];
 	$filename = strtr($filename, $scrub_characters);
 	return $filename;
 }
@@ -5456,7 +5318,7 @@ function clean_filename(string $filename): string {
 
 function create_bs_alert(string $alert_id,string $alert_type,string $alert_header="",string $alert_body="",string $alert_icon="",string $alert_dismiss="",bool $alert_stacked=FALSE): string {
 
-    if ($alert_dismiss == "no-dismiss") $alert_dismissable = "";
+    if ($alert_dismiss === "no-dismiss") $alert_dismissable = "";
     else $alert_dismissable = "alert-dismissible";
 
     if ($alert_stacked) $alert_added_classes = "alert-stacked";
@@ -5487,7 +5349,7 @@ function create_bs_popover(string $popover_id,string $popover_class,string $popo
     // $popover_type can be "button" (typically on its own), "link" or "icon" (typically inline with text)  
     
     // Button
-    if ($popover_type == "button") $popover_class .= " btn btn-primary"; 
+    if ($popover_type === "button") $popover_class .= " btn btn-primary"; 
     $popover_output = "<a class=\"".$popover_class."\" ";
     $popover_output .= "href=\"#\" ";
     $popover_output .= "role=\"button\" ";
@@ -5498,8 +5360,8 @@ function create_bs_popover(string $popover_id,string $popover_class,string $popo
     $popover_output .= "data-html=\"true\" ";
     $popover_output .= "data-content=\"".$popover_body."\"";
     $popover_output .= ">";
-    if ($popover_type == "icon") $popover_output .= "<i class=\"".$popover_icon."\"></i>";
-    elseif (($popover_type == "button") && (!empty($popover_icon))) {
+    if ($popover_type === "icon") $popover_output .= "<i class=\"".$popover_icon."\"></i>";
+    elseif (($popover_type === "button") && (!empty($popover_icon))) {
         $popover_output .= $popover_title." <i class=\"".$popover_icon."\"></i>";
     }
     else $popover_output .= $popover_link_text;
@@ -5547,16 +5409,16 @@ function simpleDecrypt(string $data,string $key,string $salt): string|false {
 	$encryption_key = base64_decode($key);
 	
 	if (HOSTED) {
-		list($encrypted_data, $iv) = explode('::', base64_decode($data));
-		$iv = $iv ?? "";
+		[$encrypted_data, $iv] = explode('::', base64_decode($data));
+		$iv ??= "";
 		$decrypted_data = openssl_decrypt($encrypted_data, 'AES-128-CBC', $encryption_key, 0, $iv);
 	}
 	
 	else {
 		
 		if (function_exists('openssl_decrypt')) {
-			list($encrypted_data, $iv) = explode('::', base64_decode($data));
-			$iv = $iv ?? "";
+			[$encrypted_data, $iv] = explode('::', base64_decode($data));
+			$iv ??= "";
 			$decrypted_data = openssl_decrypt($encrypted_data, 'AES-128-CBC', $encryption_key, 0, $iv);
 		}
 

@@ -469,7 +469,7 @@ if (!check_update("brewerDiscount", $prefix."brewer")) {
 	$row_archive_1200 = mysqli_fetch_assoc($archive_1200);
 	$totalRows_archive_1200 = mysqli_num_rows($archive_1200);
 
-	$a_1200 = array();
+	$a_1200 = [];
 	
 	if ($totalRows_archive_1200 > 0) {
 		do { $a_1200[] = $row_archive_1200['archiveSuffix']; } while ($row_archive_1200 = mysqli_fetch_assoc($archive_1200));
@@ -477,7 +477,7 @@ if (!check_update("brewerDiscount", $prefix."brewer")) {
 		foreach ($a_1200 as $suffix) {
 			
 			$suffix = rtrim($suffix, "_"); // HACK - could not isolate code where there's an extra "_"
-			if (strpos($suffix,'_') !== false) $suffix = $suffix;
+			if (str_contains($suffix,'_')) $suffix = $suffix;
 			//if (substr($suffix,0,1) == '_') !== false) $suffix = "_".$suffix;
 			else $suffix = "_".$suffix;
 			

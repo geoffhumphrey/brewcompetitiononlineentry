@@ -438,7 +438,7 @@ if ($section != "admin") {
 	if ($archive_sidebar) {
 
 		if ((isset($_SESSION['contestWinnerLink'])) && (!empty($_SESSION['contestWinnerLink']))) {
-			if ($archive_sidebar_count == 0) $archive_sidebar_content .= sprintf("<li><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s <i class=\"fa fa-fw fa-external-link-alt\"></i></a></li>",$_SESSION['contestWinnerLink'],$label_view);
+			if ($archive_sidebar_count === 0) $archive_sidebar_content .= sprintf("<li><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s <i class=\"fa fa-fw fa-external-link-alt\"></i></a></li>",$_SESSION['contestWinnerLink'],$label_view);
 			else $archive_sidebar_content .= sprintf("<li><i class=\"fa fa-fw fa-external-link-alt text-silver\"></i> <a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s</a></li>",$_SESSION['contestWinnerLink'],$label_more_info);
 		}
 		

@@ -64,15 +64,15 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         <label for="brewerBreweryProd" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_organization." ".$label_yearly_volume; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="1 - 10,000" id="brewerBreweryProd_5" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "1 - 10,000") !== false)) echo "CHECKED"; if (($action == "add") || (empty($brewerBreweryInfo))) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="1 - 10,000" id="brewerBreweryProd_5" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "1 - 10,000"))) echo "CHECKED"; if (($action == "add") || (empty($brewerBreweryInfo))) echo "CHECKED"; ?> />
                 <label>1 - 10,000 <?php echo $label_gallons; ?></label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="10,001 - 250,000" id="brewerBreweryProd_6" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "10,001 - 250,000") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="10,001 - 250,000" id="brewerBreweryProd_6" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "10,001 - 250,000"))) echo "CHECKED"; ?> />
                 <label>10,001 - 250,000 <?php echo $label_gallons; ?></label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="250,001+" id="brewerBreweryProd_7" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "250,001+") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="250,001+" id="brewerBreweryProd_7" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "250,001+"))) echo "CHECKED"; ?> />
                 <label>250,001+ <?php echo $label_gallons; ?></label>
             </div>
             <div>
@@ -87,23 +87,23 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         <label id="brewery-prod-label" for="brewerBreweryProd" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i id="brewery-prod-label-icon" class="fa fa-star me-1"></i> <strong><?php echo $label_organization." ".$label_yearly_volume; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="1 - 5,000" id="brewerBreweryProd_0" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "1 - 5,000") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="1 - 5,000" id="brewerBreweryProd_0" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "1 - 5,000"))) echo "CHECKED"; ?> />
                 <label>1 - 5,000</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="5,001 - 15,000" id="brewerBreweryProd_1" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "5,001 - 15,000") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="5,001 - 15,000" id="brewerBreweryProd_1" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "5,001 - 15,000"))) echo "CHECKED"; ?> />
                 <label>5,001 - 15,000</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="15,001 - 60,000" id="brewerBreweryProd_2" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "15,001 - 60,000") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="15,001 - 60,000" id="brewerBreweryProd_2" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "15,001 - 60,000"))) echo "CHECKED"; ?> />
                 <label>15,001 - 60,000</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="60,001 - 599,999" id="brewerBreweryProd_3" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "60,001 - 599,999") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="60,001 - 599,999" id="brewerBreweryProd_3" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "60,001 - 599,999"))) echo "CHECKED"; ?> />
                 <label>60,001 - 599,999</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="6,000,000+" id="brewerBreweryProd_4" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "6,000,000+") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="6,000,000+" id="brewerBreweryProd_4" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "6,000,000+"))) echo "CHECKED"; ?> />
                 <label>6,000,000+</label>
             </div>
             <div>
@@ -113,11 +113,11 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
 
             <div id="brewerBreweryProdMeas" class="mt-2">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_barrels; ?>" id="brewerBreweryProdMeas_0" <?php if (($action == "edit") && (strpos($brewerBreweryProd, $label_barrels) !== false)) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />
+                    <input class="form-check-input" type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_barrels; ?>" id="brewerBreweryProdMeas_0" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, $label_barrels))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />
                     <label class="form-check-label"><?php echo $label_barrels; ?></label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_hectoliters; ?>" id="brewerBreweryProdMeas_1" <?php if (($action == "edit") && (strpos($brewerBreweryProd, $label_hectoliters) !== false)) echo "CHECKED"; ?> />
+                    <input class="form-check-input" type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_hectoliters; ?>" id="brewerBreweryProdMeas_1" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, $label_hectoliters))) echo "CHECKED"; ?> />
                     <label class="form-check-label"><?php echo $label_hectoliters; ?></label>
                 </div>
             </div>

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * application.
  */
 
-define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
+define('ROOT',__DIR__.DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('SSO',ROOT.'sso'.DIRECTORY_SEPARATOR);
 define('EVALS',ROOT.'eval'.DIRECTORY_SEPARATOR);
@@ -148,7 +148,7 @@ else ini_set('display_errors','Off');
 require_once (LIB.'sanitize.lib.php');
 
 if (HOSTED) {
-    
+
     $installation_id = md5(__FILE__);
     $session_expire_after = 60;
 
@@ -161,14 +161,14 @@ if (HOSTED) {
      * can be false-flagged by webhost security packages like Immunify.
      * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1609
      */
-    
+
     $current_url_to_parse = 'http://';
     if (is_https()) $current_url_to_parse = 'https://';  
     $current_url_to_parse .= $_SERVER['SERVER_NAME'];
-    
+
     $current_parsed_url = parse_url($current_url_to_parse);
     $current_parsed_host = explode('.', $current_parsed_url['host']);
-    
+
     $base_url_hosted = 'http://';
     if (is_https()) $base_url_hosted = 'https://';
     $base_url_hosted .= $current_parsed_host[1].".".$current_parsed_host[2]."/";
@@ -185,7 +185,7 @@ if (HOSTED) {
 if (empty($installation_id)) $prefix_session = md5(__FILE__);
 else $prefix_session = md5($installation_id);
 
-if (session_status() == PHP_SESSION_NONE) {
+if (session_status() === PHP_SESSION_NONE) {
     // **PREVENTING SESSION HIJACKING**
     // Prevents javascript XSS attacks aimed to steal the session ID
     ini_set('session.cookie_httponly', 1);

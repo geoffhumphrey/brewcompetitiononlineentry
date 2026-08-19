@@ -29,7 +29,7 @@ $token_valid = "";
 // Build Messages
 if (isset($_SESSION['loginUsername'])) $message1 .= sprintf("<p class=\"lead\">%s</p>",$login_text_000);
 
-if ((($action == "default") || ($action == "login") || ($action == "logout")) && (!isset($_SESSION['loginUsername']))) $login_form_display = TRUE; 
+if ((in_array($action, ["default", "login", "logout"])) && (!isset($_SESSION['loginUsername']))) $login_form_display = TRUE; 
 if (($action == "forgot") && ($go == "password") && (!isset($_SESSION['loginUsername']))) $forget_form_display = TRUE;
 if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUsername']))) { 
 	
@@ -55,7 +55,7 @@ if (($action == "reset-password") && ($token != "default")) {
 	$token_valid = verify_token($token,time());
 	
 	// If valid, show the password reset with token form
-	if ($token_valid == 0) { 
+	if ($token_valid === 0) { 
 		
 		if (!isset($_SESSION['loginUsername'])) {
 			$reset_token_form_display = TRUE;
@@ -67,10 +67,10 @@ if (($action == "reset-password") && ($token != "default")) {
 	else $primary_links .= "<p class=\"lead\"><a href=\"".$base_url."index.php?section=login&amp;go=password&amp;action=forgot\">".$login_text_004."</a> <a href=\"#\" role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">".ucfirst(strtolower($label_log_in))."?</a></p>";
 	
 	// If not valid, show an error
-	if ($token_valid == 1) $message3 .= sprintf("<div class='alert alert-warning'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div>",$login_text_020);
+	if ($token_valid === 1) $message3 .= sprintf("<div class='alert alert-warning'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div>",$login_text_020);
 	
 	// If expired, show an error
-	if ($token_valid == 2) $message3 .= sprintf("<div class='alert alert-warning'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div>",$login_text_021);
+	if ($token_valid === 2) $message3 .= sprintf("<div class='alert alert-warning'><span class=\"fa fa-lg fa-exclamation-circle\"></span> %s</div>",$login_text_021);
 	
 }
 
@@ -147,11 +147,11 @@ echo $primary_links;
 <?php if ($verify_form_display) {
 
 	$secret_question = "";
-	
+
 	if ((empty($message2)) || (empty($msg))) { 
-	
+
 		if ($row_userCheck) {
-			
+
 			if ($row_userCheck['userQuestion'] == $login_text_008) {
 				$secret_question = $login_text_009; 
 				if ($_SESSION['prefsContact'] == "Y") $secret_question .= sprintf(" %s",$login_text_010);

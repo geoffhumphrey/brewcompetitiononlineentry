@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 #
 # This is a test program for the portable PHP password hashing framework.
 #
@@ -6,7 +8,7 @@
 # See PasswordHash.php for more information.
 #
 
-require 'PasswordHash.php';
+require __DIR__ . '/PasswordHash.php';
 
 header('Content-type: text/plain');
 
@@ -64,7 +66,7 @@ $check = $t_hasher->CheckPassword($wrong, $hash);
 if (!$check) $ok++;
 print "Check wrong: '" . $check . "' (should be '0' or '')\n";
 
-if ($ok == 6)
+if ($ok === 6)
 	print "All tests have PASSED\n";
 else
 	print "Some tests have FAILED\n";

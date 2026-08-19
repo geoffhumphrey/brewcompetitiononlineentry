@@ -60,12 +60,12 @@ $secondary_page_info .= "<p>According to <a class='hide-loader' href='https://ww
 
 // Judging Locations & Dates List
 if ($section != "step5") {
-	
+
 	if (($action == "default") && ($totalRows_judging_locs > 0)) {
-		
+
 		$output_datatables_aaSorting = "[2,'asc']";
 		$output_datatables_aoColumns = "null, null, null, { \"asSorting\": [  ] }";
-		
+
 		$output_datatables_head .= "<tr>";
 		$output_datatables_head .= "<th>Name</th>";
 		$output_datatables_head .= "<th>Start Date/Time</th>";
@@ -226,7 +226,7 @@ if (($output_add_edit) && ($msg != 9)) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
+			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (!str_contains($section, "step")) echo $current_date." ".$current_time; ?>" required>
 			<span class="input-group-addon" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block">Provide an start date and time for the session.</span>

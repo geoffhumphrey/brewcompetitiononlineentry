@@ -74,9 +74,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 // MysqliDb is not PSR-4 autoloadable (vendor file); load it so the typed
 // data layer (src/Connection.php, repositories) works under PHPUnit. The
 // known insertMulti() deprecation is silenced only for this require.
-set_error_handler(static function (int $severity, string $message, string $file): bool {
-    return str_contains($message, 'Implicitly marking parameter $dataKeys as nullable');
-});
+set_error_handler(static fn(int $severity, string $message, string $file): bool => str_contains($message, 'Implicitly marking parameter $dataKeys as nullable'));
 try {
     require_once CONFIG . 'MysqliDb.php';
 } finally {

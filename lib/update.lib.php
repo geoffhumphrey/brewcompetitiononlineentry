@@ -10,8 +10,7 @@ function check_setup(string $tablename, string $database): bool {
 	$db_conn->where('table_name', $tablename);
 	$row_log = $db_conn->getOne('information_schema.tables', 'COUNT(*) AS count');
 
-	if ($row_log['count'] == 0) return FALSE;
-	else return TRUE;
+	return $row_log['count'] != 0;
 
 }
 
@@ -25,8 +24,7 @@ function check_update(string $column_name, string $table_name): bool {
 	$column_name_clean = preg_replace("/[^a-zA-Z0-9_]+/", "", $column_name);
 	$rows_log = $db_conn->rawQuery("SHOW COLUMNS FROM `".$table_name."` LIKE '".$column_name_clean."'");
 
-    if (count($rows_log) > 0) return TRUE;
-	else return FALSE;
+    return count($rows_log) > 0;
 
 }
 
@@ -53,8 +51,7 @@ function check_new_style(string $style1, string $style2, string $style3, $mode="
 	$db_conn->where('brewStyle', $style3);
 	$row_new_style = $db_conn->getOne($styles_db_table, "COUNT(*) as 'count'");
 
-	if ($row_new_style['count'] > 0) return TRUE;
-	else return FALSE;
+	return $row_new_style['count'] > 0;
 
 }
 
@@ -112,7 +109,7 @@ function normalize_competition_ts($value, $timezone_offset) {
 	if (($old <= 0) || (strlen((string) $old) !== 10)) return $value;
 
 	// The "no winner date" sentinel is not a real date.
-	if ($old == 2145916800) return $value;
+	if ($old === 2145916800) return $value;
 
 	if (!function_exists('to_utc_epoch')) return $value;
 

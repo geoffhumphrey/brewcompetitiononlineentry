@@ -19,33 +19,33 @@ $table_body = "";
 foreach ($rows_brewer as $row_brewer) {
 
 	include (DB.'output_participant_summary.db.php');
-	
-	$entry_numbers = array();
-	$judging_numbers = array();
+
+	$entry_numbers = [];
+	$judging_numbers = [];
 	unset($entry_numbers);
 	unset($judging_numbers);
-	
+
 	if ($totalRows_log > 0) {
-		
+
 		$judging_numbers_output = "";
 		$entry_numbers_output = "";
-		
+
 		foreach ($rows_log as $row_log) {
 
 			$entry_numbers[] = sprintf("%06s",$row_log['id']);
 			$judging_numbers[] = sprintf("%06s",$row_log['brewJudgingNumber']);
 
 		}
-		
+
 		$entry_numbers_output = implode(", ",$entry_numbers);
 		$judging_numbers_output = implode(", ",$judging_numbers);
-		
+
 		$table_body .= "<tr>";
 		$table_body .= "<td width=\"1%\" nowrap>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
 		$table_body .= "<td>".$entry_numbers_output."</td>";
 		$table_body .= "<td>".$judging_numbers_output."</td>";
 		$table_body .= "</tr>";
-		
+
  	} // END entries section
 
 }

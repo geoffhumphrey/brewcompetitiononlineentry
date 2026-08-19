@@ -48,25 +48,25 @@ if ($msg != "default") {
    * the other three.
    */
 
-  $info_msg_alerts = array(11,12,99);
-  $warning_msg_alerts = array(0,4,6,8,37,10);
-  $danger_msg_alerts = array(3,13,15,18,19,24,27,30,98,755);
-  $success_msg_alerts = array();
+  $info_msg_alerts = [11,12,99];
+  $warning_msg_alerts = [0,4,6,8,37,10];
+  $danger_msg_alerts = [3,13,15,18,19,24,27,30,98,755];
+  $success_msg_alerts = [];
 
-  $success_msg = array();
-  $info_msg = array();
-  $warning_msg = array();
-  $danger_msg = array();
+  $success_msg = [];
+  $info_msg = [];
+  $warning_msg = [];
+  $danger_msg = [];
 
   if ($section == "login") {
-    $warning_msg = array(1,4,7);
-    $danger_msg = array(1);
+    $warning_msg = [1,4,7];
+    $danger_msg = [1];
   }
 
   if ($section == "list") {
-    $success_msg = array(3,10);
-    $danger_msg = array(5,11,12);
-    $warning_msg = array(8,9);
+    $success_msg = [3,10];
+    $danger_msg = [5,11,12];
+    $warning_msg = [8,9];
     unset($danger_msg_alerts[0]);
     unset($warning_msg_alerts[3]);
     unset($info_msg_alerts[0]);
@@ -76,35 +76,35 @@ if ($msg != "default") {
   if ($section == "contact") $danger_msg[] = 2;
 
   if ($section == "pay") {
-    $success_msg = array(10,12);
-    $danger_msg = array(11);
+    $success_msg = [10,12];
+    $danger_msg = [11];
     unset($warning_msg_alerts[3]);
     unset($info_msg_alerts[0]);
     unset($info_msg_alerts[1]);
   }
 
   if ($section == "user") {
-    $warning_msg = array(1);
-    $danger_msg = array(2);
+    $warning_msg = [1];
+    $danger_msg = [2];
   }
 
   if ($section == "evaluation") {
-    $success_msg = array(3);
+    $success_msg = [3];
     unset($danger_msg_alerts[0]);
   }
 
   if ($section == "register") {
-    $danger_msg = array(1,2,5,6);
+    $danger_msg = [1,2,5,6];
     unset($warning_msg_alerts[2]);
   }
 
   if ($section == "brew") {
-    $warning_msg = array(4);
+    $warning_msg = [4];
   }
 
   if ($section == "admin") {
-    $success_msg = array(4);
-    $danger_msg = array(8,10);
+    $success_msg = [4];
+    $danger_msg = [8,10];
     unset($warning_msg_alerts[1]);
     unset($warning_msg_alerts[3]);
     unset($warning_msg_alerts[5]);

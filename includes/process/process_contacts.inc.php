@@ -22,7 +22,7 @@ define('MIN_KEY_PRESSES', 15); // Minimum key presses expected
 if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	if ($action == "email") {
@@ -69,31 +69,25 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		    header($redirect_go_to);
 		    exit();
 		}
-
-		else {
-
-			$form_loaded_time = intval($_POST['form_loaded_time']) / 1000; // Convert to seconds
-			$current_time = time();
-			$time_taken = $current_time - $form_loaded_time;
-
-			// Too fast - likely a bot; silently fail
-			if ($time_taken < MIN_SUBMISSION_TIME) {
+        $form_loaded_time = intval($_POST['form_loaded_time']) / 1000;
+        // Convert to seconds
+        $current_time = time();
+        $time_taken = $current_time - $form_loaded_time;
+        // Too fast - likely a bot; silently fail
+        if ($time_taken < MIN_SUBMISSION_TIME) {
 			    $redirect = $base_url."index.php?view=your+mom&msg=19";
 			    $redirect = prep_redirect_link($redirect);
 			    $redirect_go_to = sprintf("Location: %s", $redirect);
 			    header($redirect_go_to);
 			    exit();
 			}
-
-			if ($time_taken > MAX_SUBMISSION_TIME) {
+        if ($time_taken > MAX_SUBMISSION_TIME) {
 			    $redirect = $base_url."index.php?msg=3";
 			    $redirect = prep_redirect_link($redirect);
 			    $redirect_go_to = sprintf("Location: %s", $redirect);
 			    header($redirect_go_to);
 			    exit();
 			}
-
-		}
 
 		// Check for spam patterns
 		$spam_patterns = [
@@ -170,10 +164,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				// Verify reCAPTCHA response
 				if ($captcha_type == 1) {
 
-					$recaptcha_data = array(
+					$recaptcha_data = [
 						'secret' => $private_captcha_key,
 						'response' => $_POST['g-recaptcha-response']
-					);
+					];
 
 					$verify = curl_init();
 					curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
@@ -182,7 +176,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
 
 					$response = curl_exec($verify);
-					curl_close($verify);
 					$response_data = json_decode($response);
 
 					if ((!empty($response_data)) && ($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
@@ -191,10 +184,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				// Verify hCAPTCHA response
 				if ($captcha_type == 2) {
 
-					$hCAPTCHA_data = array(
+					$hCAPTCHA_data = [
 						'secret' => $private_captcha_key,
 						'response' => $_POST['h-captcha-response']
-					);
+					];
 					
 					$verify = curl_init();
 					curl_setopt($verify, CURLOPT_URL, "https://hcaptcha.com/siteverify");
@@ -217,11 +210,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		if (!$captcha_success) {
 
-			setcookie("to", $_POST['to'], 0, "/"); // $id of contact record in contacts table
-			setcookie("from_email", strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL)), 0, "/");
-			setcookie("from_name", sterilize(ucwords($_POST['from_name'])), 0, "/");
-			setcookie("subject", sterilize(ucwords($_POST['subject'])), 0, "/");
-			setcookie("message", sterilize($_POST['message']), 0, "/");
+			setcookie("to", $_POST['to'], ['expires' => 0, 'path' => "/"]); // $id of contact record in contacts table
+			setcookie("from_email", strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL)), ['expires' => 0, 'path' => "/"]);
+			setcookie("from_name", sterilize(ucwords($_POST['from_name'])), ['expires' => 0, 'path' => "/"]);
+			setcookie("subject", sterilize(ucwords($_POST['subject'])), ['expires' => 0, 'path' => "/"]);
+			setcookie("message", sterilize($_POST['message']), ['expires' => 0, 'path' => "/"]);
 			
 			$redirect = $base_url."index.php?msg=20";
 			$redirect = prep_redirect_link($redirect);
@@ -329,19 +322,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		if ($action == "add") {
 
 			$update_table = $prefix."contacts";
-			$data = array(
+			$data = [
 				'contactFirstName' => blank_to_null($contactFirstName),
 				'contactLastName' => blank_to_null($contactLastName),
 				'contactPosition' => blank_to_null($contactPosition),
 				'contactEmail' => blank_to_null($contactEmail)
-			);
+			];
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$insertGoTo = $_POST['relocate']."&msg=3";
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			$insertGoTo = prep_redirect_link($insertGoTo);
 			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
@@ -351,12 +344,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		if ($action == "edit") {
 
 			$update_table = $prefix."contacts";
-			$data = array(
+			$data = [
 				'contactFirstName' => blank_to_null($contactFirstName),
 				'contactLastName' => blank_to_null($contactLastName),
 				'contactPosition' => blank_to_null($contactPosition),
 				'contactEmail' => blank_to_null($contactEmail)
-			);			
+			];			
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -364,7 +357,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$updateGoTo = $_POST['relocate']."&msg=3";
 			}
 			
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			$updateGoTo = prep_redirect_link($updateGoTo);
 			$redirect_go_to = sprintf("Location: %s", $updateGoTo);

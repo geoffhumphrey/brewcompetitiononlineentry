@@ -26,15 +26,15 @@ if (!check_update("update_summary", $prefix."bcoem_sys")) {
 
 // Clear the version_date and data_check to not throw error.
 $update_table = $prefix."bcoem_sys";
-$data = array(
+$data = [
 	'version_date' => NULL,
 	'data_check' => date('Y-m-d H:i:s', time()),
 	'update_summary' => NULL
-);
+];
 $db_conn->where ('id', 1);
 $db_conn->update ($update_table, $data);
 
-$versions = array(
+$versions = [
 	"1.3.0.4" => 0,
 	"1.3.1.0" => 0,
 	"1.3.2.0" => 0,
@@ -80,7 +80,7 @@ $versions = array(
 	"3.0.3.0" => 34,
 	"3.0.4.0" => 35,
 	"3.1.0.0" => 36
-);
+];
 
 $pre_update_version_index = $versions[$row_pv['version']];
 $post_update_version_index = $versions[$current_version];
@@ -303,7 +303,7 @@ if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
 	}
 
 	$update_table = $prefix."bcoem_sys";
-	$data = array('setup_last_step' => 8);
+	$data = ['setup_last_step' => 8];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v2180_update .= "<li>Setup last step value updated.</li>";
 	else {
@@ -353,17 +353,17 @@ $update_table = $styles_db_table;
 
 if (!$style_id_auto_increment) {
 
-	$data = array(
+	$data = [
 		'brewStyle' => 'Historical Beer',
 		'brewStyleTags' => 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented',
 		'brewStyleEntry' => 'Catch-all category for other historical beers that have NOT been defined by the BJCP. The entrant must provide a description for the judges of the historical style that is NOT one of the currently defined historical style examples provided by the BJCP. Currently defined examples are: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it.'
-	);
+	];
 	$db_conn->where ('id', 184);
 	$db_conn->update ($update_table,$data);
 
-	$data = array(
+	$data = [
 		'brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%%, standard: 5.0-7.5%%, double: 7.5-9.5%%); if no strength is specified, standard will be assumed. This subcategory is a catch-all for entries that DO NOT fit into one of the defined BJCP Specialty IPA types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, or Red IPA. Entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). If the entry falls into one of the currently defined types (Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA), it should be entered into that salient subcategory type.'
-	);
+	];
 	$db_conn->where ('id', 163);
 	$db_conn->update ($update_table,$data);
 
@@ -372,8 +372,8 @@ if (!$style_id_auto_increment) {
 // Add new specialty IPA and historical styles to styles table if not present
 if (!check_new_style("27","A1","Gose")) {
 	
-	$data = array('brewStyleGroup' => '27',	'brewStyleNum' => 'A1',	'brewStyle' => 'Gose', 'brewStyleCategory' => 'Historical Beer', 'brewStyleVersion' => 'BJCP2015', 'brewStyleOG' => '1.036', 'brewStyleOGMax' => '1.056', 'brewStyleFG' => '1.006', 'brewStyleFGMax' => '1.010', 'brewStyleABV' => '4.2', 'brewStyleABVMax' => '4.8', 'brewStyleIBU' => '5', 'brewStyleIBUMax' => '12', 'brewStyleSRM' => '3', 'brewStyleSRMMax' => '4', 'brewStyleType' => '1', 'brewStyleInfo' => 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/', 'brewStyleActive' => 'Y', 'brewStyleOwn' => 'bcoe', 'brewStyleReqSpec' => '0', 'brewStyleStrength' => '0', 'brewStyleCarb' => '0', 'brewStyleSweet' => '0', 'brewStyleTags' => 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice','brewStyleComEx' => 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', 'brewStyleEntry' => NULL
-	);
+	$data = ['brewStyleGroup' => '27',	'brewStyleNum' => 'A1',	'brewStyle' => 'Gose', 'brewStyleCategory' => 'Historical Beer', 'brewStyleVersion' => 'BJCP2015', 'brewStyleOG' => '1.036', 'brewStyleOGMax' => '1.056', 'brewStyleFG' => '1.006', 'brewStyleFGMax' => '1.010', 'brewStyleABV' => '4.2', 'brewStyleABVMax' => '4.8', 'brewStyleIBU' => '5', 'brewStyleIBUMax' => '12', 'brewStyleSRM' => '3', 'brewStyleSRMMax' => '4', 'brewStyleType' => '1', 'brewStyleInfo' => 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/', 'brewStyleActive' => 'Y', 'brewStyleOwn' => 'bcoe', 'brewStyleReqSpec' => '0', 'brewStyleStrength' => '0', 'brewStyleCarb' => '0', 'brewStyleSweet' => '0', 'brewStyleTags' => 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice','brewStyleComEx' => 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', 'brewStyleEntry' => NULL
+	];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Gose style added to BJCP 2015 styles.</li>";
 	else {
@@ -385,7 +385,7 @@ if (!check_new_style("27","A1","Gose")) {
 
 if (!check_new_style("27","A2","Piwo Grodziskie")) {
 
-	$data =  array('brewStyleGroup' => '27','brewStyleNum' => 'A2','brewStyle' => 'Piwo Grodziskie','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.028','brewStyleOGMax' => '1.032','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '25','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A low-gravity, highly-carbonated, light bodied ale combining an oak-smoked flavor with a clean hop bitterness. Highly sessionable.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented,lagered, north-america, historical-style, pilsner-family, bitter, hoppy','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
+	$data =  ['brewStyleGroup' => '27','brewStyleNum' => 'A2','brewStyle' => 'Piwo Grodziskie','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.028','brewStyleOGMax' => '1.032','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '25','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A low-gravity, highly-carbonated, light bodied ale combining an oak-smoked flavor with a clean hop bitterness. Highly sessionable.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented,lagered, north-america, historical-style, pilsner-family, bitter, hoppy','brewStyleComEx' => NULL,'brewStyleEntry' => NULL];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Piwo Grodziskie style added to BJCP 2015 styles.</li>";
 	else {
@@ -397,7 +397,7 @@ if (!check_new_style("27","A2","Piwo Grodziskie")) {
 
 if (!check_new_style("27","A3","Lichtenhainer")) {
 
-	$data = array('id' => '229','brewStyleGroup' => '27','brewStyleNum' => 'A3','brewStyle' => 'Lichtenhainer','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.032','brewStyleOGMax' => '1.040','brewStyleFG' => '1.004','brewStyleFGMax' => '1.008','brewStyleABV' => '3.5','brewStyleABVMax' => '4.7','brewStyleIBU' => '5','brewStyleIBUMax' => '12','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A sour, smoked, lower-gravity historical German wheat beer. Complex yet refreshing character due to high attenuation and carbonation, along with low bitterness and moderate sourness. ','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, smoke','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
+	$data = ['id' => '229','brewStyleGroup' => '27','brewStyleNum' => 'A3','brewStyle' => 'Lichtenhainer','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.032','brewStyleOGMax' => '1.040','brewStyleFG' => '1.004','brewStyleFGMax' => '1.008','brewStyleABV' => '3.5','brewStyleABVMax' => '4.7','brewStyleIBU' => '5','brewStyleIBUMax' => '12','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A sour, smoked, lower-gravity historical German wheat beer. Complex yet refreshing character due to high attenuation and carbonation, along with low bitterness and moderate sourness. ','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, smoke','brewStyleComEx' => NULL,'brewStyleEntry' => NULL];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Lichtenhainer style added to BJCP 2015 styles.</li>";
 	else {
@@ -409,7 +409,7 @@ if (!check_new_style("27","A3","Lichtenhainer")) {
 
 if (!check_new_style("27","A4","Roggenbier")) {
 
-	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A4','brewStyle' => 'Roggenbier','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.046','brewStyleOGMax' => '1.056','brewStyleFG' => '1.010','brewStyleFGMax' => '1.014','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '10','brewStyleIBUMax' => '20','brewStyleSRM' => '14','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'A dunkelweizen made with rye rather than wheat, but with a greater body and light finishing hops.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, amber-color, top-fermenting, central-europe, historical-style, wheat-beer-family','brewStyleComEx' => 'Thurn und Taxis Roggen','brewStyleEntry' => NULL);
+	$data = ['brewStyleGroup' => '27','brewStyleNum' => 'A4','brewStyle' => 'Roggenbier','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.046','brewStyleOGMax' => '1.056','brewStyleFG' => '1.010','brewStyleFGMax' => '1.014','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '10','brewStyleIBUMax' => '20','brewStyleSRM' => '14','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'A dunkelweizen made with rye rather than wheat, but with a greater body and light finishing hops.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, amber-color, top-fermenting, central-europe, historical-style, wheat-beer-family','brewStyleComEx' => 'Thurn und Taxis Roggen','brewStyleEntry' => NULL];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Roggenbier style added to BJCP 2015 styles.</li>";
 	else {
@@ -421,7 +421,7 @@ if (!check_new_style("27","A4","Roggenbier")) {
 
 if (!check_new_style("27","A5","Sahti")) {
 
-	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A5','brewStyle' => 'Sahti','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.076','brewStyleOGMax' => '1.120','brewStyleFG' => '1.016','brewStyleFGMax' => '1.020','brewStyleABV' => '7.0','brewStyleABVMax' => '11.0','brewStyleIBU' => '7','brewStyleIBUMax' => '15','brewStyleSRM' => '4','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A sweet, heavy, strong traditional Finnish beer with a rye, juniper, and juniper berry flavor and a strong banana-clove yeast character.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, centraleurope, historical-style, spice','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
+	$data = ['brewStyleGroup' => '27','brewStyleNum' => 'A5','brewStyle' => 'Sahti','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.076','brewStyleOGMax' => '1.120','brewStyleFG' => '1.016','brewStyleFGMax' => '1.020','brewStyleABV' => '7.0','brewStyleABVMax' => '11.0','brewStyleIBU' => '7','brewStyleIBUMax' => '15','brewStyleSRM' => '4','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A sweet, heavy, strong traditional Finnish beer with a rye, juniper, and juniper berry flavor and a strong banana-clove yeast character.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, centraleurope, historical-style, spice','brewStyleComEx' => NULL,'brewStyleEntry' => NULL];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Sahti style added to BJCP 2015 styles.</li>";
 	else {
@@ -433,7 +433,7 @@ if (!check_new_style("27","A5","Sahti")) {
 
 if (!check_new_style("27","A6","Kentucky Common")) {
 
-	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A6','brewStyle' => 'Kentucky Common','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.055','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '4.0','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '30','brewStyleSRM' => '11','brewStyleSRMMax' => '20','brewStyleType' => '1','brewStyleInfo' => 'A darker-colored, light-flavored, malt-accented beer with a dry finish and interesting character malt flavors. Refreshing due to its high carbonation and mild flavors, and highly  sessionable due to being served very fresh and with restrained alcohol levels.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, amber-color, top-fermented, north america,historical-style, balanced','brewStyleComEx' => 'Apocalypse Brew Works Ortel\'s 1912','brewStyleEntry' => NULL);
+	$data = ['brewStyleGroup' => '27','brewStyleNum' => 'A6','brewStyle' => 'Kentucky Common','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.055','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '4.0','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '30','brewStyleSRM' => '11','brewStyleSRMMax' => '20','brewStyleType' => '1','brewStyleInfo' => 'A darker-colored, light-flavored, malt-accented beer with a dry finish and interesting character malt flavors. Refreshing due to its high carbonation and mild flavors, and highly  sessionable due to being served very fresh and with restrained alcohol levels.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, amber-color, top-fermented, north america,historical-style, balanced','brewStyleComEx' => 'Apocalypse Brew Works Ortel\'s 1912','brewStyleEntry' => NULL];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Kentucky Common style added to BJCP 2015 styles.</li>";
 	else {
@@ -445,7 +445,7 @@ if (!check_new_style("27","A6","Kentucky Common")) {
 
 if (!check_new_style("27","A7","Pre-Prohibition Lager")) {
 
-	$data =  array('brewStyleGroup' => '27','brewStyleNum' => 'A7','brewStyle' => 'Pre-Prohibition Lager','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.060','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '25','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A clean, refreshing, but bitter pale lager, often showcasing a grainy-sweet corn flavor. All malt or rice-based versions have a crisper, more neutral character. The higher bitterness level is the largest differentiator between this style and most modern mass-market pale lagers, but the more robust flavor profile also sets it apart.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented, lagered, north-america, historical-style, pilsner-family, bitter, hoppy','brewStyleComEx' => 'Anchor California Lager, Coors Batch 19, Little Harpeth Chicken Scratch','brewStyleEntry' => NULL);
+	$data =  ['brewStyleGroup' => '27','brewStyleNum' => 'A7','brewStyle' => 'Pre-Prohibition Lager','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.060','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '25','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A clean, refreshing, but bitter pale lager, often showcasing a grainy-sweet corn flavor. All malt or rice-based versions have a crisper, more neutral character. The higher bitterness level is the largest differentiator between this style and most modern mass-market pale lagers, but the more robust flavor profile also sets it apart.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented, lagered, north-america, historical-style, pilsner-family, bitter, hoppy','brewStyleComEx' => 'Anchor California Lager, Coors Batch 19, Little Harpeth Chicken Scratch','brewStyleEntry' => NULL];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Pre-Prohibition Lager style added to BJCP 2015 styles.</li>";
 	else {
@@ -457,7 +457,7 @@ if (!check_new_style("27","A7","Pre-Prohibition Lager")) {
 
 if (!check_new_style("27","A8","Pre-Prohibition Porter")) {
 
-	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A8','brewStyle' => 'Pre-Prohibition Porter','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.046','brewStyleOGMax' => '1.060','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '20','brewStyleIBUMax' => '30','brewStyleSRM' => '18','brewStyleSRMMax' => '30','brewStyleType' => '1','brewStyleInfo' => 'An American adaptation of English Porter using American ingredients, including adjuncts.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, dark-color, any-fermentation, northamerica, historical-style, porter-family, malty','brewStyleComEx' => 'Stegmaier Porter, Yuengling Porter','brewStyleEntry' => NULL);
+	$data = ['brewStyleGroup' => '27','brewStyleNum' => 'A8','brewStyle' => 'Pre-Prohibition Porter','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.046','brewStyleOGMax' => '1.060','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '20','brewStyleIBUMax' => '30','brewStyleSRM' => '18','brewStyleSRMMax' => '30','brewStyleType' => '1','brewStyleInfo' => 'An American adaptation of English Porter using American ingredients, including adjuncts.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, dark-color, any-fermentation, northamerica, historical-style, porter-family, malty','brewStyleComEx' => 'Stegmaier Porter, Yuengling Porter','brewStyleEntry' => NULL];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Pre-Prohibition Porter style added to BJCP 2015 styles.</li>";
 	else {
@@ -469,7 +469,7 @@ if (!check_new_style("27","A8","Pre-Prohibition Porter")) {
 
 if (!check_new_style("27","A9","London Brown Ale")) {
 
-	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A9','brewStyle' => 'London Brown Ale','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.033','brewStyleOGMax' => '1.038','brewStyleFG' => '1.012','brewStyleFGMax' => '1.015','brewStyleABV' => '2.8','brewStyleABVMax' => '3.6','brewStyleIBU' => '15','brewStyleIBUMax' => '20','brewStyleSRM' => '22','brewStyleSRMMax' => '35','brewStyleType' => '1','brewStyleInfo' => 'A luscious, sweet, malt-oriented dark brown ale, with caramel and toffee malt complexity and a sweet finish.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, dark-color, top-fermented, britishisles, historical-style, brown-ale-family, malty, sweet','brewStyleComEx' => 'Harveys Bloomsbury Brown Ale, Mann\'s Brown Ale','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
+	$data = ['brewStyleGroup' => '27','brewStyleNum' => 'A9','brewStyle' => 'London Brown Ale','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.033','brewStyleOGMax' => '1.038','brewStyleFG' => '1.012','brewStyleFGMax' => '1.015','brewStyleABV' => '2.8','brewStyleABVMax' => '3.6','brewStyleIBU' => '15','brewStyleIBUMax' => '20','brewStyleSRM' => '22','brewStyleSRMMax' => '35','brewStyleType' => '1','brewStyleInfo' => 'A luscious, sweet, malt-oriented dark brown ale, with caramel and toffee malt complexity and a sweet finish.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, dark-color, top-fermented, britishisles, historical-style, brown-ale-family, malty, sweet','brewStyleComEx' => 'Harveys Bloomsbury Brown Ale, Mann\'s Brown Ale','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>London Brown Ale style added to BJCP 2015 styles.</li>";
 	else {
@@ -481,7 +481,7 @@ if (!check_new_style("27","A9","London Brown Ale")) {
 
 if (!check_new_style("21","B1","Belgian IPA")) {
 
-	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B1','brewStyle' => 'Belgian IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.058','brewStyleOGMax' => '1.080','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '6.2','brewStyleABVMax' => '9.5','brewStyleIBU' => '50','brewStyleIBUMax' => '100','brewStyleSRM' => '5','brewStyleSRMMax' => '15','brewStyleType' => '1','brewStyleInfo' => 'An IPA with the fruitiness and spiciness derived from the use of Belgian yeast. The examples from Belgium tend to be lighter in color and more attenuated, similar to a tripel that has been brewed with more hops. This beer has a more complex flavor profile and may be higher in alcohol than a typical IPA.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Brewery Vivant Triomphe, Houblon Chouffe, Epic Brainless IPA, Green Flash Le Freak, Stone Cali-Belgique, Urthel Hop It','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
+	$data = ['brewStyleGroup' => '21','brewStyleNum' => 'B1','brewStyle' => 'Belgian IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.058','brewStyleOGMax' => '1.080','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '6.2','brewStyleABVMax' => '9.5','brewStyleIBU' => '50','brewStyleIBUMax' => '100','brewStyleSRM' => '5','brewStyleSRMMax' => '15','brewStyleType' => '1','brewStyleInfo' => 'An IPA with the fruitiness and spiciness derived from the use of Belgian yeast. The examples from Belgium tend to be lighter in color and more attenuated, similar to a tripel that has been brewed with more hops. This beer has a more complex flavor profile and may be higher in alcohol than a typical IPA.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Brewery Vivant Triomphe, Houblon Chouffe, Epic Brainless IPA, Green Flash Le Freak, Stone Cali-Belgique, Urthel Hop It','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Belgian IPA style added to BJCP 2015 styles.</li>";
 	else {
@@ -493,7 +493,7 @@ if (!check_new_style("21","B1","Belgian IPA")) {
 
 if (!check_new_style("21","B2","Black IPA")) {
 
-	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B2','brewStyle' => 'Black IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.050','brewStyleOGMax' => '1.085','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '5.5','brewStyleABVMax' => '9.0','brewStyleIBU' => '50','brewStyleIBUMax' => '90','brewStyleSRM' => '25','brewStyleSRMMax' => '40','brewStyleType' => '1','brewStyleInfo' => 'A beer with the dryness, hop-forward balance, and flavor characteristics of an American IPA, only darker in color – but without strongly roasted or burnt flavors. The flavor of darker malts is gentle and supportive, not a major flavor component. Drinkability is a key characteristic.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => '21st Amendment Back in Black (standard), Deschutes Hop in the Dark CDA (standard), Rogue Dad’s Little Helper (standard), Southern Tier Iniquity (double), Widmer Pitch Black IPA (standard)','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
+	$data = ['brewStyleGroup' => '21','brewStyleNum' => 'B2','brewStyle' => 'Black IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.050','brewStyleOGMax' => '1.085','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '5.5','brewStyleABVMax' => '9.0','brewStyleIBU' => '50','brewStyleIBUMax' => '90','brewStyleSRM' => '25','brewStyleSRMMax' => '40','brewStyleType' => '1','brewStyleInfo' => 'A beer with the dryness, hop-forward balance, and flavor characteristics of an American IPA, only darker in color – but without strongly roasted or burnt flavors. The flavor of darker malts is gentle and supportive, not a major flavor component. Drinkability is a key characteristic.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => '21st Amendment Back in Black (standard), Deschutes Hop in the Dark CDA (standard), Rogue Dad’s Little Helper (standard), Southern Tier Iniquity (double), Widmer Pitch Black IPA (standard)','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Black IPA style added to BJCP 2015 styles.</li>";
 	else {
@@ -505,7 +505,7 @@ if (!check_new_style("21","B2","Black IPA")) {
 
 if (!check_new_style("21","B3","Brown IPA")) {
 
-	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B3','brewStyle' => 'Brown IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.070','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '11','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, chocolate, toffee, and/or dark fruit malt character as in an American Brown Ale. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Brown IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Dogfish Head Indian Brown Ale, Grand Teton Bitch Creek, Harpoon Brown IPA, Russian River Janet’s Brown Ale','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
+	$data = ['brewStyleGroup' => '21','brewStyleNum' => 'B3','brewStyle' => 'Brown IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.070','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '11','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, chocolate, toffee, and/or dark fruit malt character as in an American Brown Ale. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Brown IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Dogfish Head Indian Brown Ale, Grand Teton Bitch Creek, Harpoon Brown IPA, Russian River Janet’s Brown Ale','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Brown IPA style added to BJCP 2015 styles.</li>";
 	else {
@@ -517,7 +517,7 @@ if (!check_new_style("21","B3","Brown IPA")) {
 
 if (!check_new_style("21","B4","Red IPA")) {
 
-	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B4','brewStyle' => 'Red IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.070','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '11','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, toffee, and/or dark fruit malt character. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Red IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Green Flash Hop Head Red Double Red IPA (double), Midnight Sun Sockeye Red, Sierra Nevada Flipside Red IPA, Summit Horizon Red IPA, Odell Runoff Red IPA','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
+	$data = ['brewStyleGroup' => '21','brewStyleNum' => 'B4','brewStyle' => 'Red IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.070','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '11','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, toffee, and/or dark fruit malt character. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Red IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Green Flash Hop Head Red Double Red IPA (double), Midnight Sun Sockeye Red, Sierra Nevada Flipside Red IPA, Summit Horizon Red IPA, Odell Runoff Red IPA','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Red IPA style added to BJCP 2015 styles.</li>";
 	else {
@@ -529,7 +529,7 @@ if (!check_new_style("21","B4","Red IPA")) {
 
 if (!check_new_style("21","B5","Rye IPA")) {
 
-	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B5','brewStyle' => 'Rye IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.075','brewStyleFG' => '1.008','brewStyleFGMax' => '1.014','brewStyleABV' => '5.5','brewStyleABVMax' => '8.0','brewStyleIBU' => '50','brewStyleIBUMax' => '75','brewStyleSRM' => '6','brewStyleSRMMax' => '14','brewStyleType' => '1','brewStyleInfo' => 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties and rye malt. The balance is hop-forward, with a clean fermentation profile, dry finish, and clean, supporting malt allowing a creative range of hop character to shine through.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Arcadia Sky High Rye, Bear Republic Hop Rod Rye, Founders Reds Rye, Great Lakes Rye of the Tiger, Sierra Nevada Ruthless Rye','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
+	$data = ['brewStyleGroup' => '21','brewStyleNum' => 'B5','brewStyle' => 'Rye IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.075','brewStyleFG' => '1.008','brewStyleFGMax' => '1.014','brewStyleABV' => '5.5','brewStyleABVMax' => '8.0','brewStyleIBU' => '50','brewStyleIBUMax' => '75','brewStyleSRM' => '6','brewStyleSRMMax' => '14','brewStyleType' => '1','brewStyleInfo' => 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties and rye malt. The balance is hop-forward, with a clean fermentation profile, dry finish, and clean, supporting malt allowing a creative range of hop character to shine through.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Arcadia Sky High Rye, Bear Republic Hop Rod Rye, Founders Reds Rye, Great Lakes Rye of the Tiger, Sierra Nevada Ruthless Rye','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>Rye IPA style added to BJCP 2015 styles.</li>";
 	else {
@@ -541,7 +541,7 @@ if (!check_new_style("21","B5","Rye IPA")) {
 
 if (!check_new_style("21","B6","White IPA")) {
 
-	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B6','brewStyle' => 'White IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.065','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.0','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '5','brewStyleSRMMax' => '8','brewStyleType' => '1','brewStyleInfo' => 'A fruity, spicy, refreshing version of an American IPA, but with a lighter color, less body, and featuring either the distinctive yeast and/or spice additions typical of a Belgian witbier.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy, spice','brewStyleComEx' => 'Blue Point White IPA, Deschutes Chainbreaker IPA, Harpoon The Long Thaw, New Belgium Accumulation','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
+	$data = ['brewStyleGroup' => '21','brewStyleNum' => 'B6','brewStyle' => 'White IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.065','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.0','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '5','brewStyleSRMMax' => '8','brewStyleType' => '1','brewStyleInfo' => 'A fruity, spicy, refreshing version of an American IPA, but with a lighter color, less body, and featuring either the distinctive yeast and/or spice additions typical of a Belgian witbier.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy, spice','brewStyleComEx' => 'Blue Point White IPA, Deschutes Chainbreaker IPA, Harpoon The Long Thaw, New Belgium Accumulation','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'];
 	$result = $db_conn->insert ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2180_update .= "<li>White IPA style added to BJCP 2015 styles.</li>";
 	else {
@@ -707,7 +707,7 @@ if (!check_update("prefsCAPTCHA", $prefix."preferences")) {
 
 	if (check_update("prefsCAPTCHA", $prefix."preferences")) {
 		$update_table = $prefix."preferences";
-		$data = array('prefsCAPTCHA' => 0);
+		$data = ['prefsCAPTCHA' => 0];
 		$db_conn->where ('id', 1);
 		if ($db_conn->update ($update_table, $data)) $v21100_update .= "<li>CAPTCHA column value updated in the preferences table.</li>";
 		else {
@@ -737,7 +737,7 @@ if (!check_update("prefsPaypalIPN", $prefix."preferences")) {
 
 if (check_update("prefsPaypalIPN", $prefix."preferences")) {
 	$update_table = $prefix."preferences";
-	$data = array('prefsPaypalIPN' => 0);
+	$data = ['prefsPaypalIPN' => 0];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v21100_update .= "<li>Paypal IPN column value updated in the preferences table.</li>";
 	else {
@@ -762,7 +762,7 @@ if (check_update("prefsCompOrg", $prefix."preferences")) {
 	}
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsProEdition' => 0);
+	$data = ['prefsProEdition' => 0];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v21100_update .= "<li>Pro Edition column value updated in the preferences table.</li>";
 	else {
@@ -783,7 +783,7 @@ if ((!check_update("prefsCompOrg", $prefix."preferences")) && (!check_update("pr
 	}
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsProEdition' => 0);
+	$data = ['prefsProEdition' => 0];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v21100_update .= "<li>Pro Edition column value updated in the preferences table.</li>";
 	else {
@@ -962,7 +962,7 @@ if (!check_update("userToken", $prefix."users")) {
 	}
 
 	$update_table = $prefix."users";
-	$data = array('userFailedLogins' => 0);
+	$data = ['userFailedLogins' => 0];
 	if ($db_conn->update ($update_table, $data)) $v21100_update .= "<li>Set failed logins column to 0 for all records in the users table.</li>";
 	else {
 		$v21100_update .= "<li class=\"text-danger\">Failed logins columns were NOT set to 0 for any records in the users table.</li>";
@@ -1015,7 +1015,7 @@ if ((!empty($row_delay)) && ((strlen($row_delay['prefsWinnerDelay'])) < 10)) {
 	*/
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsWinnerDelay' => $new_timestamp);
+	$data = ['prefsWinnerDelay' => $new_timestamp];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v21100_update .= "<li>Winner display date updated in the preferences table.</li>";
 	else {
@@ -1114,7 +1114,7 @@ if ($totalRows_names > 0) {
 			$brewerJudgeNotes = $purifier->purify(sterilize($row_names['brewerJudgeNotes']));
 		}
 
-		$data = array(
+		$data = [
 			'brewerFirstName' => $first_name,
 			'brewerLastName' => $last_name,
 			'brewerAddress' => $address,
@@ -1124,7 +1124,7 @@ if ($totalRows_names > 0) {
 			'brewerEmail' => $brewerEmail,
 			'brewerJudgeID' => $brewerJudgeID,
 			'brewerJudgeNotes' => $brewerJudgeNotes
-		);
+		];
 
 		$db_conn->where ('id', $row_names['id']);
 		if ($db_conn->update ($update_table, $data)) $v21100_update .= "<li>Brewer name and associated data cleanup/standardization complete for ".$last_name.", ".$first_name."</li>";
@@ -1191,13 +1191,13 @@ if ($totalRows_entry_names > 0) {
 			$brewInfo = $purifier->purify(sterilize($row_entry_names['brewInfo']));
 		}
 
-		$data = array(
+		$data = [
 			'brewJudgingNumber' => strtolower($row_entry_names['brewJudgingNumber']),
 			'brewComments' => $brewComments,
 			'brewCoBrewer' => $brewCoBrewer,
 			'brewInfo' => $brewInfo,
 			'brewName' => $brewName
-		);
+		];
 
 		$db_conn->where ('id', $row_entry_names['id']);
 		if ($db_conn->update ($update_table, $data)) $v21100_update .= "<li>Entry name and associated data cleanup/standardization complete for ".$brewName."</li>";
@@ -1297,7 +1297,7 @@ if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 
 	if (check_update("brewerJudgeCider", $prefix."brewer")) {
 		$update_table = $prefix."brewer";
-		$data = array('brewerJudgeCider' => 'N');
+		$data = ['brewerJudgeCider' => 'N'];
 		if ($db_conn->update ($update_table, $data)) $v21120_update .= "<li>Certified Cider Judge designation values entered.</li>";
 		else {
 			$v21120_update .= "<li>Certified Cider Judge designation values NOT entered. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1321,7 +1321,7 @@ if (!check_update("archiveScoresheet", $prefix."archive")) {
 
 	if (check_update("archiveScoresheet", $prefix."archive")) {
 		$update_table = $prefix."archive";
-		$data = array('archiveScoresheet' => 'J');
+		$data = ['archiveScoresheet' => 'J'];
 		if ($db_conn->update ($update_table, $data)) $v21120_update .= "<li>Archive table scoresheet values updated.</li>";
 		else {
 			$v21120_update .= "<li>Archive table scoresheet values NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1331,7 +1331,7 @@ if (!check_update("archiveScoresheet", $prefix."archive")) {
 
 }
 
-if (($update_counter == 0) && (!$setup_running)) $v21120_update .= "<li>No updates necessary.</li>";
+if (($update_counter === 0) && (!$setup_running)) $v21120_update .= "<li>No updates necessary.</li>";
 if (!$setup_running) $v21120_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.12.0'];
@@ -1384,7 +1384,7 @@ if (!check_update("prefsBestUseBOS", $prefix."preferences")) {
 
 	if (check_update("prefsBestUseBOS", $prefix."preferences")) {
 		$update_table = $prefix."preferences";
-		$data = array('prefsBestUseBOS' => 1);
+		$data = ['prefsBestUseBOS' => 1];
 		$db_conn->where ('id', 1);
 		if ($db_conn->update ($update_table, $data)) $v21130_update .= "<li>Toggle to preferences value added to allow users to specify whether to use BOS in \"Best of\" calculations.</li>";
 		else {
@@ -1400,12 +1400,12 @@ $row_mead_cider_present = $db_conn->rawQueryOne($query_mead_cider_present);
 if ($row_mead_cider_present['count'] == 0) {
 
 	$update_table = $prefix."style_types";
-	$data = array(
+	$data = [
 		'styleTypeName' => 'Mead/Cider',
 		'styleTypeOwn' => 'bcoe',
 		'styleTypeBOS' => 'N',
 		'styleTypeBOSMethod' => '1'
-	);
+	];
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Mead/Cider style type added.</li>";
 	else {
 		$v21130_update .= "<li>Mead/Cider style type NOT added. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1417,7 +1417,7 @@ if ($row_mead_cider_present['count'] == 0) {
 else {
 
 	$update_table = $prefix."style_types";
-	$data = array('styleTypeOwn' => 'bcoe');
+	$data = ['styleTypeOwn' => 'bcoe'];
 	$db_conn->where ('styleTypeName', 'Mead/Cider');
 	if ($db_conn->update ($update_table, $data)) $v21130_update .= "<li>Mead/Cider style type updated.</li>";
 	else {
@@ -1472,7 +1472,7 @@ else {
 }
 
 $update_table = $prefix."preferences";
-$data = array('prefsLanguage' => 'en-US');
+$data = ['prefsLanguage' => 'en-US'];
 $db_conn->where ('id', 1);
 if ($db_conn->update ($update_table, $data))  $v21130_update .= "<li>Language column value updated in the preferences table.</li>";
 else {
@@ -1500,7 +1500,7 @@ $update_table = $styles_db_table;
 
 if (!check_new_style("17","A1","Burton Ale")) {
 
-	$data = array('brewStyleGroup' => '17','brewStyleNum' => 'A1','brewStyle' => 'Burton Ale','brewStyleCategory' => 'British Strong Ale','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.055','brewStyleOGMax' => '1.075','brewStyleFG' => '1.018','brewStyleFGMax' => '1.024','brewStyleABV' => '5.0','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '50','brewStyleSRM' => '14','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A rich, malty, sweet, and bitter dark ale of moderately strong alcohol. Full bodied and chewy with a balanced hoppy finish and complex malty and hoppy aroma. Fruity notes accentuate the malt richness, while the hops help balance the sweeter finish. Has some similarity in malt flavor to Wee Heavy, but with substantially more bitterness. Less strong than an English Barleywine.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, traditional-style, balanced, strong-ale-family, british-isles, brown-color, top-fermented','brewStyleComEx' => 'The Laboratory Brewery Gone for a Burton','brewStyleEntry' => NULL);
+	$data = ['brewStyleGroup' => '17','brewStyleNum' => 'A1','brewStyle' => 'Burton Ale','brewStyleCategory' => 'British Strong Ale','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.055','brewStyleOGMax' => '1.075','brewStyleFG' => '1.018','brewStyleFGMax' => '1.024','brewStyleABV' => '5.0','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '50','brewStyleSRM' => '14','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A rich, malty, sweet, and bitter dark ale of moderately strong alcohol. Full bodied and chewy with a balanced hoppy finish and complex malty and hoppy aroma. Fruity notes accentuate the malt richness, while the hops help balance the sweeter finish. Has some similarity in malt flavor to Wee Heavy, but with substantially more bitterness. Less strong than an English Barleywine.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, traditional-style, balanced, strong-ale-family, british-isles, brown-color, top-fermented','brewStyleComEx' => 'The Laboratory Brewery Gone for a Burton','brewStyleEntry' => NULL];
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Burton Ale style added.</li>";
 	else {
 		$v21130_update .= "<li>Burton Ale style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1511,7 +1511,7 @@ if (!check_new_style("17","A1","Burton Ale")) {
 
 if (!check_new_style("21","B7","New England IPA")) {
 
-	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B7','brewStyle' => 'New England IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.060','brewStyleOGMax' => '1.085','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '6.0','brewStyleABVMax' => '9.0','brewStyleIBU' => '25','brewStyleIBUMax' => '60','brewStyleSRM' => '3','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'An American IPA with intense fruit flavors and aromas, a soft body, and smooth mouthfeel, and often opaque with substantial haze. Less perceived bitterness than traditional IPAs but always massively hop forward. This emphasis on late hopping, especially dry hopping, with hops with tropical fruit qualities lends the specific \'juicy\' character for which this style is known. The style is still evolving, but this style is essentially a smoother, hazier, juicier American IPA. In this context, ‘juicy’ refers to a mental impression of fruit juice or eating fresh, fully ripe fruit. Heavy examples suggestive of milkshakes, creamsicles, or fruit smoothies are beyond this range; IPAs should always be drinkable. Haziness comes from the dry hopping regime, not suspended yeast, starch haze, set pectins, or other techniques; a hazy shine is desirable, not a cloudy, murky mess.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/21b-specialty-ipa-new-england-ipa/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'bitter, craft-style, pale-color, high-strength, hoppy, ipa-family, north-america, specialty-family, top-fermented','brewStyleComEx' => 'Hill Farmstead Susan, Other Half Green Diamonds Double IPA, Tired Hands Alien Church, Tree House Julius, Trillium Congress Street, WeldWerks Juicy Bits','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
+	$data = ['brewStyleGroup' => '21','brewStyleNum' => 'B7','brewStyle' => 'New England IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.060','brewStyleOGMax' => '1.085','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '6.0','brewStyleABVMax' => '9.0','brewStyleIBU' => '25','brewStyleIBUMax' => '60','brewStyleSRM' => '3','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'An American IPA with intense fruit flavors and aromas, a soft body, and smooth mouthfeel, and often opaque with substantial haze. Less perceived bitterness than traditional IPAs but always massively hop forward. This emphasis on late hopping, especially dry hopping, with hops with tropical fruit qualities lends the specific \'juicy\' character for which this style is known. The style is still evolving, but this style is essentially a smoother, hazier, juicier American IPA. In this context, ‘juicy’ refers to a mental impression of fruit juice or eating fresh, fully ripe fruit. Heavy examples suggestive of milkshakes, creamsicles, or fruit smoothies are beyond this range; IPAs should always be drinkable. Haziness comes from the dry hopping regime, not suspended yeast, starch haze, set pectins, or other techniques; a hazy shine is desirable, not a cloudy, murky mess.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/21b-specialty-ipa-new-england-ipa/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'bitter, craft-style, pale-color, high-strength, hoppy, ipa-family, north-america, specialty-family, top-fermented','brewStyleComEx' => 'Hill Farmstead Susan, Other Half Green Diamonds Double IPA, Tired Hands Alien Church, Tree House Julius, Trillium Congress Street, WeldWerks Juicy Bits','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'];
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>New England IPA style added.</li>";
 	else {
 		$v21130_update .= "<li>New England IPA style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1522,7 +1522,7 @@ if (!check_new_style("21","B7","New England IPA")) {
 
 if (!check_new_style("PR","X1","Dorada Pampeana")) {
 
-	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X1','brewStyle' => 'Dorada Pampeana','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.042','brewStyleOGMax' => '1.054','brewStyleFG' => '1.009','brewStyleFGMax' => '1.013','brewStyleABV' => '4.3','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '22','brewStyleSRM' => '3','brewStyleSRMMax' => '5','brewStyleType' => '1','brewStyleInfo' => 'At the beginning argentine homebrewers were very limited: there wasn\'t extract - they could use only pils malt, Cascade hops and dry yeast, commonly Nottingham, Windsor or Safale. With these ingredients, Argentine brewers developed a specific version of Blond Ale, named Dorada Pampeana. Ingredients: usually only pale or pils malt, although may include low rates of caramelized malt. Commonly Cascade hops. Clean American yeast, slightly fruity British or Kölsch, usually packaged in cold.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x1-dorada-pampeana/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
+	$data = ['brewStyleGroup' => 'PR','brewStyleNum' => 'X1','brewStyle' => 'Dorada Pampeana','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.042','brewStyleOGMax' => '1.054','brewStyleFG' => '1.009','brewStyleFGMax' => '1.013','brewStyleABV' => '4.3','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '22','brewStyleSRM' => '3','brewStyleSRMMax' => '5','brewStyleType' => '1','brewStyleInfo' => 'At the beginning argentine homebrewers were very limited: there wasn\'t extract - they could use only pils malt, Cascade hops and dry yeast, commonly Nottingham, Windsor or Safale. With these ingredients, Argentine brewers developed a specific version of Blond Ale, named Dorada Pampeana. Ingredients: usually only pale or pils malt, although may include low rates of caramelized malt. Commonly Cascade hops. Clean American yeast, slightly fruity British or Kölsch, usually packaged in cold.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x1-dorada-pampeana/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => NULL,'brewStyleEntry' => NULL];
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Dorada Pampeana style added.</li>";
 	else {
 		$v21130_update .= "<li>Dorada Pampeana style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1533,7 +1533,7 @@ if (!check_new_style("PR","X1","Dorada Pampeana")) {
 
 if (!check_new_style("PR","X2","IPA Argenta")) {
 
-	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X2','brewStyle' => 'IPA Argenta','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.055','brewStyleOGMax' => '1.065','brewStyleFG' => '1.008','brewStyleFGMax' => '1.015','brewStyleABV' => '5.0','brewStyleABVMax' => '6.5','brewStyleIBU' => '35','brewStyleIBUMax' => '60','brewStyleSRM' => '6','brewStyleSRMMax' => '15','brewStyleType' => '1','brewStyleInfo' => 'A decidedly hoppy and bitter, refreshing, and moderately strong Argentine pale ale. The clue is drinkability without harshness and best balance. An Argentine version of the historical English style, developed in 2013 from Somos Cerveceros Association meetings, when its distinctive characteristics were defined. Different from an American IPA in that it is brewed with wheat and using Argentine hops (Cascade, Mapuche and Nugget are typical, although Spalt, Victoria or Bullion may be used to add complexity), with its unique flavor and aroma characteristics. Based on a citrus (from Argetine hops) and wheat pairing idea, like in a Witbier. Low amounts of wheat are similar to a Kölsch grist, as is some fruitiness from fermentation.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x2-ipa-argenta/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Antares Ipa Argenta, Kerze Ipa Argenta.','brewStyleEntry' => NULL);
+	$data = ['brewStyleGroup' => 'PR','brewStyleNum' => 'X2','brewStyle' => 'IPA Argenta','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.055','brewStyleOGMax' => '1.065','brewStyleFG' => '1.008','brewStyleFGMax' => '1.015','brewStyleABV' => '5.0','brewStyleABVMax' => '6.5','brewStyleIBU' => '35','brewStyleIBUMax' => '60','brewStyleSRM' => '6','brewStyleSRMMax' => '15','brewStyleType' => '1','brewStyleInfo' => 'A decidedly hoppy and bitter, refreshing, and moderately strong Argentine pale ale. The clue is drinkability without harshness and best balance. An Argentine version of the historical English style, developed in 2013 from Somos Cerveceros Association meetings, when its distinctive characteristics were defined. Different from an American IPA in that it is brewed with wheat and using Argentine hops (Cascade, Mapuche and Nugget are typical, although Spalt, Victoria or Bullion may be used to add complexity), with its unique flavor and aroma characteristics. Based on a citrus (from Argetine hops) and wheat pairing idea, like in a Witbier. Low amounts of wheat are similar to a Kölsch grist, as is some fruitiness from fermentation.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x2-ipa-argenta/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Antares Ipa Argenta, Kerze Ipa Argenta.','brewStyleEntry' => NULL];
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>IPA Argenta style added.</li>";
 	else {
 		$v21130_update .= "<li>IPA Argenta style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1544,7 +1544,7 @@ if (!check_new_style("PR","X2","IPA Argenta")) {
 
 if (!check_new_style("PR","X3","Italian Grape Ale")) {
 
-	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X3','brewStyle' => 'Italian Grape Ale','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.043','brewStyleOGMax' => '1.090','brewStyleFG' => '1.007','brewStyleFGMax' => '1.015','brewStyleABV' => '4.8','brewStyleABVMax' => '10','brewStyleIBU' => '10','brewStyleIBUMax' => '30','brewStyleSRM' => '5','brewStyleSRMMax' => '30','brewStyleType' => '1','brewStyleInfo' => 'A sometimes refreshing, sometimes more complex Italian ale characterized by different varieties of grapes.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x3-italian-grape-ale/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Montegioco Tibir, Montegioco Open Mind, Birranova Moscata, LoverBeer BeerBera, Loverbeer D\'uvaBeer, Birra del Borgo Equilibrista, Barley BB10, Barley BBevò, Cudera, Pasturana Filare!, Gedeone PerBacco! Toccalmatto Jadis, Rocca dei Conti Tarì Giacchè','brewStyleEntry' => NULL);
+	$data = ['brewStyleGroup' => 'PR','brewStyleNum' => 'X3','brewStyle' => 'Italian Grape Ale','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.043','brewStyleOGMax' => '1.090','brewStyleFG' => '1.007','brewStyleFGMax' => '1.015','brewStyleABV' => '4.8','brewStyleABVMax' => '10','brewStyleIBU' => '10','brewStyleIBUMax' => '30','brewStyleSRM' => '5','brewStyleSRMMax' => '30','brewStyleType' => '1','brewStyleInfo' => 'A sometimes refreshing, sometimes more complex Italian ale characterized by different varieties of grapes.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x3-italian-grape-ale/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Montegioco Tibir, Montegioco Open Mind, Birranova Moscata, LoverBeer BeerBera, Loverbeer D\'uvaBeer, Birra del Borgo Equilibrista, Barley BB10, Barley BBevò, Cudera, Pasturana Filare!, Gedeone PerBacco! Toccalmatto Jadis, Rocca dei Conti Tarì Giacchè','brewStyleEntry' => NULL];
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Italian Grape Ale style added.</li>";
 	else {
 		$v21130_update .= "<li>Italian Grape Ale style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1555,7 +1555,7 @@ if (!check_new_style("PR","X3","Italian Grape Ale")) {
 
 if (!check_new_style("PR","X4","Catharina Sour")) {
 
-	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X4','brewStyle' => 'Catharina Sour','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.039','brewStyleOGMax' => '1.048','brewStyleFG' => '1.002','brewStyleFGMax' => '1.008','brewStyleABV' => '4.0','brewStyleABVMax' => '5.5','brewStyleIBU' => '2','brewStyleIBUMax' => '68','brewStyleSRM' => '2','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'A light and refreshing wheat ale with a clean lactic sourness that is balanced by a fresh fruit addition. The low bitterness, light body, moderate alcohol content, and moderately high carbonation allow the flavor and aroma of the fruit to be the primary focus of the beer. The fruit is often, but not always, tropical in nature. This beer is stronger than a Berliner Weiss and typically features fresh fruit. The kettle souring method allows for fast production of the beer, so this is typically a present-use style. It may be bottled or canned, but it should be consumed while fresh.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x4-catharina-sour/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'craft-style, fruit, sour, specialty-beer','brewStyleComEx' => 'Itajahy Catharina Araca Sour, Blumenau Catharina Sour Sun of a Peach, Lohn Bier Catharina Sour Jaboticaba, Liffey Coroa Real, UNIKA Tangerina, Armada Daenerys.','brewStyleEntry' => 'Entrant must specify the types of fresh fruit(s) used.');
+	$data = ['brewStyleGroup' => 'PR','brewStyleNum' => 'X4','brewStyle' => 'Catharina Sour','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.039','brewStyleOGMax' => '1.048','brewStyleFG' => '1.002','brewStyleFGMax' => '1.008','brewStyleABV' => '4.0','brewStyleABVMax' => '5.5','brewStyleIBU' => '2','brewStyleIBUMax' => '68','brewStyleSRM' => '2','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'A light and refreshing wheat ale with a clean lactic sourness that is balanced by a fresh fruit addition. The low bitterness, light body, moderate alcohol content, and moderately high carbonation allow the flavor and aroma of the fruit to be the primary focus of the beer. The fruit is often, but not always, tropical in nature. This beer is stronger than a Berliner Weiss and typically features fresh fruit. The kettle souring method allows for fast production of the beer, so this is typically a present-use style. It may be bottled or canned, but it should be consumed while fresh.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x4-catharina-sour/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'craft-style, fruit, sour, specialty-beer','brewStyleComEx' => 'Itajahy Catharina Araca Sour, Blumenau Catharina Sour Sun of a Peach, Lohn Bier Catharina Sour Jaboticaba, Liffey Coroa Real, UNIKA Tangerina, Armada Daenerys.','brewStyleEntry' => 'Entrant must specify the types of fresh fruit(s) used.'];
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Catharina Sour style added.</li>";
 	else {
 		$v21130_update .= "<li>Catharina Sour style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1566,7 +1566,7 @@ if (!check_new_style("PR","X4","Catharina Sour")) {
 
 if (!check_new_style("PR","X5","New Zealand Pilsner")) {
 
-	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X5','brewStyle' => 'New Zealand Pilsner','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.046','brewStyleFG' => '1.009','brewStyleFGMax' => '1.014','brewStyleABV' => '4.5','brewStyleABVMax' => '5.8','brewStyleIBU' => '25','brewStyleIBUMax' => '45','brewStyleSRM' => '2','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'A pale, dry, golden-colored, cleanly-fermented beer showcasing the characteristic tropical, citrusy, fruity, grassy New Zealand-type hops. Medium body, soft mouthfeel, and smooth palate and finish, with a neutral to bready malt base provide the support for this very drinkable, refreshing, hop-forward beer.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x5-new-zealand-pilsner/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'bitter, pale-color, standard-strength, bottom-fermented, hoppy, pilsner-family, lagered, craft-style, pacific','brewStyleComEx' => 'Croucher New Zealand Pilsner, Emerson’s Pilsner, Liberty Halo Pilsner, Panhead Port Road Pilsner, Sawmill Pilsner, Tuatara Mot Eureka','brewStyleEntry' => NULL); 
+	$data = ['brewStyleGroup' => 'PR','brewStyleNum' => 'X5','brewStyle' => 'New Zealand Pilsner','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.046','brewStyleFG' => '1.009','brewStyleFGMax' => '1.014','brewStyleABV' => '4.5','brewStyleABVMax' => '5.8','brewStyleIBU' => '25','brewStyleIBUMax' => '45','brewStyleSRM' => '2','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'A pale, dry, golden-colored, cleanly-fermented beer showcasing the characteristic tropical, citrusy, fruity, grassy New Zealand-type hops. Medium body, soft mouthfeel, and smooth palate and finish, with a neutral to bready malt base provide the support for this very drinkable, refreshing, hop-forward beer.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x5-new-zealand-pilsner/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'bitter, pale-color, standard-strength, bottom-fermented, hoppy, pilsner-family, lagered, craft-style, pacific','brewStyleComEx' => 'Croucher New Zealand Pilsner, Emerson’s Pilsner, Liberty Halo Pilsner, Panhead Port Road Pilsner, Sawmill Pilsner, Tuatara Mot Eureka','brewStyleEntry' => NULL]; 
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>New Zealand Pilsner style added.</li>";
 	else {
 		$v21130_update .= "<li>New Zealand Pilsner style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1576,17 +1576,17 @@ if (!check_new_style("PR","X5","New Zealand Pilsner")) {
 }
 
 $update_table = $styles_db_table;
-$style_type_convert = array(
+$style_type_convert = [
 	'Lager' => 1,
 	'Ale' => 1,
 	'Mixed' => 1,
 	'Cider' => 2,
 	'Mead' => 3
-);
+];
 
 foreach ($style_type_convert as $key => $value) {
 
-	$data = array('brewStyleType' => $value);
+	$data = ['brewStyleType' => $value];
 	$db_conn->where ('brewStyleType', $key);
 	if ($db_conn->update ($update_table, $data)) $v21130_update .= "<li>Style type ".$key." updated.</li>";
 	else {
@@ -1644,7 +1644,7 @@ if (isset($row_current_prefs['prefsStyleSet'])) {
 	$update_counter += 1;
 
 	$update_table = $styles_db_table;
-	$data = array('brewStyleVersion' => $row_current_prefs['prefsStyleSet']);
+	$data = ['brewStyleVersion' => $row_current_prefs['prefsStyleSet']];
 	$db_conn->where ('brewStyleOwn', 'custom');
 	if ($db_conn->update ($update_table, $data)) $v21140_update .= "<li>Custom styles updated to currently chosen style set.</li>";
 	else {
@@ -1654,7 +1654,7 @@ if (isset($row_current_prefs['prefsStyleSet'])) {
 
 }
 
-if (($update_counter == 0) && (!$setup_running)) $v21140_update .= "<li>No updates necessary.</li>";
+if (($update_counter === 0) && (!$setup_running)) $v21140_update .= "<li>No updates necessary.</li>";
 if (!$setup_running) $v21140_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.14.0'];
@@ -1687,7 +1687,7 @@ if (!$setup_running) $v21150_update .= "<ul>";
 if ((empty($row_current_prefs['prefsDisplaySpecial'])) || (!isset($row_current_prefs['prefsDisplaySpecial']))) {
 	
 	$update_table = $prefix."preferences";
-	$data = array('prefsDisplaySpecial' => 'J');
+	$data = ['prefsDisplaySpecial' => 'J'];
 	if ($db_conn->update ($update_table, $data)) $v21150_update .= "<li>Uploaded scoresheet preferences updated (were not set).</li>";
 	else {
 		$v21150_update .= "<li>Uploaded scoresheet preferences NOT updated. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1697,7 +1697,7 @@ if ((empty($row_current_prefs['prefsDisplaySpecial'])) || (!isset($row_current_p
 }
 
 $update_table = $styles_db_table;
-$data = array('brewStyle' => 'British Strong Ale');
+$data = ['brewStyle' => 'British Strong Ale'];
 $db_conn->where ('brewStyle', 'English Strong Ale');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
 if ($db_conn->update ($update_table, $data)) $v21150_update .= "<li>British Strong Ale name corrected in styles table.</li>";
@@ -1722,7 +1722,7 @@ $v21190_update = "";
 if ((!$setup_running) && (!$update_running)) {
 	$v21190_update .= "<p>";
 	$v21190_update .= "<strong>Version 2.1.19.0 Updates</strong>";
-	if (($row_pv['version'] == "2.1.15.0") || ($row_pv['version'] == "2.1.16.0") || ($row_pv['version'] == "2.1.17.0") || ($row_pv['version'] == "2.1.18.0")) $v21190_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	if (in_array($row_pv['version'], ["2.1.15.0", "2.1.16.0", "2.1.17.0", "2.1.18.0"])) $v21190_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
 	$v21190_update .= "</p>";
 }
 
@@ -1734,7 +1734,7 @@ elseif ($update_running) {
 if (!$setup_running) $v21190_update .= "<ul>";
 
 $update_table = $styles_db_table;
-$data = array('brewStyle' => 'Specialty Fruit Beer');
+$data = ['brewStyle' => 'Specialty Fruit Beer'];
 $db_conn->where ('brewStyle', 'Speciality Fruit Beer');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
 if ($db_conn->update ($update_table, $data)) $v21190_update .= "<li>Specialty Fruit Beer name corrected in styles table.</li>";
@@ -1744,7 +1744,7 @@ else {
 }
 
 $update_table = $prefix."brewing";
-$data = array('brewStyle' => 'Specialty Fruit Beer');
+$data = ['brewStyle' => 'Specialty Fruit Beer'];
 $db_conn->where ('brewStyle', 'Speciality Fruit Beer');
 if ($db_conn->update ($update_table, $data)) $v21190_update .= "<li>All Specialty Fruit Beer names corrected in brewing table.</li>";
 else {
@@ -1827,7 +1827,7 @@ if ($totalRows_cust_st > 0) {
 		else
 		*/
 		$update_table = $styles_db_table;
-		$data = array('brewStyleGroup' => $new_style_number);
+		$data = ['brewStyleGroup' => $new_style_number];
 		$db_conn->where ('id', $row_cust_st['id']);
 		if ($db_conn->update ($update_table, $data)) $new_style_number++;
 
@@ -1840,20 +1840,20 @@ if ($totalRows_cust_st > 0) {
  * This reserves 1-15 for system use.
  */
 
-$old_style_types = array(
+$old_style_types = [
     "Beer" => "1",
     "Cider" => "2",
     "Mead" => "3",
     "Mead/Cider" => "4"
-);
+];
 
-$new_style_types = array(
+$new_style_types = [
     "Wine" => "5",
     "Rice Wine" => "6",
     "Spirits" => "7",
     "Kombucha" => "8",
     "Pulque" => "9"
-);
+];
 
 $all_style_types = array_merge($old_style_types,$new_style_types);
 
@@ -1865,36 +1865,36 @@ $sql = sprintf("TRUNCATE %s",$prefix."style_types");
 $result = $db_conn->rawQuery($sql);
 
 $update_table = $prefix."style_types";
-$data = array(
-	array(
+$data = [
+	[
 		'id' => 1,
 		'styleTypeName' => 'Beer',
 		'styleTypeOwn' => 'bcoe',
 		'styleTypeBOS' => 'N',
 		'styleTypeBOSMethod' => 1
-	),
-	array(
+	],
+	[
 		'id' => 2,
 		'styleTypeName' => 'Cider',
 		'styleTypeOwn' => 'bcoe',
 		'styleTypeBOS' => 'N',
 		'styleTypeBOSMethod' => 1
-	),
-	array(
+	],
+	[
 		'id' => 3,
 		'styleTypeName' => 'Mead',
 		'styleTypeOwn' => 'bcoe',
 		'styleTypeBOS' => 'N',
 		'styleTypeBOSMethod' => 1
-	),
-	array(
+	],
+	[
 		'id' => 4,
 		'styleTypeName' => 'Mead/Cider',
 		'styleTypeOwn' => 'bcoe',
 		'styleTypeBOS' => 'N',
 		'styleTypeBOSMethod' => 1
-	)
-);
+	]
+];
 if ($db_conn->insertMulti($update_table, $data)) $v21190_update .= "<li>Legacy core style types reconstructed.</li>";
 else $v21190_update .= "<li>Legacy core style types NOT reconstructed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
@@ -1902,13 +1902,13 @@ else $v21190_update .= "<li>Legacy core style types NOT reconstructed. <strong c
 foreach ($new_style_types as $key => $value) {
 
     $update_table = $prefix."style_types";
-    $data = array(
+    $data = [
     	'id' => $value,
     	'styleTypeName' => $key,
 		'styleTypeOwn' => 'bcoe',
 		'styleTypeBOS' => 'N',
 		'styleTypeBOSMethod' => 1
-    );
+    ];
     if ($db_conn->insert ($update_table, $data)) $v21190_update .= "<li>".$key." style type added.</li>";
 	else {
 		$v21190_update .= "<li>".$key." style type NOT added. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1943,7 +1943,7 @@ foreach ($rows_current_st as $row_current_st) {
             else 
             */
             $update_table = $styles_db_table;
-			$data = array('brewStyleType' => $all_style_types[$row_current_st['styleTypeName']]);
+			$data = ['brewStyleType' => $all_style_types[$row_current_st['styleTypeName']]];
 			$db_conn->where ('brewStyleType', $row_current_st['id']);
 			if ($db_conn->update ($update_table, $data)) $v21190_update .= "<li>".$all_style_types[$row_current_st['styleTypeName']]." Style Type reassigned in Styles table.</li>";
 			else {
@@ -1954,7 +1954,7 @@ foreach ($rows_current_st as $row_current_st) {
         }
 
         $update_table = $prefix."style_types";
-		$data = array('styleTypeBOS' => $row_current_st['styleTypeBOS'], 'styleTypeBOSMethod' => $row_current_st['styleTypeBOSMethod']);
+		$data = ['styleTypeBOS' => $row_current_st['styleTypeBOS'], 'styleTypeBOSMethod' => $row_current_st['styleTypeBOSMethod']];
 		$db_conn->where ('styleTypeName', $row_current_st['styleTypeName']);
 		if ($db_conn->update ($update_table, $data)) $v21190_update .= "<li>".$row_current_st['styleTypeName']." Style Type reassigned.</li>";
 		else {
@@ -1970,12 +1970,12 @@ foreach ($rows_current_st as $row_current_st) {
     else {
 
     	$update_table = $prefix."style_types";
-		$data = array(
+		$data = [
 			'styleTypeName' => $row_current_st['styleTypeName'],
 			'styleTypeOwn' => 'custom',
 			'styleTypeBOS' => $row_current_st['styleTypeBOS'], 
 			'styleTypeBOSMethod' => $row_current_st['styleTypeBOSMethod']
-		);
+		];
 		if ($db_conn->insert ($update_table, $data)) $v21190_update .= "<li>".$row_current_st['styleTypeName']." Style Type reassigned.</li>";
 		else {
 			$v21190_update .= "<li>".$row_current_st['styleTypeName']." Style Type NOT reassigned. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -1990,7 +1990,7 @@ foreach ($rows_current_st as $row_current_st) {
         else 
         */
         $update_table = $styles_db_table;
-		$data = array('brewStyleType' => $row_new_st['id']);
+		$data = ['brewStyleType' => $row_new_st['id']];
 		$db_conn->where ('brewStyleType', $row_current_st['styleTypeName']);
 		if ($db_conn->update ($update_table, $data)) $v21190_update .= "<li>".$row_current_st['styleTypeName']." Style Type relational id updated in styles table.</li>";
 		else {
@@ -2064,7 +2064,7 @@ if (check_update("judgingTime", $prefix."judging_locations")) {
 	}
 
 	$update_table = $prefix."judging_locations";
-	$data = array('judgingDateEnd' => NULL);
+	$data = ['judgingDateEnd' => NULL];
 	if ($db_conn->update ($update_table, $data)) $v2200_update .= "<li>The judgingDateEnd value was set.</li>";
 	else {
 		$v2200_update .= "<li>The judgingDateEnd value was NOT set. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -2086,7 +2086,7 @@ if (!check_update("judgingLocType", $prefix."judging_locations")) {
 	}
 
 	$update_table = $prefix."judging_locations";
-	$data = array('judgingLocType' => 0);
+	$data = ['judgingLocType' => 0];
 	if ($db_conn->update ($update_table, $data)) $v2200_update .= "<li>The judgingLocType value was set for all judging locations.</li>";
 	else {
 		$v2200_update .= "<li>The judgingLocType value was NOT set for all judging locations. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -2158,7 +2158,7 @@ if (!check_update("prefsEmailCC", $prefix."preferences")) {
 	}
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsEmailCC' => 0);
+	$data = ['prefsEmailCC' => 0];
 	if ($db_conn->update ($update_table, $data)) $v2200_update .= "<li>The prefsEmailCC value was set to 0 (disabled).</li>";
 	else {
 		$v2200_update .= "<li>The prefsEmailCC value was NOT set to 0. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -2188,7 +2188,7 @@ if (!check_update("archiveWinnerMethod", $prefix."archive")) {
 	}
 
 	$update_table = $prefix."archive";
-	$data = array('archiveWinnerMethod' => 0);
+	$data = ['archiveWinnerMethod' => 0];
 	if ($db_conn->update ($update_table, $data)) $v2200_update .= "<li>The archiveWinnerMethod value was set to 0.</li>";
 	else {
 		$v2200_update .= "<li>The archiveWinnerMethod value was NOT set to 0. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -2210,7 +2210,7 @@ if (!check_update("archiveDisplayWinners", $prefix."archive")) {
 	}
 
 	$update_table = $prefix."archive";
-	$data = array('archiveDisplayWinners' => 'N');
+	$data = ['archiveDisplayWinners' => 'N'];
 	if ($db_conn->update ($update_table, $data)) $v2200_update .= "<li>The archiveDisplayWinners value was set to No.</li>";
 	else {
 		$v2200_update .= "<li>The archiveDisplayWinners value was NOT set to No. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -2229,7 +2229,7 @@ $query_archive = sprintf("SELECT archiveSuffix FROM %s",$prefix."archive");
 $rows_archive = $db_conn->rawQuery($query_archive);
 $totalRows_archive = count($rows_archive);
 
-$tables_array = array(
+$tables_array = [
 	$prefix."brewing", 
 	$prefix."judging_assignments", 
 	$prefix."judging_flights", 
@@ -2242,9 +2242,9 @@ $tables_array = array(
 	$prefix."special_best_info",
 	$prefix."style_types",
 	$prefix."users"
-);
+];
 
-$archive_suffixes = array();
+$archive_suffixes = [];
 
 if ($totalRows_archive > 0) {
 
@@ -2334,7 +2334,7 @@ if ($totalRows_archive > 0) {
 			if ($table_archive == $brewing_db_table."_".$row_archive['archiveSuffix']) {
 
 				$update_table = $brewing_db_table."_".$row_archive['archiveSuffix'];
-				$data = array('brewStyle' => 'Czech Premium Pale Lager');
+				$data = ['brewStyle' => 'Czech Premium Pale Lager'];
 				$db_conn->where ('brewStyle', 'Czech Premimum Pale Lager');
 				if ($db_conn->update ($update_table, $data)) $v2200_update .= "<li>Corrected Czech Premium Pale Lager name in brewing table.</li>";
 				else {
@@ -2343,7 +2343,7 @@ if ($totalRows_archive > 0) {
 				}
 
 				$update_table = $brewing_db_table."_".$row_archive['archiveSuffix'];
-				$data = array('brewStyle' => 'British Golden Ale');
+				$data = ['brewStyle' => 'British Golden Ale'];
 				$db_conn->where ('brewStyle', 'English Golden Ale');
 				if ($db_conn->update ($update_table, $data)) $v2200_update .= "<li>Corrected British Golden Ale name in archive ".$row_archive['archiveSuffix']." brewing table.</li>";
 				else {
@@ -2422,7 +2422,7 @@ if ($totalRows_archive > 0) {
 				$sql = sprintf("UPDATE `%s` SET archiveDisplayWinners='Y' WHERE archiveSuffix='%s';", $prefix."archive",$row_archive['archiveSuffix']);
 
 				$update_table = $prefix."archive";
-				$data = array('archiveDisplayWinners' => 'Y');
+				$data = ['archiveDisplayWinners' => 'Y'];
 				$db_conn->where ('archiveSuffix', $row_archive['archiveSuffix']);
 				if ($db_conn->update ($update_table, $data)) $v2200_update .= "<li>Winner display for all archives set to Yes.</li>";
 				else {
@@ -2439,7 +2439,7 @@ if ($totalRows_archive > 0) {
 
 }
 
-if (($update_counter == 0) && (!$setup_running)) $v2200_update .= "<li>No updates necessary.</li>";
+if (($update_counter === 0) && (!$setup_running)) $v2200_update .= "<li>No updates necessary.</li>";
 if (!$setup_running) $v2200_update .= "</ul>";
 
 $this_update_version_block = $versions['2.2.0.0'];
@@ -2484,8 +2484,8 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 
 	$update_table = $prefix."preferences";
 	
-	if (EVALUATION) $data = array('prefsEval' => 1);
-	else $data = array('prefsEval' => 0);
+	if (EVALUATION) $data = ['prefsEval' => 1];
+	else $data = ['prefsEval' => 0];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v2300_update .= "<li>The prefsEval column value was set.</li>";
 	else {
@@ -2498,7 +2498,7 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 
 }
 
-if (($update_counter == 0) && (!$setup_running)) $v2300_update .= "<li>No updates necessary.</li>";
+if (($update_counter === 0) && (!$setup_running)) $v2300_update .= "<li>No updates necessary.</li>";
 if (!$setup_running) $v2300_update .= "</ul>";
 
 $this_update_version_block = $versions['2.3.0.0'];
@@ -2527,7 +2527,7 @@ elseif ($update_running) {
 if (!$setup_running) $v2320_update .= "<ul>";
 
 $update_table = $styles_db_table;
-$data = array('brewStyleReqSpec' => 1);
+$data = ['brewStyleReqSpec' => 1];
 $db_conn->where ('brewStyleGroup', 'PR');
 $db_conn->where ('brewStyleNum', 'X3');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
@@ -2580,7 +2580,7 @@ if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJC
 	include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsStyleSet' => 'BJCP2015');
+	$data = ['prefsStyleSet' => 'BJCP2015'];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v2400_update .= "<li>Changed style set to BJCP 2015 from BJCP 2008.</li>";
 
@@ -2649,7 +2649,7 @@ $v2400_update .= "<li>Added evaluation DB table - for use with Electronic Scores
  */
 
 $update_table = $styles_db_table;
-$data = array('brewStyle' => 'British Golden Ale');
+$data = ['brewStyle' => 'British Golden Ale'];
 $db_conn->where ('brewStyle', 'English Golden Ale');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
 if ($db_conn->update ($update_table, $data)) $v2400_update .= "<li>Corrected British Golden Ale name in styles table.</li>";
@@ -2659,7 +2659,7 @@ else {
 }
 
 $update_table = $prefix."brewing";
-$data = array('brewStyle' => 'British Golden Ale');
+$data = ['brewStyle' => 'British Golden Ale'];
 $db_conn->where ('brewStyle', 'English Golden Ale');
 if ($db_conn->update ($update_table, $data)) $v2400_update .= "<li>Corrected British Golden Ale name in brewing table.</li>";
 else {
@@ -2719,7 +2719,7 @@ if ($totalRows_security_resp > 0) {
 			$hash_question = $hasher_question->HashPassword($row_security_resp['userQuestionAnswer']);
 
 			$update_table = $prefix."users";
-			$data = array('userQuestionAnswer' => $hash_question);
+			$data = ['userQuestionAnswer' => $hash_question];
 			$db_conn->where ('id', $row_security_resp['id']);
 			if ($db_conn->update ($update_table, $data)) $total_encrypted += 1;
 			else $total_not_encrypted += 1;
@@ -2743,15 +2743,15 @@ if ($total_not_encrypted > 0) $v2500_update .= "<li>".$total_not_encrypted." pla
  */
 
 $v2500_update .= "<li>Recipe-related data collection is now deprecated. Removed entry recipe fields from UI.</li>";
-$deprecated_entry_forms = array("B","N","M","U","3","4");
+$deprecated_entry_forms = ["B","N","M","U","3","4"];
 
 if ((isset($row_current_prefs['prefsEntryForm'])) && (in_array($row_current_prefs['prefsEntryForm'],$deprecated_entry_forms))) {
 
-	if (($row_current_prefs['prefsEntryForm'] == "B") || ($row_current_prefs['prefsEntryForm'] == "M") || ($row_current_prefs['prefsEntryForm'] == "U")) $entry_form = 1;
+	if (in_array($row_current_prefs['prefsEntryForm'], ["B", "M", "U"])) $entry_form = 1;
 	else $entry_form = 2;
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsEntryForm' => $entry_form);
+	$data = ['prefsEntryForm' => $entry_form];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v2500_update .= "<li>Since recipe-related data collection is now deprecated, printed recipe forms are as well. Changed to Printed Entry Bottle Labels only.</li>";
 	else {
@@ -2815,7 +2815,7 @@ if (!check_new_style("01","04","American Light Lager [BJCP 1A]")) include (UPDAT
  */
 
 $update_table = $styles_db_table;
-$data = array('brewStyle' => 'Czech Premium Pale Lager');
+$data = ['brewStyle' => 'Czech Premium Pale Lager'];
 $db_conn->where ('brewStyle', 'Czech Premimum Pale Lager');
 if ($db_conn->update ($update_table, $data)) $v2500_update .= "<li>Corrected Czech Premium Pale Lager name in styles table.</li>";
 else {
@@ -2824,7 +2824,7 @@ else {
 }
 
 $update_table = $prefix."brewing";
-$data = array('brewStyle' => 'Czech Premium Pale Lager');
+$data = ['brewStyle' => 'Czech Premium Pale Lager'];
 $db_conn->where ('brewStyle', 'Czech Premimum Pale Lager');
 if ($db_conn->update ($update_table, $data)) $v2500_update .= "<li>Corrected Czech Premium Pale Lager name in brewing table.</li>";
 else {
@@ -3127,16 +3127,16 @@ if ($row_comp_rules) {
 		$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_040);
 		$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_041);
 
-		$rules_json = array(
+		$rules_json = [
 			"competition_rules" => $row_comp_rules['contestRules'],
 			"competition_packing_shipping" => $current_shipping,
-		);
+		];
 
 		$rules_json = json_encode($rules_json);
 
 		// Update the data in contestRules to JSON
 		$update_table = $prefix."contest_info";
-		$data = array('contestJSON' => $rules_json);
+		$data = ['contestJSON' => $rules_json];
 		$db_conn->where ('id', 1);
 		if ($db_conn->update ($update_table, $data)) $v2600_update .= "<li>Current contest rules and packing/shipping rules converted to accept JSON data for storage.</li>";
 		else {
@@ -3215,7 +3215,7 @@ if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJC
 	include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsStyleSet' => 'BJCP2021');
+	$data = ['prefsStyleSet' => 'BJCP2021'];
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $v2600_update .= "<li>Changed style set to BJCP 2021 from BJCP 2015.</li>";
 
@@ -3317,21 +3317,21 @@ if ($row_current_styleset) {
 			else 
 			*/
 			$update_table = $styles_db_table;
-			$data = array(
+			$data = [
 				'brewStyleGroup' => $style_id,
 				'brewStyleNum' => $sub_style_id,
 				'brewStyleVersion' => $row_current_styleset['prefsStyleSet'],
-			);
+			];
 			$db_conn->where ('id', $row_style_name['id']);
 			$result = $db_conn->update ($update_table, $data);
 
 			// Update all entries in brewing table with the style
 			$update_table = $prefix."brewing";
-			$data = array(
+			$data = [
 				'brewCategory' => $style_id,
 				'brewCategorySort' => $style_id,
 				'brewSubCategory' => $sub_style_id
-			);
+			];
 			$db_conn->where ('brewStyle', $row_style_name['brewStyle']);
 			$result = $db_conn->update ($update_table, $data);
 
@@ -3379,14 +3379,14 @@ if (!check_update("userAdminObfuscate", $prefix."users")) {
 		$v2610_update .= "<li>The userAdminObfuscate column was added to the users table.</li>";
 
 		$update_table = $prefix."users";
-		$data = array(
+		$data = [
 			'userAdminObfuscate' => 1,
-		);
+		];
 		$result = $db_conn->update ($update_table, $data);
 		
-		$data = array(
+		$data = [
 			'userAdminObfuscate' => 0,
-		);
+		];
 		$db_conn->where ('userLevel', 0);
 		$result = $db_conn->update ($update_table, $data);
 	
@@ -3456,9 +3456,9 @@ if (!check_update("prefsScoringCOA", $prefix."preferences")) {
 if (check_update("prefsScoringCOA", $prefix."preferences")) {
 	$v2620_update .= "<li>The prefsScoringCOA column was added to the preferences table.</li>";
 	$update_table = $prefix."preferences";
-	$data = array(
+	$data = [
 		'prefsScoringCOA' => 0,
-	);
+	];
 	$result = $db_conn->update ($update_table, $data);
 }
 
@@ -3519,13 +3519,13 @@ if (!check_update("prefsSelectedStyles", $prefix."preferences")) {
 
 	foreach ($rows_styles_default as $row_styles_default) {
 
-		$styles_selected[$row_styles_default['id']] = array(
+		$styles_selected[$row_styles_default['id']] = [
 			'brewStyle' => $row_styles_default['brewStyle'],
 			'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
 			'brewStyleNum' => $row_styles_default['brewStyleNum'],
 			'brewStyleVersion' => $row_styles_default['brewStyleVersion']
-		);
-		
+		];
+
 		/*
 		if (HOSTED) {
 			// Retaining the following code for a future implementation to migrate
@@ -3606,7 +3606,7 @@ if (!check_update("prefsSelectedStyles", $prefix."preferences")) {
 	$styles_selected_update = json_encode($styles_selected);
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsSelectedStyles' => $styles_selected_update);
+	$data = ['prefsSelectedStyles' => $styles_selected_update];
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 
@@ -3726,9 +3726,9 @@ if (!check_update("brewPouring", $prefix."brewing")) {
 
 	// Provide baseline pouring instructions for all entries currently in the DB
 	$update_table = $prefix."brewing";
-	$data = array(
+	$data = [
 		'brewPouring' => '{"pouring":"Normal","pouring_rouse":"No"}'
-	);
+	];
 	$result = $db_conn->update ($update_table, $data);
 
 }
@@ -3753,9 +3753,9 @@ if (!check_update("brewStyleType", $prefix."brewing")) {
 		foreach ($rows_entry_style_types as $row_entry_style_types) {
 
 			$update_table = $prefix."brewing";
-			$data = array(
+			$data = [
 				'brewStyleType' => $row_entry_style_types['brewStyleType']
-			);
+			];
 			$db_conn->where ('id', $row_entry_style_types['id']);
 			$result = $db_conn->update ($update_table, $data);
 
@@ -3826,13 +3826,13 @@ if (check_update("brewerBreweryTTB", $prefix."brewer")) {
 			if (json_last_error() === JSON_ERROR_NONE) $is_json = TRUE;
 
 			if (!$is_json) {
-				$brewerBreweryInfo = array();
+				$brewerBreweryInfo = [];
 				$brewerBreweryInfo['TTB'] = $row_ttb['brewerBreweryInfo'];
 				$brewerBreweryInfo = json_encode($brewerBreweryInfo);
 
-				$data = array(
+				$data = [
 					'brewerBreweryInfo' => $brewerBreweryInfo
-				);
+				];
 				$db_conn->where ('id', $row_ttb['id']);
 				$result = $db_conn->update ($update_table, $data);
 			}
@@ -3866,13 +3866,13 @@ foreach ($archive_suffixes as $suffix) {
 				if (json_last_error() === JSON_ERROR_NONE) $is_json = TRUE;
 
 				if (!$is_json) {
-					$brewerBreweryInfo = array();
+					$brewerBreweryInfo = [];
 					$brewerBreweryInfo['TTB'] = $row_ttb['brewerBreweryInfo'];
 					$brewerBreweryInfo = json_encode($brewerBreweryInfo);
 
-					$data = array(
+					$data = [
 						'brewerBreweryInfo' => $brewerBreweryInfo
-					);
+					];
 					$db_conn->where ('id', $row_ttb['id']);
 					$result = $db_conn->update ($update_table, $data);
 				}
@@ -3909,9 +3909,9 @@ foreach ($archive_suffixes as $suffix) {
 
 		// Provide baseline pouring instructions for all entries currently in the DB
 		$update_table = $prefix."brewing_".$suffix;
-		$data = array(
+		$data = [
 			'brewPouring' => '{"pouring":"Normal","pouring_rouse":"No"}'
-		);
+		];
 		$result = $db_conn->update ($update_table, $data);
 	}
 
@@ -3932,7 +3932,7 @@ $nw_cider_update_output = "";
 
 $update_table = $prefix."styles";
 
-$data = array('brewStyleEntry' => NULL);
+$data = ['brewStyleEntry' => NULL];
 $db_conn->where ('brewStyleGroup', 'C1');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -3942,7 +3942,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C1 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => NULL);
+$data = ['brewStyleEntry' => NULL];
 $db_conn->where ('brewStyleGroup', 'C1');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -3952,7 +3952,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C1 B was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => NULL);
+$data = ['brewStyleEntry' => NULL];
 $db_conn->where ('brewStyleGroup', 'C2');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -3962,7 +3962,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C2 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => NULL);
+$data = ['brewStyleEntry' => NULL];
 $db_conn->where ('brewStyleGroup', 'C2');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -3972,7 +3972,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C2 B was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify apples used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify apples used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C3');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -3982,7 +3982,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C3 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify apples used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify apples used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C3');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -3992,7 +3992,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C1 B was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MAY</u></strong> specify pears used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MAY</u></strong> specify pears used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C4');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4002,7 +4002,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C4 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MAY</u></strong> specify pears used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MAY</u></strong> specify pears used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C4');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4012,7 +4012,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C4 B was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong>  specify wood used, including the type of wine, beer or spirits barrel, if applicable.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples and process used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong>  specify wood used, including the type of wine, beer or spirits barrel, if applicable.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples and process used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C5');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4022,7 +4022,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C5 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong>  specify apple or pear variety used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong>  specify apple or pear variety used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C6');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4032,7 +4032,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C6 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit.</p>'];
 $db_conn->where ('brewStyleGroup', 'C7');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4042,7 +4042,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C7 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit. FG > 1.007 (> 1.8 Brix).</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit. FG > 1.007 (> 1.8 Brix).</p>'];
 $db_conn->where ('brewStyleGroup', 'C7');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4052,7 +4052,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C7 B was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit. FG < 1.007 (< 1.8 Brix).</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify all fruits used.</p><p>Entrants <strong><u>MUST</u></strong> specify primary fruit. FG < 1.007 (< 1.8 Brix).</p>'];
 $db_conn->where ('brewStyleGroup', 'C7');
 $db_conn->where ('brewStyleNum', 'C');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4062,7 +4062,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C7 C was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify hop variety or varieties.</p><p>Entrants MAY specify apples or pears used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify hop variety or varieties.</p><p>Entrants MAY specify apples or pears used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C8');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4072,7 +4072,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C8 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify herbs and and/or spices used.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify herbs and and/or spices used.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C8');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4082,7 +4082,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C8 B was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify spices and/or herbs used.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify spices and/or herbs used.</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C8');
 $db_conn->where ('brewStyleNum', 'C');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4092,7 +4092,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C8 C was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify the process used.</p><p>Entrants MAY specify apples or pears used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify the process used.</p><p>Entrants MAY specify apples or pears used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C9');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4102,7 +4102,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C9 A was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify process used (i.e., alcohol removed or ciderkin production).</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p><p>ABV range: 0.5% - 4.5%.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify process used (i.e., alcohol removed or ciderkin production).</p><p>Entrants <strong><u>MAY</u></strong>  specify apples or pears used.</p><p>ABV range: 0.5% - 4.5%.</p>'];
 $db_conn->where ('brewStyleGroup', 'C9');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4112,7 +4112,7 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C9 B was NOT updated.</li>";
 }
 
-$data = array('brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify processes and ingredients that make the cider not suitable for any other category.</p><p>Entrants <strong><u>MUST</u></strong> specify commercial yeast cultures or wild yeast processes (i.e., wild ferment, brettanomyces, or lactobacillus). <p>Entrants <strong><u>MUST</u></strong> note additions such as added sweeteners (i.e., honey or molasses).</p><p>Entrants MAY specify apples or pears used.</p>');
+$data = ['brewStyleEntry' => '<p>Entrants <strong><u>MUST</u></strong> specify processes and ingredients that make the cider not suitable for any other category.</p><p>Entrants <strong><u>MUST</u></strong> specify commercial yeast cultures or wild yeast processes (i.e., wild ferment, brettanomyces, or lactobacillus). <p>Entrants <strong><u>MUST</u></strong> note additions such as added sweeteners (i.e., honey or molasses).</p><p>Entrants MAY specify apples or pears used.</p>'];
 $db_conn->where ('brewStyleGroup', 'C9');
 $db_conn->where ('brewStyleNum', 'C');
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
@@ -4122,9 +4122,9 @@ if ($db_conn->getLastErrno() !== 0) {
 	$nw_cider_update_output .= "<li>NW Cider Cup Style C9 C was NOT updated.</li>";
 }
 
-$data = array(
+$data = [
 	'brewStyleReqSpec' => 0
-);
+];
 $db_conn->where ('brewStyleVersion', 'NWCiderCup');
 $db_conn->where ('brewStyleGroup', 'C1');
 $db_conn->orWhere ('brewStyleGroup', 'C2');
@@ -4178,7 +4178,7 @@ else {
 }
 
 $update_table = $prefix."styles";
-$data = array('brewStyleReqSpec' => '1');
+$data = ['brewStyleReqSpec' => '1'];
 $db_conn->where ('brewStyleGroup', 'C2');
 $db_conn->where ('brewStyleNum', 'A');
 $db_conn->where ('brewStyleVersion', 'BJCP2021');
@@ -4190,7 +4190,7 @@ else {
 }
 
 $update_table = $prefix."styles";
-$data = array('brewStyleReqSpec' => '1');
+$data = ['brewStyleReqSpec' => '1'];
 $db_conn->where ('brewStyleGroup', 'C2');
 $db_conn->where ('brewStyleNum', 'B');
 $db_conn->where ('brewStyleVersion', 'BJCP2021');
@@ -4202,7 +4202,7 @@ else {
 }
 
 $update_table = $prefix."styles";
-$data = array('brewStyleReqSpec' => '1');
+$data = ['brewStyleReqSpec' => '1'];
 $db_conn->where ('brewStyleGroup', 'C2');
 $db_conn->where ('brewStyleNum', 'D');
 $db_conn->where ('brewStyleVersion', 'BJCP2021');
@@ -4214,7 +4214,7 @@ else {
 }
 
 $update_table = $prefix."styles";
-$data = array('brewStyleReqSpec' => '1');
+$data = ['brewStyleReqSpec' => '1'];
 $db_conn->where ('brewStyleGroup', 'C2');
 $db_conn->where ('brewStyleNum', 'E');
 $db_conn->where ('brewStyleVersion', 'BJCP2021');
@@ -4226,7 +4226,7 @@ else {
 }
 
 $update_table = $prefix."styles";
-$data = array('brewStyleReqSpec' => '1');
+$data = ['brewStyleReqSpec' => '1'];
 $db_conn->where ('brewStyleGroup', 'C2');
 $db_conn->where ('brewStyleNum', 'F');
 $db_conn->where ('brewStyleVersion', 'BJCP2021');
@@ -4237,14 +4237,14 @@ else {
 	$error_count++;
 }
 
-$entry_forms_allowed = array("5","6","7","8");
+$entry_forms_allowed = ["5","6","7","8"];
 
 if (!in_array($row_current_prefs['prefsEntryForm'],$entry_forms_allowed)) {
 
-	if ($row_current_prefs['prefsEntryForm'] == "0") $data = array('prefsEntryForm' => "8");
-	elseif (($row_current_prefs['prefsEntryForm'] == "2") || ($row_current_prefs['prefsEntryForm'] == "C")) $data = array('prefsEntryForm' => "5");
-	elseif (($row_current_prefs['prefsEntryForm'] == "1") || ($row_current_prefs['prefsEntryForm'] == "E")) $data = array('prefsEntryForm' => "7");
-	else $data = array('prefsEntryForm' => "5");
+	if ($row_current_prefs['prefsEntryForm'] == "0") $data = ['prefsEntryForm' => "8"];
+	elseif (($row_current_prefs['prefsEntryForm'] == "2") || ($row_current_prefs['prefsEntryForm'] == "C")) $data = ['prefsEntryForm' => "5"];
+	elseif (($row_current_prefs['prefsEntryForm'] == "1") || ($row_current_prefs['prefsEntryForm'] == "E")) $data = ['prefsEntryForm' => "7"];
+	else $data = ['prefsEntryForm' => "5"];
 
 	$update_table = $prefix."preferences";
 	$db_conn->where ('id', 1);
@@ -4269,7 +4269,7 @@ if (!check_update("prefsUserEntryLimitDates", $prefix."preferences")) {
 if (($row_current_prefs['prefsTheme'] == "claussenii") || ($row_current_prefs['prefsTheme'] == "naardenensis")) {
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsTheme' => 'default');
+	$data = ['prefsTheme' => 'default'];
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 	if ($db_conn->getLastErrno() === 0) $v2710_update .= "<li>Deprecated theme updated to BCOE&amp;M Default. To change, update your site preferences.</li>";
@@ -4327,9 +4327,9 @@ if (!check_update("prefsMHPDisplay", $prefix."preferences")) {
 	else $prefsMHPDisplay = 1;
 
 	$update_table = $prefix."preferences";
-	$data = array(
+	$data = [
 		'prefsMHPDisplay' => $prefsMHPDisplay,
-	);
+	];
 
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
@@ -4435,9 +4435,9 @@ if (!check_update("prefsEmailPort", $prefix."preferences")) {
 	// $row_current_prefs was captured before this version's own schema changes ran, so
 	// columns added earlier in this same update pass (e.g. prefsEmailCC, added above) may
 	// not exist in it yet on installs upgrading from before that point.
-	$prefsEmailRegConfirm = isset($row_current_prefs['prefsEmailRegConfirm']) ? $row_current_prefs['prefsEmailRegConfirm'] : 0;
-	$prefsEmailCC = isset($row_current_prefs['prefsEmailCC']) ? $row_current_prefs['prefsEmailCC'] : 0;
-	$prefsContact = isset($row_current_prefs['prefsContact']) ? $row_current_prefs['prefsContact'] : "N";
+	$prefsEmailRegConfirm = $row_current_prefs['prefsEmailRegConfirm'] ?? 0;
+	$prefsEmailCC = $row_current_prefs['prefsEmailCC'] ?? 0;
+	$prefsContact = $row_current_prefs['prefsContact'] ?? "N";
 
 	$secretKey = base64_encode(bin2hex($password));
 	$nacl = base64_encode(bin2hex($server_root));
@@ -4466,9 +4466,9 @@ if (!check_update("prefsEmailPort", $prefix."preferences")) {
 	if (!empty($row_comp_rules['contestEntryFeePassword'])) {
 
 		$entry_fee_password = simpleEncrypt($row_comp_rules['contestEntryFeePassword'], $secretKey, $nacl);
-		$data = array(
+		$data = [
 			'contestEntryFeePassword' => $entry_fee_password
-		);
+		];
 		$db_conn->where ('id', 1);
 		$result = $db_conn->update ($prefix."contest_info", $data);
 
@@ -4488,16 +4488,16 @@ if (!check_update("prefsEmailPort", $prefix."preferences")) {
 	 * This will trigger an alert in the Admin Dashboard.
 	 */
 
-	if (($smtp_enable == 0) && (($prefsEmailRegConfirm == 1) || ($prefsContact == "Y"))) $smtp_enable = 3;
+	if (($smtp_enable === 0) && (($prefsEmailRegConfirm == 1) || ($prefsContact == "Y"))) $smtp_enable = 3;
 
-	if (($smtp_enable == 0) || ($smtp_enable == 3)) {
+	if (($smtp_enable === 0) || ($smtp_enable === 3)) {
 		$prefsEmailRegConfirm = 0;
 		$prefsEmailCC = 0;
 		$prefsContact = "N";
 	}
 
 	$update_table = $prefix."preferences";
-	$data = array(
+	$data = [
 		'prefsEmailSMTP' => $smtp_enable,
 		'prefsEmailFrom' => blank_to_null($mail_default_from),
 		'prefsEmailHost' => blank_to_null($smtp_host),
@@ -4508,7 +4508,7 @@ if (!check_update("prefsEmailPort", $prefix."preferences")) {
 		'prefsEmailRegConfirm' => $prefsEmailRegConfirm,
 		'prefsEmailCC' => $prefsEmailCC,
 		'prefsContact' => $prefsContact
-	);
+	];
 
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
@@ -4718,13 +4718,13 @@ $v304_cleanup_field_set = function ($db_conn, $table, $columns, $normalize) use 
 	$changed = 0;
 	$rows = $db_conn->get($table);
 	foreach ($rows as $row) {
-		$updates = array();
+		$updates = [];
 		foreach ($columns as $col) {
 			if (!array_key_exists($col, $row) || $row[$col] === null || $row[$col] === '') continue;
 			$normalized = $normalize($v304_fully_decode($row[$col]));
 			if ($normalized !== $row[$col]) $updates[$col] = $normalized;
 		}
-		if (!empty($updates)) {
+		if ($updates !== []) {
 			$changed++;
 			$db_conn->where('id', $row['id']);
 			$db_conn->update($table, $updates);
@@ -4733,13 +4733,13 @@ $v304_cleanup_field_set = function ($db_conn, $table, $columns, $normalize) use 
 	return $changed;
 };
 
-$v304_purify_normalize = function ($raw) use ($purifier) { return $purifier->purify($raw); };
-$v304_plain_normalize = function ($raw) { return trim(strip_tags($raw)); };
+$v304_purify_normalize = (fn($raw) => $purifier->purify($raw));
+$v304_plain_normalize = (fn($raw) => trim(strip_tags($raw)));
 
 $v304_changed_brewer = $v304_cleanup_field_set(
 	$db_conn,
 	$prefix."brewer",
-	array('brewerJudgeID', 'brewerBreweryName', 'brewerJudgeNotes', 'brewerFirstName', 'brewerLastName', 'brewerAddress', 'brewerCity', 'brewerState'),
+	['brewerJudgeID', 'brewerBreweryName', 'brewerJudgeNotes', 'brewerFirstName', 'brewerLastName', 'brewerAddress', 'brewerCity', 'brewerState'],
 	$v304_purify_normalize
 );
 
@@ -4753,14 +4753,14 @@ foreach ($v304_rows_brewer_ttb as $v304_row_brewer_ttb) {
 	if ($v304_normalized_ttb !== $v304_info['TTB']) {
 		$v304_info['TTB'] = $v304_normalized_ttb;
 		$db_conn->where('id', $v304_row_brewer_ttb['id']);
-		$db_conn->update($prefix."brewer", array('brewerBreweryInfo' => json_encode($v304_info)));
+		$db_conn->update($prefix."brewer", ['brewerBreweryInfo' => json_encode($v304_info)]);
 		$v304_changed_brewer++;
 	}
 }
 
-$v304_changed_tables = $v304_cleanup_field_set($db_conn, $prefix."judging_tables", array('tableName'), $v304_plain_normalize);
-$v304_changed_styles = $v304_cleanup_field_set($db_conn, $prefix."style_types", array('styleTypeName'), $v304_plain_normalize);
-$v304_changed_prefs = $v304_cleanup_field_set($db_conn, $prefix."preferences", array('prefsBestBrewerTitle', 'prefsBestClubTitle'), $v304_purify_normalize);
+$v304_changed_tables = $v304_cleanup_field_set($db_conn, $prefix."judging_tables", ['tableName'], $v304_plain_normalize);
+$v304_changed_styles = $v304_cleanup_field_set($db_conn, $prefix."style_types", ['styleTypeName'], $v304_plain_normalize);
+$v304_changed_prefs = $v304_cleanup_field_set($db_conn, $prefix."preferences", ['prefsBestBrewerTitle', 'prefsBestClubTitle'], $v304_purify_normalize);
 
 $v304_total_changed = $v304_changed_brewer + $v304_changed_tables + $v304_changed_styles + $v304_changed_prefs;
 
@@ -4844,21 +4844,19 @@ if ((is_array($v310_row_prefs)) && (isset($v310_row_prefs['prefsTimeZone'])) && 
 	$v310_timezone_raw = (float) $v310_row_prefs['prefsTimeZone'];
 }
 
-$v310_normalize_ts = function ($value) use ($v310_timezone_raw) {
-	return normalize_competition_ts($value, $v310_timezone_raw);
-};
+$v310_normalize_ts = (fn($value) => normalize_competition_ts($value, $v310_timezone_raw));
 
 $v310_ts_migrate = function ($db_conn, $table, $columns) use ($v310_normalize_ts) {
 	$changed = 0;
 	$rows = $db_conn->get($table);
 	foreach ($rows as $row) {
-		$updates = array();
+		$updates = [];
 		foreach ($columns as $col) {
 			if (!array_key_exists($col, $row)) continue;
 			$normalized = $v310_normalize_ts($row[$col]);
 			if ($normalized !== $row[$col]) $updates[$col] = $normalized;
 		}
-		if (!empty($updates)) {
+		if ($updates !== []) {
 			$changed++;
 			$db_conn->where('id', $row['id']);
 			$db_conn->update($table, $updates);
@@ -4868,22 +4866,22 @@ $v310_ts_migrate = function ($db_conn, $table, $columns) use ($v310_normalize_ts
 };
 
 $v310_changed = 0;
-$v310_changed += $v310_ts_migrate($db_conn, $prefix."contest_info", array(
+$v310_changed += $v310_ts_migrate($db_conn, $prefix."contest_info", [
 	'contestRegistrationOpen', 'contestRegistrationDeadline',
 	'contestEntryOpen', 'contestEntryDeadline', 'contestEntryEditDeadline',
 	'contestJudgeOpen', 'contestJudgeDeadline', 'contestAwardsLocDate',
 	'contestShippingOpen', 'contestShippingDeadline',
 	'contestDropoffOpen', 'contestDropoffDeadline'
-));
-$v310_changed += $v310_ts_migrate($db_conn, $prefix."judging_preferences", array(
+]);
+$v310_changed += $v310_ts_migrate($db_conn, $prefix."judging_preferences", [
 	'jPrefsJudgingOpen', 'jPrefsJudgingClosed'
-));
-$v310_changed += $v310_ts_migrate($db_conn, $prefix."judging_locations", array(
+]);
+$v310_changed += $v310_ts_migrate($db_conn, $prefix."judging_locations", [
 	'judgingDate', 'judgingDateEnd'
-));
-$v310_changed += $v310_ts_migrate($db_conn, $prefix."preferences", array(
+]);
+$v310_changed += $v310_ts_migrate($db_conn, $prefix."preferences", [
 	'prefsWinnerDelay'
-));
+]);
 
 if ($v310_changed > 0) $v3100_update .= "<li>Normalized ".$v310_changed." stored competition timestamp(s) to UTC epoch (timezone-consistent storage).</li>";
 
@@ -4919,23 +4917,23 @@ if (!check_update("prefsLanguageToggle", $prefix."preferences")) {
 		// no longer consulted at runtime.
 		$v310_lang_toggle = ((isset($enable_language_toggle)) && ($enable_language_toggle)) ? 'Y' : 'N';
 
-		if ((isset($override_languages)) && (is_array($override_languages)) && (!empty($override_languages))) {
+		if ((isset($override_languages)) && (is_array($override_languages)) && ($override_languages !== [])) {
 			$v310_lang_options = json_encode(array_keys($override_languages));
 		}
 		else {
-			$v310_lang_options = json_encode(array("pt-BR","cs-CZ","en-GB","en-US","fr-FR","hu-HU","es-419"));
+			$v310_lang_options = json_encode(["pt-BR","cs-CZ","en-GB","en-US","fr-FR","hu-HU","es-419"]);
 		}
 
 		$update_table = $prefix."preferences";
-		$data = array(
+		$data = [
 			'prefsLanguageToggle' => $v310_lang_toggle,
 			'prefsLanguageOptions' => $v310_lang_options
-		);
+		];
 		$db_conn->where ('id', 1);
 		$result = $db_conn->update ($update_table, $data);
 
 		if ($db_conn->getLastErrno() === 0) {
-			$v3100_update .= "<li>Runtime language toggle preferences initialized".(($v310_lang_toggle == 'Y') ? " (carried forward from config.php)" : "").".</li>";
+			$v3100_update .= "<li>Runtime language toggle preferences initialized".(($v310_lang_toggle === 'Y') ? " (carried forward from config.php)" : "").".</li>";
 		}
 		else {
 			$v3100_update .= "<li class=\"text-danger\">Runtime language toggle preferences NOT initialized. Error: ".$db_conn->getLastError()."</li>";
@@ -4969,7 +4967,7 @@ if (!$setup_running) $output_run_update .= "</ul>";
  * ---------------------------------------------------------------------------------------------------
  */
 
-$optimize_db_tables = array(
+$optimize_db_tables = [
 	$prefix."brewer",
 	$prefix."brewing",
 	$prefix."evaluation",
@@ -4982,7 +4980,7 @@ $optimize_db_tables = array(
 	$prefix."staff",
 	$prefix."styles",
 	$prefix."users"
-);
+];
 
 /*
 if (HOSTED) {
@@ -5003,12 +5001,12 @@ foreach ($optimize_db_tables as $table) {
  */
 
 $update_table = $prefix."bcoem_sys";
-$data = array(
+$data = [
 	'version' => $current_version,
 	'version_date' => $current_version_date_display,
 	'data_check' => date('Y-m-d H:i:s', time()),
 	'update_date' => time()
-);
+];
 $db_conn->where ('id', 1);
 
 if ($db_conn->update ($update_table, $data)) {
@@ -5045,8 +5043,8 @@ $output .= $output_run_update;
 
 if (!$setup_running) {
 	$update_table = $prefix."bcoem_sys";
-	if ($update_running) $data = array('update_summary' => $output);
-	else $data = array('update_summary' => $output_errors.$output_run_update);
+	if ($update_running) $data = ['update_summary' => $output];
+	else $data = ['update_summary' => $output_errors.$output_run_update];
 	$db_conn->where ('id', 1);
 	$db_conn->update ($update_table, $data);
 }
@@ -5064,7 +5062,7 @@ if (!$setup_running) {
 	$_SESSION['update_complete'] = 1;
 	if ($update_running) $_SESSION['update_summary'] = $output;
 	else $_SESSION['update_summary'] = $output_errors.$output_run_update;
-	if ($error_count == 0) $_SESSION['update_errors'] = 0;
+	if ($error_count === 0) $_SESSION['update_errors'] = 0;
 	else $_SESSION['update_errors'] = 1;
 }
 

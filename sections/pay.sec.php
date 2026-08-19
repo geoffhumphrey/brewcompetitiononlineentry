@@ -89,7 +89,7 @@ else {
 	if (($_SESSION['prefsTransFee'] == "Y") && ($total_to_pay > 0)) $primary_page_info .= "<strong><span class=\"text-primary\">*</span></strong>";
 	$primary_page_info .= ".</small></p>";
 
-	if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p></small></p>",$pay_text_010);
+	if (($total_not_paid === 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p></small></p>",$pay_text_010);
 
 
 	else {
@@ -150,10 +150,10 @@ else {
 			 * deducted from the paid total.
 			 * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1317
 			 */
-			
+
 			if ($_SESSION['prefsTransFee'] == "Y") {
-				
-				$pp_fixed_fees_arr = array(
+
+				$pp_fixed_fees_arr = [
 					"$" => 0.49,
 					"R$" => 2.90,
 					"pound" => 0.39,
@@ -177,7 +177,7 @@ else {
 					"skr" => 4.09,
 					"sfranc" => 0.49,
 					"baht" => 15.00,
-				);
+				];
 
 				if ((isset($_SESSION['prefsCurrency'])) && (array_key_exists($_SESSION['prefsCurrency'],$pp_fixed_fees_arr))) $pp_fixed_fee = $pp_fixed_fees_arr[$_SESSION['prefsCurrency']];
 				else $pp_fixed_fee = 0;
@@ -255,7 +255,7 @@ else {
 
 	}
 
-	if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "") && ((($total_entry_fees > 0) && ($total_entry_fees != $total_paid_entry_fees)))) {
+	if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "") && ((($total_entry_fees > 0) && ($total_entry_fees !== $total_paid_entry_fees)))) {
 		$header1_7 .= sprintf("<h2>%s</h2>",$label_fee_discount);
 		$page_info7 .= sprintf("<p>%s</p>",$pay_text_023);
 		$page_info7 .= sprintf("<form class=\"form-inline\" action=\"%sincludes/process.inc.php?action=check_discount&amp;dbTable=%s&amp;id=%s\" method=\"POST\" name=\"form1\" id=\"form1\">",$base_url,$brewer_db_table,$row_brewer['uid']);
@@ -267,7 +267,7 @@ else {
 		$page_info7 .= "</form>";
 	}
 
-	if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) 
+	if (($total_entry_fees > 0) && ($total_entry_fees === $total_paid_entry_fees)) 
 		$page_info6 .= sprintf("<p class=\"text-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>%s</strong></p>",$pay_text_024);
 	if (($total_entry_fees == 0) && ($_SESSION['contestEntryFee'] > 0)) 
 		$page_info6 .= sprintf("<p>%s</p>",$pay_text_025);

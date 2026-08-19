@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * UPDATE June 13, 2023
  * - Deprecated BJCP 2015
@@ -45,8 +48,7 @@
  *      - If any REQUIRED items are removed or their values are blank, this will 
  *        result in - say it with me - errors and unexpected functionality.
  */
-
-$style_sets = array(
+$style_sets = [
 
 /**
  * ------------------------------------------------------------------------------
@@ -259,7 +261,7 @@ $style_sets = array(
 
 	*/
 
-	array(
+	[
 		"id" => 1,
 		"style_set_name" => "BJCP2025",
 		"style_set_long_name" => "BJCP Beer 2021, Mead 2015, Cider 2025",
@@ -268,7 +270,7 @@ $style_sets = array(
 		"style_set_display_separator" => "",
 		"style_set_system_separator" => "-",
 		"style_set_sub_style_method" => "0",
-		"style_set_categories" => array(
+		"style_set_categories" => [
 			"01" => "Standard American Beer",
 			"02" => "International Lager",
 			"03" => "Czech Lager",
@@ -312,14 +314,14 @@ $style_sets = array(
 			"C2" => "Strong Cider",
 			"C3" => "Specialty Cider",
 			"C4" => "Perry"
-		),
+		],
 		"style_set_beer_end" => "34",
-		"style_set_mead" => array("M1","M2","M3","M4"),
-		"style_set_cider" => array("C1","C2","C3","C4"),
+		"style_set_mead" => ["M1","M2","M3","M4"],
+		"style_set_cider" => ["C1","C2","C3","C4"],
 		"style_set_category_end" => "49"
-	),
+	],
 
-	array(
+	[
 		"id" => 2,
 		"style_set_name" => "BJCP2021",
 		"style_set_long_name" => "BJCP Beer 2021, Mead and Cider 2015",
@@ -328,7 +330,7 @@ $style_sets = array(
 		"style_set_display_separator" => "",
 		"style_set_system_separator" => "-",
 		"style_set_sub_style_method" => "0",
-		"style_set_categories" => array(
+		"style_set_categories" => [
 			"01" => "Standard American Beer",
 			"02" => "International Lager",
 			"03" => "Czech Lager",
@@ -370,14 +372,14 @@ $style_sets = array(
 			"C1" => "Standard Cider and Perry",
 			"C2" => "Specialty Cider and Perry",
 			"LS" => "Local Styles"
-		),
+		],
 		"style_set_beer_end" => "34",
-		"style_set_mead" => array("M1","M2","M3","M4"),
-		"style_set_cider" => array("C1","C2"),
+		"style_set_mead" => ["M1","M2","M3","M4"],
+		"style_set_cider" => ["C1","C2"],
 		"style_set_category_end" => "49"
-	),
+	],
 
-	array(
+	[
 		"id" => 3,
 		"style_set_name" => "BA",
 		"style_set_long_name" => "Brewers Association",
@@ -386,7 +388,7 @@ $style_sets = array(
 		"style_set_display_separator" => "",
 		"style_set_system_separator" => "-",
 		"style_set_sub_style_method" => "1",
-		"style_set_categories" => array(
+		"style_set_categories" => [
 			"01" => "British Origin Ales",
 			"02" => "Irish Origin Ales",
 			"03" => "North American Origin Ales",
@@ -401,14 +403,14 @@ $style_sets = array(
 			"12" => "Mead, Cider, and Perry", 
 			"13" => "Other Origin", // Deprecated
 			"14" => "Malternative Beverages" // Deprecated
-		),
+		],
 		"style_set_beer_end" => "11",
-		"style_set_mead" => array("12"),
-		"style_set_cider" => array("12"),
+		"style_set_mead" => ["12"],
+		"style_set_cider" => ["12"],
 		"style_set_category_end" => "49"
-	),
+	],
 
-	array(
+	[
 		"id" => 4,
 		"style_set_name" => "AABC",
 		"style_set_long_name" => "Australian Amateur Brewing Championship 2019 [Deprecated]",
@@ -417,7 +419,7 @@ $style_sets = array(
 		"style_set_display_separator" => ".",
 		"style_set_system_separator" => "-",
 		"style_set_sub_style_method" => "1",
-		"style_set_categories" => array(
+		"style_set_categories" => [
 			"01" => "Low Alcohol",
 			"02" => "Pale Lager",
 			"03" => "Amber and Dark Lager",
@@ -438,14 +440,14 @@ $style_sets = array(
 			"18" => "Specialty Beer",
 			"19" => "Mead",
 			"20" => "Cider"
-		),
+		],
 		"style_set_beer_end" => "18",
-		"style_set_mead" => array("19"),
-		"style_set_cider" => array("20"),
+		"style_set_mead" => ["19"],
+		"style_set_cider" => ["20"],
 		"style_set_category_end" => "49"
-	),
+	],
 
-	array(
+	[
 		"id" => 5,
 		"style_set_name" => "AABC2022",
 		"style_set_long_name" => "Australian Amateur Brewing Championship 2022",
@@ -454,7 +456,7 @@ $style_sets = array(
 		"style_set_display_separator" => ".",
 		"style_set_system_separator" => "-",
 		"style_set_sub_style_method" => "1",
-		"style_set_categories" => array(
+		"style_set_categories" => [
 			"01" => "Low Alcohol",
 			"02" => "Pale Lager",
 			"03" => "Amber and Dark Lager",
@@ -475,14 +477,14 @@ $style_sets = array(
 			"18" => "Specialty Beer",
 			"19" => "Mead",
 			"20" => "Cider and Perry"
-		),
+		],
 		"style_set_beer_end" => "18",
-		"style_set_mead" => array("19"),
-		"style_set_cider" => array("20"),
+		"style_set_mead" => ["19"],
+		"style_set_cider" => ["20"],
 		"style_set_category_end" => "49"
-	),
+	],
 
-	array(
+	[
 		"id" => 6,
 		"style_set_name" => "AABC2025",
 		"style_set_long_name" => "Australian Amateur Brewing Championship 2025",
@@ -491,7 +493,7 @@ $style_sets = array(
 		"style_set_display_separator" => ".",
 		"style_set_system_separator" => "-",
 		"style_set_sub_style_method" => "1",
-		"style_set_categories" => array(
+		"style_set_categories" => [
 			"01" => "Low Alcohol",
 			"02" => "Pale Lager",
 			"03" => "Amber and Dark Lager",
@@ -512,14 +514,14 @@ $style_sets = array(
 			"18" => "Specialty Beer",
 			"19" => "Mead",
 			"20" => "Cider and Perry"
-		),
+		],
 		"style_set_beer_end" => "18",
-		"style_set_mead" => array("19"),
-		"style_set_cider" => array("20"),
+		"style_set_mead" => ["19"],
+		"style_set_cider" => ["20"],
 		"style_set_category_end" => "49"
-	),
+	],
 
-	array(
+	[
 		"id" => 7,
 		"style_set_name" => "NWCiderCup",
 		"style_set_long_name" => "Northwest Cider Cup",
@@ -528,7 +530,7 @@ $style_sets = array(
 		"style_set_display_separator" => "-",
 		"style_set_system_separator" => "-",
 		"style_set_sub_style_method" => "0",
-		"style_set_categories" => array(
+		"style_set_categories" => [
 			"C1" => "Low-Tannin Cider",
 			"C2" => "High-Tannin Cider",
 			"C3" => "Red Fleshed Cider",
@@ -538,12 +540,11 @@ $style_sets = array(
 			"C7" => "Fruit Cider or Perry",
 			"C8" => "Botanical Cider or Perry",
 			"C9" => "Specialty Cider or Perry",
-		),
+		],
 		"style_set_beer_end" => "0",
-		"style_set_mead" => array(),
-		"style_set_cider" => array("C1","C2","C3","C4","C5","C6","C7","C8","C9"),
+		"style_set_mead" => [],
+		"style_set_cider" => ["C1","C2","C3","C4","C5","C6","C7","C8","C9"],
 		"style_set_category_end" => "49"
-	)
+	]
 
-);
-?>
+];

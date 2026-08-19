@@ -16,18 +16,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$sponsor_info = $purifier->purify(sterilize($_POST['sponsorText'.$id]));
 			if ($_POST['sponsorEnable'.$id] == 1) $enable = 1; else $enable = 0;
 			if (isset($_POST['sponsorImage'.$id])) $image = $purifier->purify($_POST['sponsorImage'.$id]); else $image = "";
-			$data = array(
+			$data = [
 				'sponsorEnable' => $enable,
 				'sponsorLevel' => sterilize($_POST['sponsorLevel'.$id]),
 				'sponsorImage' => $image,
 				'sponsorText' => $sponsor_info
-			);
+			];
 			$db_conn->where('id', $id);
 			$result = $db_conn->update($sponsors_db_table, $data);
 		}
 
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=sponsors&msg=9";
-		$pattern = array('\'', '"');
+		$pattern = ['\'', '"'];
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
 		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 	}
@@ -39,7 +39,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$sponsorText = $purifier->purify(sterilize($_POST['sponsorText']));
 
 		$update_table = $prefix."sponsors";
-		$data = array(
+		$data = [
 			'sponsorName' => blank_to_null($sponsorName),
 			'sponsorURL' => blank_to_null($sponsorURL),
 			'sponsorImage' => blank_to_null(sterilize($_POST['sponsorImage'])),
@@ -47,7 +47,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'sponsorLocation' => blank_to_null(sterilize($_POST['sponsorLocation'])),
 			'sponsorLevel' => blank_to_null(sterilize($_POST['sponsorLevel'])),
 			'sponsorEnable' => blank_to_null(sterilize($_POST['sponsorEnable']))
-		);
+		];
 
 	}
 

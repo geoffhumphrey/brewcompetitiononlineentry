@@ -42,8 +42,8 @@ $show_judge_steward_fields = TRUE;
 
 if (($_SESSION['prefsProEdition'] == 1) && (isset($row_brewer['brewerBreweryName']))) {
 	$show_judge_steward_fields = FALSE;
-	$label_contact = $label_contact." ";
-	$label_organization = $label_organization." ";
+	$label_contact .= " ";
+	$label_organization .= " ";
 }
 
 else {
@@ -153,7 +153,7 @@ arsort($a);
 
 foreach ($a as $value) {
 	
-	if ($value != "0-0") {
+	if ($value !== "0-0") {
 		
 		$b = substr($value, 2);
 
@@ -165,7 +165,7 @@ foreach ($a as $value) {
 			if (($judging_location_info[0] > 0) && ($judging_location_info[5] < 2))  {
 
 				$user_available = yes_no(substr($value, 0, 1),$base_url,3);
-				if (ucwords($user_available) == ucwords($label_yes)) $judge_available_sessions++;
+				if (ucwords($user_available) === ucwords($label_yes)) $judge_available_sessions++;
 				$judge_info .= "<tr>\n";
 				$judge_info .= "<td>";
 				$judge_info .= yes_no(substr($value, 0, 1),$base_url,1);
@@ -217,7 +217,7 @@ arsort($a);
 
 foreach ($a as $value) {
 	
-	if ($value != "0-0") {
+	if ($value !== "0-0") {
 
 		$b = substr($value, 2);
 
@@ -226,7 +226,7 @@ foreach ($a as $value) {
 		if ((isset($judging_location_info[0])) && ($judging_location_info[0] > 0)) {
 
 			$user_available = yes_no(substr($value, 0, 1),$base_url,3);
-			if (ucwords($user_available) == ucwords($label_yes)) $steward_available_sessions++;
+			if (ucwords($user_available) === ucwords($label_yes)) $steward_available_sessions++;
 
 			$steward_info .= "<tr>\n";
 			$steward_info .= "<td>";
@@ -401,7 +401,7 @@ $account_display .= "<div class=\"".$display_right_cols."\">";
 if (!empty($_SESSION['brewerAssignment'])) {
 
 	$affiliated_orgs = json_decode($_SESSION['brewerAssignment'],true);
-	$affiliations = array();
+	$affiliations = [];
 
 	if (!empty($affiliated_orgs['affilliated'])) {
 	    foreach($affiliated_orgs['affilliated'] as $value) {
@@ -419,7 +419,7 @@ if (!empty($_SESSION['brewerAssignment'])) {
 	    }
 	}
 
-	if (!empty($affiliations)) {
+	if ($affiliations !== []) {
 		$affiliations = implode(", ",$affiliations);
 		$account_display .= $affiliations;
 	}
@@ -520,7 +520,7 @@ if ($show_judge_steward_fields) {
 		if ($_SESSION['brewerJudgeRank'] != "") $account_display .= str_replace("<br />",", ",$display_rank); else $account_display .= "N/A";
 		$account_display .= "</div>";
 		$account_display .= "</div>";
-		
+
 		$account_display .= "<div class=\"row bcoem-account-info\">";
 		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_judge_comps);
 		$account_display .= "<div class=\"".$display_right_cols."\">";
@@ -544,7 +544,7 @@ if ($show_judge_steward_fields) {
 			$account_display .= "<div class=\"row bcoem-account-info\">";
 			$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_avail);
 			$account_display .= "<div class=\"".$display_right_cols."\">";
-			if (($assignment == "judge") || (empty($assignment))) {
+			if (($assignment === "judge") || (empty($assignment))) {
 				if (empty($table_assign_judge)) {
 						$account_display .= "\n\t<table id=\"sortable_judge\" class=\"table table-condensed table-striped table-bordered table-responsive border-dark-subtle\">";
 						$account_display .= "\t<thead class=\"table-dark\">\n";
@@ -611,7 +611,7 @@ if ($show_judge_steward_fields) {
 			$account_display .= "<div class=\"row bcoem-account-info\">";
 			$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_avail);
 			$account_display .= "<div class=\"".$display_right_cols."\">";
-			if (($assignment == "steward") || (empty($assignment))) {
+			if (($assignment === "steward") || (empty($assignment))) {
 
 				if (empty($table_assign_steward)) {
 
@@ -712,8 +712,8 @@ if ((!isset($_SESSION['brewerBreweryInfo'])) || (empty($_SESSION['brewerBreweryI
 
 $judge_no_availability = FALSE;
 $steward_no_availability = FALSE;
-if (($_SESSION['brewerJudge'] == "Y") && ($judge_available_sessions == 0)) $judge_no_availability = TRUE;
-if (($_SESSION['brewerSteward'] == "Y") && ($steward_available_sessions == 0)) $steward_no_availability = TRUE;
+if (($_SESSION['brewerJudge'] == "Y") && ($judge_available_sessions === 0)) $judge_no_availability = TRUE;
+if (($_SESSION['brewerSteward'] == "Y") && ($steward_available_sessions === 0)) $steward_no_availability = TRUE;
 
 // --------------------------------------------------------------
 // Display

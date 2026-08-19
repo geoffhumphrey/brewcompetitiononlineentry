@@ -7,16 +7,10 @@ class HTMLPurifier_ConfigSchema_Interchange_Id
 {
 
     /**
-     * @type string
-     */
-    public $key;
-
-    /**
      * @param string $key
      */
-    public function __construct($key)
+    public function __construct(public $key)
     {
-        $this->key = $key;
     }
 
     /**

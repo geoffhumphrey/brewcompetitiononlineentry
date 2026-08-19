@@ -66,9 +66,9 @@ if ($section == "past_winners") {
 		$_SESSION['prefsWinnerMethod'] = $winner_display_method; // TODO: change in appropriate query scripts (scores.db.php)
 
 		include (DB.'winners.db.php');
-		if ($winner_display_method == 0) include (SECTIONS.'winners.sec.php');
-		if ($winner_display_method == 1) include (SECTIONS.'winners_category.sec.php');
-		if ($winner_display_method == 2) include (SECTIONS.'winners_subcategory.sec.php');
+		if ($winner_display_method === 0) include (SECTIONS.'winners.sec.php');
+		if ($winner_display_method === 1) include (SECTIONS.'winners_category.sec.php');
+		if ($winner_display_method === 2) include (SECTIONS.'winners_subcategory.sec.php');
 		
 	}
 

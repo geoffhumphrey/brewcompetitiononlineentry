@@ -39,8 +39,8 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
     elseif (($_SESSION['prefsEval'] == 1) && (($judging_started) || ($judge_window_open > 0))) $show_best = TRUE;
 }
 
-$judge_assign_links = array();
-$steward_assign_links = array();
+$judge_assign_links = [];
+$steward_assign_links = [];
 
 // Judge Inventory
 $ji_loc_entry = "";
@@ -137,9 +137,9 @@ if ($totalRows_tables > 0) {
 
             for ($i=1; $i <= 3; $i++) {
 
-                if ($i == 1) $pro_am_bos_method = "1st Place Only";
-                if ($i == 2) $pro_am_bos_method = "1st and 2nd Places";
-                if ($i == 3) $pro_am_bos_method = "1st, 2nd, and 3rd Places";
+                if ($i === 1) $pro_am_bos_method = "1st Place Only";
+                if ($i === 2) $pro_am_bos_method = "1st and 2nd Places";
+                if ($i === 3) $pro_am_bos_method = "1st, 2nd, and 3rd Places";
 
                 $bos_pull_pro_am_entry_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;view=entry&amp;id=".$row_style_type['id'];
                 $bos_pull_pro_am_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;id=".$row_style_type['id']; 
@@ -611,7 +611,7 @@ if ($recently_updated) {
     
     $summary_button_style = "btn btn-dark btn-block";
     $summary_button_icon = "fa fa-code";
-    if (strpos($row_system['update_summary'], 'Warning: Errors') !== false)  {
+    if (str_contains($row_system['update_summary'], 'Warning: Errors'))  {
         $summary_button_style = "btn btn-danger btn-block";
         $summary_button_icon = "fa fa-exclamation-circle";
         $summary_button_errors = " (Errors Present)";
@@ -2458,11 +2458,11 @@ if ($recently_updated) {
                                 $update_errors_msg = "";
 
                                 if (isset($_SESSION['update_summary'])) {
-                                    if (strpos($_SESSION['update_summary'], 'Warning: Errors') !== false) $update_errors_msg = " <span class=\"text-danger\"><i class=\"fa fa-exclamation-circle\"></i> Errors Present</span>";
+                                    if (str_contains($_SESSION['update_summary'], 'Warning: Errors')) $update_errors_msg = " <span class=\"text-danger\"><i class=\"fa fa-exclamation-circle\"></i> Errors Present</span>";
                                 }                                
                                 
                                 else {
-                                   if (strpos($row_system['update_summary'], 'Warning: Errors') !== false) $update_errors_msg = " <span class=\"text-danger\"><i class=\"fa fa-exclamation-circle\"></i> Errors Present</span>"; 
+                                   if (str_contains($row_system['update_summary'], 'Warning: Errors')) $update_errors_msg = " <span class=\"text-danger\"><i class=\"fa fa-exclamation-circle\"></i> Errors Present</span>"; 
                                 } 
                                 if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) {
                             ?>

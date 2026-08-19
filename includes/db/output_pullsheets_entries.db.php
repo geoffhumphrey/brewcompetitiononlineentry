@@ -21,7 +21,7 @@ if ($filter == "mini_bos") {
 	else $order = "b.id";
 
 	$query_entries = "SELECT a.scoreMiniBOS, b.id, b.brewStyle, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewJudgingNumber, b.brewBoxNum, b.brewComments, b.brewInfoOptional, b.brewPossAllergens, b.brewStaffNotes, b.brewABV, b.brewJuiceSource, b.brewSweetnessLevel, b.brewPouring, b.brewStyleType, b.brewPackaging FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b WHERE b.brewCategorySort=? AND b.brewSubCategory=? AND a.eid = b.id AND a.scoreMiniBOS='1' ORDER BY ".$order;
-	$params_entries = array($row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+	$params_entries = [$row_styles['brewStyleGroup'], $row_styles['brewStyleNum']];
 
 }
 
@@ -38,7 +38,7 @@ else {
 	}
 
 	$query_entries = "SELECT * FROM ".$prefix."brewing"." WHERE brewCategorySort=? AND brewSubCategory=?";
-	$params_entries = array($row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+	$params_entries = [$row_styles['brewStyleGroup'], $row_styles['brewStyleNum']];
 
 	if ($received) $query_entries .= " AND brewReceived='1'";
 	$query_entries .= " ORDER BY ".$order." ASC";

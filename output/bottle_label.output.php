@@ -19,7 +19,7 @@ if (isset($_SESSION['loginUsername'])) {
 
     // Get id array from $_POST of the entry label(s) user wishes to print.
     if ($id == "default") {
-      $entry_arr = array();
+      $entry_arr = [];
       foreach($_POST['id'] as $entry_id) {
         $entry_id = filter_var($entry_id,FILTER_SANITIZE_NUMBER_INT);
         $entry_arr[] = $entry_id;
@@ -90,13 +90,13 @@ if (isset($_SESSION['loginUsername'])) {
      * 11 = Standard, large number and style with barcode/qr [entry number]  
      */
 
-    $anon_label_arr = array(1,2,3,4,6,8,9,0);
-    $standard_label_arr = array(5,7,10,11);
-    $barcode_qr_arr = array(1,3,5,6,0,11);
-    $large_label_arr = array(1,2,3,4);
-    $large_text_arr = array(10,11);
-    $judging_number_label_arr = array(3,4,9,0);
-    $entry_number_label_arr = array(1,2,5,6,7,8,10,11);
+    $anon_label_arr = [1,2,3,4,6,8,9,0];
+    $standard_label_arr = [5,7,10,11];
+    $barcode_qr_arr = [1,3,5,6,0,11];
+    $large_label_arr = [1,2,3,4];
+    $large_text_arr = [10,11];
+    $judging_number_label_arr = [3,4,9,0];
+    $entry_number_label_arr = [1,2,5,6,7,8,10,11];
 
     if (in_array($_SESSION['prefsEntryForm'],$anon_label_arr)) { $anon = TRUE; $standard = FALSE; }
     if (in_array($_SESSION['prefsEntryForm'],$standard_label_arr)) { $standard = TRUE; $anon = FALSE; }
@@ -144,7 +144,7 @@ if (isset($_SESSION['loginUsername'])) {
           if ($entry_number_disp) $barcode = sprintf("%06s",$row_log['id']);
 
             if ($barcode_qr) {
-              
+
               // Generate Barcode
               $barcode_link = "https://admin.brewingcompetitions.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=20&code=BCGcode39";
 
@@ -157,17 +157,17 @@ if (isset($_SESSION['loginUsername'])) {
 
               $qr->qRCreate($qrcode_url,"75x75","UTF-8");
               $qrcode_link = $qr->url;
-            
+
             }
 
             $entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
             $entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
-            if (($bottle_label_endRow == 0) && ($bottle_label_hloopRow1++ != 0)) $page_info1 .= "<div class=\"row\">";
+            if (($bottle_label_endRow === 0) && ($bottle_label_hloopRow1++ !== 0)) $page_info1 .= "<div class=\"row\">";
 
             // Layout Column div
             $page_info1 .= "<div class=\"col-xs-".$bottle_label_columns_bs." label-border\">";
-            
+
             $page_info1 .= "<div class=\"label-inner\">";
 
             $page_info1 .= "<div style=\"margin: 0 0 10px 0;\" class=\"text-center label-title\"><strong>".h($_SESSION['contestName'])."</strong></div>";
@@ -180,13 +180,13 @@ if (isset($_SESSION['loginUsername'])) {
               // truncate($string, $your_desired_width, $append="", $max_word_length=20)
 
               $style_name_large = truncate(h($row_log['brewStyle']),25,"...",20);
-              
+
               $page_info1 .= "<div class=\"text-center label-category-name\" style=\"margin: 0 0 20px 0; padding: 0 5px 0 5px;\" >";
-              
+
               if ($_SESSION['prefsStyleSet'] == "BA") {
                 $page_info1 .= "<div>".$style_name_large."</div>";
               }
-              
+
               elseif ($_SESSION['prefsStyleSet'] == "AABC") {
                 $page_info1 .= "<div>".$label_category.": ".ltrim(h($row_log['brewCategory']),"0").".".ltrim(h($row_log['brewSubCategory']),"0")."</div>";
                 $page_info1 .= "<div style=\"font-size: .7em;\">".$style_name_large."</div>";
@@ -200,13 +200,13 @@ if (isset($_SESSION['loginUsername'])) {
               $page_info1 .= "</div>";
 
             }
-            
+
             if (!$anon) $page_info1 .= "<div style=\"margin: 0 0 5px 0;\"><strong>".$label_entry_name.":</strong> ".truncate($entry_name,30,"&hellip;")."</div>";
 
             if (!$large_text) { 
 
               $page_info1 .= "<div style=\"margin: 0 0 5px 0;\">";
-              
+
               if ($_SESSION['prefsStyleSet'] == "BA") $page_info1 .= "<strong>Cat:</strong> ".h($row_log['brewStyle']);
               elseif ($_SESSION['prefsStyleSet'] == "AABC")  $page_info1 .= "<strong>".$label_category.":</strong> ".ltrim(h($row_log['brewCategory']),"0").".".ltrim(h($row_log['brewSubCategory']),"0")." ".h($row_log['brewStyle'])."</span>";
               else $page_info1 .= "<strong>".$label_category.":</strong> ".h($row_log['brewCategory']).h($row_log['brewSubCategory'])." ".h($row_log['brewStyle'])."</span>";
@@ -216,7 +216,7 @@ if (isset($_SESSION['loginUsername'])) {
             }
 
             if ($anon) {
-              
+
               $brewInfo = "";
               $brewMeadCider = "";
 
@@ -228,7 +228,7 @@ if (isset($_SESSION['loginUsername'])) {
 
               if (!empty($row_log['brewInfo'])) {
                 $brewInfo = h($row_log['brewInfo']);
-                if (strpos($row_log['brewInfo'],"^") !== FALSE) $brewInfo = str_replace("^", "&nbsp;", $brewInfo);
+                if (str_contains($row_log['brewInfo'],"^")) $brewInfo = str_replace("^", "&nbsp;", $brewInfo);
                 if (empty($brewMeadCider)) $brewInfo = truncate($brewInfo,200,"&hellip;");
                 else $brewInfo = truncate($brewInfo,150,"&hellip;");
               }
@@ -243,13 +243,13 @@ if (isset($_SESSION['loginUsername'])) {
               if (!empty($brewMeadCider)) {
                 $page_info1 .= "<div style=\"margin: 0 0 5px 0;\">".$brewMeadCider."</div>";
               }
-            
+
             }
 
             if ($standard) {
-              
+
               $page_info1 .= "<div>";
-              
+
               if ($_SESSION['prefsProEdition'] == 1) {
                 $page_info1 .= $row_brewer['brewerBreweryName']."<br>";
                 $page_info1 .= $label_contact.": ".$brewerFirstName." ".$brewerLastName."<br>";
@@ -259,7 +259,7 @@ if (isset($_SESSION['loginUsername'])) {
               $page_info1 .= h($brewerEmail)."<br>";
               $page_info1 .= h($phone);
               $page_info1 .= "</div>";
-            
+
             }
 
             if ($barcode_qr) {
@@ -268,7 +268,7 @@ if (isset($_SESSION['loginUsername'])) {
               $page_info1 .= "&nbsp;&nbsp;<img src=\"".$qrcode_link."\">";
               $page_info1 .= "</div>";
             }
-            
+
             // if ((!$anon) && ($barcode_qr)) $page_info1 .= "<div align=\"center\" class=\"box\">".$bottle_labels_006."</div>";
 
             $page_info1 .= "</div>";
@@ -295,7 +295,7 @@ if (isset($_SESSION['loginUsername'])) {
     }
 
     // Insert Empty Column if No Content Available
-    if ($bottle_label_endRow != 0) {
+    if ($bottle_label_endRow !== 0) {
       while ($bottle_label_endRow < $bottle_label_columns) {
         $page_info1 .= "<div class=\"col-lg-3 col-md-3 col-sm-3\">&nbsp;</div>";
         $bottle_label_endRow++;

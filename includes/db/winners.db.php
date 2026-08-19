@@ -18,7 +18,7 @@ if (table_exists($special_best_info_db_table)) {
 	if ($action == "edit") {
 		$db_conn->where("id", $id);
 		$row_sbi = $db_conn->getOne($special_best_info_db_table);
-		$rows_sbi = $row_sbi ? array($row_sbi) : array();
+		$rows_sbi = $row_sbi ? [$row_sbi] : [];
 	} else {
 		$db_conn->orderBy("sbi_rank", "ASC");
 		$rows_sbi = $db_conn->get($special_best_info_db_table);

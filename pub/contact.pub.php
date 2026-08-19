@@ -51,12 +51,12 @@ elseif ($show_contact_list) {
 	$page_info = "";
 
     if ($totalRows_contact == 0) $page_info .= sprintf("<p>%s</p>",$contact_text_004);
-    
+
     else {
-    	
+
         $page_info .= sprintf("<p>%s</p>",$contact_text_000);
     	$page_info .= "<ul>";
-    	
+
         foreach ($rows_contact as $row_contact) {
 
             $secretKey = base64_encode(bin2hex($password));
@@ -67,7 +67,7 @@ elseif ($show_contact_list) {
             $page_info .= sprintf("<li><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">%s %s</a> &ndash; %s</li>",$email_redirect_link,h($row_contact['contactFirstName']),h($row_contact['contactLastName']),h($row_contact['contactPosition']));
 
     	}
-    	
+
         $page_info .= "</ul>";
     }
 
@@ -189,7 +189,7 @@ elseif ($show_contact_form) {
                     </div>
                 </div>
             </div>
-            
+
         </form>
 
     <script src="<?php echo $captcha_url; ?>"></script>
@@ -199,7 +199,7 @@ elseif ($show_contact_form) {
     <script src="<?php echo $js_url; ?>contact.min.js"></script>
 
 <?php } // end if ($msg != 1);
-    
+
     } // end if ($totalRows_contact > 0)
 
 } // end if ($_SESSION['prefsContact'] == "Y")

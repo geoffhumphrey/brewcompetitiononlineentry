@@ -14,7 +14,7 @@ if ($action == "add") {
 	// Fixed to what the ELSE branch's structure clearly intended.
 	if (SINGLE) {
 		$query_table_number_last = "SELECT tableNumber FROM ".$judging_tables_db_table." WHERE comp_id=? ORDER BY tableNumber DESC LIMIT 1";
-		$row_table_number_last = $db_conn->rawQueryOne($query_table_number_last, array($_SESSION['comp_id']));
+		$row_table_number_last = $db_conn->rawQueryOne($query_table_number_last, [$_SESSION['comp_id']]);
 	}
 	else {
 		$query_table_number_last = "SELECT tableNumber FROM ".$judging_tables_db_table." ORDER BY tableNumber DESC LIMIT 1";

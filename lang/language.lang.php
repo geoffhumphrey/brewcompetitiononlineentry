@@ -16,7 +16,7 @@
 $mail_use_smtp = FALSE;
 
 $carat_url_var = FALSE;
-if ((isset($view)) && ($view != "default") && ((strpos($view, "^") !== FALSE) || (strpos($view, "%5E") !== FALSE))) $carat_url_var = TRUE;
+if ((isset($view)) && ($view != "default") && ((str_contains($view, "^")) || (str_contains($view, "%5E")))) $carat_url_var = TRUE;
 
 if (HOSTED) {
   
@@ -84,7 +84,7 @@ if ((isset($_SESSION['prefsLanguage'])) && (!empty($_SESSION['prefsLanguage'])))
 if ((isset($_SESSION['prefsLanguageFolder'])) && (!empty($_SESSION['prefsLanguageFolder']))) {
   // A legacy "English"/"english" prefsLanguage value derives to a "english" folder
   // upstream, which doesn't exist on disk (the actual folder is "en") - catch it here too.
-  if (strtolower($_SESSION['prefsLanguageFolder']) == "english") $prefsLanguageFolder = "en";
+  if (strtolower($_SESSION['prefsLanguageFolder']) === "english") $prefsLanguageFolder = "en";
   else $prefsLanguageFolder = $_SESSION['prefsLanguageFolder'];
 }
 

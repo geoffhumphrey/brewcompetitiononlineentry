@@ -1,6 +1,6 @@
 <?php
 
-$org_array_lower = array();
+$org_array_lower = [];
 foreach ($org_array as $value) {
     $org_array_lower[] = strtolower($value);
 }

@@ -120,7 +120,7 @@ $entry_output = "";
 
 if ($_SESSION['prefsEval'] == 1) {
 
-	$evals = array();
+	$evals = [];
 	// Check which evaluations exist
 	$rows_eval_exists = $db_conn->get($prefix."evaluation", null, "DISTINCT eid");
 	$totalRows_eval_exists = $db_conn->count;
@@ -261,7 +261,7 @@ if ($totalRows_log > 0) {
 
 					if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 					    $first_character = mb_substr($row_log['brewCategorySort'], 0, 1);
-					    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+					    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 					    else $chosen_style_set = "BJCP2021";
 					}
 
@@ -325,18 +325,18 @@ if ($totalRows_log > 0) {
 			 * how old they are.
 			 */
 
-			$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+			$tempfiles = array_diff(scandir(USER_TEMP), ['..', '.']);
 			
 			foreach ($tempfiles as $file) {
 				
 				if (!empty($scoresheet_file_name_judging)) {
-					if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+					if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((str_contains($file, $scoresheet_file_name_judging)))) {
 						unlink(USER_TEMP.$file);
 					}
 				}
 
 				if (!empty($scoresheet_file_name_entry)) {
-					if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+					if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((str_contains($file, $scoresheet_file_name_entry)))) {
 						unlink(USER_TEMP.$file);
 					}
 				}
@@ -499,7 +499,7 @@ if ($totalRows_log > 0) {
 		// Print Forms
 		$alt_title = "";
 		$alt_title .= "Print ";
-		if ((!NHC) && (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U") || ($_SESSION['prefsEntryForm'] == "N"))) $alt_title .= sprintf("%s ",$brewer_entries_text_008);
+		if ((!NHC) && (in_array($_SESSION['prefsEntryForm'], ["B", "M", "U", "N"]))) $alt_title .= sprintf("%s ",$brewer_entries_text_008);
 		$alt_title .= sprintf("%s ",$brewer_entries_text_009);
 		$alt_title .= "for ".$entry_name;
 

@@ -15,7 +15,7 @@ if (TESTING) {
 
 	$db_conn->where ("brewStyleGroup", $row_entries['brewCategorySort']);
 	$db_conn->where ("brewStyleNum", $row_entries['brewSubCategory']);
-	if ($_SESSION['prefsStyleSet'] == "BJCP2025") $db_conn->where ("brewStyleVersion = ? OR brewStyleVersion = ?", array("BJCP2025","BJCP2021"));
+	if ($_SESSION['prefsStyleSet'] == "BJCP2025") $db_conn->where ("brewStyleVersion = ? OR brewStyleVersion = ?", ["BJCP2025","BJCP2021"]);
 	else $db_conn->where ("brewStyleVersion", $_SESSION['prefsStyleSet']);
 	$row_style = $db_conn->getOne ($prefix."styles", null, "brewStyleType");
 	
@@ -27,7 +27,7 @@ if (TESTING) {
 
 	
 $eval_place = "";
-$eval_places = array();
+$eval_places = [];
 
 foreach ($eval_scores as $key => $value) {
 	
@@ -67,7 +67,7 @@ if ((!empty($assigned_score)) && (count($assigned_score) > 1)) {
 		$notes .= "</strong></div>";
 
 		if ($score_previous) {
-			$assigned_score_mismatch[] = array(
+			$assigned_score_mismatch[] = [
 				"table_id" => $tbl_id,
 				"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
 				"id" => $row_entries['id'],
@@ -75,7 +75,7 @@ if ((!empty($assigned_score)) && (count($assigned_score) > 1)) {
 				"brewCategorySort" => $row_entries['brewCategorySort'],
 				"brewSubCategory" => $row_entries['brewSubCategory'],
 				"brewStyle" => $row_entries['brewStyle']
-			);
+			];
 		}
 	}
 }
@@ -148,11 +148,11 @@ if ($mini_bos_count > 0) {
 	if ($eval_count == $mini_bos_count) $mini_bos_checked_yes = "CHECKED";
 }
 
-if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== false)) {
+if (($judging_open) && (str_contains($row_table_assignments['assignRoles'], "HJ"))) {
 
 	if ($score_previous_other) {
 
-		if ((!empty($eval_places)) && (count(array_unique($eval_places)) === 1)) $eval_place = $eval_places[0];
+		if (($eval_places !== []) && (count(array_unique($eval_places)) === 1)) $eval_place = $eval_places[0];
 
 		// save_column('".$ajax_url."','evalPlace','evaluation','".$row_entries['id']."','','','','','eval-place-ajax-".$row_entries['id']."');
 		// select_place_multi('".$base_url."','evalPlace','evaluation','".$row_entries['id']."','eval-place-choose-".$tbl_id."','','','','eval-place-ajax-".$row_entries['id']."');
@@ -198,11 +198,11 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 
 		// Mini-BOS
 		$actions .= "<div class=\"row mb-3\">";
-		
+
 		$actions .= "<div class=\"col col-lg-5 col-md-7 col-sm-12 ".$mini_bos_alert_css."\">";
 		$actions .= $label_mini_bos;
 		$actions .= "</div>";
-		
+
 		$actions .= "<div class=\"col col-lg-7 col-md-5 col-sm-12\">";
 		$actions .= "<div class=\"form-check form-check-inline\">";
 		$actions .= "<input class=\"form-check-input\" type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"1\" onclick=\"save_column('".$ajax_url."','evalMiniBOS','evaluation','".$row_entries['id']."','1','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_yes.">";
@@ -233,7 +233,7 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 if (!$score_previous_other) {
 	$notes .= "<div class=\"mb-2\">";
 	$notes .= $evaluation_info_016;
-	if ((strpos($row_table_assignments['assignRoles'], "HJ") !== false) && ((!$judging_open) || ((!empty($table_location[1])) && (time() > $table_location[1])))) $notes .= " ".$evaluation_info_030;
+	if ((str_contains($row_table_assignments['assignRoles'], "HJ")) && ((!$judging_open) || ((!empty($table_location[1])) && (time() > $table_location[1])))) $notes .= " ".$evaluation_info_030;
 	$notes .= "</div>";
 }
 
@@ -254,7 +254,7 @@ if (($add_disabled) && ($judging_open)) {
 			$actions .= "<div class=\"d-grid mb-1\">";
 			$actions .= "<a class=\"btn btn-sm btn-secondary\" href=\"".$add_link_full."\">Classic</a>";
 			$actions .= "</div>";
-			
+
 			if ($row_style['brewStyleType'] <= 3) {
 				$actions .= "<div class=\"d-grid mb-1\">";
 				$actions .= "<a class=\"btn btn-sm btn-secondary\" href=\"".$add_link_structured."\">Structured</a>";
@@ -272,7 +272,7 @@ if (($add_disabled) && ($judging_open)) {
 				}
 
 				if ($row_style['brewStyleType'] == 2) {
-					
+
 					$actions .= "<div class=\"d-grid mb-1\">";
 					$actions .= "<a class=\"btn btn-sm btn-secondary\" href=\"".$add_link_nw_cider."\">NW Cider</a>";
 					$actions .= "</div>";
@@ -280,7 +280,7 @@ if (($add_disabled) && ($judging_open)) {
 
 
 			}
-			
+
 			$actions .= "</div>"; // end collapse
 		}
 
@@ -311,7 +311,7 @@ elseif ($scored_by_user) {
     	}
 		
 		$actions .= "<a style=\"word-wrap:break-word;\" data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-secondary modal-window-link hide-loader\" href=\"".$view_link."\">";
-		if (strpos($row_table_assignments['assignRoles'], "HJ") !== false) $actions .= $label_view_my_eval;
+		if (str_contains($row_table_assignments['assignRoles'], "HJ")) $actions .= $label_view_my_eval;
 		else $actions .= $label_view;
 		$actions .= "</a>";
 		
@@ -401,7 +401,7 @@ else {
 
 }
 
-if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== false) && ($score_previous_other)) {
+if (($judging_open) && (str_contains($row_table_assignments['assignRoles'], "HJ")) && ($score_previous_other)) {
 
 	foreach ($eval_scores as $key => $value) {
 		if ($value['eid'] == $row_entries['id']) {
@@ -423,7 +423,7 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 
 }
 
-if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") === false) && ((!empty($eval_places)) && (count(array_unique($eval_places)) === 1))) {
+if (($judging_open) && (!str_contains($row_table_assignments['assignRoles'], "HJ")) && (($eval_places !== []) && (count(array_unique($eval_places)) === 1))) {
 	$actions .= "<div class=\"text-center\"><small>".$label_place_awarded.": ".display_place($eval_places[0],1)."</small></div>";
 }
 

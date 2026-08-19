@@ -13,7 +13,7 @@ $styles_db_table = $prefix."styles";
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($setup_free_access))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	// Instantiate HTMLPurifier
@@ -47,12 +47,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "update") {
 
-		$update_selected_styles = array();
+		$update_selected_styles = [];
 
 		foreach($_POST['id'] as $id) {
 
 			if ($filter == "default") {
-				
+
 				if (isset($_POST['brewStyleActive'.$id])) {
 
 					$style_id = sterilize($id);
@@ -65,21 +65,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					$totalRows_styles_default = $db_conn->count;
 
 					if ($row_styles_default) {
-						$update_selected_styles[$row_styles_default['id']] = array(
+						$update_selected_styles[$row_styles_default['id']] = [
 							'id' => $row_styles_default['id'],
 							'brewStyle' => sterilize($row_styles_default['brewStyle']),
 							'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
 							'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
 							'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion']),
                             'brewStyleType' => $row_styles_default['brewStyleType']				
-						);
+						];
 					}
 
 					$update_table = $prefix."styles";
-					$data = array('brewStyleAtLimit' => $brewStyleAtLimit);
+					$data = ['brewStyleAtLimit' => $brewStyleAtLimit];
 					$db_conn->where ('id', $row_styles_default['id']);
 					$result = $db_conn->update ($update_table, $data);
-				
+
 				} // if (isset($_POST['brewStyleActive'.$id]))
 
 			} // end if ($filter == "default")
@@ -89,9 +89,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$update_selected_styles = json_encode($update_selected_styles);
 
 		$update_table = $prefix."preferences";
-		$data = array(
+		$data = [
 			'prefsSelectedStyles' => blank_to_null($update_selected_styles)
-		);
+		];
 		$db_conn->where ('id', 1);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -106,7 +106,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($section == "setup") {
 
 			$update_table = $prefix."bcoem_sys";
-			$data = array('setup_last_step' => 7);
+			$data = ['setup_last_step' => 7];
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -114,7 +114,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$errors = TRUE;
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			$redirect = $base_url."setup.php?section=step8";
 			if ($errors) $base_url."setup.php?section=step7&msg=3";
@@ -125,7 +125,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		else {
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			if ($errors) $massUpdateGoTo = $base_url."index.php?section=admin&go=styles&msg=3";
 			else $massUpdateGoTo = $base_url."index.php?section=admin&go=styles&msg=2";
@@ -139,7 +139,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (($action == "add") || ($action == "edit")) {
 
 		$update_table = $prefix."styles";
-		$data = array(
+		$data = [
 			'brewStyle' => blank_to_null($purifier->purify($_POST['brewStyle'])),
 			'brewStyleOG' => blank_to_null(sterilize($_POST['brewStyleOG'])),
 			'brewStyleOGMax' => blank_to_null(sterilize($_POST['brewStyleOGMax'])),
@@ -164,7 +164,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewStyleCarb' => blank_to_null(sterilize($_POST['brewStyleCarb'])),
 			'brewStyleSweet' => blank_to_null(sterilize($_POST['brewStyleSweet'])),
 			'brewStyleEntry' => blank_to_null($brewStyleEntry)
-		);
+		];
 
 	}
 
@@ -176,7 +176,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 		$insertGoTo = prep_redirect_link($insertGoTo);
@@ -202,7 +202,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			foreach ($rows_log as $row_log) {
 
 				$update_table = $prefix."brewing";
-				$data = array('brewStyle' => $_POST['brewStyle']);
+				$data = ['brewStyle' => $_POST['brewStyle']];
 				$db_conn->where ('id', $row_log['id']);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -214,7 +214,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
 		$updateGoTo = prep_redirect_link($updateGoTo);
@@ -242,21 +242,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			// If editing, use $id
 			
 			$update_selected_styles = json_decode($_SESSION['prefsSelectedStyles'], true);
-			$update_selected_styles[$id] = array(
+			$update_selected_styles[$id] = [
 				'id' => $id,
 				'brewStyle' => $purifier->purify($_POST['brewStyle']),
 				'brewStyleGroup' => sterilize($_POST['brewStyleGroup']),
 				'brewStyleNum' => sterilize($_POST['brewStyleNum']),
 				'brewStyleVersion' => sterilize($_SESSION['prefsStyleSet'])
-			);
+			];
 
 			$update_selected_styles = json_encode($update_selected_styles);
 			//echo $update_selected_styles; exit();
 
 			$update_table = $prefix."preferences";
-			$data = array(
+			$data = [
 				'prefsSelectedStyles' => blank_to_null($update_selected_styles)
-			);
+			];
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {

@@ -7,7 +7,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	// Instantiate HTMLPurifier
@@ -29,19 +29,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "add") {
 
 		$update_table = $prefix."special_best_info";
-		$data = array(
+		$data = [
 			'sbi_name' => blank_to_null($sbi_name),
 			'sbi_description' => blank_to_null($sbi_description),
 			'sbi_places' => blank_to_null(sterilize($_POST['sbi_places'])),
 			'sbi_rank' => blank_to_null(sterilize($_POST['sbi_rank']))
-		);
+		];
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 		$insertGoTo = prep_redirect_link($insertGoTo);
@@ -52,12 +52,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "edit") {
 
 		$update_table = $prefix."special_best_info";
-		$data = array(
+		$data = [
 			'sbi_name' => blank_to_null($sbi_name),
 			'sbi_description' => blank_to_null($sbi_description),
 			'sbi_places' => blank_to_null(sterilize($_POST['sbi_places'])),
 			'sbi_rank' => blank_to_null(sterilize($_POST['sbi_rank']))
-		);
+		];
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -65,7 +65,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
 		$updateGoTo = prep_redirect_link($updateGoTo);

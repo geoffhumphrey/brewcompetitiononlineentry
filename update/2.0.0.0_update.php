@@ -102,29 +102,29 @@ $row_archive_current = mysqli_fetch_assoc($archive_current);
 $totalRows_archive_current = mysqli_num_rows($archive_current);
 
 if ($totalRows_archive_current > 0) {
-	
+
 	do { $a_current[] = $row_archive_current['archiveSuffix']; } while ($row_archive_current = mysqli_fetch_assoc($archive_current));
-	
+
 	foreach ($a_current as $suffix_current) {
-		
+
 		$suffix_current = "_".$suffix_current;
-		
+
 		// Update brewer table with changed values
 		if (check_setup($prefix."brewer".$suffix_current,$database)) {
-			
+
 			$updateSQL = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` CHANGE `brewerJudgeAssignedLocation` `brewerJudgeExp` VARCHAR(25) NULL DEFAULT NULL;";
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL); 
-			
+
 			$updateSQL = "ALTER TABLE  `".$prefix."brewer".$suffix_current."` CHANGE `brewerStewardAssignedLocation` `brewerJudgeNotes` TEXT NULL DEFAULT NULL;";
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL);
-			
-			
+
+
 		} // end if (check_setup($prefix."brewer".$suffix_current,$database))
-		
+
 	} // end foreach ($a_current as $suffix_current)
 	
 } // end if ($totalRows_archive_current > 0)

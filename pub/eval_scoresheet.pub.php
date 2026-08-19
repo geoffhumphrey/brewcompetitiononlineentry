@@ -23,12 +23,12 @@ $nw_cider = FALSE;
 $scored_previously = FALSE;
 $consensus_match = FALSE;
 $auto_logout_extension = FALSE;
-$evals = array();
-$judge_scores = array();
-$consensus_scores = array();
+$evals = [];
+$judge_scores = [];
+$consensus_scores = [];
 $other_judge_scores = "";
 $other_judge_consensus_scores = "";
-$other_judge_previous_consensus = array();
+$other_judge_previous_consensus = [];
 $my_consensus_score = "";
 $evalPosition = "";
 
@@ -52,7 +52,7 @@ else $score_range = 7;
  * with the 2021 guidelines. See coding below.
  */
 
-$bjcp2015_exceptions = array(
+$bjcp2015_exceptions = [
   "27A1" => "//bjcp.org/style/2015/27/27A/historical-beer-gose/",
   "27A2" => "//bjcp.org/style/2015/27/27A/historical-beer-piwo-grodziskie/",
   "27A3" => "//bjcp.org/style/2015/27/27A/historical-beer-lichtenhainer/",
@@ -75,9 +75,9 @@ $bjcp2015_exceptions = array(
   "PRX3" => "//bjcp.org/beer-styles/x3-italian-grape-ale/",
   "PRX4" => "//bjcp.org/beer-styles/x4-catharina-sour/",
   "PRX5" => "//bjcp.org/beer-styles/x5-new-zealand-pilsner/"
-);
+];
 
-$bjcp2021_exceptions = array(
+$bjcp2021_exceptions = [
   "17A1" => "//bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/",
   "21B1" => "//bjcp.org/style/2021/21/21B/specialty-ipa-belgian-ipa/",
   "21B2" => "//bjcp.org/style/2021/21/21B/specialty-ipa-black-ipa/",
@@ -99,7 +99,7 @@ $bjcp2021_exceptions = array(
   "LSX3" => "//bjcp.org/beer-styles/x3-italian-grape-ale/",
   "LSX4" => "//bjcp.org/beer-styles/x4-catharina-sour/",
   "LSX5" => "//bjcp.org/beer-styles/x5-new-zealand-pilsner/"
-);
+];
 
 /**
  * When admins edit a scoresheet, the $bid var will be in the URL.
@@ -182,7 +182,7 @@ if ($action == "add") {
     
     if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
         $first_character = mb_substr($row_entry_info['brewCategorySort'], 0, 1);
-        if ($first_character == "C") $chosen_style_set = "BJCP2025";
+        if ($first_character === "C") $chosen_style_set = "BJCP2025";
         else $chosen_style_set = "BJCP2021";
     }
 
@@ -256,7 +256,7 @@ if ($totalRows_entry_info > 0) {
   if ($action == "add") $flight_count_info = flight_count_info($id,0);
   if ($action == "edit") $flight_count_info = flight_count_info($eid,0);
 
-  if (!empty($judge_scores)) {
+  if ($judge_scores !== []) {
     $scored_previously = TRUE;
     $consensus_scores = eval_exits($row_entry_info['id'],"consensus_scores",$dbTable);
     if (count(array_unique($consensus_scores)) === 1) $consensus_match = TRUE;
@@ -265,7 +265,7 @@ if ($totalRows_entry_info > 0) {
     if (isset($row_eval['evalFinalScore'])) $my_consensus_score .= sprintf("%s: <span id=\"my-consensus-score\">".$row_eval['evalFinalScore']."</span>",$label_your_consensus_score);
   }
 
-  if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore']));
+  if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,[$row_eval['evalFinalScore']]);
 
   if (isset($_POST['entry_number'])) {
     
@@ -355,14 +355,14 @@ if ($entry_found) {
   $style_concat = ltrim($row_style['brewStyleGroup'],"0").strtoupper($row_style['brewStyleNum']);
 
   if (!empty($row_style['brewStyleLink'])) {
-    
+
     if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
       if (array_key_exists($style_concat, $bjcp2015_exceptions)) $style_link = $bjcp2015_exceptions[$style_concat];
       else $style_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
-      
+
     }
-    
+
     else $style_link = $row_style['brewStyleLink'];
 
   }
@@ -378,7 +378,7 @@ if ($entry_found) {
     elseif (is_numeric(ltrim($row_style['brewStyleGroup'],"0"))) $style_link = "//bjcp.org/style/2021/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
     // 2025 update was cider only; find styles that begin with C
-    elseif (($_SESSION['prefsStyleSet'] == "BJCP2025") && ($first_character == "C")) $style_link = "//bjcp.org/style/2025/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+    elseif (($_SESSION['prefsStyleSet'] == "BJCP2025") && ($first_character === "C")) $style_link = "//bjcp.org/style/2025/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
     // If mead, use 2015 link
     else $style_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
@@ -389,7 +389,7 @@ if ($entry_found) {
 
     $entry_info_html .= $style_num." ".$row_style['brewStyle'];
     if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
-    if (($_SESSION['prefsStyleSet'] == "AABC") || ($_SESSION['prefsStyleSet'] == "AABC2022") || ($_SESSION['prefsStyleSet'] == "AABC2025")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://aabc.asn.au/docs/AABC2025StyleGuidelines.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    if (in_array($_SESSION['prefsStyleSet'], ["AABC", "AABC2022", "AABC2025"])) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://aabc.asn.au/docs/AABC2025StyleGuidelines.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
     if ($_SESSION['prefsStyleSet'] == "BA") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
 
   }
@@ -408,7 +408,7 @@ if ($entry_found) {
 
   if (!empty($row_entry_info['brewInfo'])) {
     $entry_info_html .= "<div class=\"row mb-3\">";
-    if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style_num == "2A")) $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_regional_variation."</strong></div>";
+    if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style_num === "2A")) $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_regional_variation."</strong></div>";
     else $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_required_info."</strong></div>";
     $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".str_replace("^", " - ", $row_entry_info['brewInfo'])."</div>";
     $entry_info_html .= "</div>";
@@ -459,7 +459,7 @@ if ($entry_found) {
   if (($_SESSION['prefsStyleSet'] != "NWCiderCup") && (!empty($row_entry_info['brewSweetnessLevel']))) {
 
     $sweetness_json = json_decode($row_entry_info['brewSweetnessLevel'],true);
-    
+
     if (json_last_error() === JSON_ERROR_NONE) {
 
       if (!empty($sweetness_json['OG'])) {
@@ -477,7 +477,7 @@ if ($entry_found) {
       }
 
     }
-    
+
     else {
 
       $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
@@ -505,7 +505,7 @@ if ($entry_found) {
   }
 
   if ((!empty($row_entry_info['brewPouring'])) && ((!empty($row_entry_info['brewStyleType'])) && ($row_entry_info['brewStyleType'] == 1))) {
-    
+
     $pouring_arr = json_decode($row_entry_info['brewPouring'],true);
 
     $entry_info_html .= "<div class=\"row mb-3\">";
@@ -545,7 +545,7 @@ if ($entry_found) {
   $entry_info_html .= "</section>"; // end alert-teal
 
   if ((isset($_POST['participants'])) || ($bid != "default")) {
-    
+
     $eval_source = 0;
 
     if (isset($_POST['participants'])) {
@@ -559,11 +559,11 @@ if ($entry_found) {
       $eval_judge = brewer_info($bid);
     }
 
-    
+
 
     $eval_judge = explode("^",$eval_judge);
 
-    if (strpos($eval_judge[3], ",") !== false) {
+    if (str_contains($eval_judge[3], ",")) {
         $judge_rank = explode(",",$eval_judge[3]);
         $judge_rank_display = $judge_rank[0];
     }
@@ -595,7 +595,7 @@ if ($entry_found) {
     $judge_info_html .= "</div>";
     $judge_info_html .= "</div>"; // end row
     $judge_info_html .= "</section>"; // end alert-info
-  
+
   }
 
   if (!empty($judge_info_html)) $entry_info_html .= $judge_info_html;
@@ -604,12 +604,12 @@ if ($entry_found) {
 
   $entry_info_html .= "</section>"; // end row mb-3
 
-  
-  
-  
+
+
+
   // If admin is adding eval on behalf of a judge, or if editing a judge's evaluation, display their judge's info
-  
-  
+
+
   // Sticky score
   $sticky_score_tally = "\n\n<div id=\"sticky-score\" class=\"float-end\">";
 
@@ -629,7 +629,7 @@ if ($entry_found) {
   $sticky_score_tally .= "<section id=\"scoring-guide-status\" class=\"p-3 w-100 border border-secondary-subtle bg-secondary-subtle shadow rounded-3 collapse show\">";
 
   if (!$nw_cider) {
-    
+
     $sticky_score_tally .= "<p class=\"mb-0 pb-1\"><i class=\"fa fa-info-circle\"></i> <strong>".$label_status." &ndash; ".$label_admin_scores."</strong></p>";
     $sticky_score_tally .= "<section class=\"row small\">";
     $sticky_score_tally .= "<div class=\"col-10\">";
@@ -748,7 +748,7 @@ else {
 
 // Sub-nav Buttons
 $eval_nav_buttons .= "<div class=\"d-print-none mb-3\">";
-if ($eval_source == 0) $eval_nav_buttons .= "<a class=\"btn btn-dark me-2\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><i class=\"fa fa-chevron-circle-left me-2\"></i>".$label_admin.": ".$label_evaluations."</a>";
+if ($eval_source === 0) $eval_nav_buttons .= "<a class=\"btn btn-dark me-2\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><i class=\"fa fa-chevron-circle-left me-2\"></i>".$label_admin.": ".$label_evaluations."</a>";
 else $eval_nav_buttons .= "<button class=\"btn btn-dark\" data-bs-toggle=\"modal\" data-bs-target=\"#unsaved-modal\"><i class=\"fa fa-chevron-circle-left me-2\"></i>".$label_judging_dashboard."</button>";
 $eval_nav_buttons .= "</div>";
 if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104);
@@ -1302,20 +1302,20 @@ var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
 <?php if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { 
 
     if (($cider) || ($mead)) {
-      $comment_fields = array(
+      $comment_fields = [
         "aroma" => "#evalAromaComments",
         "appearance" => "#evalAppearanceComments",
         "flavor" => "#evalFlavorComments",
         "overall" => "#evalOverallComments"
-      );
+      ];
     } else {
-      $comment_fields = array(
+      $comment_fields = [
           "aroma" => "#evalAromaComments",
           "appearance" => "#evalAppearanceComments",
           "flavor" => "#evalFlavorComments",
           "mouthfeel" => "#evalMouthfeelComments",
           "overall" => "#evalOverallComments"
-      );
+      ];
     }
 
 ?>

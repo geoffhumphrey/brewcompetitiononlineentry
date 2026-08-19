@@ -75,11 +75,11 @@ if ($check == 1) {
 
 	// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
 	$db_conn->where('id', $row_login['id']);
-	$db_conn->update($prefix."users", array('user_name' => $loginUsername));
+	$db_conn->update($prefix."users", ['user_name' => $loginUsername]);
 
 	// Convert email address in the user's accociated record in the "brewer" table
 	$db_conn->where('uid', $row_login['id']);
-	$db_conn->update($prefix."brewer", array('brewerEmail' => $loginUsername));
+	$db_conn->update($prefix."brewer", ['brewerEmail' => $loginUsername]);
 	
 	// Register the session variable
 	$_SESSION['loginUsername'] = $loginUsername;

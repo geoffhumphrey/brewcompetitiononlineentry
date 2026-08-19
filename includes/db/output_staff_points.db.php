@@ -43,7 +43,7 @@ $rows_bos_judges_no_assignment = $db_conn->rawQuery($query_bos_judges_no_assignm
 $row_bos_judges_no_assignment = ($rows_bos_judges_no_assignment && count($rows_bos_judges_no_assignment) > 0) ? $rows_bos_judges_no_assignment[0] : null;
 $totalRows_bos_judges_no_assignment = $db_conn->count;
 
-$bos_judge_no_assignment = array();
+$bos_judge_no_assignment = [];
 
 if ($totalRows_bos_judges > 0) {
 

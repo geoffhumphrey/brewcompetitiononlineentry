@@ -47,13 +47,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = trim(strip_tags($_POST['sbd_comments'.$id]));
 						else $sbd_comments = "";
 
-						$data = array(
+						$data = [
 							'sid' => blank_to_null(sterilize($_POST['sid'.$id])),
 							'bid' => blank_to_null($row_entry['brewBrewerID']),
 							'eid' => blank_to_null($row_entry['id']),
 							'sbd_place' => blank_to_null($sbd_place),
 							'sbd_comments' => blank_to_null($sbd_comments)
-						);
+						];
 						$result = $db_conn->insert($special_best_data_db_table, $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
@@ -70,7 +70,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			}
 
-			$pattern = array('\'', '"');
+			$pattern = ['\'', '"'];
 			$insertGoTo = str_replace($pattern, "", $insertGoTo);
 
 			if (array_sum($a) == 0) {
@@ -116,13 +116,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = trim(strip_tags($_POST['sbd_comments'.$id]));
 						else $sbd_comments = "";
 
-						$data = array(
+						$data = [
 							'sid' => blank_to_null(sterilize($_POST['sid'.$id])),
 							'bid' => blank_to_null($row_entry['brewBrewerID']),
 							'eid' => blank_to_null($row_entry['id']),
 							'sbd_place' => blank_to_null($sbd_place),
 							'sbd_comments' => blank_to_null($sbd_comments)
-						);
+						];
 						$db_conn->where('id', sterilize($id));
 						$result = $db_conn->update($special_best_data_db_table, $data);
 						if (!$result) {
@@ -151,13 +151,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = trim(strip_tags($_POST['sbd_comments'.$id]));
 						else $sbd_comments = "";
 
-						$data = array(
+						$data = [
 							'sid' => blank_to_null(sterilize($_POST['sid'.$id])),
 							'bid' => blank_to_null($row_entry['brewBrewerID']),
 							'eid' => blank_to_null($row_entry['id']),
 							'sbd_place' => blank_to_null($sbd_place),
 							'sbd_comments' => blank_to_null($sbd_comments)
-						);
+						];
 						$result = $db_conn->insert($special_best_data_db_table, $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
@@ -177,7 +177,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// exit;
 
-			$pattern = array('\'', '"');
+			$pattern = ['\'', '"'];
 			if (array_sum($a) == 0) $updateGoTo = $base_url."index.php?section=admin&go=special_best_data&msg=2";
 			else $updateGoTo = $base_url."index.php?section=admin&go=special_best_data&action=edit&id=$table_id&msg=24";
 			$updateGoTo = str_replace($pattern, "", $updateGoTo);

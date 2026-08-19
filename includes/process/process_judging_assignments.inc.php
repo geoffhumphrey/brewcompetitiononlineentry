@@ -10,7 +10,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	if ($action == "update") {
@@ -21,8 +21,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			//exit;
 
 			foreach ($_POST['random'] as $random) {
-				
-				$roles = array();
+
+				$roles = [];
 				$assignRoles = "";
 				$roles_only_update = FALSE;
 
@@ -48,7 +48,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$assignPlanning = sterilize($_SESSION['jPrefsTablePlanning']);
 				$assignRoles = sterilize($assignRoles);
 
-				$data = array(
+				$data = [
 					'bid' => blank_to_null($bid),
 					'assignment' => blank_to_null($assignment),
 					'assignTable' => blank_to_null($assignTable),
@@ -57,7 +57,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					'assignLocation' => blank_to_null($assignLocation),
 					'assignPlanning' => blank_to_null($assignPlanning),
 					'assignRoles' => blank_to_null($assignRoles)
-				);
+				];
 
 				if (isset($_POST['unassign'.$random])) $unassign = $_POST['unassign'.$random];
 				else $unassign = 0;
@@ -116,7 +116,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (($roles_only_update) && ($_POST['id'.$random] > 0)) {
 
 					$update_table = $prefix."judging_assignments";
-					$data = array('assignRoles' => blank_to_null($assignRoles));
+					$data = ['assignRoles' => blank_to_null($assignRoles)];
 					$db_conn->where ('id', sterilize($_POST['id'.$random]));
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -127,7 +127,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				} // end if (($roles_only_update) && ($_POST['id'.$random] > 0))
 
 				if (($unassign > 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] == 0))) {
-					
+
 					$db_conn->where("bid", sterilize($_POST['bid'.$random]));
 					$db_conn->where("assignRound", sterilize($_POST['assignRound'.$random]));
 					$db_conn->where("assignLocation", sterilize($_POST['assignLocation'.$random]));
@@ -153,7 +153,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ((isset($_POST['head_judge_choose'])) && (!empty($_POST['head_judge_choose']))) {
 
 				$update_table = $prefix."judging_assignments";
-				$data = array('assignRoles' => 'HJ');
+				$data = ['assignRoles' => 'HJ'];
 				$db_conn->where ('bid', sterilize($_POST['head_judge_choose']));
 				$db_conn->where ('assignTable', sterilize($_POST['assignTable'.$random]));
 				$result = $db_conn->update ($update_table,$data);
@@ -161,23 +161,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
 				}
-		
+
 			} // end if ((isset($_POST['head_judge_choose'])) && (!empty($_POST['head_judge_choose'])))
 
 	  	} // end if ($_SESSION['jPrefsQueued'] == "N")
 
 	  	if ($_SESSION['jPrefsQueued'] == "Y") {
-			
+
 			foreach ($_POST['random'] as $random) {
 
-				$roles = array();
+				$roles = [];
 				$assignRoles = "";
 				$roles_only_update = FALSE;
 
 				if (!empty($_POST['head_judge'.$random])) $roles[] = $_POST['head_judge'.$random];
 				if (!empty($_POST['lead_judge'.$random])) $roles[] = $_POST['lead_judge'.$random];
 				if (!empty($_POST['minibos_judge'.$random])) $roles[] = $_POST['minibos_judge'.$random];
-				if (!empty($roles)) $assignRoles = implode(", ",$roles);
+				if ($roles !== []) $assignRoles = implode(", ",$roles);
 
 				// Set up insert/update vars
 				$bid = sterilize($_POST['bid'.$random]);
@@ -189,7 +189,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$assignPlanning = sterilize($_SESSION['jPrefsTablePlanning']);
 				$assignRoles = sterilize($assignRoles);
 
-				$data = array(
+				$data = [
 					'bid' => blank_to_null($bid),
 					'assignment' => blank_to_null($assignment),
 					'assignTable' => blank_to_null($assignTable),
@@ -198,7 +198,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					'assignLocation' => blank_to_null($assignLocation),
 					'assignPlanning' => blank_to_null($assignPlanning),
 					'assignRoles' => blank_to_null($assignRoles)
-				);
+				];
 
 				if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
 				elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
@@ -230,7 +230,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (($roles_only_update) && ($_POST['id'.$random] > 0)) {
 
 					$update_table = $prefix."judging_assignments";
-					$data = array('assignRoles' => blank_to_null($assignRoles));
+					$data = ['assignRoles' => blank_to_null($assignRoles)];
 					$db_conn->where ('id', sterilize($_POST['id'.$random]));
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -241,7 +241,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				} // end if (($roles_only_update) && ($_POST['id'.$random] > 0))
 
 				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] > 0))) {
-		
+
 					$update_table = $prefix."judging_assignments";
 					$db_conn->where ('id', sterilize($_POST['unassign'.$random]));
 					$result = $db_conn->update ($update_table, $data);
@@ -268,7 +268,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}  // end if ($_SESSION['jPrefsQueued'] == "Y")
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		$redirect = $base_url."index.php?section=admin&go=judging_tables&msg=2";
 		if ($errors) $redirect = $base_url."index.php?section=admin&go=judging_tables&msg=3";

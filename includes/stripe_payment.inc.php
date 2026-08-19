@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * To integrate Stripe as a payment option for users,
  * admins must have access to an active Stripe account

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hindi PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer

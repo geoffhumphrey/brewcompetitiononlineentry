@@ -6,7 +6,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	// Instantiate HTMLPurifier
@@ -32,21 +32,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		else $id = $row_id_last_num['id'] + 1;
 
 		$update_table = $prefix."style_types";
-		$data = array(
+		$data = [
 			'id' => $id,
 			'styleTypeName' => blank_to_null($styleTypeName),
 			'styleTypeOwn' => blank_to_null(sterilize($_POST['styleTypeOwn'])),
 			'styleTypeBOS' => blank_to_null(sterilize($_POST['styleTypeBOS'])),
 			'styleTypeBOSMethod' => blank_to_null(sterilize($_POST['styleTypeBOSMethod'])),
 			'styleTypeEntryLimit' => blank_to_null(sterilize($_POST['styleTypeEntryLimit']))
-		);
+		];
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 		$insertGoTo = prep_redirect_link($insertGoTo);
@@ -61,7 +61,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$update_table = $prefix."style_types";
 
 			// Activate Mead/Cider style type
-			$data = array('styleTypeBOS' => 'Y');
+			$data = ['styleTypeBOS' => 'Y'];
 			$db_conn->where ('styleTypeName', 'Mead/Cider');
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -70,10 +70,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Deactivate Cider
-			$data = array(
+			$data = [
 				'styleTypeBOS' => 'N',
 				'styleTypeEntryLimit' => NULL
-			);
+			];
 			$db_conn->where ('id', 2);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -82,10 +82,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Deactivate Mead
-			$data = array(
+			$data = [
 				'styleTypeBOS' => 'N',
 				'styleTypeEntryLimit' => NULL
-			);
+			];
 			$db_conn->where ('id', 3);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -112,10 +112,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$update_table = $prefix."style_types";
 
 			// Deactivate Mead/Cider style type
-			$data = array(
+			$data = [
 				'styleTypeBOS' => 'N',
 				'styleTypeEntryLimit' => NULL
-			);
+			];
 			$db_conn->where ('styleTypeName', 'Mead/Cider');
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -124,7 +124,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Activate Cider
-			$data = array('styleTypeBOS' => 'Y');
+			$data = ['styleTypeBOS' => 'Y'];
 			$db_conn->where ('id', 2);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -133,7 +133,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Activate Mead
-			$data = array('styleTypeBOS' => 'Y');
+			$data = ['styleTypeBOS' => 'Y'];
 			$db_conn->where ('id', 3);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -160,13 +160,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		else {
 
 			$update_table = $prefix."style_types";
-			$data = array(
+			$data = [
 				'styleTypeName' => blank_to_null($styleTypeName),
 				'styleTypeOwn' => blank_to_null(sterilize($_POST['styleTypeOwn'])),
 				'styleTypeBOS' => blank_to_null(sterilize($_POST['styleTypeBOS'])),
 				'styleTypeBOSMethod' => blank_to_null(sterilize($_POST['styleTypeBOSMethod'])),
 				'styleTypeEntryLimit' => blank_to_null(sterilize($_POST['styleTypeEntryLimit']))
-			);
+			];
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -176,7 +176,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
 		$updateGoTo = prep_redirect_link($updateGoTo);

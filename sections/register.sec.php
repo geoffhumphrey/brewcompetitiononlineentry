@@ -16,7 +16,7 @@ var action = "<?php echo $action; ?>";
 
 <?php } ?>
 </script>
-<script src="<?php echo $js_url; ?>registration_checks.min.js<?php if (((DEBUG) || (TESTING)) && (strpos($base_url, 'test.brewingcompetitions.com') !== false)) echo "?t=".time(); ?>"></script>
+<script src="<?php echo $js_url; ?>registration_checks.min.js<?php if (((DEBUG) || (TESTING)) && (str_contains($base_url, 'test.brewingcompetitions.com'))) echo "?t=".time(); ?>"></script>
 <?php
 $warning0 = "";
 $warning1 = "";
@@ -75,7 +75,7 @@ else { // THIS ELSE ENDS at the end of the script
 	if (NHC) $totalRows_log = $totalRows_entry_count;
 	else $totalRows_log = $totalRows_log;
 	if ($go != "default") {
-		
+
 		asort($countries);
 		$country_select = "";
 		foreach ($countries as $country) {
@@ -222,7 +222,7 @@ if ((isset($_COOKIE['userQuestion'])) && ($_COOKIE['userQuestion'] != "Randomly 
 foreach ($security_questions_display as $key => $value) {
 
 	$security_checked = "";
-	if (($msg == "default") && ($key == 0)) $security_checked = "CHECKED";
+	if (($msg == "default") && ($key === 0)) $security_checked = "CHECKED";
 
     if (isset($_COOKIE['userQuestion'])) {
         if ($_COOKIE['userQuestion'] == $security_question[$value]) $security .= "";
@@ -254,9 +254,9 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
         $steward_avail_option = "";
 
         if ($row_judging3['judgingLocType'] == 2) {
-            
+
             $staff_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
-           
+
             $staff_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerNonJudgeLocation".$row_judging3['id']."\" data-width=\"auto\">";
             $staff_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
             $staff_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
@@ -468,10 +468,10 @@ if ($go == "default") {  ?>
             </div>
             <div id="brewerBreweryProdMeas" class="input-group">
                 <label class="radio-inline">
-                    <input type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_barrels; ?>" id="brewerBreweryProdMeas_0" <?php if (($action == "edit") && (strpos($brewerBreweryProd, $label_barrels) !== false)) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> /><?php echo $label_barrels; ?>
+                    <input type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_barrels; ?>" id="brewerBreweryProdMeas_0" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, $label_barrels))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> /><?php echo $label_barrels; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_hectoliters; ?>" id="brewerBreweryProdMeas_1" <?php if (($action == "edit") && (strpos($brewerBreweryProd, $label_hectoliters) !== false)) echo "CHECKED"; ?> /><?php echo $label_hectoliters; ?>
+                    <input type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_hectoliters; ?>" id="brewerBreweryProdMeas_1" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, $label_hectoliters))) echo "CHECKED"; ?> /><?php echo $label_hectoliters; ?>
                 </label>
             </div>
         </div>
@@ -661,7 +661,7 @@ if ($go == "default") {  ?>
             <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
-	
+
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_zip; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -921,7 +921,7 @@ if ($go == "default") {  ?>
     <?php if ($totalRows_judging > 0) {
 	if ($action == "edit") $judging_locations = explode(",",$row_brewer['brewerJudgeLocation']);
 	elseif ((isset($_COOKIE['brewerJudgeLocation'])) && ($section != "admin")) $judging_locations = explode(",",$_COOKIE['brewerJudgeLocation']);
-	else $judging_locations = array("","");
+	else $judging_locations = ["",""];
 	if (!empty($judge_location_avail)) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
         <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_judging_avail; ?></label>
@@ -972,7 +972,7 @@ if ($go == "default") {  ?>
 	<?php if ($totalRows_judging > 1) {
 	if ($action == "edit") $stewarding_locations = explode(",",$row_brewer['brewerStewardLocation']);
 	elseif ((isset($_COOKIE['brewerStewardLocation'])) && ($section != "admin")) $stewarding_locations = explode(",",$_COOKIE['brewerStewardLocation']);
-	else $stewarding_locations = array("","");
+	else $stewarding_locations = ["",""];
 	?>
 	<?php if (!empty($steward_location_avail)) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
@@ -988,11 +988,11 @@ if ($go == "default") {  ?>
    	<input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
    	<?php } // END else ?>
     <?php } // END if (!$steward_hidden) ?>
-    
+
 
     <?php if (((!$judge_hidden) || (!$steward_hidden)) && ($section != "admin")) {
     include(DB.'organizations.db.php');
-    $org_array_lower = array();
+    $org_array_lower = [];
     foreach ($org_array as $value) {
         $org_array_lower[] = strtolower($value);
     }
@@ -1065,7 +1065,7 @@ if ($go == "default") {  ?>
 <script type="text/javascript">
 	$("#brewerStaffFields").hide();
 	$("#staff-help").hide();
-	
+
   	$(function () {
   		$('#user_screen_name').focus();
 	});

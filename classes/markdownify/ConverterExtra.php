@@ -71,9 +71,9 @@ class ConverterExtra extends Converter
             'align' => 'optional',
         ];
         $this->isMarkdownable['tr'] = [];
-        array_push($this->ignore, 'thead');
-        array_push($this->ignore, 'tbody');
-        array_push($this->ignore, 'tfoot');
+        $this->ignore[] = 'thead';
+        $this->ignore[] = 'tbody';
+        $this->ignore[] = 'tfoot';
         // definition lists
         $this->isMarkdownable['dl'] = [];
         $this->isMarkdownable['dd'] = [];
@@ -195,7 +195,7 @@ class ConverterExtra extends Converter
             }
             $this->out($tag['text']);
             if ($add) {
-                array_push($this->stack['abbr'], $tag);
+                $this->stack['abbr'][] = $tag;
             }
         }
     }
@@ -211,12 +211,12 @@ class ConverterExtra extends Converter
         $out = [];
         foreach ($this->stack['abbr'] as $k => $tag) {
             if (!isset($tag['unstacked'])) {
-                array_push($out, ' *[' . $tag['text'] . ']: ' . $tag['title']);
+                $out[] = ' *[' . $tag['text'] . ']: ' . $tag['title'];
                 $tag['unstacked'] = true;
                 $this->stack['abbr'][$k] = $tag;
             }
         }
-        if (!empty($out)) {
+        if ($out !== []) {
             $this->out("\n\n" . implode("\n", $out));
         }
     }
@@ -241,13 +241,13 @@ class ConverterExtra extends Converter
                     $aligns = [];
                     foreach ($cols[2] as $align) {
                         $align = strtolower($align);
-                        array_push($aligns, $align);
+                        $aligns[] = $align;
                         if (empty($align)) {
                             $align = 'left'; // default value
                         }
                         $td = '\s+align=("|\')' . $align . '\\' . $i;
                         $i++;
-                        if ($align == 'left') {
+                        if ($align === 'left') {
                             // look for empty align or left
                             $td = '(?:' . $td . ')?';
                         }
@@ -303,18 +303,18 @@ class ConverterExtra extends Converter
                         $right = ':';
                         break;
                 }
-                array_push($separator, $left . str_repeat('-', $this->table['col_widths'][$col]) . $right);
+                $separator[] = $left . str_repeat('-', $this->table['col_widths'][$col]) . $right;
             }
             $separator = '|' . implode('|', $separator) . '|';
 
             $rows = [];
             // add padding
-            array_walk_recursive($this->table['rows'], [&$this, 'alignTdContent']);
+            array_walk_recursive($this->table['rows'], $this->alignTdContent(...));
             $header = array_shift($this->table['rows']);
-            array_push($rows, '| ' . implode(' | ', $header) . ' |');
-            array_push($rows, $separator);
+            $rows[] = '| ' . implode(' | ', $header) . ' |';
+            $rows[] = $separator;
             foreach ($this->table['rows'] as $row) {
-                array_push($rows, '| ' . implode(' | ', $row) . ' |');
+                $rows[] = '| ' . implode(' | ', $row) . ' |';
             }
             $this->out(implode("\n" . $this->indent, $rows));
             $this->table = [];
@@ -444,17 +444,17 @@ class ConverterExtra extends Converter
     protected function handleTag_dd()
     {
         if ($this->parser->isStartTag) {
-            if (substr(ltrim($this->parser->html), 0, 3) == '<p>') {
+            if (str_starts_with(ltrim($this->parser->html), '<p>')) {
                 // next comes a paragraph, so we'll need an extra line
                 $this->out("\n" . $this->indent);
-            } elseif (substr($this->output, -2) == "\n\n") {
+            } elseif (str_ends_with($this->output, "\n\n")) {
                 $this->output = substr($this->output, 0, -1);
             }
             $this->out(':   ');
             $this->indent('    ', false);
         } else {
             // lookahead for next dt
-            if (substr(ltrim($this->parser->html), 0, 4) == '<dt>') {
+            if (str_starts_with(ltrim($this->parser->html), '<dt>')) {
                 $this->setLineBreaks(2);
             } else {
                 $this->setLineBreaks(1);
@@ -532,7 +532,7 @@ class ConverterExtra extends Converter
         //   <fn name="...">...</fn>
         //   ...
         // </footnotes>
-        $html = preg_replace_callback('#<div class="footnotes">\s*<hr />\s*<ol>\s*(.+)\s*</ol>\s*</div>#Us', [&$this, '_makeFootnotes'], $html);
+        $html = preg_replace_callback('#<div class="footnotes">\s*<hr />\s*<ol>\s*(.+)\s*</ol>\s*</div>#Us', $this->_makeFootnotes(...), $html);
 
         return parent::parseString($html);
     }
@@ -579,7 +579,7 @@ class ConverterExtra extends Converter
         if (isset($this->parser->tagAttributes['class'])) {
             $classes = explode(' ', $this->decode($this->parser->tagAttributes['class']));
             $classes = array_filter($classes);
-            $cssSelector .= '.' . join('.', $classes);
+            $cssSelector .= '.' . implode('.', $classes);
         }
         return $cssSelector;
     }

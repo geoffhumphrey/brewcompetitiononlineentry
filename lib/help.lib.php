@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$bcoem_dashboard_help_array = array("comp-prep","entries-participants","sorting","organizing","scoring","preferences","reports","data-exports","data-mgmt","comp-logo","sponsor-logo","check-in","tables","assign-tables","materials","bos-judges","bos-results","winning","pro-am");
+$bcoem_dashboard_help_array = ["comp-prep","entries-participants","sorting","organizing","scoring","preferences","reports","data-exports","data-mgmt","comp-logo","sponsor-logo","check-in","tables","assign-tables","materials","bos-judges","bos-results","winning","pro-am"];
 
 function bcoem_dashboard_help(string $content): string {
 	require(CONFIG.'config.php');
@@ -287,35 +287,35 @@ function bcoem_help(string $section, string $go, string $action, string $filter)
 
 	// --------------------- General user sections ---------------------
 	// My account
-	if ($section == "list") {
+	if ($section === "list") {
 		$bcoem_help_title .= $list_help_title;
 		$bcoem_help_body .= $list_help_body;
 		$content = TRUE;
 	}
 
 	// Edit account
-	if (($section == "brewer") && ($go == "account") && ($action == "edit")) {
+	if (($section === "brewer") && ($go === "account") && ($action === "edit")) {
 		$bcoem_help_title .= $brewer_acct_edit_help_title;
 		$bcoem_help_body .= $brewer_acct_edit_help_body;
 		$content = TRUE;
 	}
 
 	// Pay fees
-	if ($section == "pay") {
+	if ($section === "pay") {
 		$bcoem_help_title .= $pay_help_title;
 		$bcoem_help_body .= $pay_help_body;
 		$content = TRUE;
 	}
 
 	// Change username
-	if (($section == "user") && ($go == "account") && ($action == "username")) {
+	if (($section === "user") && ($go === "account") && ($action === "username")) {
 		$bcoem_help_title .= $username_help_title;
 		$bcoem_help_body .= $username_help_body;
 		$content = TRUE;
 	}
 
 	// Change password
-	if (($section == "user") && ($go == "account") && ($action == "password")) {
+	if (($section === "user") && ($go === "account") && ($action === "password")) {
 		$bcoem_help_title .= $password_help_title;
 		$bcoem_help_body .= $password_help_body;
 		$content = TRUE;
@@ -323,57 +323,57 @@ function bcoem_help(string $section, string $go, string $action, string $filter)
 
 	// --------------------- Admin ---------------------
 
-	if ($section == "admin") {
+	if ($section === "admin") {
 
-		if ($go == "contacts") {
+		if ($go === "contacts") {
 			$bcoem_help_title .= "Contact Help";
 			$bcoem_help_body .= "<p>Define the contacts associated with the competition (e.g., the Competition Coordinator, Head Judge, Cellar Master, etc.). The names will be available via a drop-down list on the Contact page.</p>";
 			$content = TRUE;
 		}
 
-		if ($go == "contest_info") {
+		if ($go === "contest_info") {
 			$bcoem_help_title .= "Competition Info Help";
 			$bcoem_help_body .= "<p>Here admins can define or change the vital information associated with the competition (e.g., the the competition name, entry and registration dates, rules, etc.). The information entered will be displayed on your site&rsquo;s home and info pages.</p><p>This information is retained even after running BCOE&amp;M&rsquo;s Archive function; therefore, it will need to be updated periodically for each new competition instance.</p>";
 			$content = TRUE;
 		}
 
-		if ($go == "special_best") {
+		if ($go === "special_best") {
 			$bcoem_help_title .= "Custom Categories Help";
 			$bcoem_help_body .= "<p>View and define a winning category unique to your competition. (e.g., Steward's Choice, Best Name, etc.). This is especially useful to define and display Pro-Am winners.</p><p>Select the &ldquo;Add a Custom Style&rdquo; button to define a new category.<p>";
 			$content = TRUE;
 		}
 
-		if ($go == "dropoff") {
+		if ($go === "dropoff") {
 			$bcoem_help_title .= "Drop-Off Locations Help";
 			$bcoem_help_body .= "<p>Define one or more entry drop-off locations for participants to hand-deliver their entries. Drop-off locations are displayed on the Info with a link* to a map and driving directions.</p><p>A drop-off location may or may not be the same as the Shipping Location, which is defined in Competition Info. There is only one shipping location defined for the competition, whereas there can be multiple drop-off locations.</p><p>Select the &ldquo;Add a Drop-Off Location&rdquo; button to enter a drop-off location.<p><p class=\"small\">* The mapping features will only work if an address is input.</p>";
 			$content = TRUE;
 		}
 
-		if (($go == "judging") && ($action == "default")) {
+		if (($go === "judging") && ($action === "default")) {
 			$bcoem_help_title .= "Judging Locations Help";
 			$bcoem_help_body .= "<p>Define one or more entry judging locations and associated dates and times. Each judging location is displayed on the public pages sidebar with a link* to a map and driving directions.</p><p>Select the &ldquo;Add a Judging Location&rdquo; button to enter a new judging location and its associated date/time.<p><p class=\"small\">* The mapping features will only work if an address is input.</p>";
 			$content = TRUE;
 		}
 
-		if ($go == "sponsors") {
+		if ($go === "sponsors") {
 			$bcoem_help_title .= "Sponsors Help";
 			$bcoem_help_body .= "<p>View, add or edit competition sponsors for display on the public Home page and Sponsors page.</p><p>For each sponsor, enter their name, location, level (1 through 5, 1 being the highest level), website address, logo image name* from the drop-down and an optional short description.<p><p class=\"small\">*Logo images must be uploaded first to show up on the logo image drop-down list. Select the &ldquo;Upload Sponsor Logo Images&rdquo; button.</p>";
 			$content = TRUE;
 		}
 
-		if ($go == "styles") {
+		if ($go === "styles") {
 			$bcoem_help_title .= "Styles Help";
 			$bcoem_help_body .= "<p>Define the accepted sub-styles for your competition based upon the 2008 or 2015 BJCP Style Guidelines. Check or uncheck the sub-styles your competition will accept.</p><p>Custom Styles will be at the top of the list. To define a custom style or custom style type, select the &ldquo;Add...&rdquo; drop-down menu.</p>";
 			$content = TRUE;
 		}
 
-		if ($go == "style_types") {
+		if ($go === "style_types") {
 			$bcoem_help_title .= "Styles Types Help";
 			$bcoem_help_body .= "<p>Here, you can designate the style types for use in the competition.</p><p>BCOE&M ships with three pre-defined style types: Beer, Cider, and Mead. Using the Style Types function, Administrators can add a custom style type, define whether a best of show round will be conducted for each style type (including pre-defined ones), and designate which placed entries from each table will be sent to the best of show round (1st place only, 1st and 2nd place, or 1st, 2nd, and 3rd places).</p><p>You can also add a custom style type (e.g., wine, soda, saki, etc.) and its associated best of show methodology by selecting the &ldquo;Add...&rdquo; drop-down menu.</p>";
 			$content = TRUE;
 		}
 
-		if ($go == "entries") {
+		if ($go === "entries") {
 			$bcoem_help_title .= "Entries Help";
 			$bcoem_help_body .= "<p>From here, Administrators can view, add, edit, or delete any entry.</p>";
 			$bcoem_help_body .= "<ul>";
@@ -393,7 +393,7 @@ function bcoem_help(string $section, string $go, string $action, string $filter)
 			$content = TRUE;
 		}
 
-		if ($go == "participants") {
+		if ($go === "participants") {
 			$bcoem_help_title .= "Participants Help";
 			$bcoem_help_body .= "<p>&ldquo;Participant&rdquo; is a term for any person who:</p>";
 			$bcoem_help_body .= "<ul>";
@@ -419,7 +419,7 @@ function bcoem_help(string $section, string $go, string $action, string $filter)
 			$content = TRUE;
 		}
 
-		if (($go == "judging") && ($action == "assign")) {
+		if (($go === "judging") && ($action === "assign")) {
 			$bcoem_help_title .= "Assign Judges or Stewards Help";
 			$bcoem_help_body .= "<p>The process to assign judges and stewards is three-fold:</p>";
 			$bcoem_help_body .= "<ol>";
@@ -431,7 +431,7 @@ function bcoem_help(string $section, string $go, string $action, string $filter)
 			$content = TRUE;
 		}
 
-		if (($go == "judging_tables") && ($action == "default")) {
+		if (($go === "judging_tables") && ($action === "default")) {
 			$bcoem_help_title .= "Tables Help";
 			$bcoem_help_body .= "<p>Tables are where administrators group style categories together, defining where their associated entries will be physically judged.</p>";
 			$bcoem_help_body .= "<p>To define style categories to a table, there must be at least one entry in each category.</p>";
@@ -442,7 +442,7 @@ function bcoem_help(string $section, string $go, string $action, string $filter)
 			$content = TRUE;
 		}
 
-		if (($go == "judging_tables") && ($action == "assign") && ($id != "default")) {
+		if (($go === "judging_tables") && ($action === "assign") && ($id != "default")) {
 			$bcoem_help_title .= "Assign Judges or Stewards to Tables Help";
 			$bcoem_help_body .= "<p>Choose judges or stewards to assign to this table.</p>";
 			$bcoem_help_body .= "<ul>";
@@ -452,20 +452,20 @@ function bcoem_help(string $section, string $go, string $action, string $filter)
 			$content = TRUE;
 		}
 
-		if ($go == "preferences") {
+		if ($go === "preferences") {
 			$bcoem_help_title .= "Preferences Help";
 			$bcoem_help_body .= "<p>Here, site admins can customize the display and function of the competition site from pre-defined variables. More information about particular preferences can be accessed by selecting the &ldquo;Info&rdquo; buttons below line items.</p>";
 			$bcoem_help_body .= "<p>Preferences are presented categorically depending upon their function and focus.</p>";
 			$content = TRUE;
 		}
 
-		if ($go == "judging_preferences") {
+		if ($go === "judging_preferences") {
 			$bcoem_help_title .= "Judging/Competition Organization Preferences Help";
 			$bcoem_help_body .= "<p>Here, site admins can define how their competition judging will be setup and organized, including flights, rounds, and Best of Show places. More information about particular preferences can be accessed by selecting the &ldquo;Info&rdquo; buttons below the line items.</p>";
 			$content = TRUE;
 		}
 
-		if ($go == "archive") {
+		if ($go === "archive") {
 			$bcoem_help_title .= "Archives Help";
 			$bcoem_help_body .= "<p>BCOE&amp;M provides administrators the option to archive competition data to access at a later time. This is useful for organizers to be able to track trends from competition to competition using the same installation of BCOE&amp;M.</p>";
 			$bcoem_help_body .= "<p>If no archives have been created, administrators can create one by naming providing a name of their archive. The current user, participant, entry, table, scoring, and result data will be archived Admins also have the option to retain sets of data for re-use such as users, participants, custom categories, custom style types, drop-off locations, judging locations, and sponsors.</p>";
@@ -497,9 +497,8 @@ function bcoem_help(string $section, string $go, string $action, string $filter)
 	}
 
 	// --------------------- Output ---------------------
-	if ($content) $output = $return;
-	else $output = "";
-	return $output;
+	if ($content) return $return;
+	return "";
 }
 
 

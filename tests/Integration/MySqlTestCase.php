@@ -33,7 +33,7 @@ abstract class MySqlTestCase extends TestCase
 
     protected static function db(): MysqliDb
     {
-        if (self::$db === null) {
+        if (!self::$db instanceof \MysqliDb) {
             $host = getenv('BCOEM_TEST_DB_HOST') ?: '127.0.0.1';
             $user = getenv('BCOEM_TEST_DB_USER') ?: 'root';
             $pass = getenv('BCOEM_TEST_DB_PASS') ?: 'root';

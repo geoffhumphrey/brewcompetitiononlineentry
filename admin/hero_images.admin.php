@@ -1,7 +1,7 @@
 <?php
 
 // Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!str_contains($section, "step")) && ($_SESSION['userLevel'] > 0))) {
     $redirect = "../../403.php";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
@@ -14,15 +14,15 @@ $save_message = "";
 $save_error = "";
 $request_uri = htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
 
-$category_prefixes = array(
+$category_prefixes = [
     "0" => "misc",
     "1" => "beer",
     "2" => "cider",
     "3" => "mead"
-);
+];
 
-$allowed_extensions = array("jpg", "jpeg", "png", "gif", "webp");
-$allowed_mime_types = array("image/jpeg", "image/png", "image/gif", "image/webp");
+$allowed_extensions = ["jpg", "jpeg", "png", "gif", "webp"];
+$allowed_mime_types = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 $max_upload_bytes = 5 * 1024 * 1024; // 5 MB
 
 function is_valid_hero_token() {
@@ -41,24 +41,16 @@ function hero_safe_filename_stem($input) {
 }
 
 function hero_upload_error_message($error_code) {
-    switch ((int)$error_code) {
-        case UPLOAD_ERR_INI_SIZE:
-            return "The uploaded file is larger than the server allows.";
-        case UPLOAD_ERR_FORM_SIZE:
-            return "The uploaded file is larger than the form allows.";
-        case UPLOAD_ERR_PARTIAL:
-            return "The file was only partially uploaded.";
-        case UPLOAD_ERR_NO_FILE:
-            return "No file was uploaded.";
-        case UPLOAD_ERR_NO_TMP_DIR:
-            return "The server is missing a temporary upload folder.";
-        case UPLOAD_ERR_CANT_WRITE:
-            return "The server could not write the uploaded file to disk.";
-        case UPLOAD_ERR_EXTENSION:
-            return "A server extension stopped the upload.";
-        default:
-            return "Image upload failed. Please try again.";
-    }
+    return match ((int)$error_code) {
+        UPLOAD_ERR_INI_SIZE => "The uploaded file is larger than the server allows.",
+        UPLOAD_ERR_FORM_SIZE => "The uploaded file is larger than the form allows.",
+        UPLOAD_ERR_PARTIAL => "The file was only partially uploaded.",
+        UPLOAD_ERR_NO_FILE => "No file was uploaded.",
+        UPLOAD_ERR_NO_TMP_DIR => "The server is missing a temporary upload folder.",
+        UPLOAD_ERR_CANT_WRITE => "The server could not write the uploaded file to disk.",
+        UPLOAD_ERR_EXTENSION => "A server extension stopped the upload.",
+        default => "Image upload failed. Please try again.",
+    };
 }
 
 if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset($_POST['action'])) && ($_POST['action'] == "upload")) {
@@ -147,7 +139,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     }
     else {
         $delete_image = (isset($_POST['hero_image_delete'])) ? basename((string)$_POST['hero_image_delete']) : "";
-        $all_known_images = array();
+        $all_known_images = [];
 
         foreach ($all_images as $images) {
             foreach ($images as $image) {
@@ -179,7 +171,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
 
 if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset($_POST['action'])) && ($_POST['action'] == "save")) {
     $token_valid = is_valid_hero_token();
-    $images_to_save = array();
+    $images_to_save = [];
 
     if (!$token_valid) {
         $save_error = "Security token validation failed. Please refresh and try again.";
@@ -189,16 +181,16 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         foreach ($all_images as $images) {
             foreach ($images as $image) {
                 $checkbox_name = "hero_image_".preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
-                $images_to_save[$image] = (isset($_POST[$checkbox_name])) ? true : false;
+                $images_to_save[$image] = isset($_POST[$checkbox_name]);
             }
         }
 
         if (save_hero_images_preferences($db_conn, $prefix, $images_to_save)) {
-            $save_message = isset($lang['admin_hero_images_saved']) ? $lang['admin_hero_images_saved'] : "Hero images preferences saved successfully.";
+            $save_message = $lang['admin_hero_images_saved'] ?? "Hero images preferences saved successfully.";
             $hero_prefs = $images_to_save;
         }
         else {
-            $save_error = isset($lang['admin_hero_images_error']) ? $lang['admin_hero_images_error'] : "Error saving hero images preferences.";
+            $save_error = $lang['admin_hero_images_error'] ?? "Error saving hero images preferences.";
         }
     }
 }
@@ -207,7 +199,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
 
 <div id="hero_images_admin" class="admin-section">
 
-    <h2><?php echo isset($lang['admin_hero_images_title']) ? $lang['admin_hero_images_title'] : "Banner Images"; ?></h2>
+    <h2><?php echo $lang['admin_hero_images_title'] ?? "Banner Images"; ?></h2>
 
     <?php if (!empty($save_message)): ?>
     <div class="alert alert-success alert-dismissible fade in" role="alert">
@@ -227,16 +219,16 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     </div>
     <?php endif; ?>
 
-    <p><?php echo isset($lang['admin_hero_images_description']) ? $lang['admin_hero_images_description'] : "Select which banner images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types."; ?></p>
+    <p><?php echo $lang['admin_hero_images_description'] ?? "Select which banner images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types."; ?></p>
 
     <div class="well well-sm">
-        <strong><?php echo isset($lang['admin_hero_how_it_works_title']) ? $lang['admin_hero_how_it_works_title'] : "How it works"; ?>:</strong>
-        <?php echo isset($lang['admin_hero_how_it_works_body']) ? $lang['admin_hero_how_it_works_body'] : "Banner images appear as a large background strip at the top of the competition homepage. One image is picked at random each time a visitor loads the page. Images are grouped by category &mdash; Miscellaneous images can appear at any time, while Beer, Cider, and Mead images only appear when your competition accepts entries in those categories. Use the checkboxes below to choose which images are in the rotation, then click <strong>Save Changes</strong>. To add a new image, use the upload panel and choose the matching category."; ?>
+        <strong><?php echo $lang['admin_hero_how_it_works_title'] ?? "How it works"; ?>:</strong>
+        <?php echo $lang['admin_hero_how_it_works_body'] ?? "Banner images appear as a large background strip at the top of the competition homepage. One image is picked at random each time a visitor loads the page. Images are grouped by category &mdash; Miscellaneous images can appear at any time, while Beer, Cider, and Mead images only appear when your competition accepts entries in those categories. Use the checkboxes below to choose which images are in the rotation, then click <strong>Save Changes</strong>. To add a new image, use the upload panel and choose the matching category."; ?>
     </div>
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4 class="panel-title"><?php echo isset($lang['hero_images_text_002']) ? $lang['hero_images_text_002'] : "Upload New Banner Image"; ?></h4>
+            <h4 class="panel-title"><?php echo $lang['hero_images_text_002'] ?? "Upload New Banner Image"; ?></h4>
         </div>
         <div class="panel-body">
             <form method="POST" action="<?php echo $request_uri; ?>" enctype="multipart/form-data" class="form-inline">
@@ -249,30 +241,30 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                 </p>
 
                 <div class="form-group" style="margin-right: 10px; margin-bottom: 10px;">
-                    <label for="hero_image_category" class="sr-only"><?php echo isset($lang['hero_images_text_007']) ? $lang['hero_images_text_007'] : "Category"; ?></label>
+                    <label for="hero_image_category" class="sr-only"><?php echo $lang['hero_images_text_007'] ?? "Category"; ?></label>
                     <select class="form-control" id="hero_image_category" name="hero_image_category" required>
-                        <option value=""><?php echo isset($lang['hero_images_text_008']) ? $lang['hero_images_text_008'] : "Select a category..."; ?></option>
-                        <option value="0"><?php echo isset($lang['admin_hero_category_misc']) ? $lang['admin_hero_category_misc'] : "Miscellaneous"; ?></option>
-                        <option value="1"><?php echo isset($lang['admin_hero_category_beer']) ? $lang['admin_hero_category_beer'] : "Beer"; ?></option>
-                        <option value="2"><?php echo isset($lang['admin_hero_category_cider']) ? $lang['admin_hero_category_cider'] : "Cider"; ?></option>
-                        <option value="3"><?php echo isset($lang['admin_hero_category_mead']) ? $lang['admin_hero_category_mead'] : "Mead"; ?></option>
+                        <option value=""><?php echo $lang['hero_images_text_008'] ?? "Select a category..."; ?></option>
+                        <option value="0"><?php echo $lang['admin_hero_category_misc'] ?? "Miscellaneous"; ?></option>
+                        <option value="1"><?php echo $lang['admin_hero_category_beer'] ?? "Beer"; ?></option>
+                        <option value="2"><?php echo $lang['admin_hero_category_cider'] ?? "Cider"; ?></option>
+                        <option value="3"><?php echo $lang['admin_hero_category_mead'] ?? "Mead"; ?></option>
                     </select>
                 </div>
 
                 <div class="form-group" id="hero_image_file_group" style="margin-right: 10px; margin-bottom: 10px; display:none;">
-                    <label for="hero_image_file" class="sr-only"><?php echo isset($lang['hero_images_text_004']) ? $lang['hero_images_text_004'] : "Image File"; ?></label>
+                    <label for="hero_image_file" class="sr-only"><?php echo $lang['hero_images_text_004'] ?? "Image File"; ?></label>
                     <input type="file" class="form-control" id="hero_image_file" name="hero_image_file" accept=".jpg,.jpeg,.png,.gif,.webp" required>
                 </div>
 
                 <button type="submit" id="hero_image_upload_button" class="btn btn-success" style="margin-bottom: 10px; display:none;" disabled>
-                    <span class="glyphicon glyphicon-upload"></span> <?php echo isset($lang['hero_images_text_012']) ? $lang['hero_images_text_012'] : "Upload Image"; ?>
+                    <span class="glyphicon glyphicon-upload"></span> <?php echo $lang['hero_images_text_012'] ?? "Upload Image"; ?>
                 </button>
             </form>
             <div class="help-block" style="margin-top:12px;">
-                <p><strong><?php echo isset($lang['admin_hero_upload_note_title']) ? $lang['admin_hero_upload_note_title'] : "File naming"; ?>:</strong>
-                <?php echo isset($lang['admin_hero_upload_note_body']) ? $lang['admin_hero_upload_note_body'] : "The uploaded file is automatically renamed using the selected category as a prefix &mdash; for example, uploading <em>sunset.jpg</em> in the Beer category saves as <code>beer-sunset.jpg</code>. You do not need to rename the file before uploading."; ?></p>
-                <p><strong><?php echo isset($lang['admin_hero_upload_note_size_title']) ? $lang['admin_hero_upload_note_size_title'] : "Size &amp; format"; ?>:</strong> 
-                <?php echo isset($lang['admin_hero_upload_note_size_body']) ? $lang['admin_hero_upload_note_size_body'] : "Recommended 3000&times;500 px (6:1 ratio). Minimum width 1200 px with at least a 3.5:1 aspect ratio. Accepted formats: JPG, PNG, GIF, WebP. Maximum file size: 5 MB."; ?></p>
+                <p><strong><?php echo $lang['admin_hero_upload_note_title'] ?? "File naming"; ?>:</strong>
+                <?php echo $lang['admin_hero_upload_note_body'] ?? "The uploaded file is automatically renamed using the selected category as a prefix &mdash; for example, uploading <em>sunset.jpg</em> in the Beer category saves as <code>beer-sunset.jpg</code>. You do not need to rename the file before uploading."; ?></p>
+                <p><strong><?php echo $lang['admin_hero_upload_note_size_title'] ?? "Size &amp; format"; ?>:</strong> 
+                <?php echo $lang['admin_hero_upload_note_size_body'] ?? "Recommended 3000&times;500 px (6:1 ratio). Minimum width 1200 px with at least a 3.5:1 aspect ratio. Accepted formats: JPG, PNG, GIF, WebP. Maximum file size: 5 MB."; ?></p>
             </div>
         </div>
     </div>
@@ -282,27 +274,27 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         <input type="hidden" name="action" value="save">
         <input type="hidden" name="user_session_token" value="<?php echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 
-        <p class="help-block"><?php echo isset($lang['hero_images_text_009']) ? $lang['hero_images_text_009'] : "Images are randomly selected based on your competition's accepted style types. Miscellaneous images appear on all pages."; ?></p>
+        <p class="help-block"><?php echo $lang['hero_images_text_009'] ?? "Images are randomly selected based on your competition's accepted style types. Miscellaneous images appear on all pages."; ?></p>
 
         <?php
-        $category_blocks = array(
-            "0" => array(
-                "title" => (isset($lang['admin_hero_category_misc']) ? $lang['admin_hero_category_misc'] : "Miscellaneous"),
-                "help" => (isset($lang['admin_hero_category_shown_all']) ? $lang['admin_hero_category_shown_all'] : "Shown on all pages")
-            ),
-            "1" => array(
-                "title" => (isset($lang['admin_hero_category_beer']) ? $lang['admin_hero_category_beer'] : "Beer"),
-                "help" => (isset($lang['admin_hero_category_shown_beer']) ? $lang['admin_hero_category_shown_beer'] : "Shown when beer category is active")
-            ),
-            "2" => array(
-                "title" => (isset($lang['admin_hero_category_cider']) ? $lang['admin_hero_category_cider'] : "Cider"),
-                "help" => (isset($lang['admin_hero_category_shown_cider']) ? $lang['admin_hero_category_shown_cider'] : "Shown when cider category is active")
-            ),
-            "3" => array(
-                "title" => (isset($lang['admin_hero_category_mead']) ? $lang['admin_hero_category_mead'] : "Mead"),
-                "help" => (isset($lang['admin_hero_category_shown_mead']) ? $lang['admin_hero_category_shown_mead'] : "Shown when mead category is active")
-            )
-        );
+        $category_blocks = [
+            "0" => [
+                "title" => ($lang['admin_hero_category_misc'] ?? "Miscellaneous"),
+                "help" => ($lang['admin_hero_category_shown_all'] ?? "Shown on all pages")
+            ],
+            "1" => [
+                "title" => ($lang['admin_hero_category_beer'] ?? "Beer"),
+                "help" => ($lang['admin_hero_category_shown_beer'] ?? "Shown when beer category is active")
+            ],
+            "2" => [
+                "title" => ($lang['admin_hero_category_cider'] ?? "Cider"),
+                "help" => ($lang['admin_hero_category_shown_cider'] ?? "Shown when cider category is active")
+            ],
+            "3" => [
+                "title" => ($lang['admin_hero_category_mead'] ?? "Mead"),
+                "help" => ($lang['admin_hero_category_shown_mead'] ?? "Shown when mead category is active")
+            ]
+        ];
 
         foreach ($category_blocks as $category => $meta) {
         ?>
@@ -316,21 +308,21 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                     <?php if (!empty($all_images[$category])): ?>
                     <button type="button" class="btn btn-primary btn-xs hero-toggle-all-button"
                         data-hero-category="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>"
-                        data-label-select="<?php echo htmlspecialchars(isset($lang['admin_hero_select_all']) ? $lang['admin_hero_select_all'] : "Select All", ENT_QUOTES, 'UTF-8'); ?>"
-                        data-label-deselect="<?php echo htmlspecialchars(isset($lang['admin_hero_deselect_all']) ? $lang['admin_hero_deselect_all'] : "Deselect All", ENT_QUOTES, 'UTF-8'); ?>">
-                        <?php echo isset($lang['admin_hero_deselect_all']) ? $lang['admin_hero_deselect_all'] : "Deselect All"; ?>
+                        data-label-select="<?php echo htmlspecialchars($lang['admin_hero_select_all'] ?? "Select All", ENT_QUOTES, 'UTF-8'); ?>"
+                        data-label-deselect="<?php echo htmlspecialchars($lang['admin_hero_deselect_all'] ?? "Deselect All", ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php echo $lang['admin_hero_deselect_all'] ?? "Deselect All"; ?>
                     </button>
                     <?php endif; ?>
                 </div>
             </div>
             <div class="panel-body">
                 <?php if (empty($all_images[$category])): ?>
-                    <p class="text-muted"><?php echo isset($lang['admin_hero_no_images']) ? $lang['admin_hero_no_images'] : "No images found"; ?></p>
+                    <p class="text-muted"><?php echo $lang['admin_hero_no_images'] ?? "No images found"; ?></p>
                 <?php else: ?>
                     <div class="hero-images-grid" data-hero-category-grid="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>">
                         <?php foreach ($all_images[$category] as $image):
                             $checkbox_name = "hero_image_".preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
-                            $is_checked = (isset($hero_prefs[$image])) ? $hero_prefs[$image] : false;
+                            $is_checked = $hero_prefs[$image] ?? false;
                         ?>
                         <div class="hero-image-item">
                             <div class="checkbox">
@@ -341,7 +333,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                             </div>
                             <img src="<?php echo htmlspecialchars($images_url.$image, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
                             <button type="button" class="btn btn-link btn-xs hero-image-delete-button" data-hero-image="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>">
-                                <span class="glyphicon glyphicon-trash"></span> <?php echo isset($lang['delete']) ? $lang['delete'] : "Delete"; ?>
+                                <span class="glyphicon glyphicon-trash"></span> <?php echo $lang['delete'] ?? "Delete"; ?>
                             </button>
                         </div>
                         <?php endforeach; ?>
@@ -354,10 +346,10 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-12">
                 <button type="submit" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-floppy-disk"></span> <?php echo isset($lang['admin_hero_save_button']) ? $lang['admin_hero_save_button'] : "Save Changes"; ?>
+                    <span class="glyphicon glyphicon-floppy-disk"></span> <?php echo $lang['admin_hero_save_button'] ?? "Save Changes"; ?>
                 </button>
                 <button type="button" class="btn btn-default" onclick="location.reload();">
-                    <span class="glyphicon glyphicon-refresh"></span> <?php echo isset($lang['cancel']) ? $lang['cancel'] : "Cancel"; ?>
+                    <span class="glyphicon glyphicon-refresh"></span> <?php echo $lang['cancel'] ?? "Cancel"; ?>
                 </button>
             </div>
         </div>

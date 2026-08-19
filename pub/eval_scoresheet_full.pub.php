@@ -147,7 +147,7 @@ else $beer = TRUE;
             <?php for($i=5; $i>=1; $i--) { ?>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="evalStyleAccuracy" id="evalStyleAccuracy<?php echo $i; ?>" value="<?php echo $i; ?>" data-error="<?php echo $evaluation_info_067; ?>" required <?php if (($action == "edit") && ($row_eval['evalStyleAccuracy'] == $i)) echo "checked"; ?>>
-                <label class="form-check-label"><?php if ($i == 1) echo $label_not_style; if ($i == 5) echo $label_classic_example; ?></label>
+                <label class="form-check-label"><?php if ($i === 1) echo $label_not_style; if ($i === 5) echo $label_classic_example; ?></label>
             </div>
             <?php } ?>
             <div class="help-block small invalid-feedback"><?php echo $evaluation_info_067; ?></div>
@@ -163,7 +163,7 @@ else $beer = TRUE;
             <?php for($i=5; $i>=1; $i--) { ?>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="evalTechMerit" id="techMerit<?php echo $i; ?>" value="<?php echo $i; ?>" data-error="<?php echo $evaluation_info_067; ?>" required  <?php if (($action == "edit") && ($row_eval['evalTechMerit'] == $i)) echo "checked"; ?>>
-                <label class="form-check-label"><?php if ($i == 1) echo $label_significant_flaws; if ($i == 5) echo $label_flawless; ?></label>
+                <label class="form-check-label"><?php if ($i === 1) echo $label_significant_flaws; if ($i === 5) echo $label_flawless; ?></label>
             </div>
             <?php } ?>
             <div class="help-block small invalid-feedback"><?php echo $evaluation_info_067; ?></div>
@@ -179,7 +179,7 @@ else $beer = TRUE;
             <?php for($i=5; $i>=1; $i--) { ?>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="evalIntangibles" id="evalIntangibles<?php echo $i; ?>" value="<?php echo $i; ?>" data-error="<?php echo $evaluation_info_067; ?>" required  <?php if (($action == "edit") && ($row_eval['evalIntangibles'] == $i)) echo "checked"; ?>>
-                <label class="form-check-label"><?php if ($i == 1) echo $label_lifeless; if ($i == 5) echo $label_wonderful; ?></label>
+                <label class="form-check-label"><?php if ($i === 1) echo $label_lifeless; if ($i === 5) echo $label_wonderful; ?></label>
             </div>
             <?php } ?>
             <div class="help-block small invalid-feedback"><?php echo $evaluation_info_067; ?></div>
@@ -195,7 +195,7 @@ else $beer = TRUE;
     <div class="mb-3">
         <?php foreach ($descriptors as $key => $value) { ?>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="evalDescriptors[]" value="<?php echo $key; ?>" <?php if ($action == "edit") { if (strpos($row_eval['evalDescriptors'],$key) !== false) echo "checked"; } ?>>
+            <input class="form-check-input" type="checkbox" name="evalDescriptors[]" value="<?php echo $key; ?>" <?php if ($action == "edit") { if (str_contains($row_eval['evalDescriptors'],$key)) echo "checked"; } ?>>
             <label class="form-check-label"><strong><?php echo $key; ?></strong> – <?php echo $value; ?></label>
         </div>
         <?php } ?>

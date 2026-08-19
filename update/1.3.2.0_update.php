@@ -146,7 +146,7 @@ $totalRows_custom_styles = mysqli_num_rows($custom_styles);
 
 if ($totalRows_custom_styles > 0) {
 
-	$a = array();
+	$a = [];
 
 	do {
 
@@ -459,7 +459,7 @@ if ($totalRows_custom_styles > 0) {
 
 		do {
 			$b = "";
-			$new_table_styles = array();
+			$new_table_styles = [];
 
 			//echo $row_custom_style_table['id']."<br>";
 			//echo $row_custom_style_table['tableStyles']."<br>";

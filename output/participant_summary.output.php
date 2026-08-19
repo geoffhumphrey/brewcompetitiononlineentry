@@ -21,16 +21,14 @@ include (LIB.'output.lib.php');
 function bos_place_output(int|string $entry_id,string $prefix,\mysqli $connection): string {
     $db_conn = new MysqliDb($connection);
     $query_bos = "SELECT a.scorePlace FROM ".$prefix."judging_scores_bos"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE a.eid = ? AND c.uid = b.brewBrewerID";
-    $row_bos = $db_conn->rawQueryOne($query_bos, array($entry_id));
+    $row_bos = $db_conn->rawQueryOne($query_bos, [$entry_id]);
     $totalRows_bos = $db_conn->count;
 
     if ($totalRows_bos > 0) {
-        $return = $row_bos['scorePlace'];
+        return $row_bos['scorePlace'];
     }
 
-    else $return = "";
-
-    return $return;
+    return "";
 }
 
 // Get custom winning category info
@@ -124,7 +122,7 @@ foreach ($rows_brewer as $row_brewer) {
 			?>	
 			</td>
 			<td><?php if ($_SESSION['prefsStyleSet'] != "BA") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": "; echo $row_log['brewStyle'] ?></td>
-			<td><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>
+			<td><?php echo score_check($row_log['id'],$judging_scores_db_table); ?></td>
 			<td><?php if (minibos_check($row_log['id'],$judging_scores_db_table)) echo "<span class =\"fa fa-lg fa-check\"></span>"; ?></td>
             <td><?php if (!empty($bos_place)) echo "<span class=\"fa fa-lg fa-trophy\"></span> ". addOrdinalNumberSuffix($bos_place); ?></td>
 			<td><?php echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$_SESSION['prefsWinnerMethod']); ?></td>

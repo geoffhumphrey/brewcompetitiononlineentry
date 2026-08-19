@@ -7,31 +7,32 @@
  * Author:  Dan Machado                                               *
  * Require  FPDF v1.81, formatedstring v1.0                                                *
  **********************************************************************/
- include 'formatedstring.php';
+ include __DIR__ . '/formatedstring.php';
  class exFPDF extends FPDF{
 
+    public $current_font;
     public function PageBreak(){
        return $this->PageBreakTrigger;
    }
 
    public function current_font($c){
-      if($c=='family'){
-         return $this->FontFamily;
+      if ($c=='family') {
+          return $this->FontFamily;
       }
-      elseif($c=='style'){
-         return $this->FontStyle;
+      if ($c=='style') {
+          return $this->FontStyle;
       }
-      elseif($c=='size'){
-         return $this->FontSizePt;
+      if ($c=='size') {
+          return $this->FontSizePt;
       }
    }
 
    public function get_color($c){
-      if($c=='fill'){
-         return $this->FillColor;
+      if ($c=='fill') {
+          return $this->FillColor;
       }
-      elseif($c=='text'){
-         return $this->TextColor;
+      if ($c=='text') {
+          return $this->TextColor;
       }
    }
 
@@ -40,14 +41,14 @@
    }
 
    public function get_margin($c){
-      if($c=='l'){
-         return $this->lMargin;
+      if ($c=='l') {
+          return $this->lMargin;
       }
-      elseif($c=='r'){
-         return $this->rMargin;
+      if ($c=='r') {
+          return $this->rMargin;
       }
-      elseif($c=='t'){
-         return $this->tMargin;
+      if ($c=='t') {
+          return $this->tMargin;
       }
    }
 
@@ -58,8 +59,8 @@
    public function get_orientation(){
       return $this->CurOrientation;
    }
-   static private $hex=array('0'=>0,'1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5,'6'=>6,'7'=>7,'8'=>8,'9'=>9,
-   'A'=>10,'B'=>11,'C'=>12,'D'=>13,'E'=>14,'F'=>15);
+   static private $hex=['0'=>0,'1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5,'6'=>6,'7'=>7,'8'=>8,'9'=>9,
+   'A'=>10,'B'=>11,'C'=>12,'D'=>13,'E'=>14,'F'=>15];
 
    public function is_rgb($str){
       $a=true;
@@ -77,7 +78,7 @@
       $a=true;
       $str=strtoupper($str);
       $n=strlen($str);
-      if(($n==7 || $n==4) && $str[0]=='#'){
+      if(($n === 7 || $n === 4) && $str[0]=='#'){
          for($i=1; $i<$n; $i++){
             if(!isset(self::$hex[$str[$i]])){
                $a=false;
@@ -92,11 +93,11 @@
    }
 
    public function hextodec($str){
-      $result=array();
+      $result=[];
       $str=strtoupper(substr($str,1));
       $n=strlen($str);
       for($i=0; $i<3; $i++){
-         if($n==6){
+         if($n === 6){
             $result[$i]=self::$hex[$str[2*$i]]*16+self::$hex[$str[2*$i+1]];
          }
          else{
@@ -105,12 +106,12 @@
       }
       return $result;
    }
-   static private $options=array('F'=>'', 'T'=>'', 'D'=>'');
+   static private $options=['F'=>'', 'T'=>'', 'D'=>''];
 
    public function resetColor($str, $p='F'){
       if(isset(self::$options[$p]) && self::$options[$p]!=$str){
          self::$options[$p]=$str;
-         $array=array();
+         $array=[];
          if($this->is_hex($str)){
             $array=$this->hextodec($str);
          }
@@ -123,7 +124,7 @@
             }
          }
          else{
-            $array=array(null, null, null);
+            $array=[null, null, null];
             $i=0;
             $tmp=explode(' ', $str);
             foreach($tmp as $c){
@@ -155,7 +156,7 @@
 
    public function resetStaticData(){
       self::$font_def='';
-      self::$options=array('F'=>'', 'T'=>'', 'D'=>'');
+      self::$options=['F'=>'', 'T'=>'', 'D'=>''];
    }
    /***********************************************************************
    *
@@ -169,7 +170,7 @@
       else
       $family = strtolower($family);
       $style = strtoupper($style);
-      if(strpos($style,'U')!==false){
+      if(str_contains($style,'U')){
          $this->underline = true;
          $style = str_replace('U','',$style);
       }
@@ -209,7 +210,7 @@
       $j=count($lines)-1;
       $k=strlen($lines[$j]);
          if(!isset($linesmap[$j][0])) {
-         $linesmap[$j]=array($p,$p, 0);
+         $linesmap[$j]=[$p,$p, 0];
       }
       $sl=$cw[' ']*$cfty['font-size'];
       $x=$a=$linesmap[$j][2];
@@ -223,7 +224,7 @@
       $l=$p+$q;
       $ftmp='';
       for($i=$p; $i<$l; $i++){
-            if($ftmp!=$ffs){
+            if($ftmp !== $ffs){
             $cfty=$fstring->get_current_style($i);
             $ffs=$cfty['font-family'] . $cfty['style'];
             if(!isset($fstring->used_fonts[$ffs])){
@@ -250,7 +251,7 @@
             }
             $j++;
             $lines[$j]=$t;
-            $linesmap[$j]=array();
+            $linesmap[$j]=[];
             $linesmap[$j][0]=$u;
             $linesmap[$j][2]=0;
          }
@@ -262,11 +263,11 @@
    }
 
    public function &extMultiCell($font_family, $font_style, $font_size, $font_color, $w, $txt){
-      $result=array();
+      $result=[];
       if($w==0){
          return $result;
       }
-      $this->current_font=array('font-family'=>$font_family, 'style'=>$font_style, 'font-size'=>$font_size, 'font-color'=>$font_color);
+      $this->current_font=['font-family'=>$font_family, 'style'=>$font_style, 'font-size'=>$font_size, 'font-color'=>$font_color];
       $fstring=new formatedString($txt, $w, $this->current_font);
       $word='';
       $p=0;
@@ -274,7 +275,7 @@
       $n=strlen($fstring->parced_str);
       while($i<$n){
          $word.=$fstring->parced_str[$i];
-         if($fstring->parced_str[$i]=="\n" || $fstring->parced_str[$i]==' ' || $i==$n-1){
+         if($fstring->parced_str[$i]=="\n" || $fstring->parced_str[$i]==' ' || $i === $n - 1){
             $word=trim($word);
             $this->setLines($fstring, $p, strlen($word));
             $p=$i+1;
@@ -283,12 +284,12 @@
                $z=0;
                $j=count($fstring->lines);
                $fstring->lines[$j]='';
-               $fstring->linesmap[$j]=array();
+               $fstring->linesmap[$j]=[];
             }
          }
          $i++;
       }
-      if($n==0){
+      if($n === 0){
          return $result;
       }
       $n=count($fstring->lines);
@@ -354,7 +355,7 @@
                foreach($tmp as $e=>$tt){
                   if($e>0){
                      $xx+=$dw;
-                     if($tt==''){
+                     if($tt === ''){
                         continue;
                      }
                   }

@@ -10,7 +10,7 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 	if ($value > 500) {
 
 		$query_entries = "SELECT ".$select_cols." FROM ".$dbTable." WHERE (brewCategorySort=? AND brewSubCategory=?) AND brewReceived='1'";
-		$params_entries = array($score_style_data[0], $score_style_data[1]);
+		$params_entries = [$score_style_data[0], $score_style_data[1]];
 
 		if (SINGLE) {
 			$query_entries .= " AND comp_id=?";
@@ -22,7 +22,7 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 	else {
 
 		$query_entries = "SELECT ".$select_cols." FROM ".$dbTable." WHERE brewSubCategory=? AND brewReceived='1'";
-		$params_entries = array($score_style_data[1]);
+		$params_entries = [$score_style_data[1]];
 
 		if (SINGLE) {
 			$query_entries .= " AND comp_id=?";
@@ -37,12 +37,12 @@ else {
 
 	if (SINGLE) {
 		$query_entries = "SELECT ".$select_cols." FROM ".$dbTable." WHERE comp_id = ? AND (brewCategorySort=? AND brewSubCategory=?) AND brewReceived='1'";
-		$params_entries = array($_SESSION['comp_id'], $score_style_data[0], $score_style_data[1]);
+		$params_entries = [$_SESSION['comp_id'], $score_style_data[0], $score_style_data[1]];
 	}
 
 	else {
 		$query_entries = "SELECT ".$select_cols." FROM ".$dbTable." WHERE (brewCategorySort=? AND brewSubCategory=?) AND brewReceived='1'";
-		$params_entries = array($score_style_data[0], $score_style_data[1]);
+		$params_entries = [$score_style_data[0], $score_style_data[1]];
 	}
 
 }

@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 header('Pragma: no-cache');
 header('Expires: 0');
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require(CONFIG.'bootstrap.php');
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
@@ -26,20 +26,20 @@ if (isset($_GET['c2'])) $c2 = sterilize($_GET['c2']);
 if (isset($_GET['p3'])) $p3 = sterilize($_GET['p3']);
 if (isset($_GET['c3'])) $c3 = sterilize($_GET['c3']);
 
-$response = array(
+$response = [
     "success" => false,
     "count" => 0,
     "message" => ''
-);
+];
 
 // $section and its associated columns are restricted to a fixed allow-list matching the
 // values used by this endpoint's real callers (fetchRecordCount() in admin/sidebar.admin.php,
 // index.pub.php, eval/dashboard.eval.php).
-$allowed_sections = array("evaluation", "brewing", "updated-display");
-$allowed_columns = array(
-    "evaluation" => array("evalTable"),
-    "brewing" => array("brewConfirmed", "brewPaid", "brewReceived")
-);
+$allowed_sections = ["evaluation", "brewing", "updated-display"];
+$allowed_columns = [
+    "evaluation" => ["evalTable"],
+    "brewing" => ["brewConfirmed", "brewPaid", "brewReceived"]
+];
 
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (in_array($section, $allowed_sections))) {
 
@@ -130,14 +130,9 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (in_array($section, $a
                 throw new Exception("Fetch failed: " . $db_conn->getLastError());
 
             }
-
-            else {
-
-                $response['success'] = true;
-                $response['count'] = $no_query_value;
-                $response['updated'] = sprintf("%s %s", $current_date_display_short, $current_time);
-
-            }
+            $response['success'] = true;
+            $response['count'] = $no_query_value;
+            $response['updated'] = sprintf("%s %s", $current_date_display_short, $current_time);
 
         }
 

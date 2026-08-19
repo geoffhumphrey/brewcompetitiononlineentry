@@ -16,14 +16,14 @@ else {
 	$style_types_db_table = $prefix."style_types_".$filter_clean;
 }
 
-$rows_sbd = array();
+$rows_sbd = [];
 $totalRows_sbd = 0;
 $row_sbd = null;
 
 if ((table_exists($special_best_data_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
 	$sql_sbd = sprintf("SELECT a.eid, a.bid, a.sbd_place, a.sbd_comments, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerCity, c.brewerState, c.brewerCountry, c.brewerBreweryName, c.brewerClubs FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND a.sid=? ORDER BY a.sbd_place ASC", $special_best_data_db_table, $brewing_db_table, $brewer_db_table);
 
-	$rows_sbd = $db_conn->rawQuery($sql_sbd, array($row_sbi['id']));
+	$rows_sbd = $db_conn->rawQuery($sql_sbd, [$row_sbi['id']]);
 	$totalRows_sbd = $db_conn->count;
 	$row_sbd = ($rows_sbd && count($rows_sbd) > 0) ? $rows_sbd[0] : null;
 }

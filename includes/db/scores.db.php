@@ -11,7 +11,7 @@ if ($winner_method != 0) {
 // Display by Table
 if ($winner_method == 0) {
     $query_scores = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.scoreTable=? AND a.eid = b.id AND c.uid = b.brewBrewerID";
-    $params_scores = array($row_tables['id']);
+    $params_scores = [$row_tables['id']];
 }
 
 // Display by Category
@@ -19,12 +19,12 @@ if ($winner_method == 1) {
 
     if ($style_set == "BA") {
         $query_scores = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE b.brewCategory=? AND a.eid = b.id AND c.uid = b.brewBrewerID";
-        $params_scores = array($style);
+        $params_scores = [$style];
     }
 
     else {
         $query_scores = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID";
-        $params_scores = array($style_pad);
+        $params_scores = [$style_pad];
     }
 
 }
@@ -34,12 +34,12 @@ if ($winner_method == 2) {
 
     if ($style_set == "BA") {
         $query_scores = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE b.brewSubCategory=? AND a.eid = b.id  AND c.uid = b.brewBrewerID";
-        $params_scores = array($value['brewStyleNum']);
+        $params_scores = [$value['brewStyleNum']];
     }
 
     else {
         $query_scores = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE b.brewCategorySort=? AND b.brewSubCategory=? AND a.eid = b.id  AND c.uid = b.brewBrewerID";
-        $params_scores = array($value['brewStyleGroup'], $value['brewStyleNum']);
+        $params_scores = [$value['brewStyleGroup'], $value['brewStyleNum']];
     }
 
 }

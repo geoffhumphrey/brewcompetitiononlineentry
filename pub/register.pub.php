@@ -13,7 +13,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 <script type="text/javascript">
 var action = "<?php echo $action; ?>";
 </script>
-<script src="<?php echo $js_url; ?>registration_checks.min.js<?php if (((DEBUG) || (TESTING)) && (strpos($base_url, 'test.brewingcompetitions.com') !== false)) echo "?t=".time(); ?>"></script>
+<script src="<?php echo $js_url; ?>registration_checks.min.js<?php if (((DEBUG) || (TESTING)) && (str_contains($base_url, 'test.brewingcompetitions.com'))) echo "?t=".time(); ?>"></script>
 <?php
 $warning0 = "";
 $warning1 = "";
@@ -66,7 +66,7 @@ else { // THIS ELSE ENDS at the end of the script
 	if (NHC) $totalRows_log = $totalRows_entry_count;
 	else $totalRows_log = $totalRows_log;
 	if ($go != "default") {
-		
+
 		asort($countries);
 		$country_select = "";
 		foreach ($countries as $country) {
@@ -218,20 +218,20 @@ if ((isset($_COOKIE['userQuestion'])) && ($_COOKIE['userQuestion'] != "Randomly 
 foreach ($security_questions_display as $key => $value) {
 
 	$security_checked = "";
-	
-	if (($msg == "default") && ($key == 0) && (!isset($_COOKIE['userQuestion']))) $security_checked = "CHECKED";
+
+	if (($msg == "default") && ($key === 0) && (!isset($_COOKIE['userQuestion']))) $security_checked = "CHECKED";
 
     if (isset($_COOKIE['userQuestion'])) {
-        
+
         if ($_COOKIE['userQuestion'] == $security_question[$value]) $security .= "";
-        
+
         else {
-        	
+
         	$security .= "<div class=\"form-check\">";
         	$security .= "<input class=\"form-check-input\" type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" ".$security_checked.">";
         	$security .= "<label class=\"form-check-label\">".$security_question[$value]."</label>";
         	$security .= "</div>";
-        
+
         }
 
     }
@@ -268,7 +268,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
         if ($row_judging3['judgingLocType'] == 2) {
 
         	$staff_avail_info .= sprintf("<p class=\"mb-1\">%s <small class=\"ps-2\">%s</small></p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
-            
+
             $staff_avail_option .= "<div class=\"row\">";
             $staff_avail_option .= "<div class=\"col-xs-12 col-sm-6 col-md-3\">";
             $staff_avail_option .= "<select class=\"form-select mb-1\" name=\"brewerJudgeLocation[]\" id=\"brewerNonJudgeLocation".$row_judging3['id']."\">";
@@ -311,7 +311,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $judge_avail_option .= "</select>";
             $judge_avail_option .= "</div>";
             $judge_avail_option .= "</div>";
-            
+
             if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
                 $judge_location_avail .= "<section class=\"mb-3\">";
                 $judge_location_avail .= $judge_avail_info;
@@ -331,7 +331,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $steward_avail_option .= "<label class=\"form-check-label\">".$label_no."</label>";
             $steward_avail_option .= "</div>";
             */
-            
+
             $steward_avail_option .= "<div class=\"row\">";
             $steward_avail_option .= "<div class=\"col-xs-12 col-sm-6 col-md-3\">";
             $steward_avail_option .= "<select class=\"form-select bootstrap-select mb-1\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation".$row_judging3['id']."\" data-width=\"auto\" required>";
@@ -341,7 +341,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             $steward_avail_option .= "</select>";
             $steward_avail_option .= "</div>";
             $steward_avail_option .= "</div>";
-            
+
 
             if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
                 $steward_location_avail .= "<section class=\"mb-3\">";
@@ -464,15 +464,15 @@ if ($go == "default") {  ?>
         <label for="brewerBreweryProd" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_organization." ".$label_yearly_volume; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="1 - 10,000" id="brewerBreweryProd_5" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "1 - 10,000") !== false)) echo "CHECKED"; if (($action == "add") || (empty($brewerBreweryInfo))) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="1 - 10,000" id="brewerBreweryProd_5" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "1 - 10,000"))) echo "CHECKED"; if (($action == "add") || (empty($brewerBreweryInfo))) echo "CHECKED"; ?> />
                 <label>1 - 10,000 <?php echo $label_gallons; ?></label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="10,001 - 250,000" id="brewerBreweryProd_6" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "10,001 - 250,000") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="10,001 - 250,000" id="brewerBreweryProd_6" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "10,001 - 250,000"))) echo "CHECKED"; ?> />
                 <label>10,001 - 250,000 <?php echo $label_gallons; ?></label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="250,001+" id="brewerBreweryProd_7" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "250,001+") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="250,001+" id="brewerBreweryProd_7" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "250,001+"))) echo "CHECKED"; ?> />
                 <label>250,001+ <?php echo $label_gallons; ?></label>
             </div>
             <div>
@@ -487,23 +487,23 @@ if ($go == "default") {  ?>
         <label id="brewery-prod-label" for="brewerBreweryProd" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i id="brewery-prod-label-icon" class="fa fa-star me-1"></i> <strong><?php echo $label_organization." ".$label_yearly_volume; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="1 - 5,000" id="brewerBreweryProd_0" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "1 - 5,000") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="1 - 5,000" id="brewerBreweryProd_0" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "1 - 5,000"))) echo "CHECKED"; ?> />
                 <label>1 - 5,000</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="5,001 - 15,000" id="brewerBreweryProd_1" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "5,001 - 15,000") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="5,001 - 15,000" id="brewerBreweryProd_1" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "5,001 - 15,000"))) echo "CHECKED"; ?> />
                 <label>5,001 - 15,000</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="15,001 - 60,000" id="brewerBreweryProd_2" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "15,001 - 60,000") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="15,001 - 60,000" id="brewerBreweryProd_2" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "15,001 - 60,000"))) echo "CHECKED"; ?> />
                 <label>15,001 - 60,000</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="60,001 - 599,999" id="brewerBreweryProd_3" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "60,001 - 599,999") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="60,001 - 599,999" id="brewerBreweryProd_3" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "60,001 - 599,999"))) echo "CHECKED"; ?> />
                 <label>60,001 - 599,999</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="6,000,000+" id="brewerBreweryProd_4" <?php if (($action == "edit") && (strpos($brewerBreweryProd, "6,000,000+") !== false)) echo "CHECKED"; ?> />
+                <input class="form-check-input" type="radio" name="brewerBreweryProd" value="6,000,000+" id="brewerBreweryProd_4" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, "6,000,000+"))) echo "CHECKED"; ?> />
                 <label>6,000,000+</label>
             </div>
             <div>
@@ -513,11 +513,11 @@ if ($go == "default") {  ?>
 
             <div id="brewerBreweryProdMeas" class="mt-2">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_barrels; ?>" id="brewerBreweryProdMeas_0" <?php if (($action == "edit") && (strpos($brewerBreweryProd, $label_barrels) !== false)) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />
+                    <input class="form-check-input" type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_barrels; ?>" id="brewerBreweryProdMeas_0" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, $label_barrels))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />
                     <label class="form-check-label"><?php echo $label_barrels; ?></label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_hectoliters; ?>" id="brewerBreweryProdMeas_1" <?php if (($action == "edit") && (strpos($brewerBreweryProd, $label_hectoliters) !== false)) echo "CHECKED"; ?> />
+                    <input class="form-check-input" type="radio" name="brewerBreweryProdMeas" value="<?php echo $label_hectoliters; ?>" id="brewerBreweryProdMeas_1" <?php if (($action == "edit") && (str_contains($brewerBreweryProd, $label_hectoliters))) echo "CHECKED"; ?> />
                     <label class="form-check-label"><?php echo $label_hectoliters; ?></label>
                 </div>
             </div>
@@ -530,7 +530,7 @@ if ($go == "default") {  ?>
     </div>
     <?php } ?>
 	<?php } // END if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) ?>
-	
+
 
 	<div class="row mb-3">
         <label for="user_name" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php echo $label_email; ?></strong></label>
@@ -566,7 +566,7 @@ if ($go == "default") {  ?>
         </div>
     </div>
 	<?php } // END if ($view == "default") ?>
-   
+
    	<?php if ($section != "admin") { // Show only when NOT being added by an administrator ?>
 
 
@@ -729,14 +729,14 @@ if ($go == "default") {  ?>
 	    </div>
 	</div>
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant"))) ?>
-    
+
     <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 
 
     <div class="mb-3 row">
         <label for="brewerClubs" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_club; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-        
+
         <select class="form-select mb-1 bootstrap-select" name="brewerClubs" id="brewerClubs" placeholder="<?php echo $label_select_club; ?>" title="<?php echo $label_select_club; ?>">
             <option value="0" <?php if (($action == "edit") && (empty($row_brewer['brewerClubs']))) echo "SELECTED"; ?>>None</option>
             <option value="Other" <?php if ($club_other) echo "SELECTED"; ?>>Other</option>
@@ -852,9 +852,9 @@ if ($go == "default") {  ?>
         if ($go == "steward") $judge_checked_no = TRUE;
         if ($go == "judge") $judge_disabled = TRUE;
     ?>
-    
+
     <!-- Show Judge Fields if Registering as a Judge -->
-    
+
     <div class="mb-3 row">
         <label for="brewerJudge" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php echo $label_judging; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
@@ -875,7 +875,7 @@ if ($go == "default") {  ?>
     <?php if ($totalRows_judging > 0) {
 	if ($action == "edit") $judging_locations = explode(",",$row_brewer['brewerJudgeLocation']);
 	elseif ((isset($_COOKIE['brewerJudgeLocation'])) && ($section != "admin")) $judging_locations = explode(",",$_COOKIE['brewerJudgeLocation']);
-	else $judging_locations = array("","");
+	else $judging_locations = ["",""];
 	if (!empty($judge_location_avail)) { ?>
 
 	<div class="mb-3 row">
@@ -1106,9 +1106,9 @@ if ($go == "default") {  ?>
             </div>
         </div>
     </div>
-    
+
     <?php } // END if (!$judge_hidden) ?>
-    
+
 
     <?php if (!$steward_hidden) {
         $steward_checked_yes = FALSE;
@@ -1122,7 +1122,7 @@ if ($go == "default") {  ?>
         if ($go == "judge") $steward_checked_no = TRUE;
         if ($go == "steward") $steward_disabled = TRUE;
     ?>
-    
+
     <!-- Show Steward Fields if Registering as a Steward -->
     <div class="mb-3 row">
         <label for="brewerSteward" class="col-xs-12 col-sm-3 col-lg-2  col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php echo $label_stewarding; ?></strong></label>
@@ -1142,7 +1142,7 @@ if ($go == "default") {  ?>
 	<?php if ($totalRows_judging > 1) {
 	if ($action == "edit") $stewarding_locations = explode(",",$row_brewer['brewerStewardLocation']);
 	elseif ((isset($_COOKIE['brewerStewardLocation'])) && ($section != "admin")) $stewarding_locations = explode(",",$_COOKIE['brewerStewardLocation']);
-	else $stewarding_locations = array("","");
+	else $stewarding_locations = ["",""];
 	?>
 	<?php if (!empty($steward_location_avail)) { ?>
 
@@ -1162,7 +1162,7 @@ if ($go == "default") {  ?>
 
     <?php if (((!$judge_hidden) || (!$steward_hidden)) && ($section != "admin")) {
     include(DB.'organizations.db.php');
-    $org_array_lower = array();
+    $org_array_lower = [];
     foreach ($org_array as $value) {
         $org_array_lower[] = strtolower($value);
     }
@@ -1208,7 +1208,7 @@ if ($go == "default") {  ?>
         </div>
     </section>
     <?php } // END if (((!$judge_hidden) || (!$steward_hidden)) && ($section != "admin")) ?>
-    
+
     <?php if ($_SESSION['prefsCAPTCHA'] == "1") { ?>
     <!-- CAPTCHA -->
 	<div class="row mb-3">
@@ -1232,7 +1232,7 @@ if ($go == "default") {  ?>
 <script type="text/javascript">
 	$("#brewerStaffFields").hide();
 	$("#staff-help").hide();
-	
+
   	$(function () {
   		$('#user_screen_name').focus();
 	});

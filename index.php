@@ -10,7 +10,7 @@ declare(strict_types=1);
  * ------------------------------
  */
 
-require_once ('paths.php');
+require_once (__DIR__ . '/paths.php');
 require_once (CONFIG.'bootstrap.php');
 if (!HOSTED) require_once (DB.'mods.db.php');
 
@@ -21,7 +21,7 @@ header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
 // Good for 3.0.0+
-$account_pages = array("list","pay","brewer","user","brew","pay","evaluation");
+$account_pages = ["list","pay","brewer","user","brew","pay","evaluation"];
 
 if ((!$logged_in) && (in_array($section,$account_pages))) {
     
@@ -185,8 +185,8 @@ else include (INCLUDES.'load_cdn_libraries_public.inc.php');
 </head>
 
 <?php
-if (($section == "admin") || ($admin != "default")) require ('index.legacy.php');
-else require ('index.pub.php');
+if (($section == "admin") || ($admin != "default")) require (__DIR__ . '/index.legacy.php');
+else require (__DIR__ . '/index.pub.php');
 if (($section == "list") || ($section == "pay")) echo $pay_modal;
 mysqli_close($connection); 
 ?>

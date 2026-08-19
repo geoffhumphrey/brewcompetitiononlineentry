@@ -135,8 +135,8 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
  * A ReCaptchaResponse is returned from recaptcha_check_answer()
  */
 class ReCaptchaResponse {
-        var $is_valid;
-        var $error;
+        public $is_valid;
+        public $error;
 }
 
 
@@ -149,7 +149,7 @@ class ReCaptchaResponse {
   * @param array $extra_params an array of extra variables to post to the server
   * @return ReCaptchaResponse
   */
-function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = array())
+function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = [])
 {
 	if ($privkey == null || $privkey == '') {
 		die ("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>");
@@ -162,7 +162,7 @@ function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $ex
 
 
         //discard spam submissions
-        if ($challenge == null || strlen($challenge) == 0 || $response == null || strlen($response) == 0) {
+        if ($challenge == null || (string) $challenge === '' || $response == null || (string) $response === '') {
                 $recaptcha_response = new ReCaptchaResponse();
                 $recaptcha_response->is_valid = false;
                 $recaptcha_response->error = 'incorrect-captcha-sol';
@@ -170,18 +170,18 @@ function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $ex
         }
 
         $response = _recaptcha_http_post (RECAPTCHA_VERIFY_SERVER, "/recaptcha/api/verify",
-                                          array (
+                                           [
                                                  'privatekey' => $privkey,
                                                  'remoteip' => $remoteip,
                                                  'challenge' => $challenge,
                                                  'response' => $response
-                                                 ) + $extra_params
+                                                 ] + $extra_params
                                           );
 
         $answers = explode ("\n", $response [1]);
         $recaptcha_response = new ReCaptchaResponse();
 
-        if (trim ($answers [0]) == 'true') {
+        if (trim ($answers [0]) === 'true') {
                 $recaptcha_response->is_valid = true;
         }
         else {
@@ -200,7 +200,7 @@ function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $ex
  * @param string $appname The name of your application
  */
 function recaptcha_get_signup_url ($domain = null, $appname = null) {
-	return "https://www.google.com/recaptcha/admin/create?" .  _recaptcha_qsencode (array ('domains' => $domain, 'app' => $appname));
+	return "https://www.google.com/recaptcha/admin/create?" .  _recaptcha_qsencode ( ['domains' => $domain, 'app' => $appname]);
 }
 
 function _recaptcha_aes_pad($val) {

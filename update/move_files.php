@@ -1,5 +1,5 @@
 <?php
-include ('../paths.php');
+include (__DIR__ . '/../paths.php');
 
 /**
 * Recursively move files from one directory to another
@@ -46,8 +46,8 @@ function rdelete($src,$file_ext){
  */
 function rdelete(string $src, $file_mimes): bool{
 
-    if (empty($file_mimes)) $file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml');
-    else $file_mimes = array('application/pdf');
+    if (empty($file_mimes)) $file_mimes = ['image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml'];
+    else $file_mimes = ['application/pdf'];
 
     // If source is not a directory stop processing
     if(!is_dir($src)) return false;

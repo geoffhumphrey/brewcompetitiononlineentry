@@ -16,7 +16,6 @@
  * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/731
  * 
  */
-
 if (isset($_SESSION['loginUsername'])) {
 
 	if (($_SESSION['brewerEmail'] != $_SESSION['loginUsername']) && ($_SESSION['userLevel'] > 1)) {
@@ -25,29 +24,23 @@ if (isset($_SESSION['loginUsername'])) {
 	  	echo "</body></html>";
   		exit();
 	}
-
-   	else {
-
-		// Decode the file names
-		$get_real_file_name = urldecode($_GET['scoresheetfilename']);
-		$scoresheet_file_name = deobfuscateURL($get_real_file_name,$_SESSION['encryption_key']);
-
-		// Get the directory name from URL if present
-		if ($view == "default") $scoresheetfile = USER_DOCS.$scoresheet_file_name;
+    // Decode the file names
+    $get_real_file_name = urldecode($_GET['scoresheetfilename']);
+    $scoresheet_file_name = deobfuscateURL($get_real_file_name,$_SESSION['encryption_key']);
+    // Get the directory name from URL if present
+    if ($view == "default") $scoresheetfile = USER_DOCS.$scoresheet_file_name;
 		else $scoresheetfile = USER_DOCS.$view.DIRECTORY_SEPARATOR.$scoresheet_file_name;
-
-		// Decrypt the filename
-		$get_random_file_name = urldecode($_GET['randomfilename']);
-		$random_file_name = deobfuscateURL($get_random_file_name,$_SESSION['encryption_key']);
-		$scoresheet_random_file_relative = "user_temp/".$random_file_name;
-		$scoresheet_random_file = USER_TEMP.$random_file_name;
-
-		if (copy($scoresheetfile, $scoresheet_random_file)) {
+    // Decrypt the filename
+    $get_random_file_name = urldecode($_GET['randomfilename']);
+    $random_file_name = deobfuscateURL($get_random_file_name,$_SESSION['encryption_key']);
+    $scoresheet_random_file_relative = "user_temp/".$random_file_name;
+    $scoresheet_random_file = USER_TEMP.$random_file_name;
+    if (copy($scoresheetfile, $scoresheet_random_file)) {
 
 			header("Cache-Control: public");
-     		header("Content-Description: File Transfer");
-     		header("Content-Type: application/pdf");
-     		header("Content-Transfer-Encoding: binary");
+ 		header("Content-Description: File Transfer");
+ 		header("Content-Type: application/pdf");
+ 		header("Content-Transfer-Encoding: binary");
 			header("Content-Disposition: attachment; filename=".$scoresheet_file_name);
 			ob_clean();
 			flush();
@@ -55,23 +48,13 @@ if (isset($_SESSION['loginUsername'])) {
 			exit();
 
 		}
-
-		else {
-			echo sprintf("<html><head><title>%s</title><meta http-equiv=\"refresh\" content=\"0;URL='".$base_url."index.php?section=list&msg=11'\" /></head><body>",$label_error);
-			echo sprintf("<p>%s</p>",$output_text_004);
-			echo "</body></html>";
-			exit();
-		}
-
-	}
-
-}
-
-else {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
+    echo sprintf("<html><head><title>%s</title><meta http-equiv=\"refresh\" content=\"0;URL='".$base_url."index.php?section=list&msg=11'\" /></head><body>",$label_error);
+    echo sprintf("<p>%s</p>",$output_text_004);
+    echo "</body></html>";
     exit();
-}
 
-?>
+}
+$redirect = "../../403.php";
+$redirect_go_to = sprintf("Location: %s", $redirect);
+header($redirect_go_to);
+exit();

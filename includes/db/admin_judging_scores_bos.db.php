@@ -1,13 +1,13 @@
 <?php
 
 $query_style_type = "SELECT * FROM $style_types_db_table";
-$params_style_type = array();
+$params_style_type = [];
 if (($action == "edit") && ($filter != "default")) { $query_style_type .= " WHERE id=?"; $params_style_type[] = $filter; }
 if (($action == "enter") && ($filter != "default")) { $query_style_type .= " WHERE id=?"; $params_style_type[] = $filter; }
 if (($go != "styles") && ($id !="default")) { $query_style_type .= " WHERE id=?"; $params_style_type[] = $id; }
 if ((($go == "judging_tables") || ($go == "judging_scores_bos")) && ($action == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
 if (($go == "judging_assignments") && ($action == "download") && ($filter == "default") && ($id == "default")) $query_style_type .= " WHERE styleTypeBOS='Y'";
-$row_style_type = $db_conn->rawQueryOne($query_style_type, empty($params_style_type) ? null : $params_style_type);
+$row_style_type = $db_conn->rawQueryOne($query_style_type, $params_style_type === [] ? null : $params_style_type);
 $totalRows_style_type = $db_conn->count;
 
 
@@ -22,7 +22,7 @@ if ($action == "enter") {
 	else $mead_cider_combined = FALSE;
 
 	$query_enter_bos = "SELECT * FROM $judging_scores_db_table";
-	$params_enter_bos = array();
+	$params_enter_bos = [];
 	if ($mead_cider_combined) $query_enter_bos .= " WHERE (scoreType='2' OR scoreType='3')";
 	else {
 		$query_enter_bos .= " WHERE scoreType=?";
@@ -34,7 +34,7 @@ if ($action == "enter") {
 	if ($row_style_type['styleTypeBOSMethod'] == "3") $query_enter_bos .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3')";
 
 	$query_enter_bos .= " ORDER BY scoreTable ASC";
-	$rows_enter_bos = $db_conn->rawQuery($query_enter_bos, empty($params_enter_bos) ? null : $params_enter_bos);
+	$rows_enter_bos = $db_conn->rawQuery($query_enter_bos, $params_enter_bos === [] ? null : $params_enter_bos);
 	$row_enter_bos = ($rows_enter_bos && count($rows_enter_bos) > 0) ? $rows_enter_bos[0] : null;
 	$totalRows_enter_bos = $db_conn->count;
 
@@ -52,7 +52,7 @@ else {
 	if (SINGLE) {
 
 		$query_bos = "SELECT * FROM $judging_scores_db_table WHERE comp_id=?";
-		$params_bos = array($_SESSION['comp_id']);
+		$params_bos = [$_SESSION['comp_id']];
 		if ($mead_cider_combined) $query_bos .= " AND (scoreType='2' OR scoreType='3')";
 		else {
 			$query_bos .= " AND scoreType=?";
@@ -82,7 +82,7 @@ else {
 	else {
 
 		$query_bos = "SELECT * FROM $judging_scores_db_table";
-		$params_bos = array();
+		$params_bos = [];
 		if ($mead_cider_combined) $query_bos .= " WHERE (scoreType='2' OR scoreType='3')";
 		else {
 			$query_bos .= " WHERE scoreType=?";
@@ -92,7 +92,7 @@ else {
 		if ($style_type_info[1] == "2") $query_bos .= " AND (scorePlace='1' OR scorePlace='2')";
 		if ($style_type_info[1] == "3") $query_bos .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3')";
 		$query_bos .= " ORDER BY scoreTable ASC";
-		$rows_bos = $db_conn->rawQuery($query_bos, empty($params_bos) ? null : $params_bos);
+		$rows_bos = $db_conn->rawQuery($query_bos, $params_bos === [] ? null : $params_bos);
 		$row_bos = ($rows_bos && count($rows_bos) > 0) ? $rows_bos[0] : null;
 		$totalRows_bos = $db_conn->count;
 

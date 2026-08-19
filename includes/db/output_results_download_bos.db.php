@@ -1,5 +1,5 @@
 <?php
-$rows_bos = array();
+$rows_bos = [];
 $totalRows_bos = 0;
 
 $brewing_db_table = $prefix."brewing";
@@ -29,7 +29,7 @@ if ((!empty($type)) && (is_numeric($type)) && (table_exists($style_types_db_tabl
 
 		else {
 			$sql_bos = sprintf("SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerCity, c.brewerState, c.brewerCountry, c.brewerBreweryName, c.brewerClubs FROM %s a, %s b, %s c WHERE a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID AND a.scoreType=? ORDER BY a.scorePlace", $judging_scores_bos_db_table, $brewing_db_table, $brewer_db_table);
-			$rows_bos = $db_conn->rawQuery($sql_bos, array($type));
+			$rows_bos = $db_conn->rawQuery($sql_bos, [$type]);
 		}
 
 		$totalRows_bos = $db_conn->count;

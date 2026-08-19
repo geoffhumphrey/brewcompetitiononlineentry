@@ -1,7 +1,7 @@
 <?php
 
 ob_start();
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 if (session_status() === PHP_SESSION_NONE) session_start();
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
@@ -30,9 +30,9 @@ else $status = 9;
 
 if ($action == "json") {
 
-	$return_json = array(
+	$return_json = [
 		"status" => "$status"
-	);
+	];
 
 	echo json_encode($return_json);
 
