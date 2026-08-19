@@ -2866,7 +2866,7 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,string $archive
 		elseif ($filter == "stewards") $r = $label_stewards;
 		elseif ($filter == "staff") $r = $label_staff;
 		elseif ($filter == "bos") $r = "BOS ".$label_judges;
-		else $r = [];
+		else $r = "";
 	}
 
 return $r;
@@ -3213,7 +3213,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	$db_conn = new MysqliDb($connection);
 
 	if ($method2 == 2) $output = [];
-	else $output = [];
+	else $output = "";
 
 	$db_conn->where('bid', $uid);
 	$db_conn->where('assignment', $method);
