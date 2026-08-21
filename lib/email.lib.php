@@ -12,6 +12,18 @@ require (CLASSES.'phpmailer/src/PHPMailer.php');
 require (CLASSES.'phpmailer/src/SMTP.php');
 
 /**
+ * RFC 2047 MIME-encode a display name for use in a raw mail() header string
+ * (e.g. "Name <email>"). PHPMailer's addAddress()/setFrom() already do this
+ * internally for the SMTP path; the plain PHP mail() fallback does not, so
+ * a non-ASCII name (accented characters, etc.) reaches the recipient's mail
+ * server unencoded and can be rejected as a malformed header.
+ */
+function mime_encode_header_name($name) {
+    if (($name === null) || ($name === "")) return $name;
+    return mb_encode_mimeheader($name, "UTF-8", "B", "\r\n");
+}
+
+/**
  * @param \PHPMailer\PHPMailer\PHPMailer $mail
  */
 function sendPHPMailerMessage(\PHPMailer\PHPMailer\PHPMailer $mail): void {
