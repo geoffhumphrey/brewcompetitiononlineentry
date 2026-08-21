@@ -575,7 +575,7 @@ function number_of_flights($table_id): string {
     $row_flights = $db_conn->getOne($prefix."judging_flights", "flightNumber");
 
 	$r = $row_flights['flightNumber'];
-	return $r;
+	return (string) $r;
 }
 
 function check_flight_number($entry_id,$flight,$method): string {
@@ -592,7 +592,7 @@ function check_flight_number($entry_id,$flight,$method): string {
   	if ($method == 1) $r = $row_flights['flightNumber'];
   }
 	
-	return $r;
+	return (string) $r;
 
 }
 
