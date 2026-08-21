@@ -771,7 +771,7 @@ function flight_round_number($flight_table,$flight_number): string {
 		$db_conn->where('flightNumber', $flight_number);
 		$db_conn->orderBy('id', 'DESC');
 		$row_round_no = $db_conn->getOne($prefix."judging_flights", "flightRound");
-		return $row_round_no['flightRound'];
+		return (string) $row_round_no['flightRound'];
 	}
 	return "";
 

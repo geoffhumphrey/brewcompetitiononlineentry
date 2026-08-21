@@ -2722,7 +2722,7 @@ function score_check($id,$judging_scores_db_table): string {
 
 	$db_conn->where('eid', $id);
 	$row_scores = $db_conn->getOne($judging_scores_db_table, "scoreEntry");
-	if ($row_scores) return $row_scores['scoreEntry'];
+	if ($row_scores) return (string) $row_scores['scoreEntry'];
 	return "";
 }
 
