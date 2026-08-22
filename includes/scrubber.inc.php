@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+declare(strict_types=1);
 
 /*
 Checked Single
@@ -6,7 +8,7 @@ Checked Single
 */
 
 // ---------------------------- Scrubber --------------------------------------------------------------------
-$string = array( 
+$string = [ 
 	chr(38) => "&#38;", 
 	chr(60) => "&#60;", 
 	chr(62) => "&#62;", 
@@ -14,9 +16,9 @@ $string = array(
 	chr(35) => "&#35;", 
 	chr(39) => "&#39;",
 	chr(176) => "&#176;"
-);
+];
 
-$quote_convert = array(
+$quote_convert = [
 	chr(34) => "&quot;",
 	chr(39) => "&rsquo;",
 	"&#39;" => "&rsquo;",
@@ -30,9 +32,9 @@ $quote_convert = array(
 	"–" => "&ndash;",  	// en dash
 	"\n" => " ",
 	"\t" => " "
-);
+];
 
-$html_string = array( 
+$html_string = [ 
 	/*
 	chr(34) => "&quot;",  
 	chr(37) => "&#37;",
@@ -315,9 +317,9 @@ $html_string = array(
 	"…" => "...",  		// elipsis
 	"—" => "&mdash;",  	// em dash
 	"–" => "&ndash;",  	// en dash
-);
+];
 
-$html_remove = array( 
+$html_remove = [ 
 	"&amp;" => "&",
 	"&lt;" => "<", 
 	"&gt;" => ">", 
@@ -341,9 +343,9 @@ $html_remove = array(
 	"…" => "...",  	// elipsis
 	"—" => "--",  	// em dash
 	"–" => "-",  	// en dash
-);
+];
 
-$space_remove = array( 
+$space_remove = [ 
 	"&amp;" => "",
 	"&lt;" => "", 
 	"&gt;" => "", 
@@ -353,17 +355,17 @@ $space_remove = array(
 	"&deg;" => "",
 	" " => "",
 	"&nbsp;" => ""
-);
+];
 
-$bjcp_num_replace = array( 
+$bjcp_num_replace = [ 
 	"(" => "9", 
 	")" => "0", 
 	"o" => "0", 
 	"O" => "0",
 	"-" => ""
-);
+];
 
-$html_replace = array(
+$html_replace = [
 	"<p>" => "",
 	"</p>" => "",
 	"<ul>" => "<br>",
@@ -387,6 +389,6 @@ $html_replace = array(
 	"\n" => " ",
 	"\t" => " "
 
-);
+];
 
 ?>

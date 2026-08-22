@@ -57,7 +57,7 @@ if (($filter != "default") && ($filter != "rounds"))  {
 				$flight_table_tbody .= "</td>\n";
 
 				for($i=1; $i<$flight_count+1; $i++) {
-					if (($action == "add") && ($i == 1)) $checked = "checked";
+					if (($action == "add") && ($i === 1)) $checked = "checked";
 					elseif (($action == "edit") && (isset($flight_number_value[1])) && ($flight_number_value[1] == $i)) $checked = "checked";
 					else $checked = "";
 					$flight_table_tbody .= "<td>";
@@ -285,7 +285,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 				$location_missing = TRUE;
 				$judging_location_string = sprintf("<span class=\"text-danger\">No location chosen.</span> <a href=\"%s%s\">Choose a location</a>.",$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=edit&amp;id=",$row_tables['id']);
 			}
-			
+
 ?>
 
 

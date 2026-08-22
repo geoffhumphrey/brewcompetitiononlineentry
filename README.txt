@@ -4,14 +4,14 @@ Developed by Geoff Humphrey with code contributions by the GitHub community.
 Website:     http://www.brewingcompetitions.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
 
-Release 2.1.19, 2020-07-28
+Release 3.1.0, 2026-08-13
 
 Developed utilizing a number of extensions and functions, with gratitude to their
 respective developers and online communities. Tested with the following versions:
-- PHP 7.3.X                       http://www.php.net
+- PHP 8.3.X through 8.5.X         http://www.php.net
   -- PHP's Fileinfo extension must be installed and enabled
   -- see http://php.net/manual/en/fileinfo.setup.php
-- MySQL 5.5.42                    	http://www.mysql.com
+- MySQL 8.0                          http://www.mysql.com
 - jQuery 3.1.0                    	http://jquery.com
 - Bootstrap 3.3.7                 	http://getbootstrap.com
 - DataTables 1.10.12              	http://www.datatables.net
@@ -55,7 +55,7 @@ application.
 Step-by-step installation instructions are available at
 http://brewingcompetitions.com/install-instructions.
 
-This software utilizes PHP 5.6.X and MySQL 5.5.X to process and store data.
+This software requires PHP 8.3 or newer and MySQL 5.7 or newer to process and store data.
 
 Your web server needs both of these installed, configured, and ready for use.
 
@@ -123,7 +123,7 @@ http://www.brewingcompetitions.com/change-log
 Fallback DB Install
 ***********************************************************************************
 For those experiencing any issues related to the initial browser-based setup,
-the bcoem_baseline_2.1.X.sql document is available in the package. It contains the
+the bcoem_baseline_3.0.X.sql document is available in the package. It contains the
 necessary database structure and dummy data for a new installation that can be
 installed manually via phpMyAdmin or shell access. Be sure to follow the directions
 in the document BEFORE use.

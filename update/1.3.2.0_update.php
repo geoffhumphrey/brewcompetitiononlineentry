@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 if (!function_exists('check_update')) {
 	$redirect = "../../403.php";
@@ -20,21 +20,21 @@ $output .= "<ul>";
 // Adding style set preferences
 // -----------------------------------------------------------
 
-$block_ok = TRUE;
-
 if (!check_update("prefsStyleSet",$prefix."preferences")) {
 	$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsStyleSet` VARCHAR( 20 ) NULL";
-	$result = $db_conn->rawQuery($updateSQL);
-	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("prefsAutoPurge",$prefix."preferences")) {
 	$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsAutoPurge` TINYINT( 1 ) NULL";
-	$result = $db_conn->rawQuery($updateSQL);
-	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
-if ($block_ok) $output .=  "<li>Preferences table altered successfully.</li>";
+$output .=  "<li>Preferences table altered successfully.</li>";
 
 // -----------------------------------------------------------
 // Alter Table: Styles
@@ -43,46 +43,50 @@ if ($block_ok) $output .=  "<li>Preferences table altered successfully.</li>";
 // shift carbonation, sweetnes, and strength to DB side
 // -----------------------------------------------------------
 
-$block_ok = TRUE;
-
 if (check_update("brewStyleJudgingLoc",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` CHANGE `brewStyleJudgingLoc` `brewStyleVersion` VARCHAR(20) NULL DEFAULT NULL;";
-	$result = $db_conn->rawQuery($updateSQL);
-	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("brewStyleStrength",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleStrength` INT(1) NULL COMMENT 'Requires strength? 0=No, 1=Yes';";
-	$result = $db_conn->rawQuery($updateSQL);
-	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("brewStyleCarb",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleCarb` INT(1) NULL COMMENT 'Requires carbonation? 0=No, 1=Yes';";
-	$result = $db_conn->rawQuery($updateSQL);
-	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("brewStyleSweet",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleSweet` INT(1) NULL COMMENT 'Requires sweetness? 0=No, 1=Yes';";
-	$result = $db_conn->rawQuery($updateSQL);
-	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("brewStyleCategory",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleCategory` VARCHAR(255) NULL DEFAULT NULL AFTER `brewStyle`;";
-	$result = $db_conn->rawQuery($updateSQL);
-	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("brewStyleTags",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleTags` VARCHAR(255) NULL DEFAULT NULL";
-	$result = $db_conn->rawQuery($updateSQL);
-	if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 //if (check_db_table_column("preferences","prefsStyleSet"))
-if ($block_ok) $output .=  "<li>Styles table altered successfully.</li>";
+$output .=  "<li>Styles table altered successfully.</li>";
 //else $output .=  "<li>Styles table NOT altered successfully.</li>";
 
 // -----------------------------------------------------------
@@ -91,17 +95,17 @@ if ($block_ok) $output .=  "<li>Styles table altered successfully.</li>";
 // category identification schema (numeric to alpha numeric)
 // -----------------------------------------------------------
 
-$block_ok = TRUE;
-
 $updateSQL = "ALTER TABLE `".$prefix."brewing` CHANGE `brewCategory` `brewCategory` VARCHAR(4) NULL DEFAULT NULL";
-$result = $db_conn->rawQuery($updateSQL);
-if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewing` CHANGE `brewCategorySort` `brewCategorySort` VARCHAR(4) NULL DEFAULT NULL";
-$result = $db_conn->rawQuery($updateSQL);
-if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-if ($block_ok) $output .=  "<li>Entries table altered successfully.</li>";
+$output .=  "<li>Entries table altered successfully.</li>";
 
 // -----------------------------------------------------------
 // Version 1.3.1.0 and 1.3.2.0
@@ -110,50 +114,53 @@ if ($block_ok) $output .=  "<li>Entries table altered successfully.</li>";
 
 // Update System table
 $sql = "UPDATE `".$system_db_table."` SET version = '1.3.2.0', version_date = '2015-08-21' WHERE id = 1";
-$result = $db_conn->rawQuery($sql);
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 //echo $sql."<br>";
-if ($db_conn->getLastErrno() === 0) $output .=  "<li>Version updated successfully in the database.</li>";
-else $output .= "<li class=\"text-danger\">Error: Version NOT updated in the database. ".$db_conn->getLastError()."</li>";
+$output .=  "<li>Version updated successfully in the database.</li>";
 
 // Update Preferences to use BJCP2008
 $sql = "UPDATE `".$preferences_db_table."` SET  `prefsStyleSet`='BJCP2008' WHERE id=1; ";
-$result = $db_conn->rawQuery($sql);
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 //echo $sql."<br>";
-if ($db_conn->getLastErrno() === 0) $output .=  "<li>Style Set updated successfully in the database.</li>";
-else $output .= "<li class=\"text-danger\">Error: Style Set NOT updated in the database. ".$db_conn->getLastError()."</li>";
+$output .=  "<li>Style Set updated successfully in the database.</li>";
 
 // Update Preferences to automatically purge unconfirmed entries (default)
 $sql = "UPDATE `".$preferences_db_table."` SET  `prefsAutoPurge`='1' WHERE id=1; ";
-$result = $db_conn->rawQuery($sql);
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 //echo $sql."<br>";
-if ($db_conn->getLastErrno() === 0) $output .=  "<li>Auto purge set to \"Yes.\"</li>";
-else $output .= "<li class=\"text-danger\">Error: Auto purge NOT set. ".$db_conn->getLastError()."</li>";
+$output .=  "<li>Auto purge set to \"Yes.\"</li>";
 
 // Get any custom styles and hold in variables to insert later
 $query_custom_styles = sprintf("SELECT * FROM %s WHERE brewStyleGroup > 28", $prefix."styles");
-$rows_custom_styles = $db_conn->rawQuery($query_custom_styles);
-$totalRows_custom_styles = count($rows_custom_styles);
+$custom_styles = mysqli_query($connection,$query_custom_styles) or die (mysqli_error($connection));
+$row_custom_styles = mysqli_fetch_assoc($custom_styles);
+$totalRows_custom_styles = mysqli_num_rows($custom_styles);
 
 //echo $totalRows_custom_styles."<br>";
 
 if ($totalRows_custom_styles > 0) {
 
-	$a = array();
+	$a = [];
 
-	foreach ($rows_custom_styles as $row_custom_styles) {
+	do {
 
 		$a[] = $row_custom_styles['id']."|".$row_custom_styles['brewStyleNum']."|".$row_custom_styles['brewStyle']."|".$row_custom_styles['brewStyleCategory']."|".$row_custom_styles['brewStyleOG']."|".$row_custom_styles['brewStyleOGMax']."|".$row_custom_styles['brewStyleFG']."|".$row_custom_styles['brewStyleFGMax']."|".$row_custom_styles['brewStyleABV']."|".$row_custom_styles['brewStyleABVMax']."|".$row_custom_styles['brewStyleIBU']."|".$row_custom_styles['brewStyleIBUMax']."|".$row_custom_styles['brewStyleSRM']."|".$row_custom_styles['brewStyleSRMMax']."|".$row_custom_styles['brewStyleType']."|".$row_custom_styles['brewStyleInfo']."|".$row_custom_styles['brewStyleLink']."|".$row_custom_styles['brewStyleGroup']."|".$row_custom_styles['brewStyleActive']."|".$row_custom_styles['brewStyleOwn'];
 
-	}
+	} while ($row_custom_styles = mysqli_fetch_assoc($custom_styles));
 
 }
 
 // Empty the current Styles table
-$block_ok = TRUE;
-
 $sql = "TRUNCATE `".$styles_db_table."`";
-$result = $db_conn->rawQuery($sql);
-if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 //echo $sql."<br>";
 
 
@@ -211,8 +218,9 @@ $sql .= "(47, 'F', 'Imperial Stout', 'Stout', '1.075', '1.115', '1.018', '1.030'
 $sql .= "(48, 'A', 'English IPA', 'India Pale Ale', '1.050', '1.075', '1.010', '1.018', '5.0', '7.5', '40', '60', '8', '14', 'Ale', 'A hoppy, moderately strong pale ale that features characteristics consistent with the use of English malt, hops and yeast. Has less hop character and a more pronounced malt flavor than American versions.Commercial Examples: Meantime India Pale Ale, Freeminer Trafalgar IPA, Fuller&rsquo;s IPA, Ridgeway Bad Elf, Summit India Pale Ale, Samuel Smith&rsquo;s India Ale, Hampshire Pride of Romsey IPA, Burton Bridge Empire IPA,Middle Ages ImPailed Ale, Goose Island IPA, Brooklyn East India Pale Ale.', 'http://www.bjcp.org/2008styles/style14.php#1a', '14', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, ''), ";
 $sql .= "(49, 'B', 'American IPA', 'India Pale Ale', '1.056', '1.075', '1.010', '1.018', '5.5', '7.5', '40', '70', '6', '15', 'Ale', 'A decidedly hoppy and bitter, moderately strong American pale ale.Commercial Examples: Bell&rsquo;s Two-Hearted Ale, AleSmith IPA, Russian River Blind Pig IPA, Stone IPA, Three Floyds Alpha King, Great Divide Titan IPA, Bear Republic Racer 5 IPA, Victory Hop Devil, Sierra Nevada Celebration Ale, Anderson Valley Hop Ottin&rsquo;,  Dogfish Head 60 Minute IPA, Founder&rsquo;s Centennial IPA, Anchor Liberty Ale, Harpoon IPA, Avery IPA.', 'http://www.bjcp.org/2008styles/style14.php#1b', '14', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, ''), ";
 $sql .= "(50, 'C', 'Imperial IPA', 'India Pale Ale', '1.075', '1.090', '1.010', '1.020', '7.5', '10.0', '60', '120', '8', '15', 'Ale', 'An intensely hoppy, very strong pale ale without the big maltiness and/or deeper malt flavors of an American barleywine.  Strongly hopped, but clean, lacking harshness, and a tribute to historical IPAs.  Drinkability is an important characteristic; this should not be a heavy, sipping beer.  It should also not have much residual sweetness or a heavy character grain profile.Commercial Examples: Russian River Pliny the Elder, Three Floyd&rsquo;s Dreadnaught, Avery Majaraja, Bell&rsquo;s Hop Slam, Stone Ruination IPA, Great Divide Hercules Double IPA, Surly Furious, Rogue I2PA, Moylan&rsquo;s Hopsickle Imperial India Pale Ale, Stoudt&rsquo;s Double IPA, Dogfish Head 90-minute IPA, Victory Hop Wallop.', 'http://www.bjcp.org/2008styles/style14.php#1c', '14', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, ''); ";
-$result = $db_conn->rawQuery($sql);
-if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 $sql = "INSERT INTO `".$styles_db_table."` ";
 $sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`) ";
@@ -266,8 +274,9 @@ $sql .= "(96, 'B', 'Fruit Cider', 'Specialty Cider and Perry', '1.045', '1.070',
 $sql .= "(97, 'C', 'Applewine', 'Specialty Cider and Perry', '1.070', '1.100', '0.995', '1.010', '9.0', '12.0', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a dry white wine, balanced, and with low astringency and bitterness.Commercial Examples: [US] AEppelTreow Summer&rsquo;s End (WI), Wandering Aengus Pommeau (OR), Uncle John&rsquo;s Fruit House Winery Fruit House Apple (MI), Irvine&rsquo;s Vintage Ciders (WA).', 'http://www.bjcp.org/2008styles/style28.php#1c', '28', 'Y', 'bcoe', 'BJCP2008', 1, 0, 1, 1, ''), ";
 $sql .= "(98, 'D', 'Other Specialty Cider or Perry', 'Specialty Cider and Perry', '1.045', '1.100', '0.995', '1.020', '5.0', '12.0', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Entrants MUST specify all major ingredients and adjuncts. Entrants MUST specify carbonation level (still, petillant, or sparkling). Entrants MUST specify sweetness (dry or medium).Commercial Examples: [US] Red Barn Cider Fire Barrel (WA), AEppelTreow Pear Wine and Sparrow Spiced Cider (WI).', 'http://www.bjcp.org/2008styles/style28.php#1d', '28', 'Y', 'bcoe', 'BJCP2008', 1, 0, 1, 1, ''), ";
 $sql .= "(99, 'A', 'American Light Lager', 'Standard American Beer', '1.028', '1.040', '0.998', '1.008', '2.8', '4.2', '8', '12', '2', '3', 'Lager', 'Highly carbonated, very light-bodied, nearly flavorless lager designed to be consumed very cold. Very refreshing and thirst quenching. Commercial Examples: Miller Lite, Bud Light, Coors Light, Old Milwaukee Light, Keystone Light, Michelob Light.', 'http://bjcp.org/stylecenter.php', '01', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, pale-color, bottom-fermented, lagered, north-america, traditional-style, pale-lager-family, balanced'); ";
-$result = $db_conn->rawQuery($sql);
-if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 $sql = "INSERT INTO `".$styles_db_table."` ";
 $sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`) ";
@@ -322,8 +331,9 @@ $sql .= "(146, 'A', 'Sweet Stout', 'Dark British Beer', '1.044', '1.060', '1.012
 $sql .= "(147, 'B', 'Oatmeal Stout', 'Dark British Beer', '1.045', '1.065', '1.010', '1.018', '4.2', '5.9', '25', '40', '22', '40', 'Ale', 'A very dark, full-bodied, roasty, malty ale with a complementary oatmeal flavor. The sweetness, balance, and oatmeal impression can vary considerably. Commercial Examples: Samuel Smith Oatmeal Stout, Young&rsquo;s Oatmeal Stout, McAuslan Oatmeal Stout, Maclay&rsquo;s Oat Malt Stout, Broughton Kinmount Willie Oatmeal Stout, Anderson Valley Barney Flats Oatmeal Stout, Troegs Oatmeal Stout, New Holland The Poet, Goose Island Oatmeal Stout, Wolaver&rsquo;s Oatmeal Stout.', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, balanced, roasty'), ";
 $sql .= "(148, 'C', 'Tropical Stout', 'Dark British Beer', '1.056', '1.075', '1.010', '1.018', '5.5', '8.0', '30', '50', '30', '40', 'Ale', 'A very dark, sweet, fruity, moderately strong ale with smooth roasty flavors without a burnt harshness. Commercial Examples: Lion Stout (Sri Lanka), Dragon Stout (Jamaica), ABC Stout (Singapore), Royal Extra &quot;The Lion Stout&quot; (Trinidad), Jamaica Stout (Jamaica).', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, malty, roasty, sweet'), ";
 $sql .= "(149, 'D', 'Foreign Extra Stout', 'Dark British Beer', '1.056', '1.075', '1.010', '1.018', '6.5', '8.0', '50', '70', '30', '40', 'Ale', 'A very dark, moderately strong, fairly dry, stout with prominent roast flavors. Commercial Examples: Guinness Foreign Extra Stout, Ridgeway Foreign Export Stout, Coopers Best Extra Stout, Elysian Dragonstooth Stout.', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, balanced, roasty'); ";
-$result = $db_conn->rawQuery($sql);
-if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 $sql = "INSERT INTO `".$styles_db_table."` ";
 $sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`) ";
@@ -365,7 +375,7 @@ $sql .= "(183, 'D', 'Belgian Dark Strong Ale', 'Trappist Ale', '1.075', '1.110',
 $sql .= "(184, 'A', 'Historical Beer', 'Historical Beer', '', '', '', '', '', '', '', '', '', '', '', 'The Historical Beer category contains styles that either have all but died out in modern times, or that were much more popular in past times and are known only through recreations. This category can also be used for traditional or indigenous beers of cultural importance within certain countries. Placing a beer in the historical category does not imply that it is not currently being produced, just that it is a very minor style or perhaps is in the process of rediscovery by craft brewers. Entry Instructions: The entrant must either specify a style with a BJCP-supplied description, or provide a similar description for the judges of a different style. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it. Currently defined examples: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented, lagered, pilsner-family, bitter, hoppy, any-fermentation,  porter-family, high-strength, spice'), ";
 $sql .= "(185, 'A', 'Brett Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'An interesting and refreshing variation on the base style, often drier and fruitier than expected, with at most a light acidity. Funky notes are generally restrained in 100% Brett examples, except in older examples. Entry Instructions: The entrant must specify either a base beer style (classic BJCP style, or a generic style family) or provide a description of the ingredients/specs/desired character. The entrant must specify if a 100% Brett fermentation was conducted. The entrant may specify the strain(s) of Brettanomyces used, along with a brief description of its character.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer'), ";
 $sql .= "(186, 'B', 'Mixed Fermentation Sour Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a base style of beer. Entry Instructions: The entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. Commercial Examples: Bruery Tart of Darkness, Jolly Pumpkin Calabaza Blanca, Cascade Vlad the Imp Aler, Russian River Temptation, Boulevard Love Child, Hill Farmstead Bi', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour'), ";
-$sql .= "(187, 'C', 'Wild Specialty Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a fruit, herb, or spice beer, or a wild beer aged in wood. If wood-aged, the wood should not be the primary or dominant character. Entry Instructions: Entrant must specify the type of fruit, spice, herb, or wood used. Entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. A general description of the special nature of the beer can cover all the required items. Commercial Examples: Cascade Bourbonic Plague, Jester King Atrial Rubicite, New Belgium Ericï¿½s Ale, New Glarus Belgian Red, Russian River Supplication, The Lost Abbey Cuvee de Tomme.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour, fruit'), ";
+$sql .= "(187, 'C', 'Wild Specialty Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a fruit, herb, or spice beer, or a wild beer aged in wood. If wood-aged, the wood should not be the primary or dominant character. Entry Instructions: Entrant must specify the type of fruit, spice, herb, or wood used. Entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. A general description of the special nature of the beer can cover all the required items. Commercial Examples: Cascade Bourbonic Plague, Jester King Atrial Rubicite, New Belgium Eric�s Ale, New Glarus Belgian Red, Russian River Supplication, The Lost Abbey Cuvee de Tomme.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour, fruit'), ";
 $sql .= "(188, 'A', 'Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit and beer, but still recognizable as a beer. The fruit character should be evident but in balance with the beer, not so forward as to suggest an artificial product. Entry Instructions: The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. Soured fruit beers that aren&rsquo;t lambics should be entered in the American Wild Ale category. Commercial Examples: Bell&rsquo;s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Ebulum Elderberry Black Ale.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit'), ";
 $sql .= "(189, 'B', 'Fruit and Spice Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit, spice, and beer, but still recognizable as a beer. The fruit and spice character should each be evident but in balance with the beer, not so forward as to suggest an artificial product. Entry Instructions: The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit and spices, herbs, or vegetables (SHV) used; individual SHV ingredients do not need to be specified if a well-known blend of spices is used (e.g., apple pie spice).', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit, spice'), ";
 $sql .= "(190, 'C', 'Speciality Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit, sugar, and beer, but still recognizable as a beer. The fruit and sugar character should both be evident but in balance with the beer, not so forward as to suggest an artificial product. Entry Instructions: The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. The entrant must specify the type of additional fermentable sugar or special process employed.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit'), ";
@@ -378,8 +388,9 @@ $sql .= "(196, 'A', 'Classic Style Smoked Beer', 'Smoked Beer', '', '', '', '', 
 $sql .= "(197, 'B', 'Specialty Smoked Beer', 'Smoked Beer', '', '', '', '', '', '', '', '', '', '', '', 'A smoke-enhanced beer showing good balance between the smoke, the beer character, and the added ingredients, while remaining pleasant to drink. Balance in the use of smoke, hops and malt character is exhibited by the better examples. Entry Instructions: The entrant must specify a base beer style; the base beer does not have to be a Classic Style. The entrant must specify the type of wood or smoke if a varietal smoke character is noticeable. The entrant must specify the additional ingredients or processes that make this a specialty smoked beer.', 'http://bjcp.org/stylecenter.php', '32', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, smoke'), ";
 $sql .= "(198, 'A', 'Wood-Aged Beer', 'Wood Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood. The best examples will be smooth, flavorful, well-balanced and well-aged. Entry Instructions: The entrant must specify the type of wood used and the char level (if charred). The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood has been used, the entrant must supply a brief description of the sensory aspects the wood adds to beer.', 'http://bjcp.org/stylecenter.php', '33', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, wood'), ";
 $sql .= "(199, 'B', 'Specialty Wood-Aged Beer', 'Wood Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood (including alcoholic products previously in contact with the wood). The best examples will be smooth, flavorful, well-balanced and well-aged. Entry Instructions: The entrant must specify the additional alcohol character, with information about the barrel if relevant to the finished flavor profile. The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood or ingredient has been used, the entrant must supply a brief description of the sensory aspects the ingredients adds to the beer. Commercial Examples: The Lost Abbey Angel&rsquo;s Share Ale, J.W. Lees Harvest Ale in Port, Sherry, Lagavulin Whisky or Calvados Casks, Founders Kentucky Breakfast Stout, Goose Island Bourbon County Stout, many microbreweries have specialty beers served only on premises often directly from the cask.', 'http://bjcp.org/stylecenter.php', '33', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, wood'); ";
-$result = $db_conn->rawQuery($sql);
-if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 $sql = "INSERT INTO `".$styles_db_table."` ";
 $sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`) ";
@@ -412,10 +423,11 @@ $sql .= "(224, 'D', 'Ice Cider', 'Specialty Cider and Perry', '1.130', '1.180', 
 $sql .= "(225, 'E', 'Cider with Herbs/Spices', 'Specialty Cider and Perry', '1.045', '1.070', '0.995', '1.010', '5.0', '9.0', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a white wine with complex flavors. The apple character must marry with the botanicals and give a balanced result. Entry Instructions: Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used. Commercial Examples: [US] Colorado Cider Grasshop-ah (CO), Wandering Aengus Anthem Hops (OR).', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, ''), ";
 $sql .= "(226, 'F', 'Specialty Cider/Perry', 'Specialty Cider and Perry', '1.045', '1.100', '0.995', '1.020', '5.0', '12.0', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is an open-ended category for cider or perry with other ingredients such that it does not fit any of the other BJCP categories. Entry Instructions: Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '');";
 
-$result = $db_conn->rawQuery($sql);
-if ($db_conn->getLastErrno() !== 0) { $output .= "<li class=\"text-danger\">Error: ".$db_conn->getLastError()."</li>"; $block_ok = FALSE; }
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 //echo $sql;
-if ($block_ok) $output .=  "<li>Style data updated successfully in the database.</li>";
+$output .=  "<li>Style data updated successfully in the database.</li>";
 
 // Add custom styles to Styles DB
 if ($totalRows_custom_styles > 0) {
@@ -424,44 +436,30 @@ if ($totalRows_custom_styles > 0) {
 		$custom_style_data = explode("|",$custom_style);
 		$new_custom = ($custom_style_data[17] + 6);
 
-		$data = array(
-			'id' => NULL,
-			'brewStyleNum' => $custom_style_data[1],
-			'brewStyle' => $custom_style_data[2],
-			'brewStyleCategory' => $custom_style_data[3],
-			'brewStyleOG' => $custom_style_data[4],
-			'brewStyleOGMax' => $custom_style_data[5],
-			'brewStyleFG' => $custom_style_data[6],
-			'brewStyleFGMax' => $custom_style_data[7],
-			'brewStyleABV' => $custom_style_data[8],
-			'brewStyleABVMax' => $custom_style_data[9],
-			'brewStyleIBU' => $custom_style_data[10],
-			'brewStyleIBUMax' => $custom_style_data[11],
-			'brewStyleSRM' => $custom_style_data[12],
-			'brewStyleSRMMax' => $custom_style_data[13],
-			'brewStyleType' => $custom_style_data[14],
-			'brewStyleInfo' => $custom_style_data[15],
-			'brewStyleLink' => $custom_style_data[16],
-			'brewStyleGroup' => $new_custom,
-			'brewStyleActive' => $custom_style_data[18],
-			'brewStyleOwn' => $custom_style_data[19]
-		);
-		$result = $db_conn->insert($styles_db_table, $data);
+		$sql = "INSERT INTO `".$styles_db_table."` ";
+		$sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`) ";
+		$sql .= "VALUES ";
+		$sql .= "(NULL, '".$custom_style_data[1]."', '".$custom_style_data[2]."', '".$custom_style_data[3]."', '".$custom_style_data[4]."', '".$custom_style_data[5]."', '".$custom_style_data[6]."', '".$custom_style_data[7]."', '".$custom_style_data[8]."', '".$custom_style_data[9]."', '".$custom_style_data[10]."', '".$custom_style_data[11]."', '".$custom_style_data[12]."', '".$custom_style_data[13]."', '".$custom_style_data[14]."', '".$custom_style_data[15]."', '".$custom_style_data[16]."', '".$new_custom."', '".$custom_style_data[18]."', '".$custom_style_data[19]."');";
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 		// Update any defined judging tables with new id
 
 		$query_custom_style_id = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1", $prefix."styles");
-		$row_custom_style_id = $db_conn->rawQueryOne($query_custom_style_id);
+		$custom_style_id = mysqli_query($connection,$query_custom_style_id) or die (mysqli_error($connection));
+		$row_custom_style_id = mysqli_fetch_assoc($custom_style_id);
 		//echo $query_custom_style_id."<br>";
 		//echo $row_custom_style_id['id']."<br>";
 
 		$query_custom_style_table = sprintf("SELECT id,tableStyles FROM %s", $prefix."judging_tables");
-		$rows_custom_style_table = $db_conn->rawQuery($query_custom_style_table);
+		$custom_style_table = mysqli_query($connection,$query_custom_style_table) or die (mysqli_error($connection));
+		$row_custom_style_table = mysqli_fetch_assoc($custom_style_table);
 		//echo $query_custom_style_table."<br>";
 
-		foreach ($rows_custom_style_table as $row_custom_style_table) {
+		do {
 			$b = "";
-			$new_table_styles = array();
+			$new_table_styles = [];
 
 			//echo $row_custom_style_table['id']."<br>";
 			//echo $row_custom_style_table['tableStyles']."<br>";
@@ -479,8 +477,10 @@ if ($totalRows_custom_styles > 0) {
 
 				$insert = implode(",",$new_table_styles);
 
-				$db_conn->where('id', $row_custom_style_table['id']);
-				$result = $db_conn->update($prefix."judging_tables", array('tableStyles' => $insert));
+				$sql = sprintf("UPDATE %s SET tableStyles='%s' WHERE id='%s'",$prefix."judging_tables",$insert,$row_custom_style_table['id']);
+				mysqli_select_db($connection,$database);
+				mysqli_real_escape_string($connection,$sql);
+				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 				//echo $sql."<br>";
 			}
@@ -491,19 +491,15 @@ if ($totalRows_custom_styles > 0) {
 
 			}
 
-		}
+		} while ($row_custom_style_table = mysqli_fetch_assoc($custom_style_table));
 
 
 		// Update any entries with new style number
 
-		$data = array(
-			'brewCategory' => $new_custom,
-			'brewCategorySort' => $new_custom,
-			'brewSubCategory' => 'A',
-			'brewStyle' => $custom_style_data[2]
-		);
-		$db_conn->where('brewCategorySort', $custom_style_data[17]);
-		$result = $db_conn->update($prefix."brewing", $data);
+		$sql = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='A', brewStyle='%s' WHERE brewCategorySort='%s'",$prefix."brewing", $new_custom, $new_custom, $custom_style_data[2], $custom_style_data[17]);
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 	}
 }

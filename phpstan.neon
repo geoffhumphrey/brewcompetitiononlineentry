@@ -1,35 +1,56 @@
+parameters:
+    level: 4
+    parallel:
+        maximumNumberOfProcesses: 2
+        processTimeout: 1800.0
+    paths:
+        - lib/
+        - includes/
+        - admin/
+        - pub/
+        - sections/
+        - output/
+        - eval/
+        - ajax/
+        - setup/
+        - update/
+        - site/
+        - .
+        - index.php
+        - index.legacy.php
+        - index.pub.php
+        - handle.php
+        - qr.php
+        - setup.php
+        - update.php
+        - awards.php
+        - maintenance.php
+        - ppv.php
+        - paths.php
+    excludePaths:
+        - var/
+        - vendor/
+        - tests/
+        - .git/
+        - node_modules/
+        - classes/
+        - site/MysqliDb.php
+        - site/dbObject.php
+        - site/bootstrap.php
+    tmpDir: var/phpstan
+    scanFiles:
+        - site/MysqliDb.php
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        -
+            identifier: missingType.generics
+        -
+            message: '#Parameter \$mail of function sendPHPMailerMessage\(\) has invalid type PHPMailer#'
+            path: lib/email.lib.php
+        -
+            message: '#Parameter \$mail of function send_test_message\(\) has invalid type PHPMailer#'
+            path: admin/send_test_email.admin.php
+
 includes:
     - phpstan-baseline.neon
-
-parameters:
-    phpVersion: 80300
-    level: 0
-
-    paths:
-        - admin
-        - ajax
-        - eval
-        - includes
-        - lib
-        - output
-        - pub
-        - sections
-        - setup
-        - update
-        - awards.php
-        - handle.php
-        - index.legacy.php
-        - index.php
-        - index.pub.php
-        - qr.php
-        - update.php
-
-    excludePaths:
-        - classes/*
-        - vendor/*
-
-    scanDirectories:
-        - classes
-
-    bootstrapFiles:
-        - phpstan-bootstrap.php

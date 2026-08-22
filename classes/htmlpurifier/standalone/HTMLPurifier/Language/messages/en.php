@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 $fallback = false;
 
-$messages = array(
+$messages = [
 
     'HTMLPurifier' => 'HTML Purifier',
 // for unit testing purposes
@@ -44,12 +46,12 @@ $messages = array(
     'Strategy_FixNesting: Node contents removed' => 'Contents of $CurrentToken.Compact node removed',
     'AttrValidator: Attributes transformed' => 'Attributes on $CurrentToken.Compact transformed from $1.Keys to $2.Keys',
     'AttrValidator: Attribute removed' => '$CurrentAttr.Name attribute on $CurrentToken.Compact removed',
-);
+];
 
-$errorNames = array(
+$errorNames = [
     E_ERROR => 'Error',
     E_WARNING => 'Warning',
     E_NOTICE => 'Notice'
-);
+];
 
 // vim: et sw=4 sts=4

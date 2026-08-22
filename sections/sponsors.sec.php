@@ -29,7 +29,7 @@ $page_info1 .= "<section class=\"row\">";
 foreach ($rows_sponsors as $row_sponsors) {
 	if ($row_sponsors['sponsorEnable'] == "1") {
 
-		if (($sponsors_endRow == 0) && ($sponsors_hloopRow1++ != 0)) $page_info1 .= "<section class=\"row\">";
+		if (($sponsors_endRow === 0) && ($sponsors_hloopRow1++ !== 0)) $page_info1 .= "<section class=\"row\">";
 
 		// Layout Column DIV 
 		$page_info1 .= "<section class=\"col-lg-3 col-md-6 col-sm-9 col-xs-12 bcoem-sponsor-container\">";
@@ -71,7 +71,7 @@ foreach ($rows_sponsors as $row_sponsors) {
 }
 
 // Insert Empty Column if No Content Available
-if ($sponsors_endRow != 0) {
+if ($sponsors_endRow !== 0) {
 	while ($sponsors_endRow < $sponsors_columns) {
 		$page_info1 .= "<section class=\"col-lg-3 col-md-3 col-sm-3\">&nbsp;</section>";
 		$sponsors_endRow++;

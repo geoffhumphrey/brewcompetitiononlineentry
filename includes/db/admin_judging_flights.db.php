@@ -1,15 +1,15 @@
 <?php
 if (($filter != "default") && ($filter != "rounds"))  {
-	
+
 		$style_name = explode(",",$style_name);
-		$params_entries = array();
+		$params_entries = [];
 		if (SINGLE) {
 			$query_entries = "SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM ".$brewing_db_table." WHERE comp_id=? AND brewCategorySort=? AND brewSubcategory=?";
-			$params_entries = array($_SESSION['comp_id'], $style_name[0], $style_name[1]);
+			$params_entries = [$_SESSION['comp_id'], $style_name[0], $style_name[1]];
 		}
 		else {
 			$query_entries = "SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM ".$brewing_db_table." WHERE brewCategorySort=? AND brewSubcategory=?";
-			$params_entries = array($style_name[0], $style_name[1]);
+			$params_entries = [$style_name[0], $style_name[1]];
 		}
 
 		if ($_SESSION['jPrefsTablePlanning'] == 0) $query_entries .= " AND brewReceived='1'";

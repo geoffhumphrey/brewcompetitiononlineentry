@@ -1,5 +1,6 @@
 <?php
 
+
 if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed'])) || (empty($row_judging_prefs['jPrefsScoresheet']))) {
 
 	$alert_empty_prefs = "<div class=\"alert alert-danger\">";

@@ -136,7 +136,7 @@ $php_version = phpversion();
  */
 
 $j_s_text = "";
-if (strpos($section, "step") === FALSE) {
+if (!str_contains($section, "step")) {
 	if ((isset($judge_limit)) && (isset($steward_limit))) {
 		if (($judge_limit) && (!$steward_limit)) $j_s_text = "Felszolgáló"; // missing punctuation intentional
 		elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Bíráló"; // missing punctuation intentional
@@ -2247,19 +2247,19 @@ $contact_text_014 = "A verseny kapcsolattartóinak megjelenítését a webhely r
  * ------------------------------------------
  */
 
-if (strpos($section, "step") === FALSE) $alert_text_032 = $alert_text_032; else $alert_text_032 = "";
-if (strpos($section, "step") === FALSE) $alert_text_033 = $alert_text_033; else $alert_text_033 = "";
-if (strpos($section, "step") === FALSE) $alert_text_036 = $alert_text_036; else $alert_text_036 = "";
-if (strpos($section, "step") === FALSE) $alert_text_039 = $alert_text_039; else $alert_text_039 = "";
-if ((strpos($section, "step") === FALSE) && ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 0))) $alert_text_043 = $alert_text_043; else $alert_text_043 = "";
-if ((strpos($section, "step") === FALSE) && ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 0))) $alert_text_047 = $alert_text_047; else $alert_text_047 = "";
-if (strpos($section, "step") === FALSE) $alert_text_050 = $alert_text_050; else $alert_text_050 = "";
-if (strpos($section, "step") === FALSE) $alert_text_053 = $alert_text_053; else $alert_text_053 = "";
-if ((strpos($section, "step") === FALSE) && ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 0))) $alert_text_060 = $alert_text_060; else $alert_text_060 = "";
-if (strpos($section, "step") === FALSE) $alert_text_068 = $alert_text_068; else $alert_text_068 = "";
-if (strpos($section, "step") === FALSE) $alert_text_070 = $alert_text_070; else $alert_text_070 = "";
-if (strpos($section, "step") === FALSE) $label_character_limit = $label_character_limit; else $label_character_limit = "";
-if (strpos($section, "step") === FALSE) $header_text_031 = $header_text_031; else $header_text_031 = "";
-if (strpos($section, "step") === FALSE) $beerxml_text_007 = $beerxml_text_007; else $beerxml_text_007 = "";
+if (!str_contains($section, "step")) $alert_text_032 = $alert_text_032; else $alert_text_032 = "";
+if (!str_contains($section, "step")) $alert_text_033 = $alert_text_033; else $alert_text_033 = "";
+if (!str_contains($section, "step")) $alert_text_036 = $alert_text_036; else $alert_text_036 = "";
+if (!str_contains($section, "step")) $alert_text_039 = $alert_text_039; else $alert_text_039 = "";
+if ((!str_contains($section, "step")) && ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 0))) $alert_text_043 = $alert_text_043; else $alert_text_043 = "";
+if ((!str_contains($section, "step")) && ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 0))) $alert_text_047 = $alert_text_047; else $alert_text_047 = "";
+if (!str_contains($section, "step")) $alert_text_050 = $alert_text_050; else $alert_text_050 = "";
+if (!str_contains($section, "step")) $alert_text_053 = $alert_text_053; else $alert_text_053 = "";
+if ((!str_contains($section, "step")) && ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 0))) $alert_text_060 = $alert_text_060; else $alert_text_060 = "";
+if (!str_contains($section, "step")) $alert_text_068 = $alert_text_068; else $alert_text_068 = "";
+if (!str_contains($section, "step")) $alert_text_070 = $alert_text_070; else $alert_text_070 = "";
+if (!str_contains($section, "step")) $label_character_limit = $label_character_limit; else $label_character_limit = "";
+if (!str_contains($section, "step")) $header_text_031 = $header_text_031; else $header_text_031 = "";
+if (!str_contains($section, "step")) $beerxml_text_007 = $beerxml_text_007; else $beerxml_text_007 = "";
 
 ?>

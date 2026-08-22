@@ -18,7 +18,7 @@ if ($section == "step7") {
 elseif (isset($_SESSION['prefsStyleSet'])) $styleSet = $_SESSION['prefsStyleSet'];
 else $styleSet = "BJCP2025";
 
-$styles_selected = array();
+$styles_selected = [];
 $styles_selected = json_decode($_SESSION['prefsSelectedStyles'], true);
 
 if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) {
@@ -33,18 +33,18 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 	$row_styles_all = ($rows_styles_all && count($rows_styles_all) > 0) ? $rows_styles_all[0] : null;
 	$totalRows_styles_all = $db_conn->count;
 
-	$custom_styles_arr = array();
+	$custom_styles_arr = [];
 
 	if ($totalRows_styles_all > 0) {
 
 		foreach ($rows_styles_all as $row_styles_all) {
 
-			$custom_styles_arr[] = array(
+			$custom_styles_arr[] = [
 				"id" => $row_styles_all['id'],
 				"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
 				"brewStyleNum" => $row_styles_all['brewStyleNum'],
 				"brewStyle" => $row_styles_all['brewStyle']
-			);
+			];
 
 		}
 
@@ -52,9 +52,9 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 
 }
 
-if ($styleSet == "BJCP2025") { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles = array(); }
-elseif ($styleSet == "AABC2025") { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles = array(); }
-else { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')"; $params_styles = array($styleSet); }
+if ($styleSet == "BJCP2025") { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles = []; }
+elseif ($styleSet == "AABC2025") { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles = []; }
+else { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')"; $params_styles = [$styleSet]; }
 
 if ($section == "admin") {
 
@@ -103,7 +103,7 @@ elseif (($section == "default") || ($section == "step7")) {
 	$query_styles .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 }
 
-$rows_styles = (!empty($params_styles)) ? $db_conn->rawQuery($query_styles, $params_styles) : $db_conn->rawQuery($query_styles);
+$rows_styles = ($params_styles !== []) ? $db_conn->rawQuery($query_styles, $params_styles) : $db_conn->rawQuery($query_styles);
 $row_styles = ($rows_styles && count($rows_styles) > 0) ? $rows_styles[0] : null;
 $totalRows_styles = $db_conn->count;
 
@@ -113,16 +113,16 @@ if ($section != "list") {
 	if (HOSTED) $query_styles2 = ...
 	else
 	*/
-	if ($styleSet == "BJCP2025") { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles2 = array(); }
-	elseif ($styleSet == "AABC2025") { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles2 = array(); }
-	else { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')"; $params_styles2 = array($styleSet); }
+	if ($styleSet == "BJCP2025") { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles2 = []; }
+	elseif ($styleSet == "AABC2025") { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles2 = []; }
+	else { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')"; $params_styles2 = [$styleSet]; }
 	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 	elseif ($section == "brew") $query_styles2 .= " AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'";
 	else {
 		if ($styleSet == "BA") $query_styles2 .= " ORDER BY brewStyleGroup, brewStyleNum ASC";
 		else $query_styles2 .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 	}
-	$rows_styles2 = (!empty($params_styles2)) ? $db_conn->rawQuery($query_styles2, $params_styles2) : $db_conn->rawQuery($query_styles2);
+	$rows_styles2 = ($params_styles2 !== []) ? $db_conn->rawQuery($query_styles2, $params_styles2) : $db_conn->rawQuery($query_styles2);
 	$row_styles2 = ($rows_styles2 && count($rows_styles2) > 0) ? $rows_styles2[0] : null;
 	$totalRows_styles2 = $db_conn->count;
 

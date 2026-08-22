@@ -3,7 +3,7 @@ if ($action == "edit") {
 	$db_conn->where("id", $id);
 	$row_contact = $db_conn->getOne($contacts_db_table);
 	$totalRows_contact = $db_conn->count;
-	$rows_contact = $row_contact ? array($row_contact) : array();
+	$rows_contact = $row_contact ? [$row_contact] : [];
 }
 else {
 	$db_conn->orderBy("contactLastName", "ASC");

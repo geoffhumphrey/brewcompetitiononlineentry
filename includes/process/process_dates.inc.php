@@ -1,8 +1,11 @@
 <?php
+// $timezone_raw is set by process.inc.php before including this file; default
+// to UTC if this file is ever included standalone (mirrors process.inc.php).
+if (!isset($timezone_raw)) $timezone_raw = 0;
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	// Entry-Related
@@ -36,7 +39,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = to_utc_epoch(sterilize($_POST['contestJudgeDeadline']), $timezone_raw);
 
 	$update_table = $prefix."contest_info";
-	$data = array(
+	$data = [
 		'contestRegistrationOpen' => blank_to_null($contestRegistrationOpen),
 		'contestRegistrationDeadline' => blank_to_null($contestRegistrationDeadline),
 		'contestEntryOpen' => blank_to_null($contestEntryOpen),
@@ -50,7 +53,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'contestShippingDeadline' => blank_to_null($contestShippingDeadline),
 		'contestDropoffOpen' => blank_to_null($contestDropoffOpen),
 		'contestDropoffDeadline' => blank_to_null($contestDropoffDeadline)
-	);
+	];
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) {
@@ -65,7 +68,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	// Judging Open
 	
-	$judging_dates = array();
+	$judging_dates = [];
 	$judging_earliest_date = "";
 	$judging_latest_date = "";
 	
@@ -104,10 +107,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	else $jPrefsJudgingClosed = "";
 
 	$update_table = $prefix."judging_preferences";
-	$data = array(
+	$data = [
 		'jPrefsJudgingOpen' => blank_to_null($jPrefsJudgingOpen),
 		'jPrefsJudgingClosed' => blank_to_null($jPrefsJudgingClosed)
-	);
+	];
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) {
@@ -135,10 +138,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	}
 
 	$update_table = $prefix."preferences";
-	$data = array(
+	$data = [
 		'prefsWinnerDelay' => blank_to_null($prefsWinnerDelay),
 		'prefsDisplayWinners' => blank_to_null($prefsDisplayWinners)
-	);
+	];
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) {
@@ -161,10 +164,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (isset($_POST['judgingDateEnd'.$id])) $judgingDateEnd = to_utc_epoch(sterilize($_POST['judgingDateEnd'.$id]), $timezone_raw);
 
 			$update_table = $prefix."judging_locations";
-			$data = array(
+			$data = [
 				'judgingDate' => blank_to_null($judgingDate),
 				'judgingDateEnd' => blank_to_null($judgingDateEnd)			
-			);			
+			];			
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {

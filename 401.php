@@ -1,5 +1,6 @@
 <?php
-require('paths.php');
+declare(strict_types=1);
+require(__DIR__ . '/paths.php');
 require(CONFIG.'bootstrap.php');
 $redirect = $base_url."index.php?section=401";
 $redirect = prep_redirect_link($redirect);

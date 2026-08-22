@@ -39,6 +39,11 @@ Step by step [installation](https://info.brewingcompetitions.com/install-instruc
 
 After configuration to your environment, installation is a breeze via the online setup interface.
 
+## Requirements
+- PHP 8.3 or newer (PHP 8.3, 8.4, and 8.5 are exercised in CI).
+- MySQL 5.7 or newer (integration tests run against MySQL 8.0).
+- [Composer](https://getcomposer.org) is required to install dependencies; the `vendor/` directory is part of the deployment.
+
 ## Fallback Installation
 There are times when the online setup encounters issues that prevent the installation from successfully completing. That's why there's a [Fallback Installation](https://info.brewingcompetitions.com/install-instructions) method. For those experiencing any issues related to the initial browser-based setup, the bcoem_baseline_3.X.X.sql document is available in the package's /sql/ folder. This document contains the necessary database structure and dummy data for a new installation that can be installed manually via phpMyAdmin or shell access. Be sure to follow the directions in the document **BEFORE** use.
 

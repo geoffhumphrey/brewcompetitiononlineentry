@@ -1,10 +1,11 @@
 <?php
-require_once ('paths.php');
+declare(strict_types=1);
+require_once (__DIR__ . '/paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
 // Build array - used in language files, so it needs to be before bootstrap.php
-$checked_in_numbers = array();
-if (strpos($view, "^") !== FALSE) $checked_in_numbers = explode("^",$view);
-elseif (strpos($view, "%5E") !== FALSE) $checked_in_numbers = explode("%5E",$view);
+$checked_in_numbers = [];
+if (str_contains($view, "^")) $checked_in_numbers = explode("^",$view);
+elseif (str_contains($view, "%5E")) $checked_in_numbers = explode("%5E",$view);
 require_once (CONFIG.'bootstrap.php');
 require_once (LIB.'common.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');
@@ -18,18 +19,18 @@ else $db_conn->where("id", 1);
 $row_prefs = $db_conn->getOne($prefix."preferences");
 $totalRows_prefs = $db_conn->count;
 
-$_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
+$_SESSION['prefsLanguage'] = ($row_prefs && $row_prefs['prefsLanguage'] !== null) ? $row_prefs['prefsLanguage'] : "en-US";
 
 // Legacy installs may still have prefsLanguage stored as "English" (pre-locale-code
 // installs, e.g. via the 2.1.5.0 update) rather than "en-US" - normalize before deriving
 // the folder, or this falls through to strtolower() producing "english", which doesn't
 // match the actual "en" folder on disk.
-if (strtolower($_SESSION['prefsLanguage']) == "english") $_SESSION['prefsLanguage'] = "en-US";
+if (strtolower($_SESSION['prefsLanguage']) === "english") $_SESSION['prefsLanguage'] = "en-US";
 
 if (($action != "update") && ($action != "password-check")) csrf_token_generate(false);
 
 // Check if variation used (demarked with a dash)
-if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
+if (str_contains($_SESSION['prefsLanguage'], '-')) {
 	$lang_folder = explode("-",$_SESSION['prefsLanguage']);
 	$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
 }
@@ -134,7 +135,7 @@ if (($go == "default") && ($id != "default") && ($process_allowed)) {
 
 		$brewBoxNum = NULL;
 		$brewPaid = 0;
-		
+
 		$paid = FALSE;
 
 		if ($row_entry['brewPaid'] == 1) {
@@ -195,13 +196,13 @@ if (($go == "default") && ($id != "default") && ($process_allowed)) {
 					header(sprintf("Location: %s", $redirect));
 					exit();
 				}
-				
-				$data = array(
+
+				$data = [
 					'brewReceived' => 1,
 					'brewJudgingNumber' => $brewJudgingNumber,
 					'brewBoxNum' => $brewBoxNum,
 					'brewPaid' => $brewPaid
-				);
+				];
 
 				$checkin_redirect .= "&view=".$id."^".$brewJudgingNumber."&msg=3";
 
@@ -209,14 +210,14 @@ if (($go == "default") && ($id != "default") && ($process_allowed)) {
 
 			else {
 
-				$data = array(
+				$data = [
 					'brewReceived' => 1,
 					'brewBoxNum' => $brewBoxNum,
 					'brewPaid' => $brewPaid
-				);
+				];
 
 				$checkin_redirect .= "&view=".$id."^".$row_entry['brewJudgingNumber']."&msg=6";
-				
+
 			}
 
 			$db_conn->where ('id', $id);
@@ -284,7 +285,7 @@ if (isset($_SESSION['last_action'])) {
         session_unset();
 		session_destroy();
 		session_write_close();
-		setcookie(session_name($prefix_session),'',0,'/');
+		setcookie(session_name($prefix_session),'', ['expires' => 0, 'path' => '/']);
     }
 }
 

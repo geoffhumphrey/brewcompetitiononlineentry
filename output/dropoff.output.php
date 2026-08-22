@@ -1,4 +1,5 @@
-<?php 
+<?php
+ 
 /**
  * Module:      dropoff.php 
  * Description: Outputs report of entries by dropoff location.

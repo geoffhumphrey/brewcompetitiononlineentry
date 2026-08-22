@@ -47,7 +47,7 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 	}
 	else {
 		$query_styles = "SELECT id,brewStyleGroup FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC";
-		$rows_styles = $db_conn->rawQuery($query_styles, array($_SESSION['prefsStyleSet']));
+		$rows_styles = $db_conn->rawQuery($query_styles, [$_SESSION['prefsStyleSet']]);
 	}
 	$totalRows_styles = $db_conn->count;
 
@@ -61,13 +61,13 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 		$row_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
 		$query_score_count = "SELECT  COUNT(*) as 'count' FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scorePlace IS NOT NULL OR a.scorePlace='')";
-		$row_score_count = $db_conn->rawQueryOne($query_score_count, array($style));
+		$row_score_count = $db_conn->rawQueryOne($query_score_count, [$style]);
 
 
 		if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
 
 			$query_scores = "SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND a.eid = b.id AND c.uid = b.brewBrewerID AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace";
-			$rows_scores = $db_conn->rawQuery($query_scores, array($style));
+			$rows_scores = $db_conn->rawQuery($query_scores, [$style]);
 			$totalRows_scores = $db_conn->count;
 
 			foreach ($rows_scores as $row_scores) {
@@ -120,7 +120,7 @@ elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 	}
 	else {
 		$query_styles = "SELECT id,brewStyleGroup,brewStyleNum,brewStyle FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') ORDER BY brewStyleGroup,brewStyleNum ASC";
-		$rows_styles = $db_conn->rawQuery($query_styles, array($_SESSION['prefsStyleSet']));
+		$rows_styles = $db_conn->rawQuery($query_styles, [$_SESSION['prefsStyleSet']]);
 	}
 	$totalRows_styles = $db_conn->count;
 
@@ -136,12 +136,12 @@ elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 		$row_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
 		$query_score_count = "SELECT  COUNT(*) as 'count' FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND b.brewSubCategory=? AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID";
-		$row_score_count = $db_conn->rawQueryOne($query_score_count, array($style[0], $style[1]));
+		$row_score_count = $db_conn->rawQueryOne($query_score_count, [$style[0], $style[1]]);
 
 		if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
 
 			$query_scores = "SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewSubCategory, b.brewStyle, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND b.brewSubCategory=? AND a.eid = b.id  AND c.uid = b.brewBrewerID  AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace";
-			$rows_scores = $db_conn->rawQuery($query_scores, array($style[0], $style[1]));
+			$rows_scores = $db_conn->rawQuery($query_scores, [$style[0], $style[1]]);
 			$totalRows_scores = $db_conn->count;
 
 			foreach ($rows_scores as $row_scores) {
@@ -189,7 +189,7 @@ else { // Output by Table.
 	foreach ($rows_tables as $row_tables) {
 
 	$query_scores = "SELECT * FROM ".$prefix."judging_scores WHERE scoreTable=?";
-	$params_scores = array($row_tables['id']);
+	$params_scores = [$row_tables['id']];
 	$query_scores .= " AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3' OR scorePlace='4' OR scorePlace='5') ORDER BY scorePlace ASC";
 	$rows_scores = $db_conn->rawQuery($query_scores, $params_scores);
 	$totalRows_scores = $db_conn->count;
@@ -230,7 +230,7 @@ else { // Output by Table.
 			}
 
 			$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
-			if ($display_place != "N/A") $pdf->Add_Label($text);
+			if ($display_place !== "N/A") $pdf->Add_Label($text);
 
 		}
 

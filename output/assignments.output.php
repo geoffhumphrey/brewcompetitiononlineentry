@@ -1,12 +1,13 @@
 <?php
+
 if (NHC) $base_url = "../";
 if ($filter == "stewards") $filter = "S"; 
 elseif ($filter == "judges") $filter = "J";
 
 include (DB.'output_assignments.db.php');
 $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0);
-$role_replace1 = array("HJ","LJ","MBOS",", ");
-$role_replace2 = array("<span class=\"text-primary\"><span class=\"fa fa-gavel\"></span> Table Head Judge</span><br>","<span class=\"text-warning\"><span class=\"fa fa-star\"></span> Lead Judge</span><br>","<span class=\"text-success\"><span class=\"fa fa-trophy\"></span> Mini-BOS Judge</span><br>","");
+$role_replace1 = ["HJ","LJ","MBOS",", "];
+$role_replace2 = ["<span class=\"text-primary\"><span class=\"fa fa-gavel\"></span> Table Head Judge</span><br>","<span class=\"text-warning\"><span class=\"fa fa-star\"></span> Lead Judge</span><br>","<span class=\"text-success\"><span class=\"fa fa-trophy\"></span> Mini-BOS Judge</span><br>",""];
 
 if ($view != "sign-in") {
 include (LIB.'admin.lib.php');
@@ -202,12 +203,12 @@ else {
 	foreach ($judging_sessions as $key => $value) {
 
 		$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,b.uid,b.staff_judge,b.staff_steward,b.staff_staff,b.staff_organizer,c.assignLocation FROM ".$prefix."brewer"." a, ".$prefix."staff"." b, ".$prefix."judging_assignments"." c WHERE a.uid = b.uid AND a.uid = c.bid";
-		$params_brewer = array();
+		$params_brewer = [];
 		if (SINGLE) { $query_brewer .= " AND comp_id=?"; $params_brewer[] = $_SESSION['comp_id']; }
 		if ($filter == "S") $query_brewer .= " AND b.staff_steward='1'";
 		else $query_brewer .= " AND b.staff_judge='1'";
 		$query_brewer .= " ORDER BY a.brewerLastName ASC";
-		$rows_brewer = (!empty($params_brewer)) ? $db_conn->rawQuery($query_brewer, $params_brewer) : $db_conn->rawQuery($query_brewer);
+		$rows_brewer = ($params_brewer !== []) ? $db_conn->rawQuery($query_brewer, $params_brewer) : $db_conn->rawQuery($query_brewer);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 		$totalRows_brewer = $db_conn->count;
 

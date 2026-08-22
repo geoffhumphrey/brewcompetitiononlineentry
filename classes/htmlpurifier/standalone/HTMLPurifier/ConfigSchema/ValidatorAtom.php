@@ -9,31 +9,22 @@
 class HTMLPurifier_ConfigSchema_ValidatorAtom
 {
     /**
-     * @type string
-     */
-    protected $context;
-
-    /**
-     * @type object
-     */
-    protected $obj;
-
-    /**
-     * @type string
-     */
-    protected $member;
-
-    /**
      * @type mixed
      */
     protected $contents;
 
-    public function __construct($context, $obj, $member)
+    public function __construct(/**
+     * @type string
+     */
+    protected $context, /**
+     * @type object
+     */
+    protected $obj, /**
+     * @type string
+     */
+    protected $member)
     {
-        $this->context = $context;
-        $this->obj = $obj;
-        $this->member = $member;
-        $this->contents =& $obj->$member;
+        $this->contents =& $this->obj->{$this->member};
     }
 
     /**

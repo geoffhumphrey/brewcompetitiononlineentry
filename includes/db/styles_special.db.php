@@ -6,33 +6,33 @@ else
 $styles_db_table = $prefix."styles";
 
 $add_edit_entry_modals = "";
-$special_beer = array();
-$special_beer_info = array();
-$carb_str_only = array();
-$carb_str_sweet_special = array();
-$carb_str_sweet_special_info = array();
-$sweet_carb_only = array();
-$sweet_carb_str_only = array();
-$spec_sweet_carb_only = array();
-$spec_sweet_carb_only_info = array();
-$spec_carb_only = array();
-$spec_carb_only_info = array();
-$styles_entry_text = array();
-$styles_entry_text_cider = array();
+$special_beer = [];
+$special_beer_info = [];
+$carb_str_only = [];
+$carb_str_sweet_special = [];
+$carb_str_sweet_special_info = [];
+$sweet_carb_only = [];
+$sweet_carb_str_only = [];
+$spec_sweet_carb_only = [];
+$spec_sweet_carb_only_info = [];
+$spec_carb_only = [];
+$spec_carb_only_info = [];
+$styles_entry_text = [];
+$styles_entry_text_cider = [];
 
-$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
-if ($go == "default") $replacement2 = array('<strong class="text-danger-emphasis">Entry Instructions:</strong>','<strong class="text-info-emphasis">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
-else $replacement2 = array('<strong class="text-danger-emphasis">Entry Instructions:</strong>','<strong class="text-info-emphasis">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<u>MAY</u> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
-$replacement3 = array('Entry Instructions:','Commercial Examples:','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> state');
+$replacement1 = ['Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state'];
+if ($go == "default") $replacement2 = ['<strong class="text-danger-emphasis">Entry Instructions:</strong>','<strong class="text-info-emphasis">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state'];
+else $replacement2 = ['<strong class="text-danger-emphasis">Entry Instructions:</strong>','<strong class="text-info-emphasis">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<u>MAY</u> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state'];
+$replacement3 = ['Entry Instructions:','Commercial Examples:','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> state'];
 
-$replacement4 = array('must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
-$replacement5 = array('<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> state');
+$replacement4 = ['must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state'];
+$replacement5 = ['<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> state'];
 
 if ($_SESSION['prefsLanguage'] == "en-US") {
 
 	if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
 		
-		$styles_entry_text = array(
+		$styles_entry_text = [
 		    "7-C" => str_replace($replacement4,$replacement5,$styles_entry_text_07C),
 		    "9-A" => str_replace($replacement4,$replacement5,$styles_entry_text_09A),
 		    "10-C" => str_replace($replacement4,$replacement5,$styles_entry_text_10C),
@@ -82,13 +82,13 @@ if ($_SESSION['prefsLanguage'] == "en-US") {
 		    "PR-X4" => str_replace($replacement4,$replacement5,$styles_entry_text_PRX4),
 		    "LS-X3" => str_replace($replacement4,$replacement5,$styles_entry_text_PRX3),
 		    "LS-X4" => str_replace($replacement4,$replacement5,$styles_entry_text_PRX4),
-		);
+		];
 
 	}
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
 
-		$styles_entry_text_cider = array(
+		$styles_entry_text_cider = [
 			"C1-A" => str_replace($replacement4,$replacement5,$styles_entry_text_C1A),
 			"C1-B" => str_replace($replacement4,$replacement5,$styles_entry_text_C1B),
 			"C1-C" => str_replace($replacement4,$replacement5,$styles_entry_text_C1C),
@@ -99,13 +99,13 @@ if ($_SESSION['prefsLanguage'] == "en-US") {
 			"C2-D" => str_replace($replacement4,$replacement5,$styles_entry_text_C2D),
 			"C2-E" => str_replace($replacement4,$replacement5,$styles_entry_text_C2E),
 			"C2-F" => str_replace($replacement4,$replacement5,$styles_entry_text_C2F)
-		);
+		];
 
 	}
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 
-		$styles_entry_text_cider = array(
+		$styles_entry_text_cider = [
 			"C1-A" => str_replace($replacement4,$replacement5,$styles_entry_text_C1A_2025),
 			"C1-B" => str_replace($replacement4,$replacement5,$styles_entry_text_C1B_2025),
 			"C1-C" => str_replace($replacement4,$replacement5,$styles_entry_text_C1C_2025),
@@ -122,7 +122,7 @@ if ($_SESSION['prefsLanguage'] == "en-US") {
 			"C4-B" => str_replace($replacement4,$replacement5,$styles_entry_text_C4B_2025),
 			"C4-C" => str_replace($replacement4,$replacement5,$styles_entry_text_C4C_2025),
 			"C4-D" => str_replace($replacement4,$replacement5,$styles_entry_text_C4D_2025)
-		);
+		];
 
 	}
 
@@ -135,7 +135,7 @@ elseif ($_SESSION['prefsLanguage'] != "en-US") {
 
 	if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
 
-		$styles_entry_text = array(
+		$styles_entry_text = [
 		    "7-C" => $styles_entry_text_07C,
 		    "9-A" => $styles_entry_text_09A,
 		    "10-C" => $styles_entry_text_10C,
@@ -185,13 +185,13 @@ elseif ($_SESSION['prefsLanguage'] != "en-US") {
 		    "PR-X4" => $styles_entry_text_PRX4,
 		    "LS-X3" => $styles_entry_text_PRX3,
 		    "LS-X4" => $styles_entry_text_PRX4,
-		);
+		];
 
 	}
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
 
-		$styles_entry_text_cider = array(
+		$styles_entry_text_cider = [
 			"C1-A" => $styles_entry_text_C1A,
 			"C1-B" => $styles_entry_text_C1B,
 			"C1-C" => $styles_entry_text_C1C,
@@ -202,13 +202,13 @@ elseif ($_SESSION['prefsLanguage'] != "en-US") {
 			"C2-D" => $styles_entry_text_C2D,
 			"C2-E" => $styles_entry_text_C2E,
 			"C2-F" => $styles_entry_text_C2F
-		);
+		];
 
 	}
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 
-		$styles_entry_text_cider = array(
+		$styles_entry_text_cider = [
 			"C1-A" => $styles_entry_text_C1A_2025,
 			"C1-B" => $styles_entry_text_C1B_2025,
 			"C1-C" => $styles_entry_text_C1C_2025,
@@ -225,15 +225,15 @@ elseif ($_SESSION['prefsLanguage'] != "en-US") {
 			"C4-B" => $styles_entry_text_C4B_2025,
 			"C4-C" => $styles_entry_text_C4C_2025,
 			"C4-D" => $styles_entry_text_C4D_2025
-		);
+		];
 
 	}
 
-	if (!empty($styles_entry_text_cider)) $styles_entry_text = array_merge($styles_entry_text,$styles_entry_text_cider);
+	if ($styles_entry_text_cider !== []) $styles_entry_text = array_merge($styles_entry_text,$styles_entry_text_cider);
 
 }
 
-else $styles_entry_text = array();
+else $styles_entry_text = [];
 
 // --------------------------------------If Non-BA Styles --------------------------------------
 
@@ -259,18 +259,18 @@ elseif ($_SESSION['prefsStyleSet'] == "AABC2025") {
 }
 else {
 	$query_required_optional = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion = ? OR brewStyleOwn = 'custom')";
-	$rows_required_optional = $db_conn->rawQuery($query_required_optional, array($_SESSION['prefsStyleSet']));
+	$rows_required_optional = $db_conn->rawQuery($query_required_optional, [$_SESSION['prefsStyleSet']]);
 }
 $totalRows_required_optional = $db_conn->count;
 
-$req_special_ing_styles = array();
-$req_strength_styles = array();
-$req_sweetness_styles = array();
-$req_carb_styles = array();
-$req_pouring = array();
+$req_special_ing_styles = [];
+$req_strength_styles = [];
+$req_sweetness_styles = [];
+$req_carb_styles = [];
+$req_pouring = [];
 
-$cider_sweetness_custom_styles = array();
-$mead_sweetness_custom_styles = array();
+$cider_sweetness_custom_styles = [];
+$mead_sweetness_custom_styles = [];
 
 foreach ($rows_required_optional as $row_required_optional) {
 
@@ -285,7 +285,7 @@ foreach ($rows_required_optional as $row_required_optional) {
 	if (($row_required_optional['brewStyleType'] == 3) && (is_numeric($row_required_optional['brewStyleGroup']))) $mead_sweetness_custom_styles[] = $style_id;
 
 	// If BJCP 2021, add style 2A to the list
-	if (($row_required_optional['brewStyleVersion'] == "BJCP2021") && ($style_id == "2-A")) {
+	if (($row_required_optional['brewStyleVersion'] == "BJCP2021") && ($style_id === "2-A")) {
 		$req_special_ing_styles[] = $style_id;
 	}
 

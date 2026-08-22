@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Module:      bos_mat.php
  * Description: Template for custom reports.
@@ -21,7 +22,7 @@ require (LIB.'admin.lib.php');
 require (LIB.'output.lib.php');
 if ($_SESSION['prefsStyleSet'] == "BA") include(INCLUDES.'ba_constants.inc.php');
 
-function check_table_name($id,$judging_tables_db_table) {
+function check_table_name(int|string $id,string $judging_tables_db_table): string {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('id', $id);
@@ -29,7 +30,7 @@ function check_table_name($id,$judging_tables_db_table) {
 	return "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName'];
 }
 
-$a = array();
+$a = [];
 $output = "";
 
 if ($action == "blank") {
@@ -104,7 +105,7 @@ if (!empty($a)) {
 
 		$display = FALSE;
 		if ($action == "mini-bos") $display = TRUE;
-		
+
 		else {
 
 			$style_type_info = style_type_info($type);
@@ -135,15 +136,15 @@ if (!empty($a)) {
 
 					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 
-					if ($tile_count == 1) $output .= '<tr>';
-					if ($tile_count == 4) $output .= '<tr>';
+					if ($tile_count === 1) $output .= '<tr>';
+					if ($tile_count === 4) $output .= '<tr>';
 					$output .= '<td>';
 					$output .= '<div style="position:relative;width:100%;height:100%;">';
-					
+
 					if ($action == "mini-bos") $output .= '<p style="text-align:center"><strong>*** '.$label_mini_bos.' ***</strong></p>';
 					elseif ($action == "pro-am") $output .= '<p style="text-align:center"><strong>*** '.$label_pro_am.': '.$style_type_info[2].' * ***</strong></p>';
 					else $output .= '<p style="text-align:center"><strong>*** '.$label_bos.': '.$style_type_info[2].' ***</strong></p>';
-					
+
 					if ($_SESSION['prefsStyleSet'] == "BA") {
 
 						$output .= '<h3 style="padding:0; margin: 0;">';
@@ -154,7 +155,7 @@ if (!empty($a)) {
 						$output .= '</h4>';
 
 					}
-					
+
 					else {
 
 						$output .= '<h3 style="padding:0 0 5px 0; margin:0;">';
@@ -166,11 +167,11 @@ if (!empty($a)) {
 						$output .= '</h4>';
 
 					}
-					
+
 					if (!empty($row_scores['brewInfo'])) $output .= '<p><em><small>'.str_replace("^"," | ",$row_scores['brewInfo']).'</small></em></p>';
 					if (!empty($row_scores['brewInfoOptional'])) $output .= '<p><em><small>'.str_replace("^"," | ",$row_scores['brewInfoOptional']).'</small></em></p>';
 					if (!empty($row_scores['brewComments'])) $output .= '<p><em><small>'.$row_scores['brewComments'].'</small></em></p>';
-					
+
 					if (($action == "default") && ($type == 2)) {
 						$output .= '<p><em>';
 						if (!empty($row_scores['brewMead1'])) $output .= $row_scores['brewMead1'];
@@ -187,10 +188,10 @@ if (!empty($a)) {
 					}
 
 					if (!empty($row_scores['brewPossAllergens'])) $output .= '<p style="width:100%; padding:5px; border:1px solid #ccc; border-radius:5px;"><small><strong>'.$label_possible_allergens.':</strong> <em>'.$row_scores['brewPossAllergens'].'</em></small></p>';
-					
+
 
 					if (($action == "default") && (pro_am_check($row_scores['brewBrewerID']) == 1)) $output .= "<p><em>** NOT ELIGIBLE FOR PRO-AM **</em></p>";
-					
+
 					$output .= '<section style="text-align:right;position:absolute;bottom:0;right:0;">';
 
 					if ($filter == "entry") $output .= '<p style="padding:0;margin:0"><small>#'.sprintf("%06s",$row_scores['id']).'</small></p>';
@@ -200,7 +201,7 @@ if (!empty($a)) {
 						$output .= '<p><small><strong>'.check_table_name($row_scores['scoreTable'],$judging_tables_db_table).'</strong></small></p>';
 						$output .= '</section>';
 					}
-					
+
 					/*
 					$output .= $tile_count;
 					$output .= "<br>";
@@ -216,7 +217,7 @@ if (!empty($a)) {
 
 					if ($endRow >= $columns) {
 						$output .= '</tr>';
-						if ($tile_count == $cells) {
+						if ($tile_count === $cells) {
 							$output .= '</table><div style="break-after: always;"></div><table class="BOS-mat">';
 							$tile_count = 0;
 						}
@@ -231,17 +232,17 @@ if (!empty($a)) {
 
 				$this_tile_count = 0;
 				$output_extra = "";
-				
+
 				while ($tile_count < $cells) {
-					
+
 					$tile_count++;
 					$endRow++;
 					$this_tile_count++;
-					
-					if ($tile_count == 4) $output_extra .= '<tr>';
+
+					if ($tile_count === 4) $output_extra .= '<tr>';
 					$output_extra .= '<td>&nbsp;</td>';
-					
-					if ($tile_count == 6) $output_extra .= '</tr>';
+
+					if ($tile_count === 6) $output_extra .= '</tr>';
 
 				}
 
@@ -266,8 +267,8 @@ if (!empty($a)) {
 
 } // end if (!empty($a))
 
-$unformatted = array("</table>","</tr>","</td>","</p>","</h3>","</h4>","</div>","</section>","<tr>","<td>",);
-$formatted = array("</table>\n\n","</tr>\n","</td>\n","</p>\n","</h3>\n","</h4>\n","</div>\n","</section>\n","<tr>\n","<td>\n",);
+$unformatted = ["</table>","</tr>","</td>","</p>","</h3>","</h4>","</div>","</section>","<tr>","<td>",];
+$formatted = ["</table>\n\n","</tr>\n","</td>\n","</p>\n","</h3>\n","</h4>\n","</div>\n","</section>\n","<tr>\n","<td>\n",];
 $output = str_replace($unformatted,$formatted,$output);
 echo $output;
 

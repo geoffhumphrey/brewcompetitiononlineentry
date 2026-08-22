@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Savaş Can Altun - 30.01.2014
  * QR İmage Creator 
  * @see http://savascanaltun.com
  * @see http://saltun.net
  */
-
-
 class qRClas {
     
     /**
@@ -22,7 +22,7 @@ class qRClas {
      * e = Charset ( Karakter seti )
      */
 
-    function qRCreate($t,$s,$e=NULL) {
+    public function qRCreate($t,$s,$e=NULL) {
         
         if (empty($e)) {
             $e="UTF-8";
@@ -45,13 +45,13 @@ class qRClas {
      * t = Phone Number ( Telefon Numarası )
      * s = Size ( boyut ) 
      */
-    function telQr($u,$a,$t,$s){
+    public function telQr($u,$a,$t,$s){
 
         $this->url="http://api.qrserver.com/v1/create-qr-code/?data=TEL%3A".$u.$a."$t&size=$s";
      
      }
 
-     function smsQr($u,$a,$t,$s,$m){
+     public function smsQr($u,$a,$t,$s,$m){
 
          $this->url="http://api.qrserver.com/v1/create-qr-code/?data=SMSTO%3A".$u.$a.$t."%3A".$m."&size=$s";
      

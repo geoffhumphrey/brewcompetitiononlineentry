@@ -15,11 +15,11 @@ class easyTable{
    const IMGPadding=0.5;
    const PBThreshold=30;
    static private $table_counter=false;
-   static private $style=array('width'=>false, 'border'=>false, 'border-color'=>false,
+   static private $style=['width'=>false, 'border'=>false, 'border-color'=>false,
    'border-width'=>false, 'line-height'=>false,
    'align'=>'', 'valign'=>'', 'bgcolor'=>false, 'split-row'=>false, 'l-margin'=>false,
    'font-family'=>false, 'font-style'=>false,'font-size'=>false, 'font-color'=>false,
-   'paddingX'=>false, 'paddingY'=>false);
+   'paddingX'=>false, 'paddingY'=>false];
    private $pdf_obj;
    private $document_style;
    private $table_style;
@@ -41,7 +41,7 @@ class easyTable{
 
    private function get_available($colspan, $rowspan){
       static $k=0;
-      if(count($this->grid)==0){
+      if(count($this->grid) === 0){
          $k=0;
       }
       while(isset($this->grid[$k])){
@@ -70,10 +70,10 @@ class easyTable{
       }
       if($c=='R' || $c=='T'){
          if($c=='R'){
-            $result['c-align']=array_pad(array(), $this->col_num, 'L');
+            $result['c-align']=array_pad([], $this->col_num, 'L');
          }
          else{
-            $result['c-align']=array();
+            $result['c-align']=[];
          }
       }
       if($c=='R'){
@@ -176,24 +176,24 @@ class easyTable{
          $this->inherating($sty, 'border', $c);
       }
       else{
-         $border=array('T'=>1, 'R'=>1, 'B'=>1, 'L'=>1);
-         if(!(is_numeric($sty['border']) && $sty['border']==1)){
+         $border=['T'=>1, 'R'=>1, 'B'=>1, 'L'=>1];
+         if(!is_numeric($sty['border']) || $sty['border'] != 1){
             foreach($border as $k=>$v){
                $border[$k]=0;
-               if(strpos($sty['border'], $k)!==false){
+               if(str_contains($sty['border'], $k)){
                   $border[$k]=1;
                }
             }
          }
          $sty['border']=$border;
       }
-      $color_settings=array('bgcolor', 'font-color', 'border-color');
+      $color_settings=['bgcolor', 'font-color', 'border-color'];
       foreach($color_settings as $setting){
-         if($sty[$setting]===false || !($this->pdf_obj->is_hex($sty[$setting]) || $this->pdf_obj->is_rgb($sty[$setting]))){
+         if($sty[$setting]===false || !$this->pdf_obj->is_hex($sty[$setting]) && !$this->pdf_obj->is_rgb($sty[$setting])){
             if($c=='C' || $c=='R'){
                $this->inherating($sty, $setting, $c);
             }
-            elseif($setting=='font-color'){
+            elseif($setting === 'font-color'){
                $sty[$setting]=$this->document_style[$setting];
             }
          }
@@ -201,7 +201,7 @@ class easyTable{
             $sty[$setting]=$sty[$setting];
          }
       }
-      $font_settings=array('font-family', 'font-style', 'font-size');
+      $font_settings=['font-family', 'font-style', 'font-size'];
       foreach($font_settings as $setting){
          if($sty[$setting]===false){
             $this->inherating($sty, $setting, $c);
@@ -222,7 +222,7 @@ class easyTable{
          if($sty['img']){
             $tmp=explode(',', $sty['img']);
             if(file_exists($tmp[0])){
-               $sty['img']=array('path'=>'', 'h'=>0, 'w'=>0);
+               $sty['img']=['path'=>'', 'h'=>0, 'w'=>0];
                $img=@ getimagesize($tmp[0]);
                $sty['img']['path']=$tmp[0];
                for($i=1; $i<3; $i++){
@@ -294,7 +294,7 @@ class easyTable{
             }
          }
       }
-      if($sty['align']!='L' && $sty['align']!='C' && $sty['align']!='R' && $sty['align']!='J'){
+      if(!in_array($sty['align'], ['L', 'C', 'R', 'J'])){
          if($c=='C'){
             $sty['align']=$this->row_style['c-align'][$pos];
          }
@@ -309,7 +309,7 @@ class easyTable{
       elseif($c=='T' && $sty['align']=='J'){
          $sty['align']='C';
       }
-      if($sty['valign']!='T' && $sty['valign']!='M' && $sty['valign']!='B'){
+      if(!in_array($sty['valign'], ['T', 'M', 'B'])){
          if($c=='C' || $c=='R'){
             $this->inherating($sty, 'valign', $c);
          }
@@ -339,11 +339,11 @@ class easyTable{
       if($this->row_data[$i][1]['border-color']!=false){
          $this->pdf_obj->resetColor($this->row_data[$i][1]['border-color'], 'D');
       }
-      $a=array(1, 1, 1, 0);
-      $borders=array('L'=>3, 'T'=>0, 'R'=>1, 'B'=>2);
+      $a=[1, 1, 1, 0];
+      $borders=['L'=>3, 'T'=>0, 'R'=>1, 'B'=>2];
       foreach($borders as $border=>$j){
          if($this->row_data[$i][1]['border'][$border]){
-            if($border=='B'){
+            if($border === 'B'){
                if($split==0){
                   $this->pdf_obj->Line($this->row_data[$i][6]+(1+$a[($j+2)%4])%2*$w, $y+(1+$a[($j+1)%4])%2 * $h, $this->row_data[$i][6]+$a[$j%4]*$w, $y+($a[($j+3)%4])%2 *$h);
                }
@@ -419,15 +419,16 @@ class easyTable{
    private function printing_loop($swap=false){
       $this->swap_data($swap);
       $y=$this->pdf_obj->GetY();
-      $tmp=array();
-      $rw=array();
-      $ztmp=array();
+      $tmp=[];
+      $rw=[];
+      $ztmp=[];
       $total_cells=count($this->row_data);
-      while(count($tmp)!=$total_cells){
+      while(count($tmp) !== $total_cells){
          $a=count($this->rows);
          $h=0;
          $y=$this->pdf_obj->GetY();
-         for($j=0; $j<count($this->rows); $j++){
+         $counter = count($this->rows);
+         for($j=0; $j<$counter; $j++){
             $T=$y+$h;
             if($T<$this->pdf_obj->PageBreak()){
 
@@ -482,7 +483,7 @@ class easyTable{
                }
             }
          }
-         if(count($tmp)!=$total_cells){
+         if(count($tmp) !== $total_cells){
             foreach($ztmp as $index){
                $this->row_data[$index][5]=$this->row_data[$index][7]+$this->overflow;
                if(isset($this->row_data[$index][8])){
@@ -491,7 +492,7 @@ class easyTable{
                }
             }
             $this->overflow=0;
-            $ztmp=array();
+            $ztmp=[];
             $this->pdf_obj->addPage($this->document_style['orientation']);
          }
          else{
@@ -512,11 +513,10 @@ class easyTable{
          $li+=$this->row_data[$i][3]-$this->row_data[$i][1]['img']['h'];
          $ls+=$li;
       }
-      $result=0;
       if($li<$this->pdf_obj->PageBreak() && $this->pdf_obj->PageBreak()<$ls){
-         $result=$this->pdf_obj->PageBreak()-$li;
+         return $this->pdf_obj->PageBreak()-$li;
       }
-      return $result;
+      return 0;
    }
 
    private function scan_for_breaks($index, $H, $l=true){
@@ -569,9 +569,9 @@ class easyTable{
       if($swap==false){
          return;
       }
-      static $data=array();
-      if(count($data)==0){
-         $data=array('header_data'=>$this->header_row['row_data'], 'row_heights'=>&$this->row_heights, 'row_data'=>&$this->row_data, 'rows'=>&$this->rows);
+      static $data=[];
+      if(count($data) === 0){
+         $data=['header_data'=>$this->header_row['row_data'], 'row_heights'=>&$this->row_heights, 'row_data'=>&$this->row_data, 'rows'=>&$this->rows];
          unset($this->row_heights, $this->row_data, $this->rows);
          $this->row_heights=&$this->header_row['row_heights'];
          $this->row_data=&$this->header_row['row_data'];
@@ -583,7 +583,7 @@ class easyTable{
          $this->row_heights=$data['row_heights'];
          $this->row_data=$data['row_data'];
          $this->rows=$data['rows'];
-         $data=array();
+         $data=[];
       }
    }
    /********************************************************************
@@ -644,10 +644,10 @@ class easyTable{
       $this->document_style['line-width']=$this->pdf_obj->get_linewidth();
       $this->table_style=$this->set_style($style, 'T');
       $this->col_num=false;
-      $this->col_width=array();
-      if(is_int($num_cols) && $num_cols!=0){
+      $this->col_width=[];
+      if(is_int($num_cols) && $num_cols !== 0){
          $this->col_num=abs($num_cols);
-         $this->col_width=array_pad(array(), abs($num_cols), $this->table_style['width']/abs($num_cols));
+         $this->col_width=array_pad([], abs($num_cols), $this->table_style['width']/abs($num_cols));
       }
       elseif(is_string($num_cols)){
          $num_cols=trim($num_cols, '}, ');
@@ -673,7 +673,7 @@ class easyTable{
             }
          }
          $this->col_num=count($this->col_width);
-         if($tp=='%'){
+         if($tp === '%'){
             if($w!=100){
                error_log('The sum of the percentages of the columns is not 100');
                exit();
@@ -689,7 +689,8 @@ class easyTable{
             else{
                $this->table_style['width']=$this->document_style['document_width'];
                $d=$this->table_style['width']/$w;
-               for($i=0; $i<count($num_cols); $i++){
+               $counter = count($num_cols);
+               for($i=0; $i<$counter; $i++){
                   $this->col_width[$i]*=$d;
                }
             }
@@ -716,18 +717,18 @@ class easyTable{
       }
       $this->row_style_def=$this->set_style('', 'R');
       $this->row_style=$this->row_style_def;
-      $this->row_heights=array();
-      $this->row_data=array();
-      $this->rows=array();
+      $this->row_heights=[];
+      $this->row_data=[];
+      $this->rows=[];
       $this->total_rowspan=0;
       $this->col_counter=0;
-      $this->grid=array();
-      $this->blocks=array();
+      $this->grid=[];
+      $this->blocks=[];
       $this->overflow=0;
       if($this->table_style['border-width']!=false){
          $this->pdf_obj->SetLineWidth($this->table_style['border-width']);
       }
-      $this->header_row=array();
+      $this->header_row=[];
       $this->new_table=true;
    }
    /***********************************************************************
@@ -780,7 +781,7 @@ class easyTable{
          }
          if($sty['rowspan']){
             $this->total_rowspan=max($this->total_rowspan, $sty['rowspan']);
-            $this->blocks[$cell_index]=array($cell_index, $row_number, $sty['rowspan']);
+            $this->blocks[$cell_index]=[$cell_index, $row_number, $sty['rowspan']];
          }
          $w=$this->col_width[$colm];
          $r=0;
@@ -818,7 +819,7 @@ class easyTable{
          for($k=0; $k<$d; $k++){
             $posx+=$this->col_width[$k];
          }
-         $this->row_data[$cell_index]=array($data, $sty, $w, $h, $cell_pos, 0, $posx, 0);
+         $this->row_data[$cell_index]=[$data, $sty, $w, $h, $cell_pos, 0, $posx, 0];
          
       }
    }
@@ -905,7 +906,7 @@ class easyTable{
             $block_height+=$this->row_heights[$j];
          }
          if($setAsHeader===true){
-            if(count($this->header_row)==0){
+            if(count($this->header_row) === 0){
                $this->header_row['row_heights']=$this->row_heights;
                $this->header_row['row_data']=$this->row_data;
                $this->header_row['rows']=$this->rows;
@@ -928,11 +929,11 @@ class easyTable{
             $this->new_table=false;
          }
          $this->printing_loop();
-         $this->grid=array();
-         $this->row_data=array();
-         $this->rows=array();
-         $this->row_heights=array();
-         $this->blocks=array();
+         $this->grid=[];
+         $this->row_data=[];
+         $this->rows=[];
+         $this->row_heights=[];
+         $this->blocks=[];
          $this->overflow=0;
          $this->new_table=false;
       }

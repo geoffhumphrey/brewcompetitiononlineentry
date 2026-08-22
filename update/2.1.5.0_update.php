@@ -105,14 +105,15 @@ if (!check_update("brewStyleComEx", $prefix."styles")) {
 $target_charset = "utf8";
 $target_collate = "utf8_general_ci";
 
-function MysqlError($connection) {
+function MysqlError(\mysqli $connection): ?string {
 	if (mysqli_errno($connection)) {
 		return "<li>MySQL Error: " . mysqli_error($connection) . "</li>";
 	}
+	return null;
 }
 
-$count = array();
-$tabs = array();
+$count = [];
+$tabs = [];
 $res = $db_conn->rawQuery("SHOW TABLES");
 
 $output .= MysqlError($connection);
@@ -120,26 +121,26 @@ $output .= MysqlError($connection);
 foreach ($res as $res_row) {
 	$row = array_values($res_row);
 	if (!empty($prefix)) {
-		if (strpos($row[0], $prefix) !== false) $tabs[] = $row[0];
+		if (str_contains($row[0], $prefix)) $tabs[] = $row[0];
 	} else $tabs[] = $row[0];
 }
 
-if (!empty($tabs)) {
+if ($tabs !== []) {
 
 	// Convert tables
 
 	foreach ($tabs as $tab) {
 		$res = $db_conn->rawQuery("show index from {$tab}");
 		$output .= MysqlError($connection);
-		$indicies = array();
-		$count = array();
+		$indicies = [];
+		$count = [];
 
 		foreach ($res as $res_row) {
 			$row = array_values($res_row);
 
 			if ($row[2] != "PRIMARY") {
 
-				$indicies[] = array("name" => $row[2], "unique" => !($row[1] == "1"), "col" => $row[4]);
+				$indicies[] = ["name" => $row[2], "unique" => $row[1] != "1", "col" => $row[4]];
 				$db_conn->rawQuery("ALTER TABLE {$tab} DROP INDEX {$row[2]}");
 				$output .= MysqlError($connection);
 				$output .= "<li>Dropped index {$row[2]}. Unique: {$row[1]}</li>";

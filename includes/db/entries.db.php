@@ -5,13 +5,13 @@ $totalRows_entry_count = total_paid_received("",0);
 if ($section == "list") {
 
 	$query_log = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ? ORDER BY brewCategorySort, brewSubCategory ASC";
-	$params_log = array($_SESSION['user_id']);
+	$params_log = [$_SESSION['user_id']];
 
 	$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ? AND NOT brewPaid='1'";
-	$params_log_paid = array($_SESSION['user_id']);
+	$params_log_paid = [$_SESSION['user_id']];
 
 	$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ? AND brewConfirmed='1'";
-	$params_log_confirmed = array($_SESSION['user_id']);
+	$params_log_confirmed = [$_SESSION['user_id']];
 
 	$db_conn->where("id", 1);
 	$row_contest_info = $db_conn->getOne($prefix."contest_info", "contestEntryFeePassword");
@@ -32,7 +32,7 @@ if ($section == "list") {
 				// Ownership check: only mark an entry paid if it belongs to the current session's user,
 				// preventing a logged-in user from marking another user's entries as paid via a forged view param.
 				$update_table = $prefix."brewing";
-				$data = array('brewPaid' => 1);
+				$data = ['brewPaid' => 1];
 				$db_conn->where ('id', $value);
 				$db_conn->where ('brewBrewerID', $_SESSION['user_id']);
 				$result = $db_conn->update ($update_table, $data);
@@ -52,13 +52,13 @@ if ($section == "list") {
 elseif ($section == "pay") {
 
 	$query_log = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ?";
-	$params_log = array($_SESSION['user_id']);
+	$params_log = [$_SESSION['user_id']];
 
 	$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ? AND NOT brewPaid='1'";
-	$params_log_paid = array($_SESSION['user_id']);
+	$params_log_paid = [$_SESSION['user_id']];
 
 	$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ? AND brewConfirmed='1'";
-	$params_log_confirmed = array($_SESSION['user_id']);
+	$params_log_confirmed = [$_SESSION['user_id']];
 
 	$db_conn->where("id", 1);
 	$row_contest_info = $db_conn->getOne($prefix."contest_info", "contestEntryFeePassword");
@@ -68,13 +68,13 @@ elseif ($section == "pay") {
 elseif (($section == "brew") && ($action == "add")) {
 
 	$query_log = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ?";
-	$params_log = array($_SESSION['user_id']);
+	$params_log = [$_SESSION['user_id']];
 
 	$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewPaid='1'";
-	$params_log_paid = array();
+	$params_log_paid = [];
 
 	$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewConfirmed='1'";
-	$params_log_confirmed = array();
+	$params_log_confirmed = [];
 
 	if (SINGLE) {
 		$query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id'];
@@ -87,13 +87,13 @@ elseif (($section == "brew") && ($action == "add")) {
 elseif (($section == "brew") && ($action == "edit")) {
 
 	$query_log = "SELECT * FROM ".$brewing_db_table." WHERE id = ?";
-	$params_log = array($id);
+	$params_log = [$id];
 
 	$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewPaid='1'";
-	$params_log_paid = array();
+	$params_log_paid = [];
 
 	$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewConfirmed='1'";
-	$params_log_confirmed = array();
+	$params_log_confirmed = [];
 
 	if (SINGLE) {
 		$query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id'];
@@ -109,11 +109,11 @@ elseif ($section == "admin") {
 
 		if ($action == "edit") {
 			$query_log = "SELECT * FROM ".$brewing_db_table." WHERE id = ?";
-			$params_log = array($id);
+			$params_log = [$id];
 			$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewPaid='1'";
-			$params_log_paid = array();
+			$params_log_paid = [];
 			$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewConfirmed='1'";
-			$params_log_confirmed = array();
+			$params_log_confirmed = [];
 		}
 
 		else {
@@ -122,7 +122,7 @@ elseif ($section == "admin") {
 
 				$dbTable_clean = preg_replace("/[^a-zA-Z0-9_]+/", "", $dbTable);
 				if (table_exists($dbTable_clean)) $brewing_db_table = $dbTable_clean;
-				$archive_array = array();
+				$archive_array = [];
 
 				// Check Archives DB table. If suffix is there good to go
 				$get_suffix = get_suffix($dbTable);
@@ -136,12 +136,12 @@ elseif ($section == "admin") {
 					}
 				}
 
-				if ((!empty($archive_array)) && (in_array($get_suffix,$archive_array))) $brewer_db_table = $prefix."brewer_".$get_suffix;
+				if (($archive_array !== []) && (in_array($get_suffix,$archive_array))) $brewer_db_table = $prefix."brewer_".$get_suffix;
 
 			}
 
 			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, a.brewMead1, a.brewMead2, a.brewMead3, a.brewSweetnessLevel, a.brewABV, a.brewJuiceSource, a.brewInfoOptional, a.brewPouring, a.brewStyleType, a.brewPackaging, a.brewCoBrewer, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryInfo, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid", $brewing_db_table, $brewer_db_table);
-			$params_log = array();
+			$params_log = [];
 
 			if ($view == "paid") $query_log .= " AND a.brewPaid='1'";
 			if ($view == "unpaid") $query_log .= " AND (a.brewPaid='' OR a.brewPaid='0' OR a.brewPaid IS NULL)";
@@ -149,9 +149,9 @@ elseif ($section == "admin") {
 			if ($bid != "default") { $query_log .= " AND b.uid=?"; $params_log[] = $bid; }
 
 			$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewPaid='1'";
-			$params_log_paid = array();
+			$params_log_paid = [];
 			$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewConfirmed='1'";
-			$params_log_confirmed = array();
+			$params_log_confirmed = [];
 
 			if (SINGLE) {
 				$query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id'];
@@ -171,16 +171,16 @@ elseif ($section == "admin") {
 
 		if ((isset($_SESSION['loginUsername'])) && ($section != "admin")) {
 			$query_log = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ?";
-			$params_log = array($_SESSION['user_id']);
+			$params_log = [$_SESSION['user_id']];
 		}
 		else {
 			$query_log = "SELECT * FROM ".$brewing_db_table;
-			$params_log = array();
+			$params_log = [];
 		}
 		$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewReceived='1'";
-		$params_log_paid = array();
+		$params_log_paid = [];
 		$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewConfirmed='1'";
-		$params_log_confirmed = array();
+		$params_log_confirmed = [];
 
 		if (SINGLE) {
 			if ((isset($_SESSION['loginUsername'])) && ($section != "admin")) { $query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id']; }
@@ -198,11 +198,11 @@ elseif ($section == "notes") {
 	if (($go == "allergens") || ($go == "org_notes")) {
 
 		$query_log = "SELECT * FROM ".$brewing_db_table." WHERE brewPossAllergens IS NOT NULL";
-		$params_log = array();
+		$params_log = [];
 		$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewPossAllergens IS NOT NULL AND brewPaid='1'";
-		$params_log_paid = array();
+		$params_log_paid = [];
 		$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewPossAllergens IS NOT NULL AND brewConfirmed='1'";
-		$params_log_confirmed = array();
+		$params_log_confirmed = [];
 
 		if (SINGLE) {
 			$query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id'];
@@ -215,11 +215,11 @@ elseif ($section == "notes") {
 	if ($go == "admin") {
 
 		$query_log = "SELECT * FROM ".$brewing_db_table." WHERE brewAdminNotes IS NOT NULL OR brewStaffNotes IS NOT NULL";
-		$params_log = array();
+		$params_log = [];
 		$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE (brewAdminNotes IS NOT NULL OR brewStaffNotes IS NOT NULL) AND brewPaid='1'";
-		$params_log_paid = array();
+		$params_log_paid = [];
 		$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE (brewAdminNotes IS NOT NULL OR brewStaffNotes IS NOT NULL) AND brewConfirmed='1'";
-		$params_log_confirmed = array();
+		$params_log_confirmed = [];
 
 		if (SINGLE) {
 			$query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id'];
@@ -236,11 +236,11 @@ elseif ($section == "notes") {
 elseif (($section == "eval") && ($id != "default")) {
 
 	$query_log = "SELECT * FROM ".$brewing_db_table." WHERE id=?";
-	$params_log = array($id);
+	$params_log = [$id];
 	$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewPossAllergens IS NOT NULL AND brewPaid='1'";
-	$params_log_paid = array();
+	$params_log_paid = [];
 	$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewPossAllergens IS NOT NULL AND brewConfirmed='1'";
-	$params_log_confirmed = array();
+	$params_log_confirmed = [];
 
 	if (SINGLE) {
 		$query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id'];
@@ -254,16 +254,16 @@ else {
 
 	if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['user_id'])) && ($section != "admin")) {
 		$query_log = "SELECT * FROM ".$brewing_db_table." WHERE brewBrewerID = ?";
-		$params_log = array($_SESSION['user_id']);
+		$params_log = [$_SESSION['user_id']];
 	}
 	else {
 		$query_log = "SELECT * FROM ".$brewing_db_table;
-		$params_log = array();
+		$params_log = [];
 	}
 	$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewReceived='1'";
-	$params_log_paid = array();
+	$params_log_paid = [];
 	$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewConfirmed='1'";
-	$params_log_confirmed = array();
+	$params_log_confirmed = [];
 
 	if (SINGLE) {
 		if ((isset($_SESSION['loginUsername'])) && ($section != "admin")) { $query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id']; }

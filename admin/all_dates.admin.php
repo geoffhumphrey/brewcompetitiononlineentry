@@ -16,14 +16,14 @@ $non_judging_count = 0;
 
 if ($_SESSION['prefsEval'] == 1) {
 
-    $judging_dates = array();
+    $judging_dates = [];
     $judging_earliest_date = "";
     $judging_latest_date = "";
 
     // Check whether any judging sessions have been defined. 
     // If so, loop through and find the earliest and the latest dates.
     
-    $cols = array("id", "judgingDate", "judgingDateEnd");
+    $cols = ["id", "judgingDate", "judgingDateEnd"];
     $db_conn->where ("judgingLocType", "1", "<=");
     $db_conn->returnType = "array"; 
     $row_judging_locations = $db_conn->get($prefix."judging_locations", null, $cols);
@@ -419,7 +419,7 @@ if ($totalRows_judging > 0) {
         } // END if ($row_judging['judgingLocType'] == 2)
     } 
 } // end if ($totalRows_judging > 0)
-if ($non_judging_count == 0) echo "<p>No non-judging sessions have been defined. <a href=\"".$base_url."index.php?section=admin&amp;go=non-judging&amp;action=add\">Add a non-judging session</a>?</p>"; 
+if ($non_judging_count === 0) echo "<p>No non-judging sessions have been defined. <a href=\"".$base_url."index.php?section=admin&amp;go=non-judging&amp;action=add\">Add a non-judging session</a>?</p>"; 
 ?>
 
 <!-- If Winner Display Enabled -->

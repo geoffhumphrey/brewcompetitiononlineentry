@@ -1,5 +1,6 @@
 <?php
 
+
 // Redirect if directly accessed without authenticated session
 if (!isset($_SESSION['loginUsername'])) {
     $redirect = "../../403.php";

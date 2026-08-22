@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Module:      paths.php
@@ -10,7 +11,7 @@
  * application.
  */
 
-define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
+define('ROOT',__DIR__.DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('SSO',ROOT.'sso'.DIRECTORY_SEPARATOR);
 define('EVALS',ROOT.'eval'.DIRECTORY_SEPARATOR);
@@ -144,49 +145,10 @@ ini_set('log_errors','On');
 if (DEBUG) ini_set('display_errors','On');
 else ini_set('display_errors','Off');
 
-/** 
- * Function to check for HTTPS protocol (SSL) will be
- * called when constructing the $base_url variable in the
- * /sites/config.php file.
- * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
- * @see https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
- */
-
-function is_https() {
-    if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return TRUE;
-    elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == "on"))) return TRUE;
-    else return FALSE;
-}
-
-/**
- * General sanitization function. Needs to be top-level due to its 
- * use in the url_variables.inc.php file.
- */
-
-function sterilize($sterilize = NULL) {
-    if (is_array($sterilize)) return array_map('sterilize', $sterilize);
-    elseif ($sterilize == NULL) return NULL;
-    elseif (empty($sterilize)) return $sterilize;
-    else {
-        $sterilize = trim($sterilize);
-        if (is_numeric($sterilize)) {
-            if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-            if (is_int($sterilize)) {
-                if ($sterilize == 0) $sterilize = 0;
-                else $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
-            }            
-        }
-        else $sterilize = filter_var($sterilize,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $sterilize = strip_tags($sterilize);
-        $sterilize = stripcslashes($sterilize);
-        $sterilize = stripslashes($sterilize);
-        $sterilize = addslashes($sterilize);
-        return $sterilize;
-    }
-}
+require_once (LIB.'sanitize.lib.php');
 
 if (HOSTED) {
-    
+
     $installation_id = md5(__FILE__);
     $session_expire_after = 60;
 
@@ -199,14 +161,14 @@ if (HOSTED) {
      * can be false-flagged by webhost security packages like Immunify.
      * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1609
      */
-    
+
     $current_url_to_parse = 'http://';
     if (is_https()) $current_url_to_parse = 'https://';  
     $current_url_to_parse .= $_SERVER['SERVER_NAME'];
-    
+
     $current_parsed_url = parse_url($current_url_to_parse);
     $current_parsed_host = explode('.', $current_parsed_url['host']);
-    
+
     $base_url_hosted = 'http://';
     if (is_https()) $base_url_hosted = 'https://';
     $base_url_hosted .= $current_parsed_host[1].".".$current_parsed_host[2]."/";
@@ -223,7 +185,7 @@ if (HOSTED) {
 if (empty($installation_id)) $prefix_session = md5(__FILE__);
 else $prefix_session = md5($installation_id);
 
-if (session_status() == PHP_SESSION_NONE) {
+if (session_status() === PHP_SESSION_NONE) {
     // **PREVENTING SESSION HIJACKING**
     // Prevents javascript XSS attacks aimed to steal the session ID
     ini_set('session.cookie_httponly', 1);

@@ -46,7 +46,7 @@
     <!-- Load Moment -->
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/public/moment/moment-with-locales.min.js"></script>
 
-    <?php if (($section == "register") || ($section == "login") || ($section == "step1") || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
+    <?php if (in_array($section, ["register", "login", "step1"]) || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
         
     <!-- Load Password Strength Indicator / https://github.com/ablanco/jquery.pwstrength.bootstrap -->
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/public/zxcvbn/zxcvbn.js"></script>

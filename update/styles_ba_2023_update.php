@@ -8,10 +8,10 @@ $update_table = $prefix."styles";
 
 // Update all 07 styles with the correct category name
 $update_table = $prefix."styles";
-$data = array(
+$data = [
 	'brewStyleCategory' => 'European Origin Lagers',
 	'brewStyleTags' => '2023'
-);
+];
 $db_conn->where ('brewStyleVersion', 'BA');
 $db_conn->where ('brewStyleGroup', '07');
 if ($db_conn->update ($update_table, $data)) $v2600_update .= "<li>BA European Origin Lagers styles updated.</li>";
@@ -22,7 +22,7 @@ else {
 
 // Update European-Style Dark Lager
 $update_table = $prefix."styles";
-$data = array(
+$data = [
 	'brewStyle' => 'European-Style Dark Lager',
 	'brewStyleOG' => '1.048',
 	'brewStyleOGMax' => '1.056',
@@ -37,7 +37,7 @@ $data = array(
 	'brewStyleType' => '1',
 	'brewStyleInfo' => 'These beers offer a ﬁne balance of sweet maltiness and hop bitterness.',
 	'brewStyleTags' => '2023'
-);
+];
 $db_conn->where ('brewStyleVersion', 'BA');
 $db_conn->where ('brewStyleGroup', '07');
 $db_conn->where ('brewStyleNum', '90');
@@ -48,7 +48,7 @@ else {
 }
 
 // Update American-Style India Pale Lager
-$data = array(
+$data = [
 	'brewStyleTags' => '2023',
 	'brewStyleOG' => '1.050',
 	'brewStyleOGMax' => '1.065',
@@ -61,7 +61,7 @@ $data = array(
 	'brewStyleSRM' => '2.5',
 	'brewStyleSRMMax' => '6',
 	'brewStyleInfo' => 'This style of beer should exhibit the fresh character of hops. Some versions may be brewed with corn, rice, or other adjunct grains, and may exhibit attributes typical of those adjuncts.'
-);
+];
 $db_conn->where ('brewStyleVersion', 'BA');
 $db_conn->where ('brewStyleGroup', '08');
 $db_conn->where ('brewStyleNum', '178');
@@ -73,7 +73,7 @@ else {
 
 if (!check_new_style("03","184","West Coast-Style India Pale Ale")) {
 
-	$data = array(
+	$data = [
 		'brewStyleGroup' => '03',
 		'brewStyleNum' => '184',
 		'brewStyle' => 'West Coast-Style India Pale Ale',
@@ -101,7 +101,7 @@ if (!check_new_style("03","184","West Coast-Style India Pale Ale")) {
 		'brewStyleTags' => '2023',
 		'brewStyleComEx' => NULL,
 		'brewStyleEntry' => NULL
-	);
+	];
 	if ($db_conn->insert ($update_table, $data)) $v2600_update .= "<li>2023 BA style West Coast-Style India Pale Ale added.</li>";
 	else {
 		$v2600_update .= "<li>2023 BA style West Coast-Style India Pale Ale NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
@@ -112,7 +112,7 @@ if (!check_new_style("03","184","West Coast-Style India Pale Ale")) {
 
 if (!check_new_style("11","185","Dessert Stout or Pastry Stout")) {
 
-	$data = array(
+	$data = [
 		'brewStyleGroup' => '11',
 		'brewStyleNum' => '185',
 		'brewStyle' => 'Dessert Stout or Pastry Stout',
@@ -140,7 +140,7 @@ if (!check_new_style("11","185","Dessert Stout or Pastry Stout")) {
 		'brewStyleTags' => '2023',
 		'brewStyleComEx' => NULL,
 		'brewStyleEntry' => NULL
-	);
+	];
 	if ($db_conn->insert ($update_table, $data)) $v2600_update .= "<li>2023 BA style Dessert Stout or Pastry Stout added.</li>";
 	else {
 		$v2600_update .= "<li>2023 BA style Dessert Stout or Pastry Stout NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";

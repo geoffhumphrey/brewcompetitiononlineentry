@@ -2,12 +2,12 @@
 
 if ($bid != "") {
 	$query_judging = "SELECT judgingLocName FROM ".$prefix."judging_locations WHERE id=?";
-	$params_judging = array($bid);
+	$params_judging = [$bid];
 	if (SINGLE) { $query_judging .= " AND comp_id=?"; $params_judging[] = $_SESSION['comp_id']; }
 	$row_judging = $db_conn->rawQueryOne($query_judging, $params_judging);
 }
 
-$params_sql = array();
+$params_sql = [];
 
 // Note: the order of the columns is set to the specifications set by HCCP for import
 if (($filter != "winners") || ($tb != "winners")) {
@@ -48,14 +48,14 @@ if (($filter == "winners") || ($tb == "winners") || ($tb == "circuit")) {
 	$archive_suffix = "";
 	if ($sort != "default") $archive_suffix = "_".$sort;
 
-	$params_sql = array();
+	$params_sql = [];
 	$query_sql = "SELECT id,tableNumber,tableName FROM ".$judging_tables_db_table.$archive_suffix;
 	if (SINGLE) { $query_sql .= " AND comp_id=?"; $params_sql[] = $_SESSION['comp_id']; }
 	$query_sql .= " ORDER BY tableNumber ASC";
 
 }
 
-$rows_sql = (!empty($params_sql)) ? $db_conn->rawQuery($query_sql, $params_sql) : $db_conn->rawQuery($query_sql);
+$rows_sql = ($params_sql !== []) ? $db_conn->rawQuery($query_sql, $params_sql) : $db_conn->rawQuery($query_sql);
 $row_sql = ($rows_sql && count($rows_sql) > 0) ? $rows_sql[0] : null;
 $num_fields = ($row_sql) ? count($row_sql) : 0;
 $totalRows_sql = $db_conn->count;

@@ -1,5 +1,6 @@
 <?php
 
+
 $flaws_table = "";
 $entry_flaws = "";  
 
@@ -44,7 +45,7 @@ $mouthfeel_data = json_decode($row_eval['evalMouthfeelChecklist'], true);
 
 // Build Flaws Table
 $cols_display = 2;
-$html_output = array();
+$html_output = [];
 
 if (!empty($row_eval['evalFlaws'])) {
     $entry_flaws = str_replace(", ", ",", $row_eval['evalFlaws']); // remove spaces between flaws
@@ -589,8 +590,8 @@ else {
     <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm no-break">
         <tr>
-            <td width="9%"><?php if (strpos($key, $label_body) !== false) echo $label_thin; else echo "<small>".$label_none."</small>"; ?></td>
-            <td width="9%"><?php if (strpos($key, $label_body) === false) echo $label_low; ?></td>
+            <td width="9%"><?php if (str_contains($key, $label_body)) echo $label_thin; else echo "<small>".$label_none."</small>"; ?></td>
+            <td width="9%"><?php if (!str_contains($key, $label_body)) echo $label_low; ?></td>
             <td width="9%"></td>
             <td width="9%"></td>
             <td width="9%"></td>
@@ -599,7 +600,7 @@ else {
             <td width="9%"></td>
             <td width="9%"></td>
             <td width="9%"></td>
-            <td width="10%" style="text-align: right;"><?php if (strpos($key, $label_body) !== false) echo $label_full; else echo $label_high; ?></td>
+            <td width="10%" style="text-align: right;"><?php if (str_contains($key, $label_body)) echo $label_full; else echo $label_high; ?></td>
         </tr>
         <tr style="border-left: 1px solid #000; border-right: 1px solid #000;">
             <?php for ($i=0; $i <= 10; $i++) { ?>

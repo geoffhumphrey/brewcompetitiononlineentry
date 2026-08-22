@@ -85,7 +85,7 @@ if ($action == "edit") {
 if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
 
 	// Fix fatal error when using [] operator on strings
-	$user_entries = array();
+	$user_entries = [];
 
 	// Check whether user is "authorized" to edit the entry in DB
 	$db_conn->where('brewBrewerID', $_SESSION['user_id']);
@@ -165,8 +165,8 @@ foreach ($rows_styles as $row_styles) {
 		$selected = "";
 		
 		if ($action == "edit") {
-			if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED";
-			if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit)) $selected_disabled = "DISABLED";
+			if ($row_styles['brewStyleGroup'] . $row_styles['brewStyleNum'] === $row_log['brewCategorySort'] . $row_log['brewSubCategory']) $selected_disabled = "SELECTED";
+			if (($row_styles['brewStyleGroup'] . $row_styles['brewStyleNum'] !== $row_log['brewCategorySort'] . $row_log['brewSubCategory']) && ($subcat_limit)) $selected_disabled = "DISABLED";
 			$styles_disabled_count++;
 		}
 		
@@ -205,7 +205,7 @@ foreach ($rows_styles as $row_styles) {
 		if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
 		if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
 		if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
-		if ($selected_disabled == "DISABLED") $selection .= " ".$brew_text_003;
+		if ($selected_disabled === "DISABLED") $selection .= " ".$brew_text_003;
 
 		if (!empty($row_styles['brewStyleGroup'])) {
 			$styles_dropdown .= "<option value=\"".$style_value."\"";
@@ -269,7 +269,7 @@ if ($add_or_edit) {
 	// Define vars
 	if ($action == "edit") $collapse_icon = "fa-plus-circle";
 	else $collapse_icon = "fa-pencil";
-	$possible_allergens = array($brew_text_030,$brew_text_031,$brew_text_032,$brew_text_033,$brew_text_034,$brew_text_035,$brew_text_036,$brew_text_037);
+	$possible_allergens = [$brew_text_030,$brew_text_031,$brew_text_032,$brew_text_033,$brew_text_034,$brew_text_035,$brew_text_036,$brew_text_037];
 
 	// Get the brewer's information from the function
 	if ((($filter == "admin") || ($filter == "default")) && ($bid == "default")) $brewer_id = $_SESSION['user_id'];
@@ -296,7 +296,7 @@ if ($add_or_edit) {
 		
 		$brewPaid = $row_log['brewPaid'];
 
-		if (strlen(strstr($view,"21-B")) > 0) {
+		if ((string) strstr($view,"21-B") !== '') {
 
 			$exploder = explode("^",$row_log['brewInfo']);
 
@@ -322,9 +322,9 @@ if ($add_or_edit) {
 				$brewInfo = "";
 			}
 
-			if ($exploder_ipa == "Session Strength") $IPASession = "CHECKED";
-			if ($exploder_ipa == "Standard Strength") $IPAStandard = "CHECKED";
-			if ($exploder_ipa == "Double Strength") $IPADouble = "CHECKED"; 
+			if ($exploder_ipa === "Session Strength") $IPASession = "CHECKED";
+			if ($exploder_ipa === "Standard Strength") $IPAStandard = "CHECKED";
+			if ($exploder_ipa === "Double Strength") $IPADouble = "CHECKED"; 
 		}
 
 		elseif ($view == "23-F") {
@@ -398,11 +398,11 @@ if ($add_or_edit) {
     $entry_style_warning .= "</div>";
 
     if (($action == "edit") && (!empty($row_log['brewPouring']))) $pouring_arr = json_decode($row_log['brewPouring'],true);
-    else $pouring_arr = array(
+    else $pouring_arr = [
     	"pouring" => "",
     	"pouring_rouse" => "",
     	"pouring_notes" => ""
-    );
+    ];
 
 echo $add_edit_entry_modals;
 if (!isset($_SERVER['HTTP_REFERER'])) $relocate_referrer = "list";
@@ -410,7 +410,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 
 if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { 
 
-	$juice_select_options = array(
+	$juice_select_options = [
 		"BC" => "British Columbia (BC)",
 		"ID" => "Idaho (ID)",
 		"MT" => "Montana (MT)",
@@ -419,11 +419,11 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
 		"Other" => "Others States/Provinces in US/Canada",
 		"Outside of US/Canada" => "Outside of US/Canada",
 		"Unknown" => "I Don't Know"
-	);
+	];
 
 	$juice_select_dropdown = "";
 	$juice_select_dropdown_other = "";
-	$juice_source_arr = array();
+	$juice_source_arr = [];
 
 	if (($action == "edit") && (!empty($row_log['brewJuiceSource']))) {
 		$juice_src_arr = json_decode($row_log['brewJuiceSource'],true);
@@ -547,7 +547,7 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
         	<div class="col-xs-12 col-sm-9 col-lg-10">
         		<textarea class="form-control" rows="8" name="brewInfo" id="brewInfo" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>><?php echo $brewInfo; ?></textarea>
         	<div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brew_text_010; ?></div>
-            <div class="help-block mb-1 invalid-feedback text-danger"><?php if ((strpos($styleSet,"BABDB") !== false) && ($view_explodies[0] < 28)) echo $brew_text_027; ?></div>
+            <div class="help-block mb-1 invalid-feedback text-danger"><?php if ((str_contains($styleSet,"BABDB")) && ($view_explodies[0] < 28)) echo $brew_text_027; ?></div>
             <div id="helpBlock" class="help-block mb-1"><p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="countInfo"><?php if ($action == "edit") echo mb_strlen($brewInfo); else echo "0" ?></span></p></div>
         </div>
     </div>

@@ -33,11 +33,11 @@ if ($action == "reset") {
 
 			// Insert the hash into the database
 			$update_table = $prefix."users";
-			$data = array(
+			$data = [
 				'password' => $hash,
 				'userToken' => NULL,
 				'userTokenTime' => NULL
-			);
+			];
 			$db_conn->where ('id', $row_reset['id']);
 			$result = $db_conn->update ($update_table, $data);
 
@@ -51,15 +51,9 @@ if ($action == "reset") {
 			exit();
 			
 		}
-		
-		// If not, redirect
-		else {
-			
-			$updateGoTo = sprintf($base_url."index.php?section=login&go=password&action=reset-password&msg=6&token=%s",$token);
-			header(sprintf("Location: %s", $updateGoTo)); 
-			exit;
-			
-		}	
+        $updateGoTo = sprintf($base_url."index.php?section=login&go=password&action=reset-password&msg=6&token=%s",$token);
+        header(sprintf("Location: %s", $updateGoTo));
+        exit;	
 		
 	}	
 	

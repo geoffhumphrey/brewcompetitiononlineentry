@@ -16,16 +16,16 @@ require_once (LIB.'preflight.lib.php');
 if ($setup_success) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	if (!isset($_SESSION['error_output'])) $_SESSION['error_output'] = "";
 
 	// ---------------------------- Define URL Variables -------------------------------
 	require_once (INCLUDES.'url_variables.inc.php');
 
 	// ---------------------------- Check if Valid Section -----------------------------
-	$section_array = array(
+	$section_array = [
 		"default", "rules", "entry", "volunteers", "contact", "pay", "list", "admin", "login", "logout", "check", "brewer", "user", "setup", "judge", "register", "sponsors", "past_winners", "brew", "step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "update", "confirm", "delete", "table_cards", "participant_summary", "loc", "sorting", "output_styles", "map", "driving", "scores", "entries", "participants", "emails", "assignments", "bos-mat", "dropoff", "summary", "inventory", "pullsheets", "results", "sorting", "staff", "styles", "promo", "table-cards", "testing", "notes", "qr", "shipping-label", "particpant-entries", "evaluation", "competition", "past-winners"
-	);
+	];
 
 	// ---------------------------- QR Redirect --------------------------------------
 
@@ -66,11 +66,11 @@ if ($setup_success) {
 		// Tied to the DB connection, so it releases on its own if this request
 		// dies mid-update rather than leaving the site stuck "updating" forever.
 		$update_lock_name = "bcoem_update_".$prefix;
-		$row_update_lock = $db_conn->rawQueryOne("SELECT GET_LOCK(?, 0) AS lock_acquired", array($update_lock_name));
+		$row_update_lock = $db_conn->rawQueryOne("SELECT GET_LOCK(?, 0) AS lock_acquired", [$update_lock_name]);
 
 		if ($row_update_lock['lock_acquired'] == 1) {
 			include (UPDATE.'run_update.php');
-			$db_conn->rawQuery("SELECT RELEASE_LOCK(?)", array($update_lock_name));
+			$db_conn->rawQuery("SELECT RELEASE_LOCK(?)", [$update_lock_name]);
 		}
 
 	}
@@ -123,11 +123,11 @@ if ($setup_success) {
 	else $_SESSION['currentVersion'] = 0;
 
 	if ((isset($_SESSION['prefsEval'])) && ($_SESSION['prefsEval'] == 1)) {
-		
+
 		if (!check_setup($prefix."evaluation",$database)) require_once (EVALS.'install_eval_db.eval.php');
-		
+
 		if (($section == "evaluation") && ($go == "scoresheet")) {
-			
+
 			/**
 			 * For usability when accessing an electronic scoresheet, 
 			 * make sure session timeout is at least 30 minutes to 
@@ -139,7 +139,7 @@ if ($setup_success) {
 				$session_expire_after = 30;
 				$auto_logout_extension = TRUE;
 			}
-			
+
 			else $session_expire_after = $session_expire_after;
 
 		}
@@ -198,7 +198,7 @@ if ($setup_success) {
 		if ($totalRows_prefs_check == 0) {
 
 			$update_table = $prefix."preferences";
-			$data = array(
+			$data = [
 				'id' => '1',
 				'prefsTemp' => 'Fahrenheit',
 				'prefsWeight1' => 'ounces',
@@ -270,7 +270,7 @@ if ($setup_success) {
 				'prefsCAPTCHA' => '0',
 				'prefsBestUseBOS' => '0',
 				'prefsEval' => '1'
-			);
+			];
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -284,7 +284,7 @@ if ($setup_success) {
 		if ($row_prefs_check['id'] != "1") {
 
 			$update_table = $prefix."preferences";
-			$data = array('id' => 1);
+			$data = ['id' => 1];
 			$db_conn->where ('id', $row_prefs_check['id']);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -302,7 +302,7 @@ if ($setup_success) {
 	}
 
 	$alert_flag_contest_info = FALSE;
-	
+
 	// Check if contest_info DB table is empty or does not have a row with id of 1. If so, add row with id of 1 with dummy content. Set alert flag.
 	if (!isset($_SESSION['compInfoSet'])) {
 
@@ -313,7 +313,7 @@ if ($setup_success) {
 		if ($totalRows_contest_info_check == 0) {
 
 			$update_table = $prefix."contest_info";
-			$data = array(
+			$data = [
 				'id' => '1',
 				'contestName' => 'Baseline Data Installation',
 				'contestHost' => 'Baseline',
@@ -351,7 +351,7 @@ if ($setup_success) {
 				'contestCircuit' => NULL,
 				'contestVolunteers' => '<p>Volunteer information coming soon!</p>',
 				'contestCheckInPassword' => NULL
-			);
+			];
 
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -366,7 +366,7 @@ if ($setup_success) {
 		if (($row_contest_info_check) && ($row_contest_info_check['id'] != "1")) {
 
 			$update_table = $prefix."contest_info";
-			$data = array('id' => 1);
+			$data = ['id' => 1];
 			$db_conn->where ('id', $row_contest_info_check['id']);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -403,13 +403,13 @@ if ($setup_success) {
 	$css_url = $base_url."css/";
 	$images_url = $base_url."images/";
 	$js_url = $base_url."js_includes/";
-	
+
 	if (HOSTED) {
 
 		$css_url = $base_url_hosted."_3.X_shared/css/";
 		$images_url = $base_url_hosted."_3.X_shared/images/";
 		$js_url = $base_url_hosted."_3.X_shared/js_includes/";
-	
+
 	}
 
 	$js_app_url = $js_url."app.min.js";
@@ -425,18 +425,18 @@ if ($setup_success) {
 		else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
 		$css_common_url = $css_common_url;
 	}
-	
+
 	else {
 		$theme = $css_url."default-3.min.css";
 		$css_common_url = $css_url."common-3.min.css";
 	}
 
 	if ((DEBUG) || (TESTING)) {
-	   
+
 	    $css_common_url = str_replace(".min", "", $css_common_url);
 	    $theme = str_replace(".min", "", $theme);
-	    
-	    if (strpos($base_url, 'test.brewingcompetitions.com') !== false) {
+
+	    if (str_contains($base_url, 'test.brewingcompetitions.com')) {
 	    	$js_app_url = $base_url."js_source/app.js";
 	        $js_app_pub_url = $base_url."js_source/app.pub.js";
 	        $js_invoke_url = $base_url."js_source/invoke.js";
@@ -444,7 +444,7 @@ if ($setup_success) {
 	        $js_add_edit_entry_url = $base_url."js_source/entry.js";
 	        $js_user_url = $base_url."js_source/user.js";
 	    }
-	    
+
 	    $js_app_url .= "?t=".time();
 	    $js_app_pub_url .= "?t=".time();
 	    $js_invoke_url .= "?t=".time();
@@ -453,7 +453,7 @@ if ($setup_success) {
 	    $js_user_url .= "?t=".time();
 	    $theme .= "?t=".time();
 	    $css_common_url .= "?t=".time();
-	    
+
 	}
 
 } // end if ($setup_success);

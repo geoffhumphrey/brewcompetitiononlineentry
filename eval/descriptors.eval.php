@@ -1,13 +1,16 @@
 <?php
-$common_descriptors = array(
+
+declare(strict_types=1);
+
+$common_descriptors = [
   $label_alcoholic => $descr_alcoholic,
   $label_metallic => $descr_metallic,
   $label_oxidized => $descr_oxidized,
   $label_phenolic => $descr_phenolic,
   $label_vegetal => $descr_vegetal
-);
+];
 
-$beer_descriptors = array(
+$beer_descriptors = [
   $label_astringent => $descr_astringent,
   $label_acetaldehyde => $descr_acetaldehyde,
   $label_diacetyl => $descr_diacetyl,
@@ -20,9 +23,9 @@ $beer_descriptors = array(
   $label_sour_acidic => $descr_sour_acidic,
   $label_sulfur => $descr_sulfur,
   $label_yeasty => $descr_yeasty
-);
+];
 
-$cider_descriptors = array(
+$cider_descriptors = [
   $label_acetaldehyde => $descr_acetaldehyde,
   $label_acetified => $descr_acetified,
   $label_acidic => $descr_acidic,
@@ -40,9 +43,9 @@ $cider_descriptors = array(
   $label_sulfite => $descr_sulfite,
   $label_sweet => $descr_sweet,
   $label_thin => $descr_thin
-);
+];
 
-$mead_descriptors = array(
+$mead_descriptors = [
   $label_acetic => $descr_acetic,
   $label_acidic => $descr_acidic_mead,
   $label_alcoholic => $descr_alcoholic_mead,
@@ -56,9 +59,9 @@ $mead_descriptors = array(
   $label_tannic => $descr_tannic,
   $label_waxy => $descr_waxy,
   $label_yeasty => $descr_yeasty
-);
+];
 
-$flaws_mouthfeel = array(
+$flaws_mouthfeel = [
   $label_alcoholic,
   $label_astringent,
   $label_diacetyl,
@@ -68,9 +71,9 @@ $flaws_mouthfeel = array(
   $label_sour_acidic,
   $label_spicy,
   $label_vinegary
-);
+];
 
-$flaws = array(
+$flaws = [
   $label_acetaldehyde,
   $label_alcoholic,
   $label_astringent,
@@ -92,9 +95,9 @@ $flaws = array(
   $label_vegetal,
   $label_vinegary,
   $label_yeasty
-);
+];
 
-$flaws_structured_beer = array(
+$flaws_structured_beer = [
   $label_acetaldehyde,
   $label_alcoholic,
   $label_astringent,
@@ -115,9 +118,9 @@ $flaws_structured_beer = array(
   $label_spicy,
   $label_sulfury,
   $label_vegetal
-);
+];
 
-$flaws_structured_mead = array(
+$flaws_structured_mead = [
   $label_acetic,
   $label_acidic,
   $label_alcoholic,
@@ -140,9 +143,9 @@ $flaws_structured_mead = array(
   $label_vegetal,
   $label_waxy,
   $label_yeasty
-);
+];
 
-$flaws_structured_cider = array(
+$flaws_structured_cider = [
   $label_acetaldehyde,
   $label_acetified,
   $label_acidic,
@@ -164,7 +167,7 @@ $flaws_structured_cider = array(
   $label_sweet,
   $label_thin,
   $label_vegetal
-);
+];
 
 // Scoresheet points (defaults to beer)
 $aroma_points = 12;
@@ -172,7 +175,7 @@ $appearance_points = 3;
 $flavor_points = 20;
 $mouthfeel_points = 5;
 $overall_points = 10;
-$descriptors = array();
+$descriptors = [];
 
 if (!empty($query_style)) {
 
@@ -200,57 +203,57 @@ if (!empty($query_style)) {
 
 }
 
-$aroma_ticks_beer = array(
+$aroma_ticks_beer = [
   $label_malt => "evalAromaMalt",
   $label_hops => "evalAromaHops",
   $label_ferm_char => "evalAromaFerm"
-);
+];
 
-$aroma_ticks_mead = array(
+$aroma_ticks_mead = [
   $label_honey => "evalAromaHoney",
   $label_alcohol => "evalAromaAlcohol",
   $label_ferm_char => "evalAromaFerm",
   $label_complexity => "evalAromaComplexity"
-);
+];
 
-$aroma_ticks_cider = array(
+$aroma_ticks_cider = [
   $label_fruit => "evalAromaFruit",
   $label_alcohol => "evalAromaAlcohol",
   $label_ferm_char => "evalAromaFerm"
-);
+];
 
-$flavor_ticks_beer = array(
+$flavor_ticks_beer = [
   $label_malt => "evalFlavorMalt",
   $label_hops => "evalFlavorHops",
   $label_bitterness => "evalFlavorBitter",
   $label_ferm_char => "evalFlavorFerm"
-);
+];
 
-$flavor_ticks_mead = array(
+$flavor_ticks_mead = [
   $label_honey => "evalFlavorHoney",
   $label_sweetness => "evalFlavorSweetness",
   $label_acidity => "evalFlavorAcidity",
   $label_tannin => "evalFlavorTannin",
   $label_alcohol => "evalFlavorAlcohol",
   $label_carbonation => "evalFlavorCarb"
-);
+];
 
-$flavor_ticks_cider = array(
+$flavor_ticks_cider = [
   $label_fruit => "evalFlavorFruit",
   $label_sweetness => "evalFlavorSweetness",
   $label_acidity => "evalFlavorAcidity",
   $label_tannin => "evalFlavorTannin",
   $label_alcohol => "evalFlavorAlcohol",
   $label_carbonation => "evalFlavorCarb"
-);
+];
 
-$mouthfeel_ticks_beer = array(
+$mouthfeel_ticks_beer = [
   $label_body => "evalMouthfeelBody",
   $label_carbonation => "evalMouthfeelCarb",
   $label_warmth => "evalMouthfeelWarmth",
   $label_creaminess => "evalMouthfeelCream",
   $label_astringency => "evalMouthfeelAstr"
-);
+];
 
 
 ?>

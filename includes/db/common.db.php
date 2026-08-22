@@ -63,7 +63,7 @@ if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 // Get the general info for the competition from the DB and store in session variables
 if ((!isset($_SESSION['contest_info_general'.$prefix_session])) || (empty($_SESSION['contest_info_general'.$prefix_session]))) {
 
-	if (strpos($section, "step") === FALSE) {
+	if (!str_contains($section, "step")) {
 
 		$db_conn->where ("id", 1);
 		$row_contest_info = $db_conn->getOne ($prefix."contest_info");
@@ -85,7 +85,7 @@ if ((!isset($_SESSION['contest_info_general'.$prefix_session])) || (empty($_SESS
 
 if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$prefix_session]))) {
 
-	if (strpos($section, "step") === FALSE) {
+	if (!str_contains($section, "step")) {
 
 		$db_conn->where ("id", 1);
 		$row_prefs = $db_conn->getOne ($prefix."preferences");
@@ -106,7 +106,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 				if ($key != "id") $_SESSION[$key] = $value;
 			}
 		}
-		
+
 		// Get counts for common, mostly static items
 		$row_sponsor_count = $db_conn->getOne ($prefix."sponsors", "sum(id), COUNT(*) as count");
 
@@ -148,33 +148,33 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 			$totalRows_ba_style = $db_conn->count;
 
 
-			$ba_styles_arr_data = array();
+			$ba_styles_arr_data = [];
 
 			// Build various conditional arrays
-			$ba_special_beer = array();
-			$ba_special_mead_cider = array();
-			$ba_carb = array();
-			$ba_strength = array();
-			$ba_sweetness = array();
-			$ba_special_beer_ids = array();
-			$ba_special_mead_cider_ids = array();
-			$ba_carb_ids = array();
-			$ba_strength_ids = array();
-			$ba_sweetness_ids = array();
-			$ba_beer = array();
-			$ba_mead_cider = array();
-			$ba_special_carb_str_sweet = array();
-			$ba_special_carb_str_sweet_ids = array();
-			$ba_carb_str_sweet = array();
-			$ba_carb_str_sweet_ids = array();
-			$ba_carb_str = array();
-			$ba_carb_str_ids = array();
-			$ba_carb_sweet = array();
-			$ba_carb_sweet_ids = array();
-			$ba_carb_special = array();
-			$ba_carb_special_ids = array();
-			$ba_carb_sweet_special = array();
-			$ba_carb_sweet_special_ids = array();
+			$ba_special_beer = [];
+			$ba_special_mead_cider = [];
+			$ba_carb = [];
+			$ba_strength = [];
+			$ba_sweetness = [];
+			$ba_special_beer_ids = [];
+			$ba_special_mead_cider_ids = [];
+			$ba_carb_ids = [];
+			$ba_strength_ids = [];
+			$ba_sweetness_ids = [];
+			$ba_beer = [];
+			$ba_mead_cider = [];
+			$ba_special_carb_str_sweet = [];
+			$ba_special_carb_str_sweet_ids = [];
+			$ba_carb_str_sweet = [];
+			$ba_carb_str_sweet_ids = [];
+			$ba_carb_str = [];
+			$ba_carb_str_ids = [];
+			$ba_carb_sweet = [];
+			$ba_carb_sweet_ids = [];
+			$ba_carb_special = [];
+			$ba_carb_special_ids = [];
+			$ba_carb_sweet_special = [];
+			$ba_carb_sweet_special_ids = [];
 
 			foreach ($return_ba_style as $row_ba_style) {
 
@@ -278,7 +278,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 
 if ((isset($_SESSION['loginUsername'])) && ((!isset($_SESSION['user_info'.$prefix_session])) || (empty($_SESSION['user_info'.$prefix_session]))))  {
 
-	if (strpos($section, "step") === FALSE) {
+	if (!str_contains($section, "step")) {
 
 		if ($section != "setup") {
 
@@ -299,35 +299,35 @@ if ((isset($_SESSION['loginUsername'])) && ((!isset($_SESSION['user_info'.$prefi
 					if ($key != "id") $_SESSION[$key] = $value;
 				}
 				
-			}
+				$_SESSION['user_id'] = $row_user['id'];
 
-		    $_SESSION['user_id'] = $row_user['id'];
+				$db_conn->where ('uid', $row_user['id']);
+				$row_name = $db_conn->getOne ($prefix."brewer");
+				$totalRows_name = $db_conn->count; 
 
-		    $db_conn->where ('uid', $row_user['id']);
-			$row_name = $db_conn->getOne ($prefix."brewer");
-			$totalRows_name = $db_conn->count; 
+				/*
+				$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
+				$brewer_name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
+				$row_name = mysqli_fetch_assoc($brewer_name);
+				*/
+				
+				if ($totalRows_name > 0) {
 
-			/*
-			$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
-			$brewer_name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
-			$row_name = mysqli_fetch_assoc($brewer_name);
-			*/
-			
-			if ($totalRows_name > 0) {
+					$name_columns = array_keys($row_name);
 
-				$name_columns = array_keys($row_name);
+					foreach ($row_name as $key => $value) {
+						if ($key != "id") $_SESSION[$key] = $value;
+					}
 
-			    foreach ($row_name as $key => $value) {
-					if ($key != "id") $_SESSION[$key] = $value;
+					$_SESSION['brewerID'] = $row_name['id'];
 				}
 
+				$_SESSION['user_info'.$prefix_session] = $prefix_session;
+
 			}
 
-		    $_SESSION['brewerID'] = $row_name['id'];
-			$_SESSION['user_info'.$prefix_session] = $prefix_session;
-
 		}
-			
+
 	}
 
 }
@@ -365,9 +365,9 @@ if ((!isset($_SESSION['prefsLanguageFolder'.$prefix_session]))|| (empty($_SESSIO
 	// installs, e.g. via the 2.1.5.0 update) rather than "en-US" - normalize before deriving
 	// the folder, or this falls through to strtolower() producing "english", which doesn't
 	// match the actual "en" folder on disk.
-	if (strtolower($_SESSION['prefsLanguage']) == "english") $_SESSION['prefsLanguage'] = "en-US";
+	if (strtolower($_SESSION['prefsLanguage']) === "english") $_SESSION['prefsLanguage'] = "en-US";
 
-	if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
+	if (str_contains($_SESSION['prefsLanguage'], '-')) {
 		$lang_folder = explode("-",$_SESSION['prefsLanguage']);
 		$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
 	}
@@ -398,11 +398,11 @@ if ((check_update("flightPlanning", $prefix."judging_flights")) && ((!isset($_SE
 }
 
 if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section != "update")) {
-	
+
 	// Some limits and dates may need to be changed by admin and propagated instantly to all users
 	// These will be called on every page load instead of being stored in a session variable
 
-	$cols = array("prefsStyleSet", "prefsEntryLimit", "prefsUserEntryLimit", "prefsSpecialCharLimit", "prefsUserSubCatLimit", "prefsUSCLEx", "prefsUSCLExLimit", "prefsEntryLimitPaid", "prefsShowBestBrewer", "prefsShowBestClub", "prefsUserEntryLimitDates");
+	$cols = ["prefsStyleSet", "prefsEntryLimit", "prefsUserEntryLimit", "prefsSpecialCharLimit", "prefsUserSubCatLimit", "prefsUSCLEx", "prefsUSCLExLimit", "prefsEntryLimitPaid", "prefsShowBestBrewer", "prefsShowBestClub", "prefsUserEntryLimitDates"];
 	$db_conn->where ("id", 1);
 	$row_limits = $db_conn->getOne ($prefix."preferences", null, $cols);
 	$totalRows_limits = $db_conn->count;
@@ -452,17 +452,17 @@ if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section !=
 	    		if ((time() > $limit_date_3) && (time() <= $limit_date_4)) $current_limit = 4;	
 	    	}
 
-	    	if ($current_limit == 0) $row_limits['prefsUserEntryLimit'] = $real_overall_user_entry_limit;
-	    	elseif ($current_limit == 1) $row_limits['prefsUserEntryLimit'] = $incremental_limits[1]['limit-number']; 
-	    	elseif ($current_limit == 2) $row_limits['prefsUserEntryLimit'] = $incremental_limits[2]['limit-number'];
-	    	elseif ($current_limit == 3) $row_limits['prefsUserEntryLimit'] = $incremental_limits[3]['limit-number']; 
-	    	elseif ($current_limit == 4) $row_limits['prefsUserEntryLimit'] = $incremental_limits[4]['limit-number'];
+	    	if ($current_limit === 0) $row_limits['prefsUserEntryLimit'] = $real_overall_user_entry_limit;
+	    	elseif ($current_limit === 1) $row_limits['prefsUserEntryLimit'] = $incremental_limits[1]['limit-number']; 
+	    	elseif ($current_limit === 2) $row_limits['prefsUserEntryLimit'] = $incremental_limits[2]['limit-number'];
+	    	elseif ($current_limit === 3) $row_limits['prefsUserEntryLimit'] = $incremental_limits[3]['limit-number']; 
+	    	elseif ($current_limit === 4) $row_limits['prefsUserEntryLimit'] = $incremental_limits[4]['limit-number'];
 
 	    }
 
 	}
 
-	$cols = array("jprefsCapJudges","jprefsCapStewards");
+	$cols = ["jprefsCapJudges","jprefsCapStewards"];
 	$db_conn->where ("id", 1);
 	$row_judge_limits = $db_conn->getOne ($prefix."judging_preferences", null, $cols);
 
@@ -472,7 +472,7 @@ if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section !=
 	$row_judge_limits = mysqli_fetch_assoc($judge_limits);
 	*/
 
-	$cols = array("contestCheckInPassword", "contestRegistrationOpen", "contestRegistrationDeadline", "contestJudgeOpen", "contestJudgeDeadline", "contestEntryOpen", "contestEntryDeadline", "contestShippingOpen", "contestShippingDeadline", "contestDropoffOpen", "contestDropoffDeadline", "contestEntryEditDeadline", "contestAwardsLocTime");
+	$cols = ["contestCheckInPassword", "contestRegistrationOpen", "contestRegistrationDeadline", "contestJudgeOpen", "contestJudgeDeadline", "contestEntryOpen", "contestEntryDeadline", "contestShippingOpen", "contestShippingDeadline", "contestDropoffOpen", "contestDropoffDeadline", "contestEntryEditDeadline", "contestAwardsLocTime"];
 	$db_conn->where ("id", 1);
 	$row_contest_dates = $db_conn->getOne ($prefix."contest_info", null, $cols);
 
@@ -487,7 +487,7 @@ if ((check_update("prefsShowBestBrewer", $prefix."preferences")) && ($section !=
 // Only used for initial setup of installation
 if ($section == "step4") {
 
-	$cols = array("brewerFirstName","brewerLastName","brewerEmail");
+	$cols = ["brewerFirstName","brewerLastName","brewerEmail"];
 	$db_conn->where ("uid", 1);
 	$row_name = $db_conn->getOne ($brewer_db_table, null, $cols);
 
@@ -530,7 +530,7 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 
 // If Archive DB table, get pertinent info
 if ($dbTable != "default") {
-	
+
 	$suffix = strrchr($dbTable,"_");
 	$suffix = ltrim($suffix, "_");
 	$db_conn->where ("archiveSuffix", $suffix);
@@ -628,7 +628,7 @@ if (($section == "admin") && ($go == "default")) {
 
 }
 
-$prefs_barcode_labels = array("N","C","2","0","3","4");
+$prefs_barcode_labels = ["N","C","2","0","3","4"];
 
 
 /*

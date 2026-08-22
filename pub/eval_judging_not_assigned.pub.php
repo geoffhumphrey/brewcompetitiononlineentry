@@ -17,7 +17,7 @@ foreach ($eval_scores as $key => $value) {
 			$style_display_otf = "";
 			$actions_otf = "";
 			$notes_otf = "";
-				
+
 			// Build table row
 			if ($totalRows_entry > 0) {
 
@@ -28,7 +28,7 @@ foreach ($eval_scores as $key => $value) {
 	        	$table_info = get_table_info(1,"basic",$value['table'],"default","default");
 				$table_info = explode("^", $table_info);
 
-				if ((!empty($table_info)) && (isset($table_info[2]))) {
+				if (($table_info !== []) && (isset($table_info[2]))) {
 					$table_location = get_table_info($table_info[2],"location",$value['table'],"default","default");
 					$table_location = explode("^", $table_location);
 					if ((!empty($table_location[1])) && (time() > $table_location[1])) $disable_add_edit_otf = TRUE;
@@ -46,14 +46,14 @@ foreach ($eval_scores as $key => $value) {
 
 				// If other judges have evaluated the entry, compare evalFinalScores
 				if ($totalRows_evals > 1) {
-					$assigned_score = array();
+					$assigned_score = [];
 
 					foreach ($rows_evals as $row_evals) {
 						$assigned_score[] = $row_evals['evalFinalScore'];
 					}
 
 					if (count(array_unique($assigned_score)) === 1) $notes_otf .= "<div style=\"margin-bottom:5px;\" class=\"text-success\">".$evaluation_info_026."<br>".$label_assigned_score.": ".$assigned_score[0]."</div>";
-					
+
 					else {
 						$notes_otf .= "<div style=\"margin-bottom:5px;\" class=\"text-danger\"><strong>";
 						$notes_otf .= $evaluation_info_017;
@@ -69,8 +69,8 @@ foreach ($eval_scores as $key => $value) {
 						$tbl_loc_disp_otf = $table_name_otf[2];
 						$tbl_num_disp_otf = $table_name_otf[0];
 						*/
-						
-						$assigned_score_mismatch[] = array(
+
+						$assigned_score_mismatch[] = [
 							"table_id" => $value['table'],
 							"table_name" => "",
 							"id" => $value['id'],
@@ -78,8 +78,8 @@ foreach ($eval_scores as $key => $value) {
 							"brewCategorySort" => $row_entry['brewCategorySort'],
 							"brewSubCategory" => $row_entry['brewSubCategory'],
 							"brewStyle" => $row_entry['brewStyle']
-						);
-						
+						];
+
 					}
 
 				}
@@ -88,7 +88,7 @@ foreach ($eval_scores as $key => $value) {
 				$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id']."&amp;tb=1";
 
 				if ($judging_open) {
-	        		
+
 	        		$edit_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=edit&amp;filter=".$value['table']."&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
 	        		$actions_otf .= "<div class=\"d-grid gap-1 mb-2\">";
 	        		if (!$disable_add_edit_otf) {
@@ -100,7 +100,7 @@ foreach ($eval_scores as $key => $value) {
 	        		$actions_otf .= "</div>";
 
 	        	}
-	        	
+
 	        	else {
 	        		$actions_otf .= "<div class=\"d-grid gap-1 mb-2\">";
 	        		$actions_otf .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-secondary hide-loader modal-window-link\" href=\"".$view_link."\">".$label_view;
@@ -119,7 +119,7 @@ foreach ($eval_scores as $key => $value) {
 	    		}
 	    		$notes_otf .= $evaluation_info_004." ";
 			    if ($judging_open) $notes_otf .= $evaluation_info_006;
-	    		
+
 				$on_the_fly_display_tbody .= "<tr>";
 				$on_the_fly_display_tbody .= "<td><a name=\"".$number_otf."\"></a>".$number_otf."</td>";
 				$on_the_fly_display_tbody .= "<td class=\"hidden-xs\">".$style_display_otf."</td>";

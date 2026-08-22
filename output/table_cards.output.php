@@ -1,5 +1,6 @@
 <?php
 
+
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
     $redirect = "../../403.php";
@@ -28,14 +29,14 @@ if (($table_card_output) && ($psort == "sorting-placards")) {
     include (DB.'styles.db.php');
 
     $table_card_output_print = "";
-    $style_beer_count = array();
-    $style_beer_count_logged = array();
-    $style_mead_count = array();
-    $style_mead_count_logged = array();
-    $style_cider_count = array();
-    $style_cider_count_logged = array();
-    $style_mead_cider_count = array();
-    $style_mead_cider_count_logged = array();
+    $style_beer_count = [];
+    $style_beer_count_logged = [];
+    $style_mead_count = [];
+    $style_mead_count_logged = [];
+    $style_cider_count = [];
+    $style_cider_count_logged = [];
+    $style_mead_cider_count = [];
+    $style_mead_cider_count_logged = [];
 
     foreach ($style_sets as $style_set_data) {
         
@@ -104,7 +105,7 @@ if (($table_card_output) && ($psort == "sorting-tables")) {
     foreach ($rows_tables as $row_tables) {
 
 
-        $a = array(get_table_info("1","list",$row_tables['id'],$dbTable,"default"));
+        $a = [get_table_info("1","list",$row_tables['id'],$dbTable,"default")];
         $styles = display_array_content($a,1);
         $received = get_table_info("1","count_total",$row_tables['id'],$dbTable,"default");
         $table_location = table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
@@ -145,8 +146,8 @@ if (($table_card_output) && ($psort == "sorting-tables")) {
 if (($table_card_output) && ($psort == "default")) {
 if ($round != "default") $round2 = $round; else $round2 = "default";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
-$role_replace1 = array("HJ","LJ","MBOS",", ");
-$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
+$role_replace1 = ["HJ","LJ","MBOS",", "];
+$role_replace2 = ["<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;"];
 
 if ($id == "default") { ?>
 
@@ -193,7 +194,7 @@ if ($id == "default") { ?>
                         $role = str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
                 ?>
         <tr>
-                <td><?php echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; if ((!empty($rank)) && ($assignment == "Judge")) echo " (".rtrim($rank,", ").") "; if (!empty($role)) echo "<br><em>".$role."</em>"; ?></td>
+                <td><?php echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; if ((!empty($rank)) && ($assignment === "Judge")) echo " (".rtrim($rank,", ").") "; if (!empty($role)) echo "<br><em>".$role."</em>"; ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $round; ?></td>
                 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ******************************************************************************
  * Setup the email settings for the application

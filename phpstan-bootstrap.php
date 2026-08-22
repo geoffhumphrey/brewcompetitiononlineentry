@@ -48,33 +48,39 @@ define('ENABLE_MARKDOWN', FALSE);
 define('ENABLE_MAILER', FALSE);
 
 if (!function_exists('is_https')) {
-    function is_https() {
-        if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return TRUE;
-        elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == "on"))) return TRUE;
-        else return FALSE;
+    function is_https()
+    {
+        if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) {
+            return TRUE;
+        }
+        return ((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === "on"));
     }
 }
 
 if (!function_exists('sterilize')) {
     function sterilize($sterilize = NULL) {
-        if (is_array($sterilize)) return array_map('sterilize', $sterilize);
-        elseif ($sterilize == NULL) return NULL;
-        elseif (empty($sterilize)) return $sterilize;
-        else {
-            $sterilize = trim($sterilize);
-            if (is_numeric($sterilize)) {
-                if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-                if (is_int($sterilize)) {
-                    if ($sterilize == 0) $sterilize = 0;
-                    else $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
-                }
-            }
-            else $sterilize = filter_var($sterilize,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $sterilize = strip_tags($sterilize);
-            $sterilize = stripcslashes($sterilize);
-            $sterilize = stripslashes($sterilize);
-            $sterilize = addslashes($sterilize);
+        if (is_array($sterilize)) {
+            return array_map(sterilize(...), $sterilize);
+        }
+        if ($sterilize == NULL) {
+            return NULL;
+        }
+        if (empty($sterilize)) {
             return $sterilize;
         }
+        $sterilize = trim($sterilize);
+        if (is_numeric($sterilize)) {
+            if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+            if (is_int($sterilize)) {
+                if ($sterilize === 0) $sterilize = 0;
+                else $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
+            }
+        }
+        else $sterilize = filter_var($sterilize,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $sterilize = strip_tags($sterilize);
+        $sterilize = stripcslashes($sterilize);
+        $sterilize = stripslashes($sterilize);
+        $sterilize = addslashes($sterilize);
+        return $sterilize;
     }
 }

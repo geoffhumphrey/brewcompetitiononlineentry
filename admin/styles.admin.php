@@ -1,7 +1,7 @@
 <?php
 
 // Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!str_contains($section, "step")) && ($_SESSION['userLevel'] > 0))) {
     $redirect = "../../403.php";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
@@ -177,7 +177,7 @@ $(document).ready(function () {
  <tr>
   <th><input type="checkbox" id="select-all-enable" /></th>
   <th>Style Name</th>
-  <th><?php if (strpos($_SESSION['prefsStyleSet'],"BJCP") === false) echo "Overall Category"; else echo "#"; ?></th>
+  <th><?php if (!str_contains($_SESSION['prefsStyleSet'],"BJCP")) echo "Overall Category"; else echo "#"; ?></th>
   <th>Style Type</th>
   <th>Requirements</th>
   <th nowrap="nowrap"><input type="checkbox" id="select-all-limit" /> Restrict Entries <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you want to restrict further entries for a style on the fly, check its corresponding box in this column and then select Update at the bottom of the page. <span class='text-primary'><strong>Please Note:</strong> This will override any table-level restriction if using Table Limits in Tables Planning Mode.</span>" ?><i class="fa fa-question-circle"></i></a></th>

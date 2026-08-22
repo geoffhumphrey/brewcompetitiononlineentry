@@ -15,7 +15,7 @@ $totalRows_organizations = $db_conn->count;
 
 $org_options = "";
 
-$org_array = array();
+$org_array = [];
 
 if ($totalRows_organizations > 0) {
 
@@ -93,7 +93,7 @@ if ($totalRows_organizations > 0) {
 
 }
 
-$org_other = array();
+$org_other = [];
 
 if ((!empty($affiliated_orgs)) && (!empty($affiliated_orgs['affilliatedOther']))) {
     foreach($affiliated_orgs['affilliatedOther'] as $value) {
@@ -101,7 +101,7 @@ if ((!empty($affiliated_orgs)) && (!empty($affiliated_orgs['affilliatedOther']))
     }
 }
 
-if (!empty($org_other)) {
+if ($org_other !== []) {
     asort($org_other);
     $org_other = implode(",",$org_other);
 }

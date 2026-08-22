@@ -1,4 +1,7 @@
 <?php
+// $timezone_raw is set by process.inc.php before including this file; default
+// to UTC if this file is ever included standalone (mirrors process.inc.php).
+if (!isset($timezone_raw)) $timezone_raw = 0;
 /*
  * Module:      process_judging_location.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_locations" table
@@ -7,7 +10,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))) || ($setup_free_access))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	// Instantiate HTMLPurifier
@@ -35,7 +38,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (empty($judgingLocType)) $judgingLocType = 0;
 
 	$update_table = $prefix."judging_locations";
-	$data = array(
+	$data = [
 		'judgingLocType' => $judgingLocType,
 		'judgingDate' => blank_to_null($judgingDate),
 		'judgingDateEnd' => blank_to_null($judgingDateEnd),
@@ -43,7 +46,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'judgingLocName' => blank_to_null($judgingLocName),
 		'judgingRounds' => blank_to_null($judgingRounds),
 		'judgingLocNotes' => blank_to_null($judgingLocNotes)
-	);
+	];
 
 	if ($action == "add") {
 		
@@ -56,7 +59,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($section == "setup") {
 
 			$update_table = $prefix."bcoem_sys";
-			$data = array('setup_last_step' => 5);
+			$data = ['setup_last_step' => 5];
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -94,7 +97,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	
 	} // end if ($action == "edit")
 
-	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+	if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 } else {
 

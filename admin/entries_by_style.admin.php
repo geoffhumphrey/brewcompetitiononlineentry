@@ -28,7 +28,7 @@ include (DB.'styles.db.php');
 
 // print_r($styles_selected);
 
-$accepted_categories = array();
+$accepted_categories = [];
 
 foreach ($rows_styles as $row_styles) {
 	if (array_key_exists($row_styles['id'], $styles_selected)) {

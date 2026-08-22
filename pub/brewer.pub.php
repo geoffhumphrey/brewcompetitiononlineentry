@@ -157,7 +157,7 @@ foreach ($us_state_abbrevs_names as $key => $value) {
         $us_state = strtolower($value);
         $us_state_abb = strtolower($key);
         $us_state_user = strtolower($row_brewer['brewerState']);
-        if (($row_brewer['brewerState'] == $key) || ($us_state == $us_state_user) || ($us_state_abb == $us_state_user)) $us_state_select .= "SELECTED";
+        if (($row_brewer['brewerState'] == $key) || ($us_state === $us_state_user) || ($us_state_abb === $us_state_user)) $us_state_select .= "SELECTED";
     }
     $us_state_select .= ">";
     $us_state_select .= $value." [".$key."]</option>\n";
@@ -170,7 +170,7 @@ foreach ($ca_state_abbrevs_names as $key => $value) {
         $ca_state = strtolower($value);
         $ca_state_abb = strtolower($key);
         $ca_state_user = strtolower($row_brewer['brewerState']);
-        if (($row_brewer['brewerState'] == $key) || ($ca_state == $ca_state_user) || ($ca_state_abb == $ca_state_user)) $ca_state_select .= "SELECTED";
+        if (($row_brewer['brewerState'] == $key) || ($ca_state === $ca_state_user) || ($ca_state_abb === $ca_state_user)) $ca_state_select .= "SELECTED";
     }
     $ca_state_select .= ">";
     $ca_state_select .= $value." [".$key."]</option>\n";
@@ -183,7 +183,7 @@ foreach ($aus_state_abbrevs_names as $key => $value) {
         $aus_state = strtolower($value);
         $aus_state_abb = strtolower($key);
         $aus_state_user = strtolower($row_brewer['brewerState']);
-        if (($row_brewer['brewerState'] == $key) || ($aus_state == $aus_state_user) || ($aus_state_abb == $aus_state_user)) $aus_state_select .= "SELECTED";
+        if (($row_brewer['brewerState'] == $key) || ($aus_state === $aus_state_user) || ($aus_state_abb === $aus_state_user)) $aus_state_select .= "SELECTED";
     }
     $aus_state_select .= ">";
     $aus_state_select .= $value." [".$key."]</option>\n";

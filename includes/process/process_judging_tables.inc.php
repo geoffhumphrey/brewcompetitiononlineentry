@@ -14,7 +14,7 @@ $styles_db_table = $prefix."styles";
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	if ($_SESSION['jPrefsTablePlanning'] == 1) $flightPlanning = 1; 
@@ -43,13 +43,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "add") {
 
 		$update_table = $prefix."judging_tables";
-		$data = array(
+		$data = [
 			'tableName' => blank_to_null($tableName),
 			'tableStyles' => blank_to_null($tableStyles),
 			'tableNumber' => blank_to_null($tableNumber),
 			'tableLocation' => blank_to_null($tableLocation),
 			'tableEntryLimit' => blank_to_null($tableEntryLimit)
-		);
+		];
 
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -80,9 +80,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				foreach (array_unique($a) as $value) {
 
 					$update_table = $prefix."styles";
-					$data = array(
+					$data = [
 						'brewStyleAtLimit' => 1
-					);
+					];
 					$db_conn->where ('id', $value);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -91,7 +91,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					}
 
 				} // end foreach
-			
+
 			} // end if ($row_table_entry_limits['tableEntryLimit'] >= $total_table_entries)
 
 			// If the total entries for that table is BELOW the limit,
@@ -102,9 +102,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				foreach (array_unique($a) as $value) {
 
 					$update_table = $prefix."styles";
-					$data = array(
+					$data = [
 						'brewStyleAtLimit' => 0
-					);
+					];
 					$db_conn->where ('id', $value);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -113,7 +113,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					}
 
 				} // end foreach
-			
+
 			} // end if ($row_table_entry_limits['tableEntryLimit'] < $total_table_entries)
 
 		} // end if (!empty($tableEntryLimit))
@@ -144,7 +144,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			foreach ($rows_entries as $row_entries) {
 
 				$update_table = $prefix."judging_scores";
-				$data = array('scoreTable' => $row_table['id']);
+				$data = ['scoreTable' => $row_table['id']];
 				$db_conn->where ('eid', $row_entries['id']);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -161,7 +161,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if ($totalRows_empty_count > 0) {
 
 					$update_table = $prefix."judging_flights";
-					$data = array('flightTable' => $row_table['id']);
+					$data = ['flightTable' => $row_table['id']];
 					$db_conn->where ('flightEntryID', $row_entries['id']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -175,12 +175,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				else {
 
 					$update_table = $prefix."judging_flights";
-					$data = array(
+					$data = [
 						'flightTable' => $row_table['id'],
 						'flightNumber' => 1,
 						'flightEntryID' => $row_entries['id'],
 						'flightRound' => $rounds
-					);
+					];
 					$result = $db_conn->insert ($update_table, $data);
 					if (!$result) {
 						$error_output[] = $db_conn->getLastError();
@@ -193,7 +193,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Finally change the flightPlanning status for all records
 			$update_table = $prefix."judging_flights";
-			$data = array('flightPlanning' => blank_to_null($flightPlanning));
+			$data = ['flightPlanning' => blank_to_null($flightPlanning)];
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -202,7 +202,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		if (empty($_POST['tableStyles'])) $insertGoTo = $insertGoTo;
 		elseif (($_POST['return-to-add-table'] == 1) && (!empty($_POST['tableStyles']))) $insertGoTo = $base_url."index.php?section=admin&go=judging_tables&action=add&msg=1";
@@ -271,7 +271,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				foreach ($rows_entries as $row_entries) {
 
 					$update_table = $prefix."judging_scores";
-					$data = array('scoreTable' => $row_table['id']);
+					$data = ['scoreTable' => $row_table['id']];
 					$db_conn->where ('eid', $row_entries['id']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -288,7 +288,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					if ($totalRows_empty_count > 0) {
 
 						$update_table = $prefix."judging_flights";
-						$data = array('flightTable' => $id);
+						$data = ['flightTable' => $id];
 						$db_conn->where ('flightEntryID', $row_entries['id']);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -302,12 +302,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					else {
 
 						$update_table = $prefix."judging_flights";
-						$data = array(
+						$data = [
 							'flightTable' => $id,
 							'flightNumber' => 1,
 							'flightEntryID' => $row_entries['id'],
 							'flightRound' => blank_to_null($rounds)
-						);
+						];
 						$result = $db_conn->insert ($update_table, $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
@@ -320,7 +320,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				// Finally change the flightPlanning status for all records
 				$update_table = $prefix."judging_flights";
-				$data = array('flightPlanning' => blank_to_null($flightPlanning));
+				$data = ['flightPlanning' => blank_to_null($flightPlanning)];
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -332,13 +332,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // End if ($tableStyles != $row_table['tableStyles'])
 
 		$update_table = $prefix."judging_tables";
-		$data = array(
+		$data = [
 			'tableName' => blank_to_null($tableName),
 			'tableStyles' => blank_to_null($tableStyles),
 			'tableNumber' => blank_to_null($tableNumber),
 			'tableLocation' => blank_to_null($tableLocation),
 			'tableEntryLimit' => blank_to_null($tableEntryLimit)
-		);
+		];
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -360,9 +360,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				foreach (array_unique($a) as $value) {
 
 					$update_table = $prefix."styles";
-					$data = array(
+					$data = [
 						'brewStyleAtLimit' => 1
-					);
+					];
 					$db_conn->where ('id', $value);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -371,7 +371,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					}
 
 				} // end foreach
-			
+
 			} // end if ($row_table_entry_limits['tableEntryLimit'] >= $total_table_entries)
 
 			// If the total entries for that table is BELOW the limit,
@@ -382,9 +382,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				foreach (array_unique($a) as $value) {
 
 					$update_table = $prefix."styles";
-					$data = array(
+					$data = [
 						'brewStyleAtLimit' => 0
-					);
+					];
 					$db_conn->where ('id', $value);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -393,7 +393,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					}
 
 				} // end foreach
-			
+
 			} // end if ($row_table_entry_limits['tableEntryLimit'] < $total_table_entries)
 
 		} // end if (!empty($tableEntryLimit))
@@ -420,14 +420,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 					if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 					    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
-					    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+					    if ($first_character === "C") $chosen_style_set = "BJCP2025";
 					    else $chosen_style_set = "BJCP2021";
 					}
 
 					else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 					$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-					$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $row_entry['brewCategorySort'], $row_entry['brewSubCategory']));
+					$row_style = $db_conn->rawQueryOne($query_style, [$chosen_style_set, $row_entry['brewCategorySort'], $row_entry['brewSubCategory']]);
 
 					$style_id = $row_style['id'];
 
@@ -443,7 +443,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					if (in_array($style_id,$style_array)) {
 
 						$update_table = $prefix."judging_flights";
-						$data = array('flightTable' => $row_table_styles['id']);
+						$data = ['flightTable' => $row_table_styles['id']];
 						$db_conn->where ('flightEntryID', $id);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -460,14 +460,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // end if ($totalRows_empty_count > 0)
 
 		$update_table = $prefix."judging_flights";
-		$data = array('flightPlanning' => blank_to_null($flightPlanning));
+		$data = ['flightPlanning' => blank_to_null($flightPlanning)];
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=2";
 		if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=3";

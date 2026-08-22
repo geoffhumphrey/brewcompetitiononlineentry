@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Module:      maintenance.php
  * Description: This page displays if the site is in maintenance mode.
@@ -12,7 +13,7 @@ if (session_status() !== PHP_SESSION_NONE) {
     session_destroy();
 }
 
-require_once ('paths.php');
+require_once (__DIR__ . '/paths.php');
 require_once (CONFIG.'bootstrap.php');
 if (!MAINT) {
     $redirect = prep_redirect_link($base_url);

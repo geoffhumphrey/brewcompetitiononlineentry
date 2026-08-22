@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Code is executed when rendering a scoresheet.
  * Not used for any other purposes.
@@ -22,12 +23,12 @@ if (empty($row_eval['evalStyle'])) {
 	// (wrong precedence) instead of the intended "... AND (brewStyleVersion=? OR brewStyleVersion=?)".
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 		$query_style = "SELECT id,brewStyle,brewStyleGroup,brewStyleNum,brewStyleType FROM ".$styles_db_table." WHERE brewStyle=? AND brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2025' OR brewStyleVersion='BJCP2021')";
-		$params_style = array($row_brewing['brewStyle'], $row_brewing['brewCategorySort'], $row_brewing['brewSubCategory']);
+		$params_style = [$row_brewing['brewStyle'], $row_brewing['brewCategorySort'], $row_brewing['brewSubCategory']];
 	}
 
 	else {
 		$query_style = "SELECT id,brewStyle,brewStyleGroup,brewStyleNum,brewStyleType FROM ".$styles_db_table." WHERE brewStyle=? AND brewStyleGroup=? AND brewStyleNum=? AND brewStyleVersion=?";
-		$params_style = array($row_brewing['brewStyle'], $row_brewing['brewCategorySort'], $row_brewing['brewSubCategory'], $_SESSION['prefsStyleSet']);
+		$params_style = [$row_brewing['brewStyle'], $row_brewing['brewCategorySort'], $row_brewing['brewSubCategory'], $_SESSION['prefsStyleSet']];
 	}
 
 	$row_style = $db_conn->rawQueryOne($query_style, $params_style);

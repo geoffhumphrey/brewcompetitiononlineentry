@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 // Import PHPMailer classes into the global namespace
 // These must be at the top
 use PHPMailer\PHPMailer\PHPMailer;
@@ -20,7 +23,10 @@ function mime_encode_header_name($name) {
     return mb_encode_mimeheader($name, "UTF-8", "B", "\r\n");
 }
 
-function sendPHPMailerMessage($mail) {
+/**
+ * @param \PHPMailer\PHPMailer\PHPMailer $mail
+ */
+function sendPHPMailerMessage(\PHPMailer\PHPMailer\PHPMailer $mail): void {
 
     require (CONFIG.'config.php');
 
@@ -50,7 +56,7 @@ function sendPHPMailerMessage($mail) {
         $mail->Port       = $smtp_port;
         $mail->isHTML(true);
         $mail->send();
-    } catch (Exception $e) {
+    } catch (Exception) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }

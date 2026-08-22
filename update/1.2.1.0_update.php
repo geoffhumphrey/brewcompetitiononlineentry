@@ -243,13 +243,13 @@ if ($totalRows_log > 0) {
 		if ($row_log['brewWinner'] == "Y") $brewWinner = "1"; else $brewWinner = "0";
 		if ($row_log['brewReceived'] == "Y") $brewReceived = "1"; else $brewReceived = "0";
 
-			$data = array(
+			$data = [
 				'brewPaid' => $brewPaid,
 				'brewWinner' => $brewWinner,
 				'brewReceived' => $brewReceived,
 				'brewConfirmed' => "1",
 				'brewUpdated' => $db_conn->now()
-			);
+			];
 			$db_conn->where('id', $row_log['id']);
 			$result = $db_conn->update($prefix."brewing", $data);
 			//$output .= $updateSQL."<br>";
@@ -284,7 +284,7 @@ foreach ($rows_judging_locations as $row_judging_locations) {
 	$string = strtotime($row_judging_locations['judgingDate'].$row_judging_locations['judgingTime']);
 
 	$db_conn->where('id', $row_judging_locations['id']);
-	$result = $db_conn->update($judging_locations_db_table, array('judgingDate' => $string));
+	$result = $db_conn->update($judging_locations_db_table, ['judgingDate' => $string]);
 	//$output .= $updateSQL."<br>";
 }
 $output .= "<li>Updates to judging locations table completed.</li>";
@@ -306,7 +306,7 @@ $output .= "<li>Updates to judging locations table completed.</li>";
 	if ($row_contest_info['contestAwardsLocDate'] != "") $string5 = strtotime($row_contest_info['contestAwardsLocDate'].$row_contest_info['contestAwardsLocTime']);
 	else $string5 = strtotime(date("Y-m-d")." 12:00 AM");
 	
-	$data = array(
+	$data = [
 		'contestRegistrationOpen' => $string1,
 		'contestRegistrationDeadline' => $string2,
 		'contestEntryOpen' => $string3,
@@ -314,7 +314,7 @@ $output .= "<li>Updates to judging locations table completed.</li>";
 		'contestJudgeOpen' => $string1,
 		'contestJudgeDeadline' => $string2,
 		'contestAwardsLocTime' => $string5
-	);
+	];
 	$db_conn->where('id', 1);
 	$result = $db_conn->update($contest_info_db_table, $data);
 	//$output .= $updateSQL."<br>";
@@ -328,7 +328,7 @@ $totalRows_user = count($rows_user);
 foreach ($rows_user as $row_user) {
 
 	$db_conn->where('id', $row_user['id']);
-	$result = $db_conn->update($users_db_table, array('userCreated' => $db_conn->now()));
+	$result = $db_conn->update($users_db_table, ['userCreated' => $db_conn->now()]);
 
 }
 $output .= "<li>Users table updated.</li>";
@@ -351,7 +351,7 @@ $query_archive = "SELECT archiveSuffix FROM $archive_db_table";
 $rows_archive = $db_conn->rawQuery($query_archive);
 $totalRows_archive = count($rows_archive);
 
-$a = array();
+$a = [];
 
 if ($totalRows_archive > 0) {
 
@@ -373,13 +373,13 @@ if ($totalRows_archive > 0) {
 		if ($row_log['brewWinner'] == "Y") $brewWinner = "1"; else $brewWinner = "0";
 		if ($row_log['brewReceived'] == "Y") $brewReceived = "1"; else $brewReceived = "0";
 
-		$data = array(
+		$data = [
 			'brewPaid' => $brewPaid,
 			'brewWinner' => $brewWinner,
 			'brewReceived' => $brewReceived,
 			'brewConfirmed' => "1",
 			'brewUpdated' => $db_conn->now()
-		);
+		];
 			$db_conn->where('id', $row_log['id']);
 			$result = $db_conn->update($prefix."brewing_".$suffix, $data);
 
@@ -393,14 +393,14 @@ if ($totalRows_archive > 0) {
 		foreach ($rows_user as $row_user) {
 
 			$db_conn->where('id', $row_user['id']);
-			$result = $db_conn->update($users_db_table, array('userCreated' => $db_conn->now()));
+			$result = $db_conn->update($users_db_table, ['userCreated' => $db_conn->now()]);
 
 			if ($row_user['userQuestion'] == "") {
 
-			$data = array(
+			$data = [
 				'userQuestion' => "What is your favorite all-time beer to drink?",
 				'userQuestionAnswer' => "Pabst"
-			);
+			];
 			$db_conn->where('id', $row_user['id']);
 			$result = $db_conn->update($prefix."users_".$suffix, $data);
 

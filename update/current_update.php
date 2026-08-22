@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * -----------------------------------------------------------
  * If version is below 2.1.8.0, the following will run.
@@ -14,7 +16,7 @@
  * -----------------------------------------------------------
  */
 
-include ('current_alter_tables.php');
+include (__DIR__ . '/current_alter_tables.php');
 
 /**
  * -----------------------------------------------------------
@@ -22,7 +24,7 @@ include ('current_alter_tables.php');
  * -----------------------------------------------------------
  */
 
-include ('current_data_updates.php');
+include (__DIR__ . '/current_data_updates.php');
 
 /**
  * -----------------------------------------------------------
@@ -30,5 +32,5 @@ include ('current_data_updates.php');
  * -----------------------------------------------------------
  */
 
-include ('run_update.php');
+include (__DIR__ . '/run_update.php');
 ?>

@@ -40,7 +40,7 @@ $output_hide_print = "";
 $output_assignment_modals = "";
 $output_user_question_modals = "";
 $assignment_modal_body = "";
-$all_email_display = array();
+$all_email_display = [];
 
 
 if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
@@ -255,7 +255,7 @@ if ($totalRows_brewer > 0) {
 					$output_datatables_other_link2 = "";
 				}
 				
-				if (strpos($brewer_assignment,'Judge') !== false)  {
+				if (str_contains($brewer_assignment,'Judge'))  {
 					$output_datatables_view_link = "<a class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=labels-judge&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".h($brewer_tooltip_display_name)." - Letter (Avery 5160)\"><span class=\"fa fa-lg fa-file\"></span></a>";
 					$output_datatables_view_link2 = "<a class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=labels-judge&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".h($brewer_tooltip_display_name)." - A4 (Avery 3422)\"><span class=\"fa fa-lg fa-file-text\"></span></a>";
 				}
@@ -285,7 +285,7 @@ if ($totalRows_brewer > 0) {
 
 			$output_datatables_add_link = build_action_link("fa-beer",$base_url,"admin","entries","add",$row_brewer['uid'],"default","default","default",0,"Add an entry for ".$brewer_tooltip_display_name); // /index.php?section=admin&go=entries&action=add&bid=864
 
-			$output_actions_arr = array($output_datatables_add_link, $output_datatables_edit_link, $output_datatables_delete_link, $output_datatables_other_link, $output_datatables_email_link, $output_datatables_phone_link, $output_datatables_other_link2, $output_datatables_change_pwd, $output_datatables_view_link, $output_datatables_view_link2);
+			$output_actions_arr = [$output_datatables_add_link, $output_datatables_edit_link, $output_datatables_delete_link, $output_datatables_other_link, $output_datatables_email_link, $output_datatables_phone_link, $output_datatables_other_link2, $output_datatables_change_pwd, $output_datatables_view_link, $output_datatables_view_link2];
 
 			$output_datatables_actions = "";
 			foreach ($output_actions_arr as $value) {
@@ -349,13 +349,13 @@ if ($totalRows_brewer > 0) {
 				
 					// Build assignment modal for participants
 					unset($assignment_modal_body);
-					if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {
+					if ((str_contains($brewer_assignment,"Judge")) || (str_contains($brewer_assignment,"Steward")) ) {
 
-						if (strpos($brewer_assignment,"Judge") !== false) {
+						if (str_contains($brewer_assignment,"Judge")) {
 							if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s):<br>".h($table_assign_judge)."</p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.</p>";
 						}
-						if (strpos($brewer_assignment,"Steward") !== false) {
+						if (str_contains($brewer_assignment,"Steward")) {
 							if (!empty($table_assign_steward))  $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s):<br>".h($table_assign_steward)."</p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.</p>";
 						}
@@ -424,7 +424,7 @@ if ($totalRows_brewer > 0) {
 				if ($exploder != "") {
 					sort($a);
 					foreach ($a as $value) {
-						if ($value != "") {
+						if ($value !== "") {
 							$b = substr($value, 2);
 							$output .= judging_location_avail($b,$value);
 							}
@@ -467,7 +467,7 @@ if ($totalRows_brewer > 0) {
 			
 			if (!empty($brewer_assignment)) {
 				
-				if (((!$archive_display) && ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false))) && ($filter != "judges") && ($filter != "stewards")) {
+				if (((!$archive_display) && ((str_contains($brewer_assignment,"Judge")) || (str_contains($brewer_assignment,"Steward")))) && ($filter != "judges") && ($filter != "stewards")) {
 					$output_datatables_body .= "<button type=\"button\" class=\"btn btn-link\" style=\"margin:0; padding:0;\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$row_brewer['uid']."\">".ucwords($brewer_assignment)."</button>";
 				}
 				else {
@@ -483,7 +483,7 @@ if ($totalRows_brewer > 0) {
 					$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 					$display_rank = bjcp_rank($bjcp_rank[0],1);
 
-					if (((strpos($display_rank, "Level 0:") !== false)) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $display_rank = "Level 3: Certified Cider or Mead Judge";
+					if (((str_contains($display_rank, "Level 0:"))) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $display_rank = "Level 3: Certified Cider or Mead Judge";
 
 					$output_datatables_body .= "<td class=\"".$output_hide_print."\">".$row_brewer['brewerJudgeID']."</td>";
 					$output_datatables_body .= "<td>".$display_rank;

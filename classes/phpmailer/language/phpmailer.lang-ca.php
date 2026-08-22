@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Catalan PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer

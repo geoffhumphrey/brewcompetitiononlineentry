@@ -1,13 +1,13 @@
 <?php
 
 ob_start();
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require(CONFIG.'bootstrap.php');
 ini_set('display_errors', 1); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 1); // Change to 0 for prod; change to 1 for testing.
 error_reporting(E_ALL); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
-$return_json = array();
+$return_json = [];
 $status = 0;
 $process = FALSE;
 $sql = "";
@@ -67,28 +67,28 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 			if ($db_conn->getLastErrno() !== 0) $error_count += 1;
 
 		}
-		
+
 		$row_flight_entries = $db_conn->getOne ($prefix."judging_flights", "count(*) as count");
 
 		if ($row_flight_entries['count'] > 0) {
 
 			// Loop through the tables and their styles
-			$cols = array("id","tableStyles","tableLocation");
+			$cols = ["id","tableStyles","tableLocation"];
 			$row_table = $db_conn->get ($prefix."judging_tables", null, $cols);
 
 			foreach ($row_table as $row_table) {
 
 				$a = explode(",",$row_table['tableStyles']);
-				$updated_table_styles = array();
+				$updated_table_styles = [];
 
 				// Query the entries table for all ids for each sub-style
 				foreach (array_unique($a) as $value) {
 
-					$cols = array("brewStyleGroup","brewStyleNum");
+					$cols = ["brewStyleGroup","brewStyleNum"];
 					$db_conn->where ("id", $value);
 					$row_styles = $db_conn->getOne ($styles_db_table, null, $cols);
 
-					$cols = array("id","brewReceived");
+					$cols = ["id","brewReceived"];
 					$db_conn-> where ("brewCategorySort",$row_styles['brewStyleGroup']);
 					$db_conn-> where ("brewSubCategory",$row_styles['brewStyleNum']);
 					$row_entries = $db_conn->get ($prefix."brewing", null, $cols);
@@ -107,12 +107,12 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 							if ($row_entries['brewReceived'] == 0) {
 
 								$update_table = $prefix."judging_flights";
-								$data = array(
+								$data = [
 									'flightTable' => $row_table['id'],
 									'flightNumber' => 1,
 									'flightEntryID' => $row_entries['id'],
 									'flightRound' => $row_fl_round['flightRound']
-								);
+								];
 								$result = $db_conn->insert ($update_table, $data);
 								if (!$result) $error_count += 1;
 
@@ -125,7 +125,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 
 				} // end foreach (array_unique($a) as $value)
 
-				if (empty($updated_table_styles)) {
+				if ($updated_table_styles === []) {
 
 					$update_table = $prefix."judging_tables";
 					$db_conn->where ('id', $row_table['id']);
@@ -141,16 +141,16 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 					$db_conn->where ('flightTable', $row_table['id']);
 					$result = $db_conn->delete ($update_table);
 					if (!$result) $error_count += 1;
-					
+
 				}
 
 				// If at least one style, update the table's styles
 				else {
 
 					$new_table_styles = implode(",", $updated_table_styles);
-					
+
 					$update_table = $prefix."judging_tables";
-					$data = array('tableStyles' => $new_table_styles);
+					$data = ['tableStyles' => $new_table_styles];
 					$db_conn->where ('id', $row_table['id']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) $error_count += 1;
@@ -158,28 +158,28 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 				}
 
 			} // end foreach
-			
+
 			$update_table = $prefix."judging_flights";
-			$data = array('flightPlanning' => 1);
+			$data = ['flightPlanning' => 1];
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) $error_count += 1;
-			
+
 			$update_table = $prefix."judging_assignments";
-			$data = array('assignPlanning' => 1);
+			$data = ['assignPlanning' => 1];
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) $error_count += 1;
 
 		} // end if ($row_flight_entries['count'] > 0)
-		
+
 		$update_table = $prefix."judging_preferences";
-		$data = array('jPrefsTablePlanning' => 1);
+		$data = ['jPrefsTablePlanning' => 1];
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) $error_count += 1;
 
 		unset($_SESSION['prefs'.$prefix_session]);
 
 		// If error count is zero, change $status from fail (0) to success (1)
-		if ($error_count == 0) $status = 1;
+		if ($error_count === 0) $status = 1;
 		else $error_type = 3; // SQL error
 
 	} // end if ($section == "enable-planning")
@@ -205,8 +205,8 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 
 		require(LIB."admin.lib.php");
 
-		$received_entries_arr = array();
-		$flight_entries_arr = array();
+		$received_entries_arr = [];
+		$flight_entries_arr = [];
 
 		// Get ids of all entries marked as received in the brewing table
 		$db_conn-> where ("brewReceived", 1);
@@ -238,7 +238,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 		// Loop through and compare, deleting any record from the judging_flights that
 		// isn't in the received entry list.
 
-		if (!empty($flight_entries_arr)) {
+		if ($flight_entries_arr !== []) {
 			
 			// Loop through flight_entries array
 			foreach ($flight_entries_arr as $value) {
@@ -257,12 +257,12 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 
 			// Update all records left to production (0)
 			$update_table = $prefix."judging_flights";
-			$data = array('flightPlanning' => 0);
+			$data = ['flightPlanning' => 0];
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) $error_count += 1;
 
 			// Loop through the tables and their styles made in planning mode
-			$cols = array("id","tableStyles","tableLocation");
+			$cols = ["id","tableStyles","tableLocation"];
 			$row_table = $db_conn->get ($prefix."judging_tables", null, $cols);
 
 			// --------- Update Table Styles ------
@@ -270,11 +270,11 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 			foreach ($row_table as $row_table) {
 
 				$a = explode(",",$row_table['tableStyles']);
-				$updated_table_styles = array();
+				$updated_table_styles = [];
 
 				foreach (array_unique($a) as $value) {
 
-					$cols = array("brewStyleGroup","brewStyleNum");
+					$cols = ["brewStyleGroup","brewStyleNum"];
 					$db_conn->where ("id",$value);
 					$row_styles = $db_conn->getOne ($styles_db_table, null, $cols);
 
@@ -290,7 +290,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 				} // end foreach (array_unique($a) as $value)
 
 				// If no styles, delete the table and any associated flights or assignments
-				if (empty($updated_table_styles)) {
+				if ($updated_table_styles === []) {
 
 					$update_table = $prefix."judging_tables";
 					$db_conn->where ('id', $row_table['id']);
@@ -306,16 +306,16 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 					$db_conn->where ('flightTable', $row_table['id']);
 					$result = $db_conn->delete ($update_table);
 					if (!$result) $error_count += 1;
-					
+
 				}
 
 				// If at least one style, update the table's styles
 				else {
 
 					$new_table_styles = implode(",", $updated_table_styles);
-					
+
 					$update_table = $prefix."judging_tables";
-					$data = array('tableStyles' => $new_table_styles);
+					$data = ['tableStyles' => $new_table_styles];
 					$db_conn->where ('id', $row_table['id']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) $error_count += 1;
@@ -324,7 +324,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 					// entries at this table.
 
 					// Query judging assignments for this table.
-					$cols = array("id","bid");
+					$cols = ["id","bid"];
 					$db_conn->where ("assignTable", $row_table['id']);
 					$row_table_assignments = $db_conn->get ($prefix."judging_assignments", null, $cols);
 
@@ -332,7 +332,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 
 						$entry_conflict = FALSE;
 						if ($row_table_assignments) $entry_conflict = entry_conflict($row_table_assignments['bid'],$new_table_styles);
-						
+
 						if ($entry_conflict) {
 
 							$update_table = $prefix."judging_assignments";
@@ -371,25 +371,25 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 		}
 
 		$update_table = $prefix."judging_preferences";
-		$data = array('jPrefsTablePlanning' => 0);
+		$data = ['jPrefsTablePlanning' => 0];
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) $error_count += 1;
 
 		unset($_SESSION['prefs'.$prefix_session]);
 
 		// If error count is zero, change $status from fail (0) to success (1)
-		if ($error_count == 0) $status = 1;
+		if ($error_count === 0) $status = 1;
 		else $error_type = 3; // SQL error
 
 		if ($unassign_flag > 0) $_SESSION['judge_unassign_flag'] = 1;
 
 	}
 
-	$return_json = array(
+	$return_json = [
 		"status" => "$status",
 		"error_count" => "$error_count",
 		"error_type" => "$error_type"
-	);
+	];
 
 	// Return the json
 	echo json_encode($return_json);

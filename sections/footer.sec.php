@@ -17,7 +17,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || ((isset($_SESSION['prefs'.$p
 
 $footer = "";
 
-if ((!empty($current_version_display_append)) && (strpos($current_version_display, $current_version_display_append) !== false)) {
+if ((!empty($current_version_display_append)) && (str_contains($current_version_display, $current_version_display_append))) {
 	$new_version_display = str_replace($current_version_display_append, "", $current_version_display);
 	$current_version_display = $new_version_display."<small>".$current_version_display_append."</small>";
 }

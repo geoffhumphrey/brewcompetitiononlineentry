@@ -7,7 +7,7 @@
 if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	// --------------------------- If a User Registers On Their Own -------------------- //
@@ -44,7 +44,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			}
 
 			else  {
-				
+
 				require(CLASSES.'phpass/PasswordHash.php');
 				$hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
 				$hasher_question = new PasswordHash(8, false);
@@ -54,7 +54,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				if ($_POST['userLevel'] == 0) $userAdminObfuscate = 0;
 
 				$update_table = $prefix."users";
-				$data = array(
+				$data = [
 					'user_name' => $username,
 					'userLevel' => sterilize($_POST['userLevel']),
 					'password' => $hash,
@@ -62,7 +62,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'userQuestionAnswer' => $hash_question,
 					'userCreated' =>  date('Y-m-d H:i:s', time()),
 					'userAdminObfuscate' => $userAdminObfuscate
-				);
+				];
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -80,10 +80,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						session_name($prefix_session);
 						session_start();
 					}
-					
+
 					// Authenticate the user
 					if ($totalRows_login == 1)	{
-						
+
 						// Register the loginUsername
 						$_SESSION['loginUsername'] = $username;
 
@@ -95,7 +95,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					}
 
 					else {
-						
+
 						// If the username/password combo is incorrect or not found, relocate to the login error page
 						$redirect = $base_url."index.php?section=default&go=".$go."&msg=1";
 						$redirect = prep_redirect_link($redirect);
@@ -121,7 +121,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		}
-	
+
 	} // end if (($action == "add") && ($section == "admin") && ($_SESSION['userLevel'] <= 1))
 
 	// ---------------------------  Editing a User -------------------------------------------
@@ -160,11 +160,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				}
 
 				$update_table = $prefix."users";
-				$data = array(
+				$data = [
 					'userLevel' => sterilize($_POST['userLevel']),
 					'userCreated' => date('Y-m-d H:i:s', time()),
 					'userAdminObfuscate' => $userAdminObfuscate
-				);			
+				];			
 				$db_conn->where ('user_name', $username);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -172,14 +172,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$errors = TRUE;
 				}
 
-				if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+				if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 				if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=participants&msg=3";
 				$updateGoTo = prep_redirect_link($updateGoTo);
 				$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 
 			} else {
-	
+
 				$redirect = $base_url."index.php?msg=98";
 				$redirect = prep_redirect_link($redirect);
 				$redirect_go_to = sprintf("Location: %s", $redirect);
@@ -199,15 +199,15 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$redirect_go_to = sprintf("Location: %s", $redirect);
 
 				}
-				
+
 				// User name not found. OK to update.
 				if ($totalRows_userCheck < 1) {
 
 					$update_table = $prefix."users";
-					$data = array(
+					$data = [
 						'user_name' => $username,
 						'userCreated' => date('Y-m-d H:i:s', time())
-					);			
+					];			
 					$db_conn->where ('id', $id);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -218,10 +218,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					// Previously, changed the brewer record based upon a match of the user id and the brewer uid
 					// Match using the old email address, update the new email address in the brewer table as well
 					$update_table = $prefix."brewer";
-					$data = array(
+					$data = [
 						'brewerEmail' => $username,
 						'uid' => $id
-					);
+					];
 					$db_conn->where ('brewerEmail', $row_brewerCheck['brewerEmail']);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -229,7 +229,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						$errors = TRUE;
 					}
 
-					if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+					if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 					if ($filter == "admin") {
 
@@ -237,7 +237,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						else $updateGoTo = $_POST['relocate']."&msg=2";
 						$updateGoTo = prep_redirect_link($updateGoTo);
 						$redirect_go_to = sprintf("Location: %s", $updateGoTo);
-					
+
 					} // end if ($filter == "admin")
 
 					if ($filter != "admin") {
@@ -246,18 +246,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						$row_login = $db_conn->getOne($users_db_table, "user_name");
 						$totalRows_login = $db_conn->count;
 
-						if (session_status() == PHP_SESSION_NONE) {
+						if (session_status() === PHP_SESSION_NONE) {
 							session_name($prefix_session);
 							session_start();
 						}
 
 						// Authenticate the user
 						if ($totalRows_login == 1) {
-							
+
 							// Register the loginUsername
 							$_SESSION['loginUsername'] = $username;
 							unset($_SESSION['user_info'.$prefix_session]);
-							
+
 							// If the username/password combo is OK, relocate to the "protected" content index page
 							$redirect = $base_url."index.php?section=list&msg=3";
 							$redirect = prep_redirect_link($redirect);
@@ -279,7 +279,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				} // end if ($totalRows_userCheck < 1)
 
 			} // end if ($go == "username")
-		
+
 		} // end if (strstr($username,'@'))
 
 		else {
@@ -314,17 +314,17 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			if ($check)  {
 
 				$update_table = $prefix."users";
-				$data = array(
+				$data = [
 					'password' => $hash_new,
 					'userCreated' => date('Y-m-d H:i:s', time())
-				);			
+				];			
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
 				}
-				
+
 				$redirect = $base_url."index.php?section=list&id=".$id."&msg=4";
 				$redirect = prep_redirect_link($redirect);
 				$redirect_go_to = sprintf("Location: %s", $redirect);
@@ -339,10 +339,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$hash_new = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
 			$update_table = $prefix."users";
-			$data = array(
+			$data = [
 				'password' => $hash_new,
 				'userCreated' => date('Y-m-d H:i:s', time())
-			);
+			];
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
@@ -350,7 +350,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$errors = TRUE;
 			}
 
-			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+			if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 			$redirect = $base_url."index.php?section=admin&go=participants&msg=33";
 			if ($errors) $redirect = $base_url."index.php?section=admin&go=participants&msg=3";

@@ -1,5 +1,6 @@
-<?php 
-$color_array = array(
+<?php
+ 
+$color_array = [
 	$label_pale,
 	$label_straw,
 	$label_gold,
@@ -11,7 +12,7 @@ $color_array = array(
 	$label_red,
 	$label_purple,
 	$label_garnet
-);
+];
 
 if ($action == "edit") {
 	$aroma_data = json_decode($row_eval['evalAromaChecklist'], true);

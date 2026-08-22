@@ -1,6 +1,7 @@
-<?php 
+<?php
+ 
 ob_start();
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 $address = rtrim($id,"&amp;KeepThis=true");
 $address1 = str_replace(' ', '+', $address);

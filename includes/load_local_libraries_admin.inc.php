@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>libraries/admin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" />
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/admin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 
-    <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
+    <?php if ((($section == "admin") || (str_contains($section, 'step'))) && (in_array($go,$tinymce_load))) { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
     <?php if (ENABLE_MARKDOWN) { ?>
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>libraries/admin/bootstrap-markdown-editor/bootstrap-markdown-editor.css">
@@ -52,7 +52,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>libraries/admin/jasny-bootstrap/jasny-bootstrap.min.css">
     <script src="<?php echo $base_url; ?>libraries/admin/jasny-bootstrap/jasny-bootstrap.min.js"></script>
     
-	<?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
+	<?php if ((($section == "admin") || (str_contains($section, 'step'))) && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
     <!-- Load DropZone / http://www.dropzonejs.com -->
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>libraries/admin/dropzone/dropzone.min.css" />
     <script src="<?php echo $base_url; ?>libraries/admin/dropzone/dropzone.min.js"></script>

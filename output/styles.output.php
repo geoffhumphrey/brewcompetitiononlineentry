@@ -1,5 +1,6 @@
 <?php
 
+
 // Redirect if directly accessed without authenticated session
 if (!isset($_SESSION['loginUsername'])) {
     $redirect = "../../403.php";
@@ -20,9 +21,9 @@ include (DB.'styles.db.php');
     </div>
 <?php if ($totalRows_styles > 0) { ?>
 <?php foreach ($rows_styles as $row_styles) {
-$replacement1 = array('$label_entry_instructions:','$label_commerical_examples:','must specify','may specify','MUST specify','MAY specify','must provide');
-if ($go == "default") $replacement2 = array('<p><strong class="text-danger">$label_entry_instructions:</strong>','<p><strong class="text-info">$label_commercial_examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
-else $replacement2 = array('<p><strong class="text-danger">$label_entry_instructions:</strong>','<p><strong class="text-info">$label_commercial_examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide');
+$replacement1 = ['$label_entry_instructions:','$label_commerical_examples:','must specify','may specify','MUST specify','MAY specify','must provide'];
+if ($go == "default") $replacement2 = ['<p><strong class="text-danger">$label_entry_instructions:</strong>','<p><strong class="text-info">$label_commercial_examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide'];
+else $replacement2 = ['<p><strong class="text-danger">$label_entry_instructions:</strong>','<p><strong class="text-info">$label_commercial_examples:</strong>','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> specify','<u>MAY</u> specify','<u>MUST</u> provide'];
 $info = str_replace($replacement1,$replacement2,$row_styles['brewStyleInfo']);
 
 $comEx = sprintf("<strong class=\"text-info\">%s:</strong> %s",$label_commercial_examples,$row_styles['brewStyleComEx']);

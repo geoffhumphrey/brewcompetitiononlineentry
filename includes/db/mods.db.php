@@ -30,11 +30,11 @@ if ((!isset($_SESSION['mods_display'])) || ((isset($_SESSION['mods_display'])) &
 	$row_mods_display = ($rows_mods_display && count($rows_mods_display) > 0) ? $rows_mods_display[0] : null;
 	$totalRows_mods_display = $db_conn->count;
 
-	$mods_display_arr = array();
+	$mods_display_arr = [];
 
 	if ($totalRows_mods_display > 0) {
 		foreach ($rows_mods_display as $row_mods_display) {
-			$mods_display_arr[] = array(
+			$mods_display_arr[] = [
 				'id' => $row_mods_display['id'],
 				'mod_extend_function' => $row_mods_display['mod_extend_function'],
 				'mod_extend_function_admin' => $row_mods_display['mod_extend_function_admin'],
@@ -43,7 +43,7 @@ if ((!isset($_SESSION['mods_display'])) || ((isset($_SESSION['mods_display'])) &
 				'mod_filename' => $row_mods_display['mod_filename'],
 				'mod_enable' => $row_mods_display['mod_enable'],
 				'mod_type' => $row_mods_display['mod_type']
-			);
+			];
 		}
 	}
 
@@ -62,29 +62,13 @@ function mod_display($row_mod_display,$section,$go,$user_level,$page_location) {
 	$file_ok = 0;
 	$output = "";
 
-	switch ($section) {
-
-		case "default":
-		case "rules":
-		case "volunteers":
-		case "sponsors":
-		case "contact":
-		case "pay": $display_section = 1;
-		break;
-
-		case "register": $display_section = 6;
-		break;
-
-		case "list": $display_section = 8;
-		break;
-
-		case "admin": $display_section = 9;
-		break;
-
-		default: $display_section = 0;
-		break;
-
-	}
+	$display_section = match ($section) {
+        "default", "rules", "volunteers", "sponsors", "contact", "pay" => 1,
+        "register" => 6,
+        "list" => 8,
+        "admin" => 9,
+        default => 0,
+    };
 
 	if (!empty($row_mod_display)) {
 
@@ -116,11 +100,11 @@ function mod_display($row_mod_display,$section,$go,$user_level,$page_location) {
 
 	}
 
-	return array(
+	return [
 		'file_not_found' => $file_not_found,
 		'file_ok' => $file_ok,
 		'output' => $output
-	);
+	];
 
 }
 ?>

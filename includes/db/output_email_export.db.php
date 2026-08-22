@@ -6,7 +6,7 @@ if ($bid != "") {
 	$row_judging = $db_conn->getOne($prefix."judging_locations", "judgingLocName");
 }
 
-$params_sql = array();
+$params_sql = [];
 
 if ($filter == "judges") {
 	$query_sql = "SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.brewerJudgeLocation, a.brewerStewardLocation, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLikes, a.brewerJudgeDislikes, a.brewerJudgeMead, a.brewerJudgeCider, b.uid FROM ".$prefix."brewer"." a, ".$prefix."staff"." b WHERE b.staff_judge='1' AND a.uid = b.uid";
@@ -44,7 +44,7 @@ else {
 	$query_sql .= " ORDER BY brewerLastName ASC";
 }
 
-$rows_sql = (!empty($params_sql)) ? $db_conn->rawQuery($query_sql, $params_sql) : $db_conn->rawQuery($query_sql);
+$rows_sql = ($params_sql !== []) ? $db_conn->rawQuery($query_sql, $params_sql) : $db_conn->rawQuery($query_sql);
 $row_sql = ($rows_sql && count($rows_sql) > 0) ? $rows_sql[0] : null;
 $totalRows_sql = $db_conn->count;
 ?>

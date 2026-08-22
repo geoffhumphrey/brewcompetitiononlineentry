@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-function dropoff_loc($id) {
+function dropoff_loc($id): string {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -13,13 +14,13 @@ function dropoff_loc($id) {
 	return $return;
 }
 
-function location_count($location_id) {
+function location_count($location_id): int {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
 	$location_count = 0;
-	$uid = array();
+	$uid = [];
 
 	$db_conn->where('brewerDropOff', $location_id);
 	$rows_dropoff = $db_conn->get($prefix."brewer", null, "uid");
@@ -42,7 +43,7 @@ function location_count($location_id) {
 	return $location_count;
 }
 
-function dropoff_location_info($location_id) {
+function dropoff_location_info($location_id): string {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -59,7 +60,7 @@ function dropoff_location_info($location_id) {
 
 }
 
-function entries_by_dropoff_loc($id) {
+function entries_by_dropoff_loc($id): string {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -107,51 +108,51 @@ function entries_by_dropoff_loc($id) {
 //							/output/entries_export.php
 // --------------------------------------------------------
 
-function parseCSVComments($comments) {
+function parseCSVComments(string $comments): string {
 
 	// First, escape all " and make them ""
 	$comments = str_replace('"', '""', $comments);
 	$comments = preg_replace("/[\n\r]/","",$comments);
 
 	// Check if any commas or new lines
-	if(str_contains($comments, ",") or str_contains($comments, "\n") or str_contains($comments, "\t") or str_contains($comments, "\r") or str_contains($comments, "\v")) {
+	if(str_contains($comments, ",") || str_contains($comments, "\n") || str_contains($comments, "\t") || str_contains($comments, "\r") || str_contains($comments, "\v")) {
 
 		// If new lines or commas and escape them
 		return '"'.$comments.'"';
 
 	}
-
-	// If no new lines or commas just return the value
-	else return $comments;
+    return $comments;
 }
 
-function filename($input) {
+function filename(string $input): string {
 
-	if ($input == "default") $return = "";
-	else {
-		$return = str_replace('_', ' ',$input);
-		$return = ucwords($return);
-		$return = "_".str_replace(' ','_',$return);
-	}
-	return $return;
+	if ($input === "default") return "";
+    $return = str_replace('_', ' ',$input);
+    $return = ucwords($return);
+	return "_".str_replace(' ','_',$return);
 }
 
 // --------------------------------------------------------
 // The following applies to entry.output.php
 // --------------------------------------------------------
 
-function pay_to_print($prefs_pay,$entry_paid) {
-	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
-	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
-	elseif ($prefs_pay == "N") return TRUE;
+function pay_to_print(string $prefs_pay, $entry_paid): bool
+{
+    if (($prefs_pay === "Y") && ($entry_paid == "1")) {
+        return TRUE;
+    }
+    if (($prefs_pay === "Y") && ($entry_paid == "0")) {
+        return FALSE;
+    }
+    return $prefs_pay === "N";
 }
 
 // --------------------------------------------------------
 // The following applies to labels.output.php
 // --------------------------------------------------------
 
-function truncate($string, $your_desired_width, $append="", $max_word_length=20) {
-  $parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
+function truncate(string $string, $your_desired_width, string $append="", $max_word_length=20): string {
+  $parts = preg_split('/([\s\n\r]+)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
   $parts_count = count($parts);
 
   // Single word: truncate by character count
@@ -170,7 +171,7 @@ function truncate($string, $your_desired_width, $append="", $max_word_length=20)
         $append_len = mb_strlen($append, 'UTF-8');
         $remaining = $your_desired_width - ($length - mb_strlen($part, 'UTF-8')) - $append_len;
         if ($remaining >= 1) {
-          $r = implode(array_slice($parts, 0, $last_part));
+          $r = implode('', array_slice($parts, 0, $last_part));
           $r .= mb_substr($part, 0, $remaining, 'UTF-8') . $append;
           return $r;
         }
@@ -179,7 +180,7 @@ function truncate($string, $your_desired_width, $append="", $max_word_length=20)
     }
   }
 
-  $r = implode(array_slice($parts, 0, $last_part));
+  $r = implode('', array_slice($parts, 0, $last_part));
 
   if (mb_strlen($string, 'UTF-8') > $your_desired_width) {
     $r = rtrim($r);
@@ -188,13 +189,13 @@ function truncate($string, $your_desired_width, $append="", $max_word_length=20)
   return $r;
 }
 
-function user_entry_count($uid,$view) {
+function user_entry_count($uid,$view): string {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
-	$judging_numbers = array();
-	$entry_numbers = array();
+	$judging_numbers = [];
+	$entry_numbers = [];
 	$user_entry_numbers = "";
 	$user_judging_numbers = "";
 
@@ -202,7 +203,7 @@ function user_entry_count($uid,$view) {
 	else $sort = "brewJudgingNumber";
 
 	$query_with_entries_count = "SELECT DISTINCT id,brewJudgingNumber FROM ".$prefix."brewing"." WHERE brewBrewerID=? AND brewReceived='1' ORDER BY ".$sort." ASC";
-	$rows_with_entries_count = $db_conn->rawQuery($query_with_entries_count, array($uid));
+	$rows_with_entries_count = $db_conn->rawQuery($query_with_entries_count, [$uid]);
 	$totalRows_with_entries_count = $db_conn->count;
 
 	if ($totalRows_with_entries_count > 0) {
@@ -223,13 +224,13 @@ function user_entry_count($uid,$view) {
 // The following applies to /output/staff_points.php
 // --------------------------------------------------------
 
-function round_down_to_hundred($number) {
-    if (strlen($number)<3) { $number = $number;	}
-	else { $number = substr($number, 0, strlen($number)-2) . "00";	}
-    return $number;
+function round_down_to_hundred(int|string $number): string {
+    $number = (string)$number;
+    if (strlen($number)<3) { return $number;	}
+    return substr($number, 0, strlen($number)-2) . "00";
 }
 
-function total_days() {
+function total_days(): int {
 	include (CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -246,7 +247,7 @@ function total_days() {
 
 }
 
-function total_sessions() {
+function total_sessions(): int {
 	include (CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
@@ -263,7 +264,7 @@ function total_sessions() {
 
 }
 
-function total_flights() {
+function total_flights(): int {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	$rows_tables = $db_conn->get($prefix."judging_tables", null, "id");
@@ -287,17 +288,18 @@ function total_flights() {
 
 }
 
-function validate_bjcp_id($input) {
+function validate_bjcp_id(string $input): bool {
 	// BJCP also issues "TEMPDDDD" ids (judges who passed the online exam but not
 	// yet the tasting exam) alongside the standard single-letter + 4-digit ids
-	if (preg_match('/^TEMP\d{4}$/i', (string) $input)) return TRUE;
+	if (preg_match('/^TEMP\d{4}$/i', $input)) return TRUE;
 	$length = strlen($input);
-	if ($length != 5) return FALSE;
-	elseif (!preg_match('([a-zA-Z])',$input)) return FALSE;
-	else return TRUE;
+    if ($length !== 5) {
+        return FALSE;
+    }
+    return (bool) preg_match('([a-zA-Z])',$input);
 }
 
-function total_points($total_entries,$method) {
+function total_points($total_entries,$method): string {
 
 	// Get the maximum allowable points for all roles
 	// According to the Maximum Points Earned (Table 1) table - https://bjcp.org/about/reference/experience-point-award-schedule/
@@ -356,7 +358,7 @@ function total_points($total_entries,$method) {
 
 }
 
-function judge_points($user_id,$judge_max_points) {
+function judge_points($user_id,$judge_max_points): string {
 
 	/**
 	 * To figure out judge points, need to assess:
@@ -375,7 +377,7 @@ function judge_points($user_id,$judge_max_points) {
 	require (INCLUDES.'db_tables.inc.php');
 	require (DB.'judging_locations.db.php');
 
-	$days_judged = array();
+	$days_judged = [];
 
 	$points = 0;
 
@@ -387,7 +389,7 @@ function judge_points($user_id,$judge_max_points) {
 		if ($row_judging['judgingLocType'] < 2) {
 			
 			// Get date and determine 24 hour window where it falls based upon the time zone
-			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
+			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", (int)$row_judging['judgingDate']));
 			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
 
 			/**
@@ -407,11 +409,11 @@ function judge_points($user_id,$judge_max_points) {
 
 	        if ($row_assignments['count'] > 0) {
 				
-				$days_judged[] = array (
+				$days_judged[] =  [
 					"day_midnight" => $timestamp_curr_day_midnight,
 					"points" => $row_assignments['count'] * 0.5,
 					"distributed" => $row_judging['judgingLocType']
-				);
+				];
 
 			}
 
@@ -419,15 +421,15 @@ function judge_points($user_id,$judge_max_points) {
 
 	}
 
-	if (!empty($days_judged)) {
+	if ($days_judged !== []) {
 
 		// Traditional-type sessions are tallied per calendar day (multiple judging_locations
 		// rows can share a date - e.g. two rooms running concurrently - so all of a judge's
 		// points for that day must be summed before the 1.5/day cap is applied, not capped
 		// per row). Distributed sessions aren't tied to a single date - each stands on its
 		// own and gets its own 1.5 cap.
-		$daily_totals = array();
-		$distributed_totals = array();
+		$daily_totals = [];
+		$distributed_totals = [];
 
 		foreach ($days_judged as $day) {
 
@@ -465,7 +467,7 @@ function judge_points($user_id,$judge_max_points) {
 
 }
 
-function steward_points($user_id) {
+function steward_points($user_id): string {
 
 	/**
 	 * To figure out steward points, need to assess:
@@ -483,8 +485,8 @@ function steward_points($user_id) {
 	require (INCLUDES.'db_tables.inc.php');
 	require (DB.'judging_locations.db.php');
 
-	$possible_judging_days = array();
-	$days_stewarded = array();
+	$possible_judging_days = [];
+	$days_stewarded = [];
 
 	$points = 0;
 
@@ -497,7 +499,7 @@ function steward_points($user_id) {
 
 		if ($row_judging['judgingLocType'] < 1) {
 			// Get date and determine 24 hour window where it falls based upon the time zone
-			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
+			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", (int)$row_judging['judgingDate']));
 			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
 			$possible_judging_days[] = $timestamp_curr_day_midnight;
 
@@ -527,7 +529,7 @@ function steward_points($user_id) {
 	$possible_judging_days = array_unique($possible_judging_days);
 	$days_stewarded = array_unique($days_stewarded);
 
-	if (!empty($days_stewarded)) {
+	if ($days_stewarded !== []) {
 		
 		foreach ($possible_judging_days as $judging_day) {
 			foreach ($days_stewarded as $day) {
@@ -549,15 +551,14 @@ function steward_points($user_id) {
 
 }
 
-function bos_points($uid) {
+function bos_points($uid): bool {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 	require(INCLUDES.'db_tables.inc.php');
 	$db_conn->where('uid', $uid);
 	$row_bos_judges = $db_conn->getOne($prefix."staff", "staff_judge_bos");
 
-	if ($row_bos_judges['staff_judge_bos'] == 1) return TRUE;
-	else return FALSE;
+	return $row_bos_judges['staff_judge_bos'] == 1;
 }
 
 
@@ -565,7 +566,7 @@ function bos_points($uid) {
 // The following applies to /output/pullsheets.php
 // --------------------------------------------------------
 
-function number_of_flights($table_id) {
+function number_of_flights($table_id): string {
     require(CONFIG.'config.php');
     $db_conn = new MysqliDb($connection);
 
@@ -574,10 +575,10 @@ function number_of_flights($table_id) {
     $row_flights = $db_conn->getOne($prefix."judging_flights", "flightNumber");
 
 	$r = $row_flights['flightNumber'];
-	return $r;
+	return (string) $r;
 }
 
-function check_flight_number($entry_id,$flight,$method) {
+function check_flight_number($entry_id,$flight,$method): string {
 	require(CONFIG.'config.php');
   $db_conn = new MysqliDb($connection);
 
@@ -591,25 +592,27 @@ function check_flight_number($entry_id,$flight,$method) {
   	if ($method == 1) $r = $row_flights['flightNumber'];
   }
 	
-	return $r;
+	return (string) $r;
 
 }
 
-function check_flight_round($flight_round,$round) {
+function check_flight_round($flight_round,$round): bool {
 
 	if ($round == "default") {
-		if ($flight_round != "") return TRUE;
-		else return FALSE;
+		return $flight_round != "";
 	}
 
 	if ($round != "default") {
-		if (($flight_round != "") && ($flight_round == $round)) return TRUE;
-		else return FALSE;
+		return ($flight_round != "") && ($flight_round == $round);
 	}
+
+	return FALSE;
 
 }
 
-function results_count($style) {
+function results_count(string $style): string {
+	require(CONFIG.'config.php');
+    $db_conn = new MysqliDb($connection);
 	require(CONFIG.'config.php');
     $db_conn = new MysqliDb($connection);
 
@@ -618,13 +621,13 @@ function results_count($style) {
 	$row_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
 	$query_score_count = "SELECT COUNT(*) as 'count' FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b, ".$prefix."brewer"." c WHERE b.brewCategorySort=? AND a.eid = b.id AND a.scorePlace IS NOT NULL AND c.uid = b.brewBrewerID";
-	$row_score_count = $db_conn->rawQueryOne($query_score_count, array($style));
+	$row_score_count = $db_conn->rawQueryOne($query_score_count, [$style]);
 
 	return $row_entry_count['count']."^".$row_score_count['count'];
 
 }
 
-function get_flight_info($id) {
+function get_flight_info($id): array {
 	require(CONFIG.'config.php');
     $db_conn = new MysqliDb($connection);
 
@@ -636,19 +639,17 @@ function get_flight_info($id) {
 	    $db_conn->where('id', $row_flights['flightTable']);
 		$row_tables = $db_conn->getOne($prefix."judging_tables", "id,tableName,tableNumber");
 
-		$return = array(
+		return [
 			"response" => "Assigned",
 			"id" => $row_tables['id'],
 			"tableName" => $row_tables['tableName'],
 			"tableNumber" => $row_tables['tableNumber'],
 			"flightNumber" => $row_flights['flightNumber'],
 			"flightRound" => $row_flights['flightRound']
-		);
+		];
 	}
 
-	else $return = array("response" => "Not assigned to a table.");
-
-	return $return;
+	return ["response" => "Not assigned to a table."];
 }
 
 ?>

@@ -15,9 +15,9 @@ $limits_by_style = FALSE;
 $limits_by_table = FALSE;
 $style_limits_json = json_decode($_SESSION['prefsStyleLimits'],true);
 if ((strlen($_SESSION['prefsStyleLimits']) > 1) && (json_last_error() === JSON_ERROR_NONE)) $limits_by_style = TRUE;
-if ((strlen($_SESSION['prefsStyleLimits']) == 1) && (is_numeric($_SESSION['prefsStyleLimits']))) $limits_by_table = TRUE;
+if ((strlen($_SESSION['prefsStyleLimits']) === 1) && (is_numeric($_SESSION['prefsStyleLimits']))) $limits_by_table = TRUE;
 
-if (strpos($section, "step") === FALSE) {
+if (!str_contains($section, "step")) {
 
     if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights";
     else $assign_to = "Tables";
@@ -56,9 +56,9 @@ $bos_modal_body = "";
 $orphan_modal_body_1 = "";
 $orphan_modal_body_2 = "";
 $style_assigned_this = "";
-$all_loc_total = array();
+$all_loc_total = [];
 $mode_alert_color = "alert-teal";
-$table_location_js_cookies = array();
+$table_location_js_cookies = [];
 
 $sub_lead_text_comp_mode = "<div id=\"tables-competition-mode-text\"><strong>Your installation is currently in Tables Competition Mode </strong> &ndash; to ensure accuracy, verify that all paid and received entries have been marked as such via the <a href=\"".$base_url."index.php?section=admin&amp;go=entries\">Manage Entries</a> screen.</div>";
     
@@ -86,8 +86,8 @@ if (($action == "default") && ($filter == "default")) {
 
         if ($dbTable == "default") {
 
-    		$a[] = array();
-    		$y[] = array();
+    		$a[] = [];
+    		$y[] = [];
     		$z = 0;
 
     		foreach ($rows_styles as $row_styles) {
@@ -111,7 +111,7 @@ if (($action == "default") && ($filter == "default")) {
     			
     		}
 
-            if ($z == 0) $orphan_modal_body_1 .= "<p>All styles with entries have been assigned to tables.</p>";
+            if ($z === 0) $orphan_modal_body_1 .= "<p>All styles with entries have been assigned to tables.</p>";
             else $orphan_modal_body_1 .= "<p>The following styles with entries have not been assigned to tables:</p>";
 
         }
@@ -191,10 +191,10 @@ if (($action == "default") && ($filter == "default")) {
     $db_conn->returnType = "array";
     $rows_judge_avail = $db_conn->rawQuery($query_judge_avail);
 
-    $judge_availability = array();
-    $steward_availability = array();
-    $all_judge_loc_avail_assign_total = array();
-    $all_steward_loc_avail_assign_total = array();
+    $judge_availability = [];
+    $steward_availability = [];
+    $all_judge_loc_avail_assign_total = [];
+    $all_steward_loc_avail_assign_total = [];
 
     if (!empty($rows_judge_avail)) {
 
@@ -256,11 +256,11 @@ if (($action == "default") && ($filter == "default")) {
 
             $count_judge_yes = "Y-".$row_judging['id'];
             $count_judge_avail = array_count_values($judge_availability);
-            if ((!empty($count_judge_avail)) && (array_key_exists($count_judge_yes,$count_judge_avail))) $count_judge_avail = $count_judge_avail[$count_judge_yes];
+            if (($count_judge_avail !== []) && (array_key_exists($count_judge_yes,$count_judge_avail))) $count_judge_avail = $count_judge_avail[$count_judge_yes];
             
             $count_steward_yes = "Y-".$row_judging['id'];
             $count_steward_avail = array_count_values($steward_availability);
-            if ((!empty($count_steward_avail)) && (array_key_exists($count_steward_yes,$count_steward_avail))) $count_steward_avail = $count_steward_avail[$count_steward_yes];
+            if (($count_steward_avail !== []) && (array_key_exists($count_steward_yes,$count_steward_avail))) $count_steward_avail = $count_steward_avail[$count_steward_yes];
             
             $db_conn->where("assignment", "J");
             $db_conn->where("assignLocation", $row_judging['id']);
@@ -275,8 +275,8 @@ if (($action == "default") && ($filter == "default")) {
             if ((is_numeric($count_judge_avail)) && ($count_judge_avail > 0)) $judge_difference = ($count_judge_avail - $row_judge_loc_assign['count']);
             if ((is_numeric($count_steward_avail)) && ($count_steward_avail > 0)) $steward_difference = ($count_steward_avail - $row_steward_loc_assign['count']);
 
-            $all_judge_loc_avail_assign_total[$row_judging['id']] = array('location_total_available' => $count_judge_avail,'location_total_assigned' => $row_judge_loc_assign['count'], "location_available" => $judge_difference);
-            $all_steward_loc_avail_assign_total[$row_judging['id']] = array('location_total_available' => $count_steward_avail,'location_total_assigned' => $row_steward_loc_assign['count'], "location_available" => $steward_difference);
+            $all_judge_loc_avail_assign_total[$row_judging['id']] = ['location_total_available' => $count_judge_avail,'location_total_assigned' => $row_judge_loc_assign['count'], "location_available" => $judge_difference];
+            $all_steward_loc_avail_assign_total[$row_judging['id']] = ['location_total_available' => $count_steward_avail,'location_total_assigned' => $row_steward_loc_assign['count'], "location_available" => $steward_difference];
 
         }
         
@@ -287,7 +287,7 @@ if (($action == "default") && ($filter == "default")) {
 
         foreach ($rows_tables as $row_tables) {
 
-            $a = array(get_table_info("1","list",$row_tables['id'],$dbTable,"default"));
+            $a = [get_table_info("1","list",$row_tables['id'],$dbTable,"default")];
             $styles = display_array_content($a,1);
             $received = get_table_info("1","count_total",$row_tables['id'],$dbTable,"default");
             $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
@@ -433,15 +433,15 @@ if (($action == "default") && ($filter == "default")) {
 if (($action == "add") || ($action == "edit")) {
 
     $all_table_styles_concat = "";
-    $all_table_numbers_array = array();
-    $all_table_styles_array = array();
+    $all_table_numbers_array = [];
+    $all_table_styles_array = [];
     $table_styles_available = "";
-	$current_table_styles_array = array();
+	$current_table_styles_array = [];
     $table_numbers_available = "";
     $table_locations_available = "";
     $table_numbers = "";
     $table_total = 0;
-    $style_ids_at_table = array();
+    $style_ids_at_table = [];
 
     if ($judging_session) {
         
@@ -567,7 +567,7 @@ if (($action == "add") || ($action == "edit")) {
                 $table_styles_available .= "<td><span id=\"".$row_styles['id']."-total\">".$received_entry_count_style."</span></td>\n";
                 $table_styles_available .= "</tr>\n\n";
 
-                if ($selected_styles == "CHECKED") $table_total += $received_entry_count_style;
+                if ($selected_styles === "CHECKED") $table_total += $received_entry_count_style;
 
             }
 
@@ -1617,4 +1617,4 @@ if (($action == "assign") && ($filter == "default")) { ?>
 </div>
 <?php } ?>
 <script src="<?php echo $js_url."admin_ajax.min.js"; ?>"></script>
-<?php if (($action == "assign") && ($filter != "default") && ($id != "default")) include ('judging_assign.admin.php'); ?>
+<?php if (($action == "assign") && ($filter != "default") && ($id != "default")) include (__DIR__ . '/judging_assign.admin.php'); ?>

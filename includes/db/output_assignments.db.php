@@ -3,7 +3,7 @@
 if ($filter == "staff") {
 
 	$tbody_staff = "";
-	$row_assignments = array();
+	$row_assignments = [];
 
 	// Get IDs of non-judging sessions
 	$db_conn->where('judgingLocType', '2');
@@ -12,8 +12,8 @@ if ($filter == "staff") {
 
 	if ($totalRows_non_judge > 0) {
 
-		$non_judge_locs = array();
-		$row_assignments = array();
+		$non_judge_locs = [];
+		$row_assignments = [];
 
 		foreach ($rows_non_judge as $row_non_judge) { $non_judge_locs[] = $row_non_judge['id']; }
 
@@ -49,7 +49,7 @@ if ($filter == "staff") {
 
 else {
 	$query_assignments = "SELECT * FROM ".$prefix."judging_assignments"." WHERE assignment=?";
-	$params_assignments = array($filter);
+	$params_assignments = [$filter];
 	if ($id != "default") { $query_assignments .= " AND assignTable=?"; $params_assignments[] = $id; }
 	if ($location != "default") { $query_assignments .= " AND assignLocation=?"; $params_assignments[] = $location; }
 	if (SINGLE) { $query_assignments .= " AND comp_id=?"; $params_assignments[] = $_SESSION['comp_id']; }
@@ -63,13 +63,13 @@ else {
 		$rows_sessions = $db_conn->get($prefix."judging_locations");
 		$totalRows_sessions = $db_conn->count;
 
-		$judging_sessions = array();
+		$judging_sessions = [];
 		if ($totalRows_sessions > 0) {
 			foreach ($rows_sessions as $row_sessions) {
-				$judging_sessions[] = array(
+				$judging_sessions[] = [
 					"loc-name" => $row_sessions['judgingLocName'],
 					"loc-id" => $row_sessions['id']
-				);
+				];
 			}
 		}
 	}

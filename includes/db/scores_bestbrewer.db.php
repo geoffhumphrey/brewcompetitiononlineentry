@@ -14,13 +14,13 @@ if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
 
 if ($row_bb_prefs['prefsScoringCOA'] == 0) {
 
-    $bb_points_prefs = array($row_bb_prefs['prefsFirstPlacePts'],$row_bb_prefs['prefsSecondPlacePts'],$row_bb_prefs['prefsThirdPlacePts'],$row_bb_prefs['prefsFourthPlacePts'],$row_bb_prefs['prefsHMPts']);
+    $bb_points_prefs = [$row_bb_prefs['prefsFirstPlacePts'],$row_bb_prefs['prefsSecondPlacePts'],$row_bb_prefs['prefsThirdPlacePts'],$row_bb_prefs['prefsFourthPlacePts'],$row_bb_prefs['prefsHMPts']];
 
 }
 
 else {
 
-    $bb_points_prefs = array();
+    $bb_points_prefs = [];
 
     // Get overall entries...
     // Per table
@@ -57,7 +57,7 @@ else {
                 include (DB.'winners_category.db.php');
 
                 if (isset($style)) $bb_points_prefs[$style] = $row_entry_count['count'];
-           
+
             }
 
         }
@@ -69,7 +69,7 @@ else {
     else {
 
         $active_styles = styles_active(2,$go);
-        
+
         foreach (array_unique($active_styles) as $style) {
 
             if (!empty($style)) {
@@ -92,9 +92,9 @@ else {
     foreach ($bb_points_prefs as $key => $value) {
         echo $key.": ".$value."<br>";
         echo "<ul>";
-        
+
         for ($i=1; $i <= 5; $i++) {
-            
+
             if ($value > 0) {
                 $points = pow((($value - $i) / $value),3);
                 if ($points > 0) echo "<li>".$i." = ".$points." points</li>";
@@ -102,11 +102,11 @@ else {
             }
 
             else echo "<li>".$i." = 0 points</li>";
-            
+
         }
-        
+
         echo "</ul>";
-        
+
     }
 
     echo "<br><br>";
@@ -115,5 +115,5 @@ else {
 
 } // end else
 
-$bb_tiebreaker_prefs = array($row_bb_prefs['prefsTieBreakRule1'],$row_bb_prefs['prefsTieBreakRule2'],$row_bb_prefs['prefsTieBreakRule3'],$row_bb_prefs['prefsTieBreakRule4'],$row_bb_prefs['prefsTieBreakRule5'],$row_bb_prefs['prefsTieBreakRule6']);
+$bb_tiebreaker_prefs = [$row_bb_prefs['prefsTieBreakRule1'],$row_bb_prefs['prefsTieBreakRule2'],$row_bb_prefs['prefsTieBreakRule3'],$row_bb_prefs['prefsTieBreakRule4'],$row_bb_prefs['prefsTieBreakRule5'],$row_bb_prefs['prefsTieBreakRule6']];
 ?>

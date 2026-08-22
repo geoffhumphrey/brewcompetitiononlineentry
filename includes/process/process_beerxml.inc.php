@@ -5,10 +5,10 @@ include (INCLUDES.'beerXML/input_beer_xml.inc.php');
 	$MAX_SIZE = 2000000;
 
 	//Allowable file Mime Types.
-	$FILE_MIMES = array('image/jpeg','image/jpg','image/gif','image/png','application/msword');
+	$FILE_MIMES = ['image/jpeg','image/jpg','image/gif','image/png','application/msword'];
 
 	//Allowable file ext. names.
-	$FILE_EXTS  = array('.xml','.txt');
+	$FILE_EXTS  = ['.xml','.txt'];
 
 	//Allow file delete? no, if only allow upload only
 	$DELETABLE  = false;

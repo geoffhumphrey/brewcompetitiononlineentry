@@ -1,6 +1,6 @@
 <?php
 ob_start();
-require_once ('../paths.php');
+require_once (__DIR__ . '/../paths.php');
 require_once (CONFIG.'bootstrap.php');
 ini_set('display_errors', 1); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 1); // Change to 0 for prod; change to 1 for testing.
@@ -12,22 +12,22 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	require_once (INCLUDES.'constants_post_lang.inc.php');
 	require_once (LIB.'process.lib.php');
 
-	$errors = array();
+	$errors = [];
 	$error_count = 0;
 	$location_added = FALSE;
 	$judges_to_update = FALSE;
 	$styles_added_count = 0; 
 	$styles_added = FALSE;
-	$added_styles = array();
-	$judges_list = array();
-	$judges_not_assigned = array();
+	$added_styles = [];
+	$judges_list = [];
+	$judges_not_assigned = [];
 	$practice_table_added = FALSE;
 
 	$testing = FALSE;
 
 	// Get selected style types from the form
 	if (isset($_POST['selected_style_types'])) $selected_style_types = $_POST['selected_style_types'];
-	else $selected_style_types = array("1","2","3"); // default to beer, cider, and mead
+	else $selected_style_types = ["1","2","3"]; // default to beer, cider, and mead
 
 	// Establish the new location's judging date start from the form.
 	if (isset($_POST['judging_session_start'])) {
@@ -40,21 +40,21 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	if (time() > $last_judging_date) $last_judging_date = time() + 604800; // 7 days from today
 
 	$update_table = $prefix."judging_locations";
-	$data = array(
+	$data = [
 		'judgingLocType' => 1, // Practice location
 		'judgingDate' => $judging_date_start,
 		'judgingDateEnd' => $last_judging_date,
 		'judgingLocName' => $label_practice_session,
 		'judgingLocation' => ucfirst(strtolower($label_practice_session)),
 		'judgingRounds' => 1
-	);
+	];
 
 	$result_add_judging_date = $db_conn->insert ($update_table, $data);
 
 	if ($result_add_judging_date) {
 
 		$location_added = TRUE;
-		
+
 		// Get the new location's id
 		$query_new_location = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."judging_locations");
 		$new_location = mysqli_query($connection,$query_new_location) or die (mysqli_error($connection));
@@ -77,17 +77,17 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 			do {
 
-				$judges_list[] = array(
+				$judges_list[] = [
 					'uid' => $row_judges['uid'],
 					'brewerFirstName' => $row_judges['brewerFirstName'],
 					'brewerLastName' => $row_judges['brewerLastName']
-				);
+				];
 
-				$data = array(
+				$data = [
 					'brewerJudgeLocation' => $new_availability
-				);
+				];
 				$db_conn->where ('id', $row_judges['id']);
-				
+
 				if ($testing) {
 					print_r($data);
 					echo "<br>";
@@ -113,7 +113,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		$hash_question = $hasher_question->HashPassword(sterilize($userQuestionAnswer));
 
 		$update_table = $prefix."users";
-		$data = array(
+		$data = [
 			'user_name' => $username,
 			'userLevel' => 2,
 			'password' => $hash,
@@ -121,8 +121,8 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			'userQuestionAnswer' => $hash_question,
 			'userCreated' =>  date('Y-m-d H:i:s', time()),
 			'userAdminObfuscate' => 1
-		);
-		
+		];
+
 		$result = $db_conn->insert ($update_table, $data);
 
 		// Get the id from the "users" table to insert as the uid in the "brewer" table
@@ -140,7 +140,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		$brewerPhone1 = "(000) 867-5309";
 
 		$update_table = $prefix."brewer";
-		$data = array(
+		$data = [
 			'uid' => $row_new_user['id'],
 			'brewerFirstName' => $first_name,
 			'brewerLastName' => $last_name,
@@ -173,13 +173,13 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			'brewerBreweryName' => NULL,
 			'brewerBreweryInfo' => NULL,
 			'brewerAssignment' => NULL
-		);
+		];
 
 		$result = $db_conn->insert ($update_table, $data);
 
 		// Create a new custom style for each of the selected style types (beer, cider, and/or mead).
 		// Then, add an single entry for each style type.
-		
+
 		// Get last brewStyleGroup for any custom styles (will be 50+)
 		$query_last_custom = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleGroup >= '50' AND brewStyleOwn='custom' ORDER BY brewStyleGroup DESC LIMIT 1;",$prefix."styles");
 		$last_custom = mysqli_query($connection,$query_last_custom) or die (mysqli_error($connection));
@@ -188,10 +188,10 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 		$brewStyleGroup = 50;
 		if (($totalRows_last_custom > 0) && (is_numeric($row_last_custom['brewStyleGroup']))) $brewStyleGroup = $row_last_custom['brewStyleGroup'];	
-		
+
 		foreach ($selected_style_types as $value) {
 
-			$brewStyleGroup = $brewStyleGroup + 1;
+			$brewStyleGroup += 1;
 
 			if ($value == 1) {
 				$brewStyle = $label_practice_beer;
@@ -221,7 +221,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 			$update_table = $prefix."styles";
 
-			$data = array(
+			$data = [
 				'brewStyle' => $brewStyle,
 				'brewStyleOG' => NULL,
 				'brewStyleOGMax' => NULL,
@@ -246,20 +246,20 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				'brewStyleCarb' => $brewStyleCarb,
 				'brewStyleSweet' => $brewStyleSweet,
 				'brewStyleEntry' => NULL
-			);
-			
+			];
+
 			$result = $db_conn->insert ($update_table, $data);
 
 			if ($result) {
 
 				$styles_added_count++;
-				
+
 				// Get the id of the newly created style.
 				$query_last_added = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' ORDER BY id DESC LIMIT 1;",$prefix."styles");
 				$last_added = mysqli_query($connection,$query_last_added) or die (mysqli_error($connection));
 				$row_last_added = mysqli_fetch_assoc($last_added);
-				
-				$added_styles[] = array(
+
+				$added_styles[] = [
 					'id' => $row_last_added['id'],
 					'brewStyle' => $brewStyle,
 					'brewStyleGroup' => $brewStyleGroup,
@@ -268,7 +268,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					'brewStyleCarb' => $brewStyleCarb,
 					'brewStyleSweet' => $brewStyleSweet,
 					'brewStyleType' => $brewStyleType
-				);
+				];
 
 			}
 
@@ -276,13 +276,13 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 		if ($styles_added_count > 0) $styles_added = TRUE;
 
-		$added_table_styles = array();
-		$added_entry_ids = array();
+		$added_table_styles = [];
+		$added_entry_ids = [];
 
 		if ($styles_added) {
 
 			// Insert into the entries DB table an entry for each style type.
-			
+
 			foreach ($added_styles as $key => $value) {
 
 				$added_table_styles[] = $value['id'];
@@ -296,7 +296,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 				$update_table = $prefix."brewing";
 
-				$data = array(
+				$data = [
 					'brewName' => $label_practice_entry." ".$key,
 					'brewStyle' => $value['brewStyle'],
 					'brewCategory' => $value['brewStyleGroup'],
@@ -317,7 +317,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					'brewStaffNotes' => $brewAdminNotes,
 					'brewAdminNotes' => $brewAdminNotes,
 					'brewPouring' => "{\"pouring\":\"Normal\",\"pouring_rouse\":\"No\"}",
-				);
+				];
 
 				$result = $db_conn->insert ($update_table, $data);
 
@@ -338,16 +338,16 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 	 	// Create a table with all the newly added styles.
 
-	 	if ((is_array($added_table_styles)) && (!empty($added_table_styles))) $added_table_styles = implode(",",$added_table_styles);
+	 	if ((is_array($added_table_styles)) && ($added_table_styles !== [])) $added_table_styles = implode(",",$added_table_styles);
 
 		$update_table = $prefix."judging_tables";
-		$data = array(
+		$data = [
 			'tableName' => $label_scoresheet_practice,
 			'tableStyles' => $added_table_styles,
 			'tableNumber' => 999,
 			'tableLocation' => $row_new_location['id'],
 			'tableEntryLimit' => NULL
-		);
+		];
 
 		$result = $db_conn->insert ($update_table, $data);
 
@@ -356,7 +356,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		if ($result) {
 
 			$practice_table_added = TRUE;
-			
+
 			$query_last_table_added = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1;",$prefix."judging_tables");
 			$last_table_added = mysqli_query($connection,$query_last_table_added) or die (mysqli_error($connection));
 			$row_last_table_added = mysqli_fetch_assoc($last_table_added);
@@ -364,26 +364,26 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			foreach ($added_entry_ids as $key => $value) {
 
 				$update_table = $prefix."judging_flights";
-				
-				$data = array(
+
+				$data = [
 					'flightTable' => $row_last_table_added['id'],
 					'flightNumber' => 1,
 					'flightEntryID' => $value,
 					'flightRound' => 1,
-				);
-				
+				];
+
 				$result = $db_conn->insert ($update_table, $data);
 
 			}
 
 			// Add all assigned judges to that table.
 
-			if ((is_array($judges_list)) && (!empty($judges_list))) {
+			if ((is_array($judges_list)) && ($judges_list !== [])) {
 
 				foreach ($judges_list as $key => $value) {
-					
+
 					$update_table = $prefix."judging_assignments";
-					$data = array(
+					$data = [
 						'bid' => $value['uid'],
 						'assignment' => "J",
 						'assignTable' => $row_last_table_added['id'],
@@ -392,7 +392,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 						'assignLocation' => $row_new_location['id'],
 						'assignPlanning' => NULL,
 						'assignRoles' => NULL
-					);
+					];
 
 					$result = $db_conn->insert ($update_table, $data);
 
@@ -410,7 +410,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 } // end if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))
 
 else {
-	
+
 	$error = 1;
 	header("Location: https://pbs.twimg.com/media/CGx6dsDVIAAV0am.png");
 

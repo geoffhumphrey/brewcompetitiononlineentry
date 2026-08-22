@@ -1,4 +1,5 @@
-<?php 
+<?php
+ 
 
 $beer = FALSE;
 $cider = FALSE;
@@ -184,7 +185,7 @@ $mhp_qr_data = json_encode($mhp_qr_data, JSON_NUMERIC_CHECK);
             <?php echo $row_judge['brewerFirstName']." ".$row_judge['brewerLastName']; ?>
             </div>
         </div><!-- /row for judge name -->
-        <?php if (strpos($row_judge['brewerJudgeRank'],"Non-BJCP") === false) { ?>
+        <?php if (!str_contains($row_judge['brewerJudgeRank'],"Non-BJCP")) { ?>
         <div class="row">
             <div class="col col-lg-5 col-md-4 col-sm-3 col-xs-3">
             <strong><?php echo $label_bjcp_id; ?>:</strong>

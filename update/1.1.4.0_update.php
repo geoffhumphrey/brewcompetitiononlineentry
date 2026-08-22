@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 if (!function_exists('check_update')) {
 	$redirect = "../../403.php";

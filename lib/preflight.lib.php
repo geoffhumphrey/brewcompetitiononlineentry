@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 include (LIB.'update.lib.php');
 
 $update_required = FALSE;
@@ -11,7 +14,7 @@ $system_name_change = FALSE;
 $recently_updated = FALSE;
 
 if (check_setup($prefix."system",$database)) {
-	
+
 	$db_conn->where('id', '1');
 	$row_system = $db_conn->getOne($prefix."system");
 
@@ -30,7 +33,7 @@ if (check_setup($prefix."bcoem_sys",$database)) {
 	$system_name_change = TRUE;
 	$db_conn->where('id', '1');
 	$row_system = $db_conn->getOne($prefix."bcoem_sys");
-	
+
 	if ($row_system['version'] != $current_version) {
 		unset($_SESSION['session_set_'.$prefix_session]);
 		unset($_SESSION['currentVersion']);
@@ -44,7 +47,7 @@ if (check_setup($prefix."bcoem_sys",$database)) {
 if (((isset($_SESSION['update_complete'])) && ($_SESSION['update_complete'] == 1)) && (isset($_SESSION['update_summary']))) $recently_updated = TRUE;
 
 if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion'])) && ($_SESSION['currentVersion'] == 0))) {
-	
+
 	// The following line will need to change with future conversions
 	if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) {
 		$setup_relocate = "Location: ".$base_url."setup.php?section=step0";
@@ -73,9 +76,9 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		/**
 		 * Check if setup was completed successfully
 		 */
-		
+
 		if ((!isset($row_system['setup'])) || ($row_system['setup'] == 0)) {
-			$setup_last_step = isset($row_system['setup_last_step']) ? $row_system['setup_last_step'] : 0;
+			$setup_last_step = $row_system['setup_last_step'] ?? 0;
 			$setup_relocate = "Location: ".$base_url."setup.php?section=step".($setup_last_step+1);
 
 			if ($setup_last_step == 1) {
@@ -119,7 +122,7 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 	if (FORCE_UPDATE) $force_update = TRUE;
 
 	if ($setup_success) {
-		
+
 		if ($update_required) {
 			header ($setup_relocate);
 			exit();
@@ -133,7 +136,7 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 		header ($setup_relocate);
 		exit();
-		
+
 	}
 
 } // end if (!isset($_SESSION['currentVersion']))

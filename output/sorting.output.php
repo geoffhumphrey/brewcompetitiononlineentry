@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
@@ -24,20 +25,20 @@ else $s = $a;
 sort($s,SORT_NUMERIC);
 
 // print_r($s);
- 
+
 foreach (array_unique($s) as $style) { 
 include (DB.'output_sorting.db.php');
-	
+
 // echo $query_entries."<br>";
-	
+
 if ($totalRows_entries > 0) {
 	if ($totalRows_entries == 1) $total_entries = $totalRows_entries." Entry"; else $total_entries = $totalRows_entries." Entries";
-	
+
 	if (($_SESSION['prefsStyleSet'] == "BA") && ($style < 28))  $title = sprintf("%s<br><small><em class=\"text-muted\">%s</em></small>", $ba_category_names[$style], $total_entries);
 	elseif (($_SESSION['prefsStyleSet'] == "BA") && ($style > 28))  $title = sprintf("%s<br><small><em class=\"text-muted\">%s</em></small>", style_convert($style,1,$base_url), $total_entries);
 	else $title = sprintf("%s %s: %s<br><small><em class=\"text-muted\">%s</em></small>", $label_category, ltrim($style,"0"), style_convert($style,1,$base_url), $total_entries);
-	
-	
+
+
 ?>
     <div class="page-header">
        <h2><?php echo $title; ?></h2>
@@ -136,7 +137,7 @@ if ($totalRows_entries > 0) {
 			"aaSorting": [[0,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
-				<?php if (strpos($styleSet,"BABDB") === false) { ?>{ "asSorting": [  ] },<?php } ?>
+				<?php if (!str_contains($styleSet,"BABDB")) { ?>{ "asSorting": [  ] },<?php } ?>
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
@@ -147,7 +148,7 @@ if ($totalRows_entries > 0) {
     <table class="table table-striped table-bordered" id="sortable<?php echo $style; ?>">
     <thead>
     <tr>
-		<?php if (strpos($styleSet,"BABDB") === false) { ?><th width="5%" nowrap><?php echo $label_subcategory; ?></th><?php } ?>
+		<?php if (!str_contains($styleSet,"BABDB")) { ?><th width="5%" nowrap><?php echo $label_subcategory; ?></th><?php } ?>
     	<th width="20%" nowrap><?php echo $label_entry; ?></th>
         <th width="20%" nowrap><?php echo $label_judging; ?></th>
         <th><?php echo $label_affixed; ?></th>
@@ -159,7 +160,7 @@ if ($totalRows_entries > 0) {
 	$brewer_info = explode("^",$info);
 	?>
     <tr>
-		<?php if (strpos($styleSet,"BABDB") === false) { ?><td><span class="hidden"><?php echo $row_entries['brewCategorySort'].$row_entries['brewSubCategory']; ?></span><?php echo $row_entries['brewSubCategory']; ?></td><?php } ?>
+		<?php if (!str_contains($styleSet,"BABDB")) { ?><td><span class="hidden"><?php echo $row_entries['brewCategorySort'].$row_entries['brewSubCategory']; ?></span><?php echo $row_entries['brewSubCategory']; ?></td><?php } ?>
         <td><?php echo sprintf("%06s",$row_entries['id']); ?></td>
         <td><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td><p class="box_small">&nbsp;</p></td>

@@ -43,9 +43,8 @@ class PaypalIPN
     {
         if ($this->use_sandbox) {
             return self::SANDBOX_VERIFY_URI;
-        } else {
-            return self::VERIFY_URI;
         }
+        return self::VERIFY_URI;
     }
     /**
      * Verification Function
@@ -61,10 +60,10 @@ class PaypalIPN
         }
         $raw_post_data = file_get_contents('php://input');
         $raw_post_array = explode('&', $raw_post_data);
-        $myPost = array();
+        $myPost = [];
         foreach ($raw_post_array as $keyval) {
             $keyval = explode('=', $keyval);
-            if (count($keyval) == 2) {
+            if (count($keyval) === 2) {
                 // Since we do not want the plus in the datetime string to be encoded to a space, we manually encode it.
                 if ($keyval[0] === 'payment_date') {
                     if (substr_count($keyval[1], '+') === 1) {
@@ -81,7 +80,7 @@ class PaypalIPN
             $get_magic_quotes_exists = true;
         }
         foreach ($myPost as $key => $value) {
-            if ($get_magic_quotes_exists == true && get_magic_quotes_gpc() == 1) {
+            if ($get_magic_quotes_exists === true && get_magic_quotes_gpc() == 1) {
                 $value = urlencode(stripslashes($value));
             } else {
                 $value = urlencode($value);
@@ -105,12 +104,11 @@ class PaypalIPN
 		*/
         curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Connection: Close']);
         $res = curl_exec($ch);
         if ( ! ($res)) {
             $errno = curl_errno($ch);
             $errstr = curl_error($ch);
-            curl_close($ch);
             throw new Exception("cURL error: [$errno] $errstr");
         }
         $info = curl_getinfo($ch);
@@ -118,13 +116,8 @@ class PaypalIPN
         if ($http_code != 200) {
             throw new Exception("PayPal responded with http code $http_code");
         }
-        curl_close($ch);
         // Check if PayPal verifies the IPN data, and if so, return true.
-        if ($res == self::VALID) {
-            return true;
-        } else {
-            return false;
-        }
+        return $res == self::VALID;
     }
 }
 ?>

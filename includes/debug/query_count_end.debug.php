@@ -4,8 +4,8 @@ if (isset($_SESSION['userLevel'])) {
 		$row_count_end = $db_conn->rawQuery("SHOW SESSION STATUS LIKE 'Questions'")[0];
 		$stop_queries = $row_count_end['Value'];
 		$queries_total_page = $stop_queries - $start_queries - 1;
-		if (basename($_SERVER['SCRIPT_FILENAME'], '.php') == "process.inc") $_SESSION['queries_last'] = $queries_total_page;
-		$_SESSION['queries_total'] = $_SESSION['queries_total'] + $queries_total_page;
+		if (basename($_SERVER['SCRIPT_FILENAME'], '.php') === "process.inc") $_SESSION['queries_last'] = $queries_total_page;
+		$_SESSION['queries_total'] += $queries_total_page;
 
 		$output_query_count = "";
 		$output_query_count .= "<div class=\"alert alert-info small\" style=\"margin-top: 20px\">";

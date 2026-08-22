@@ -41,15 +41,6 @@ class Converter
      */
     protected $skipConversion = false;
 
-    /* options */
-
-    /**
-     * keep html tags which cannot be converted to markdown
-     *
-     * @var bool
-     */
-    protected $keepHTML = false;
-
     /**
      * wrap output, set to 0 to skip wrapping
      *
@@ -63,14 +54,6 @@ class Converter
      * @var int
      */
     protected $minBodyWidth = 25;
-
-    /**
-     * position where the link reference will be displayed
-     *
-     *
-     * @var int
-     */
-    protected $linkPosition;
     const LINK_AFTER_CONTENT = 0;
     const LINK_AFTER_PARAGRAPH = 1;
     const LINK_IN_PARAGRAPH = 2;
@@ -242,11 +225,15 @@ class Converter
      *             defaults to true (HTML will be kept)
      * @return void
      */
-    public function __construct($linkPosition = self::LINK_AFTER_CONTENT, $bodyWidth = MDFY_BODYWIDTH, $keepHTML = MDFY_KEEPHTML)
+    public function __construct(/**
+     * position where the link reference will be displayed
+     *
+     */
+    protected $linkPosition = self::LINK_AFTER_CONTENT, $bodyWidth = MDFY_BODYWIDTH, /**
+     * keep html tags which cannot be converted to markdown
+     */
+    protected $keepHTML = MDFY_KEEPHTML)
     {
-        $this->linkPosition = $linkPosition;
-        $this->keepHTML = $keepHTML;
-
         if ($bodyWidth > $this->minBodyWidth) {
             $this->bodyWidth = intval($bodyWidth);
         } else {
@@ -260,8 +247,8 @@ class Converter
         $search = [];
         $replace = [];
         foreach ($this->escapeInText as $s => $r) {
-            array_push($search, '@(?<!\\\)' . $s . '@U');
-            array_push($replace, $r);
+            $search[] = '@(?<!\\\)' . $s . '@U';
+            $replace[] = $r;
         }
         $this->escapeInText = [
             'search' => $search,
@@ -365,12 +352,12 @@ class Converter
 
                     if ($this->isMarkdownable()) {
                         if ($this->parser->isBlockElement && $this->parser->isStartTag && !$this->lastWasBlockTag && !empty($this->output)) {
-                            if (!empty($this->buffer)) {
+                            if ($this->buffer !== []) {
                                 $str =& $this->buffer[count($this->buffer) - 1];
                             } else {
                                 $str =& $this->output;
                             }
-                            if (substr($str, -strlen($this->indent) - 1) != "\n" . $this->indent) {
+                            if (substr($str, -strlen($this->indent) - 1) !== "\n" . $this->indent) {
                                 $str .= "\n" . $this->indent;
                             }
                         }
@@ -393,9 +380,9 @@ class Converter
             }
             $this->lastWasBlockTag = $this->parser->nodeType == 'tag' && $this->parser->isStartTag && $this->parser->isBlockElement;
         }
-        if (!empty($this->buffer)) {
+        if ($this->buffer !== []) {
             // trigger_error('buffer was not flushed, this is a bug. please report!', E_USER_WARNING);
-            while (!empty($this->buffer)) {
+            while ($this->buffer !== []) {
                 $this->out($this->unbuffer());
             }
         }
@@ -423,7 +410,7 @@ class Converter
             $return = true;
             if ($this->keepHTML) {
                 $diff = array_diff(array_keys($this->parser->tagAttributes), array_keys($this->isMarkdownable[$this->parser->tagName]));
-                if (!empty($diff)) {
+                if ($diff !== []) {
                     // non markdownable attributes given
                     $return = false;
                 }
@@ -438,19 +425,17 @@ class Converter
                 }
             }
             if (!$return) {
-                array_push($this->notConverted, $this->parser->tagName . '::' . implode('/', $this->parser->openTags));
+                $this->notConverted[] = $this->parser->tagName . '::' . implode('/', $this->parser->openTags);
             }
 
             return $return;
-        } else {
-            if (!empty($this->notConverted) && end($this->notConverted) === $this->parser->tagName . '::' . implode('/', $this->parser->openTags)) {
-                array_pop($this->notConverted);
-
-                return false;
-            }
-
-            return true;
         }
+        if ($this->notConverted !== [] && end($this->notConverted) === $this->parser->tagName . '::' . implode('/', $this->parser->openTags)) {
+            array_pop($this->notConverted);
+
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -596,7 +581,7 @@ class Converter
      */
     protected function handleText()
     {
-        if ($this->hasParent('pre') && strpos($this->parser->node, "\n") !== false) {
+        if ($this->hasParent('pre') && str_contains($this->parser->node, "\n")) {
             $this->parser->node = str_replace("\n", "\n" . $this->indent, $this->parser->node);
         }
         if (!$this->hasParent('code') && !$this->hasParent('pre')) {
@@ -795,7 +780,7 @@ class Converter
         }
 
         $bufferDecoded = $this->decode(trim($buffer));
-        if (substr($tag['href'], 0, 7) == 'mailto:' && 'mailto:' . $bufferDecoded == $tag['href']) {
+        if (str_starts_with($tag['href'], 'mailto:') && 'mailto:' . $bufferDecoded == $tag['href']) {
             if (is_null($tag['title'])) {
                 // <mail@example.com>
                 return '<' . $bufferDecoded . '>';
@@ -819,7 +804,7 @@ class Converter
         }
         if (!isset($tag['linkID'])) {
             $tag['linkID'] = count($this->footnotes) + 1;
-            array_push($this->footnotes, $tag);
+            $this->footnotes[] = $tag;
         }
 
         return '[' . $buffer . '][' . $tag['linkID'] . ']';
@@ -857,9 +842,8 @@ class Converter
             $this->out('![' . $this->parser->tagAttributes['alt'] . '](' . $this->parser->tagAttributes['title'] . ')', true);
 
             return;
-        } else {
-            $this->parser->tagAttributes['src'] = $this->decode($this->parser->tagAttributes['src']);
         }
+        $this->parser->tagAttributes['src'] = $this->decode($this->parser->tagAttributes['src']);
 
         $out = '![' . $this->parser->tagAttributes['alt'] . ']';
         if ($this->linkPosition == self::LINK_IN_PARAGRAPH) {
@@ -891,7 +875,7 @@ class Converter
                 'linkID' => $link_id,
                 'title' => $this->parser->tagAttributes['title']
             ];
-            array_push($this->footnotes, $tag);
+            $this->footnotes[] = $tag;
         }
         $out .= '[' . $link_id . ']';
 
@@ -930,7 +914,7 @@ class Converter
             } else {
                 $ticks = '`';
             }
-            if ($buffer[0] == '`' || substr($buffer, -1) == '`') {
+            if ($buffer[0] == '`' || str_ends_with($buffer, '`')) {
                 $buffer = ' ' . $buffer . ' ';
             }
             $this->out($ticks . $buffer . $ticks, true);
@@ -1072,7 +1056,7 @@ class Converter
         if (!isset($this->stack[$this->parser->tagName])) {
             $this->stack[$this->parser->tagName] = [];
         }
-        array_push($this->stack[$this->parser->tagName], $this->parser->tagAttributes);
+        $this->stack[$this->parser->tagName][] = $this->parser->tagAttributes;
     }
 
     /**
@@ -1123,7 +1107,7 @@ class Converter
      */
     protected function buffer()
     {
-        array_push($this->buffer, '');
+        $this->buffer[] = '';
     }
 
     /**
@@ -1151,7 +1135,7 @@ class Converter
         if (empty($put)) {
             return;
         }
-        if (!empty($this->buffer)) {
+        if ($this->buffer !== []) {
             $this->buffer[count($this->buffer) - 1] .= $put;
         } else {
             if ($this->bodyWidth && !$this->parser->keepWhitespace) { // wrap lines
@@ -1171,28 +1155,26 @@ class Converter
                     }
 
                     return;
-                } else {
-                    $put .= "\n"; // make sure we get all lines in the while below
-                    $lineLen = $this->strlen($line);
-                    while ($pos = strpos($put, "\n")) {
-                        $putLine = substr($put, 0, $pos + 1);
-                        $put = substr($put, $pos + 1);
-                        $putLen = $this->strlen($putLine);
-                        if ($lineLen + $putLen < $this->bodyWidth) {
-                            $this->output .= $putLine;
-                            $lineLen = $putLen;
-                        } else {
-                            $split = preg_split('#^(.{0,' . ($this->bodyWidth - $lineLen) . '})\b#', $putLine, 2, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
-                            $this->output .= rtrim($split[1][0]) . "\n" . $this->indent . $this->wordwrap(ltrim($split[2][0]), $this->bodyWidth, "\n" . $this->indent, false);
-                        }
-                    }
-                    $this->output = substr($this->output, 0, -1);
-
-                    return;
                 }
-            } else {
-                $this->output .= $put;
+                $put .= "\n";
+                // make sure we get all lines in the while below
+                $lineLen = $this->strlen($line);
+                while ($pos = strpos($put, "\n")) {
+                    $putLine = substr($put, 0, $pos + 1);
+                    $put = substr($put, $pos + 1);
+                    $putLen = $this->strlen($putLine);
+                    if ($lineLen + $putLen < $this->bodyWidth) {
+                        $this->output .= $putLine;
+                        $lineLen = $putLen;
+                    } else {
+                        $split = preg_split('#^(.{0,' . ($this->bodyWidth - $lineLen) . '})\b#', $putLine, 2, PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
+                        $this->output .= rtrim($split[1][0]) . "\n" . $this->indent . $this->wordwrap(ltrim($split[2][0]), $this->bodyWidth, "\n" . $this->indent, false);
+                    }
+                }
+                $this->output = substr($this->output, 0, -1);
+                return;
             }
+            $this->output .= $put;
         }
     }
 
@@ -1239,9 +1221,8 @@ class Converter
     {
         if (function_exists('mb_strlen')) {
             return mb_strlen($str, 'UTF-8');
-        } else {
-            return preg_match_all('/[\x00-\x7F\xC0-\xFD]/', $str, $var_empty);
         }
+        return preg_match_all('/[\x00-\x7F\xC0-\xFD]/', $str, $var_empty);
     }
 
     /**
@@ -1324,7 +1305,7 @@ class Converter
                 $this->parser->html = ltrim($this->parser->html, " \t\0\x0B");
             }
         } else {
-            if (!empty($this->buffer)) {
+            if ($this->buffer !== []) {
                 $str =& $this->buffer[count($this->buffer) - 1];
             } else {
                 $str =& $this->output;

@@ -154,22 +154,22 @@ if ($msg != "default") {
    * REWORK with new cross-app standard message numbers.
    */
 
-  $info_msg_alerts = array(7,11,12,99);
-  $warning_msg_alerts = array(0,4,6,8,37,10);
-  $danger_msg_alerts = array(3,13,15,18,19,24,27,30,98,755);
-  $success_msg_alerts = array();
+  $info_msg_alerts = [7,11,12,99];
+  $warning_msg_alerts = [0,4,6,8,37,10];
+  $danger_msg_alerts = [3,13,15,18,19,24,27,30,98,755];
+  $success_msg_alerts = [];
 
-  $success_msg = array();
-  $info_msg = array();
-  $warning_msg = array();
-  $danger_msg = array();
+  $success_msg = [];
+  $info_msg = [];
+  $warning_msg = [];
+  $danger_msg = [];
 
   if ($section == "default") {
 
-    $info_msg = array(15);
-    $success_msg = array(13,18,19);
-    $warning_msg = array(11,14,16,17,20);
-    $danger_msg = array(0);
+    $info_msg = [15];
+    $success_msg = [13,18,19];
+    $warning_msg = [11,14,16,17,20];
+    $danger_msg = [0];
     unset($danger_msg_alerts[1]);
     unset($danger_msg_alerts[2]);
     unset($danger_msg_alerts[3]);
@@ -179,14 +179,14 @@ if ($msg != "default") {
   }
 
   if ($section == "login") {
-    $warning_msg = array(1,4,7,9);
-    $danger_msg = array(1);
+    $warning_msg = [1,4,7,9];
+    $danger_msg = [1];
   }
 
   if ($section == "list") {
-    $success_msg = array(3,10,15);
-    $danger_msg = array(5,11,12,14,16);
-    $warning_msg = array(8,9,13);
+    $success_msg = [3,10,15];
+    $danger_msg = [5,11,12,14,16];
+    $warning_msg = [8,9,13];
     unset($danger_msg_alerts[0]);
     unset($danger_msg_alerts[1]);
     unset($danger_msg_alerts[2]);
@@ -199,26 +199,26 @@ if ($msg != "default") {
   if ($section == "contact") $warning_msg[] = 2;
 
   if ($section == "pay") {
-    $success_msg = array(10,12);
-    $danger_msg = array(11);
+    $success_msg = [10,12];
+    $danger_msg = [11];
     unset($warning_msg_alerts[3]);
     unset($info_msg_alerts[0]);
     unset($info_msg_alerts[1]);
   }
 
   if ($section == "user") {
-    $warning_msg = array(1);
-    $danger_msg = array(2);
+    $warning_msg = [1];
+    $danger_msg = [2];
   }
 
   if ($section == "evaluation") {
-    $success_msg = array(3);
+    $success_msg = [3];
     unset($danger_msg_alerts[0]);
   }
 
   if ($section == "register") {
-    $danger_msg = array(5);
-    $warning_msg = array(1,2,4,6);
+    $danger_msg = [5];
+    $warning_msg = [1,2,4,6];
   }
 
   $success_msg_alerts = array_merge($success_msg_alerts,$success_msg);
@@ -254,13 +254,13 @@ if ($msg != "default") {
     $errors_display = "";
 
     if ((!empty($_SESSION['error_output'])) || (!empty($error_output))) {
-        
+
         $errors_display .= "<div class=\"bcoem-admin-element\">";
         $errors_display .= "<div class=\"alert alert-danger alert-dismissible d-print-none fade in\">";
         $errors_display .= "<p><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Error(s)</strong></p>";
         $errors_display .= "<p>The following errors were logged on the last MySQL server call:</p>";
         $errors_display .= "<ul>";
-        
+
         if (!empty($error_output)) {
             foreach ($error_output as $key => $value) {
                 $errors_display .= "<li>".$value."</li>";
@@ -272,17 +272,17 @@ if ($msg != "default") {
                 $errors_display .= "<li>".$value."</li>";
             }
         }
-            
+
         $errors_display .= "</ul>";
         $errors_display .= "</div>";
         $errors_display .= "</div>";
-        
+
     }
 
     if (!empty($errors_display)) echo $errors_display;
 
     echo create_bs_alert("alert-auto-dismiss",$alert_type,"",$output,$alert_icon,"",FALSE);
-    
+
     echo $output_extend;
 
   } // end if (!empty($output))
@@ -294,9 +294,9 @@ $stacked_alert_msg_info = "";
 $stacked_alert_msg_warning = "";
 
 if ($logged_in) { 
-  
+
   if ($section == "brew") { 
-      
+
     if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
       if ($entry_window_open == 0) $alert_message_closed = "<strong>".$alert_text_029."</strong> ".$alert_text_027;
       if ($entry_window_open == 2) $alert_message_closed = "<strong>".$alert_text_029."</strong> ".$alert_text_028;
@@ -321,7 +321,7 @@ if ($logged_in) {
       $stacked_alert_msg_warning .= "<p class=\"mb-1\">".$alert_message_closed."</p>";
       //echo create_bs_alert("alert-add-edit-closed","warning","",$alert_message_closed,"fa-exclamation-circle","",TRUE);
     } 
-  
+
   } // end if ($section == "brew")
 
 } // end if ($logged_in) 

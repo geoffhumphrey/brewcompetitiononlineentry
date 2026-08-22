@@ -7,11 +7,11 @@
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
 
-require('ttfparser.php');
+require(__DIR__ . '/ttfparser.php');
 
 function Message($txt, $severity='')
 {
-	if(PHP_SAPI=='cli')
+	if(PHP_SAPI === 'cli')
 	{
 		if($severity)
 			echo "$severity: ";
@@ -43,18 +43,18 @@ function Error($txt)
 
 function LoadMap($enc)
 {
-	$file = dirname(__FILE__).'/'.strtolower($enc).'.map';
+	$file = __DIR__.'/'.strtolower($enc).'.map';
 	$a = file($file);
 	if(empty($a))
 		Error('Encoding not found: '.$enc);
-	$map = array_fill(0, 256, array('uv'=>-1, 'name'=>'.notdef'));
+	$map = array_fill(0, 256, ['uv'=>-1, 'name'=>'.notdef']);
 	foreach($a as $line)
 	{
 		$e = explode(' ', rtrim($line));
 		$c = hexdec(substr($e[0],1));
 		$uv = hexdec(substr($e[1],2));
 		$name = $e[2];
-		$map[$c] = array('uv'=>$uv, 'name'=>$name);
+		$map[$c] = ['uv'=>$uv, 'name'=>$name];
 	}
 	return $map;
 }
@@ -77,7 +77,7 @@ function GetInfoFromTrueType($file, $embed, $subset, $map)
 			Error('Font license does not allow embedding');
 		if($subset)
 		{
-			$chars = array();
+			$chars = [];
 			foreach($map as $v)
 			{
 				if($v['name']!='.notdef')
@@ -99,7 +99,7 @@ function GetInfoFromTrueType($file, $embed, $subset, $map)
 	$info['Descender'] = round($k*$ttf->typoDescender);
 	$info['UnderlineThickness'] = round($k*$ttf->underlineThickness);
 	$info['UnderlinePosition'] = round($k*$ttf->underlinePosition);
-	$info['FontBBox'] = array(round($k*$ttf->xMin), round($k*$ttf->yMin), round($k*$ttf->xMax), round($k*$ttf->yMax));
+	$info['FontBBox'] = [round($k*$ttf->xMin), round($k*$ttf->yMin), round($k*$ttf->xMax), round($k*$ttf->yMax)];
 	$info['CapHeight'] = round($k*$ttf->capHeight);
 	$info['MissingWidth'] = round($k*$ttf->glyphs[0]['w']);
 	$widths = array_fill(0, 256, $info['MissingWidth']);
@@ -159,33 +159,33 @@ function GetInfoFromType1($file, $embed, $map)
 		if(count($e)<2)
 			continue;
 		$entry = $e[0];
-		if($entry=='C')
+		if($entry === 'C')
 		{
 			$w = $e[4];
 			$name = $e[7];
 			$cw[$name] = $w;
 		}
-		elseif($entry=='FontName')
+		elseif($entry === 'FontName')
 			$info['FontName'] = $e[1];
-		elseif($entry=='Weight')
+		elseif($entry === 'Weight')
 			$info['Weight'] = $e[1];
-		elseif($entry=='ItalicAngle')
+		elseif($entry === 'ItalicAngle')
 			$info['ItalicAngle'] = (int)$e[1];
-		elseif($entry=='Ascender')
+		elseif($entry === 'Ascender')
 			$info['Ascender'] = (int)$e[1];
-		elseif($entry=='Descender')
+		elseif($entry === 'Descender')
 			$info['Descender'] = (int)$e[1];
-		elseif($entry=='UnderlineThickness')
+		elseif($entry === 'UnderlineThickness')
 			$info['UnderlineThickness'] = (int)$e[1];
-		elseif($entry=='UnderlinePosition')
+		elseif($entry === 'UnderlinePosition')
 			$info['UnderlinePosition'] = (int)$e[1];
-		elseif($entry=='IsFixedPitch')
+		elseif($entry === 'IsFixedPitch')
 			$info['IsFixedPitch'] = ($e[1]=='true');
-		elseif($entry=='FontBBox')
-			$info['FontBBox'] = array((int)$e[1], (int)$e[2], (int)$e[3], (int)$e[4]);
-		elseif($entry=='CapHeight')
+		elseif($entry === 'FontBBox')
+			$info['FontBBox'] = [(int)$e[1], (int)$e[2], (int)$e[3], (int)$e[4]];
+		elseif($entry === 'CapHeight')
 			$info['CapHeight'] = (int)$e[1];
-		elseif($entry=='StdVW')
+		elseif($entry === 'StdVW')
 			$info['StdVW'] = (int)$e[1];
 	}
 
@@ -257,9 +257,9 @@ function MakeWidthArray($widths)
 	$s = "array(\n\t";
 	for($c=0;$c<=255;$c++)
 	{
-		if(chr($c)=="'")
+		if(chr($c) === "'")
 			$s .= "'\\''";
-		elseif(chr($c)=="\\")
+		elseif(chr($c) === "\\")
 			$s .= "'\\\\'";
 		elseif($c>=32 && $c<=126)
 			$s .= "'".chr($c)."'";
@@ -268,7 +268,7 @@ function MakeWidthArray($widths)
 		$s .= '=>'.$widths[$c];
 		if($c<255)
 			$s .= ',';
-		if(($c+1)%22==0)
+		if(($c + 1) % 22 === 0)
 			$s .= "\n\t";
 	}
 	$s .= ')';
@@ -285,7 +285,7 @@ function MakeFontEncoding($map)
 	{
 		if($map[$c]['name']!=$ref[$c]['name'])
 		{
-			if($c!=$last+1)
+			if($c !== $last + 1)
 				$s .= $c.' ';
 			$last = $c;
 			$s .= '/'.$map[$c]['name'].' ';
@@ -297,7 +297,7 @@ function MakeFontEncoding($map)
 function MakeUnicodeArray($map)
 {
 	// Build mapping to Unicode values
-	$ranges = array();
+	$ranges = [];
 	foreach($map as $c=>$v)
 	{
 		$uv = $v['uv'];
@@ -313,11 +313,11 @@ function MakeUnicodeArray($map)
 				else
 				{
 					$ranges[] = $range;
-					$range = array($c, $c, $uv, $uv);
+					$range = [$c, $c, $uv, $uv];
 				}
 			}
 			else
-				$range = array($c, $c, $uv, $uv);
+				$range = [$c, $c, $uv, $uv];
 		}
 	}
 	$ranges[] = $range;
@@ -387,16 +387,16 @@ function MakeFont($fontfile, $enc='cp1252', $embed=true, $subset=true)
 	if(!file_exists($fontfile))
 		Error('Font file not found: '.$fontfile);
 	$ext = strtolower(substr($fontfile,-3));
-	if($ext=='ttf' || $ext=='otf')
+	if($ext === 'ttf' || $ext === 'otf')
 		$type = 'TrueType';
-	elseif($ext=='pfb')
+	elseif($ext === 'pfb')
 		$type = 'Type1';
 	else
 		Error('Unrecognized font file extension: '.$ext);
 
 	$map = LoadMap($enc);
 
-	if($type=='TrueType')
+	if($type === 'TrueType')
 		$info = GetInfoFromTrueType($fontfile, $embed, $subset, $map);
 	else
 		$info = GetInfoFromType1($fontfile, $embed, $map);
@@ -423,11 +423,11 @@ function MakeFont($fontfile, $enc='cp1252', $embed=true, $subset=true)
 	Message('Font definition file generated: '.$basename.'.php');
 }
 
-if(PHP_SAPI=='cli')
+if(PHP_SAPI === 'cli')
 {
 	// Command-line interface
 	ini_set('log_errors', '0');
-	if($argc==1)
+	if($argc === 1)
 		die("Usage: php makefont.php fontfile [encoding] [embed] [subset]\n");
 	$fontfile = $argv[1];
 	if($argc>=3)

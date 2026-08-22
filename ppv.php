@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * @link https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNSetup/
@@ -20,11 +21,11 @@
  */
 
 use PHPMailer\PHPMailer\PHPMailer;
-require ('paths.php');
+require (__DIR__ . '/paths.php');
 require (CONFIG.'bootstrap.php');
 require (LIB.'email.lib.php');
 
-$cols = array("prefsPaypalAccount","prefsPaypalIPN");
+$cols = ["prefsPaypalAccount","prefsPaypalIPN"];
 $db_conn->where ("id", 1);
 $row_prefs = $db_conn->getOne ($prefix."preferences", null, $cols);
 
@@ -50,12 +51,12 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	$current_date_time_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time");
 	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
 
-	$cols = array("contestName","contestLogo");
+	$cols = ["contestName","contestLogo"];
 	$db_conn->where ("id", 1);
 	$row_logo = $db_conn->getOne ($prefix."contest_info", null, $cols);
 	$totalRows_logo = $db_conn->count;
 
-	$cols = array("brewerFirstName","brewerLastName","brewerEmail");
+	$cols = ["brewerFirstName","brewerLastName","brewerEmail"];
 	$db_conn->where ("uid", $custom_parts[0]);
 	$row_user_info = $db_conn->getOne ($prefix."brewer", null, $cols);
 
@@ -125,7 +126,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	// Check the receiver email to see if it matches
 	$receiver_email_found = FALSE;
 
-	if (strtolower($data['receiver_email']) == strtolower($paypal_email_address)) {
+	if (strtolower($data['receiver_email']) === strtolower($paypal_email_address)) {
 		$receiver_email_found = TRUE;
 	}
 
@@ -142,18 +143,18 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 			// If payment completed, update the brewing table rows for each paid entry
 
 			if (strpos($custom_parts[1],"-")) $b = explode("-",$custom_parts[1]);
-			else $b = array($custom_parts[1]);
+			else $b = [$custom_parts[1]];
 			
 			$queries = "";
-			$display_entry_no = array();
+			$display_entry_no = [];
 
 			foreach ($b as $key=>$value) {
 
 				$update_table = $prefix."brewing";
-				$data_paid = array(
+				$data_paid = [
 					'brewPaid' => 1,
 					'brewUpdated' => date('Y-m-d H:i:s', time())
-				);
+				];
 				$db_conn->where ('id', $value);
 				$result = $db_conn->update ($update_table, $data_paid);
 
@@ -250,7 +251,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	if (($save_log_file) && (isset($data['txn_id'])) && (!empty($data['txn_id']))) {
 
 		$update_table = $prefix."payments";
-		$data_ppv = array(
+		$data_ppv = [
 			'uid' => $custom_parts[0],
 			'first_name' => $data['first_name'],
 			'last_name' => $data['last_name'],
@@ -261,7 +262,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 			'payment_status' => $paypal_ipn_status,
 			'payment_entries' => $custom_parts[1],
 			'payment_time' => time()
-		);
+		];
 		$result = $db_conn->insert ($update_table, $data_ppv);
 
 	}

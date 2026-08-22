@@ -463,7 +463,7 @@ $(document).ready(function() {
         include (DB.'admin_judging_scores.db.php');
 
         if ($row_entries) {
-        
+
             $style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],$style_display_method);
 
             foreach ($rows_entries as $row_entries) {

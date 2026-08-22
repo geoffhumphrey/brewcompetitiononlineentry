@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Tagalog PHPMailer language file: refer to English translation for definitive list
  *

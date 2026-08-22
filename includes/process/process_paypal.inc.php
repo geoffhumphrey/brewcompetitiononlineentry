@@ -24,7 +24,7 @@ $query_string .= "?business=".urlencode($paypal_email)."&";
 
 // Loop for posted values and append to querystring
 foreach($_POST as $key => $value){
-	if (($key != "cancel_return") && ($key != "return") && ($key != "business")) {
+	if (!in_array($key, ["cancel_return", "return", "business"])) {
 		$value = urlencode(stripslashes($value));
 		$query_string .= "$key=$value&";
 	}

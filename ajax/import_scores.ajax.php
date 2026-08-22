@@ -1,7 +1,7 @@
 <?php
 
 ob_start();
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require(CONFIG.'bootstrap.php');
 include (LIB.'admin.lib.php');
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
@@ -18,9 +18,9 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	$scored_places_discrepency_count = 0;
 	$flagged_count = 0;
 
-	$return_json = array();
-	$eval_arr = array();
-	$evalPlace = array();
+	$return_json = [];
+	$eval_arr = [];
+	$evalPlace = [];
 
 	$styles_db_table = $prefix."styles";
 
@@ -31,10 +31,10 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 	// If no records
 	if ($totalRows_eval == 0) {
-		$return_json = array(
+		$return_json = [
 			"status" => "0",
 			"scores_imported" => "0"
-		);
+		];
 	}
 
 	// If there are records, update the scores DB table with scores recorded by judges
@@ -44,22 +44,22 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		$row_scored = $db_conn->get($prefix."judging_scores");
 		$totalRows_scored = $db_conn->count;
 
-		$flagged = array();
-		$eval_arr = array();
-		$scored_arr = array();
-		$scored_places = array();
-		$scored_places_discrepency = array();
-		$singles = array();
-		$evalPlace = array();
+		$flagged = [];
+		$eval_arr = [];
+		$scored_arr = [];
+		$scored_places = [];
+		$scored_places_discrepency = [];
+		$singles = [];
+		$evalPlace = [];
 		$status = 1;
 
 		foreach ($row_scored as $row_scored) {
 			$scored_arr[] = $row_scored['eid'];
-			$scored_places[] = array(
+			$scored_places[] = [
 				"scored_id" => $row_scored['eid'],
 				"scored_place" => $row_scored['scorePlace'],
 				"scored_minibos" => $row_scored['scoreMiniBOS']
-			);
+			];
 		} 
 
 		foreach ($row_eval as $row_eval) {
@@ -90,9 +90,9 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 			// If it has, check that any places OR mini-BOS has been recorded or changed
 			if (in_array($value,$scored_arr)) {
 
-				$evalMiniBOS = array();
-				$evalPlace = array();
-				$evalStyleType = array();
+				$evalMiniBOS = [];
+				$evalPlace = [];
+				$evalStyleType = [];
 
 				// If there is a record, update the record in the scores DB
 				// Loop through and compare each final score. 
@@ -105,23 +105,23 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					else $evalStyleType[] = "";
 					$evalPlace[] = $row_evals['evalPlace'];
 					$evalMiniBOS[] = $row_evals['evalMiniBOS'];
-				
+
 				}
 
-				if ((is_array($evalMiniBOS)) && (!empty($evalMiniBOS))) $evalMiniBOS = max($evalMiniBOS);
+				if ((is_array($evalMiniBOS)) && ($evalMiniBOS !== [])) $evalMiniBOS = max($evalMiniBOS);
 				if ((is_numeric($evalMiniBOS)) && ($evalMiniBOS > 0)) $evalMiniBOS = 1;
 				else $evalMiniBOS = 0;
 
-				if ((is_array($evalPlace)) && (!empty($evalPlace))) $evalPlace = max($evalPlace);
+				if ((is_array($evalPlace)) && ($evalPlace !== [])) $evalPlace = max($evalPlace);
 				if ((is_numeric($evalPlace)) && ($evalPlace > 0)) $evalPlace = $evalPlace;
 				else $evalPlace = "";
 
-				if ((is_array($evalStyleType)) && (!empty($evalStyleType))) $evalStyleType = max($evalStyleType);
+				if ((is_array($evalStyleType)) && ($evalStyleType !== [])) $evalStyleType = max($evalStyleType);
 				else $evalStyleType = "";
 
 				// If the entry has been scored and a place has been recorded
 				// Grab the place and build discrepency array
-				if (!empty($scored_places)) {
+				if ($scored_places !== []) {
 					foreach ($scored_places as $k => $v) {
 						if ($v['scored_id'] == $value) {
 
@@ -154,28 +154,28 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 					if (($update_place) && ($update_miniBOS)) {
 						$score_count++;
-						$data = array(
+						$data = [
 							'scorePlace' => $evalPlace,
 							'scoreType' => $evalStyleType,
 							'scoreMiniBOS' => $evalMiniBOS
-						);	
+						];	
 					}
 
 					if (($update_place) && (!$update_miniBOS)) {
 						$score_count++;
-						$data = array(
+						$data = [
 							'scorePlace' => $evalPlace,
 							'scoreType' => $evalStyleType
-						);	
+						];	
 					}
 
 					if ((!$update_place) && ($update_miniBOS)) {
 						$score_count++;
-						$data = array(
+						$data = [
 							'scoreMiniBOS' => $evalMiniBOS
-						);	
+						];	
 					}
-														
+
 					$db_conn->where ('eid', $value);
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) $status = 2;	
@@ -183,17 +183,17 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				}							
 
 			}
-		
+
 			// If no record, import
 			else {
 
-				$eval_scores = array();
-				$eid = array();
-				$uid = array();
-				$evalTable = array();
-				$evalMiniBOS = array();
-				$evalPlace = array();
-				$evalStyleType = array();
+				$eval_scores = [];
+				$eid = [];
+				$uid = [];
+				$evalTable = [];
+				$evalMiniBOS = [];
+				$evalPlace = [];
+				$evalStyleType = [];
 
 				// echo $query_evals."<br>";
 
@@ -202,7 +202,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					$singles[] = $row_evals[0]['eid'];
 					$not_imported_count ++;
 				}
-				
+
 				if ($totalRows_evals > 1) {
 
 					// Loop through and compare each final score. 
@@ -233,21 +233,21 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					$final_score = max($eval_scores);
 					$evalStyleType = max($evalStyleType);
 
-					if ((is_array($evalPlace)) && (!empty($evalPlace))) $evalPlace = max($evalPlace);
+					if ((is_array($evalPlace)) && ($evalPlace !== [])) $evalPlace = max($evalPlace);
 					if ((is_numeric($evalPlace)) && ($evalPlace > 0)) $evalPlace = $evalPlace;
-					else $evalPlace = "";
+					else $evalPlace = [];
 
 					$db_conn->where ('eid', $value);
 					$db_conn->where ('evalFinalScore', $final_score);
 					$row_eval_max = $db_conn->getOne ($prefix."evaluation", "sum(id), count(*) as count");
-				
+
 					// If all consensus scores match, add the sql insert statement
 					if ($row_eval_max['count'] == $totalRows_evals) {
 
 						$score_count++;
 
 						$update_table = $prefix."judging_scores";
-						$data = array(
+						$data = [
 							'eid' => $eid,
 							'bid' => $uid, 
 							'scoreTable' => $evalTable, 
@@ -255,45 +255,45 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 							'scoreMiniBOS' => $evalMiniBOS, 
 							'scorePlace' => $evalPlace, 
 							'scoreType' => $evalStyleType
-						);
+						];
 						$result = $db_conn->insert ($update_table, $data);
 						if (!$result) $status = 2;
-					
+
 					} 
 
 					// If scores differ, add the eid to the flagged array
 					else { 
-						$flagged[] = array(
+						$flagged[] = [
 							"eid" => $value,
 							"uid" => $uid
-						); 
+						]; 
 						$flagged_count++;
 					}		
-					
+
 				} 
 
 			}
-			
+
 		}
 
 		// Finally, clear out all zeroes in scorePlace columns. Just in case.
 		$update_table = $prefix."judging_scores";
-		$data = array('scorePlace' => NULL);
+		$data = ['scorePlace' => NULL];
 		$db_conn->where ('scorePlace', 0);
 		$result = $db_conn->update ($update_table, $data);
 
-		if (empty($scored_places_discrepency)) $scored_places_discrepency = "";
+		if ($scored_places_discrepency === []) $scored_places_discrepency = "";
 		else $scored_places_discrepency = implode(",",$scored_places_discrepency);
 
-		$return_json = array(
+		$return_json = [
 			"status" => "$status",
 			"scores_imported_count" => "$score_count",
 			"scores_not_imported_count" => "$not_imported_count",
 			"flagged_count" => "$flagged_count",
 			"scored_places_discrepency" => "$scored_places_discrepency",
 			"scored_places_discrepency_count" => "$scored_places_discrepency_count"
-		);
-	
+		];
+
 	}
 
 	echo json_encode($return_json);

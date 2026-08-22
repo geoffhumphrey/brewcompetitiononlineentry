@@ -13,7 +13,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	require(CLASSES.'phpass/PasswordHash.php');
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 	$captcha_success = FALSE;
 	$no_register = FALSE;
@@ -53,10 +53,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				// Verify reCAPTCHA response
 				if ($captcha_type == 1) {
 
-					$recaptcha_data = array(
+					$recaptcha_data = [
 						'secret' => $private_captcha_key,
 						'response' => $_POST['g-recaptcha-response']
-					);
+					];
 
 					$verify = curl_init();
 					curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
@@ -65,7 +65,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
 
 					$response = curl_exec($verify);
-					curl_close($verify);
 					$response_data = json_decode($response);
 
 					if ((!empty($response_data)) && ($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
@@ -75,10 +74,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				// Verify hCAPTCHA response
 				if ($captcha_type == 2) {
 
-					$hCAPTCHA_data = array(
+					$hCAPTCHA_data = [
 						'secret' => $private_captcha_key,
 						'response' => $_POST['h-captcha-response']
-					);
+					];
 					
 					$verify = curl_init();
 					curl_setopt($verify, CURLOPT_URL, "https://hcaptcha.com/siteverify");
@@ -162,7 +161,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				if ($registerUserLevel == 0) $userAdminObfuscate = 0;
 
 				$update_table = $prefix."users";
-				$data = array(
+				$data = [
 					'user_name' => $username,
 					'userLevel' => $registerUserLevel,
 					'password' => $hash,
@@ -170,8 +169,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'userQuestionAnswer' => $hash_question,
 					'userCreated' =>  date('Y-m-d H:i:s', time()),
 					'userAdminObfuscate' => $userAdminObfuscate
-				);
-				
+				];
+
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -183,7 +182,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$row_user = $db_conn->getOne($users_db_table);
 
 				$update_table = $prefix."brewer";
-				$data = array(
+				$data = [
 					'uid' => $row_user['id'],
 					'brewerFirstName' => blank_to_null($first_name),
 					'brewerLastName' => blank_to_null($last_name),
@@ -216,7 +215,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'brewerBreweryName' => blank_to_null($brewerBreweryName),
 					'brewerBreweryInfo' => blank_to_null($brewerBreweryInfo),
 					'brewerAssignment' => blank_to_null($brewerAssignment)
-				);
+				];
 
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
@@ -279,14 +278,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	 			if ($row_stray['count'] == 0) {
 
 	 				$update_table = $prefix."staff";
-	 				$data = array(
+	 				$data = [
 	 					'uid' => $row_user['id'],
 	 					'staff_judge' => $staff_judge,
 	 					'staff_judge_bos' => 0,
 	 					'staff_steward' => $staff_steward,
 	 					'staff_organizer' => 0,
 	 					'staff_staff' => $staff_staff
-	 				);
+	 				];
 	 				$result = $db_conn->insert ($update_table, $data);
 	 				if (!$result) {
 	 					$error_output[] = $db_conn->getLastError();
@@ -298,13 +297,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	 			elseif ($row_stray['count'] == 1) {
 
 	 				$update_table = $prefix."staff";
-	 				$data = array(
+	 				$data = [
 	 					'staff_judge' => $staff_judge,
 	 					'staff_judge_bos' => 0,
 	 					'staff_steward' => $staff_steward,
 	 					'staff_organizer' => 0,
 	 					'staff_staff' => $staff_staff
-	 				);
+	 				];
 	 				$db_conn->where ('uid', $row_user['id']);
 	 				$result = $db_conn->update ($update_table, $data);
 	 				if (!$result) {
@@ -332,22 +331,22 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 					// Build vars
 					$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-					
+
 					$to_name = $first_name." ".$last_name;
 					$to_name = html_entity_decode($to_name);
 					$to_name = mb_convert_encoding($to_name, "UTF-8");
-					
+
 					$to_email = mb_convert_encoding($username, "UTF-8");
 					$to_email_formatted = $to_name." <".$to_email.">";
-					
+
 					$subject = sprintf($_SESSION['contestName'].": %s",$register_text_037);
 					$subject = html_entity_decode($subject);
 					$subject = mb_convert_encoding($subject, "UTF-8");
 
 					$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-					if (strpos($url, 'brewingcompetitions.com') !== false) $from_email = $default_from."@brewingcompetitions.com";
+					if (str_contains($url, 'brewingcompetitions.com')) $from_email = $default_from."@brewingcompetitions.com";
 					$from_email = mb_convert_encoding($from_email, "UTF-8");
-					
+
 					$from_name = html_entity_decode($_SESSION['contestName']);
 					$from_name = mb_convert_encoding($from_name, "UTF-8");		
 
@@ -406,7 +405,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$mail->Subject = $subject;
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);
-					
+
 					/*
 					echo $url;
 					echo $headers."<br>";
@@ -418,7 +417,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				} // end if ($_SESSION['prefsEmailRegConfirm'] == 1)
 
 				if ($filter == "default") {
-					
+
 					unset($_SESSION['user_info'.$prefix_session]);
 					$_SESSION['loginUsername'] = $username;
 					csrf_token_generate(true);
@@ -435,18 +434,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 						$db_conn->where("uid", $row_user['id']);
 						$row_brewer = $db_conn->getOne($brewer_db_table, "id");
-						
+
 						if ($view == "quick") {
 							$insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";
 							if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=3";
 						}
-						
+
 						else {
 							$insertGoTo = $base_url."index.php?section=brewer&go=admin&action=edit&filter=".$row_brewer['id']."&psort=judge&id=".$row_brewer['id'];
 							if ($errors) $insertGoTo .= "&msg=3";
 						}
 
-						if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+						if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 						$insertGoTo = prep_redirect_link($insertGoTo);
 						$redirect_go_to = sprintf("Location: %s", $insertGoTo);
@@ -455,7 +454,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 					else {
 
-						if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+						if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 						$insertGoTo = $base_url."index.php?section=admin&go=participants&msg=1";
 						if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=3";
@@ -484,30 +483,30 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	if ($no_register) {
 
-		setcookie("userQuestion", sterilize($_POST['userQuestion']), 0, "/");
-		setcookie("userQuestionAnswer", $userQuestionAnswer, 0, "/");
-		setcookie("brewerFirstName", $first_name, 0, "/");
-		setcookie("brewerLastName", $last_name, 0, "/");
-		setcookie("brewerAddress", $address, 0, "/");
-		setcookie("brewerCity", $city, 0, "/");
-		setcookie("brewerState", sterilize($state_province), 0, "/");
-		setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
-		setcookie("brewerCountry", sterilize($_POST['brewerCountry']), 0, "/");
-		setcookie("brewerPhone1", $brewerPhone1, 0, "/");
-		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-		setcookie("brewerClubs", $brewerClubs, 0, "/");
-		setcookie("brewerAHA", $brewerAHA, 0, "/");
-		setcookie("brewerMHP", $brewerMHP, 0, "/");
-		setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
-		setcookie("brewerSteward", $brewerSteward, 0, "/");
-		setcookie("brewerJudge", $brewerJudge, 0, "/");
-		setcookie("brewerDropOff", $brewerDropOff, 0, "/");
-		setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
-		setcookie("brewerStewardLocation", $location_pref2, 0, "/");
-		setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
-		setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/"); // $brewerBreweryTTB var is incoprorated into $brewerBreweryInfo array.
-		setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
-		setcookie("brewerProAm", $brewerProAm, 0, "/");
+		setcookie("userQuestion", sterilize($_POST['userQuestion']), ['expires' => 0, 'path' => "/"]);
+		setcookie("userQuestionAnswer", $userQuestionAnswer, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerFirstName", $first_name, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerLastName", $last_name, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerAddress", $address, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerCity", $city, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerState", sterilize($state_province), ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerZip", sterilize($_POST['brewerZip']), ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerCountry", sterilize($_POST['brewerCountry']), ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerPhone1", $brewerPhone1, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerPhone2", $brewerPhone2, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerClubs", $brewerClubs, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerAHA", $brewerAHA, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerMHP", $brewerMHP, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerStaff", sterilize($_POST['brewerStaff']), ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerSteward", $brewerSteward, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerJudge", $brewerJudge, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerDropOff", $brewerDropOff, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerJudgeLocation", $location_pref1, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerStewardLocation", $location_pref2, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerBreweryName", $brewerBreweryName, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerBreweryTTB", $brewerBreweryTTB, ['expires' => 0, 'path' => "/"]); // $brewerBreweryTTB var is incoprorated into $brewerBreweryInfo array.
+		setcookie("brewerJudgeID", $brewerJudgeID, ['expires' => 0, 'path' => "/"]);
+		setcookie("brewerProAm", $brewerProAm, ['expires' => 0, 'path' => "/"]);
 
 	}
 
@@ -515,12 +514,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	exit();
 
 
-} else {
-
-	$redirect = $base_url."index.php?msg=98";
-	$redirect = prep_redirect_link($redirect);
-	$redirect_go_to = sprintf("Location: %s", $redirect);
-	header($redirect_go_to);
-	exit();
 }
+$redirect = $base_url."index.php?msg=98";
+$redirect = prep_redirect_link($redirect);
+$redirect_go_to = sprintf("Location: %s", $redirect);
+header($redirect_go_to);
+exit();
 ?>

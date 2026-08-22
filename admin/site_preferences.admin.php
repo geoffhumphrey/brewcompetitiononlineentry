@@ -1,6 +1,6 @@
 <?php
 // Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
+if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!str_contains($section, "step")) && ($_SESSION['userLevel'] > 0))) {
     $redirect = "../../403.php";
     $redirect_go_to = sprintf("Location: %s", $redirect);
     header($redirect_go_to);
@@ -35,11 +35,11 @@ if (($action == "default") || ($action == "entries")) {
     $limits_by_table = FALSE;
     $style_limits_json = json_decode($row_prefs['prefsStyleLimits'],true);
     if ((strlen($row_prefs['prefsStyleLimits']) > 1) && (json_last_error() === JSON_ERROR_NONE)) $limits_by_style = TRUE;
-    if ((strlen($row_prefs['prefsStyleLimits']) == 1) && (is_numeric($row_prefs['prefsStyleLimits']))) $limits_by_table = TRUE;
+    if ((strlen($row_prefs['prefsStyleLimits']) === 1) && (is_numeric($row_prefs['prefsStyleLimits']))) $limits_by_table = TRUE;
 
     if (($custom_styles_arr) && (!empty($custom_styles_arr))) {
         foreach ($custom_styles_arr as $value) {
-            if ((is_array($value)) && ($value) && (!empty($value))) {
+            if ((is_array($value)) && ($value) && ($value !== [])) {
                 $custom_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\">";
                 $custom_exceptions_USCLEx .= "Custom Style: ";
                 $custom_exceptions_USCLEx .= $value['brewStyle']."</label></div>\n";
@@ -65,11 +65,11 @@ if (($action == "default") || ($action == "entries")) {
         // array and show/hide the list as each are selected via jQuery.
         $styles_db_table = $prefix."styles";
 
-        $cols = array("id","brewStyleGroup","brewStyleNum","brewStyle","brewStyleVersion","brewStyleOwn");
+        $cols = ["id","brewStyleGroup","brewStyleNum","brewStyle","brewStyleVersion","brewStyleOwn"];
         $db_conn->returnType = 'array';
-        if ($style_set['style_set_name'] == "BJCP2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", array("BJCP2025","2","BJCP2021","2","custom"));
-        elseif ($style_set['style_set_name'] == "AABC2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", array("AABC2025","2","AABC2022","2","custom"));
-        else $db_conn->where ("brewStyleVersion = ? AND brewStyleOwn != ?", array($style_set['style_set_name'],"custom"));
+        if ($style_set['style_set_name'] == "BJCP2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", ["BJCP2025","2","BJCP2021","2","custom"]);
+        elseif ($style_set['style_set_name'] == "AABC2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", ["AABC2025","2","AABC2022","2","custom"]);
+        else $db_conn->where ("brewStyleVersion = ? AND brewStyleOwn != ?", [$style_set['style_set_name'],"custom"]);
         $row_styles_all = $db_conn->get($styles_db_table, null, $cols);
 
         if ($style_set['style_set_name'] == "BA") $method = 2;
@@ -212,7 +212,7 @@ if (($section == "admin") && ($go == "preferences")) {
 
         // Entries: Styles
 
-        $styles_selected = array();
+        $styles_selected = [];
         $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
         if ($row_styles) {
@@ -225,7 +225,7 @@ if (($section == "admin") && ($go == "preferences")) {
                     $checked = "";
 
                     if ($go == "preferences") {
-                        $a = explode(",", $row_limits['prefsUSCLEx']);
+                        $a = ($row_limits['prefsUSCLEx']) ? explode(",", $row_limits['prefsUSCLEx']) : [];
                         $b = $row_styles['id'];
                         foreach ($a as $value) {
                             if ($value == $b) $checked = "CHECKED";
@@ -937,7 +937,7 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Results Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-            <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
+            <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (!str_contains($section, "step")) echo $current_date." ".$current_time; ?>" required>
         <div class="help-block">Date and time when the system will display winners if Results Display is enabled.</div>
         <div class="help-block with-errors"></div>
     </div>
@@ -1561,7 +1561,7 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">    
         <select class="selectpicker" name="prefsShowBestBrewer" id="prefsShowBestBrewer" data-size="10" data-width="auto">
             <?php for ($i=-1; $i <= 50; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestBrewer'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestBrewer'] == $i) echo "SELECTED"; elseif (($i === 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i === -1) echo "Display all"; elseif ($i === 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
             <?php } ?>
         </select>
         <div class="help-block">Indicate whether you want to display the list of best brewers according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display.</div>
@@ -1581,7 +1581,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
         <select class="selectpicker" name="prefsShowBestClub" id="prefsShowBestClub" data-size="10" data-width="auto">
             <?php for ($i=-1; $i <= 50; $i++) { ?>
-            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestClub'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestClub'] == $i) echo "SELECTED"; elseif (($i === 0) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i === -1) echo "Display all"; elseif ($i === 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
             <?php } ?>
         </select>
             <div class="help-block">Indicate whether you want to display the list of best clubs according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display. Applies ONLY to the amateur edition.</div>
@@ -1658,7 +1658,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
                 <?php for ($i=0; $i <= 25; $i++) { ?>
-                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i === 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
             <div class="help-block">Enter the number of points awarded for each first place that an entrant receives.</div>
@@ -1669,7 +1669,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
                 <?php for ($i=0; $i <= 25; $i++) { ?>
-                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i === 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
             <div class="help-block">Enter the number of points awarded for each second place that an entrant receives.</div>
@@ -1680,7 +1680,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
                 <?php for ($i=0; $i <= 25; $i++) { ?>
-                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i === 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
             <div class="help-block">Enter the number of points awarded for each third place that an entrant receives.</div>
@@ -1691,7 +1691,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
                 <?php for ($i=0; $i <= 25; $i++) { ?>
-                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i === 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
             <div class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</div>
@@ -1702,7 +1702,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
             <select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
                 <?php for ($i=0; $i <= 25; $i++) { ?>
-                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+                <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i === 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
                 <?php } ?>
             </select>
             <div class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</div>
@@ -2026,8 +2026,8 @@ if (isset($row_contest_info['contestEntryFeePassword'])) $contestEntryFeePasswor
     </div>
 </div>
 <?php
-if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
-    $st_arr = array();
+if ((!str_contains($section, "step")) && ($row_style_type)) {
+    $st_arr = [];
     $st_count = 0;
     foreach ($rows_style_type as $row_style_type) {
         $st_arr[] = $row_style_type['id'];
@@ -2086,7 +2086,7 @@ if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
 </div>
 <?php for ($i=1; $i <= 4; $i++) { ?>
 <section id="user-entry-limit-increment-<?php echo $i; ?>">
-<?php if ($i == 2) echo "<hr>"; ?>
+<?php if ($i === 2) echo "<hr>"; ?>
 <div class="form-group">
     <label for="user-entry-limit-number-<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">#<?php echo $i; ?> Incremental Entry Limit per Participant</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -2151,12 +2151,12 @@ if ((strpos($section, "step") === FALSE) && ($row_style_type)) {
     <div class="form-group" id="subStyleExeptionsEdit">
         <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Per Participant Sub-Style Entry Limit</label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <?php if (strpos($section, "step") === FALSE) { ?>
+            <?php if (!str_contains($section, "step")) { ?>
                 <div class="btn-group" role="group">
                     <button class="btn btn btn-default" data-toggle="collapse" href="#sub-style-list" aria-expanded="false" aria-controls="sub-style-list">Expand/Collapse the Sub-Style List</button>
                 </div>
                 <?php } ?>
-            <div class="<?php if (strpos($section, "step") === FALSE) echo "collapse"; ?>" id="sub-style-list">
+            <div class="<?php if (!str_contains($section, "step")) echo "collapse"; ?>" id="sub-style-list">
                 <div class="input-group">
                     <?php echo $prefsUSCLEx; ?>
                 </div>

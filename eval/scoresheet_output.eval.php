@@ -1,6 +1,7 @@
-<?php 
+<?php
+ 
 
-$scoresheet_display = array();
+$scoresheet_display = [];
 $archive_suffix = "";
 
 if ($dbTable == "default") $dbTable = $prefix."evaluation";

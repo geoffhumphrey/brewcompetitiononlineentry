@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $list_help_title = "My Account Help";
 $list_help_body = "<p>This is a comprehensive snapshot of your account information.</p>";
 $list_help_body .= "<p>Here, you can view your personal information including name, address, phone number(s), clubs, AHA member number, BJCP ID, BJCP judge rank, judging preferences, and stewarding preferences.</p>";

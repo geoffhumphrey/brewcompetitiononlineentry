@@ -1,5 +1,6 @@
 <?php
-$entry_forms = array("0","1","2","E","C");
+
+$entry_forms = ["0","1","2","E","C"];
 
 // If using non-TBS bottle labels, redirect
 if (!in_array($_SESSION['prefsEntryForm'],$entry_forms)) {

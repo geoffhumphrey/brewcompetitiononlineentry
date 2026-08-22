@@ -1,4 +1,5 @@
-<?php 
+<?php
+ 
 /**
  * Add judging dashboard text and button to My Account
  */

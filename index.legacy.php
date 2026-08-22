@@ -1,3 +1,4 @@
+<?php declare(strict_types=1); ?>
 <body>
 
 <a name="top"></a>
@@ -391,7 +392,7 @@ if (($_SESSION['prefsEval'] == 1) && ($section == "admin") && ($go == "evaluatio
 if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); 
 
 // Perform version check if NOT going into setup
-if (strpos($section, 'step') === FALSE)  {
+if (!str_contains($section, 'step'))  {
     version_check($version,$current_version,$current_version_date_display);
 }
 

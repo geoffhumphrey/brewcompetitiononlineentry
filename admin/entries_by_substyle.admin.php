@@ -24,12 +24,12 @@ $substyle = "";
 
 include (DB.'styles.db.php');
 
-$subcats = array();
+$subcats = [];
 
 foreach ($rows_styles as $row_styles) {
 
 	if (array_key_exists($row_styles['id'], $styles_selected)) {
-		$subcats[] = array($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$row_styles['brewStyle'],$row_styles['brewStyleCategory'],$row_styles['brewStyleActive']);
+		$subcats[] = [$row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$row_styles['brewStyle'],$row_styles['brewStyleCategory'],$row_styles['brewStyleActive']];
 	}
 
 }
@@ -40,25 +40,25 @@ foreach ($subcats as $key => $value) {
 
 	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) {
 		$query_substyle_count = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'";
-		$params_substyle_count = array($substyle[0]);
+		$params_substyle_count = [$substyle[0]];
 	}
 	else {
 		$query_substyle_count = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewSubCategory=? AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'";
-		$params_substyle_count = array($substyle[0], $substyle[1]);
+		$params_substyle_count = [$substyle[0], $substyle[1]];
 	}
 
 	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) {
 		$query_substyle_count_logged = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewConfirmed='1'";
-		$params_substyle_count_logged = array($substyle[0]);
+		$params_substyle_count_logged = [$substyle[0]];
 	}
 	else {
 		$query_substyle_count_logged = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewSubCategory=? AND brewConfirmed='1'";
-		$params_substyle_count_logged = array($substyle[0], $substyle[1]);
+		$params_substyle_count_logged = [$substyle[0], $substyle[1]];
 	}
 
 	include (DB.'entries_by_substyle.db.php');
 
-	if (!empty($substyle)) {
+	if ($substyle !== []) {
 
 		if ($row_substyle_count_logged['count'] > 0) {
 			if ($filter == "default") $html .= "<tr class=\"success text-success\">";

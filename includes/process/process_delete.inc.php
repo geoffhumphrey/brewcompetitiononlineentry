@@ -21,7 +21,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($row_user['userLevel'] == 1) $admin_user = TRUE;
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	if (($admin_user) && ($go == "image")) {
@@ -117,15 +117,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					if ((in_array("Y-".$id,$a)) || (in_array("N-".$id,$a))) {
 
 						foreach ($a as $b) {
-							if ($b == "Y-".$id) $c[] = "";
-							elseif ($b == "N-".$id) $c[] = "";
+							if ($b === "Y-" . $id) $c[] = "";
+							elseif ($b === "N-" . $id) $c[] = "";
 							else $c[] = $b.",";
 						}
 
 						$d = rtrim(implode("",$c),",");
 
 						$update_table = $prefix."brewer";
-						$data = array('brewerJudgeLocation' => $d);
+						$data = ['brewerJudgeLocation' => $d];
 						$db_conn->where ('id', $row_loc['id']);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -147,8 +147,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 						foreach ($e as $f) {
 
-							if ($f == "Y-".$id) $g[] = "";
-							elseif ($f == "N-".$id) $g[] = "";
+							if ($f === "Y-" . $id) $g[] = "";
+							elseif ($f === "N-" . $id) $g[] = "";
 							else $g[] = $f.",";
 
 						}
@@ -156,7 +156,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						$h = rtrim(implode("",$g),",");
 
 						$update_table = $prefix."brewer";
-						$data = array('brewerStewardLocation' => $h);
+						$data = ['brewerStewardLocation' => $h];
 						$db_conn->where ('id', $row_loc['id']);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -209,7 +209,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$db_conn->where('brewBrewerID', $id);
 			$rows_entries = $db_conn->get($brewing_db_table, null, "id");
 
-			$a = array();
+			$a = [];
 			foreach ($rows_entries as $row_entries) { $a[] = $row_entries['id']; }
 
 				sort($a);
@@ -246,7 +246,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$db_conn->where('bid', $id);
 			$rows_judge_assign = $db_conn->get($judging_assignments_db_table, null, "id");
 
-			$b = array();
+			$b = [];
 			foreach ($rows_judge_assign as $row_judge_assign) { $b[] = $row_judge_assign['id']; }
 
 				sort($b);
@@ -267,7 +267,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$db_conn->where('uid', $id);
 			$rows_staff_assign = $db_conn->get($prefix."staff", null, "id");
 
-			$c = array();
+			$c = [];
 			foreach ($rows_staff_assign as $row_staff_assign) { $c[] = $row_staff_assign['id']; }
 
 				sort($c);
@@ -315,12 +315,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Determine if the style chosen is a cider - if so, run a different query
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 			$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
-			$style_version = ($first_character == "C") ? 'BJCP2025' : 'BJCP2021';
+			$style_version = ($first_character === "C") ? 'BJCP2025' : 'BJCP2021';
 		}
 		else $style_version = $_SESSION['prefsStyleSet'];
 
 		$query_style_name = "SELECT id FROM ".$prefix."styles WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-		$row_style_name = $db_conn->rawQueryOne($query_style_name, array($style_version, $row_brews['brewCategorySort'], $row_brews['brewSubCategory']));
+		$row_style_name = $db_conn->rawQueryOne($query_style_name, [$style_version, $row_brews['brewCategorySort'], $row_brews['brewSubCategory']]);
 
 		table_limit($row_style_name['id'],1);
 
@@ -356,10 +356,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$rows_delete_assign = $db_conn->get($judging_scores_db_table, null, "id");
 		$totalRows_delete_assign = $db_conn->count;
 
-		$a = array();
-		$b = array();
-		$z = array();
-		$c = array();
+		$a = [];
+		$b = [];
+		$z = [];
+		$c = [];
 
 		if ($totalRows_delete_assign > 0) {
 
@@ -458,7 +458,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$delete_suffix = "_".$filter; 
 
-		$drop_tables_array = array(
+		$drop_tables_array = [
 			$prefix."brewer".$delete_suffix,
 			$prefix."brewing".$delete_suffix,
 			$prefix."evaluation".$delete_suffix,
@@ -472,7 +472,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$prefix."staff".$delete_suffix,
 			$prefix."style_types".$delete_suffix,
 			$prefix."users".$delete_suffix
-		);
+		];
 		
 		foreach ($drop_tables_array as $table) {
 			
@@ -530,12 +530,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// Determine if the style chosen is a cider - if so, run a different query
 			if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 				$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
-				$style_version = ($first_character == "C") ? 'BJCP2025' : 'BJCP2021';
+				$style_version = ($first_character === "C") ? 'BJCP2025' : 'BJCP2021';
 			}
 			else $style_version = $_SESSION['prefsStyleSet'];
 
 			$query_style_name = "SELECT id FROM ".$prefix."styles WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-			$row_style_name = $db_conn->rawQueryOne($query_style_name, array($style_version, $row_brews['brewCategorySort'], $row_brews['brewSubCategory']));
+			$row_style_name = $db_conn->rawQueryOne($query_style_name, [$style_version, $row_brews['brewCategorySort'], $row_brews['brewSubCategory']]);
 
 			if ($entry_allow_delete) {
 
@@ -568,7 +568,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		elseif (($admin_superuser) && ($dbTable == $prefix."archive")) {
 
-			$tables_array = array($brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table);
+			$tables_array = [$brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table];
 
 			foreach ($tables_array as $table) {
 
@@ -621,7 +621,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	}
 
-	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+	if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 	if ($errors) $deleteGoTo = $base_url."index.php?section=admin&msg=3";
 	$deleteGoTo = prep_redirect_link($deleteGoTo);

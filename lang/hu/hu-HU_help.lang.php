@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $list_help_title = "Fiókom Segítség";
 $list_help_body = "<p>Ez egy átfogó pillanatkép az Ön fiókadatairól.</p>";
 $list_help_body .= "<p>Itt megtekintheti személyes adatait, beleértve a nevet, címet, telefonszámo(ka)t, klubokat, AHA tagsági számot, BJCP azonosítót, BJCP bírói rangot, bírálási preferenciákat és kiszolgálói preferenciákat.</p>";

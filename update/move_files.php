@@ -1,5 +1,5 @@
 <?php
-include ('../paths.php');
+include (__DIR__ . '/../paths.php');
 
 /**
 * Recursively move files from one directory to another
@@ -8,7 +8,7 @@ include ('../paths.php');
 * @param String $dest – Destination of files being moved
 * @source https://ben.lobaugh.net/blog/864/php-5-recursively-move-or-copy-files
 */
-function rmove($src, $dest){
+function rmove(string $src, string $dest): bool{
 
     // If source is not a directory stop processing
     if(!is_dir($src)) return false;
@@ -29,6 +29,8 @@ function rmove($src, $dest){
             rename($f->getRealPath(), "$dest/" . $f->getFilename());
         }
     }
+
+    return true;
 }
 
 /*
@@ -39,10 +41,13 @@ function rdelete($src,$file_ext){
     array_map('unlink', glob($src."*".$file_ext));
 }
 */
-function rdelete($src,$file_mimes){
+/**
+ * @param mixed $file_mimes
+ */
+function rdelete(string $src, $file_mimes): bool{
 
-    if (empty($file_mimes)) $file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml');
-    else $file_mimes = array('application/pdf');
+    if (empty($file_mimes)) $file_mimes = ['image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml'];
+    else $file_mimes = ['application/pdf'];
 
     // If source is not a directory stop processing
     if(!is_dir($src)) return false;
@@ -55,6 +60,8 @@ function rdelete($src,$file_mimes){
         $mime = mime_content_type($file->getPathname());
         if (in_array($mime, $file_mimes)) unlink($file);
     }
+
+    return true;
 }
 
 $src = USER_DOCS;

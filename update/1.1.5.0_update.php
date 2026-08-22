@@ -50,7 +50,7 @@ if (!check_update("sponsorLevel", $prefix."sponsors")) {
 
 	foreach ($rows_user_level as $row_user_level) {
 		$db_conn->where('id', $row_user_level['id']);
-		$result = $db_conn->update($prefix."users", array('userLevel' => '0'));
+		$result = $db_conn->update($prefix."users", ['userLevel' => '0']);
 	}
 
 }

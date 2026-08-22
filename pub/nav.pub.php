@@ -136,7 +136,7 @@ if ($logged_in) {
 	                    // Build the current page URL (without existing ?lang= param)
 	                    $current_url = preg_replace('/[?&]lang=[^&]+/', '', $_SERVER['REQUEST_URI']);
 	                    // Determine separator (? or &)
-	                    $lang_sep = (strpos($current_url, '?') !== false) ? '&' : '?';
+	                    $lang_sep = (str_contains($current_url, '?')) ? '&' : '?';
 	                ?>
 	                <div class="nav-item dropdown">
 	                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="<?php echo $label_language ?? 'Language'; ?>">

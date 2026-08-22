@@ -1,5 +1,6 @@
 <?php
 
+
 include(LIB.'output.lib.php');
 
 $eid = "";
@@ -23,12 +24,12 @@ $nw_cider = FALSE;
 $scored_previously = FALSE;
 $consensus_match = FALSE;
 $auto_logout_extension = FALSE;
-$evals = array();
-$judge_scores = array();
-$consensus_scores = array();
+$evals = [];
+$judge_scores = [];
+$consensus_scores = [];
 $other_judge_scores = "";
 $other_judge_consensus_scores = "";
-$other_judge_previous_consensus = array();
+$other_judge_previous_consensus = [];
 $my_consensus_score = "";
 $evalPosition = "";
 
@@ -52,7 +53,7 @@ else $score_range = 7;
  * with the 2021 guidelines. See coding below.
  */
 
-$bjcp2015_exceptions = array(
+$bjcp2015_exceptions = [
   "27A1" => "//bjcp.org/style/2015/27/27A/historical-beer-gose/",
   "27A2" => "//bjcp.org/style/2015/27/27A/historical-beer-piwo-grodziskie/",
   "27A3" => "//bjcp.org/style/2015/27/27A/historical-beer-lichtenhainer/",
@@ -75,9 +76,9 @@ $bjcp2015_exceptions = array(
   "PRX3" => "//bjcp.org/beer-styles/x3-italian-grape-ale/",
   "PRX4" => "//bjcp.org/beer-styles/x4-catharina-sour/",
   "PRX5" => "//bjcp.org/beer-styles/x5-new-zealand-pilsner/"
-);
+];
 
-$bjcp2021_exceptions = array(
+$bjcp2021_exceptions = [
   "17A1" => "//bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/",
   "21B1" => "//bjcp.org/style/2021/21/21B/specialty-ipa-belgian-ipa/",
   "21B2" => "//bjcp.org/style/2021/21/21B/specialty-ipa-black-ipa/",
@@ -99,7 +100,7 @@ $bjcp2021_exceptions = array(
   "LSX3" => "//bjcp.org/beer-styles/x3-italian-grape-ale/",
   "LSX4" => "//bjcp.org/beer-styles/x4-catharina-sour/",
   "LSX5" => "//bjcp.org/beer-styles/x5-new-zealand-pilsner/"
-);
+];
 
 /**
  * When admins edit a scoresheet, the $bid var will be in the URL.
@@ -181,7 +182,7 @@ if ($action == "add") {
 
     if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
         $first_character = mb_substr($row_entry_info['brewCategorySort'], 0, 1);
-        if ($first_character == "C") $chosen_style_set = "BJCP2025";
+        if ($first_character === "C") $chosen_style_set = "BJCP2025";
         else $chosen_style_set = "BJCP2021";
     }
 
@@ -245,7 +246,7 @@ if ($totalRows_entry_info > 0) {
   if ($action == "add") $flight_count_info = flight_count_info($id,0);
   if ($action == "edit") $flight_count_info = flight_count_info($eid,0);
 
-  if (!empty($judge_scores)) {
+  if ($judge_scores !== []) {
     $scored_previously = TRUE;
     $consensus_scores = eval_exits($row_entry_info['id'],"consensus_scores",$dbTable);
     if (count(array_unique($consensus_scores)) === 1) $consensus_match = TRUE;
@@ -254,7 +255,7 @@ if ($totalRows_entry_info > 0) {
     if (isset($row_eval['evalFinalScore'])) $my_consensus_score .= sprintf("%s: <span id=\"my-consensus-score\">".$row_eval['evalFinalScore']."</span>",$label_your_consensus_score);
   }
 
-  if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore']));
+  if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,[$row_eval['evalFinalScore']]);
 
   if (isset($_POST['entry_number'])) {
     
@@ -363,7 +364,7 @@ if ($entry_found) {
     elseif (is_numeric(ltrim($row_style['brewStyleGroup'],"0"))) $style_link = "//bjcp.org/style/2021/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
     // 2025 update was cider only; find styles that begin with C
-    elseif (($_SESSION['prefsStyleSet'] == "BJCP2025") && ($first_character == "C")) $style_link = "//bjcp.org/style/2025/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+    elseif (($_SESSION['prefsStyleSet'] == "BJCP2025") && ($first_character === "C")) $style_link = "//bjcp.org/style/2025/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
     // If mead, use 2015 link
     else $style_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
@@ -392,7 +393,7 @@ if ($entry_found) {
 
   if (!empty($row_entry_info['brewInfo'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
-    if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style_num == "2A")) $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_regional_variation."</strong></div>";
+    if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style_num === "2A")) $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_regional_variation."</strong></div>";
     else $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_required_info."</strong></div>";
     $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".str_replace("^", " - ", $row_entry_info['brewInfo'])."</div>";
     $entry_info_html .= "</div>";
@@ -666,7 +667,7 @@ else {
 $entry_info_html .= "</section>";
 
 // Sub-nav Buttons
-if ($eval_source == 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
+if ($eval_source === 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
 $eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><button class=\"btn btn-block btn-default\"  data-toggle=\"modal\" data-target=\"#unsaved-modal\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</button></div>";
 if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104);
 ?>
@@ -1238,20 +1239,20 @@ var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
 <?php if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { 
 
     if (($cider) || ($mead)) {
-      $comment_fields = array(
+      $comment_fields = [
         "aroma" => "#evalAromaComments",
         "appearance" => "#evalAppearanceComments",
         "flavor" => "#evalFlavorComments",
         "overall" => "#evalOverallComments"
-      );
+      ];
     } else {
-      $comment_fields = array(
+      $comment_fields = [
           "aroma" => "#evalAromaComments",
           "appearance" => "#evalAppearanceComments",
           "flavor" => "#evalFlavorComments",
           "mouthfeel" => "#evalMouthfeelComments",
           "overall" => "#evalOverallComments"
-      );
+      ];
     }
 
 ?>

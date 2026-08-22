@@ -5,7 +5,7 @@
 
 if ($go == "entries") {
 
-	$params_log = array();
+	$params_log = [];
 
 	if ($action == "bottle-entry") {
 
@@ -69,7 +69,7 @@ if ($go == "entries") {
 
 
 	// Execute query
-	$rows_log = (!empty($params_log)) ? $db_conn->rawQuery($query_log, $params_log) : $db_conn->rawQuery($query_log);
+	$rows_log = ($params_log !== []) ? $db_conn->rawQuery($query_log, $params_log) : $db_conn->rawQuery($query_log);
 	$row_log = ($rows_log && count($rows_log) > 0) ? $rows_log[0] : null;
 	$totalRows_log = $db_conn->count;
 
@@ -81,7 +81,7 @@ if ($go == "entries") {
 
 if ($go == "participants") {
 
-	$params_brewer = array();
+	$params_brewer = [];
 
 	if ($action == "judging_nametags") {
 
@@ -114,7 +114,7 @@ if ($go == "participants") {
 	}
 
 	// Execute the query
-	$rows_brewer = (!empty($params_brewer)) ? $db_conn->rawQuery($query_brewer, $params_brewer) : $db_conn->rawQuery($query_brewer);
+	$rows_brewer = ($params_brewer !== []) ? $db_conn->rawQuery($query_brewer, $params_brewer) : $db_conn->rawQuery($query_brewer);
 	$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 	$totalRows_brewer = $db_conn->count;
 }

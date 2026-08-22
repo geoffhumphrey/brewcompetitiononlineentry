@@ -1,7 +1,7 @@
-<?php 
+<?php
 
 ob_start();
-require('../paths.php');
+require(__DIR__ . '/../paths.php');
 require(CONFIG.'bootstrap.php');
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
@@ -75,10 +75,10 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 else $status = 9; // Session expired, not enabled, etc.
 
-$return_json = array(
+$return_json = [
 	"status" => "$status",
 	"message" => "$message"
-);
+];
 
 echo json_encode($return_json);
 mysqli_close($connection);

@@ -128,7 +128,7 @@ if ($action == "add") {
 		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<!-- Input Here -->
-				<input class="form-control" id="sbd_judging_no<?php echo $i; ?>" name="sbd_judging_no<?php echo $i; ?>" type="text" size="10" maxlength="255" value="" placeholder="" <?php if ($i == 1) echo "autofocus"; ?>>
+				<input class="form-control" id="sbd_judging_no<?php echo $i; ?>" name="sbd_judging_no<?php echo $i; ?>" type="text" size="10" maxlength="255" value="" placeholder="" <?php if ($i === 1) echo "autofocus"; ?>>
 				<span class="input-group-addon" id="sbd_judging_no<?php echo $i; ?>-2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 			</div>
 		</div>

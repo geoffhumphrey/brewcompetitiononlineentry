@@ -3,7 +3,7 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
 
 	$errors = FALSE;
-	$error_output = array();
+	$error_output = [];
 	$_SESSION['error_output'] = "";
 
 	require(INCLUDES.'scrubber.inc.php');
@@ -11,7 +11,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	$dbTable = "default";
 
-	$tables_array = array($special_best_info_db_table, $special_best_data_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
+	$tables_array = [$special_best_info_db_table, $special_best_data_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table];
 
 	if (check_setup($prefix."evaluation",$database)) {
 		$tables_array[] = $prefix."evaluation";
@@ -33,9 +33,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	// Clear BJCP ID from "contest_info"
 	$update_table = $prefix."contest_info";
-	$data = array(
+	$data = [
 		'contestID' => NULL
-	);
+	];
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) {
@@ -46,14 +46,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	// Reset judge, steward, and staff interest and availability
 	// Clear out any discounts
 	$update_table = $prefix."brewer";
-	$data = array(
+	$data = [
 		'brewerJudge' => 'N',
 		'brewerSteward' => 'N',
 		'brewerJudgeLocation' => NULL,
 		'brewerStewardLocation' => NULL,
 		'brewerDropOff' => '999',
 		'brewerDiscount' => NULL
-	);
+	];
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) {
 		$error_output[] = $db_conn->getLastError();
@@ -67,7 +67,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$rows_admin = $db_conn->get($prefix."users", null, "id");
 		$totalRows_admin = $db_conn->count;
 
-		$admin_ids = array();
+		$admin_ids = [];
 
 		if ($totalRows_admin > 0) {
 
@@ -113,7 +113,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	} // end if ($filter == "default")
 
-	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+	if ($error_output !== []) $_SESSION['error_output'] = $error_output;
 
 	$redirect = $base_url."index.php?section=admin&go=archive&msg=7";
 	$redirect = prep_redirect_link($redirect);

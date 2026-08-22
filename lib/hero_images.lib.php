@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hero Images Library Functions
  *
@@ -18,7 +20,7 @@ function load_hero_images_preferences($db_conn, $prefix, $all_images) {
         $db_conn->where('id', 1);
         $row_prefs = $db_conn->getOne($prefix."preferences", "prefsHeroImages");
     }
-    catch (Exception $e) {
+    catch (Exception) {
         return $default_prefs;
     }
 
@@ -32,7 +34,7 @@ function load_hero_images_preferences($db_conn, $prefix, $all_images) {
     }
 
     // Keep only currently-discovered images, preserving choices and enabling new files by default.
-    $normalized = array();
+    $normalized = [];
     foreach ($default_prefs as $image => $enabled_default) {
         if (array_key_exists($image, $decoded)) {
             $normalized[$image] = $decoded[$image];
@@ -58,10 +60,10 @@ function hero_image_category_from_filename($filename) {
         return $matches[1];
     }
 
-    if (strpos($filename, 'misc-') === 0) return "0";
-    if (strpos($filename, 'beer-') === 0) return "1";
-    if (strpos($filename, 'cider-') === 0) return "2";
-    if (strpos($filename, 'mead-') === 0) return "3";
+    if (str_starts_with($filename, 'misc-')) return "0";
+    if (str_starts_with($filename, 'beer-')) return "1";
+    if (str_starts_with($filename, 'cider-')) return "2";
+    if (str_starts_with($filename, 'mead-')) return "3";
 
     // Default unknown naming patterns to miscellaneous.
     return "0";
@@ -113,7 +115,7 @@ function is_hero_image_candidate($filename) {
  * Build default image preference map with all available images set active.
  */
 function get_default_hero_preferences($all_images) {
-    $images_array = array();
+    $images_array = [];
 
     foreach ($all_images as $images) {
         foreach ($images as $image) {
@@ -128,19 +130,18 @@ function get_default_hero_preferences($all_images) {
  * Scan /images folder and get all available hero images grouped by category.
  */
 function get_all_available_hero_images() {
-    $hero_images = array(
-        "0" => array(),
-        "1" => array(),
-        "2" => array(),
-        "3" => array(),
-    );
+    $hero_images = [
+        "0" => [],
+        "1" => [],
+        "2" => [],
+        "3" => [],
+    ];
 
-    // GLOB_BRACE isn't defined on every platform (e.g. musl-based Linux such as Alpine),
-    // and referencing an undefined constant is a fatal error since PHP 8.0 - glob per
-    // extension instead so this doesn't depend on GLOB_BRACE being available.
-    $files = array();
-    foreach (array('jpg', 'jpeg', 'png', 'gif', 'webp') as $extension) {
-        $matches = glob(IMAGES.'*.'.$extension);
+    // GLOB_BRACE is undefined on PHP 8.4+ (removed), so glob each supported
+    // extension separately instead of using a brace pattern.
+    $files = [];
+    foreach (['jpg', 'jpeg', 'png', 'gif', 'webp'] as $ext) {
+        $matches = glob(IMAGES.'*.'.$ext);
         if ($matches !== false) $files = array_merge($files, $matches);
     }
 
@@ -164,22 +165,22 @@ function get_all_available_hero_images() {
 /**
  * Return active hero images allowed for the currently selected style types.
  */
-function get_active_hero_images($db_conn, $prefix, $style_types = array()) {
-    $active_images = array();
+function get_active_hero_images($db_conn, $prefix, $style_types = []) {
+    $active_images = [];
     $all_images = get_all_available_hero_images();
     $hero_prefs = load_hero_images_preferences($db_conn, $prefix, $all_images);
     if (!is_array($hero_prefs)) return $active_images;
 
-    $allowed_types = array("0");
+    $allowed_types = ["0"];
     foreach ($style_types as $type) {
         $type_str = (string)$type;
-        if (($type_str !== "0") && in_array($type_str, array("1", "2", "3"))) {
+        if (($type_str !== "0") && in_array($type_str, ["1", "2", "3"])) {
             $allowed_types[] = $type_str;
         }
     }
 
     foreach ($hero_prefs as $image => $is_active) {
-        if (!($is_active === true || $is_active === 1 || $is_active === "1" || $is_active === "true")) continue;
+        if (!(in_array($is_active, [true, 1, "1", "true"], true))) continue;
 
         $category = hero_image_category_from_filename($image);
         if (($category !== null) && in_array($category, $allowed_types)) {
@@ -206,9 +207,9 @@ function save_hero_images_preferences($db_conn, $prefix, $images_array) {
 
     try {
         $db_conn->where('id', 1);
-        return $db_conn->update($prefix."preferences", array('prefsHeroImages' => $json_data));
+        return $db_conn->update($prefix."preferences", ['prefsHeroImages' => $json_data]);
     }
-    catch (Exception $e) {
+    catch (Exception) {
         return false;
     }
 }

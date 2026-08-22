@@ -14,11 +14,11 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 
 //require(DB.'mods.db.php');
 
-function mod_info($info,$method) {
+function mod_info(string $info,int $method): string {
 
 	$output = "";
 	
-	if ($method == 1) {
+	if ($method === 1) {
 		switch($info) {
 			case "0": 
 			case "": $output = "Informational (Static HTML)"; break;
@@ -28,7 +28,7 @@ function mod_info($info,$method) {
 		}
 	}
 
-	if ($method == 2) {
+	if ($method === 2) {
 		switch($info) {
 			case "0": $output = "All Public Pages"; break;
 			case "1": $output = "Public Home Page"; break;
@@ -43,7 +43,7 @@ function mod_info($info,$method) {
 		}
 	}
 
-	if ($method == 3) {
+	if ($method === 3) {
 		switch($info) {
 			case "0": $output = "Top level admins"; break;
 			case "1": $output = "Admins"; break;
@@ -51,7 +51,7 @@ function mod_info($info,$method) {
 		}
 	}
 
-	if ($method == 4) {
+	if ($method === 4) {
 		switch($info) {
 			case "0": $output = "N/A (Stand-alone)"; break;
 			case "1": $output = "Before public core content"; break;

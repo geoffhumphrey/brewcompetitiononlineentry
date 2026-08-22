@@ -1,16 +1,16 @@
 <?php
 $query_scores = "SELECT scoreEntry,scorePlace,scoreType FROM ".$prefix."judging_scores WHERE eid=?";
-$params_scores = array($row_sql['id']);
+$params_scores = [$row_sql['id']];
 if (SINGLE) { $query_scores .= " AND comp_id=?"; $params_scores[] = $_SESSION['comp_id']; }
 $row_scores = $db_conn->rawQueryOne($query_scores, $params_scores);
 
 $query_flight = "SELECT * FROM ".$prefix."judging_flights WHERE flightEntryID=?";
-$params_flight = array($row_sql['id']);
+$params_flight = [$row_sql['id']];
 if (SINGLE) { $query_flight .= " AND comp_id=?"; $params_flight[] = $_SESSION['comp_id']; }
 $row_flight = $db_conn->rawQueryOne($query_flight, $params_flight);
 
 $query_bos = "SELECT scorePlace FROM ".$prefix."judging_scores_bos WHERE eid=?";
-$params_bos = array($row_sql['id']);
+$params_bos = [$row_sql['id']];
 if (SINGLE) { $query_bos .= " AND comp_id=?"; $params_bos[] = $_SESSION['comp_id']; }
 $row_bos = $db_conn->rawQueryOne($query_bos, $params_bos);
 $totalRows_bos = $db_conn->count;

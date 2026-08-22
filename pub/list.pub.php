@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Module:      list.pub.php
  * Description: This module displays user-related data including personal information,
@@ -6,10 +7,15 @@
  *
  */
 
-function pay_to_print($prefs_pay,$entry_paid) {
-	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
-	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
-	elseif ($prefs_pay == "N") return TRUE;
+function pay_to_print(string $prefs_pay, string $entry_paid): bool
+{
+    if (($prefs_pay === "Y") && ($entry_paid === "1")) {
+        return TRUE;
+    }
+    if (($prefs_pay === "Y") && ($entry_paid === "0")) {
+        return FALSE;
+    }
+    return $prefs_pay === "N";
 }
 
 $pay_button_disable = "";

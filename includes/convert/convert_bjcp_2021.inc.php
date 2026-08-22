@@ -14,14 +14,14 @@ $styles_db_table = $prefix."styles";
 if (HOSTED) $query_style_ids = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyleVersion FROM `%s` WHERE brewStyleVersion='BJCP2015' OR brewStyleVersion='BJCP2021' UNION ALL SELECT id,brewStyleGroup,brewStyleNum,brewStyleVersion FROM `%s` WHERE brewStyleVersion='BJCP2015' OR brewStyleVersion='BJCP2021' ORDER BY brewStyleVersion,id ASC", $styles_db_table, $prefix."styles");
 else 
 */ 
-$db_conn->where('brewStyleVersion', array('BJCP2015','BJCP2021'), 'in');
+$db_conn->where('brewStyleVersion', ['BJCP2015','BJCP2021'], 'in');
 $db_conn->orderBy('brewStyleVersion', 'ASC');
 $db_conn->orderBy('id', 'ASC');
 $rows_style_ids = $db_conn->get($styles_db_table, null, "id, brewStyleGroup, brewStyleNum, brewStyleVersion");
 
-$styles_2015 = array();
-$styles_2021 = array();
-$mapped_style_ids = array();
+$styles_2015 = [];
+$styles_2021 = [];
+$mapped_style_ids = [];
 
 if (!isset($output)) $output = "";
 
@@ -69,15 +69,15 @@ if ($totalRows_judge_likes > 0) {
 
     foreach ($rows_judge_likes as $row_judge_likes) {
 
-        $likes_arr_new = array();
-        $dislikes_arr_new = array();
+        $likes_arr_new = [];
+        $dislikes_arr_new = [];
         $likes_new = "";
         $dislikes_new = "";
-        
-        $current_likes_2015 = array();
-        $current_dislikes_2015 = array();
-        $bjcp_2021_likes = array();
-        $bjcp_2021_dislikes = array();
+
+        $current_likes_2015 = [];
+        $current_dislikes_2015 = [];
+        $bjcp_2021_likes = [];
+        $bjcp_2021_dislikes = [];
 
         if (!empty($row_judge_likes['brewerJudgeLikes'])) {
             $likes_arr = explode(",",$row_judge_likes['brewerJudgeLikes']);
@@ -103,21 +103,21 @@ if ($totalRows_judge_likes > 0) {
             }
         }
 
-        if (!empty($likes_arr_new)) $likes_new = implode(",",$likes_arr_new);
-        if (!empty($dislikes_arr_new)) $dislikes_new = implode(",",$dislikes_arr_new);
+        if ($likes_arr_new !== []) $likes_new = implode(",",$likes_arr_new);
+        if ($dislikes_arr_new !== []) $dislikes_new = implode(",",$dislikes_arr_new);
 
         $current_likes = implode(",",$current_likes_2015);
         $current_dislikes = implode(",",$current_dislikes_2015);
         $likes_2015 = implode(",",$bjcp_2021_likes);
         $dislikes_2015 = implode(",",$bjcp_2021_dislikes);
-        
+
         if ((!empty($current_likes)) || (!empty($current_dislikes))) {
 
             $update_table = $prefix."brewer";
-            $data = array(
+            $data = [
                 'brewerJudgeLikes' => $likes_new,
                 'brewerJudgeDislikes' => $dislikes_new
-            );
+            ];
             $db_conn->where ('id', $row_judge_likes['id']);
             if ($db_conn->update ($update_table, $data)) $output .= "<li>Judge likes updated to BJCP 2021 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName']."</li>";
             else $output .= "<li>Judge likes NOT updated to BJCP 2021 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName'].". Error: ".$db_conn->getLastError()."</li>";
@@ -154,11 +154,11 @@ if ($totalRows_tables > 0) {
 
     foreach ($rows_tables as $row_tables) {
 
-        $table_styles_arr_new = array();
+        $table_styles_arr_new = [];
 
         if (!empty($row_tables['tableStyles'])) {
             $table_styles_arr = explode(",",$row_tables['tableStyles']);
-            
+
             foreach ($table_styles_arr as $value) {
                 if (array_key_exists($value, $mapped_style_ids)) {
                     $new_style_num = $mapped_style_ids[$value];
@@ -167,17 +167,17 @@ if ($totalRows_tables > 0) {
             }
         }
 
-        if (!empty($table_styles_arr_new)) {
+        if ($table_styles_arr_new !== []) {
             $table_styles_new = implode(",",$table_styles_arr_new);
 
             $update_table = $prefix."judging_tables";
-            $data = array('tableStyles' => $table_styles_new);
+            $data = ['tableStyles' => $table_styles_new];
             $db_conn->where ('id', $row_tables['id']);
             if ($db_conn->update ($update_table, $data)) $output .= "<li>Table styles updated to BJCP 2021 for ".$row_tables['tableName']."</li>";
             else $output .= "<li>Judge likes NOT updated to BJCP 2021  for ".$row_tables['tableName'].". Error: ".$db_conn->getLastError()."</li>";
 
         }
-        
+
         /*
         echo $row_tables['tableName']."<br>";
         print_r($table_styles_arr);
@@ -209,13 +209,13 @@ if ($totalRows_styles_active > 0) {
 
     // First, "deselect" all styles in the DB for BJCP2021
     $update_table = $prefix."styles";
-    $data = array('brewStyleActive' => 'N');
+    $data = ['brewStyleActive' => 'N'];
     $db_conn->where ('brewStyleVersion', 'BJCP2021');
     $db_conn->update ($update_table, $data);
 
     if (HOSTED) {
         $update_table = $styles_db_table;
-        $data = array('brewStyleActive' => 'N');
+        $data = ['brewStyleActive' => 'N'];
         $db_conn->where ('brewStyleVersion', 'BJCP2021');
         $result = $db_conn->update ($update_table, $data);
     }
@@ -231,13 +231,13 @@ if ($totalRows_styles_active > 0) {
             $id = $styles_2021[$new_style_num];
 
             $update_table = $prefix."styles";
-            $data = array('brewStyleActive' => 'Y');
+            $data = ['brewStyleActive' => 'Y'];
             $db_conn->where ('id', $id);
             $result = $db_conn->update ($update_table, $data);
 
             if (HOSTED) {
                 $update_table = $styles_db_table;
-                $data = array('brewStyleActive' => 'Y');
+                $data = ['brewStyleActive' => 'Y'];
                 $db_conn->where ('id', $id);
                 $result = $db_conn->update ($update_table, $data);
             }
@@ -257,7 +257,7 @@ $db_conn->orderBy('brewSubCategory', 'ASC');
 $rows_brews = $db_conn->get($prefix."brewing", null, "id,brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle");
 $totalRows_brews = $db_conn->count;
 
-$current_active = array();
+$current_active = [];
 
 if ($totalRows_brews > 0) {
 
@@ -278,14 +278,14 @@ if ($totalRows_brews > 0) {
 // Activate all styles that have been converted.
 // Failsafe just in case comp converts during entry window.
 
-if (!empty($current_active)) {
+if ($current_active !== []) {
 
     $update_table = $prefix."styles";
 
     foreach($current_active as $value) {
 
         $style_parts = explode("-", $value);
-        $data = array('brewStyleActive' => 'Y');
+        $data = ['brewStyleActive' => 'Y'];
         $db_conn->where ('brewStyleGroup', $style_parts[0]);
         $db_conn->where ('brewStyleNum', $style_parts[1]);
         $db_conn->update ($update_table, $data);
@@ -298,14 +298,14 @@ $output .= "<ul>";
 
 // Update all custom styles
 $update_table = $prefix."styles";
-$data = array('brewStyleVersion' => 'BJCP2021');
+$data = ['brewStyleVersion' => 'BJCP2021'];
 $db_conn->where ('brewStyleOwn', NULL, 'IS');
 $db_conn->orWhere ('brewStyleOwn', 'custom');
 if ($db_conn->update ($update_table, $data)) $output .= "<li>Custom styles updated to BJCP 2021.</li>";
 else $output .= "Custom styles NOT updated to BJCP 2021. <li>Error: ".$db_conn->getLastError()."</li>";
 
 $update_table = $prefix."preferences";
-$data = array('prefsStyleSet' => 'BJCP2021');
+$data = ['prefsStyleSet' => 'BJCP2021'];
 $db_conn->where ('id', 1);
 if ($db_conn->update ($update_table, $data)) $output .= "<li>Preferences set to BJCP 2021.</li>";
 else $output .= "<li>Preferences NOT set to BJCP 2021. Error: ".$db_conn->getLastError()."</li>";

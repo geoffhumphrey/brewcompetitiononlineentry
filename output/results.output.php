@@ -1,4 +1,5 @@
 <?php
+
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
     require(DB.'winners.db.php');

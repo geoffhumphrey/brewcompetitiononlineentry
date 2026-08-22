@@ -252,7 +252,7 @@ class POP3
         //On Windows this will raise a PHP Warning error if the hostname doesn't exist.
         //Rather than suppress it with @fsockopen, capture it cleanly instead
         set_error_handler(function () {
-            call_user_func_array([$this, 'catchWarning'], func_get_args());
+            call_user_func_array($this->catchWarning(...), func_get_args());
         });
 
         if (false === $port) {
@@ -351,7 +351,7 @@ class POP3
         // Try to get it.  Ignore any failures here.
         try {
             $this->getResponse();
-        } catch (Exception $e) {
+        } catch (Exception) {
             //Do nothing
         }
 
@@ -359,7 +359,7 @@ class POP3
         //So ignore errors here
         try {
             @fclose($this->pop_conn);
-        } catch (Exception $e) {
+        } catch (Exception) {
             //Do nothing
         }
 
@@ -415,7 +415,7 @@ class POP3
      */
     protected function checkResponse($string)
     {
-        if (strpos($string, '+OK') !== 0) {
+        if (!str_starts_with($string, '+OK')) {
             $this->setError("Server reported an error: $string");
 
             return false;
