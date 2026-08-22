@@ -18,7 +18,8 @@ require (INCLUDES.'url_variables.inc.php');
 require (LANG.'language.lang.php');
 require (INCLUDES.'constants_post_lang.inc.php');
 
-function convert_to_entities(string $input): string {
+function convert_to_entities(?string $input): string {
+    if ($input === null) return "";
     $output = preg_replace_callback("/(&#[0-9]+;)/", fn($m) => mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES"), $input);
     $output = html_entity_decode($output);
     return $output;

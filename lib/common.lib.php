@@ -1441,8 +1441,9 @@ function total_nopay_received(string $go, $id, $comp_id): int {
 	return $row['count'];
 }
 
-function style_convert(string $number,$type,string $base_url="",string $archive=""): string {
+function style_convert(?string $number,$type,string $base_url="",string $archive=""): string {
 	
+	$number = (string) ($number ?? "");
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
 	$db_conn = new MysqliDb($connection);
@@ -2152,8 +2153,8 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 
 } // end get_table_info()
 
-function style_type(string|int $type,string $method,string $source): string {
-	$type = (string) $type;
+function style_type(string|int|null $type,string $method,string $source): string {
+	$type = (string) ($type ?? "");
 	if ($method === "1") {
 		$type = match ($type) {
             "Mead" => "3",
