@@ -19,7 +19,7 @@ else $db_conn->where("id", 1);
 $row_prefs = $db_conn->getOne($prefix."preferences");
 $totalRows_prefs = $db_conn->count;
 
-$_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
+$_SESSION['prefsLanguage'] = ($row_prefs && $row_prefs['prefsLanguage'] !== null) ? $row_prefs['prefsLanguage'] : "en-US";
 
 // Legacy installs may still have prefsLanguage stored as "English" (pre-locale-code
 // installs, e.g. via the 2.1.5.0 update) rather than "en-US" - normalize before deriving

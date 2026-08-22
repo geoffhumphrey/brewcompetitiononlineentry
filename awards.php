@@ -150,7 +150,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					if (($go == "table-numbers") || ($go == "default")) $slides_tables .= sprintf("<h1 class=\"r-fit-text tight\">%s %s: %s</h1>",$label_table,$row_tables['tableNumber'],$row_tables['tableName']);
 
 					else {
-						if (strlen($row_tables['tableName']) > 18) $slides_tables .= sprintf("<h1 class=\"r-fit-text tight\">%s</h1>",$row_tables['tableName']);
+						if (strlen((string) $row_tables['tableName']) > 18) $slides_tables .= sprintf("<h1 class=\"r-fit-text tight\">%s</h1>",$row_tables['tableName']);
 						else $slides_tables .= sprintf("<h1 class=\"tight\">%s</h1>",$row_tables['tableName']);
 					}
 
@@ -598,7 +598,7 @@ if (($display_to_admin) || ($display_to_public)) {
 			// Loop through brewing table for preliminary round scores
 			foreach ($rows_bb_scores as $bb_row_scores) {
 
-				$place = floor($bb_row_scores['scorePlace']);
+				$place = floor((float) $bb_row_scores['scorePlace']);
 				$club_name = normalizeClubs($bb_row_scores['brewerClubs']);
 
 				if (array_key_exists($bb_row_scores['uid'], $bestbrewer)) {
@@ -810,7 +810,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 					if (array_key_exists($bb_row_bos_scores['uid'], $bestbrewer)) {
 
-						$place = floor($bb_row_bos_scores['scorePlace']);
+						$place = floor((float) $bb_row_bos_scores['scorePlace']);
 						if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] += 1;
 						$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
 						$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][] = 1;
@@ -840,7 +840,7 @@ if (($display_to_admin) || ($display_to_public)) {
 						$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'] = [];
 						$bestbrewer[$bb_row_bos_scores['uid']]['Scores'] = [];
 
-						$place = floor($bb_row_bos_scores['scorePlace']);
+						$place = floor((float) $bb_row_bos_scores['scorePlace']);
 						if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] = 1;
 						$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][0] = $bb_row_bos_scores['scoreEntry'];
 						$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][0] = 1;
