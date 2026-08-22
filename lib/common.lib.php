@@ -2649,6 +2649,8 @@ function display_place($place,$method): string {
 
 	require(CONFIG.'config.php');
 
+	$place = (string) $place;
+
 	if ($method == "0") {
 		$place = addOrdinalNumberSuffix($place);
 	}
@@ -5173,7 +5175,9 @@ function remove_accents(string $string): string {
 
 }
 
-function truncate_string(string $string, int $limit, string $break=".", string $pad="..."): string {
+function truncate_string(?string $string, int $limit, string $break=".", string $pad="..."): string {
+
+	$string = (string) $string;
 
 	// return with no change if string is shorter than $limit
 	if (strlen($string) <= $limit) return $string;
@@ -5188,8 +5192,9 @@ function truncate_string(string $string, int $limit, string $break=".", string $
 	return $string;
 }
 
-function place_heirarchy(string $place): string|false
+function place_heirarchy(string|int $place): string|false
 {
+    $place = (string) $place;
     return match ($place) {
         "1" => "5",
         "2" => "4",
@@ -5200,8 +5205,8 @@ function place_heirarchy(string $place): string|false
     };
 }
 
-function normalizeClubs(string $string): string {
-	$club = strtolower($string);
+function normalizeClubs(?string $string): string {
+	$club = strtolower((string) $string);
 	$club = preg_replace( "/[^a-z0-9]/i", "", $club );
 	$club = preg_replace( '/  +/', ' ', $club );
 	return $club;
