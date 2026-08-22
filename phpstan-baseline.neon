@@ -1451,11 +1451,6 @@ parameters:
 			path: admin/entries_by_substyle.admin.php
 
 		-
-			message: "#^Variable \\$substyle in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: admin/entries_by_substyle.admin.php
-
-		-
 			message: "#^Offset 'mime' on array\\{0\\: int\\<0, max\\>, 1\\: int\\<0, max\\>, 2\\: int, 3\\: string, mime\\: string, channels\\?\\: int, bits\\?\\: int\\} in isset\\(\\) always exists and is not nullable\\.$#"
 			count: 1
 			path: admin/hero_images.admin.php
@@ -1757,7 +1752,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$filter might not be defined\\.$#"
-			count: 78
+			count: 74
 			path: admin/judging_locations.admin.php
 
 		-
@@ -3426,11 +3421,6 @@ parameters:
 			path: admin/site_preferences.admin.php
 
 		-
-			message: "#^Variable \\$value in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: admin/site_preferences.admin.php
-
-		-
 			message: "#^Variable \\$view might not be defined\\.$#"
 			count: 1
 			path: admin/site_preferences.admin.php
@@ -4311,7 +4301,7 @@ parameters:
 			path: ajax/save.ajax.php
 
 		-
-			message: "#^Right side of \\|\\| is always false\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between 1 and 0 will always evaluate to false\\.$#"
 			count: 1
 			path: ajax/save.ajax.php
 
@@ -4374,6 +4364,11 @@ parameters:
 			message: "#^Variable \\$section might not be defined\\.$#"
 			count: 2
 			path: ajax/tables_mode.ajax.php
+
+		-
+			message: "#^Function is_email not found\\.$#"
+			count: 1
+			path: ajax/username.ajax.php
 
 		-
 			message: "#^Variable \\$action might not be defined\\.$#"
@@ -4557,7 +4552,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$go might not be defined\\.$#"
-			count: 8
+			count: 6
 			path: awards.php
 
 		-
@@ -5686,6 +5681,11 @@ parameters:
 			path: eval/dashboard.eval.php
 
 		-
+			message: "#^Strict comparison using \\!\\=\\= between array\\{\\} and array\\{\\} will always evaluate to false\\.$#"
+			count: 10
+			path: eval/dashboard.eval.php
+
+		-
 			message: "#^Variable \\$action might not be defined\\.$#"
 			count: 1
 			path: eval/dashboard.eval.php
@@ -5698,11 +5698,6 @@ parameters:
 		-
 			message: "#^Variable \\$assign_score_mismatch in empty\\(\\) always exists and is always falsy\\.$#"
 			count: 2
-			path: eval/dashboard.eval.php
-
-		-
-			message: "#^Variable \\$assigned_score_mismatch in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
 			path: eval/dashboard.eval.php
 
 		-
@@ -5751,18 +5746,8 @@ parameters:
 			path: eval/dashboard.eval.php
 
 		-
-			message: "#^Variable \\$duplicate_judge_evals_alert in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: eval/dashboard.eval.php
-
-		-
 			message: "#^Variable \\$entry_info_text_001 might not be defined\\.$#"
 			count: 2
-			path: eval/dashboard.eval.php
-
-		-
-			message: "#^Variable \\$eval_all_judges in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
 			path: eval/dashboard.eval.php
 
 		-
@@ -5893,11 +5878,6 @@ parameters:
 		-
 			message: "#^Variable \\$js_url might not be defined\\.$#"
 			count: 1
-			path: eval/dashboard.eval.php
-
-		-
-			message: "#^Variable \\$judge_score_disparity in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 3
 			path: eval/dashboard.eval.php
 
 		-
@@ -6071,11 +6051,6 @@ parameters:
 			path: eval/dashboard.eval.php
 
 		-
-			message: "#^Variable \\$mini_bos_mismatch in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: eval/dashboard.eval.php
-
-		-
 			message: "#^Variable \\$mini_bos_mismatch_alert in empty\\(\\) always exists and is always falsy\\.$#"
 			count: 2
 			path: eval/dashboard.eval.php
@@ -6102,21 +6077,6 @@ parameters:
 
 		-
 			message: "#^Variable \\$show_presentation might not be defined\\.$#"
-			count: 1
-			path: eval/dashboard.eval.php
-
-		-
-			message: "#^Variable \\$single_evaluation in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 3
-			path: eval/dashboard.eval.php
-
-		-
-			message: "#^Variable \\$table_places in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: eval/dashboard.eval.php
-
-		-
-			message: "#^Variable \\$table_places_alert in empty\\(\\) always exists and is always falsy\\.$#"
 			count: 1
 			path: eval/dashboard.eval.php
 
@@ -10386,6 +10346,11 @@ parameters:
 			path: handle.php
 
 		-
+			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: includes/constants.inc.php
+
+		-
 			message: "#^If condition is always false\\.$#"
 			count: 2
 			path: includes/constants.inc.php
@@ -10423,11 +10388,6 @@ parameters:
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
 			count: 23
-			path: includes/constants.inc.php
-
-		-
-			message: "#^Variable \\$drop_ship_dates in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
 			path: includes/constants.inc.php
 
 		-
@@ -10492,7 +10452,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$section might not be defined\\.$#"
-			count: 23
+			count: 18
 			path: includes/constants.inc.php
 
 		-
@@ -10946,6 +10906,11 @@ parameters:
 			path: includes/db/admin_common.db.php
 
 		-
+			message: "#^Strict comparison using \\!\\=\\= between array\\{\\} and array\\{\\} will always evaluate to false\\.$#"
+			count: 3
+			path: includes/db/admin_common.db.php
+
+		-
 			message: "#^Variable \\$action might not be defined\\.$#"
 			count: 14
 			path: includes/db/admin_common.db.php
@@ -10972,7 +10937,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$go might not be defined\\.$#"
-			count: 26
+			count: 8
 			path: includes/db/admin_common.db.php
 
 		-
@@ -10997,21 +10962,6 @@ parameters:
 
 		-
 			message: "#^Variable \\$location might not be defined\\.$#"
-			count: 1
-			path: includes/db/admin_common.db.php
-
-		-
-			message: "#^Variable \\$params_scores in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: includes/db/admin_common.db.php
-
-		-
-			message: "#^Variable \\$params_style_types in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: includes/db/admin_common.db.php
-
-		-
-			message: "#^Variable \\$params_with_entries in empty\\(\\) always exists and is always falsy\\.$#"
 			count: 1
 			path: includes/db/admin_common.db.php
 
@@ -11261,13 +11211,13 @@ parameters:
 			path: includes/db/admin_participants.db.php
 
 		-
-			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 2
+			message: "#^Strict comparison using \\!\\=\\= between array\\{\\} and array\\{\\} will always evaluate to false\\.$#"
+			count: 1
 			path: includes/db/admin_participants.db.php
 
 		-
-			message: "#^Variable \\$params_participant_count in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
+			message: "#^Variable \\$db_conn might not be defined\\.$#"
+			count: 2
 			path: includes/db/admin_participants.db.php
 
 		-
@@ -11362,7 +11312,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$section might not be defined\\.$#"
-			count: 30
+			count: 28
 			path: includes/db/brewer.db.php
 
 		-
@@ -11726,6 +11676,11 @@ parameters:
 			path: includes/db/judging_locations.db.php
 
 		-
+			message: "#^Strict comparison using \\!\\=\\= between array\\{\\} and array\\{\\} will always evaluate to false\\.$#"
+			count: 4
+			path: includes/db/judging_locations.db.php
+
+		-
 			message: "#^Variable \\$action might not be defined\\.$#"
 			count: 16
 			path: includes/db/judging_locations.db.php
@@ -11763,26 +11718,6 @@ parameters:
 		-
 			message: "#^Variable \\$judging_locations_db_table might not be defined\\.$#"
 			count: 6
-			path: includes/db/judging_locations.db.php
-
-		-
-			message: "#^Variable \\$params_judging1 in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: includes/db/judging_locations.db.php
-
-		-
-			message: "#^Variable \\$params_judging2 in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: includes/db/judging_locations.db.php
-
-		-
-			message: "#^Variable \\$params_judging3 in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: includes/db/judging_locations.db.php
-
-		-
-			message: "#^Variable \\$params_judging_locs in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
 			path: includes/db/judging_locations.db.php
 
 		-
@@ -11921,6 +11856,11 @@ parameters:
 			path: includes/db/output_email_export.db.php
 
 		-
+			message: "#^Strict comparison using \\!\\=\\= between array\\{\\} and array\\{\\} will always evaluate to false\\.$#"
+			count: 1
+			path: includes/db/output_email_export.db.php
+
+		-
 			message: "#^Variable \\$bid might not be defined\\.$#"
 			count: 1
 			path: includes/db/output_email_export.db.php
@@ -11936,11 +11876,6 @@ parameters:
 			path: includes/db/output_email_export.db.php
 
 		-
-			message: "#^Variable \\$params_sql in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: includes/db/output_email_export.db.php
-
-		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
 			count: 10
 			path: includes/db/output_email_export.db.php
@@ -11948,6 +11883,11 @@ parameters:
 		-
 			message: "#^If condition is always false\\.$#"
 			count: 3
+			path: includes/db/output_entries_export.db.php
+
+		-
+			message: "#^Strict comparison using \\!\\=\\= between array\\{\\} and array\\{\\} will always evaluate to false\\.$#"
+			count: 1
 			path: includes/db/output_entries_export.db.php
 
 		-
@@ -11977,11 +11917,6 @@ parameters:
 
 		-
 			message: "#^Variable \\$judging_tables_db_table might not be defined\\.$#"
-			count: 1
-			path: includes/db/output_entries_export.db.php
-
-		-
-			message: "#^Variable \\$params_sql in empty\\(\\) always exists and is always falsy\\.$#"
 			count: 1
 			path: includes/db/output_entries_export.db.php
 
@@ -12837,7 +12772,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$section might not be defined\\.$#"
-			count: 8
+			count: 4
 			path: includes/db/stewarding.db.php
 
 		-
@@ -14376,7 +14311,7 @@ parameters:
 			path: includes/load_cdn_libraries.inc.php
 
 		-
-			message: "#^Strict comparison using \\!\\=\\= between false and false will always evaluate to false\\.$#"
+			message: "#^Right side of \\|\\| is always false\\.$#"
 			count: 1
 			path: includes/load_cdn_libraries.inc.php
 
@@ -14421,7 +14356,7 @@ parameters:
 			path: includes/load_cdn_libraries_admin.inc.php
 
 		-
-			message: "#^Strict comparison using \\!\\=\\= between false and false will always evaluate to false\\.$#"
+			message: "#^Right side of \\|\\| is always false\\.$#"
 			count: 1
 			path: includes/load_cdn_libraries_admin.inc.php
 
@@ -14477,7 +14412,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$section might not be defined\\.$#"
-			count: 7
+			count: 5
 			path: includes/load_cdn_libraries_public.inc.php
 
 		-
@@ -14547,7 +14482,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$section might not be defined\\.$#"
-			count: 7
+			count: 5
 			path: includes/load_local_libraries_public.inc.php
 
 		-
@@ -18016,6 +17951,11 @@ parameters:
 			path: includes/recaptchalib.inc.php
 
 		-
+			message: "#^Strict comparison using \\=\\=\\= between non\\-empty\\-string and '' will always evaluate to false\\.$#"
+			count: 2
+			path: includes/recaptchalib.inc.php
+
+		-
 			message: "#^If condition is always false\\.$#"
 			count: 4
 			path: index.legacy.php
@@ -18787,7 +18727,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$section might not be defined\\.$#"
-			count: 6
+			count: 4
 			path: index.pub.php
 
 		-
@@ -19091,11 +19031,6 @@ parameters:
 			path: lang/pt/pt-BR.lang.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 2
-			path: lib/admin.lib.php
-
-		-
 			message: "#^Variable \\$a might not be defined\\.$#"
 			count: 1
 			path: lib/admin.lib.php
@@ -19286,13 +19221,18 @@ parameters:
 			path: lib/common.lib.php
 
 		-
+			message: "#^Match arm comparison between mixed and '4' is always false\\.$#"
+			count: 1
+			path: lib/common.lib.php
+
+		-
 			message: "#^Unary operation \"\\+\" on string results in an error\\.$#"
 			count: 1
 			path: lib/common.lib.php
 
 		-
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 14
+			count: 7
 			path: lib/common.lib.php
 
 		-
@@ -19362,7 +19302,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$brewer_text_005 might not be defined\\.$#"
-			count: 1
+			count: 2
 			path: lib/common.lib.php
 
 		-
@@ -19401,7 +19341,7 @@ parameters:
 			path: lib/common.lib.php
 
 		-
-			message: "#^Variable \\$iv on left side of \\?\\? always exists and is not nullable\\.$#"
+			message: "#^Variable \\$iv on left side of \\?\\?\\= always exists and is not nullable\\.$#"
 			count: 4
 			path: lib/common.lib.php
 
@@ -19528,11 +19468,6 @@ parameters:
 		-
 			message: "#^Variable \\$label_yes might not be defined\\.$#"
 			count: 4
-			path: lib/common.lib.php
-
-		-
-			message: "#^Variable \\$location in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
 			path: lib/common.lib.php
 
 		-
@@ -19956,6 +19891,11 @@ parameters:
 			path: output/assignments.output.php
 
 		-
+			message: "#^Strict comparison using \\!\\=\\= between array\\{\\} and array\\{\\} will always evaluate to false\\.$#"
+			count: 1
+			path: output/assignments.output.php
+
+		-
 			message: "#^Variable \\$bjcp_num_replace might not be defined\\.$#"
 			count: 1
 			path: output/assignments.output.php
@@ -20088,11 +20028,6 @@ parameters:
 		-
 			message: "#^Variable \\$output_text_011 might not be defined\\.$#"
 			count: 2
-			path: output/assignments.output.php
-
-		-
-			message: "#^Variable \\$params_brewer in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
 			path: output/assignments.output.php
 
 		-
@@ -20481,11 +20416,6 @@ parameters:
 			path: output/export.output.php
 
 		-
-			message: "#^Variable \\$a in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: output/export.output.php
-
-		-
 			message: "#^Variable \\$a in isset\\(\\) always exists and is not nullable\\.$#"
 			count: 1
 			path: output/export.output.php
@@ -20508,11 +20438,6 @@ parameters:
 		-
 			message: "#^Variable \\$base_url might not be defined\\.$#"
 			count: 9
-			path: output/export.output.php
-
-		-
-			message: "#^Variable \\$beer_styles might not be defined\\.$#"
-			count: 3
 			path: output/export.output.php
 
 		-
@@ -20557,7 +20482,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 31
+			count: 33
 			path: output/export.output.php
 
 		-
@@ -20622,7 +20547,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$filter might not be defined\\.$#"
-			count: 38
+			count: 39
 			path: output/export.output.php
 
 		-
@@ -20991,11 +20916,6 @@ parameters:
 			path: output/export.output.php
 
 		-
-			message: "#^Variable \\$mead_cider might not be defined\\.$#"
-			count: 3
-			path: output/export.output.php
-
-		-
 			message: "#^Variable \\$mead_cider_combined might not be defined\\.$#"
 			count: 1
 			path: output/export.output.php
@@ -21047,7 +20967,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$prefix might not be defined\\.$#"
-			count: 20
+			count: 21
 			path: output/export.output.php
 
 		-
@@ -21267,7 +21187,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$tb might not be defined\\.$#"
-			count: 19
+			count: 16
 			path: output/export.output.php
 
 		-
@@ -21327,11 +21247,6 @@ parameters:
 
 		-
 			message: "#^Variable \\$totalRows_stewards might not be defined\\.$#"
-			count: 1
-			path: output/export.output.php
-
-		-
-			message: "#^Variable \\$total_entries_received might not be defined\\.$#"
 			count: 1
 			path: output/export.output.php
 
@@ -21531,17 +21446,17 @@ parameters:
 			path: output/labels.output.php
 
 		-
-			message: "#^Comparison operation \"\\>\" between \\(array\\<int, string\\>\\|string\\|null\\) and 0 results in an error\\.$#"
-			count: 2
-			path: output/labels.output.php
-
-		-
 			message: "#^Instantiated class PDF_Label not found\\.$#"
 			count: 25
 			path: output/labels.output.php
 
 		-
 			message: "#^Result of && is always false\\.$#"
+			count: 1
+			path: output/labels.output.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between array\\{''\\}\\|array\\{'Advanced Cicerone'\\}\\|array\\{'Certified Cicerone'\\}\\|array\\{'Master Cicerone'\\} and array\\{\\} will always evaluate to false\\.$#"
 			count: 1
 			path: output/labels.output.php
 
@@ -21553,11 +21468,6 @@ parameters:
 		-
 			message: "#^Variable \\$character_limit_adjust_special might not be defined\\.$#"
 			count: 1
-			path: output/labels.output.php
-
-		-
-			message: "#^Variable \\$cicerone in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 3
 			path: output/labels.output.php
 
 		-
@@ -21724,11 +21634,6 @@ parameters:
 			message: "#^Variable \\$totalRows_log might not be defined\\.$#"
 			count: 1
 			path: output/participant_entries_list.output.php
-
-		-
-			message: "#^Function score_check invoked with 3 parameters, 2 required\\.$#"
-			count: 1
-			path: output/participant_summary.output.php
 
 		-
 			message: "#^If condition is always false\\.$#"
@@ -22007,7 +21912,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$tb might not be defined\\.$#"
-			count: 4
+			count: 1
 			path: output/print.output.php
 
 		-
@@ -22052,7 +21957,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$go might not be defined\\.$#"
-			count: 14
+			count: 10
 			path: output/pullsheets.output.php
 
 		-
@@ -22536,11 +22441,6 @@ parameters:
 			path: output/sorting.output.php
 
 		-
-			message: "#^Variable \\$beer_styles might not be defined\\.$#"
-			count: 1
-			path: output/staff_points.output.php
-
-		-
 			message: "#^Variable \\$bjcp_num_replace might not be defined\\.$#"
 			count: 6
 			path: output/staff_points.output.php
@@ -22631,11 +22531,6 @@ parameters:
 			path: output/staff_points.output.php
 
 		-
-			message: "#^Variable \\$mead_cider might not be defined\\.$#"
-			count: 1
-			path: output/staff_points.output.php
-
-		-
 			message: "#^Variable \\$organ_max_points might not be defined\\.$#"
 			count: 3
 			path: output/staff_points.output.php
@@ -22722,16 +22617,6 @@ parameters:
 
 		-
 			message: "#^Variable \\$totalRows_stewards might not be defined\\.$#"
-			count: 1
-			path: output/staff_points.output.php
-
-		-
-			message: "#^Variable \\$total_entries might not be defined\\.$#"
-			count: 1
-			path: output/staff_points.output.php
-
-		-
-			message: "#^Variable \\$total_entries_received might not be defined\\.$#"
 			count: 1
 			path: output/staff_points.output.php
 
@@ -23048,11 +22933,6 @@ parameters:
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
 			count: 10
-			path: ppv.php
-
-		-
-			message: "#^Variable \\$from_name might not be defined\\.$#"
-			count: 1
 			path: ppv.php
 
 		-
@@ -25777,7 +25657,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$registration_open might not be defined\\.$#"
-			count: 2
+			count: 3
 			path: pub/brewer_entries.pub.php
 
 		-
@@ -27986,17 +27866,17 @@ parameters:
 			path: pub/eval_dashboard.pub.php
 
 		-
+			message: "#^Strict comparison using \\!\\=\\= between array\\{\\} and array\\{\\} will always evaluate to false\\.$#"
+			count: 9
+			path: pub/eval_dashboard.pub.php
+
+		-
 			message: "#^Variable \\$action might not be defined\\.$#"
 			count: 1
 			path: pub/eval_dashboard.pub.php
 
 		-
 			message: "#^Variable \\$assign_score_mismatch in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: pub/eval_dashboard.pub.php
-
-		-
-			message: "#^Variable \\$assigned_score_mismatch in empty\\(\\) always exists and is always falsy\\.$#"
 			count: 1
 			path: pub/eval_dashboard.pub.php
 
@@ -28021,18 +27901,8 @@ parameters:
 			path: pub/eval_dashboard.pub.php
 
 		-
-			message: "#^Variable \\$duplicate_judge_evals_alert in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: pub/eval_dashboard.pub.php
-
-		-
 			message: "#^Variable \\$entry_info_text_001 might not be defined\\.$#"
 			count: 2
-			path: pub/eval_dashboard.pub.php
-
-		-
-			message: "#^Variable \\$eval_all_judges in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
 			path: pub/eval_dashboard.pub.php
 
 		-
@@ -28218,11 +28088,6 @@ parameters:
 		-
 			message: "#^Variable \\$js_url might not be defined\\.$#"
 			count: 1
-			path: pub/eval_dashboard.pub.php
-
-		-
-			message: "#^Variable \\$judge_score_disparity in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 2
 			path: pub/eval_dashboard.pub.php
 
 		-
@@ -28416,11 +28281,6 @@ parameters:
 			path: pub/eval_dashboard.pub.php
 
 		-
-			message: "#^Variable \\$mini_bos_mismatch in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: pub/eval_dashboard.pub.php
-
-		-
 			message: "#^Variable \\$mini_bos_mismatch_alert in empty\\(\\) always exists and is always falsy\\.$#"
 			count: 1
 			path: pub/eval_dashboard.pub.php
@@ -28443,16 +28303,6 @@ parameters:
 		-
 			message: "#^Variable \\$row_judging_prefs might not be defined\\.$#"
 			count: 9
-			path: pub/eval_dashboard.pub.php
-
-		-
-			message: "#^Variable \\$single_evaluation in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 2
-			path: pub/eval_dashboard.pub.php
-
-		-
-			message: "#^Variable \\$table_places_alert in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
 			path: pub/eval_dashboard.pub.php
 
 		-
@@ -31441,6 +31291,11 @@ parameters:
 			path: pub/list.pub.php
 
 		-
+			message: "#^Variable \\$judging_started might not be defined\\.$#"
+			count: 1
+			path: pub/list.pub.php
+
+		-
 			message: "#^Variable \\$label_add_entry might not be defined\\.$#"
 			count: 1
 			path: pub/list.pub.php
@@ -31487,6 +31342,11 @@ parameters:
 
 		-
 			message: "#^Variable \\$print_bottle_labels might not be defined\\.$#"
+			count: 1
+			path: pub/list.pub.php
+
+		-
+			message: "#^Variable \\$registration_open might not be defined\\.$#"
 			count: 1
 			path: pub/list.pub.php
 
@@ -34224,6 +34084,41 @@ parameters:
 			message: "#^Variable \\$view might not be defined\\.$#"
 			count: 4
 			path: qr.php
+
+		-
+			message: "#^Access to constant CODE_QUALITY on an unknown class Rector\\\\Set\\\\ValueObject\\\\SetList\\.$#"
+			count: 1
+			path: rector.php
+
+		-
+			message: "#^Access to constant UP_TO_PHP_85 on an unknown class Rector\\\\Set\\\\ValueObject\\\\LevelSetList\\.$#"
+			count: 1
+			path: rector.php
+
+		-
+			message: "#^Call to method paths\\(\\) on an unknown class Rector\\\\Config\\\\RectorConfig\\.$#"
+			count: 1
+			path: rector.php
+
+		-
+			message: "#^Call to method sets\\(\\) on an unknown class Rector\\\\Config\\\\RectorConfig\\.$#"
+			count: 1
+			path: rector.php
+
+		-
+			message: "#^Call to method skip\\(\\) on an unknown class Rector\\\\Config\\\\RectorConfig\\.$#"
+			count: 1
+			path: rector.php
+
+		-
+			message: "#^Class Rector\\\\TypeDeclaration\\\\Rector\\\\ClassMethod\\\\ReturnNeverTypeRector not found\\.$#"
+			count: 1
+			path: rector.php
+
+		-
+			message: "#^Parameter \\$rectorConfig of anonymous function has invalid type Rector\\\\Config\\\\RectorConfig\\.$#"
+			count: 1
+			path: rector.php
 
 		-
 			message: "#^If condition is always false\\.$#"
@@ -38742,7 +38637,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$action might not be defined\\.$#"
-			count: 6
+			count: 4
 			path: sections/login.sec.php
 
 		-
@@ -39286,12 +39181,12 @@ parameters:
 			path: sections/nav.sec.php
 
 		-
-			message: "#^If condition is always false\\.$#"
-			count: 2
+			message: "#^Strict comparison using \\=\\=\\= between 0 and 1 will always evaluate to false\\.$#"
+			count: 1
 			path: sections/past_winners.sec.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between 0 and 2 will always evaluate to false\\.$#"
 			count: 1
 			path: sections/past_winners.sec.php
 
@@ -42267,7 +42162,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$section might not be defined\\.$#"
-			count: 18
+			count: 15
 			path: setup.php
 
 		-
@@ -43081,17 +42976,12 @@ parameters:
 			path: update/run_update.php
 
 		-
-			message: "#^Left side of && is always true\\.$#"
-			count: 1
-			path: update/run_update.php
-
-		-
 			message: "#^Result of && is always false\\.$#"
 			count: 5
 			path: update/run_update.php
 
 		-
-			message: "#^Right side of \\|\\| is always true\\.$#"
+			message: "#^Result of \\|\\| is always true\\.$#"
 			count: 1
 			path: update/run_update.php
 
@@ -43127,7 +43017,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$db_conn might not be defined\\.$#"
-			count: 648
+			count: 649
 			path: update/run_update.php
 
 		-

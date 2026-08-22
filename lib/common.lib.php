@@ -2152,7 +2152,8 @@ function get_table_info($input,$method,$table_id,$db_table,$param,string $base_u
 
 } // end get_table_info()
 
-function style_type(string $type,string $method,string $source): string {
+function style_type(string|int $type,string $method,string $source): string {
+	$type = (string) $type;
 	if ($method === "1") {
 		$type = match ($type) {
             "Mead" => "3",
@@ -3379,7 +3380,7 @@ function dropoff_location($input): string {
         return $label_shipping_entries;
     }
 	if (($input > 0) && ($input < 999)) {
-        return $row_dropoff['dropLocationName'];
+        return ($row_dropoff && $row_dropoff['dropLocationName'] !== null) ? $row_dropoff['dropLocationName'] : $brewer_text_005;
     }
     return $brewer_text_005;
 }
@@ -4461,7 +4462,7 @@ function pro_am_check($uid): string|false {
 	$db_conn->where('uid', $uid);
 	$row_check_proam = $db_conn->getOne($prefix."brewer", "brewerProAm");
 
-	return $row_check_proam['brewerProAm'];
+	return ($row_check_proam && $row_check_proam['brewerProAm'] !== null) ? (string) $row_check_proam['brewerProAm'] : false;
 
 }
 
@@ -4523,7 +4524,7 @@ function entry_flight_assignment($eid,$table_id): string|false {
 	$db_conn->where('flightTable', $table_id);
 	$row_flight_assign = $db_conn->getOne($prefix."judging_flights", "flightNumber");
 
-	return $row_flight_assign['flightNumber'];
+	return ($row_flight_assign && $row_flight_assign['flightNumber'] !== null) ? (string) $row_flight_assign['flightNumber'] : false;
 }
 
 function flight_count_info($eid,$method): array {
