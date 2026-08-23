@@ -1333,6 +1333,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 					$pullsheet_output .= $table_info_header.$table_info_location;
 
+					// Manual pull order per flight (maps are empty when no order has been saved)
+					$flight_order_maps = [];
+					for($f=1; $f<$flights+1; $f++) $flight_order_maps[$f] = flight_entry_orders((int) $row_tables['id'], $f);
+					$has_manual_flight_order = count(array_filter($flight_order_maps)) > 0;
+
 					$table_flight = "";
 					$table_flight_datatables = "";
 
@@ -1345,7 +1350,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_flight_datatables .= "\"sDom\": 'rt',";
 					$table_flight_datatables .= "\"bStateSave\" : false,";
 					$table_flight_datatables .= "\"bLengthChange\" : false,";
-					$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
+					$table_flight_datatables .= (($has_manual_flight_order) ? "\"aaSorting\": []," : "\"aaSorting\": [[2,'asc'],[1,'asc']],");
 					$table_flight_datatables .= "\"bProcessing\" : false,";
 					$table_flight_datatables .= "\"aoColumns\": [";
 					$table_flight_datatables .= "null,";
@@ -1371,6 +1376,8 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 					for($i=1; $i<$flights+1; $i++) {
 
+						$flight_rows = [];
+
 						$a = explode(",", $row_tables['tableStyles']);
 
 						//print_r($a);
@@ -1391,6 +1398,8 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$flight_round = check_flight_number($row_entries['id'],$i,0);
 
 									if (check_flight_round($flight_round,$round)) {
+
+										$row_html_start = strlen($table_flight_tbody);
 
 										$table_flight_tbody .= "<tr>";
 										$table_flight_tbody .= "<td>";
@@ -1487,15 +1496,25 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 											$table_flight_tbody .= "</td>";
 											$table_flight_tbody .= "</tr>";
 
-										}
+											$flight_rows[(int) $row_entries['id']] = ['html' => substr($table_flight_tbody, $row_html_start), 'key' => (($view == "default") ? $row_entries['brewJudgingNumber'] : $row_entries['id'])];
 
-									$table_flight .= $table_flight_tbody;
+										}
 
 								}
 
 							}
 
 						} // end foreach
+
+						// Manual pull order: render this flight as one flat list across styles; otherwise keep collection (style-grouped) order
+						$flight_row_ids = array_keys($flight_rows);
+						if (!empty($flight_order_maps[$i])) usort($flight_row_ids, function($a,$b) use ($flight_order_maps,$i,$flight_rows) {
+							$oa = $flight_order_maps[$i][(int) $a] ?? PHP_INT_MAX;
+							$ob = $flight_order_maps[$i][(int) $b] ?? PHP_INT_MAX;
+							if ($oa !== $ob) return $oa <=> $ob;
+							return strnatcmp(sprintf("%06s",$flight_rows[$a]['key']),sprintf("%06s",$flight_rows[$b]['key']));
+						});
+						foreach ($flight_row_ids as $flight_row_id) $table_flight .= $flight_rows[$flight_row_id]['html'];
 
 					} // end for($i=1; $i<$flights+1; $i++)
 
@@ -1560,6 +1579,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					for($i=1; $i<$flights+1; $i++) {
 
 						$table_flight = "";
+						$flight_rows = [];
+						// Manual pull order for this flight (empty when none saved)
+						$flight_order_map = flight_entry_orders((int) $row_tables['id'], $i);
+						$has_manual_flight_order = count($flight_order_map) > 0;
+
 						$table_flight_datatables = "";
 
 						$random = random_generator(5,2);
@@ -1577,7 +1601,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						$table_flight_datatables .= "\"sDom\": 'rt',";
 						$table_flight_datatables .= "\"bStateSave\" : false,";
 						$table_flight_datatables .= "\"bLengthChange\" : false,";
-						$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
+						$table_flight_datatables .= (($has_manual_flight_order) ? "\"aaSorting\": []," : "\"aaSorting\": [[2,'asc'],[1,'asc']],");
 						$table_flight_datatables .= "\"bProcessing\" : false,";
 						$table_flight_datatables .= "\"aoColumns\": [";
 						$table_flight_datatables .= "null,";
@@ -1717,11 +1741,21 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								}
 
-								$table_flight .= $table_flight_tbody;
+								$flight_rows[(int) $row_entries['id']] = ['html' => $table_flight_tbody, 'key' => (($view == "default") ? $row_entries['brewJudgingNumber'] : $row_entries['id'])];
 
 							}
 
 						} // end foreach
+
+						// Manual pull order: render this flight as one flat list across styles; otherwise keep collection (style-grouped) order
+						$flight_row_ids = array_keys($flight_rows);
+						if (!empty($flight_order_map)) usort($flight_row_ids, function($a,$b) use ($flight_order_map,$flight_rows) {
+							$oa = $flight_order_map[(int) $a] ?? PHP_INT_MAX;
+							$ob = $flight_order_map[(int) $b] ?? PHP_INT_MAX;
+							if ($oa !== $ob) return $oa <=> $ob;
+							return strnatcmp(sprintf("%06s",$flight_rows[$a]['key']),sprintf("%06s",$flight_rows[$b]['key']));
+						});
+						foreach ($flight_row_ids as $flight_row_id) $table_flight .= $flight_rows[$flight_row_id]['html'];
 
 						$table_flight .= "</tbody>";
 						$table_flight .= "</table>";
@@ -1814,7 +1848,12 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 			for($i=1; $i<$flights+1; $i++) {
 
 				$table_flight = "";
+				$flight_rows = [];
 				$table_flight_datatables = "";
+				// Manual pull order for this flight (empty when none saved)
+				$flight_order_map = flight_entry_orders((int) $row_tables['id'], $i);
+				$has_manual_flight_order = count($flight_order_map) > 0;
+
 
 
 				if ($filter != "mini_bos") {
@@ -1834,7 +1873,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_flight_datatables .= "\"sDom\": 'rt',";
 					$table_flight_datatables .= "\"bStateSave\" : false,";
 					$table_flight_datatables .= "\"bLengthChange\" : false,";
-					$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
+					$table_flight_datatables .= (($has_manual_flight_order) ? "\"aaSorting\": []," : "\"aaSorting\": [[2,'asc'],[1,'asc']],");
 					$table_flight_datatables .= "\"bProcessing\" : false,";
 					$table_flight_datatables .= "\"aoColumns\": [";
 					$table_flight_datatables .= "null,";
@@ -2011,13 +2050,23 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 							}
 
-							$table_flight .= $table_flight_tbody;
+							$flight_rows[(int) $row_entries['id']] = ['html' => $table_flight_tbody, 'key' => (($view == "default") ? $row_entries['brewJudgingNumber'] : $row_entries['id'])];
 
 						}
 
 					} // if (!empty($row_entries))
 
 				} // end foreach
+
+				// Manual pull order: render this flight as one flat list across styles; otherwise keep collection (style-grouped) order
+				$flight_row_ids = array_keys($flight_rows);
+				if (!empty($flight_order_map)) usort($flight_row_ids, function($a,$b) use ($flight_order_map,$flight_rows) {
+					$oa = $flight_order_map[(int) $a] ?? PHP_INT_MAX;
+					$ob = $flight_order_map[(int) $b] ?? PHP_INT_MAX;
+					if ($oa !== $ob) return $oa <=> $ob;
+					return strnatcmp(sprintf("%06s",$flight_rows[$a]['key']),sprintf("%06s",$flight_rows[$b]['key']));
+				});
+				foreach ($flight_row_ids as $flight_row_id) $table_flight .= $flight_rows[$flight_row_id]['html'];
 
 				if ($filter != "mini_bos") {
 					$table_flight .= "</tbody>";
