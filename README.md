@@ -1,74 +1,148 @@
-# Brew Competition Online Entry & Management
+# BCOE&M — Modernization Fork
 
-### Please check the _[Good to Know](https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues?q=is%3Aissue+label%3A%22good+to+know%21%22)_ list before posting any issue. ###
+> [!IMPORTANT]
+> This repository is a **fork** of
+> [`geoffhumphrey/brewcompetitiononlineentry`](https://github.com/geoffhumphrey/brewcompetitiononlineentry)
+> (BCOE&M — Brew Competition Online Entry & Management), developed by Geoff
+> Humphrey with contributions from the GitHub community. All credit for the
+> application itself belongs upstream.
+>
+> - **Competition organizers looking to run a competition:** use
+>   [upstream](https://github.com/geoffhumphrey/brewcompetitiononlineentry)
+>   — it has the official releases, documentation, and issue tracker.
+> - **This fork** exists primarily to *modernize the codebase*. It tracks
+>   upstream merges but is a working/deployment fork, not the canonical
+>   distribution. Bug fixes and compatible improvements are offered
+>   upstream where practical.
 
----
+## Why This Fork Exists
 
-Working repository of BCOE&M.
+Upstream BCOE&M is a mature PHP application with roots stretching back to
+2009. This fork's goal is to modernize it incrementally — without breaking
+existing installations or diverging from upstream more than necessary:
 
-Website: https://www.brewingcompetitions.com
-Helpful Articles:
- - [License](https://info.brewingcompetitions.com/license)
- - [Release Notes](https://info.brewingcompetitions.com/release-notes)
- - [Installation Instructions](https://info.brewingcompetitions.com/install-instructions)
- - [Upgrade Instructions](https://info.brewingcompetitions.com/upgrade-instructions)
+- **PHP 8.3+ floor.** Removed functions and patterns dropped in modern PHP
+  (`each()`, `eregi()`, `mysql_*`, `FILTER_SANITIZE_STRING`, …); the codebase
+  runs cleanly on PHP 8.3, 8.4, and 8.5.
+- **Typed domain layer.** A generated, typed data-access layer under `src/`
+  (PSR-4 `BCOEM\`): readonly row classes (`src/Domain/`), repositories
+  (`src/Repository/`), a database `Connection` wrapper, and a typed session
+  accessor — coexisting with the legacy code while call sites migrate.
+- **Automated tests.** A PHPUnit suite (`tests/`) covering sanitization,
+  session preferences, scoring, repository round-trips, timezone/DST epoch
+  conversion, and upgrade backfills; MySQL-gated integration tests run
+  against MySQL 8.0.
+- **Static analysis.** PHPStan on both the legacy tree (level 4,
+  baselined) and `src/` (level 6 + strict rules); Rector configured.
+- **CI.** GitHub Actions workflow linting and testing against the PHP
+  8.3–8.5 × MySQL 8.0 matrix on every push and pull request.
+- **Generator tooling.** `tools/generate_row_types.php` and
+  `tools/generate_repositories.php` regenerate the domain layer from the
+  baseline SQL schema (maintainer-only; not part of runtime deployment).
 
-The Brew Competition Online Entry and Management (BCOE&M) system is an online application to assist homebrew competition organizers - of the beer/mead/cider variety - to collect, store, and manage their competition entry, organization, and scoring data.
+See [`CHANGELOG.md`](CHANGELOG.md) for the detailed, ongoing list of
+modernization changes, fixes, and upstream merges.
 
-The biggest challenges of organizing a homebrewing competition is knowing who has entered what and how many, organizing judging efficiently, and reporting the results of the competition in a timely manner. BCOE&M provides a single online interface to collect entry and participant data, organize judging tables and assignments, input scoring data, and report the results. Features include, but certainly aren't limited to:
+## About BCOE&M
+
+BCOE&M is an online application that assists homebrew competition organizers
+— of the beer/mead/cider variety — to collect, store, and manage competition
+entry, organization, and scoring data. It provides a single online interface
+to collect entry and participant data, organize judging tables and
+assignments, input scoring data, and report results. Features include:
+
 - Collecting entry information from participants.
-- Four major style guideline collections to use: BJCP 2021, BJCP 2015, Brewers Association (BA), Australian Amateur Brewing Championship (AABC).
+- Four major style guideline collections: BJCP 2021/2015, Brewers
+  Association (BA), Australian Amateur Brewing Championship (AABC).
 - Defining categories and styles customized to your competition's needs.
 - Facilitating online entry fee payments (via PayPal).
 - Organizing and assigning participants as judges, stewards, and staff.
 - Defining tables/flights and assigning judges and stewards to them.
-- Mobile entry check-in using [QR and/or barcodes](https://info.brewingcompetitions.com/barcode-check-in).
-- [Electronic scoresheets](https://info.brewingcompetitions.com/setup-electronic-scoresheets) for use in [virtual](https://brewingcompetitions.com/virtual-judging) and/or in-person [judging](https://brewingcompetitions.com/judging-with-electronic-scoresheets).
-- Scoresheet [upload](https://info.brewingcompetitions.com/upload-scoresheets).
+- Mobile entry check-in using QR and/or barcodes.
+- Electronic scoresheets for virtual and/or in-person judging.
+- Scoresheet upload.
 - 60+ reports for use before, during, and after judging.
 - 20+ data export options.
 - Custom modules for information/functionality unique to your competition.
 
-The best part: **BCOE&M is free and open-source**. Hundreds of competitions around the world have utilized BCOE&M since its [first release](https://brewingcompetitions.com/change-log) back in 2009.
-
-## Download
-The latest version is available for [download here](https://github.com/geoffhumphrey/brewcompetitiononlineentry/releases). The [latest committed code](https://github.com/geoffhumphrey/brewcompetitiononlineentry/archive/master.zip) is also available for testers and contributors.
-
-## Install or Upgrade
-Step by step [installation](https://info.brewingcompetitions.com/install-instructions) and [upgrade](https://info.brewingcompetitions.com/upgrade-instructions) instructions are available.
-
-After configuration to your environment, installation is a breeze via the online setup interface.
+Hundreds of competitions around the world have used BCOE&M since its first
+release in 2009.
 
 ## Requirements
+
 - PHP 8.3 or newer (PHP 8.3, 8.4, and 8.5 are exercised in CI).
 - MySQL 5.7 or newer (integration tests run against MySQL 8.0).
-- [Composer](https://getcomposer.org) is required to install dependencies; the `vendor/` directory is part of the deployment.
+- [Composer](https://getcomposer.org) for development tooling; the
+  `vendor/` directory is part of the deployment.
 
-## Fallback Installation
-There are times when the online setup encounters issues that prevent the installation from successfully completing. That's why there's a [Fallback Installation](https://info.brewingcompetitions.com/install-instructions) method. For those experiencing any issues related to the initial browser-based setup, the bcoem_baseline_3.X.X.sql document is available in the package's /sql/ folder. This document contains the necessary database structure and dummy data for a new installation that can be installed manually via phpMyAdmin or shell access. Be sure to follow the directions in the document **BEFORE** use.
+## Install or Upgrade
 
-## Issue Reporting and Bug Fixes
-Many bugs and issues reported to this repository are corrected before an official release is available. Before reporting a bug, be sure to check the [Issues](https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues) list to see if it has been addressed already. If it has, chances are the latest commit package contains code to fix the issue. Keep an eye out for the [*fixed in latest master commit*](https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues?q=is%3Aissue+is%3Aopen+label%3A%22in+latest+master+commit%22) tag. Needless to say, however, the master and other branch commits housed here in the repository are **NOT FOR PRODUCTION**! Bugs may be present.
+Step-by-step [installation](https://info.brewingcompetitions.com/install-instructions)
+and [upgrade](https://info.brewingcompetitions.com/upgrade-instructions)
+instructions are maintained upstream. After configuration to your
+environment, installation completes via the online setup interface.
+
+### Fallback Installation
+
+If the browser-based setup encounters issues, the
+`bcoem_baseline_3.X.X.sql` document in `/sql/` contains the database
+structure and dummy data for a manual installation via phpMyAdmin or shell
+access. Follow the directions in the document **before** use.
+
+## Development
+
+```sh
+composer install
+composer test      # PHPUnit
+composer analyse   # PHPStan
+```
+
+Regenerate the typed domain layer after schema changes (maintainers):
+
+```sh
+php tools/generate_row_types.php
+php tools/generate_repositories.php
+```
+
+## License
+
+This fork is free software, covered under the
+[General Public License](https://opensource.org/licenses/gpl-license.php)
+as stated by
+[upstream](https://info.brewingcompetitions.com/license); upstream does not
+declare a specific GPL version, and this fork makes no broader licensing
+claims than upstream. It is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Bundled third-party libraries retain their own licenses — see the credits
+below and each library under `classes/`.
+
+For licensing inquiries, contact upstream via
+https://www.brewingcompetitions.com/contact.
 
 ## Help and Resources
-Help is integrated into the application. Just look for the question-mark icon in the main navigation.
 
-There is also a growing number of instructive resources available on the [companion website](https://info.brewingcompetitions.com) for various options, including the following:
-- [Competition Organization with BCOE&M](https://info.brewingcompetitions.com/comp-org) - an end to end guide to using BCOE&M as your main organizational tool
-- [Load Libraries Locally](https://info.brewingcompetitions.com/local-load) - disable CDN loading of external libraries such as jQuery, Bootstrap, DataTables, etc.
-- [Setup BCOE&M Electronic Scoresheets](https://info.brewingcompetitions.com/setup-electronic-scoresheets) - primer for Admins to effectively set up and use Electronic Scoresheets
-- [Virtual Judging](https://info.brewingcompetitions.com/virtual-judging) - information and suggestions for judges particpating in virtual judging sessions.
-- [Virtual Judging Tips for Judges](https://info.brewingcompetitions.com/virtual-judging/tips) - tips and tricks for evaluating homebrew entries virtually.
-- [Upload Scanned Judges' Scoresheets](https://info.brewingcompetitions.com/upload-scoresheets) - procedure for scanning and uploading scoresheets to make available to entrants via BCOE&M
-- [Reset Competition Information](https://info.brewingcompetitions.com/reset-comp) - get your site ready for your next competition iteration
-- [Barcode or QR Code Entry Check-in](https://info.brewingcompetitions.com/barcode-check-in) - utilize the barcode/QR code enabled bottle labels to efficiently check-in entries
-- [Implement PayPal Instant Payment Notifications](https://info.brewingcompetitions.com/paypal-ipn) - receive and process PayPal payment data to update entrant payment status instantly
+Help is integrated into the application (question-mark icon in the main
+navigation). Upstream also maintains instructive resources on the
+[companion website](https://info.brewingcompetitions.com):
 
-## Wanna Help with Development?
-Fork this repo and share your code!
+- [Competition Organization with BCOE&M](https://info.brewingcompetitions.com/comp-org)
+- [Load Libraries Locally](https://info.brewingcompetitions.com/local-load)
+- [Setup Electronic Scoresheets](https://info.brewingcompetitions.com/setup-electronic-scoresheets)
+- [Virtual Judging](https://info.brewingcompetitions.com/virtual-judging) and [tips for judges](https://info.brewingcompetitions.com/virtual-judging/tips)
+- [Upload Scanned Judges' Scoresheets](https://info.brewingcompetitions.com/upload-scoresheets)
+- [Reset Competition Information](https://info.brewingcompetitions.com/reset-comp)
+- [Barcode or QR Code Entry Check-in](https://info.brewingcompetitions.com/barcode-check-in)
+- [Implement PayPal IPN](https://info.brewingcompetitions.com/paypal-ipn)
 
 ## Credits
-BCOE&M is developed by Geoff Humphrey with code contributions by the GitHub community, and utilizes a number of extensions and functions with gratitude to their respective developers and online communities:
+
+BCOE&M is developed by [Geoff Humphrey](https://github.com/geoffhumphrey)
+with code contributions by the GitHub community, and utilizes a number of
+extensions and functions with gratitude to their respective developers and
+online communities:
+
 - jQuery 3.1.0 — https://jquery.com
 - Bootstrap 3.3.7 — https://getbootstrap.com
 - DataTables 1.10.12 — https://www.datatables.net
@@ -85,4 +159,3 @@ BCOE&M is developed by Geoff Humphrey with code contributions by the GitHub comm
 - HTML Purifier 4.9.3 — https://htmlpurifier.org/
 - PHPMailer 6.0.7 — https://github.com/PHPMailer/PHPMailer
 - Bootstrap Markdown Editor 2.0.1 — https://github.com/inacho/bootstrap-markdown-editor
-
