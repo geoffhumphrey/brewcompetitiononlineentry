@@ -67,3 +67,22 @@ There is also a growing number of instructive resources available on the [compan
 ## Wanna Help with Development?
 Fork this repo and share your code!
 
+## Credits
+BCOE&M is developed by Geoff Humphrey with code contributions by the GitHub community, and utilizes a number of extensions and functions with gratitude to their respective developers and online communities:
+- jQuery 3.1.0 — https://jquery.com
+- Bootstrap 3.3.7 — https://getbootstrap.com
+- DataTables 1.10.12 — https://www.datatables.net
+- Fancybox 2.1.5 — https://fancyapps.com
+- TinyMCE 4.4.0 — https://www.tinymce.com
+- Jasny Bootstrap 3.1.3 — https://jasny.net/bootstrap
+- DropZone 4.2.0 — https://dropzonejs.com
+- Bootstrap Form Validator 0.9.0 — https://1000hz.github.io/bootstrap-validator
+- Bootstrap-Select 1.12.0 — https://silviomoreto.github.io/bootstrap-select
+- Font Awesome 4.5.0 — https://fontawesome.com
+- FPDF 1.6 — https://fpdf.org
+- PHPass 0.3 — https://www.openwall.com/phpass
+- Tiny But Strong 3.10.1 — https://tinybutstrong.com
+- HTML Purifier 4.9.3 — https://htmlpurifier.org/
+- PHPMailer 6.0.7 — https://github.com/PHPMailer/PHPMailer
+- Bootstrap Markdown Editor 2.0.1 — https://github.com/inacho/bootstrap-markdown-editor
+
