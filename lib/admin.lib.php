@@ -244,6 +244,7 @@ function score_entry_data($value): string {
 
 
 function text_number(int|string $n): string {
+    $n = (string) $n;
     # Array holding the teen numbers. If the last 2 numbers of $n are in this array, then we'll add 'th' to the end of $n
     $teen_array = [11, 12, 13, 14, 15, 16, 17, 18, 19];
 
