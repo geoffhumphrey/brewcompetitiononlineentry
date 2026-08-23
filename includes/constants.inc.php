@@ -662,6 +662,10 @@ if ((!str_contains($section, 'step')) && (check_setup($prefix."bcoem_sys",$datab
                 $query_styles_default = "SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM ".$prefix."styles WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2')";
                 $rows_styles_default = $db_conn->rawQuery($query_styles_default);
             }
+            elseif ($prefsStyleSet == "AABC2025") {
+                $query_styles_default = "SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM ".$prefix."styles WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+                $rows_styles_default = $db_conn->rawQuery($query_styles_default);
+            }
             else {
                 $query_styles_default = "SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM ".$prefix."styles WHERE brewStyleVersion=?";
                 $rows_styles_default = $db_conn->rawQuery($query_styles_default, [$prefsStyleSet]);

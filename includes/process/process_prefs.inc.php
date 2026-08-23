@@ -737,7 +737,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (($style_set_change) || (empty($prefsSelectedStyles))) {
 
 				$update_selected_styles = [];
-				$db_conn->where("brewStyleVersion", $prefsStyleSet);
+				if ($prefsStyleSet == "AABC2025") {
+					$db_conn->where("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')");
+				}
+				else {
+					$db_conn->where("brewStyleVersion", $prefsStyleSet);
+				}
 				$rows_styles_default = $db_conn->get($styles_db_table, null, "id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion");
 
 				if ($rows_styles_default) {
