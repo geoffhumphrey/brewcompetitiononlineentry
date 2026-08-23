@@ -902,6 +902,10 @@ function received_entries(): string {
 		$query_styles = "SELECT brewStyle FROM ".$prefix."styles"." WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'";
 		$rows_styles = $db_conn->rawQuery($query_styles);
 	}
+	elseif ($_SESSION['prefsStyleSet'] == "AABC2025") {
+		$query_styles = "SELECT brewStyle FROM ".$prefix."styles"." WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'";
+		$rows_styles = $db_conn->rawQuery($query_styles);
+	}
 	else {
 		$query_styles = "SELECT brewStyle FROM ".$prefix."styles"." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')";
 		$rows_styles = $db_conn->rawQuery($query_styles, [$_SESSION['prefsStyleSet']]);
@@ -917,6 +921,7 @@ function received_entries(): string {
 		if ($row['count'] > 0) $a[] = $style;
 	}
 	
+	// note: $b is never assigned before this check (pre-existing); returns "" until fixed
 	if (!empty($b))	return implode(",",$a);
 	return "";
 

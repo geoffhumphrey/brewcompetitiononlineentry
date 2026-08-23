@@ -16,6 +16,7 @@ if (TESTING) {
 	$db_conn->where ("brewStyleGroup", $row_entries['brewCategorySort']);
 	$db_conn->where ("brewStyleNum", $row_entries['brewSubCategory']);
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") $db_conn->where ("brewStyleVersion = ? OR brewStyleVersion = ?", ["BJCP2025","BJCP2021"]);
+	elseif ($_SESSION['prefsStyleSet'] == "AABC2025") $db_conn->where ("brewStyleVersion = ? OR brewStyleVersion = ?", ["AABC2025","AABC2022"]);
 	else $db_conn->where ("brewStyleVersion", $_SESSION['prefsStyleSet']);
 	$row_style = $db_conn->getOne ($prefix."styles", null, "brewStyleType");
 	

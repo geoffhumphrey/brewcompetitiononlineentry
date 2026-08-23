@@ -26,6 +26,11 @@ if (empty($row_eval['evalStyle'])) {
 		$params_style = [$row_brewing['brewStyle'], $row_brewing['brewCategorySort'], $row_brewing['brewSubCategory']];
 	}
 
+	elseif ($_SESSION['prefsStyleSet'] == "AABC2025") {
+		$query_style = "SELECT id,brewStyle,brewStyleGroup,brewStyleNum,brewStyleType FROM ".$styles_db_table." WHERE brewStyle=? AND brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='AABC2025' OR brewStyleVersion='AABC2022')";
+		$params_style = [$row_brewing['brewStyle'], $row_brewing['brewCategorySort'], $row_brewing['brewSubCategory']];
+	}
+
 	else {
 		$query_style = "SELECT id,brewStyle,brewStyleGroup,brewStyleNum,brewStyleType FROM ".$styles_db_table." WHERE brewStyle=? AND brewStyleGroup=? AND brewStyleNum=? AND brewStyleVersion=?";
 		$params_style = [$row_brewing['brewStyle'], $row_brewing['brewCategorySort'], $row_brewing['brewSubCategory'], $_SESSION['prefsStyleSet']];
