@@ -3938,6 +3938,10 @@ function styles_active($method,$archive="") {
 			$query_styles = "SELECT DISTINCT brewStyleGroup FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 			$bind_params = array();
 		}
+		elseif ($style_set == "AABC2025") {
+			$query_styles = "SELECT DISTINCT brewStyleGroup FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+			$bind_params = array();
+		}
 		else {
 			$query_styles = "SELECT DISTINCT brewStyleGroup FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')";
 			$bind_params = array($style_set);
@@ -3975,11 +3979,18 @@ function styles_active($method,$archive="") {
 		if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_set, $prefix."styles", $style_set);
 		else 
 		*/
-		$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')";
+		if ($style_set == "AABC2025") {
+			$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+			$bind_params = array();
+		}
+		else {
+			$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')";
+			$bind_params = array($style_set);
+		}
 		if ((empty($archive)) || ($archive == "default")) $query_styles .= " AND brewStyleActive='Y'";
 		$query_styles .= " ORDER BY brewStyleGroup,brewStyleNum ASC";
 
-		$rows_styles = $db_conn->rawQuery($query_styles, array($style_set));
+		$rows_styles = $db_conn->rawQuery($query_styles, $bind_params);
 		$totalRows_styles = $db_conn->count;
 
 		$a = array();
