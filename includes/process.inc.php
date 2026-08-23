@@ -208,7 +208,17 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	// Updating judging flights
 	elseif ($action == "update_judging_flights") include (PROCESS.'process_judging_flight_check.inc.php');
 	
-	// Delete scoresheets in user_docs folder
+
+	// Reorder entries within a flight (manual pull order)
+	elseif ($action == "reorder_flight_entries") {
+
+		if ((!isset($_SESSION['userLevel'])) || ($_SESSION['userLevel'] > 1)) {
+			header("Location: ".$base_url."403.php");
+			exit();
+		}
+
+		include (PROCESS.'process_reorder_flights.inc.php');
+	}
 	elseif ($action == "delete_scoresheets") {
 
 		if ((!isset($_SESSION['userLevel'])) || ($_SESSION['userLevel'] > 1)) {

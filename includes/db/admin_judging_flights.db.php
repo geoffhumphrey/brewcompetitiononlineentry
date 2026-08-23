@@ -1,6 +1,24 @@
 <?php
-if (($filter != "default") && ($filter != "rounds"))  {
 
+// Reorder view: every entry assigned to one flight, saved manual order first (NULLs last), then judging number
+if ((($filter != "default") && ($filter != "rounds")) && (isset($flight)) && ($flight != "default")) {
+
+	if (SINGLE) {
+		$query_reorder_entries = "SELECT b.id,b.brewName,b.brewStyle,b.brewCategorySort,b.brewSubCategory,b.brewInfo,b.brewJudgingNumber,f.flightEntryOrder FROM ".$judging_flights_db_table." f JOIN ".$brewing_db_table." b ON f.flightEntryID=b.id WHERE f.flightTable=? AND f.flightNumber=? AND b.comp_id=?";
+		$params_reorder_entries = [$flight_table, $flight, $_SESSION['comp_id']];
+	}
+	else {
+		$query_reorder_entries = "SELECT b.id,b.brewName,b.brewStyle,b.brewCategorySort,b.brewSubCategory,b.brewInfo,b.brewJudgingNumber,f.flightEntryOrder FROM ".$judging_flights_db_table." f JOIN ".$brewing_db_table." b ON f.flightEntryID=b.id WHERE f.flightTable=? AND f.flightNumber=?";
+		$params_reorder_entries = [$flight_table, $flight];
+	}
+
+	if ($_SESSION['jPrefsTablePlanning'] == 0) $query_reorder_entries .= " AND b.brewReceived='1'";
+	$query_reorder_entries .= " ORDER BY f.flightEntryOrder IS NULL ASC, f.flightEntryOrder ASC, b.brewCategorySort, b.brewSubCategory, b.brewJudgingNumber ASC";
+
+	$rows_reorder_entries = $db_conn->rawQuery($query_reorder_entries, $params_reorder_entries);
+
+}
+elseif (($filter != "default") && ($filter != "rounds"))  {
 		$style_name = explode(",",$style_name);
 		$params_entries = [];
 		if (SINGLE) {

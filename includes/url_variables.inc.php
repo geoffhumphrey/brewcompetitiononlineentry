@@ -18,6 +18,7 @@ $go = "default";
 $username = "default";
 $dbTable = "default";
 $filter = "default";
+$flight = "default";
 $bid = "default";
 $view = "default";
 $token = "default";
@@ -47,6 +48,7 @@ if (isset($_GET['username'])) $username = sterilize($_GET['username']);
 // this value is spliced directly into SQL rather than passed as a bound parameter.
 if (isset($_GET['dbTable'])) $dbTable = preg_replace("/[^a-zA-Z0-9_]+/", "", sterilize($_GET['dbTable']));
 if (isset($_GET['filter'])) $filter = sterilize($_GET['filter']);
+if (isset($_GET['flight'])) $flight = sterilize($_GET['flight']);
 if (isset($_GET['bid'])) $bid = sterilize($_GET['bid']);
 if (isset($_GET['view'])) $view = sterilize($_GET['view']);
 if (isset($_GET['token'])) $token = sterilize($_GET['token']);

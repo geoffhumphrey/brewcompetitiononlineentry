@@ -395,6 +395,7 @@ CREATE TABLE `baseline_judging_flights` (
   `flightTable` int(11) DEFAULT NULL COMMENT 'ID of table from judging_tables table',
   `flightNumber` int(11) DEFAULT NULL,
   `flightEntryID` mediumtext DEFAULT NULL COMMENT 'array of ids of each entry from the brewing table',
+  `flightEntryOrder` int(11) DEFAULT NULL COMMENT 'manual pull order position of the entry within its flight',
   `flightRound` int(11) DEFAULT NULL,
   `flightPlanning` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
