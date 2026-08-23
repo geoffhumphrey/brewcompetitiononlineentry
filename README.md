@@ -1,11 +1,26 @@
 # BCOE&M — Modernization Fork
 
+<div align="center">
+
+[![CI](https://github.com/delight-f/brewcompetitiononlineentry/actions/workflows/ci.yml/badge.svg?branch=modernization)](https://github.com/delight-f/brewcompetitiononlineentry/actions/workflows/ci.yml)
+[![PHP](https://img.shields.io/badge/PHP-8.3%E2%80%938.5-777BB4?logo=php&logoColor=white)](composer.json)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com)
+[![Code Style: typed `src/`](https://img.shields.io/badge/PHPStan-src%20level%206%20%2B%20strict-8892BF?logo=php&logoColor=white)](phpstan.src.neon)
+[![Tests](https://img.shields.io/badge/PHPUnit-59%20tests-green.svg?logo=testinglibrary&logoColor=white)](#development)
+[![License: GPL](https://img.shields.io/badge/License-GPL-blue.svg)](#license)
+[![Upstream](https://img.shields.io/badge/upstream-geoffhumphrey%2FBCOE%26M-181717?logo=github)](https://github.com/geoffhumphrey/brewcompetitiononlineentry)
+
+**Modernizing
+[Brew Competition Online Entry & Management](https://github.com/geoffhumphrey/brewcompetitiononlineentry) —
+incrementally, without breaking existing installations.**
+
+</div>
+
 > [!IMPORTANT]
 > This repository is a **fork** of
 > [`geoffhumphrey/brewcompetitiononlineentry`](https://github.com/geoffhumphrey/brewcompetitiononlineentry)
-> (BCOE&M — Brew Competition Online Entry & Management), developed by Geoff
-> Humphrey with contributions from the GitHub community. All credit for the
-> application itself belongs upstream.
+> (BCOE&M), developed by Geoff Humphrey with contributions from the GitHub
+> community. All credit for the application itself belongs upstream.
 >
 > - **Competition organizers looking to run a competition:** use
 >   [upstream](https://github.com/geoffhumphrey/brewcompetitiononlineentry)
@@ -15,30 +30,30 @@
 >   distribution. Bug fixes and compatible improvements are offered
 >   upstream where practical.
 
+## Contents
+
+- [Why This Fork Exists](#why-this-fork-exists)
+- [About BCOE&M](#about-bcoem)
+- [Requirements](#requirements)
+- [Install or Upgrade](#install-or-upgrade)
+- [Development](#development)
+- [License](#license)
+- [Help and Resources](#help-and-resources)
+- [Credits](#credits)
+
 ## Why This Fork Exists
 
 Upstream BCOE&M is a mature PHP application with roots stretching back to
-2009. This fork's goal is to modernize it incrementally — without breaking
-existing installations or diverging from upstream more than necessary:
+2009. This fork's goal is to modernize it incrementally:
 
-- **PHP 8.3+ floor.** Removed functions and patterns dropped in modern PHP
-  (`each()`, `eregi()`, `mysql_*`, `FILTER_SANITIZE_STRING`, …); the codebase
-  runs cleanly on PHP 8.3, 8.4, and 8.5.
-- **Typed domain layer.** A generated, typed data-access layer under `src/`
-  (PSR-4 `BCOEM\`): readonly row classes (`src/Domain/`), repositories
-  (`src/Repository/`), a database `Connection` wrapper, and a typed session
-  accessor — coexisting with the legacy code while call sites migrate.
-- **Automated tests.** A PHPUnit suite (`tests/`) covering sanitization,
-  session preferences, scoring, repository round-trips, timezone/DST epoch
-  conversion, and upgrade backfills; MySQL-gated integration tests run
-  against MySQL 8.0.
-- **Static analysis.** PHPStan on both the legacy tree (level 4,
-  baselined) and `src/` (level 6 + strict rules); Rector configured.
-- **CI.** GitHub Actions workflow linting and testing against the PHP
-  8.3–8.5 × MySQL 8.0 matrix on every push and pull request.
-- **Generator tooling.** `tools/generate_row_types.php` and
-  `tools/generate_repositories.php` regenerate the domain layer from the
-  baseline SQL schema (maintainer-only; not part of runtime deployment).
+| Area | Status |
+|---|---|
+| **Runtime floor** | PHP 8.3+; legacy calls (`each()`, `eregi()`, `mysql_*`, `FILTER_SANITIZE_STRING`) removed; runs cleanly on PHP 8.3 / 8.4 / 8.5 |
+| **Domain layer** | Generated, typed data access under PSR-4 `BCOEM\` — readonly row classes (`src/Domain/`), repositories (`src/Repository/`), a `Connection` wrapper, and a typed session accessor — coexisting with legacy code while call sites migrate |
+| **Tests** | PHPUnit suite (`tests/`): sanitization, session preferences, scoring, repository round-trips, timezone/DST epoch conversion, upgrade backfills; MySQL-gated integration tests against MySQL 8.0 |
+| **Static analysis** | PHPStan level 4 on the legacy tree (baselined) and level 6 + strict rules on `src/`; Rector configured |
+| **CI** | GitHub Actions lint + PHPStan + PHPUnit on every push/PR, across the PHP 8.3–8.5 × MySQL 8.0 matrix |
+| **Tooling** | `tools/generate_row_types.php` and `tools/generate_repositories.php` regenerate the domain layer from the baseline SQL schema (maintainers only) |
 
 See [`CHANGELOG.md`](CHANGELOG.md) for the detailed, ongoing list of
 modernization changes, fixes, and upstream merges.
@@ -141,7 +156,10 @@ navigation). Upstream also maintains instructive resources on the
 BCOE&M is developed by [Geoff Humphrey](https://github.com/geoffhumphrey)
 with code contributions by the GitHub community, and utilizes a number of
 extensions and functions with gratitude to their respective developers and
-online communities:
+online communities.
+
+<details>
+<summary>Bundled libraries</summary>
 
 - jQuery 3.1.0 — https://jquery.com
 - Bootstrap 3.3.7 — https://getbootstrap.com
@@ -159,3 +177,5 @@ online communities:
 - HTML Purifier 4.9.3 — https://htmlpurifier.org/
 - PHPMailer 6.0.7 — https://github.com/PHPMailer/PHPMailer
 - Bootstrap Markdown Editor 2.0.1 — https://github.com/inacho/bootstrap-markdown-editor
+
+</details>
