@@ -52,6 +52,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		// Purge entry and associated data
 		if (($go == "entries") || ($go == "purge-all")) {
 
+			$count_results = 0;
 			$count_results_actual = 0;
 
 			// Purge all data from brewing table
@@ -158,7 +159,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				);
 				if (SINGLE)	$db_conn->where ('comp_id', $_SESSION['comp_id']);
 				$result = $db_conn->update ($update_table, $data);
-				if ($result) $count_results += 1;
+				if (!$result) $count_results_actual += 1; // unpaired failure breaks equality -> status 0
 
 			}
 
@@ -175,6 +176,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		// Purge participant and associated data
 		if (($go == "participants") || ($go == "purge-all")) {
 
+			$count_results = 0;
 			$count_results_actual = 0;
 
 			// Purge all data from brewer and users tables (except admins)
@@ -301,6 +303,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		// Purge scores and associated data
 		if (($go == "scores") || ($go == "purge-all")) {
 
+			$count_results = 0;
 			$count_results_actual = 0;
 
 			$purge_array = array($judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
@@ -331,6 +334,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		// Purge judging tables and associated data
 		if (($go == "tables") || ($go == "purge-all")) {
 
+			$count_results = 0;
 			$count_results_actual = 0;
 
 			$purge_array = array($judging_tables_db_table,$judging_assignments_db_table,$judging_flights_db_table,$judging_scores_db_table,$special_best_data_db_table);
@@ -416,6 +420,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 		if (($go == "custom") || ($go == "purge-all")) {
 
+			$count_results = 0;
 			$count_results_actual = 0;
 
 			$purge_array = array($special_best_info_db_table,$special_best_data_db_table);
@@ -445,6 +450,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 		if (($go == "availability") || ($go == "purge-all")) {
 
+			$count_results = 0;
 			$count_results_actual = 0;
 
 			$update_table = $prefix."brewer";
@@ -578,6 +584,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 		if ((($go == "payments") || ($go == "purge-all")) && (table_exists($prefix."payments"))) {
 
+			$count_results = 0;
 			$count_results_actual = 0;
 
 			$update_table = $prefix."payments";
