@@ -17,7 +17,7 @@ if ($winner_method == 0) {
 
 			if ((isset($row_scores['scorePlace'])) && (!empty($row_scores['scorePlace']))) {
 
-				if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'];
+			if ((isset($row_scores['brewerPhone1'])) && ($row_scores['brewerCountry'] == "United States")) $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'] ?? "";
 
 				if ($pro_edition == 1) {
 
@@ -181,7 +181,7 @@ if ($winner_method == 1) {
 				$db_conn->where('id', $row_scores['scoreTable']);
 				$row_table_name = $db_conn->getOne($prefix."judging_tables".$archive_suffix, "tableName,tableNumber");
 
-				if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'];
+				if ((isset($row_scores['brewerPhone1'])) && ($row_scores['brewerCountry'] == "United States")) $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'] ?? "";
 
 				if ($pro_edition == 1) {
 
@@ -357,8 +357,7 @@ if ($winner_method == 2) {
 
 				if (!empty($row_scores['scorePlace'])) {
 
-					if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); 
-					else $phone = $row_scores['brewerPhone1'];
+					if ((isset($row_scores['brewerPhone1'])) && ($row_scores['brewerCountry'] == "United States")) $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'] ?? "";
 
 					if ($pro_edition == 1)  {
 

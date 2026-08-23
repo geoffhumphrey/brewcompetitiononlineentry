@@ -1250,8 +1250,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 $assignment = implode(", ", $assign);
 
-                if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); 
-                else $phone = $row_sql['brewerPhone1'];
+                if ((isset($row_sql['brewerPhone1'])) && ($row_sql['brewerCountry'] == "United States")) $phone = format_phone_us($row_sql['brewerPhone1']);
+                else $phone = $row_sql['brewerPhone1'] ?? "";
 
                 if ($_SESSION['prefsProEdition'] == 1) {
 

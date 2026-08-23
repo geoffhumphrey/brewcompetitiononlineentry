@@ -3387,13 +3387,13 @@ function dropoff_location($input): string {
     return $brewer_text_005;
 }
 
-function judge_steward_availability(string $input,$method,string $prefix): string {
+function judge_steward_availability(?string $input, $method, string $prefix): string {
 
 	require(LANG.'language.lang.php');
 
 	$return = "";
 
-	if (($input === "Y-") || ($input === "")) {
+	if (($input === null) || ($input === "Y-") || ($input === "")) {
 		if ($method == "1") $return = strtolower(ucfirst($label_no_availability));
 	}
 	
@@ -3484,7 +3484,7 @@ function judging_winner_display($display_date): bool {
 	return time() > $display_date;
 }
 
-function format_phone_us(string $phone = '', bool $convert = true, bool $trim = true): string|false {
+function format_phone_us(?string $phone = null, bool $convert = true, bool $trim = true): string|false {
 	// If we have not entered a phone number just return empty
 	if (empty($phone)) {
 		return false;
