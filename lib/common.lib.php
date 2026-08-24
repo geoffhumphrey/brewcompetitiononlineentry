@@ -3265,12 +3265,14 @@ function winner_method($type,$output_type) {
 function table_exists($table_name) {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
-	// taken from http://snippets.dzone.com/posts/show/3369
-	// SHOW statements don't support bound placeholders in MySQL/MariaDB's prepared-statement
-	// protocol, so the table name is allow-listed to word characters and spliced directly.
-	$table_name_clean = preg_replace("/[^a-zA-Z0-9_]+/", "", $table_name);
-	$rows_exists = $db_conn->rawQuery("SHOW TABLES LIKE '".$table_name_clean."'");
-	if (count($rows_exists) > 0) return TRUE;
+	// Queries information_schema rather than SHOW TABLES - some MySQL/MariaDB
+	// versions don't support preparing SHOW statements at all (bound params or
+	// not), and MysqliDb always prepares queries, so a SHOW-based check can fail
+	// outright on those servers.
+	$db_conn->where('table_schema', $database);
+	$db_conn->where('table_name', $table_name);
+	$row_log = $db_conn->getOne('information_schema.tables', 'COUNT(*) AS count');
+	if ($row_log['count'] > 0) return TRUE;
 	else return FALSE;
 }
 

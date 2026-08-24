@@ -113,7 +113,11 @@ function MysqlError($connection) {
 
 $count = array();
 $tabs = array();
-$res = $db_conn->rawQuery("SHOW TABLES");
+// Queries information_schema rather than SHOW TABLES - some MySQL/MariaDB
+// versions don't support preparing SHOW statements at all, and MysqliDb
+// always prepares queries, so a SHOW-based check can fail outright on those servers.
+$db_conn->where('table_schema', $database);
+$res = $db_conn->get('information_schema.tables', null, 'table_name');
 
 $output .= MysqlError($connection);
 

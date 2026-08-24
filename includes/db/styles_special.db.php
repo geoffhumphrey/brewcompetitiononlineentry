@@ -250,11 +250,11 @@ else $styleSet = $_SESSION['prefsStyleSet'];
  */
 
 if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
-	$query_required_optional = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'";
+	$query_required_optional = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 	$rows_required_optional = $db_conn->rawQuery($query_required_optional);
 }
 elseif ($_SESSION['prefsStyleSet'] == "AABC2025") {
-	$query_required_optional = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'";
+	$query_required_optional = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 	$rows_required_optional = $db_conn->rawQuery($query_required_optional);
 }
 else {

@@ -18,12 +18,16 @@ function check_update($column_name, $table_name) {
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
-	// SHOW statements don't support bound placeholders in MySQL/MariaDB's prepared-statement
-	// protocol, so the column name is allow-listed to word characters and spliced directly.
-	$column_name_clean = preg_replace("/[^a-zA-Z0-9_]+/", "", $column_name);
-	$rows_log = $db_conn->rawQuery("SHOW COLUMNS FROM `".$table_name."` LIKE '".$column_name_clean."'");
+	// Queries information_schema rather than SHOW COLUMNS - some MySQL/MariaDB
+	// versions don't support preparing SHOW statements at all (bound params or
+	// not), and MysqliDb always prepares queries, so a SHOW-based check can fail
+	// outright on those servers. Matches the pattern check_setup() already uses.
+	$db_conn->where('table_schema', $database);
+	$db_conn->where('table_name', $table_name);
+	$db_conn->where('column_name', $column_name);
+	$row_log = $db_conn->getOne('information_schema.columns', 'COUNT(*) AS count');
 
-    if (count($rows_log) > 0) return TRUE;
+    if ($row_log['count'] > 0) return TRUE;
 	else return FALSE;
 
 }

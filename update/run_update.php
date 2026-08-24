@@ -316,8 +316,13 @@ if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
 
 }
 
-$query_primary_sys = sprintf("SHOW INDEX FROM `%s` WHERE Key_name = 'PRIMARY';",$styles_db_table);
-$row_primary_sys = $db_conn->rawQueryOne($query_primary_sys);
+// Queries information_schema rather than SHOW INDEX - some MySQL/MariaDB
+// versions don't support preparing SHOW statements at all, and MysqliDb
+// always prepares queries, so a SHOW-based check can fail outright on those servers.
+$db_conn->where('table_schema', $database);
+$db_conn->where('table_name', $styles_db_table);
+$db_conn->where('index_name', 'PRIMARY');
+$row_primary_sys = $db_conn->getOne('information_schema.statistics');
 
 $style_primary_key = FALSE;
 if ($row_primary_sys) $style_primary_key = TRUE;
@@ -331,8 +336,14 @@ if (!$style_primary_key) {
 }
 
 // Make sure styles table is auto increment
-$row_id_column = $db_conn->rawQueryOne(sprintf("SHOW FULL COLUMNS FROM `%s` LIKE 'id';",$styles_db_table));
-$style_id_auto_increment = ((isset($row_id_column['Extra'])) && (stripos($row_id_column['Extra'], 'auto_increment') !== FALSE));
+// Queries information_schema rather than SHOW FULL COLUMNS - some MySQL/MariaDB
+// versions don't support preparing SHOW statements at all, and MysqliDb
+// always prepares queries, so a SHOW-based check can fail outright on those servers.
+$db_conn->where('table_schema', $database);
+$db_conn->where('table_name', $styles_db_table);
+$db_conn->where('column_name', 'id');
+$row_id_column = $db_conn->getOne('information_schema.columns', 'extra');
+$style_id_auto_increment = ((isset($row_id_column['extra'])) && (stripos($row_id_column['extra'], 'auto_increment') !== FALSE));
 
 if (!$style_id_auto_increment) {
 

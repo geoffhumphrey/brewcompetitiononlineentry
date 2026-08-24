@@ -4,14 +4,16 @@
 # of the application's search engine friendly URLs.
 
 # OPTIONAL: Declare PHP Version
-# Tested 7.4.X through 8.4.X
+# Tested 7.4.X through 8.5.X
 # If experiencing issues, you should first determine whether
 # you can change PHP versions via your webhost's configuration
 # options. Only uncomment one of the following lines to 
-# explicitly declare PHP 7.4 or 8.4 here via lightspeed.
+# explicitly declare PHP 7.4, 8.3, 8.4, or 8.5 here via lightspeed.
 # 
 <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
+# SetHandler application/x-lsphp85
 # SetHandler application/x-lsphp84
+# SetHandler application/x-lsphp83
 # SetHandler application/x-lsphp74
 </FilesMatch>
 
@@ -29,11 +31,15 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 # RewriteBase /[subfolder]
 
 # SEF URLs
+# QSA (Query String Append) is required on every rule below whose substitution
+# already defines its own query string - without it, mod_rewrite REPLACES the
+# original query string instead of appending to it, silently dropping params
+# like ?lang= that get appended to a clean SEF URL (e.g. the language toggle).
 RewriteRule ^$ index.php [L]
-RewriteRule ^([A-Za-z0-9-]+)?$ index.php?section=$1 [L]
-RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2 [L]
-RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3 [L]
-RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3&id=$4 [L]
+RewriteRule ^([A-Za-z0-9-]+)?$ index.php?section=$1 [L,QSA]
+RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2 [L,QSA]
+RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3 [L,QSA]
+RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3&id=$4 [L,QSA]
 RewriteRule ^.*user_docs/.*\.pdf$ - [F,NC,L]
 
 # Block bad bots

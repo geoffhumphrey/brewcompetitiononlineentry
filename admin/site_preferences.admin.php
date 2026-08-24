@@ -67,8 +67,8 @@ if (($action == "default") || ($action == "entries")) {
 
         $cols = array("id","brewStyleGroup","brewStyleNum","brewStyle","brewStyleVersion","brewStyleOwn");
         $db_conn->returnType = 'array';
-        if ($style_set['style_set_name'] == "BJCP2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", array("BJCP2025","2","BJCP2021","2","custom"));
-        elseif ($style_set['style_set_name'] == "AABC2025") $db_conn->where ("(brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?) AND (brewStyleOwn != ?)", array("AABC2025","2","AABC2022","2","custom"));
+        if ($style_set['style_set_name'] == "BJCP2025") $db_conn->where ("((brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?)) AND (brewStyleOwn != ?)", array("BJCP2025","2","BJCP2021","2","custom"));
+        elseif ($style_set['style_set_name'] == "AABC2025") $db_conn->where ("((brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?)) AND (brewStyleOwn != ?)", array("AABC2025","2","AABC2022","2","custom"));
         else $db_conn->where ("brewStyleVersion = ? AND brewStyleOwn != ?", array($style_set['style_set_name'],"custom"));
         $row_styles_all = $db_conn->get($styles_db_table, null, $cols);
 
@@ -191,9 +191,14 @@ if (($action == "default") || ($action == "entries")) {
 
 if ($section == "step3") {
     $db_conn->returnType = "array";
-    $prefs_columns = $db_conn->rawQuery(sprintf("SHOW COLUMNS FROM %s", $prefix."preferences"));
+    // Queries information_schema rather than SHOW COLUMNS - some MySQL/MariaDB
+    // versions don't support preparing SHOW statements at all, and MysqliDb
+    // always prepares queries, so a SHOW-based check can fail outright on those servers.
+    $db_conn->where('table_schema', $database);
+    $db_conn->where('table_name', $prefix."preferences");
+    $prefs_columns = $db_conn->get('information_schema.columns', null, 'column_name');
     foreach ($prefs_columns as $row_prefs_setup) {
-        $row_prefs[$row_prefs_setup['Field']] = "";
+        $row_prefs[$row_prefs_setup['column_name']] = "";
     }
 }
 
