@@ -1459,6 +1459,10 @@ function style_convert(?string $number,$type,string $base_url="",string $archive
 		else $db_conn->where('brewStyleVersion', 'BJCP2021');
 		$row_style = $db_conn->getOne($styles_db_table, "brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn");
 	}
+	elseif ($style_set == "AABC2025") {
+		$query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM ".$styles_db_table." WHERE brewStyleGroup=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+		$row_style = $db_conn->rawQueryOne($query_style, array($number));
+	}
 	else {
 		$query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM ".$styles_db_table." WHERE brewStyleGroup=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
 		$row_style = $db_conn->rawQueryOne($query_style, [$number, $style_set]);
@@ -1866,6 +1870,10 @@ function style_convert(?string $number,$type,string $base_url="",string $archive
 			if ($first_character === "C") $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom')";
 			else $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom')";
 			$row_style = $db_conn->rawQueryOne($query_style, [$number[0], $number[1]]);
+		}
+		elseif ($number[2] == "AABC2025") {
+			$query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+			$row_style = $db_conn->rawQueryOne($query_style, array($number[0], $number[1]));
 		}
 		else {
 			$query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
