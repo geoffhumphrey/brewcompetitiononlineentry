@@ -78,12 +78,26 @@ $database_port = ini_get('mysqli.default_port');
  * error will be returned.
  */
 
-$connection = new mysqli($hostname, $username, $password, $database, $database_port);
-mysqli_set_charset($connection,'utf8mb4');
-mysqli_query($connection, "SET NAMES 'utf8mb4';");
-mysqli_query($connection, "SET CHARACTER SET 'utf8mb4';");
-mysqli_query($connection, "SET COLLATION_CONNECTION = 'utf8mb4_unicode_ci';");
-mysqli_query($connection, "SET sql_mode = '';");
+/**
+ * Reuse the existing connection via $GLOBALS if one is already open and alive, 
+ * rather than opening a brand new mysqli connection every time - on hosts with 
+ * a low per-account connection limit, a single page load touching many such functions can
+ * otherwise exhaust the limit mid-request.
+ */
+
+if ((isset($GLOBALS['connection'])) && ($GLOBALS['connection'] instanceof mysqli) && (@$GLOBALS['connection']->ping())) {
+	$connection = $GLOBALS['connection'];
+}
+
+else {
+	$connection = new mysqli($hostname, $username, $password, $database, $database_port);
+	mysqli_set_charset($connection,'utf8mb4');
+	mysqli_query($connection, "SET NAMES 'utf8mb4';");
+	mysqli_query($connection, "SET CHARACTER SET 'utf8mb4';");
+	mysqli_query($connection, "SET COLLATION_CONNECTION = 'utf8mb4_unicode_ci';");
+	mysqli_query($connection, "SET sql_mode = '';");
+	$GLOBALS['connection'] = $connection;
+}
 
 /**
  * Do not change the following line.
