@@ -433,6 +433,7 @@ function purge_entries($type, $interval) {
 
 		$params_check = array();
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND (b.brewStyleVersion = 'BJCP2021' OR b.brewStyleVersion = 'BJCP2025')";
+		elseif ($_SESSION['prefsStyleSet'] == "AABC2025") $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND (b.brewStyleVersion = 'AABC2022' OR b.brewStyleVersion = 'AABC2025')";
 		else { $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = ?"; $params_check[] = $_SESSION['prefsStyleSet']; }
 		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		$rows_check = (!empty($params_check)) ? $db_conn->rawQuery($query_check, $params_check) : $db_conn->rawQuery($query_check);
