@@ -81,13 +81,18 @@ if ($setup_free_access == TRUE) {
 		 */
 
 		$sql = sprintf("ALTER DATABASE `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$database);
-		$db_conn->rawQuery($sql);
-		if ($db_conn->getLastErrno()) {
-			$error_output[] = $db_conn->getLastError();
+		// ALTER DATABASE cannot be run as a prepared statement (unsupported by the
+		// MySQL/MariaDB protocol), so this uses queryUnprepared() instead of the
+		// usual rawQuery() - every other statement in this file is fine as-is.
+		try {
+			$db_conn->queryUnprepared($sql);
+			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> DB character set changed to UTF8-mb4 successfully.</li>";
+		}
+		catch (Exception $e) {
+			$error_output[] = $e->getMessage();
 			$errors = TRUE;
 			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> DB character set NOT changed to UTF8-mb4.</li>";
 		}
-		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> DB character set changed to UTF8-mb4 successfully.</li>";
 
 		/**
 		 * --------------------------------------

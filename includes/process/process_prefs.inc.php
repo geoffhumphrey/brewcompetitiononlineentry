@@ -640,7 +640,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if ($go == "entries") {
 
-			
+			/**
+			 * Empty the contest_info_general session variable.
+			 * Will trigger the session to reset the variables in
+			 * common.db.php upon reload after redirect.
+			 */
+
+			unset($_SESSION['contest_info_general'.$prefix_session]);
+
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($prefix."contest_info", $data_entry_fees);
 			if (!$result) {

@@ -37,6 +37,8 @@ if (isset($_SESSION['loginUsername'])) {
     $row_brewer = $db_conn->getOne($brewer_db_table);
 
     $db_conn->where('brewBrewerID', $bid);
+    $db_conn->orderBy('brewCategorySort', 'ASC');
+    $db_conn->orderBy('brewSubCategory', 'ASC');
     $rows_log = $db_conn->get($brewing_db_table);
     $row_log = ($rows_log && count($rows_log) > 0) ? $rows_log[0] : null;
     $totalRows_log = $db_conn->count;
