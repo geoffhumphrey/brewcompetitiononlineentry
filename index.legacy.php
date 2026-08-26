@@ -332,10 +332,10 @@ if (($_SESSION['prefsEval'] == 1) && ($section == "admin") && ($go == "evaluatio
 <?php if (($section == "brewer") || ($section == "admin")) { ?>
     var club_other = <?php if ((isset($club_other) && ($club_other))) echo "true"; else echo "false"; ?>;
 <?php } ?>
-    var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
-    var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
-    var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
-    var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
+    var brewer_country = "<?php if (isset($row_brewer['brewerCountry'])) echo $row_brewer['brewerCountry']; ?>";
+    var brewer_judge = "<?php if (isset($row_brewer['brewerJudge'])) echo $row_brewer['brewerJudge']; ?>";
+    var brewer_steward = "<?php if (isset($row_brewer['brewerSteward'])) echo $row_brewer['brewerSteward']; ?>";
+    var brewer_staff = "<?php if (isset($row_brewer['brewerStaff'])) echo $row_brewer['brewerStaff']; ?>";
     var brewer_brewery_ttb = <?php echo $brewery_ttb; ?>;
     var brewer_brewery_prod = <?php echo $brewery_prod; ?>;
     var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>";

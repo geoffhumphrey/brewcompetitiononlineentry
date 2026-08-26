@@ -18,7 +18,10 @@ $mini_bos_alert_icon = "";
 $mini_bos_checked_yes = "";
 $mini_bos_checked_no = "";
 
-foreach ($eval_scores as $key => $value) {
+// Pulled from the batched eval_scores_by_eid map built in dashboard.eval.php
+// instead of scanning the full $eval_scores array (every evaluation for the
+// entire competition) once per entry displayed on this page.
+foreach (($eval_scores_by_eid[$row_entries['id']] ?? array()) as $key => $value) {
 
 // Display Edit button for those evaluations that have been entered
 // Otherwise, display "No evaluation entered yet" message
@@ -27,7 +30,9 @@ foreach ($eval_scores as $key => $value) {
 
 		$count_evals += 1;
 
-		$eval_judge = brewer_info($value['judge_id']);
+		// Pulled from the batched brewer_info map built in dashboard.eval.php instead
+		// of a fresh brewer_info() query per matching evaluation per entry.
+		$eval_judge = $brewer_info_string_by_judge_id[$value['judge_id']] ?? "";
 		$eval_judge = explode("^",$eval_judge);
 		$judge_name = $eval_judge[0]." ".$eval_judge[1];
 		$score = $value['judge_score'];

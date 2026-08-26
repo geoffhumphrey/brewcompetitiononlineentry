@@ -1,8 +1,12 @@
 <?php
 
-if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed'])) || (empty($row_judging_prefs['jPrefsScoresheet']))) {
+if (
+	((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed'])) || (empty($row_judging_prefs['jPrefsScoresheet'])))
+	&& (empty($_SESSION['dismissed_admin_alerts']['empty-judging-prefs']))
+) {
 
-	$alert_empty_prefs = "<div class=\"alert alert-danger\">";
+	$alert_empty_prefs = "<div id=\"alert-empty-judging-prefs\" data-alert-key=\"empty-judging-prefs\" class=\"alert alert-danger alert-dismissible hidden-print fade in\" role=\"alert\">";
+	$alert_empty_prefs .= "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>";
 	$alert_empty_prefs .= "<div>";
 	$alert_empty_prefs .= sprintf("<p><strong><i class=\"fa fa-exclamation-circle\"></i> %s</strong> Judging/Competition Organization Preferences <strong>have not been set</strong> for the following:</p>",$label_attention);
 	$alert_empty_prefs .= "<ul>";

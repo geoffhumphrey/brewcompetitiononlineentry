@@ -41,6 +41,63 @@ else {
  
 if ($row_scored_entries['count'] > 0) {
 
+	/**
+	 * Batch what used to be per-table, per-style queries in the loop below into
+	 * three queries total, run once up front:
+	 *   1. Every style referenced by any table's tableStyles list, in one lookup.
+	 *   2. Received-entry counts for every category/subcategory combo, grouped.
+	 *   3. All scores for all tables, joined once and grouped by table in PHP.
+	 * Previously this was ~2 queries per style per table plus ~2 per table
+	 * (score_count() + scores.db.php), i.e. O(tables x styles) round trips -
+	 * on a real dataset (38 tables) that was 200+ queries for this one section.
+	 */
+
+	$all_style_ids = array();
+	foreach ($rows_tables as $row_tables_prefetch) {
+		foreach (explode(",", $row_tables_prefetch['tableStyles']) as $style_id) {
+			if ($style_id !== "") $all_style_ids[] = $style_id;
+		}
+	}
+	$all_style_ids = array_unique($all_style_ids);
+
+	$styles_by_id = array();
+	if (!empty($all_style_ids)) {
+		$db_conn->where('id', $all_style_ids, 'in');
+		$rows_all_styles = $db_conn->get($prefix."styles", null, "id,brewStyleGroup,brewStyleNum");
+		foreach ($rows_all_styles as $row_style) {
+			$styles_by_id[$row_style['id']] = $row_style;
+		}
+	}
+
+	$counts_by_style = array();
+	if (table_exists($brewing_db_table)) {
+		$db_conn->where('brewReceived', '1');
+		$db_conn->groupBy('brewCategorySort');
+		$db_conn->groupBy('brewSubCategory');
+		$rows_counts = $db_conn->get($brewing_db_table, null, "brewCategorySort, brewSubCategory, COUNT(*) as count");
+		foreach ($rows_counts as $row_count) {
+			$counts_by_style[$row_count['brewCategorySort'].'|'.$row_count['brewSubCategory']] = $row_count['count'];
+		}
+	}
+
+	// Mirrors includes/db/scores.db.php's winner_method==0 query exactly, just
+	// widened from "WHERE a.scoreTable=?" (one table) to an IN-list (all tables),
+	// then split back apart by scoreTable below.
+	$table_ids = array_column($rows_tables, 'id');
+	$scores_by_table = array();
+	if (!empty($table_ids)) {
+		$placeholders = implode(',', array_fill(0, count($table_ids), '?'));
+		$query_scores_all = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.scoreTable IN (".$placeholders.") AND a.eid = b.id AND c.uid = b.brewBrewerID";
+		if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_all .= " AND a.scorePlace > 0";
+		$query_scores_all .= " ORDER BY a.scoreTable";
+		if ($action == "awards-pres") $query_scores_all .= ", a.scorePlace DESC";
+		else $query_scores_all .= ", a.scorePlace ASC";
+		$rows_scores_all = $db_conn->rawQuery($query_scores_all, $table_ids);
+		foreach ($rows_scores_all as $row_score_all) {
+			$scores_by_table[$row_score_all['scoreTable']][] = $row_score_all;
+		}
+	}
+
 	foreach ($rows_tables as $row_tables) {
 
 		$winners_table_all = "";
@@ -52,20 +109,12 @@ if ($row_scored_entries['count'] > 0) {
 
 		foreach ($a as $value) {
 
-			// NOTE: original HOSTED branch (UNION ALL across a shared styles table) was already dead/commented code
-			$db_conn->where('id', $value);
-			$row_styles = $db_conn->getOne($prefix."styles", "brewStyleGroup,brewStyleNum");
-			$totalRows_styles = $db_conn->count;
+			if (!isset($styles_by_id[$value])) $missing_style = TRUE;
 
-			if ($totalRows_styles == 0) $missing_style = TRUE;
-
-			elseif (table_exists($brewing_db_table)) {
-				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
-				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
-				$db_conn->where('brewReceived', '1');
-				$row_style_count = $db_conn->getOne($brewing_db_table, "COUNT(*) as count");
-
-				$entry_count += $row_style_count['count'];
+			else {
+				$row_styles = $styles_by_id[$value];
+				$style_key = $row_styles['brewStyleGroup'].'|'.$row_styles['brewStyleNum'];
+				$entry_count += $counts_by_style[$style_key] ?? 0;
 			}
 
 		}
@@ -86,15 +135,17 @@ if ($row_scored_entries['count'] > 0) {
 			if ($psort != "default") $winners_table_head_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s (%s %s)</h3><p>%s</p></div>",$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
 			else $winners_table_head_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
 
-			if (score_count($row_tables['id'],"1",$suffix))	{
+			if (!empty($scores_by_table[$row_tables['id']])) {
 
 				// Build page headers
 				$winners_table_header .= sprintf("<h3>%s <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span></h3>",$row_tables['tableName'],$entry_count,$entries);
 
 				if ($missing_style) $winners_table_header .= sprintf("<p>%s</p>",$winners_text_006);
 
-				// Build table body
-				include (DB.'scores.db.php');
+				// Build table body - pulled from the batched fetch above instead of
+				// a fresh include(DB.'scores.db.php') query per table.
+				$rows_scores = $scores_by_table[$row_tables['id']];
+				$totalRows_scores = count($rows_scores);
 
 				if ($totalRows_scores > 0) {
 
@@ -228,7 +279,7 @@ if ($row_scored_entries['count'] > 0) {
 
 				$winners_table_all .= "</div>";
 			
-			} // end if (score_count($row_tables['id'],"1",$suffix)) 
+			} // end if (!empty($scores_by_table[$row_tables['id']]))
 			else $winners_table_all .= $winners_table_head_2;
 		
 		} // end if ($entry_count > 0);

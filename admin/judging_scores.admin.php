@@ -113,8 +113,17 @@ $totalRows_entry_count = total_paid_received($go,0);
         <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <?php foreach ($rows_tables_edit_2 as $row_tables_edit_2) {
-                    $table_count_total = table_count_total($row_tables_edit_2['id']);
+            <?php
+            // Batch what used to be a table_count_total() query per table into one
+            // upfront query, run once.
+            $scores_count_by_table_js = array();
+            $db_conn->groupBy('scoreTable');
+            $rows_scores_count_js = $db_conn->get($judging_scores_db_table, null, "scoreTable, COUNT(*) as count");
+            foreach ($rows_scores_count_js as $row_scores_count_js) {
+                $scores_count_by_table_js[$row_scores_count_js['scoreTable']] = $row_scores_count_js['count'];
+            }
+            foreach ($rows_tables_edit_2 as $row_tables_edit_2) {
+                    $table_count_total = $scores_count_by_table_js[$row_tables_edit_2['id']] ?? 0;
                 ?>
                 <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".h($row_tables_edit_2['tableNumber']).": ".h($row_tables_edit_2['tableName']); ?></a></li>
                 <?php  } ?>
@@ -210,10 +219,68 @@ $totalRows_entry_count = total_paid_received($go,0);
 <tbody>
 <?php
 
+    /**
+     * Batch what used to be a table_score_data() call per score row - 3 queries
+     * each (brewing, judging_tables, brewer) - into 3 upfront queries, run once.
+     * Mirrors table_score_data()'s exact suffix resolution and field selection.
+     */
+    $tsd_suffix_js = ($filter != "default") ? "_".preg_replace("/[^a-zA-Z0-9_]+/", "", $filter) : "";
+
+    $tsd_eids_js = array_column($rows_scores, 'eid');
+    $tsd_brewing_by_id_js = array();
+    if ((!empty($tsd_eids_js)) && (table_exists($prefix."brewing".$tsd_suffix_js))) {
+        $db_conn->where('id', $tsd_eids_js, 'in');
+        $rows_tsd_brewing_js = $db_conn->get($prefix."brewing".$tsd_suffix_js, null, "id, brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID");
+        foreach ($rows_tsd_brewing_js as $row_tsd_brewing_js) {
+            $tsd_brewing_by_id_js[$row_tsd_brewing_js['id']] = $row_tsd_brewing_js;
+        }
+    }
+
+    $tsd_tables_by_id_js = array();
+    if (table_exists($prefix."judging_tables".$tsd_suffix_js)) {
+        $rows_tsd_tables_js = $db_conn->get($prefix."judging_tables".$tsd_suffix_js, null, "id,tableName,tableNumber");
+        foreach ($rows_tsd_tables_js as $row_tsd_tables_js) {
+            $tsd_tables_by_id_js[$row_tsd_tables_js['id']] = $row_tsd_tables_js;
+        }
+    }
+
+    $tsd_brewer_ids_js = array_column($tsd_brewing_by_id_js, 'brewBrewerID');
+    $tsd_brewer_by_uid_js = array();
+    if ((!empty($tsd_brewer_ids_js)) && (table_exists($prefix."brewer".$tsd_suffix_js))) {
+        $db_conn->where('uid', $tsd_brewer_ids_js, 'in');
+        $rows_tsd_brewer_js = $db_conn->get($prefix."brewer".$tsd_suffix_js, null, "uid, brewerLastName,brewerFirstName,brewerBreweryName");
+        foreach ($rows_tsd_brewer_js as $row_tsd_brewer_js) {
+            $tsd_brewer_by_uid_js[$row_tsd_brewer_js['uid']] = $row_tsd_brewer_js;
+        }
+    }
+
     foreach ($rows_scores as $row_scores) {
 
-    $table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter);
-    $table_score_data = explode("^",$table_score_data);
+    // Pulled from the batched maps above instead of a fresh table_score_data()
+    // query (3 queries) per score row - mirrors its exact field order/fallbacks.
+    $row_tsd_entry_js = $tsd_brewing_by_id_js[$row_scores['eid']] ?? null;
+    $row_tsd_table_js = $tsd_tables_by_id_js[$row_scores['scoreTable']] ?? null;
+    $row_tsd_brewer_js = (isset($row_tsd_entry_js['brewBrewerID'])) ? ($tsd_brewer_by_uid_js[$row_tsd_entry_js['brewBrewerID']] ?? null) : null;
+    $tsd_style_js = (isset($row_tsd_entry_js['brewCategorySort']) ? $row_tsd_entry_js['brewCategorySort'] : "").(isset($row_tsd_entry_js['brewSubCategory']) ? $row_tsd_entry_js['brewSubCategory'] : "");
+    $tsd_style_name_js = isset($row_tsd_entry_js['brewStyle']) ? $row_tsd_entry_js['brewStyle'] : "";
+    $table_score_data = array(
+        isset($row_tsd_entry_js['id']) ? $row_tsd_entry_js['id'] : $row_scores['eid'], //0
+        isset($row_tsd_entry_js['brewStyle']) ? $row_tsd_entry_js['brewStyle'] : "", //1
+        isset($row_tsd_entry_js['brewCategory']) ? $row_tsd_entry_js['brewCategory'] : "", //2
+        isset($row_tsd_entry_js['brewName']) ? $row_tsd_entry_js['brewName'] : "", //3
+        isset($row_tsd_brewer_js['brewerFirstName']) ? $row_tsd_brewer_js['brewerFirstName'] : "", //4
+        isset($row_tsd_brewer_js['brewerLastName']) ? $row_tsd_brewer_js['brewerLastName'] : "", //5
+        isset($row_tsd_entry_js['brewJudgingNumber']) ? $row_tsd_entry_js['brewJudgingNumber'] : "", //6
+        isset($row_tsd_entry_js['brewBrewerID']) ? $row_tsd_entry_js['brewBrewerID'] : "", //7
+        isset($row_tsd_entry_js['brewCategorySort']) ? $row_tsd_entry_js['brewCategorySort'] : "", //8
+        isset($row_tsd_table_js['id']) ? $row_tsd_table_js['id'] : "", //9
+        isset($row_tsd_table_js['tableName']) ? $row_tsd_table_js['tableName'] : "", //10
+        isset($row_tsd_table_js['tableNumber']) ? $row_tsd_table_js['tableNumber'] : "", //11
+        $tsd_style_js, //12
+        $tsd_style_name_js, //13
+        isset($row_tsd_brewer_js['brewerBreweryName']) ? $row_tsd_brewer_js['brewerBreweryName'] : "", //14
+        isset($row_tsd_entry_js['brewSubCategory']) ? $row_tsd_entry_js['brewSubCategory'] : "", //15
+    );
 
     $entry_number = sprintf("%06s",$table_score_data[0]);
     $judging_number = sprintf("%06s",$table_score_data[6]);

@@ -34,26 +34,71 @@ foreach ($rows_styles as $row_styles) {
 
 }
 
+// Pre-aggregate entry counts instead of running up to 2 queries per
+// sub-style below (this used to be re-queried inside
+// includes/db/entries_by_substyle.db.php on every loop iteration - a full
+// style set can have 100+ sub-styles). Custom categories (brewCategorySort
+// >= 50) are counted at the category level only (no sub-category
+// breakdown), so they're aggregated separately from normal sub-styles.
+$db_conn->where('brewPaid', '1');
+$db_conn->where('brewReceived', '1');
+$db_conn->where('brewConfirmed', '1');
+$db_conn->groupBy('brewCategorySort');
+$db_conn->groupBy('brewSubCategory');
+$rows_substyle_counts = $db_conn->get($prefix."brewing", null, "brewCategorySort, brewSubCategory, COUNT(*) AS count");
+$substyle_counts = array();
+foreach ($rows_substyle_counts as $row_substyle_counts) {
+	$substyle_counts[$row_substyle_counts['brewCategorySort']][$row_substyle_counts['brewSubCategory']] = $row_substyle_counts['count'];
+}
+
+$db_conn->where('brewConfirmed', '1');
+$db_conn->groupBy('brewCategorySort');
+$db_conn->groupBy('brewSubCategory');
+$rows_substyle_counts_logged = $db_conn->get($prefix."brewing", null, "brewCategorySort, brewSubCategory, COUNT(*) AS count");
+$substyle_counts_logged = array();
+foreach ($rows_substyle_counts_logged as $row_substyle_counts_logged) {
+	$substyle_counts_logged[$row_substyle_counts_logged['brewCategorySort']][$row_substyle_counts_logged['brewSubCategory']] = $row_substyle_counts_logged['count'];
+}
+
+$db_conn->where('brewPaid', '1');
+$db_conn->where('brewReceived', '1');
+$db_conn->where('brewConfirmed', '1');
+$db_conn->groupBy('brewCategorySort');
+$rows_style_counts = $db_conn->get($prefix."brewing", null, "brewCategorySort, COUNT(*) AS count");
+$style_counts_by_cat = array();
+foreach ($rows_style_counts as $row_style_counts) {
+	$style_counts_by_cat[$row_style_counts['brewCategorySort']] = $row_style_counts['count'];
+}
+
+$db_conn->where('brewConfirmed', '1');
+$db_conn->groupBy('brewCategorySort');
+$rows_style_counts_logged = $db_conn->get($prefix."brewing", null, "brewCategorySort, COUNT(*) AS count");
+$style_counts_logged_by_cat = array();
+foreach ($rows_style_counts_logged as $row_style_counts_logged) {
+	$style_counts_logged_by_cat[$row_style_counts_logged['brewCategorySort']] = $row_style_counts_logged['count'];
+}
+
+// Style type per category (only needed for custom categories below), keyed
+// off the styles rows already fetched above instead of a fresh query per
+// custom sub-style.
+$style_type_by_cat = array();
+foreach ($rows_styles as $row_styles_meta) {
+	if (!isset($style_type_by_cat[$row_styles_meta['brewStyleGroup']])) {
+		$style_type_by_cat[$row_styles_meta['brewStyleGroup']] = $row_styles_meta['brewStyleType'];
+	}
+}
+
 foreach ($subcats as $key => $value) {
 
 	$substyle = $value;
 
 	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) {
-		$query_substyle_count = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'";
-		$params_substyle_count = array($substyle[0]);
+		$substyle_count = isset($style_counts_by_cat[$substyle[0]]) ? $style_counts_by_cat[$substyle[0]] : 0;
+		$substyle_count_logged = isset($style_counts_logged_by_cat[$substyle[0]]) ? $style_counts_logged_by_cat[$substyle[0]] : 0;
 	}
 	else {
-		$query_substyle_count = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewSubCategory=? AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'";
-		$params_substyle_count = array($substyle[0], $substyle[1]);
-	}
-
-	if ((is_numeric($substyle[0])) && ($substyle[0] >= 50)) {
-		$query_substyle_count_logged = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewConfirmed='1'";
-		$params_substyle_count_logged = array($substyle[0]);
-	}
-	else {
-		$query_substyle_count_logged = "SELECT COUNT(*) AS 'count' FROM ".$prefix."brewing WHERE brewCategorySort=? AND brewSubCategory=? AND brewConfirmed='1'";
-		$params_substyle_count_logged = array($substyle[0], $substyle[1]);
+		$substyle_count = isset($substyle_counts[$substyle[0]][$substyle[1]]) ? $substyle_counts[$substyle[0]][$substyle[1]] : 0;
+		$substyle_count_logged = isset($substyle_counts_logged[$substyle[0]][$substyle[1]]) ? $substyle_counts_logged[$substyle[0]][$substyle[1]] : 0;
 	}
 
 	include (DB.'entries_by_substyle.db.php');

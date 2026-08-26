@@ -1,1 +1,0 @@
-User temp directory: temporary folder for scoresheet pdfs to be created for viewing/downloading by the entrants.

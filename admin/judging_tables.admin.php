@@ -80,6 +80,132 @@ else {
 
 if (($action == "default") && ($filter == "default")) {
 
+	/**
+	 * Batch what used to be several queries per style/table/location
+	 * (get_table_info()'s many methods, assigned_judges()/assigned_stewards(),
+	 * table_location(), score_count(), table_choose(), table_count_total()) into a
+	 * handful of upfront queries, run once. Same pattern used throughout pub/,
+	 * awards.php, export.output.php, admin/participants.admin.php, and
+	 * eval/dashboard.eval.php this session.
+	 */
+
+	// Mirrors get_table_info()'s per-style styles lookup (used by its "list" method) -
+	// fetched once for every style instead of once per style per table.
+	$styles_by_id_jt = array();
+	$rows_all_styles_jt = $db_conn->get($styles_db_table, null, "id,brewStyleGroup,brewStyleNum");
+	foreach ($rows_all_styles_jt as $row_style_jt) {
+		$styles_by_id_jt[$row_style_jt['id']] = $row_style_jt;
+	}
+
+	// Mirrors get_table_info()'s "count"/"count_total" brewing-count query exactly -
+	// the brewReceived filter is applied unless Tables Planning Mode is on, matching
+	// every one of those call sites.
+	$brewing_count_by_style_jt = array();
+	if ($_SESSION['jPrefsTablePlanning'] != 1) $db_conn->where('brewReceived', '1');
+	$db_conn->groupBy('brewCategorySort');
+	$db_conn->groupBy('brewSubCategory');
+	$rows_brewing_counts_jt = $db_conn->get($brewing_db_table, null, "brewCategorySort, brewSubCategory, COUNT(*) as count");
+	foreach ($rows_brewing_counts_jt as $row_brewing_count_jt) {
+		$brewing_count_by_style_jt[$row_brewing_count_jt['brewCategorySort'].'|'.$row_brewing_count_jt['brewSubCategory']] = $row_brewing_count_jt['count'];
+	}
+
+	// Set of every style id assigned to any table - mirrors get_table_info()'s
+	// "styles" method (its table_id=="default" branch), which otherwise re-fetches
+	// and re-scans every table's tableStyles list on every single call. Also sums
+	// received-entry counts per table and per location - mirrors get_table_info()'s
+	// "count_total" method (both its $param=="default" per-table branch and its
+	// $param!="default" per-location branch, which otherwise re-fetched every
+	// table at a location, then every style at each of those tables, then
+	// re-queried its entry count - all once per table/location instead).
+	$style_ids_assigned_to_any_table_jt = array();
+	$entry_total_by_table_jt = array();
+	$entry_total_by_location_jt = array();
+	foreach ($rows_tables as $row_tables_prefetch_jt) {
+		$table_style_total_jt = 0;
+		foreach (explode(",", $row_tables_prefetch_jt['tableStyles']) as $style_id_jt) {
+			if ($style_id_jt === "") continue;
+			$style_ids_assigned_to_any_table_jt[$style_id_jt] = TRUE;
+			$row_style_lookup_jt = $styles_by_id_jt[$style_id_jt] ?? null;
+			if ($row_style_lookup_jt) {
+				$table_style_total_jt += $brewing_count_by_style_jt[$row_style_lookup_jt['brewStyleGroup'].'|'.$row_style_lookup_jt['brewStyleNum']] ?? 0;
+			}
+		}
+		$entry_total_by_table_jt[$row_tables_prefetch_jt['id']] = $table_style_total_jt;
+		if ($table_style_total_jt > 0) {
+			$loc_key_jt = $row_tables_prefetch_jt['tableLocation'];
+			$entry_total_by_location_jt[$loc_key_jt] = ($entry_total_by_location_jt[$loc_key_jt] ?? 0) + $table_style_total_jt;
+		}
+	}
+
+	// Mirrors table_location()'s judging_locations lookup - fetched once for every
+	// location instead of once per table.
+	$judging_locations_by_id_jt = array();
+	$rows_all_locations_jt = $db_conn->get($prefix."judging_locations");
+	foreach ($rows_all_locations_jt as $row_location_jt) {
+		$judging_locations_by_id_jt[$row_location_jt['id']] = $row_location_jt;
+	}
+
+	// Mirrors assigned_judges()/assigned_stewards()'s per-table COUNT query, and the
+	// per-location judge/steward assignment COUNT queries in the location loop
+	// below, batched across every table/location at once.
+	$judge_assign_counts_by_table_jt = array();
+	$steward_assign_counts_by_table_jt = array();
+	$judge_assign_counts_by_location_jt = array();
+	$steward_assign_counts_by_location_jt = array();
+	if (table_exists($judging_assignments_db_table)) {
+
+		$db_conn->where('assignment', 'J');
+		$db_conn->groupBy('assignTable');
+		$rows_judge_assign_jt = $db_conn->get($judging_assignments_db_table, null, "assignTable, COUNT(*) as count");
+		foreach ($rows_judge_assign_jt as $row_judge_assign_jt) {
+			$judge_assign_counts_by_table_jt[$row_judge_assign_jt['assignTable']] = $row_judge_assign_jt['count'];
+		}
+
+		$db_conn->where('assignment', 'S');
+		$db_conn->groupBy('assignTable');
+		$rows_steward_assign_jt = $db_conn->get($judging_assignments_db_table, null, "assignTable, COUNT(*) as count");
+		foreach ($rows_steward_assign_jt as $row_steward_assign_jt) {
+			$steward_assign_counts_by_table_jt[$row_steward_assign_jt['assignTable']] = $row_steward_assign_jt['count'];
+		}
+
+		$db_conn->where('assignment', 'J');
+		$db_conn->groupBy('assignLocation');
+		$rows_judge_loc_assign_jt = $db_conn->get($judging_assignments_db_table, null, "assignLocation, COUNT(*) as count");
+		foreach ($rows_judge_loc_assign_jt as $row_judge_loc_assign_jt) {
+			$judge_assign_counts_by_location_jt[$row_judge_loc_assign_jt['assignLocation']] = $row_judge_loc_assign_jt['count'];
+		}
+
+		$db_conn->where('assignment', 'S');
+		$db_conn->groupBy('assignLocation');
+		$rows_steward_loc_assign_jt = $db_conn->get($judging_assignments_db_table, null, "assignLocation, COUNT(*) as count");
+		foreach ($rows_steward_loc_assign_jt as $row_steward_loc_assign_jt) {
+			$steward_assign_counts_by_location_jt[$row_steward_loc_assign_jt['assignLocation']] = $row_steward_loc_assign_jt['count'];
+		}
+
+	}
+
+	// Mirrors get_table_info()'s "score_total" method, score_count(), and
+	// table_count_total() - all three compute the exact same COUNT(*) FROM
+	// judging_scores WHERE scoreTable=X query, batched across every table at once.
+	$scores_count_by_table_jt = array();
+	if (table_exists($judging_scores_db_table)) {
+		$db_conn->groupBy('scoreTable');
+		$rows_scores_count_jt = $db_conn->get($judging_scores_db_table, null, "scoreTable, COUNT(*) as count");
+		foreach ($rows_scores_count_jt as $row_scores_count_jt) {
+			$scores_count_by_table_jt[$row_scores_count_jt['scoreTable']] = $row_scores_count_jt['count'];
+		}
+	}
+
+	// Mirrors table_choose()'s "flight_choose" method exactly, batched.
+	$flights_count_by_table_jt = array();
+	if (table_exists($judging_flights_db_table)) {
+		$db_conn->groupBy('flightTable');
+		$rows_flights_count_jt = $db_conn->get($judging_flights_db_table, null, "flightTable, COUNT(*) as count");
+		foreach ($rows_flights_count_jt as $row_flights_count_jt) {
+			$flights_count_by_table_jt[$row_flights_count_jt['flightTable']] = $row_flights_count_jt['count'];
+		}
+	}
+
 	// Orphans styles not assigned to tables yet
 
 	if ($totalRows_tables > 0) {
@@ -94,17 +220,22 @@ if (($action == "default") && ($filter == "default")) {
 
                 if (((!empty($styles_selected))) && (!empty($row_styles['id'])) && (array_key_exists($row_styles['id'], $styles_selected))) {
 
-                    if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default","default","default")) {
-                        
-                        if (!get_table_info($row_styles['id'],"styles","default","default","default")) {
+                    // Pulled from the batched maps above instead of 2-3 fresh
+                    // get_table_info() queries per style (one of which re-fetched
+                    // and re-scanned every table's style list on every call).
+                    $style_entry_count_jt = $brewing_count_by_style_jt[$row_styles['brewStyleGroup'].'|'.$row_styles['brewStyleNum']] ?? 0;
+
+                    if ($style_entry_count_jt) {
+
+                        if (!isset($style_ids_assigned_to_any_table_jt[$row_styles['id']])) {
                             $a[] = $row_styles['id'];
                             $z++;
                             $orphan_modal_body_2 .= "<li>";
                             $orphan_modal_body_2 .= style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0).": ";
-                            $orphan_modal_body_2 .= h($row_styles['brewStyle'])." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)";
+                            $orphan_modal_body_2 .= h($row_styles['brewStyle'])." (".$style_entry_count_jt." entries)";
                             $orphan_modal_body_2 .= "</li>";
                         }
-                    
+
                     }
 
                 }
@@ -130,8 +261,9 @@ if (($action == "default") && ($filter == "default")) {
 
 		foreach ($rows_tables_edit as $row_tables_edit) {
 
-			$flight_count = table_choose($section,$go,$action,$row_tables_edit['id'],$view,"default","flight_choose");
-			$flight_count = explode("^",$flight_count);
+			// Pulled from the batched maps above instead of a fresh table_choose()/
+			// table_count_total() query per table.
+			$flight_count = array($flights_count_by_table_jt[$row_tables_edit['id']] ?? 0);
 
 			$flight_choose .= "<li class=\"small\"><a href=\"".$base_url;
 			$flight_choose .= "index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=";
@@ -141,7 +273,7 @@ if (($action == "default") && ($filter == "default")) {
 			$flight_choose .= "#".h($row_tables_edit['tableNumber']).": ".h($row_tables_edit['tableName']);
 			$flight_choose .= "</a></li>";
 
-			$score_count = table_count_total($row_tables_edit['id']);
+			$score_count = $scores_count_by_table_jt[$row_tables_edit['id']] ?? 0;
 			$score_choose .= "<li class=\"small\"><a href=\"".$base_url;
 			$score_choose .= "index.php?section=admin&amp;go=judging_scores&amp;action=";
 			if ($score_count  > 0) $score_choose .= "edit";
@@ -240,7 +372,10 @@ if (($action == "default") && ($filter == "default")) {
         $steward_difference = 0;
 
         if (($row_judging) && ($row_judging['judgingLocType'] < 2)) {
-            if ($row_judging) $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']);
+            // Pulled from the batched location-total map above instead of a fresh
+            // get_table_info() call per location (which re-fetched every table at
+            // the location, then every style at each of those tables).
+            if ($row_judging) $loc_total = $entry_total_by_location_jt[$row_judging['id']] ?? 0;
             $all_loc_total[] = $loc_total;
 
             $sidebar_assigned_entries_by_location .= "<div class=\"bcoem-sidebar-panel\">";
@@ -262,15 +397,10 @@ if (($action == "default") && ($filter == "default")) {
             $count_steward_avail = array_count_values($steward_availability);
             if ((!empty($count_steward_avail)) && (array_key_exists($count_steward_yes,$count_steward_avail))) $count_steward_avail = $count_steward_avail[$count_steward_yes];
             
-            $db_conn->where("assignment", "J");
-            $db_conn->where("assignLocation", $row_judging['id']);
-            $db_conn->returnType = "array";
-            $row_judge_loc_assign = $db_conn->getOne($prefix."judging_assignments", "COUNT(*) AS count");
-
-            $db_conn->where("assignment", "S");
-            $db_conn->where("assignLocation", $row_judging['id']);
-            $db_conn->returnType = "array";
-            $row_steward_loc_assign = $db_conn->getOne($prefix."judging_assignments", "COUNT(*) AS count");
+            // Pulled from the batched per-location assignment-count maps above
+            // instead of 2 fresh queries per location.
+            $row_judge_loc_assign = array('count' => $judge_assign_counts_by_location_jt[$row_judging['id']] ?? 0);
+            $row_steward_loc_assign = array('count' => $steward_assign_counts_by_location_jt[$row_judging['id']] ?? 0);
 
             if ((is_numeric($count_judge_avail)) && ($count_judge_avail > 0)) $judge_difference = ($count_judge_avail - $row_judge_loc_assign['count']);
             if ((is_numeric($count_steward_avail)) && ($count_steward_avail > 0)) $steward_difference = ($count_steward_avail - $row_steward_loc_assign['count']);
@@ -287,11 +417,22 @@ if (($action == "default") && ($filter == "default")) {
 
         foreach ($rows_tables as $row_tables) {
 
-            $a = array(get_table_info("1","list",$row_tables['id'],$dbTable,"default"));
+            // Pulled from the batched maps above instead of 4 fresh get_table_info()/
+            // table_location() queries per table (one of which - "list" - was
+            // itself a query per style at the table).
+            $b_list_jt = array();
+            foreach (explode(",", $row_tables['tableStyles']) as $style_id_list_jt) {
+                if ($style_id_list_jt === "") continue;
+                $row_style_list_jt = $styles_by_id_jt[$style_id_list_jt] ?? null;
+                if ($row_style_list_jt) $b_list_jt[] = style_number_const($row_style_list_jt['brewStyleGroup'],$row_style_list_jt['brewStyleNum'],$_SESSION['style_set_display_separator'],0).",&nbsp;";
+            }
+            $a = array($b_list_jt);
             $styles = display_array_content($a,1);
-            $received = get_table_info("1","count_total",$row_tables['id'],$dbTable,"default");
-            $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
-            $table_location = table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+            $received = $entry_total_by_table_jt[$row_tables['id']] ?? 0;
+            $scored = $scores_count_by_table_jt[$row_tables['id']] ?? 0;
+            $table_location = "";
+            $row_table_loc_lookup_jt = $judging_locations_by_id_jt[$row_tables['tableLocation']] ?? null;
+            if ($row_table_loc_lookup_jt) $table_location = $row_table_loc_lookup_jt['judgingLocName'].", ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_loc_lookup_jt['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt");
 
             $table_location_class = strtolower($table_location);
             $table_location_class = preg_replace('/[^a-zA-Z0-9\s]/', '', $table_location_class);
@@ -320,14 +461,27 @@ if (($action == "default") && ($filter == "default")) {
             }
                 
 
-            $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
+            // Pulled from the batched assignment-count maps above instead of
+            // assigned_judges()/assigned_stewards() queries per table - mirrors
+            // their exact HTML-building logic (method==0, the default).
+            $judge_count_jt = $judge_assign_counts_by_table_jt[$row_tables['id']] ?? 0;
+            if ($judge_count_jt == 0) { $judge_icon_jt = "fa-plus-circle"; $judge_title_jt = "Add judges to this table."; }
+            else { $judge_icon_jt = "fa-edit"; $judge_title_jt = "Edit judges assigned to this table."; }
+            if ($dbTable == "default") $assigned_judges = '<span id="delete-judges-'.$row_tables['id'].'-count">'.$judge_count_jt.'</span> <a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$row_tables['id'].'" data-toggle="tooltip" data-placement="top" title="'.$judge_title_jt.'"><span id="delete-judges-'.$row_tables['id'].'-icon" class="fa fa-lg '.$judge_icon_jt.'"></span></a>';
+            else $assigned_judges = $judge_count_jt;
                 if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."','delete-judges-".$table_location_class."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
-            
-            $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
+
+            $steward_count_jt = $steward_assign_counts_by_table_jt[$row_tables['id']] ?? 0;
+            if ($steward_count_jt == 0) { $steward_icon_jt = "fa-plus-circle"; $steward_title_jt = "Add stewards to this table."; }
+            else { $steward_icon_jt = "fa-edit"; $steward_title_jt = "Edit stewards assigned to this table."; }
+            if ($dbTable == "default") $assigned_stewards = '<span id="delete-stewards-'.$row_tables['id'].'-count">'.$steward_count_jt.'</span> <a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$row_tables['id'].'" data-toggle="tooltip" data-placement="top" title="'.$steward_title_jt.'"><span id="delete-stewards-'.$row_tables['id'].'-icon" class="fa fa-lg '.$steward_icon_jt.'"></span></a>';
+            else $assigned_stewards = $steward_count_jt;
                 if ($dbTable == "default") $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."','delete-stewards-".$table_location_class."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
 
             if ($dbTable == "default") {
-                if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
+                // Pulled from the batched scores-per-table map above instead of a
+                // fresh score_count() query per table.
+                if (($scores_count_by_table_jt[$row_tables['id']] ?? 0) > 0) $scoreAction = "edit";
                 else $scoreAction = "add";
             }
 

@@ -22,6 +22,255 @@ if ($_SESSION['jPrefsQueued'] == "Y") $queued = TRUE;
 if (($go == "judging_tables") && ($totalRows_tables == 0)) $tables_none = TRUE;
 if ((($go == "judging_tables") || ($go == "judging_locations") || ($go == "all_entry_info")) && ($id == "default")) $tables_all = TRUE;
 
+// Mirrors style_convert()'s type "1" and type "9" lookups - both are called once
+// per displayed entry row (one query each) across every branch of this file,
+// despite the style rows they need being a small, fixed table. Fetched once
+// here (so every $go branch below can reuse it) then matched in PHP against
+// each type's exact WHERE-clause logic per style set, keeping the first row
+// per key the same way getOne()/rawQueryOne() (no ORDER BY) would.
+$style_set_ps = $_SESSION['prefsStyleSet'];
+include (INCLUDES.'styles.inc.php');
+
+$style_convert_type1_by_group_ps = array();
+$style_convert_type9_by_key_ps = array();
+
+$rows_all_styles_full_ps = $db_conn->get($styles_db_table, null, "brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet,brewStyleOwn,brewStyleType");
+foreach ($rows_all_styles_full_ps as $row_style_full_ps) {
+
+	$grp_ps = $row_style_full_ps['brewStyleGroup'];
+
+	if ($style_set_ps == "BJCP2025") {
+		$first_char_ps = mb_substr($grp_ps, 0, 1);
+		$want_version_ps = ($first_char_ps == "C") ? "BJCP2025" : "BJCP2021";
+		$match_1_ps = ($row_style_full_ps['brewStyleVersion'] == $want_version_ps);
+		$match_9_ps = ($match_1_ps) || ($row_style_full_ps['brewStyleOwn'] == "custom");
+	}
+	elseif ($style_set_ps == "AABC2025") {
+		$match_1_ps = ((($row_style_full_ps['brewStyleVersion'] == "AABC2025") && ($row_style_full_ps['brewStyleType'] == "2")) || (($row_style_full_ps['brewStyleVersion'] == "AABC2022") && ($row_style_full_ps['brewStyleType'] != "2")) || ($row_style_full_ps['brewStyleOwn'] == "custom"));
+		$match_9_ps = $match_1_ps;
+	}
+	else {
+		$match_1_ps = (($row_style_full_ps['brewStyleVersion'] == $style_set_ps) || ($row_style_full_ps['brewStyleOwn'] == "custom"));
+		$match_9_ps = $match_1_ps;
+	}
+
+	if (($match_1_ps) && (!isset($style_convert_type1_by_group_ps[$grp_ps]))) $style_convert_type1_by_group_ps[$grp_ps] = $row_style_full_ps;
+
+	if ($match_9_ps) {
+		$key9_ps = $grp_ps.'|'.$row_style_full_ps['brewStyleNum'];
+		if (!isset($style_convert_type9_by_key_ps[$key9_ps])) $style_convert_type9_by_key_ps[$key9_ps] = $row_style_full_ps;
+	}
+}
+
+// Mirrors style_convert($number,1,...)'s exact logic, from the batched map above.
+$style_convert_1_ps = function($number) use ($style_convert_type1_by_group_ps, $style_sets, $style_set_ps) {
+	$style_convert = "";
+	$row_style = $style_convert_type1_by_group_ps[$number] ?? null;
+	if ($row_style) {
+		$custom = ($row_style['brewStyleOwn'] != "bcoe");
+		$padded_number = $number;
+		if (is_numeric($padded_number)) $padded_number = sprintf('%02d', $padded_number);
+		if ($custom) $style_convert = $row_style['brewStyle']." (Custom Style)";
+		else {
+			foreach ($style_sets as $style_set_data) {
+				if (!empty($style_set_data)) {
+					if ($style_set_data['style_set_name'] === $style_set_ps) {
+						$style_set_cat = $style_set_data['style_set_categories'];
+						if (!empty($style_set_cat)) $style_convert = $style_set_cat[$padded_number];
+					}
+				}
+			}
+		}
+	}
+	return $style_convert;
+};
+
+// Mirrors style_convert($style_special,9,...)'s exact logic, from the batched map above.
+$style_convert_9_ps = function($style_special) use ($style_convert_type9_by_key_ps) {
+	$style_convert = "";
+	$number = explode("^", $style_special);
+	$row_style = $style_convert_type9_by_key_ps[$number[0].'|'.$number[1]] ?? null;
+	if (($row_style) && ($number[0] == "02") && ($number[1] == "A") && ($number[2] == "BJCP2021")) $row_style['brewStyleReqSpec'] = 1;
+	if ($row_style) {
+		$style_name = ($row_style['brewStyle'] == "Soured Fruit Beer") ? "Wild Specialty Beer" : $row_style['brewStyle'];
+		$style_convert = $row_style['brewStyleGroup']."^".$row_style['brewStyleNum']."^".$style_name."^".$row_style['brewStyleVersion']."^".$row_style['brewStyleReqSpec']."^".$row_style['brewStyleStrength']."^".$row_style['brewStyleCarb']."^".$row_style['brewStyleSweet'];
+	}
+	return $style_convert;
+};
+
+/**
+ * Batch what used to be 2 queries per style per table (output_pullsheets_entries.db.php)
+ * plus a query per table (output_pullsheets_queued.db.php / number_of_flights() / the
+ * flightRound lookup) plus a query per entry per flight iteration (check_flight_number())
+ * plus a query per judging assignment (judge_info() / get_table_info("basic",...)) into a
+ * handful of upfront queries, run once - fetched here (rather than scoped to a single $go
+ * branch) so every branch in this file can reuse the same maps. Same pattern used
+ * throughout this session.
+ */
+
+// Mirrors output_pullsheets_entries.db.php's style lookup - fetched once for
+// every style instead of once per style per table.
+$styles_by_id_ps = array();
+$rows_all_styles_ps = $db_conn->get($styles_db_table, null, "id,brewStyleGroup,brewStyleNum");
+foreach ($rows_all_styles_ps as $row_style_ps) {
+	$styles_by_id_ps[$row_style_ps['id']] = $row_style_ps;
+}
+
+// Mirrors output_pullsheets_entries.db.php's brewing query exactly (its non-mini_bos
+// branch - mini_bos uses a genuinely different join/query, left untouched) - fetched
+// once for every entry instead of once per style per table. $received matches that
+// file's own logic: TRUE everywhere except the judge_inventory view in Table Planning
+// Mode, so both variants are kept and the judge_inventory lookup picks the right one.
+$order_col_ps = ($view == "default") ? "brewJudgingNumber" : "id";
+$entries_by_style_ps = array();
+$db_conn->where('brewReceived', '1');
+$db_conn->orderBy($order_col_ps, 'ASC');
+$rows_all_entries_ps = $db_conn->get($brewing_db_table);
+foreach ($rows_all_entries_ps as $row_entry_ps) {
+	$entries_by_style_ps[$row_entry_ps['brewCategorySort'].'|'.$row_entry_ps['brewSubCategory']][] = $row_entry_ps;
+}
+$entries_by_style_all_ps = array();
+if ($_SESSION['jPrefsTablePlanning'] == 1) {
+	$db_conn->orderBy($order_col_ps, 'ASC');
+	$rows_all_entries_unreceived_ps = $db_conn->get($brewing_db_table);
+	foreach ($rows_all_entries_unreceived_ps as $row_entry_ps) {
+		$entries_by_style_all_ps[$row_entry_ps['brewCategorySort'].'|'.$row_entry_ps['brewSubCategory']][] = $row_entry_ps;
+	}
+}
+
+// Mirrors get_table_info(1,"count_total",...)'s exact condition - it only
+// applies brewReceived='1' outside Tables Planning Mode, which can disagree
+// with the entries actually listed above in Planning Mode (a pre-existing
+// quirk, not introduced here) - so this is computed separately rather than
+// just reusing counts of $entries_by_style_ps.
+$count_by_style_ps = array();
+if ($_SESSION['jPrefsTablePlanning'] != 1) {
+	foreach ($entries_by_style_ps as $count_key_ps => $rows_count_ps) {
+		$count_by_style_ps[$count_key_ps] = count($rows_count_ps);
+	}
+}
+else {
+	$db_conn->groupBy('brewCategorySort');
+	$db_conn->groupBy('brewSubCategory');
+	$rows_unfiltered_counts_ps = $db_conn->get($brewing_db_table, null, "brewCategorySort, brewSubCategory, COUNT(*) as count");
+	foreach ($rows_unfiltered_counts_ps as $row_unfiltered_count_ps) {
+		$count_by_style_ps[$row_unfiltered_count_ps['brewCategorySort'].'|'.$row_unfiltered_count_ps['brewSubCategory']] = $row_unfiltered_count_ps['count'];
+	}
+}
+
+// Mirrors output_pullsheets_queued.db.php's per-table count, number_of_flights()'s
+// per-table max flight lookup, check_flight_number()'s per-entry lookup, and the
+// inline per-table-per-flight flightRound lookup used further below - all sourced
+// from one fetch of the whole judging_flights table instead of one query each.
+$flight_round_count_by_table_round_ps = array();
+$max_flight_by_table_ps = array();
+$flight_round_by_table_flight_ps = array();
+$flight_by_entry_id_ps = array();
+if (table_exists($judging_flights_db_table)) {
+	$rows_all_flights_ps = $db_conn->get($judging_flights_db_table);
+	foreach ($rows_all_flights_ps as $row_flight_ps) {
+		$fr_key_ps = $row_flight_ps['flightTable'].'|'.$row_flight_ps['flightRound'];
+		$flight_round_count_by_table_round_ps[$fr_key_ps] = ($flight_round_count_by_table_round_ps[$fr_key_ps] ?? 0) + 1;
+		if ((!isset($max_flight_by_table_ps[$row_flight_ps['flightTable']])) || ($row_flight_ps['flightNumber'] > $max_flight_by_table_ps[$row_flight_ps['flightTable']])) {
+			$max_flight_by_table_ps[$row_flight_ps['flightTable']] = $row_flight_ps['flightNumber'];
+		}
+		$flight_round_by_table_flight_ps[$row_flight_ps['flightTable'].'|'.$row_flight_ps['flightNumber']] = $row_flight_ps['flightRound'];
+		// check_flight_number()'s getOne() has no ORDER BY, so it's only ever
+		// guaranteed to return *a* matching row when more than one exists for
+		// the same entry - keeping the first one found here matches that.
+		if (!isset($flight_by_entry_id_ps[$row_flight_ps['flightEntryID']])) $flight_by_entry_id_ps[$row_flight_ps['flightEntryID']] = $row_flight_ps;
+	}
+}
+
+// Mirrors get_table_info(1,"count_total",...) - sums received-entry counts
+// across every style at a table, from the batched maps above.
+$table_entry_count_ps = function($table_styles_csv) use ($styles_by_id_ps, $count_by_style_ps) {
+	$total = 0;
+	foreach (explode(",", $table_styles_csv) as $style_id_lookup) {
+		if ($style_id_lookup === "") continue;
+		$row_style_lookup = $styles_by_id_ps[$style_id_lookup] ?? null;
+		if ($row_style_lookup) $total += $count_by_style_ps[$row_style_lookup['brewStyleGroup'].'|'.$row_style_lookup['brewStyleNum']] ?? 0;
+	}
+	return $total;
+};
+
+// Mirrors table_location()'s exact query/output - fetched once for every
+// location instead of once per table.
+$judging_locations_by_id_ps = array();
+$rows_all_locations_ps = $db_conn->get($prefix."judging_locations");
+foreach ($rows_all_locations_ps as $row_location_ps) {
+	$judging_locations_by_id_ps[$row_location_ps['id']] = $row_location_ps;
+}
+$table_location_ps = function($table_location_id) use ($judging_locations_by_id_ps) {
+	$loc = $judging_locations_by_id_ps[$table_location_id] ?? null;
+	if (!$loc) return "";
+	return $loc['judgingLocName'].", ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $loc['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt");
+};
+
+// Mirrors number_of_flights()'s exact query, from the batched map above.
+$number_of_flights_ps = function($table_id) use ($max_flight_by_table_ps) {
+	return $max_flight_by_table_ps[$table_id] ?? "";
+};
+
+// Mirrors check_flight_number()'s method==0 behavior exactly (its only use in
+// this file), from the batched map above.
+$check_flight_number_ps = function($entry_id, $flight) use ($flight_by_entry_id_ps) {
+	$row = $flight_by_entry_id_ps[$entry_id] ?? null;
+	if (($row) && ($row['flightNumber'] == $flight)) return $row['flightRound'];
+	return "";
+};
+
+// Mirrors get_table_info(1,"basic",...) - fetched once for every table instead
+// of once per judging assignment (used by the all_entry_info judge_inventory view).
+$tables_by_id_ps = array();
+$rows_all_tables_basic_ps = $db_conn->get($judging_tables_db_table, null, "id,tableNumber,tableName,tableLocation,tableStyles");
+foreach ($rows_all_tables_basic_ps as $row_table_basic_ps) {
+	$tables_by_id_ps[$row_table_basic_ps['id']] = $row_table_basic_ps;
+}
+
+// Mirrors judge_info() - fetched once for every brewer/judging_assignments row
+// instead of once (or twice, in non-queued judging) per judging assignment
+// (used by the all_entry_info judge_inventory view).
+$brewer_by_uid_ps = array();
+$rows_all_brewer_ps = $db_conn->get($prefix."brewer", null, "id,uid,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeCider,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes,brewerAssignment");
+foreach ($rows_all_brewer_ps as $row_brewer_ps) {
+	if (!isset($brewer_by_uid_ps[$row_brewer_ps['uid']])) $brewer_by_uid_ps[$row_brewer_ps['uid']] = $row_brewer_ps;
+}
+$judging_assignment_by_bid_ps = array();
+if ($_SESSION['jPrefsQueued'] == "N") {
+	$rows_all_judging_assignments_ps = $db_conn->get($prefix."judging_assignments", null, "bid,assignFlight,assignRound");
+	foreach ($rows_all_judging_assignments_ps as $row_judging_assignment_ps) {
+		if (!isset($judging_assignment_by_bid_ps[$row_judging_assignment_ps['bid']])) $judging_assignment_by_bid_ps[$row_judging_assignment_ps['bid']] = $row_judging_assignment_ps;
+	}
+}
+$judge_info_ps = function($uid) use ($brewer_by_uid_ps, $judging_assignment_by_bid_ps) {
+	$r = "";
+	$row_brewer_info = $brewer_by_uid_ps[$uid] ?? null;
+	if (!empty($row_brewer_info)) {
+		$r =
+		$row_brewer_info['brewerFirstName']
+		."^".$row_brewer_info['brewerLastName']
+		."^".$row_brewer_info['brewerJudgeLikes']
+		."^".$row_brewer_info['brewerJudgeDislikes']
+		."^".$row_brewer_info['brewerJudgeMead']
+		."^".$row_brewer_info['brewerJudgeRank']
+		."^".$row_brewer_info['brewerJudgeID']
+		."^".$row_brewer_info['brewerStewardLocation']
+		."^".$row_brewer_info['brewerJudgeLocation']
+		."^".$row_brewer_info['brewerJudgeExp']
+		."^".$row_brewer_info['brewerJudgeNotes']
+		."^".$row_brewer_info['id']
+		."^".$row_brewer_info['brewerJudgeCider'];
+	}
+	if (isset($row_brewer_info['brewerAssignment'])) $r .= "^".$row_brewer_info['brewerAssignment'];
+	else $r .= "^";
+	if ($_SESSION['jPrefsQueued'] == "N") {
+		$row_judge_info = $judging_assignment_by_bid_ps[$uid] ?? null;
+		if (!empty($row_judge_info)) $r .= "^".$row_judge_info['assignFlight']."^".$row_judge_info['assignRound'];
+	}
+	return $r;
+};
+
 $table_flight_thead = "";
 $pullsheet_output = "";
 
@@ -89,10 +338,13 @@ if ($go == "all_entry_info") {
 			foreach ($rows_assignments as $row_assignments) {
 
 				$show_table = FALSE;
-				$judge_info = judge_info($row_assignments['bid']);
+				// Pulled from the batched maps above instead of fresh
+				// judge_info()/get_table_info() queries per judging assignment.
+				$judge_info = $judge_info_ps($row_assignments['bid']);
 				$judge_info = explode("^",$judge_info);
 
-				$table_info = get_table_info(1,"basic",$row_assignments['assignTable'],$dbTable,"default");
+				$table_info_row_ps = $tables_by_id_ps[$row_assignments['assignTable']] ?? null;
+				$table_info = ($table_info_row_ps) ? ($table_info_row_ps['tableNumber']."^".$table_info_row_ps['tableName']."^".$table_info_row_ps['tableLocation']."^".$table_info_row_ps['id']."^".$table_info_row_ps['tableStyles']) : "";
 				$table_info = explode("^",$table_info);
 
 				if (!isset($table_info[0])) $table_info[0] = "";
@@ -124,8 +376,24 @@ if ($go == "all_entry_info") {
 						$judge_entry_count = 0;
 						
 						foreach (array_unique($a) as $value) {
-							
-							include (DB.'output_pullsheets_entries.db.php');
+
+							// Pulled from the batched styles/entries maps above instead
+							// of a fresh output_pullsheets_entries.db.php query per style
+							// per assignment - guarded to the mini_bos filter's own
+							// (different, unbatched) query, which is left untouched, and
+							// to Table Planning Mode's own (also different) received-flag
+							// handling, which output_pullsheets_entries.db.php only applies
+							// for this judge_inventory view.
+							if ($filter == "mini_bos") {
+								include (DB.'output_pullsheets_entries.db.php');
+							}
+							else {
+								$row_style_ps_lookup = $styles_by_id_ps[$value] ?? null;
+								$entries_map_ps = ($_SESSION['jPrefsTablePlanning'] == 1) ? $entries_by_style_all_ps : $entries_by_style_ps;
+								$rows_entries = ($row_style_ps_lookup) ? ($entries_map_ps[$row_style_ps_lookup['brewStyleGroup'].'|'.$row_style_ps_lookup['brewStyleNum']] ?? array()) : array();
+								$row_entries = (!empty($rows_entries)) ? $rows_entries[0] : null;
+								$totalRows_entries = count($rows_entries);
+							}
 
 							if ($row_entries) {
 
@@ -139,7 +407,9 @@ if ($go == "all_entry_info") {
 										$display_entry = TRUE;
 
 										if ($_SESSION['jPrefsQueued'] == "N") {
-											$ji_flight_num = check_flight_number($row_entries['id'],1,1);
+											// Pulled from the batched flights map above instead
+											// of a fresh check_flight_number() query per entry.
+											$ji_flight_num = $flight_by_entry_id_ps[$row_entries['id']]['flightNumber'] ?? "";
 											if ($ji_flight_num != $row_assignments['assignFlight']) $display_entry = FALSE;
 											if ($ji_flight_num == $row_assignments['assignFlight']) $judge_entry_count += 1;
 										}
@@ -157,10 +427,10 @@ if ($go == "all_entry_info") {
 
 											$table_flight_tbody .= "<td>";
 											if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-											else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
+											else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 											$table_flight_tbody .= "</td>";
 
-											$special = style_convert($style_special,"9",$base_url);
+											$special = $style_convert_9_ps($style_special);
 											$special = explode("^",$special);
 
 											$table_flight_tbody .= "<td>";
@@ -240,7 +510,10 @@ if ($go == "all_entry_info") {
 					$table_info_header .= "</h2>";
 
 					$table_info_header .= "<h3>";
-					$table_info_header .= table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+					// Pulled from the batched map above instead of a fresh table_location() query -
+					// table_location()'s "default" method resolves table id -> tableLocation itself,
+					// so that resolution is replicated here via the same batched table map.
+					$table_info_header .= $table_location_ps($tables_by_id_ps[$row_assignments['assignTable']]['tableLocation'] ?? null);
 					if ($round != "default") $table_info_header .= sprintf("<br>%s %s",$label_round,$round);
 					$table_info_header .= "</h3>";
 					
@@ -330,8 +603,10 @@ if ($go == "all_entry_info") {
 
 		foreach ($rows_tables as $row_tables) {
 
-			$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-			include (DB.'output_pullsheets_queued.db.php');
+			// Pulled from the batched maps above instead of fresh
+			// get_table_info()/output_pullsheets_queued.db.php queries per table.
+			$entry_count = $table_entry_count_ps($row_tables['tableStyles']);
+			$row_table_round = array('count' => $flight_round_count_by_table_round_ps[$row_tables['id'].'|'.$round] ?? 0);
 			$round_count[] = $row_table_round['count'];
 
 			$table_flight = "";
@@ -351,7 +626,19 @@ if ($go == "all_entry_info") {
 
 					foreach (array_unique($a) as $value) {
 
-						include (DB.'output_pullsheets_entries.db.php');
+						// Pulled from the batched styles/entries maps above instead
+						// of a fresh output_pullsheets_entries.db.php query per style
+						// per table - guarded to the mini_bos filter's own (different,
+						// unbatched) query, which is left untouched.
+						if ($filter == "mini_bos") {
+							include (DB.'output_pullsheets_entries.db.php');
+						}
+						else {
+							$row_style_ps_lookup = $styles_by_id_ps[$value] ?? null;
+							$rows_entries = ($row_style_ps_lookup) ? ($entries_by_style_ps[$row_style_ps_lookup['brewStyleGroup'].'|'.$row_style_ps_lookup['brewStyleNum']] ?? array()) : array();
+							$row_entries = (!empty($rows_entries)) ? $rows_entries[0] : null;
+							$totalRows_entries = count($rows_entries);
+						}
 						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
  
@@ -372,10 +659,10 @@ if ($go == "all_entry_info") {
 
 								$table_flight_tbody .= "<td>";
 								if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
+								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 								$table_flight_tbody .= "</td>";
 
-								$special = style_convert($style_special,"9",$base_url);
+								$special = $style_convert_9_ps($style_special);
 								$special = explode("^",$special);
 								$table_flight_tbody .= "<td>";
 								if ((!empty($row_entries['brewInfo'])) && ((isset($special[4])) && ($special[4] == "1"))) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
@@ -418,7 +705,8 @@ if ($go == "all_entry_info") {
 
 					if ((!empty($row_tables['tableLocation'])) && ($filter != "mini_bos")) {
 						$table_info_location .= "<h3>";
-						$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+						// Pulled from the batched map above instead of a fresh table_location() query.
+						$table_info_location .= $table_location_ps($row_tables['tableLocation']);
 						if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
 						$table_info_location .= "</h3>";
 					}
@@ -540,7 +828,7 @@ if ($go == "mini_bos") {
 
 			$style = style_number_const($row_entries_mini['brewCategorySort'],$row_entries_mini['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 			$style_special = $row_entries_mini['brewCategorySort']."^".$row_entries_mini['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
-			$special = style_convert($style_special,"9",$base_url);
+			$special = $style_convert_9_ps($style_special);
 			$special = explode("^",$special);
 
 			$table_flight_tbody .= "<tr>";
@@ -555,7 +843,7 @@ if ($go == "mini_bos") {
 
 			$table_flight_tbody .= "<td>";
 			if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries_mini['brewStyle'];
-			else $table_flight_tbody .= $style." ".$row_entries_mini['brewStyle']."<em><br>".style_convert($row_entries_mini['brewCategorySort'],1,$base_url)."</em>"; 
+			else $table_flight_tbody .= $style." ".$row_entries_mini['brewStyle']."<em><br>".$style_convert_1_ps($row_entries_mini['brewCategorySort'])."</em>";
 			$table_flight_tbody .= "</td>";
 
 			$table_flight_tbody .= "<td>";
@@ -748,11 +1036,11 @@ if ($go == "judging_scores_bos") {
 
 						$table_flight_tbody .= "<td>";
 						if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_bos['brewStyle'];
-						else $table_flight_tbody .= $style." ".$row_bos['brewStyle']."<em><br>".style_convert($row_bos['brewCategorySort'],1,$base_url)."</em>";
+						else $table_flight_tbody .= $style." ".$row_bos['brewStyle']."<em><br>".$style_convert_1_ps($row_bos['brewCategorySort'])."</em>";
 						$table_flight_tbody .= "</td>";
 
 						$table_flight_tbody .= "<td>";
-						$special = style_convert($style_special,"9",$base_url);
+						$special = $style_convert_9_ps($style_special);
 						$special = explode("^",$special);
 
 						if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_bos['brewInfo'] != "")) {
@@ -858,7 +1146,7 @@ if ($go == "judging_scores_bos") {
 elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_entry_info")) {
 
 	// If using queued judging (no flights)
-	
+
 	if ($queued) {
 
 		if ($tables_all) {
@@ -868,8 +1156,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 			foreach ($rows_tables as $row_tables) {
 
-				$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-				include (DB.'output_pullsheets_queued.db.php');
+				// Pulled from the batched maps above instead of a fresh
+				// get_table_info()/output_pullsheets_queued.db.php query per table.
+				$entry_count = $table_entry_count_ps($row_tables['tableStyles']);
+				$row_table_round = array('count' => $flight_round_count_by_table_round_ps[$row_tables['id'].'|'.$round] ?? 0);
 				$round_count[] = $row_table_round['count'];
 
 				$table_flight = "";
@@ -891,7 +1181,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					if ((!empty($row_tables['tableLocation'])) && ($filter != "mini_bos")) {
 
 						$table_info_location .= "<h2>";
-						$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+						// Pulled from the batched locations map above instead of a
+						// fresh table_location() query per table.
+						$table_info_location .= $table_location_ps($row_tables['tableLocation']);
 						if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
 						$table_info_location .= "</h2>";
 						$table_info_location .= "<p class=\"lead\">";
@@ -945,8 +1237,20 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 						foreach (array_unique($a) as $value) {
 
-							include (DB.'output_pullsheets_entries.db.php');
-							
+							// Pulled from the batched styles/entries maps above instead
+							// of a fresh output_pullsheets_entries.db.php query per style
+							// per table - guarded to the mini_bos filter's own (different,
+							// unbatched) query, which is left untouched.
+							if ($filter == "mini_bos") {
+								include (DB.'output_pullsheets_entries.db.php');
+							}
+							else {
+								$row_style_ps_lookup = $styles_by_id_ps[$value] ?? null;
+								$rows_entries = ($row_style_ps_lookup) ? ($entries_by_style_ps[$row_style_ps_lookup['brewStyleGroup'].'|'.$row_style_ps_lookup['brewStyleNum']] ?? array()) : array();
+								$row_entries = (!empty($rows_entries)) ? $rows_entries[0] : null;
+								$totalRows_entries = count($rows_entries);
+							}
+
 							$style = "";
 							$style_special = "";
 
@@ -971,12 +1275,12 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "</td>";
 
 									$table_flight_tbody .= "<td>";
-									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle']; 
-									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
+									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 
-									$special = style_convert($style_special,"9",$base_url);
+									$special = $style_convert_9_ps($style_special);
 									$special = explode("^",$special);
 
 									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
@@ -1080,8 +1384,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 			$pullsheet_output = "";
 
-			$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-			include (DB.'output_pullsheets_queued.db.php');
+			// Pulled from the batched maps above instead of fresh
+			// get_table_info()/output_pullsheets_queued.db.php queries per table.
+			$entry_count = $table_entry_count_ps($row_tables['tableStyles']);
+			$row_table_round = array('count' => $flight_round_count_by_table_round_ps[$row_tables['id'].'|'.$round] ?? 0);
 			$round_count[] = $row_table_round['count'];
 
 			$table_flight = "";
@@ -1103,7 +1409,8 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 				if ((!empty($row_tables['tableLocation'])) && ($filter != "mini_bos")) {
 
 					$table_info_location .= "<h2>";
-					$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+					// Pulled from the batched map above instead of a fresh table_location() query.
+					$table_info_location .= $table_location_ps($row_tables['tableLocation']);
 					if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
 					$table_info_location .= "</h2>";
 					$table_info_location .= "<p class=\"lead\">";
@@ -1155,7 +1462,19 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 					foreach (array_unique($a) as $value) {
 
-						include (DB.'output_pullsheets_entries.db.php');
+						// Pulled from the batched styles/entries maps above instead
+						// of a fresh output_pullsheets_entries.db.php query per style
+						// per table - guarded to the mini_bos filter's own (different,
+						// unbatched) query, which is left untouched.
+						if ($filter == "mini_bos") {
+							include (DB.'output_pullsheets_entries.db.php');
+						}
+						else {
+							$row_style_ps_lookup = $styles_by_id_ps[$value] ?? null;
+							$rows_entries = ($row_style_ps_lookup) ? ($entries_by_style_ps[$row_style_ps_lookup['brewStyleGroup'].'|'.$row_style_ps_lookup['brewStyleNum']] ?? array()) : array();
+							$row_entries = (!empty($rows_entries)) ? $rows_entries[0] : null;
+							$totalRows_entries = count($rows_entries);
+						}
 
 						if ($row_entries) {
 
@@ -1178,16 +1497,16 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 									$table_flight_tbody .= "<td>";
 									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
+									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 
-									$special = style_convert($style_special,"9",$base_url);
+									$special = $style_convert_9_ps($style_special);
 									$special = explode("^",$special);
 
 									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
 										$table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-									} 
+									}
 
 									elseif (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
 										$table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
@@ -1200,14 +1519,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."</li>";
 									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."</li>";
 									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_entries['brewMead3']."</li>";
-									
+
 									if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</li>";
 
-									if (!empty($row_entries['brewABV'])) $table_flight_tbody .= "<li><strong>".$label_abv.":</strong> ".$row_entries['brewABV']."</li>";	
+									if (!empty($row_entries['brewABV'])) $table_flight_tbody .= "<li><strong>".$label_abv.":</strong> ".$row_entries['brewABV']."</li>";
 									/*
 
 									if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewJuiceSource']))) {
-										  
+
 										$juice_src_arr = json_decode($row_entries['brewJuiceSource'],true);
 										$juice_src_disp = "";
 
@@ -1231,7 +1550,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									*/
 
 									if (!empty($row_entries['brewPackaging'])) $table_flight_tbody .= "<li><strong>".$label_packaging.":</strong> ".$packaging_display[$row_entries['brewPackaging']]."</li>";
-									
+
 									if ((!empty($row_entries['brewPouring'])) && ((!empty($row_entries['brewStyleType'])) && ($row_entries['brewStyleType'] == 1))) {
 										$pouring_arr = json_decode($row_entries['brewPouring'],true);
 										$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
@@ -1301,7 +1620,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_info_notes = "";
 					$table_info_header = "";
 
-					$flights = number_of_flights($row_tables['id']);
+					// Pulled from the batched map above instead of a fresh
+					// number_of_flights() query per table.
+					$flights = $number_of_flights_ps($row_tables['id']);
 					if ($flights > 0) $flights = $flights; else $flights = "0";
 
 					$table_info_header .= "<div class=\"page-header\">";
@@ -1388,7 +1709,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								foreach ($rows_entries as $row_entries) {
 
-									$flight_round = check_flight_number($row_entries['id'],$i,0);
+									// Pulled from the batched map above instead of a fresh
+							// check_flight_number() query per entry per flight.
+							$flight_round = $check_flight_number_ps($row_entries['id'],$i);
 
 									if (check_flight_round($flight_round,$round)) {
 
@@ -1404,11 +1727,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 										$table_flight_tbody .= "<td>";
 										if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-										else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
+										else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 										$table_flight_tbody .= "</td>";
 										$table_flight_tbody .= "<td>";
 
-										$special = style_convert($style_special,"9",$base_url);
+										$special = $style_convert_9_ps($style_special);
 										$special = explode("^",$special);
 
 											if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
@@ -1526,7 +1849,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_info_notes = "";
 					$table_info_header = "";
 
-					$flights = number_of_flights($row_tables['id']);
+					// Pulled from the batched map above instead of a fresh
+					// number_of_flights() query per table.
+					$flights = $number_of_flights_ps($row_tables['id']);
 					if ($flights > 0) $flights = $flights; else $flights = "0";
 
 					$table_info_header .= "<div class=\"page-header\">";
@@ -1539,11 +1864,13 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					if (!empty($row_tables['tableLocation'])) {
 
 						$table_info_location .= "<h2>";
-						$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+						// Pulled from the batched maps above instead of fresh
+						// table_location()/get_table_info() queries per table.
+						$table_info_location .= $table_location_ps($row_tables['tableLocation']);
 						if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
 						$table_info_location .= "</h2>";
 						$table_info_location .= "<p class=\"lead\">";
-						$table_info_location .= sprintf("%s: %s<br>%s: %s",$label_entries,get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"),$label_flights,$flights);
+						$table_info_location .= sprintf("%s: %s<br>%s: %s",$label_entries,$table_entry_count_ps($row_tables['tableStyles']),$label_flights,$flights);
 						$table_info_location .= "</p>";
 						$table_info_location .= "<div class=\"alert alert-warning hidden-print\">";
 						$table_info_location .= "<p><strong>".$label_please_note."</strong></p>";
@@ -1564,9 +1891,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 						$random = random_generator(5,2);
 
-						$db_conn->where('flightTable', $row_tables['id']);
-						$db_conn->where('flightNumber', $i);
-						$row_round_check = $db_conn->getOne($prefix."judging_flights", "flightRound");
+						// Pulled from the batched flights map above instead of a
+						// fresh query per table per flight.
+						$row_round_check = array('flightRound' => $flight_round_by_table_flight_ps[$row_tables['id'].'|'.$i] ?? null);
 
 						$table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
 
@@ -1605,7 +1932,12 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						//print_r($a);
 						foreach (array_unique($a) as $value) {
 
-							include (DB.'output_pullsheets_entries.db.php');
+							// Pulled from the batched styles/entries maps above instead
+							// of a fresh output_pullsheets_entries.db.php query per style.
+							$row_style_ps_lookup = $styles_by_id_ps[$value] ?? null;
+							$rows_entries = ($row_style_ps_lookup) ? ($entries_by_style_ps[$row_style_ps_lookup['brewStyleGroup'].'|'.$row_style_ps_lookup['brewStyleNum']] ?? array()) : array();
+							$row_entries = (!empty($rows_entries)) ? $rows_entries[0] : null;
+							$totalRows_entries = count($rows_entries);
 							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 							$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
@@ -1613,7 +1945,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								$table_flight_tbody = "";
 
-								$flight_round = check_flight_number($row_entries['id'],$i,0);
+								// Pulled from the batched map above instead of a fresh
+							// check_flight_number() query per entry per flight.
+							$flight_round = $check_flight_number_ps($row_entries['id'],$i);
 
 								if (check_flight_round($flight_round,$round)) {
 
@@ -1627,11 +1961,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
+									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
-									
-									$special = style_convert($style_special,"9",$base_url);
+
+									$special = $style_convert_9_ps($style_special);
 									$special = explode("^",$special);
 
 									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
@@ -1746,7 +2080,8 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 			$table_info_notes = "";
 			$table_info_header = "";
 
-			$flights = number_of_flights($row_tables['id']);
+			// Pulled from the batched map above instead of a fresh number_of_flights() query.
+			$flights = $number_of_flights_ps($row_tables['id']);
 			if ($flights > 0) $flights = $flights; else $flights = "0";
 
 			$table_info_header .= "<div class=\"page-header\">";
@@ -1759,11 +2094,13 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 			if (!empty($row_tables['tableLocation'])) {
 
 				$table_info_location .= "<h2>";
-				$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
+				// Pulled from the batched maps above instead of fresh
+				// table_location()/get_table_info() queries per table.
+				$table_info_location .= $table_location_ps($row_tables['tableLocation']);
 				if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
 				$table_info_location .= "</h2>";
 				$table_info_location .= "<p class=\"lead\">";
-				$table_info_location .= sprintf("%s: %s<br>%s: %s",$label_entries,get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"),$label_flights,$flights);
+				$table_info_location .= sprintf("%s: %s<br>%s: %s",$label_entries,$table_entry_count_ps($row_tables['tableStyles']),$label_flights,$flights);
 				$table_info_location .= "</p>";
 				$table_info_location .= "<p class=\"hidden-print\">".$label_please_note."</p>";
 				$table_info_location .= "<ul class=\"hidden-print\">";
@@ -1821,9 +2158,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 					$random = random_generator(5,2);
 
-					$db_conn->where('flightTable', $row_tables['id']);
-					$db_conn->where('flightNumber', $i);
-					$row_round_check = $db_conn->getOne($prefix."judging_flights", "flightRound");
+					// Pulled from the batched flights map above instead of a
+					// fresh query per table per flight.
+					$row_round_check = array('flightRound' => $flight_round_by_table_flight_ps[$row_tables['id'].'|'.$i] ?? null);
 
 					$table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
 
@@ -1863,7 +2200,19 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 				
 				foreach (array_unique($a) as $value) {
 
-					include (DB.'output_pullsheets_entries.db.php');
+					// Pulled from the batched styles/entries maps above instead
+					// of a fresh output_pullsheets_entries.db.php query per style
+					// per table per flight - guarded to the mini_bos filter's own
+					// (different, unbatched) query, which is left untouched.
+					if ($filter == "mini_bos") {
+						include (DB.'output_pullsheets_entries.db.php');
+					}
+					else {
+						$row_style_ps_lookup = $styles_by_id_ps[$value] ?? null;
+						$rows_entries = ($row_style_ps_lookup) ? ($entries_by_style_ps[$row_style_ps_lookup['brewStyleGroup'].'|'.$row_style_ps_lookup['brewStyleNum']] ?? array()) : array();
+						$row_entries = (!empty($rows_entries)) ? $rows_entries[0] : null;
+						$totalRows_entries = count($rows_entries);
+					}
 
 					$table_flight_tbody = "";
 
@@ -1876,7 +2225,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 							$table_flight_tbody = "";
 
-							$flight_round = check_flight_number($row_entries['id'],$i,0);
+							// Pulled from the batched map above instead of a fresh
+							// check_flight_number() query per entry per flight.
+							$flight_round = $check_flight_number_ps($row_entries['id'],$i);
 
 							if (check_flight_round($flight_round,$round)) {
 
@@ -1896,12 +2247,12 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 								// Style
 								$table_flight_tbody .= "<td>";
 								if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
+								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 								$table_flight_tbody .= "</td>";
 								
 								// Entry Info
 								$table_flight_tbody .= "<td>";
-								$special = style_convert($style_special,"9",$base_url);
+								$special = $style_convert_9_ps($style_special);
 								$special = explode("^",$special);
 
 								if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {

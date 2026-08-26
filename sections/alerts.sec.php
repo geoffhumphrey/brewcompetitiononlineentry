@@ -170,33 +170,33 @@ if ($msg != "default") {
       </div>
   <?php } ?>
 
-    <?php if (($setup_free_access) && ($action != "print")) { ?>
+    <?php if (($setup_free_access) && ($action != "print") && (empty($_SESSION['dismissed_admin_alerts']['setup-free-access']))) { ?>
       <!-- Setup free access true -->
-      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <div id="alert-setup-free-access" data-alert-key="setup-free-access" class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <span class="fa fa-lg fa-exclamation-circle"></span> <strong><?php echo $alert_text_002; ?></strong>
       </div>
     <?php } ?>
 
-    <?php if (($totalRows_dropoff == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0)) { ?>
+    <?php if (($totalRows_dropoff == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0) && (empty($_SESSION['dismissed_admin_alerts']['no-dropoff-dates']))) { ?>
       <!-- No Drop-off Dates -->
-      <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+      <div id="alert-no-dropoff-dates" data-alert-key="no-dropoff-dates" class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <span class="fa fa-lg fa-exclamation-triangle"></span> <?php echo $alert_text_007; ?>
       </div>
     <?php } ?>
 
-    <?php if (($totalRows_judging == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0)) { ?>
+    <?php if (($totalRows_judging == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0) && (empty($_SESSION['dismissed_admin_alerts']['no-judging-dates']))) { ?>
       <!-- No judging dates -->
-      <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+      <div id="alert-no-judging-dates" data-alert-key="no-judging-dates" class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <span class="fa fa-lg fa-exclamation-triangle"></span> <?php echo $alert_text_010; ?>
       </div>
     <?php } ?>
 
-    <?php if (($totalRows_contact == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0)) { ?>
+    <?php if (($totalRows_contact == "0") && ($go == "default") && ($_SESSION['userLevel'] == 0) && (empty($_SESSION['dismissed_admin_alerts']['no-competition-contacts']))) { ?>
       <!-- No competition dontacts -->
-      <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+      <div id="alert-no-competition-contacts" data-alert-key="no-competition-contacts" class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <span class="fa fa-lg fa-exclamation-triangle"></span> <?php echo $alert_text_013; ?>
         </div>
@@ -238,9 +238,9 @@ if ($msg != "default") {
 
   <?php if ($section == "admin") { ?>
 
-    <?php if (($go == "default") && ($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']) && (time() < ($_SESSION['prefsWinnerDelay'] + 604800)))) { ?>
+    <?php if (($go == "default") && ($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']) && (time() < ($_SESSION['prefsWinnerDelay'] + 604800))) && (empty($_SESSION['dismissed_admin_alerts']['results-published']))) { ?>
 
-      <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
+      <div id="alert-results-published" data-alert-key="results-published" class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p><span class="fa fa-lg fa-info-circle"></span> <strong>Results are published &ndash; congratulations!</strong> Now is the time to make sure you complete any applicable post-competition tasks like submitting your BJCP Organizer Report, downloading circuit data, or downloading and sending member results to the Master Homebrewer Program. BCOE&amp;M can help &ndash; simply select <a class="hide-loader alert-link" href="#" data-toggle="modal" data-target="#post-comp">this Post-Competition Tasks link</a> or the button below for a list of actions commonly completed after a competition concludes.</p>
       </div>
@@ -445,15 +445,15 @@ if ($msg != "default") {
     </div>
 <?php } ?>
 
-<?php if (($recently_updated) && ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) && ($section == "admin") && ($go == "default")) { ?>
-    <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
+<?php if (($recently_updated) && ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) && ($section == "admin") && ($go == "default") && (empty($_SESSION['dismissed_admin_alerts']['update-summary']))) { ?>
+    <div id="alert-update-summary" data-alert-key="update-summary" class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p><span class="fa fa-lg fa-info-circle"></span> Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>. Select the <?php echo $current_version_display; ?> Update Summary button below for a full account of what changes were made.</p>
     </div>
 <?php } ?>
 
-<?php if (($recently_updated) && ((isset($_SESSION['update_errors'])) && ($_SESSION['update_errors'] == 1)) && (($section == "admin") && ($go == "default"))) { ?>
-    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+<?php if (($recently_updated) && ((isset($_SESSION['update_errors'])) && ($_SESSION['update_errors'] == 1)) && (($section == "admin") && ($go == "default")) && (empty($_SESSION['dismissed_admin_alerts']['update-errors']))) { ?>
+    <div id="alert-update-errors" data-alert-key="update-errors" class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong>Warning: Update Errors</strong></p>
         <p>Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>, but there were errors during the update process which may result in unexpected behaviors.</p>
@@ -461,8 +461,8 @@ if ($msg != "default") {
     </div>
 <?php } ?>
 
-<?php if ((!empty($double_encoding_detected)) && ($section == "admin") && ($go == "default") && ($_SESSION['userLevel'] == 0)) { ?>
-    <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+<?php if ((!empty($double_encoding_detected)) && ($section == "admin") && ($go == "default") && ($_SESSION['userLevel'] == 0) && (empty($_SESSION['dismissed_admin_alerts']['data-cleanup-double-encoding']))) { ?>
+    <div id="alert-data-cleanup-double-encoding" data-alert-key="data-cleanup-double-encoding" class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p><span class="fa fa-lg fa-exclamation-triangle"></span> <strong>Data Cleanup Available</strong></p>
         <p>Some entries in your database appear to have leftover double-encoded characters from a previously-fixed display bug (for example, an ampersand showing as <code>&amp;amp;</code> instead of <code>&amp;</code>). A one-time cleanup tool is available to correct this.</p>
@@ -470,8 +470,8 @@ if ($msg != "default") {
     </div>
 <?php } ?>
 
-<?php if ((MAINT) && ($logged_in) && ($_SESSION['userLevel'] == 0)) { ?>
-  <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+<?php if ((MAINT) && ($logged_in) && ($_SESSION['userLevel'] == 0) && (empty($_SESSION['dismissed_admin_alerts']['maintenance-mode']))) { ?>
+  <div id="alert-maintenance-mode" data-alert-key="maintenance-mode" class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong>Your installation is in Maintenance Mode.</strong> As a Top-level Admin, you are able perform all administration functions as normal. All others who attempt to access the site will see the <a href="<?php echo $base_url; ?>index.php?section=maintenance">Maintenance page</a>.</p>
   </div>

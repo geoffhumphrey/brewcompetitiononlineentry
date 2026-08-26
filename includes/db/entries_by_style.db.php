@@ -6,38 +6,14 @@ $count_cider = FALSE;
 $other_count = FALSE;
 $cat = $key;
 $cat_convert = $key;
-$cat_name = style_convert($key,1,$base_url);
-// echo $key."<br>";
 
-/*
-if (HOSTED) $styles_db_table = "bcoem_shared_styles";
-else
-*/
-$styles_db_table = $prefix."styles"; 
-
-// Perform query in appropriate db table rows
-$db_conn->where('brewCategorySort', $cat);
-$db_conn->where('brewPaid', '1');
-$db_conn->where('brewReceived', '1');
-$db_conn->where('brewConfirmed', '1');
-$row_style_count = $db_conn->getOne($prefix."brewing", "COUNT(*) AS 'count'");
-
-$db_conn->where('brewCategorySort', $cat);
-$db_conn->where('brewConfirmed', '1');
-$db_conn->orderBy('brewCategorySort', 'ASC');
-$db_conn->orderBy('brewSubCategory', 'ASC');
-$db_conn->orderBy('id', 'ASC');
-$rows_style_count_logged = $db_conn->get($prefix."brewing", null, "id,brewCategorySort,brewSubCategory");
-$totalRows_style_count_logged = $db_conn->count;
-$row_style_count_logged = ($rows_style_count_logged && count($rows_style_count_logged) > 0) ? $rows_style_count_logged[0] : array();
-$row_style_count_logged['count'] = $totalRows_style_count_logged;
-
-/*
-if (HOSTED) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s' UNION ALL SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$styles_db_table,$cat,$prefix."styles",$cat);
-else
-*/
-$db_conn->where('brewStyleGroup', $cat);
-$row_style_type = $db_conn->getOne($styles_db_table, "brewStyle,brewStyleType,brewStyleCategory");
+// Counts and style metadata are pre-aggregated once in
+// admin/entries_by_style.admin.php ($style_counts_by_cat,
+// $style_counts_logged_by_cat, $style_type_by_cat) instead of being queried
+// fresh for every category here.
+$row_style_count = array('count' => isset($style_counts_by_cat[$cat]) ? $style_counts_by_cat[$cat] : 0);
+$row_style_count_logged = array('count' => isset($style_counts_logged_by_cat[$cat]) ? $style_counts_logged_by_cat[$cat] : 0);
+$row_style_type = isset($style_type_by_cat[$cat]) ? $style_type_by_cat[$cat] : array();
 
 if ($_SESSION['prefsStyleSet'] == "BA") {
 

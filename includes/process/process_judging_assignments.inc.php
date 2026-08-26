@@ -42,7 +42,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$bid = sterilize($_POST['bid'.$random]);
 				$assignment = sterilize($_POST['assignment'.$random]);
 				$assignTable = sterilize($_POST['assignTable'.$random]);
-				$assignFlight = sterilize($_POST['assignFlight'.$random]);
+				$assignFlight = isset($_POST['assignFlight'.$random]) ? sterilize($_POST['assignFlight'.$random]) : null;
 				$assignRound = sterilize($_POST['assignRound'.$random]);
 				$assignLocation = sterilize($_POST['assignLocation'.$random]);
 				$assignPlanning = sterilize($_SESSION['jPrefsTablePlanning']);

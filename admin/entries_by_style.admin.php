@@ -28,6 +28,42 @@ include (DB.'styles.db.php');
 
 // print_r($styles_selected);
 
+// Pre-aggregate paid/received/confirmed and confirmed-only entry counts per
+// category in 2 queries total instead of 1-2 queries per category (this
+// used to be re-queried inside includes/db/entries_by_style.db.php on every
+// loop iteration below - up to 100+ round trips for a full style set).
+$db_conn->where('brewPaid', '1');
+$db_conn->where('brewReceived', '1');
+$db_conn->where('brewConfirmed', '1');
+$db_conn->groupBy('brewCategorySort');
+$rows_style_counts = $db_conn->get($prefix."brewing", null, "brewCategorySort, COUNT(*) AS count");
+$style_counts_by_cat = array();
+foreach ($rows_style_counts as $row_style_counts) {
+	$style_counts_by_cat[$row_style_counts['brewCategorySort']] = $row_style_counts['count'];
+}
+
+$db_conn->where('brewConfirmed', '1');
+$db_conn->groupBy('brewCategorySort');
+$rows_style_counts_logged = $db_conn->get($prefix."brewing", null, "brewCategorySort, COUNT(*) AS count");
+$style_counts_logged_by_cat = array();
+foreach ($rows_style_counts_logged as $row_style_counts_logged) {
+	$style_counts_logged_by_cat[$row_style_counts_logged['brewCategorySort']] = $row_style_counts_logged['count'];
+}
+
+// Style metadata (brewStyle/brewStyleType/brewStyleCategory) per category,
+// keyed off the styles rows already fetched above instead of a fresh query
+// per category.
+$style_type_by_cat = array();
+foreach ($rows_styles as $row_styles_meta) {
+	if (!isset($style_type_by_cat[$row_styles_meta['brewStyleGroup']])) {
+		$style_type_by_cat[$row_styles_meta['brewStyleGroup']] = array(
+			'brewStyle' => $row_styles_meta['brewStyle'],
+			'brewStyleType' => $row_styles_meta['brewStyleType'],
+			'brewStyleCategory' => $row_styles_meta['brewStyleCategory']
+		);
+	}
+}
+
 $accepted_categories = array();
 
 foreach ($rows_styles as $row_styles) {

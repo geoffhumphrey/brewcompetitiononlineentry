@@ -1559,15 +1559,79 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($winner_method == 0) {
 
+                        /**
+                         * Batch what used to be a get_table_info() call plus a scores.db.php
+                         * query per table into 2 queries total, run once up front - same
+                         * pattern as pub/winners.pub.php and awards.php's table block.
+                         */
+
+                        $all_style_ids_export = array();
+                        foreach ($rows_tables as $row_tables_prefetch) {
+                            foreach (explode(",", $row_tables_prefetch['tableStyles']) as $style_id) {
+                                if ($style_id !== "") $all_style_ids_export[] = $style_id;
+                            }
+                        }
+                        $all_style_ids_export = array_unique($all_style_ids_export);
+
+                        $styles_by_id_export = array();
+                        if (!empty($all_style_ids_export)) {
+                            $db_conn->where('id', $all_style_ids_export, 'in');
+                            $rows_all_styles_export = $db_conn->get($prefix."styles", null, "id,brewStyleGroup,brewStyleNum");
+                            foreach ($rows_all_styles_export as $row_style_export) {
+                                $styles_by_id_export[$row_style_export['id']] = $row_style_export;
+                            }
+                        }
+
+                        // Mirrors get_table_info(1,"count_total",...,"default")'s own query
+                        // exactly, including the jPrefsTablePlanning exception, just grouped
+                        // instead of run once per style per table.
+                        $counts_by_style_export = array();
+                        if (table_exists($brewing_db_table)) {
+                            if ($_SESSION['jPrefsTablePlanning'] != 1) $db_conn->where('brewReceived', '1');
+                            $db_conn->groupBy('brewCategorySort');
+                            $db_conn->groupBy('brewSubCategory');
+                            $rows_style_counts_export = $db_conn->get($brewing_db_table, null, "brewCategorySort, brewSubCategory, COUNT(*) as count");
+                            foreach ($rows_style_counts_export as $row_style_count_export) {
+                                $counts_by_style_export[$row_style_count_export['brewCategorySort'].'|'.$row_style_count_export['brewSubCategory']] = $row_style_count_export['count'];
+                            }
+                        }
+
+                        // Mirrors includes/db/scores.db.php's winner_method==0 query exactly, just
+                        // widened from "WHERE a.scoreTable=?" (one table) to an IN-list (all tables).
+                        $table_ids_export = array_column($rows_tables, 'id');
+                        $scores_by_table_export = array();
+                        if (!empty($table_ids_export)) {
+                            $placeholders_export = implode(',', array_fill(0, count($table_ids_export), '?'));
+                            $query_scores_all_export = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.scoreTable IN (".$placeholders_export.") AND a.eid = b.id AND c.uid = b.brewBrewerID";
+                            if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_all_export .= " AND a.scorePlace > 0";
+                            $query_scores_all_export .= " ORDER BY a.scoreTable";
+                            if ($action == "awards-pres") $query_scores_all_export .= ", a.scorePlace DESC";
+                            else $query_scores_all_export .= ", a.scorePlace ASC";
+                            $rows_scores_all_export = $db_conn->rawQuery($query_scores_all_export, $table_ids_export);
+                            foreach ($rows_scores_all_export as $row_score_all_export) {
+                                $scores_by_table_export[$row_score_all_export['scoreTable']][] = $row_score_all_export;
+                            }
+                        }
+
                         foreach ($rows_tables as $row_tables) {
 
-                            $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+                            // entry_count: sum of counts_by_style_export for each style on this
+                            // table - mirrors get_table_info(1,"count_total",...) exactly, batched.
+                            $entry_count = 0;
+                            foreach (explode(",", $row_tables['tableStyles']) as $table_style_id_export) {
+                                if (!isset($styles_by_id_export[$table_style_id_export])) continue;
+                                $row_styles_lookup_export = $styles_by_id_export[$table_style_id_export];
+                                $entry_count += $counts_by_style_export[$row_styles_lookup_export['brewStyleGroup'].'|'.$row_styles_lookup_export['brewStyleNum']] ?? 0;
+                            }
                             if ($entry_count > 1) $entries = strtolower($label_entries);
                             else $entries = strtolower($label_entry);
 
                             if ($entry_count > 0) {
 
-                                include (DB.'scores.db.php');
+                                // Pulled from the batched fetch above instead of a fresh
+                                // include(DB.'scores.db.php') query per table.
+                                $rows_scores = $scores_by_table_export[$row_tables['id']] ?? array();
+                                $totalRows_scores = count($rows_scores);
 
                                 $title = sprintf("%s %s: %s (%s %s)",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
                                 $title_table = new easyTable($pdf,1);
@@ -1640,24 +1704,92 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($winner_method == 1) {
 
-                        $a = json_decode($_SESSION['prefsSelectedStyles'],true);
-                        $actual_styles = array();
+                        /**
+                         * Batch what used to be 2-3 queries per active category
+                         * (includes/db/winners_category.db.php's entry/judged counts, plus
+                         * includes/db/scores.db.php's fetch) into upfront queries, run once -
+                         * same pattern as pub/winners_category.pub.php and awards.php.
+                         *
+                         * Driver: for the live/default competition, read the admin-curated
+                         * prefsSelectedStyles list (the source of truth for which styles are
+                         * enabled - see admin/styles.admin.php) instead of a live styles_active()
+                         * query. Archived competitions have no per-archive equivalent of
+                         * prefsSelectedStyles, so they still need styles_active() against the
+                         * archive's own style tables, keyed by $filter (the actual archive suffix).
+                         */
 
-                        foreach ($a as $key => $value) {
-                            $actual_styles[] = $value['brewStyleGroup'];
+                        if ($filter == "default") {
+                            $prefs_selected_styles_export = json_decode($_SESSION['prefsSelectedStyles'], true);
+                            $actual_styles = array();
+                            if (is_array($prefs_selected_styles_export)) {
+                                foreach ($prefs_selected_styles_export as $selected_style_export) {
+                                    $actual_styles[] = $selected_style_export['brewStyleGroup'];
+                                }
+                            }
+                        }
+                        else {
+                            $actual_styles = styles_active(0, $filter);
+                        }
+
+                        $category_column_export = ($_SESSION['prefsStyleSet'] == "BA") ? "brewCategory" : "brewCategorySort";
+
+                        $counts_by_category_export = array();
+                        if (table_exists($brewing_db_table)) {
+                            $db_conn->where('brewReceived', '1');
+                            $db_conn->groupBy($category_column_export);
+                            $rows_cat_counts_export = $db_conn->get($brewing_db_table, null, "$category_column_export, COUNT(*) as count");
+                            foreach ($rows_cat_counts_export as $row_cat_count_export) {
+                                $counts_by_category_export[$row_cat_count_export[$category_column_export]] = $row_cat_count_export['count'];
+                            }
+                        }
+
+                        // Mirrors includes/db/winners_category.db.php's row_score_count query -
+                        // in this PDF context $view is always "pdf", so that file's scorePlace
+                        // filter (gated on $view=="winners"/"default") never applies here; this
+                        // counts ALL judged entries, not just placed ones, on purpose.
+                        $counts_judged_by_category_export = array();
+                        if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+                            $query_judged_cat_export = "SELECT b.".$category_column_export.", COUNT(*) as count FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID GROUP BY b.".$category_column_export;
+                            $rows_judged_cat_export = $db_conn->rawQuery($query_judged_cat_export);
+                            foreach ($rows_judged_cat_export as $row_judged_cat_export) {
+                                $counts_judged_by_category_export[$row_judged_cat_export[$category_column_export]] = $row_judged_cat_export['count'];
+                            }
+                        }
+
+                        // Mirrors includes/db/scores.db.php's winner_method==1 query exactly.
+                        $scores_by_category_export = array();
+                        if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+                            $query_scores_cat_export = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
+                            if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_cat_export .= " AND a.scorePlace > 0";
+                            $query_scores_cat_export .= " ORDER BY b.".$category_column_export;
+                            if ($action == "awards-pres") $query_scores_cat_export .= ", a.scorePlace DESC";
+                            else $query_scores_cat_export .= ", a.scorePlace ASC";
+                            $rows_scores_cat_export = $db_conn->rawQuery($query_scores_cat_export);
+                            foreach ($rows_scores_cat_export as $row_scores_cat_export) {
+                                $scores_by_category_export[$row_scores_cat_export[$category_column_export]][] = $row_scores_cat_export;
+                            }
                         }
 
                         foreach (array_unique($actual_styles) as $style) {
 
                             if ($style > 0) {
 
-                                include (DB.'winners_category.db.php');
-                                if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); 
+                                if ((isset($style)) && (is_numeric($style))) $style_pad_export = sprintf("%02d", $style);
+                                else $style_pad_export = $style;
+                                $lookup_key_export = ($_SESSION['prefsStyleSet'] == "BA") ? $style : $style_pad_export;
+
+                                $row_entry_count = array('count' => $counts_by_category_export[$lookup_key_export] ?? 0);
+                                $row_score_count = array('count' => $counts_judged_by_category_export[$lookup_key_export] ?? 0);
+
+                                if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries);
                                 else $entries = strtolower($label_entry);
-                                
+
                                 if ($row_score_count['count'] > 0) {
 
-                                    include (DB.'scores.db.php');
+                                    // Pulled from the batched fetch above instead of a fresh
+                                    // include(DB.'scores.db.php') query per category.
+                                    $rows_scores = $scores_by_category_export[$lookup_key_export] ?? array();
+                                    $totalRows_scores = count($rows_scores);
 
                                     if (!empty($rows_scores)) {
 
@@ -1744,28 +1876,111 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($winner_method == 2) {
 
-                        $a = json_decode($_SESSION['prefsSelectedStyles'],true);
-                        $actual_styles = array();
+                        /**
+                         * Batch what used to be 2-3 queries per active subcategory
+                         * (includes/db/winners_subcategory.db.php's entry/judged counts, plus
+                         * includes/db/scores.db.php's fetch) into upfront queries, run once -
+                         * same pattern as pub/winners_subcategory.pub.php and awards.php.
+                         *
+                         * Driver: for the live/default competition, read the admin-curated
+                         * prefsSelectedStyles list instead of a live styles_active() query.
+                         * Archived competitions have no per-archive equivalent, so they still
+                         * need styles_active() against the archive's own style tables, keyed by
+                         * $filter (the actual archive suffix). Both branches produce the same
+                         * id/brewStyle/brewStyleGroup/brewStyleNum shape, so the rest of this
+                         * block is unchanged.
+                         */
 
-                        foreach ($a as $key => $value) {
-                            $actual_styles[] = array(
-                                "id" => $key,
-                                "brewStyle" => $value['brewStyle'],
-                                "brewStyleGroup" => $value['brewStyleGroup'],
-                                "brewStyleNum" => $value['brewStyleNum']            
-                            );
+                        if ($filter == "default") {
+                            $prefs_selected_styles_export_sub = json_decode($_SESSION['prefsSelectedStyles'], true);
+                            $actual_styles = array();
+                            if (is_array($prefs_selected_styles_export_sub)) {
+                                foreach ($prefs_selected_styles_export_sub as $key => $selected_style_export_sub) {
+                                    $actual_styles[] = array(
+                                        "id" => $key,
+                                        "brewStyle" => $selected_style_export_sub['brewStyle'],
+                                        "brewStyleGroup" => $selected_style_export_sub['brewStyleGroup'],
+                                        "brewStyleNum" => $selected_style_export_sub['brewStyleNum']
+                                    );
+                                }
+                            }
                         }
-                        
+                        else {
+                            $actual_styles = array();
+                            foreach (styles_active(2, $filter) as $key => $active_style_string) {
+                                $active_style_parts = explode("^", $active_style_string);
+                                $actual_styles[] = array(
+                                    "id" => $key,
+                                    "brewStyle" => $active_style_parts[2],
+                                    "brewStyleGroup" => $active_style_parts[0],
+                                    "brewStyleNum" => $active_style_parts[1]
+                                );
+                            }
+                        }
+
+                        $winner_style_set_export_sub = ($filter == "default") ? $_SESSION['prefsStyleSet'] : $row_disp_archive_winners['archiveStyleSet'];
+                        $category_column_export_sub = ($winner_style_set_export_sub == "BA") ? "brewCategory" : "brewCategorySort";
+
+                        // Entry counts - mirrors winners_subcategory.db.php's row_entry_count
+                        // exactly, including its quirk of only filtering brewReceived=1 for BA.
+                        $counts_by_subcategory_export = array();
+                        if (table_exists($brewing_db_table)) {
+                            if ($winner_style_set_export_sub == "BA") $db_conn->where('brewReceived', '1');
+                            $db_conn->groupBy($category_column_export_sub);
+                            $db_conn->groupBy('brewSubCategory');
+                            $rows_subcat_counts_export = $db_conn->get($brewing_db_table, null, "$category_column_export_sub, brewSubCategory, COUNT(*) as count");
+                            foreach ($rows_subcat_counts_export as $row_subcat_count_export) {
+                                $counts_by_subcategory_export[$row_subcat_count_export[$category_column_export_sub].'|'.$row_subcat_count_export['brewSubCategory']] = $row_subcat_count_export['count'];
+                            }
+                        }
+
+                        // Mirrors winners_subcategory.db.php's row_score_count exactly - it always
+                        // filters scorePlace IS NOT NULL (no $action/$view gating like the category
+                        // version has), which can differ from scores.db.php's scorePlace > 0 filter
+                        // used for the actual fetch below.
+                        $counts_judged_by_subcategory_export = array();
+                        if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+                            $query_judged_sub_export = "SELECT b.".$category_column_export_sub.", b.brewSubCategory, COUNT(*) as count FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND a.scorePlace IS NOT NULL GROUP BY b.".$category_column_export_sub.", b.brewSubCategory";
+                            $rows_judged_sub_export = $db_conn->rawQuery($query_judged_sub_export);
+                            foreach ($rows_judged_sub_export as $row_judged_sub_export) {
+                                $counts_judged_by_subcategory_export[$row_judged_sub_export[$category_column_export_sub].'|'.$row_judged_sub_export['brewSubCategory']] = $row_judged_sub_export['count'];
+                            }
+                        }
+
+                        // Mirrors includes/db/scores.db.php's winner_method==2 query exactly -
+                        // including its BA quirk of filtering only brewSubCategory, not
+                        // category+subcategory together.
+                        $scores_by_subcategory_export = array();
+                        if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+                            $query_scores_sub_export = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
+                            if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_sub_export .= " AND a.scorePlace > 0";
+                            $query_scores_sub_export .= " ORDER BY b.brewSubCategory";
+                            if ($action == "awards-pres") $query_scores_sub_export .= ", a.scorePlace DESC";
+                            else $query_scores_sub_export .= ", a.scorePlace ASC";
+                            $rows_scores_sub_export = $db_conn->rawQuery($query_scores_sub_export);
+                            foreach ($rows_scores_sub_export as $row_scores_sub_export) {
+                                if ($winner_style_set_export_sub == "BA") $group_key_export_sub = $row_scores_sub_export['brewSubCategory'];
+                                else $group_key_export_sub = $row_scores_sub_export['brewCategorySort'].'|'.$row_scores_sub_export['brewSubCategory'];
+                                $scores_by_subcategory_export[$group_key_export_sub][] = $row_scores_sub_export;
+                            }
+                        }
+
                         foreach ($actual_styles as $key => $value) {
-                            
-                            include (DB.'winners_subcategory.db.php');
+
+                            $count_key_export_sub = $value['brewStyleGroup'].'|'.$value['brewStyleNum'];
+                            $row_entry_count = array('count' => $counts_by_subcategory_export[$count_key_export_sub] ?? 0);
+                            $row_score_count = array('count' => $counts_judged_by_subcategory_export[$count_key_export_sub] ?? 0);
 
                             if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
 
                                 if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries);
                                 else $entries = strtolower($label_entry);
 
-                                include (DB.'scores.db.php');
+                                // Pulled from the batched fetch above instead of a fresh
+                                // include(DB.'scores.db.php') query per subcategory.
+                                $score_key_export_sub = ($winner_style_set_export_sub == "BA") ? $value['brewStyleNum'] : $count_key_export_sub;
+                                $rows_scores = $scores_by_subcategory_export[$score_key_export_sub] ?? array();
+                                $totalRows_scores = count($rows_scores);
 
                                 if ($rows_scores) {
 
@@ -2024,16 +2239,81 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($winner_method == 0) {
 
+                        /**
+                         * Batch what used to be a get_table_info() call plus a scores.db.php
+                         * query per table into 2 queries total, run once up front - same
+                         * pattern as pub/winners.pub.php and awards.php's table block.
+                         */
+
+                        $all_style_ids_export_h = array();
+                        foreach ($rows_tables as $row_tables_prefetch) {
+                            foreach (explode(",", $row_tables_prefetch['tableStyles']) as $style_id) {
+                                if ($style_id !== "") $all_style_ids_export_h[] = $style_id;
+                            }
+                        }
+                        $all_style_ids_export_h = array_unique($all_style_ids_export_h);
+
+                        $styles_by_id_export_h = array();
+                        if (!empty($all_style_ids_export_h)) {
+                            $db_conn->where('id', $all_style_ids_export_h, 'in');
+                            $rows_all_styles_export_h = $db_conn->get($prefix."styles", null, "id,brewStyleGroup,brewStyleNum");
+                            foreach ($rows_all_styles_export_h as $row_style_export_h) {
+                                $styles_by_id_export_h[$row_style_export_h['id']] = $row_style_export_h;
+                            }
+                        }
+
+                        // Mirrors get_table_info(1,"count_total",...,"default")'s own query
+                        // exactly, including the jPrefsTablePlanning exception, just grouped
+                        // instead of run once per style per table.
+                        $counts_by_style_export_h = array();
+                        if (table_exists($brewing_db_table)) {
+                            if ($_SESSION['jPrefsTablePlanning'] != 1) $db_conn->where('brewReceived', '1');
+                            $db_conn->groupBy('brewCategorySort');
+                            $db_conn->groupBy('brewSubCategory');
+                            $rows_style_counts_export_h = $db_conn->get($brewing_db_table, null, "brewCategorySort, brewSubCategory, COUNT(*) as count");
+                            foreach ($rows_style_counts_export_h as $row_style_count_export_h) {
+                                $counts_by_style_export_h[$row_style_count_export_h['brewCategorySort'].'|'.$row_style_count_export_h['brewSubCategory']] = $row_style_count_export_h['count'];
+                            }
+                        }
+
+                        // Mirrors includes/db/scores.db.php's winner_method==0 query exactly, just
+                        // widened from "WHERE a.scoreTable=?" (one table) to an IN-list (all tables).
+                        $table_ids_export_h = array_column($rows_tables, 'id');
+                        $scores_by_table_export_h = array();
+                        if (!empty($table_ids_export_h)) {
+                            $placeholders_export_h = implode(',', array_fill(0, count($table_ids_export_h), '?'));
+                            $query_scores_all_export_h = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.scoreTable IN (".$placeholders_export_h.") AND a.eid = b.id AND c.uid = b.brewBrewerID";
+                            if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_all_export_h .= " AND a.scorePlace > 0";
+                            $query_scores_all_export_h .= " ORDER BY a.scoreTable";
+                            if ($action == "awards-pres") $query_scores_all_export_h .= ", a.scorePlace DESC";
+                            else $query_scores_all_export_h .= ", a.scorePlace ASC";
+                            $rows_scores_all_export_h = $db_conn->rawQuery($query_scores_all_export_h, $table_ids_export_h);
+                            foreach ($rows_scores_all_export_h as $row_score_all_export_h) {
+                                $scores_by_table_export_h[$row_score_all_export_h['scoreTable']][] = $row_score_all_export_h;
+                            }
+                        }
+
                         foreach ($rows_tables as $row_tables) {
 
-                            $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+                            // entry_count: sum of counts_by_style_export_h for each style on
+                            // this table - mirrors get_table_info(1,"count_total",...) exactly,
+                            // batched.
+                            $entry_count = 0;
+                            foreach (explode(",", $row_tables['tableStyles']) as $table_style_id_export_h) {
+                                if (!isset($styles_by_id_export_h[$table_style_id_export_h])) continue;
+                                $row_styles_lookup_export_h = $styles_by_id_export_h[$table_style_id_export_h];
+                                $entry_count += $counts_by_style_export_h[$row_styles_lookup_export_h['brewStyleGroup'].'|'.$row_styles_lookup_export_h['brewStyleNum']] ?? 0;
+                            }
 
                             if ($entry_count > 1) $entries = strtolower($label_entries);
                             else $entries = strtolower($label_entry);
 
                             if ($entry_count > 0) {
 
-                                include (DB.'scores.db.php');
+                                // Pulled from the batched fetch above instead of a fresh
+                                // include(DB.'scores.db.php') query per table.
+                                $rows_scores = $scores_by_table_export_h[$row_tables['id']] ?? array();
+                                $totalRows_scores = count($rows_scores);
 
                                 $html .= '<h2>'.$label_table.' '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' '.$entries.')</h2>';
                                 $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
@@ -2088,19 +2368,95 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($winner_method == 1) {
 
-                        $a = styles_active(0);
+                        /**
+                         * Batch what used to be 2-3 queries per active category
+                         * (includes/db/winners_category.db.php's entry/judged counts, plus
+                         * includes/db/scores.db.php's fetch) into upfront queries, run once -
+                         * same pattern as pub/winners_category.pub.php and awards.php.
+                         *
+                         * Driver: for the live/default competition, read the admin-curated
+                         * prefsSelectedStyles list (the source of truth for which styles are
+                         * enabled - see admin/styles.admin.php) instead of a live styles_active()
+                         * query - the original here called styles_active(0) with no archive
+                         * parameter at all, so it always read live data even for archived
+                         * exports. Archived competitions have no per-archive equivalent of
+                         * prefsSelectedStyles, so they use styles_active() against the archive's
+                         * own style tables, keyed by $filter (the actual archive suffix).
+                         */
+
+                        if ($filter == "default") {
+                            $prefs_selected_styles_export_h_cat = json_decode($_SESSION['prefsSelectedStyles'], true);
+                            $a = array();
+                            if (is_array($prefs_selected_styles_export_h_cat)) {
+                                foreach ($prefs_selected_styles_export_h_cat as $selected_style_export_h_cat) {
+                                    $a[] = $selected_style_export_h_cat['brewStyleGroup'];
+                                }
+                            }
+                        }
+                        else {
+                            $a = styles_active(0, $filter);
+                        }
+
+                        $category_column_export_h = ($_SESSION['prefsStyleSet'] == "BA") ? "brewCategory" : "brewCategorySort";
+
+                        $counts_by_category_export_h = array();
+                        if (table_exists($brewing_db_table)) {
+                            $db_conn->where('brewReceived', '1');
+                            $db_conn->groupBy($category_column_export_h);
+                            $rows_cat_counts_export_h = $db_conn->get($brewing_db_table, null, "$category_column_export_h, COUNT(*) as count");
+                            foreach ($rows_cat_counts_export_h as $row_cat_count_export_h) {
+                                $counts_by_category_export_h[$row_cat_count_export_h[$category_column_export_h]] = $row_cat_count_export_h['count'];
+                            }
+                        }
+
+                        // Mirrors includes/db/winners_category.db.php's row_score_count query -
+                        // in this HTML context $view is always "html", so that file's scorePlace
+                        // filter (gated on $view=="winners"/"default") never applies here; this
+                        // counts ALL judged entries, not just placed ones, on purpose.
+                        $counts_judged_by_category_export_h = array();
+                        if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+                            $query_judged_cat_export_h = "SELECT b.".$category_column_export_h.", COUNT(*) as count FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID GROUP BY b.".$category_column_export_h;
+                            $rows_judged_cat_export_h = $db_conn->rawQuery($query_judged_cat_export_h);
+                            foreach ($rows_judged_cat_export_h as $row_judged_cat_export_h) {
+                                $counts_judged_by_category_export_h[$row_judged_cat_export_h[$category_column_export_h]] = $row_judged_cat_export_h['count'];
+                            }
+                        }
+
+                        // Mirrors includes/db/scores.db.php's winner_method==1 query exactly.
+                        $scores_by_category_export_h = array();
+                        if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+                            $query_scores_cat_export_h = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
+                            if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_cat_export_h .= " AND a.scorePlace > 0";
+                            $query_scores_cat_export_h .= " ORDER BY b.".$category_column_export_h;
+                            if ($action == "awards-pres") $query_scores_cat_export_h .= ", a.scorePlace DESC";
+                            else $query_scores_cat_export_h .= ", a.scorePlace ASC";
+                            $rows_scores_cat_export_h = $db_conn->rawQuery($query_scores_cat_export_h);
+                            foreach ($rows_scores_cat_export_h as $row_scores_cat_export_h) {
+                                $scores_by_category_export_h[$row_scores_cat_export_h[$category_column_export_h]][] = $row_scores_cat_export_h;
+                            }
+                        }
 
                         foreach (array_unique($a) as $style) {
 
                             if ($style > 0) {
 
-                                include (DB.'winners_category.db.php');
+                                if ((isset($style)) && (is_numeric($style))) $style_pad_export_h = sprintf("%02d", $style);
+                                else $style_pad_export_h = $style;
+                                $lookup_key_export_h = ($_SESSION['prefsStyleSet'] == "BA") ? $style : $style_pad_export_h;
+
+                                $row_entry_count = array('count' => $counts_by_category_export_h[$lookup_key_export_h] ?? 0);
+                                $row_score_count = array('count' => $counts_judged_by_category_export_h[$lookup_key_export_h] ?? 0);
 
                                 // Display all winners
-                                if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); 
+                                if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries);
                                 else $entries = strtolower($label_entry);
-                                
+
                                 if ($row_score_count['count'] > 0) {
+
+                                    // Pulled from the batched fetch above instead of a fresh
+                                    // include(DB.'scores.db.php') query per category.
+                                    $rows_scores = $scores_by_category_export_h[$lookup_key_export_h] ?? array();
+                                    $totalRows_scores = count($rows_scores);
 
                                     $style_trimmed = ltrim($style,"0");
 
@@ -2119,8 +2475,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     $html .= '<td width="'.$td_width_style.'" align="center" bgcolor="#cccccc"><strong>'.$label_style.'</strong></td>';
                                     if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
                                     $html .= '</tr>';
-
-                                    include (DB.'scores.db.php');
 
                                     foreach ($rows_scores as $row_scores) {
                                         $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
@@ -2160,18 +2514,103 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($winner_method == 2) {
 
-                        $styles = styles_active(2);
+                        /**
+                         * Batch what used to be 2-3 queries per active subcategory
+                         * (includes/db/winners_subcategory.db.php's entry/judged counts, plus
+                         * includes/db/scores.db.php's fetch) into upfront queries, run once -
+                         * same pattern as pub/winners_subcategory.pub.php and awards.php. This
+                         * also fixes a pre-existing bug: the old code below included
+                         * winners_subcategory.db.php without ever setting
+                         * $value['brewStyleGroup']/$value['brewStyleNum'] (the loop variable here
+                         * was $style, an exploded array, not $value), so every lookup there
+                         * silently matched nothing and no subcategory winners were ever exported.
+                         *
+                         * Driver: for the live/default competition, read the admin-curated
+                         * prefsSelectedStyles list instead of a live styles_active() query - the
+                         * original here called styles_active(2) with no archive parameter at all,
+                         * so it always read live data even for archived exports. Archived
+                         * competitions have no per-archive equivalent, so they use styles_active()
+                         * against the archive's own style tables, keyed by $filter.
+                         */
+
+                        if ($filter == "default") {
+                            $prefs_selected_styles_export_h_sub = json_decode($_SESSION['prefsSelectedStyles'], true);
+                            $styles = array();
+                            if (is_array($prefs_selected_styles_export_h_sub)) {
+                                foreach ($prefs_selected_styles_export_h_sub as $selected_style_export_h_sub) {
+                                    $styles[] = $selected_style_export_h_sub['brewStyleGroup'].'^'.$selected_style_export_h_sub['brewStyleNum'].'^'.$selected_style_export_h_sub['brewStyle'];
+                                }
+                            }
+                        }
+                        else {
+                            $styles = styles_active(2, $filter);
+                        }
+
+                        $winner_style_set_export_h_sub = ($filter == "default") ? $_SESSION['prefsStyleSet'] : $row_disp_archive_winners['archiveStyleSet'];
+                        $category_column_export_h_sub = ($winner_style_set_export_h_sub == "BA") ? "brewCategory" : "brewCategorySort";
+
+                        // Entry counts - mirrors winners_subcategory.db.php's row_entry_count
+                        // exactly, including its quirk of only filtering brewReceived=1 for BA.
+                        $counts_by_subcategory_export_h = array();
+                        if (table_exists($brewing_db_table)) {
+                            if ($winner_style_set_export_h_sub == "BA") $db_conn->where('brewReceived', '1');
+                            $db_conn->groupBy($category_column_export_h_sub);
+                            $db_conn->groupBy('brewSubCategory');
+                            $rows_subcat_counts_export_h = $db_conn->get($brewing_db_table, null, "$category_column_export_h_sub, brewSubCategory, COUNT(*) as count");
+                            foreach ($rows_subcat_counts_export_h as $row_subcat_count_export_h) {
+                                $counts_by_subcategory_export_h[$row_subcat_count_export_h[$category_column_export_h_sub].'|'.$row_subcat_count_export_h['brewSubCategory']] = $row_subcat_count_export_h['count'];
+                            }
+                        }
+
+                        // Mirrors winners_subcategory.db.php's row_score_count exactly - it
+                        // always filters scorePlace IS NOT NULL (no $action/$view gating like the
+                        // category version has), which can differ from scores.db.php's
+                        // scorePlace > 0 filter used for the actual fetch below.
+                        $counts_judged_by_subcategory_export_h = array();
+                        if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+                            $query_judged_sub_export_h = "SELECT b.".$category_column_export_h_sub.", b.brewSubCategory, COUNT(*) as count FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND a.scorePlace IS NOT NULL GROUP BY b.".$category_column_export_h_sub.", b.brewSubCategory";
+                            $rows_judged_sub_export_h = $db_conn->rawQuery($query_judged_sub_export_h);
+                            foreach ($rows_judged_sub_export_h as $row_judged_sub_export_h) {
+                                $counts_judged_by_subcategory_export_h[$row_judged_sub_export_h[$category_column_export_h_sub].'|'.$row_judged_sub_export_h['brewSubCategory']] = $row_judged_sub_export_h['count'];
+                            }
+                        }
+
+                        // Mirrors includes/db/scores.db.php's winner_method==2 query exactly -
+                        // including its BA quirk of filtering only brewSubCategory, not
+                        // category+subcategory together.
+                        $scores_by_subcategory_export_h = array();
+                        if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+                            $query_scores_sub_export_h = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
+                            if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_sub_export_h .= " AND a.scorePlace > 0";
+                            $query_scores_sub_export_h .= " ORDER BY b.brewSubCategory";
+                            if ($action == "awards-pres") $query_scores_sub_export_h .= ", a.scorePlace DESC";
+                            else $query_scores_sub_export_h .= ", a.scorePlace ASC";
+                            $rows_scores_sub_export_h = $db_conn->rawQuery($query_scores_sub_export_h);
+                            foreach ($rows_scores_sub_export_h as $row_scores_sub_export_h) {
+                                if ($winner_style_set_export_h_sub == "BA") $group_key_export_h_sub = $row_scores_sub_export_h['brewSubCategory'];
+                                else $group_key_export_h_sub = $row_scores_sub_export_h['brewCategorySort'].'|'.$row_scores_sub_export_h['brewSubCategory'];
+                                $scores_by_subcategory_export_h[$group_key_export_h_sub][] = $row_scores_sub_export_h;
+                            }
+                        }
 
                         foreach (array_unique($styles) as $style) {
 
                             $style = explode("^",$style);
-                            include (DB.'winners_subcategory.db.php');
+                            $count_key_export_h_sub = $style[0].'|'.$style[1];
+
+                            $row_entry_count = array('count' => $counts_by_subcategory_export_h[$count_key_export_h_sub] ?? 0);
+                            $row_score_count = array('count' => $counts_judged_by_subcategory_export_h[$count_key_export_h_sub] ?? 0);
 
                             if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
 
                                 if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries);
                                 else $entries = strtolower($label_entry);
 
+                                // Pulled from the batched fetch above instead of a fresh
+                                // include(DB.'scores.db.php') query per subcategory.
+                                $score_key_export_h_sub = ($winner_style_set_export_h_sub == "BA") ? $style[1] : $count_key_export_h_sub;
+                                $rows_scores = $scores_by_subcategory_export_h[$score_key_export_h_sub] ?? array();
+                                $totalRows_scores = count($rows_scores);
 
                                 if ($_SESSION['prefsStyleSet'] == "BA") $html .= '<h2>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
                                 else $html .= '<h2>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
@@ -2184,8 +2623,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                 $html .= '<td width="'.$td_width_style.'" align="center" bgcolor="#cccccc"><strong>'.$label_style.'</strong></td>';
                                 if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
                                 $html .= '</tr>';
-
-                                include (DB.'scores.db.php');
 
                                 foreach ($rows_scores as $row_scores) {
 

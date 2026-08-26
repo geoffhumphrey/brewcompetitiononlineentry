@@ -186,6 +186,154 @@ else {
 }
 
 if ($totalRows_brewer > 0) {
+
+	/**
+	 * Batch what used to be several queries per participant row (brewer_assignment(),
+	 * table_assignments() x2 - each with its own nested get_table_info() N+1 per
+	 * assignment - judge_entries() x2, and date_created() with a repeated
+	 * information_schema probe) into a handful of upfront queries, run once - same
+	 * pattern used throughout pub/, awards.php, and export.output.php this session.
+	 */
+
+	$participant_uids_p = array();
+	$participant_user_ids_p = array();
+	foreach ($rows_brewer as $row_brewer_prefetch_p) {
+		if (isset($row_brewer_prefetch_p['uid'])) $participant_uids_p[] = $row_brewer_prefetch_p['uid'];
+		if (isset($row_brewer_prefetch_p['user_id'])) $participant_user_ids_p[] = $row_brewer_prefetch_p['user_id'];
+	}
+	$participant_uids_p = array_unique($participant_uids_p);
+	$participant_user_ids_p = array_unique($participant_user_ids_p);
+
+	$archive_p = "default";
+	if ($dbTable != "default") $archive_p = get_suffix($dbTable);
+	$staff_db_table_p = ($archive_p != "default") ? $prefix."staff_".$archive_p : $prefix."staff";
+
+	// Mirrors brewer_assignment()'s method=="1" logic exactly, batched.
+	$staff_by_uid_p = array();
+	if ((!empty($participant_uids_p)) && (table_exists($staff_db_table_p))) {
+		$db_conn->where('uid', $participant_uids_p, 'in');
+		$rows_staff_p = $db_conn->get($staff_db_table_p);
+		foreach ($rows_staff_p as $row_staff_p) {
+			$staff_by_uid_p[$row_staff_p['uid']] = $row_staff_p;
+		}
+	}
+
+	// Mirrors table_assignments()'s judging_assignments query, batched across both the
+	// "J" and "S" methods and every participant at once. table_assignments(),
+	// judging_location_avail(), and the judges/stewards judge_entries() column are all
+	// unreachable for archive views in this file (gated by !$archive_display, or by
+	// filter=="judges"/"stewards" which brewer.db.php never combines with an archive
+	// dbTable) - skip fetching their data entirely rather than fetching data guaranteed
+	// to go unused.
+	$judging_assignments_by_user_p = array();
+	if ((!$archive_display) && (!empty($participant_user_ids_p)) && (table_exists($prefix."judging_assignments"))) {
+		$db_conn->where('bid', $participant_user_ids_p, 'in');
+		$db_conn->where('assignment', array('J','S'), 'in');
+		$db_conn->orderBy('assignTable', 'ASC');
+		$rows_assignments_p = $db_conn->get($prefix."judging_assignments", null, "bid,assignment,assignTable,assignRoles,assignFlight,assignRound");
+		foreach ($rows_assignments_p as $row_assignment_p) {
+			$judging_assignments_by_user_p[$row_assignment_p['bid'].'|'.$row_assignment_p['assignment']][] = $row_assignment_p;
+		}
+	}
+
+	// Mirrors get_table_info(1,"basic",...) and get_table_info(...,"location",...), which
+	// table_assignments() called once per assignment row - fetched once for every table/
+	// location instead.
+	$judging_tables_by_id_p = array();
+	if ((!$archive_display) && (table_exists($prefix."judging_tables"))) {
+		$rows_all_tables_p = $db_conn->get($prefix."judging_tables", null, "id,tableNumber,tableName,tableLocation,tableStyles");
+		foreach ($rows_all_tables_p as $row_table_p) {
+			$judging_tables_by_id_p[$row_table_p['id']] = $row_table_p;
+		}
+	}
+
+	$judging_locations_by_id_p = array();
+	if ((!$archive_display) && (table_exists($prefix."judging_locations"))) {
+		$rows_all_locations_p = $db_conn->get($prefix."judging_locations", null, "id,judgingDate,judgingDateEnd,judgingLocName,judgingLocation,judgingLocType,judgingLocNotes");
+		foreach ($rows_all_locations_p as $row_location_p) {
+			$judging_locations_by_id_p[$row_location_p['id']] = $row_location_p;
+		}
+	}
+
+	// Mirrors judge_entries()'s query exactly, batched. Used both for the assignment
+	// modal (unconditional per assigned row) and the judges/stewards table column
+	// (the old code ran this same query a second time for that column) - both
+	// unreachable for archive views, same reasoning as above.
+	$entries_by_uid_p = array();
+	if ((!$archive_display) && (table_exists($prefix."brewing"))) {
+		$db_conn->where('brewBrewerID', $participant_uids_p, 'in');
+		$db_conn->orderBy('brewCategorySort', 'ASC');
+		$rows_entries_p = $db_conn->get($prefix."brewing", null, "brewBrewerID, brewStyle, brewCategory, brewSubCategory, brewCategorySort");
+		foreach ($rows_entries_p as $row_entry_p) {
+			$entries_by_uid_p[$row_entry_p['brewBrewerID']][] = $row_entry_p;
+		}
+	}
+
+	// Mirrors date_created()'s information_schema probe - run once for the whole page
+	// instead of once per row, since $dbTable (and therefore the target table) doesn't
+	// change per row - plus its per-user lookup, batched.
+	$date_created_dbtable_p = ($dbTable != "default") ? $dbTable : $prefix."users";
+	$db_conn->where('table_schema', $database);
+	$db_conn->where('table_name', $date_created_dbtable_p);
+	$db_conn->where('column_name', 'userCreated');
+	$row_created_exists_p = $db_conn->getOne('information_schema.columns', 'COUNT(*) AS count');
+	$date_created_exists_p = ($row_created_exists_p['count'] > 0);
+	$user_created_by_id_p = array();
+	if (($date_created_exists_p) && (!empty($participant_uids_p))) {
+		$db_conn->where('id', $participant_uids_p, 'in');
+		$rows_created_p = $db_conn->get($date_created_dbtable_p, null, "id, userCreated");
+		foreach ($rows_created_p as $row_created_p) {
+			$user_created_by_id_p[$row_created_p['id']] = $row_created_p['userCreated'];
+		}
+	}
+
+	/**
+	 * Rebuilds table_assignments()'s method2==1 output string from the batched maps
+	 * above instead of a fresh judging_assignments/judging_tables/judging_locations
+	 * query per participant per method.
+	 */
+	$table_assignments_batched_p = function($user_id, $method) use ($judging_assignments_by_user_p, $judging_tables_by_id_p, $judging_locations_by_id_p, $base_url) {
+		$output = "";
+		$assignments = $judging_assignments_by_user_p[$user_id.'|'.$method] ?? array();
+		foreach ($assignments as $row_table_assignments) {
+			$table_row = $judging_tables_by_id_p[$row_table_assignments['assignTable']] ?? null;
+			if (!$table_row) continue;
+			$table_info = array($table_row['tableNumber'], $table_row['tableName'], $table_row['tableLocation'], $table_row['id'], $table_row['tableStyles']);
+			$location = array();
+			if (isset($table_info[2])) {
+				$loc_row = $judging_locations_by_id_p[$table_info[2]] ?? null;
+				if ($loc_row) $location = array($loc_row['judgingDate'], $loc_row['judgingDateEnd'], $loc_row['judgingLocName'], $loc_row['judgingLocation'], $loc_row['judgingLocType'], $loc_row['judgingLocNotes']);
+			}
+			if ((!empty($location)) && (isset($location[2]))) {
+				if ((isset($table_info[0])) && (isset($table_info[1])) && (isset($table_info[3]))) {
+					if ($method == "J") $output .= $table_info[0]." - <a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[1]."</a>,&nbsp;";
+					if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
+				}
+			}
+		}
+		return $output;
+	};
+
+	/**
+	 * Rebuilds judge_entries()'s method==1 output string from the batched entries map
+	 * above instead of a fresh brewing query per participant (this was called twice
+	 * per row in the original - once for the assignment modal, once for the
+	 * judges/stewards table column - both now share this one lookup).
+	 */
+	$judge_entries_batched_p = function($uid) use ($entries_by_uid_p, $base_url) {
+		$entries = $entries_by_uid_p[$uid] ?? array();
+		$parts = array();
+		foreach ($entries as $row_judge_entries) {
+			if ($_SESSION['prefsStyleSet'] == "BA") {
+				$parts[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewStyle']."</a>";
+			}
+			else {
+				$parts[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory']."</a>";
+			}
+		}
+		return rtrim(implode(", ", $parts), ", ");
+	};
+
 	foreach ($rows_brewer as $row_brewer) {
 
 		$output_datatables_add_link = "";
@@ -208,11 +356,20 @@ if ($totalRows_brewer > 0) {
 
 		if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
 
-		$archive = "default";
-		if ($dbTable != "default") $archive = get_suffix($dbTable);
-
 		unset($brewer_assignment);
-		$brewer_assignment = brewer_assignment($row_brewer['uid'],"1",$id,$dbTable,$filter,$archive);
+		// Pulled from the batched staff lookup above instead of a fresh
+		// brewer_assignment() query per row - mirrors its method=="1" logic exactly.
+		$row_staff_assignment = $staff_by_uid_p[$row_brewer['uid']] ?? null;
+		$brewer_assignment_parts = array();
+		if ($row_staff_assignment) {
+			if ($row_staff_assignment['staff_organizer'] == "1") $brewer_assignment_parts[] = strtolower($label_organizer);
+			if ($row_staff_assignment['staff_judge_bos'] == "1") $brewer_assignment_parts[] = "BOS";
+			if ($row_staff_assignment['staff_judge'] == "1") $brewer_assignment_parts[] = $label_judge;
+			if ($row_staff_assignment['staff_steward'] == "1") $brewer_assignment_parts[] = $label_steward;
+			if ($row_staff_assignment['staff_staff'] == "1") $brewer_assignment_parts[] = $label_staff;
+		}
+		$brewer_assignment = implode(", ", $brewer_assignment_parts);
+		$brewer_assignment = ltrim(rtrim($brewer_assignment, ", "), ", ");
 		$all_email_display[] = $row_brewer['brewerEmail'];
 
 		// Build Action Links
@@ -337,13 +494,15 @@ if ($totalRows_brewer > 0) {
 
 			if ((!empty($brewer_assignment) && (!$archive_display))) {
 
-				$table_assign_judge = table_assignments($row_brewer['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+				// Pulled from the batched maps above instead of fresh table_assignments()/
+				// judge_entries() queries per row.
+				$table_assign_judge = $table_assignments_batched_p($row_brewer['user_id'],"J");
 				$table_assign_judge = str_replace(",&nbsp;","<br>",$table_assign_judge);
-				
-				$table_assign_steward = table_assignments($row_brewer['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+
+				$table_assign_steward = $table_assignments_batched_p($row_brewer['user_id'],"S");
 				$table_assign_steward = str_replace(",&nbsp;","<br>",$table_assign_steward);
-				
-				$judge_entries = judge_entries($row_brewer['uid'],1);
+
+				$judge_entries = $judge_entries_batched_p($row_brewer['uid']);
 
 				if (($filter != "judges") && ($filter != "stewards")) {
 				
@@ -426,7 +585,11 @@ if ($totalRows_brewer > 0) {
 					foreach ($a as $value) {
 						if ($value != "") {
 							$b = substr($value, 2);
-							$output .= judging_location_avail($b,$value);
+							// Pulled from the batched locations map above instead of a fresh
+							// judging_location_avail() query per location - mirrors its
+							// method==0 (default) branch exactly.
+							$loc_row_avail_p = $judging_locations_by_id_p[$b] ?? null;
+							if (($loc_row_avail_p) && (substr($value, 0, 1) == "Y") && (!empty($loc_row_avail_p['judgingLocName'])) && ($loc_row_avail_p['judgingLocType'] < 2)) $output .= $loc_row_avail_p['judgingLocName']."<br>";
 							}
 						}
 					}
@@ -499,12 +662,18 @@ if ($totalRows_brewer > 0) {
 				}
 				if ($filter == "judges") $output_datatables_body .= "<td>".rtrim($table_assign_judge,",&nbsp;")."</td>";
 				if ($filter == "stewards") $output_datatables_body .= "<td>".rtrim($table_assign_steward,",&nbsp;")."</td>";
-				$output_datatables_body .= "<td class=\"".$output_hide_print."\">".judge_entries($row_brewer['uid'],1)."</td>";
+				$output_datatables_body .= "<td class=\"".$output_hide_print."\">".$judge_entries_batched_p($row_brewer['uid'])."</td>";
 
 			}
 
 
-			$output_datatables_body .= "<td class=\"".$output_hide_print."\">".date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable)."</td>";
+			// Pulled from the batched schema-check + lookup above instead of a fresh
+			// date_created() call (with its own information_schema probe) per row.
+			$date_created_result_p = "&nbsp;";
+			if (($date_created_exists_p) && (array_key_exists($row_brewer['uid'], $user_created_by_id_p)) && ($user_created_by_id_p[$row_brewer['uid']] != "")) {
+				$date_created_result_p = "<span class=\"hidden\">".strtotime($user_created_by_id_p[$row_brewer['uid']])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($user_created_by_id_p[$row_brewer['uid']]), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
+			}
+			$output_datatables_body .= "<td class=\"".$output_hide_print."\">".$date_created_result_p."</td>";
 
 			if (($action != "print") && ($dbTable == "default")) {
 

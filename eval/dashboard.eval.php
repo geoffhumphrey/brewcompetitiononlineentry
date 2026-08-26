@@ -132,6 +132,106 @@ $db_conn->orderBy ("tableNumber","ASC");
 $row_table_assignments = $db_conn->get($prefix."judging_tables");
 $totalRows_table_assignments = $db_conn->count;
 
+/**
+ * Batch what used to be several queries per table (get_table_info() for its
+ * location, assigned_judges(), an inline judge-names query, get_evaluation_count())
+ * - plus, for admins, a score_style_data()/entries/score_entry_data() query per
+ * style per table per entry - into a handful of upfront queries, run once. Same
+ * pattern used throughout pub/, awards.php, export.output.php, and
+ * admin/participants.admin.php this session.
+ */
+
+$all_table_ids_eval = array_column($row_table_assignments, 'id');
+
+// Mirrors get_table_info(...,"location",...)'s own query - fetched once for every
+// location instead of once per table.
+$judging_locations_by_id_eval = array();
+$rows_all_locations_eval = $db_conn->get($prefix."judging_locations", null, "id,judgingDate,judgingDateEnd,judgingLocName,judgingLocation,judgingLocType,judgingLocNotes");
+foreach ($rows_all_locations_eval as $row_location_eval) {
+	$judging_locations_by_id_eval[$row_location_eval['id']] = $row_location_eval;
+}
+
+// Mirrors assigned_judges($tid,...,1)'s query exactly, batched.
+$assigned_judges_by_table_eval = array();
+if ((!empty($all_table_ids_eval)) && (table_exists($judging_assignments_db_table))) {
+	$db_conn->where('assignTable', $all_table_ids_eval, 'in');
+	$db_conn->where('assignment', 'J');
+	$db_conn->groupBy('assignTable');
+	$rows_assigned_judges_eval = $db_conn->get($judging_assignments_db_table, null, "assignTable, COUNT(*) as count");
+	foreach ($rows_assigned_judges_eval as $row_assigned_judges_eval) {
+		$assigned_judges_by_table_eval[$row_assigned_judges_eval['assignTable']] = $row_assigned_judges_eval['count'];
+	}
+}
+
+// Mirrors the inline judge-names query below (originally run per table, only for
+// admins) exactly, batched across every table at once.
+$judge_names_by_table_eval = array();
+if ((!empty($all_table_ids_eval)) && (table_exists($judging_assignments_db_table)) && (table_exists($prefix."brewer"))) {
+	$placeholders_eval = implode(',', array_fill(0, count($all_table_ids_eval), '?'));
+	$query_judge_names_eval = "SELECT b.assignTable, a.brewerFirstName,a.brewerLastName FROM ".$prefix."brewer"." a, ".$judging_assignments_db_table." b WHERE b.assignTable IN (".$placeholders_eval.") AND a.uid = b.bid AND b.assignment='J' ORDER BY b.assignTable, a.brewerLastName, a.brewerFirstName ASC";
+	$rows_judge_names_eval = $db_conn->rawQuery($query_judge_names_eval, $all_table_ids_eval);
+	foreach ($rows_judge_names_eval as $row_judge_name_eval) {
+		$judge_names_by_table_eval[$row_judge_name_eval['assignTable']][] = $row_judge_name_eval;
+	}
+}
+
+// Mirrors get_evaluation_count("table-unique",...)'s query exactly, batched.
+$eval_count_by_table_eval = array();
+if (!empty($all_table_ids_eval)) {
+	$db_conn->where('evalTable', $all_table_ids_eval, 'in');
+	$db_conn->groupBy('evalTable');
+	$rows_eval_counts_eval = $db_conn->get($prefix."evaluation", null, "evalTable, COUNT(DISTINCT eid) as count");
+	foreach ($rows_eval_counts_eval as $row_eval_count_eval) {
+		$eval_count_by_table_eval[$row_eval_count_eval['evalTable']] = $row_eval_count_eval['count'];
+	}
+}
+
+// Admin-only: styles/entries/score_entry_data batching. Mirrors score_style_data(),
+// includes/db's per-style brewing lookup, and score_entry_data() exactly - these
+// were previously run once per style per table, then once per entry per style per
+// table (the dominant per-entry cost on this page).
+$styles_by_id_eval = array();
+$brewing_by_style_eval = array();
+$score_entry_data_by_eid_eval = array();
+if ($admin) {
+
+	$all_style_ids_eval = array();
+	foreach ($row_table_assignments as $row_table_prefetch_eval) {
+		foreach (explode(",", $row_table_prefetch_eval['tableStyles']) as $style_id_eval) {
+			if ($style_id_eval !== "") $all_style_ids_eval[] = $style_id_eval;
+		}
+	}
+	$all_style_ids_eval = array_unique($all_style_ids_eval);
+
+	if (!empty($all_style_ids_eval)) {
+		$db_conn->where('id', $all_style_ids_eval, 'in');
+		$rows_all_styles_eval = $db_conn->get($prefix."styles", null, "id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleType");
+		foreach ($rows_all_styles_eval as $row_style_eval) {
+			$styles_by_id_eval[$row_style_eval['id']] = $row_style_eval;
+		}
+	}
+
+	// Mirrors the per-style brewing query (brewCategorySort/brewSubCategory/brewReceived=1)
+	// exactly, just fetched once for every received entry instead of once per style.
+	$db_conn->where('brewReceived', 1);
+	$rows_all_entries_eval = $db_conn->get($prefix."brewing");
+	foreach ($rows_all_entries_eval as $row_entry_eval) {
+		$brewing_by_style_eval[$row_entry_eval['brewCategorySort'].'|'.$row_entry_eval['brewSubCategory']][] = $row_entry_eval;
+	}
+
+	// Mirrors score_entry_data()'s query exactly - getOne() with no ORDER BY, so it's
+	// only guaranteed to return *a* matching row when more than one exists, same as here.
+	$all_entry_ids_eval = array_column($rows_all_entries_eval, 'id');
+	if (!empty($all_entry_ids_eval)) {
+		$db_conn->where('eid', $all_entry_ids_eval, 'in');
+		$rows_scores_eval = $db_conn->get($prefix."judging_scores", null, "id,eid,bid,scoreEntry,scorePlace,scoreMiniBOS");
+		foreach ($rows_scores_eval as $row_score_eval) {
+			if (!isset($score_entry_data_by_eid_eval[$row_score_eval['eid']])) $score_entry_data_by_eid_eval[$row_score_eval['eid']] = $row_score_eval;
+		}
+	}
+
+}
+
 $row_eval_sub = $db_conn->get($prefix."evaluation");
 $totalRows_eval_sub = $db_conn->count;
 
@@ -175,7 +275,83 @@ if ($totalRows_eval_sub > 0) {
 		);
 
 	}
-	
+
+}
+
+// Admin-only: pre-group $eval_scores by entry id - eliminates
+// judging_admin.eval.php's O(entries x evaluations) linear scan of the full
+// $eval_scores array for every single entry - and batch brewer_info() lookups for
+// every judge who has scored anything, instead of one query per matching
+// evaluation per entry (previously the single worst offender on this page: could
+// be entries x judges-per-entry separate brewer queries).
+$eval_scores_by_eid = array();
+$brewer_info_string_by_judge_id = array();
+if ($admin) {
+
+	foreach ($eval_scores as $row_eval_score_grouped) {
+		$eval_scores_by_eid[$row_eval_score_grouped['eid']][] = $row_eval_score_grouped;
+	}
+
+	$judge_ids_needed_eval = array();
+	foreach ($eval_scores as $row_eval_score_judge) {
+		$judge_ids_needed_eval[] = $row_eval_score_judge['judge_id'];
+	}
+	$judge_ids_needed_eval = array_unique($judge_ids_needed_eval);
+
+	$brewer_rows_by_judge_id_eval = array();
+	if ((!empty($judge_ids_needed_eval)) && (table_exists($prefix."brewer"))) {
+		$db_conn->where('uid', $judge_ids_needed_eval, 'in');
+		$rows_brewer_by_uid_eval = $db_conn->get($prefix."brewer");
+		$found_judge_ids_eval = array();
+		foreach ($rows_brewer_by_uid_eval as $row_brewer_info_eval) {
+			$brewer_rows_by_judge_id_eval[$row_brewer_info_eval['uid']] = $row_brewer_info_eval;
+			$found_judge_ids_eval[] = $row_brewer_info_eval['uid'];
+		}
+		// brewer_info() falls back to matching on `id` when a `uid` lookup misses -
+		// mirror that for whichever judge ids weren't found above.
+		$judge_ids_fallback_eval = array_diff($judge_ids_needed_eval, $found_judge_ids_eval);
+		if (!empty($judge_ids_fallback_eval)) {
+			$db_conn->where('id', $judge_ids_fallback_eval, 'in');
+			$rows_brewer_by_id_eval = $db_conn->get($prefix."brewer");
+			foreach ($rows_brewer_by_id_eval as $row_brewer_info_eval) {
+				$brewer_rows_by_judge_id_eval[$row_brewer_info_eval['id']] = $row_brewer_info_eval;
+			}
+		}
+	}
+
+	// Mirrors brewer_info()'s exact string-building logic, batched, so
+	// judging_admin.eval.php's explode("^", ...) parsing of the result is unaffected.
+	foreach ($judge_ids_needed_eval as $judge_id_lookup_eval) {
+		$row_brewer_info_eval = $brewer_rows_by_judge_id_eval[$judge_id_lookup_eval] ?? null;
+		$ttb_eval = array();
+		if (($_SESSION['prefsProEdition'] == 1) && (!empty($row_brewer_info_eval['brewerBreweryInfo']))) $ttb_eval = json_decode($row_brewer_info_eval['brewerBreweryInfo'],true);
+		$r_eval = "";
+		$r_eval .= $row_brewer_info_eval['brewerFirstName']."^";
+		$r_eval .= $row_brewer_info_eval['brewerLastName']."^";
+		$r_eval .= $row_brewer_info_eval['brewerPhone1']."^";
+		if (isset($row_brewer_info_eval['brewerJudgeRank'])) {
+			if (($row_brewer_info_eval['brewerJudgeMead'] == "Y") && ($row_brewer_info_eval['brewerJudgeRank'] == "Non-BJCP")) $r_eval .= "Non-BJCP Beer^";
+			else $r_eval .= $row_brewer_info_eval['brewerJudgeRank']."^";
+		}
+		else $r_eval .= "Non-BJCP^";
+		if (isset($row_brewer_info_eval['brewerJudgeID'])) $r_eval .= $row_brewer_info_eval['brewerJudgeID']."^"; else $r_eval .= "&nbsp;^";
+		$r_eval .= $row_brewer_info_eval['brewerMHP']."^";
+		$r_eval .= $row_brewer_info_eval['brewerEmail']."^";
+		$r_eval .= $row_brewer_info_eval['uid']."^";
+		if (isset($row_brewer_info_eval['brewerClubs'])) $r_eval .= $row_brewer_info_eval['brewerClubs']."^"; else $r_eval .= "&nbsp;^";
+		if (isset($row_brewer_info_eval['brewerDiscount'])) $r_eval .= $row_brewer_info_eval['brewerDiscount']."^"; else $r_eval .= "&nbsp;^";
+		$r_eval .= $row_brewer_info_eval['brewerAddress']."^";
+		$r_eval .= $row_brewer_info_eval['brewerCity']."^";
+		$r_eval .= $row_brewer_info_eval['brewerState']."^";
+		$r_eval .= $row_brewer_info_eval['brewerZip']."^";
+		$r_eval .= $row_brewer_info_eval['brewerCountry']."^";
+		if ($_SESSION['prefsProEdition'] == 1) $r_eval .= $row_brewer_info_eval['brewerBreweryName']."^"; else $r_eval .= "&nbsp;^";
+		if ($row_brewer_info_eval['brewerJudgeMead'] == "Y") $r_eval .= "Certified Mead Judge"; else $r_eval .= "&nbsp;^";
+		if (($_SESSION['prefsProEdition'] == 1) && (isset($ttb_eval['TTB'])) && (!empty($ttb_eval['TTB']))) $r_eval .= $ttb_eval['TTB']."^"; else $r_eval .= "&nbsp;^";
+		if (($_SESSION['prefsProEdition'] == 1) && (isset($ttb_eval['Production'])) && (!empty($ttb_eval['Production']))) $r_eval .= $ttb_eval['Production']."^"; else $r_eval .= "&nbsp;^";
+		$brewer_info_string_by_judge_id[$judge_id_lookup_eval] = $r_eval;
+	}
+
 }
 
 $total_scored_entries_count = 0;
@@ -208,7 +384,19 @@ if ($totalRows_table_assignments > 0) {
 		$tbl_loc_disp = $row_table_assignments['tableLocation'];
 		$tbl_num_disp = $row_table_assignments['tableNumber'];
 		
-		$table_location = get_table_info($tbl_loc_disp,"location",$tbl_id,"default","default");
+		// Pulled from the batched locations map above instead of a fresh
+		// get_table_info(...,"location",...) query per table.
+		$row_location_lookup_eval = $judging_locations_by_id_eval[$tbl_loc_disp] ?? null;
+		$table_location = "";
+		if ($row_location_lookup_eval) {
+			$table_location =
+			$row_location_lookup_eval['judgingDate']."^".
+			$row_location_lookup_eval['judgingDateEnd']."^".
+			$row_location_lookup_eval['judgingLocName']."^".
+			$row_location_lookup_eval['judgingLocation']."^".
+			$row_location_lookup_eval['judgingLocType']."^".
+			$row_location_lookup_eval['judgingLocNotes'];
+		}
 		$table_location = explode("^", $table_location);
 
 		if (!empty($table_location[0])) $location_start_date = $table_location[0];
@@ -228,7 +416,9 @@ if ($totalRows_table_assignments > 0) {
 			if ((!empty($table_location[1]) && (time() > $table_location[1]))) $disable_add_edit = TRUE;
 
 			$random = random_generator(7,2);
-			$assigned_judges = assigned_judges($tbl_id,$dbTable,$judging_assignments_db_table,1);
+			// Pulled from the batched counts map above instead of a fresh
+			// assigned_judges() query per table.
+			$assigned_judges = $assigned_judges_by_table_eval[$tbl_id] ?? 0;
 			
 			$table_start_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $location_start_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 
@@ -300,17 +490,38 @@ if ($totalRows_table_assignments > 0) {
 
 				foreach (array_unique($a) as $value) {
 
-					$score_style_data = score_style_data($value);
+					// Pulled from the batched styles map above instead of a fresh
+					// score_style_data() query per style per table (admins only -
+					// the non-admin judging dashboard's style list isn't batched,
+					// so it keeps calling the function directly).
+					if ($admin) {
+						$row_style_lookup_eval = $styles_by_id_eval[$value] ?? null;
+						$score_style_data = "";
+						if ($row_style_lookup_eval) {
+							$score_style_data = $row_style_lookup_eval['brewStyleGroup']."^".$row_style_lookup_eval['brewStyleNum']."^".$row_style_lookup_eval['brewStyle']."^".$row_style_lookup_eval['brewStyleType'];
+						}
+					}
+					else {
+						$score_style_data = score_style_data($value);
+					}
 
 					if (!empty($score_style_data)) {
 
 						$score_style_data = explode("^",$score_style_data);
 
-						$db_conn->where ("brewCategorySort", $score_style_data[0]);
-						$db_conn->where ("brewSubCategory", $score_style_data[1]);
-						$db_conn->where ("brewReceived", 1);
-						$row_entries = $db_conn->get ($prefix."brewing");
-						$totalRows_entries = $db_conn->count;
+						// Pulled from the batched brewing-by-style map above instead of a
+						// fresh per-style query (admins only, same reasoning as above).
+						if ($admin) {
+							$row_entries = $brewing_by_style_eval[$score_style_data[0].'|'.$score_style_data[1]] ?? array();
+							$totalRows_entries = count($row_entries);
+						}
+						else {
+							$db_conn->where ("brewCategorySort", $score_style_data[0]);
+							$db_conn->where ("brewSubCategory", $score_style_data[1]);
+							$db_conn->where ("brewReceived", 1);
+							$row_entries = $db_conn->get ($prefix."brewing");
+							$totalRows_entries = $db_conn->count;
+						}
 
 				        if ($totalRows_entries > 0) {
 
@@ -335,7 +546,26 @@ if ($totalRows_table_assignments > 0) {
 				        		$judge_score = array();
 								$eval_places = array();
 								$eval_place = "";
-								$score_entry_data = score_entry_data($row_entries['id']);
+								// Pulled from the batched judging_scores map above instead of a
+								// fresh score_entry_data() query per entry (admins only, same
+								// reasoning as above) - the single worst per-row offender on
+								// this page before batching.
+								if ($admin) {
+									$row_score_lookup_eval = $score_entry_data_by_eid_eval[$row_entries['id']] ?? null;
+									$score_entry_data = "";
+									if ($row_score_lookup_eval) {
+										$score_entry_data =
+										$row_score_lookup_eval['id']."^".
+										$row_score_lookup_eval['eid']."^".
+										$row_score_lookup_eval['bid']."^".
+										$row_score_lookup_eval['scoreEntry']."^".
+										$row_score_lookup_eval['scorePlace']."^".
+										$row_score_lookup_eval['scoreMiniBOS'];
+									}
+								}
+								else {
+									$score_entry_data = score_entry_data($row_entries['id']);
+								}
 								$score_entry_data = explode("^",$score_entry_data);
 								$eval_all_judges = array();
 								$ordinal_position = array();
@@ -592,7 +822,9 @@ if ($totalRows_table_assignments > 0) {
 				 * -------------------------------------------
 				 */
 
-				$table_scored_entries_count = get_evaluation_count("table-unique",$tbl_id);
+				// Pulled from the batched counts map above instead of a fresh
+				// get_evaluation_count("table-unique",...) query per table.
+				$table_scored_entries_count = $eval_count_by_table_eval[$tbl_id] ?? 0;
 				
 				$tbl_name_disp = truncate($tbl_name_disp,"25","...");
 				$status_sidebar_timing = $status_sidebar_js_timing += 2000;
@@ -640,16 +872,15 @@ if ($totalRows_table_assignments > 0) {
 
 				if ($assigned_judges > 0) {
 
-					$sql = "SELECT a.brewerFirstName,a.brewerLastName, b.assignment FROM ".$prefix."brewer"." a, ".$prefix."judging_assignments"." b WHERE b.assignTable=? AND a.uid = b.bid AND b.assignment='J' ORDER BY a.brewerLastName, a.brewerFirstName ASC";
-					$row_assigned_judge_names = $db_conn->rawQuery ($sql, array($tbl_id));
-					$totalRows_entries = $db_conn->count;
-					
-					foreach ($row_assigned_judge_names as $row_assigned_judge_names) {
+					// Pulled from the batched judge-names map above instead of a fresh
+					// query per table.
+					$row_assigned_judge_names_list = $judge_names_by_table_eval[$tbl_id] ?? array();
+					foreach ($row_assigned_judge_names_list as $row_assigned_judge_names) {
 						$assigned_judge_names_display .= $row_assigned_judge_names['brewerFirstName']." ".$row_assigned_judge_names['brewerLastName'].", ";
 					}
 
 					$assigned_judge_names_display = rtrim($assigned_judge_names_display, ", ");
-				
+
 				}
 
 				$table_assignment_stats .= "<section class=\"row\">";

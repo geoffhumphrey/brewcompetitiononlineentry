@@ -113,36 +113,108 @@ if (($display_to_admin) || ($display_to_public)) {
 
 			if ($totalRows_tables > 0) {
 
+				/**
+				 * Batch what used to be 4+ queries per table (scores.db.php's fetch,
+				 * get_table_info()'s per-style count loop, assigned_judges()'s count,
+				 * and an inline judge-names query) into 4 queries total, run once up
+				 * front - same pattern as pub/winners.pub.php's per-table batching,
+				 * extended to cover this file's extra per-table lookups.
+				 */
+
+				$all_style_ids = array();
+				foreach ($rows_tables as $row_tables_prefetch) {
+					foreach (explode(",", $row_tables_prefetch['tableStyles']) as $style_id) {
+						if ($style_id !== "") $all_style_ids[] = $style_id;
+					}
+				}
+				$all_style_ids = array_unique($all_style_ids);
+
+				$styles_by_id = array();
+				if (!empty($all_style_ids)) {
+					$db_conn->where('id', $all_style_ids, 'in');
+					$rows_all_styles = $db_conn->get($prefix."styles", null, "id,brewStyleGroup,brewStyleNum");
+					foreach ($rows_all_styles as $row_style) {
+						$styles_by_id[$row_style['id']] = $row_style;
+					}
+				}
+
+				// Mirrors get_table_info(1,"count_total",...,"default")'s own query exactly,
+				// including the jPrefsTablePlanning exception, just grouped instead of
+				// run once per style per table.
+				$counts_by_style = array();
+				if (table_exists($brewing_db_table)) {
+					if ($_SESSION['jPrefsTablePlanning'] != 1) $db_conn->where('brewReceived', '1');
+					$db_conn->groupBy('brewCategorySort');
+					$db_conn->groupBy('brewSubCategory');
+					$rows_style_counts = $db_conn->get($brewing_db_table, null, "brewCategorySort, brewSubCategory, COUNT(*) as count");
+					foreach ($rows_style_counts as $row_style_count) {
+						$counts_by_style[$row_style_count['brewCategorySort'].'|'.$row_style_count['brewSubCategory']] = $row_style_count['count'];
+					}
+				}
+
+				// Mirrors includes/db/scores.db.php's winner_method==0 query exactly, just
+				// widened from "WHERE a.scoreTable=?" (one table) to an IN-list (all tables).
+				$table_ids = array_column($rows_tables, 'id');
+				$scores_by_table = array();
+				if (!empty($table_ids)) {
+					$placeholders = implode(',', array_fill(0, count($table_ids), '?'));
+					$query_scores_all = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.scoreTable IN (".$placeholders.") AND a.eid = b.id AND c.uid = b.brewBrewerID";
+					if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_all .= " AND a.scorePlace > 0";
+					$query_scores_all .= " ORDER BY a.scoreTable";
+					if ($action == "awards-pres") $query_scores_all .= ", a.scorePlace DESC";
+					else $query_scores_all .= ", a.scorePlace ASC";
+					$rows_scores_all = $db_conn->rawQuery($query_scores_all, $table_ids);
+					foreach ($rows_scores_all as $row_score_all) {
+						$scores_by_table[$row_score_all['scoreTable']][] = $row_score_all;
+					}
+				}
+
+				// Mirrors the original inline judge-names query exactly, just widened to
+				// all tables at once and grouped by table below.
+				$judge_names_by_table = array();
+				if (!empty($table_ids)) {
+					$placeholders_j = implode(',', array_fill(0, count($table_ids), '?'));
+					$query_judge_names_all = "SELECT a.brewerFirstName,a.brewerLastName, b.assignRoles, b.assignTable FROM ".$prefix."brewer"." a, ".$prefix."judging_assignments"." b WHERE b.assignTable IN (".$placeholders_j.") AND assignment = 'J' AND a.uid = b.bid ORDER BY b.assignTable, a.brewerLastName, a.brewerFirstName ASC";
+					$rows_judge_names_all = $db_conn->rawQuery($query_judge_names_all, $table_ids);
+					foreach ($rows_judge_names_all as $row_judge_name) {
+						$judge_names_by_table[$row_judge_name['assignTable']][] = $row_judge_name;
+					}
+				}
+
 				foreach ($rows_tables as $row_tables) {
 
 					$slides_tables = "";
 
-					include (DB.'scores.db.php');
+					// Pulled from the batched fetch above instead of a fresh
+					// include(DB.'scores.db.php') query per table.
+					$rows_scores = $scores_by_table[$row_tables['id']] ?? array();
+					$totalRows_scores = count($rows_scores);
 
-					$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+					// entry_count: sum of counts_by_style for each style on this table -
+					// mirrors get_table_info(1,"count_total",...) exactly, batched.
+					$entry_count = 0;
+					foreach (explode(",", $row_tables['tableStyles']) as $table_style_id) {
+						if (!isset($styles_by_id[$table_style_id])) continue;
+						$row_styles_lookup = $styles_by_id[$table_style_id];
+						$entry_count += $counts_by_style[$row_styles_lookup['brewStyleGroup'].'|'.$row_styles_lookup['brewStyleNum']] ?? 0;
+					}
 					if ($entry_count > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
 
 					$assigned_judge_names_display = "";
+					$table_judge_names = $judge_names_by_table[$row_tables['id']] ?? array();
 
-					$assigned_judges = assigned_judges($row_tables['id'],"default",$prefix."judging_assignments",1);
+					if (!empty($table_judge_names)) {
 
-					if ($assigned_judges > 0) {
-
-						// Bound parameter used for $row_tables['id'].
-						$sql = "SELECT a.brewerFirstName,a.brewerLastName, b.assignRoles FROM ".$prefix."brewer"." a, ".$prefix."judging_assignments"." b WHERE b.assignTable=? AND assignment = 'J' AND a.uid = b.bid ORDER BY a.brewerLastName, a.brewerFirstName ASC";
-						$row_assigned_judge_names = $db_conn->rawQuery($sql, array($row_tables['id']));
-						$totalRows_assigned_judge_names = $db_conn->count;
-						
-						foreach ($row_assigned_judge_names as $row_assigned_judge_names) {
+						foreach ($table_judge_names as $row_assigned_judge_names) {
 							$assigned_judge_names_display .= $row_assigned_judge_names['brewerFirstName']." ".$row_assigned_judge_names['brewerLastName'];
 							if ((isset($row_assigned_judge_names['assignRoles'])) && (strpos($row_assigned_judge_names['assignRoles'], "HJ") !== false)) $assigned_judge_names_display .= " <span style=\"font-size: .75em;\">(".$label_head_judge.")</span>";
 							$assigned_judge_names_display .= ", ";
-						} 
+						}
 
 						$assigned_judge_names_display = rtrim($assigned_judge_names_display, ", ");
-					
+
 					}
-					
+
 					// Build Slide
 					$slides_tables .= "<section>";
 
@@ -244,21 +316,80 @@ if (($display_to_admin) || ($display_to_public)) {
 
 		// Build slides by Category
 		if ($_SESSION['prefsWinnerMethod'] == "1") {
-			
-			$a = styles_active(0,"default");
+
+			/**
+			 * Batch what used to be 2-3 queries per active category (includes/db/winners_category.db.php's
+			 * entry/score counts, plus includes/db/scores.db.php's fetch) into 2 queries total, run once
+			 * up front - same pattern as pub/winners_category.pub.php.
+			 *
+			 * Driver: read the admin-curated prefsSelectedStyles list (the source of truth for which
+			 * styles are enabled - see admin/styles.admin.php) instead of a live styles_active() query.
+			 * awards.php has no archive/$filter support (it's a live-only presentation), so unlike the
+			 * pub/ files there's no archived-competition case to branch on here.
+			 */
+
+			$prefs_selected_styles = json_decode($_SESSION['prefsSelectedStyles'], true);
+			$a = array();
+			if (is_array($prefs_selected_styles)) {
+				foreach ($prefs_selected_styles as $selected_style) {
+					$a[] = $selected_style['brewStyleGroup'];
+				}
+			}
+
+			$category_column = ($style_set == "BA") ? "brewCategory" : "brewCategorySort";
+
+			$counts_by_category = array();
+			if (table_exists($brewing_db_table)) {
+				$db_conn->where('brewReceived', '1');
+				$db_conn->groupBy($category_column);
+				$rows_category_counts = $db_conn->get($brewing_db_table, null, "$category_column, COUNT(*) as count");
+				foreach ($rows_category_counts as $row_cat_count) {
+					$counts_by_category[$row_cat_count[$category_column]] = $row_cat_count['count'];
+				}
+			}
+
+			// Mirrors includes/db/scores.db.php's winner_method==1 query exactly, just without
+			// the per-category WHERE filter, then split back apart by category below.
+			$scores_by_category = array();
+			if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+				$query_scores_all_cat = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
+				if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_all_cat .= " AND a.scorePlace > 0";
+				$query_scores_all_cat .= " ORDER BY b.".$category_column;
+				if ($action == "awards-pres") $query_scores_all_cat .= ", a.scorePlace DESC";
+				else $query_scores_all_cat .= ", a.scorePlace ASC";
+				$rows_scores_all_cat = $db_conn->rawQuery($query_scores_all_cat);
+				foreach ($rows_scores_all_cat as $row_score_cat) {
+					$scores_by_category[$row_score_cat[$category_column]][] = $row_score_cat;
+				}
+			}
 
 			foreach (array_unique($a) as $style) {
 
 				if (!empty($style)) {
 
-					include (DB.'winners_category.db.php');
+					if ((isset($style)) && (is_numeric($style))) $style_pad_awards = sprintf("%02d", $style);
+					else $style_pad_awards = $style;
+
+					$lookup_key_awards = ($style_set == "BA") ? $style : $style_pad_awards;
+					$row_entry_count = array('count' => $counts_by_category[$lookup_key_awards] ?? 0);
+					$table_scores_awards = $scores_by_category[$lookup_key_awards] ?? array();
+					// Deliberately counts only placed (scorePlace > 0) entries, unlike the old
+					// includes/db/winners_category.db.php's row_score_count (which counted all
+					// judged entries regardless of placement in this context). That mismatch let
+					// categories with judged-but-unplaced entries render an empty announcement
+					// slide (a header + entry count, no winners). Confirmed with the maintainer:
+					// skip those categories entirely instead.
+					$row_score_count = array('count' => count($table_scores_awards));
 
 					if ($row_entry_count['count'] > 1) $entries_display = strtolower($label_entries);
 					else $entries_display = strtolower($label_entry);
-					
+
 					if ($row_score_count['count'] > 0) {
 
-						include (DB.'scores.db.php');
+						// Pulled from the batched fetch above instead of a fresh
+						// include(DB.'scores.db.php') query per category.
+						$rows_scores = $table_scores_awards;
+						$totalRows_scores = count($rows_scores);
 
 						$slides .= "<section>";
 
@@ -342,23 +473,92 @@ if (($display_to_admin) || ($display_to_public)) {
 
 			$category_end = $_SESSION['style_set_category_end'];
 
-			$a = styles_active(2,"default");
+			/**
+			 * Driver: read the admin-curated prefsSelectedStyles list (the source of truth for which
+			 * styles are enabled - see admin/styles.admin.php) instead of a live styles_active() query.
+			 * awards.php has no archive/$filter support (it's a live-only presentation). Produces the
+			 * same "group^num^style" string shape styles_active(2,...) always returned, so the rest of
+			 * this block (the explode("^",...) driven loop below) is unchanged.
+			 */
+
+			$prefs_selected_styles = json_decode($_SESSION['prefsSelectedStyles'], true);
+			$a = array();
+			if (is_array($prefs_selected_styles)) {
+				foreach ($prefs_selected_styles as $selected_style) {
+					$a[] = $selected_style['brewStyleGroup'].'^'.$selected_style['brewStyleNum'].'^'.$selected_style['brewStyle'];
+				}
+			}
+
+			/**
+			 * Batch what used to be 2-3 queries per active subcategory (includes/db/winners_subcategory.db.php's
+			 * entry/score counts, plus includes/db/scores.db.php's fetch) into 2 queries total, run once
+			 * up front - same pattern as pub/winners_subcategory.pub.php. This also fixes a pre-existing
+			 * bug: the old code below included winners_subcategory.db.php without ever setting
+			 * $value['brewStyleGroup']/$value['brewStyleNum'], which that file's WHERE clause depends on -
+			 * $value held whatever unrelated value it last had (observed live as a stray int), so every
+			 * lookup silently matched nothing and no subcategory winners were ever displayed.
+			 */
+
+			$category_column_sub = ($style_set == "BA") ? "brewCategory" : "brewCategorySort";
+
+			// Entry counts, keyed by "category|subcategory" - matches winners_subcategory.db.php's
+			// composite WHERE (category_column + brewSubCategory) used for both style sets (BA
+			// additionally filters brewReceived=1 there, preserved below).
+			$counts_by_subcategory = array();
+			if (table_exists($brewing_db_table)) {
+				if ($style_set == "BA") $db_conn->where('brewReceived', '1');
+				$db_conn->groupBy($category_column_sub);
+				$db_conn->groupBy('brewSubCategory');
+				$rows_subcat_counts = $db_conn->get($brewing_db_table, null, "$category_column_sub, brewSubCategory, COUNT(*) as count");
+				foreach ($rows_subcat_counts as $row_subcat_count) {
+					$counts_by_subcategory[$row_subcat_count[$category_column_sub].'|'.$row_subcat_count['brewSubCategory']] = $row_subcat_count['count'];
+				}
+			}
+
+			// Mirrors includes/db/scores.db.php's winner_method==2 query exactly - including its
+			// BA quirk of filtering only brewSubCategory, not category+subcategory together - just
+			// without the per-subcategory WHERE filter, then split back apart below. BA groups by
+			// brewSubCategory alone to match that quirk; non-BA groups by the composite key.
+			$scores_by_subcategory = array();
+			if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
+				$query_scores_all_subcat = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
+				if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores_all_subcat .= " AND a.scorePlace > 0";
+				$query_scores_all_subcat .= " ORDER BY b.brewSubCategory";
+				if ($action == "awards-pres") $query_scores_all_subcat .= ", a.scorePlace DESC";
+				else $query_scores_all_subcat .= ", a.scorePlace ASC";
+				$rows_scores_all_subcat = $db_conn->rawQuery($query_scores_all_subcat);
+				foreach ($rows_scores_all_subcat as $row_score_subcat) {
+					if ($style_set == "BA") $group_key_sub = $row_score_subcat['brewSubCategory'];
+					else $group_key_sub = $row_score_subcat['brewCategorySort'].'|'.$row_score_subcat['brewSubCategory'];
+					$scores_by_subcategory[$group_key_sub][] = $row_score_subcat;
+				}
+			}
 
 			foreach (array_unique($a) as $style) {
 
 				$style = explode("^",$style);
+				$value['brewStyleGroup'] = $style[0];
+				$value['brewStyleNum'] = $style[1];
 
-				include (DB.'winners_subcategory.db.php');
+				$row_entry_count = array('count' => $counts_by_subcategory[$value['brewStyleGroup'].'|'.$value['brewStyleNum']] ?? 0);
+
+				if ($style_set == "BA") $score_key_sub = $value['brewStyleNum'];
+				else $score_key_sub = $value['brewStyleGroup'].'|'.$value['brewStyleNum'];
+				$table_scores_sub_awards = $scores_by_subcategory[$score_key_sub] ?? array();
+				$row_score_count = array('count' => count($table_scores_sub_awards));
 
 				// Display all winners
 				if ($row_entry_count['count'] > 0) {
 
-					if ($row_entry_count['count'] > 1) $entries_display = "entries"; 
+					if ($row_entry_count['count'] > 1) $entries_display = "entries";
 					else $entries_display = "entry";
-					
+
 					if ($row_score_count['count'] > 0) {
 
-						include (DB.'scores.db.php');
+						// Pulled from the batched fetch above instead of a fresh
+						// include(DB.'scores.db.php') query per subcategory.
+						$rows_scores = $table_scores_sub_awards;
+						$totalRows_scores = count($rows_scores);
 
 						$slides .= "<section>";
 
@@ -1327,7 +1527,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					<?php } ?>
 				</section>
 			</div>	
-			<div class="footer"><?php echo $_SESSION['contestName']." - ".$label_awards." - ".$current_date_display; ?></div>
+			<div class="footer" style="text-align:left; padding-left: 20px; font-size: .35em;"><?php echo $_SESSION['contestName']." - ".$label_awards." - ".$current_date_display; ?></div>
 		</div>
 		<!-- Load reveal.js and associated plug-ins / https://revealjs.com -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.min.js"></script>

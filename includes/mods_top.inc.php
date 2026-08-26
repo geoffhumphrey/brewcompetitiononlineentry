@@ -27,9 +27,9 @@ if ((!empty($_SESSION['mods_display'])) && ($go != "mods")) {
 
 	}
 
-	if (!empty($missing_enabled_files)) {
+	if ((!empty($missing_enabled_files)) && (empty($_SESSION['dismissed_admin_alerts']['missing-enabled-mods']))) {
 
-		$mod_top_alert .= "<div class='alert alert-danger alert-dismissible' role='alert'>";
+		$mod_top_alert .= "<div id='alert-missing-enabled-mods' data-alert-key='missing-enabled-mods' class='alert alert-danger alert-dismissible' role='alert'>";
 		$mod_top_alert .= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
 		$mod_top_alert .= "<i class='fa fa-lg fa-exclamation-triangle'></i> ";
 		$mod_top_alert .= "<strong>The following <u>enabled</u> custom module files were not found in the mods directory.</strong> These cannot be included or rendered:";
@@ -40,9 +40,9 @@ if ((!empty($_SESSION['mods_display'])) && ($go != "mods")) {
 
 	}
 
-	if (!empty($missing_disabled_files)) {
+	if ((!empty($missing_disabled_files)) && (empty($_SESSION['dismissed_admin_alerts']['missing-disabled-mods']))) {
 
-		$mod_top_alert .= "<div class='alert alert-warning alert-dismissible' role='alert'>";
+		$mod_top_alert .= "<div id='alert-missing-disabled-mods' data-alert-key='missing-disabled-mods' class='alert alert-warning alert-dismissible' role='alert'>";
 		$mod_top_alert .= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
 		$mod_top_alert .= "<i class='fa fa-lg fa-exclamation-circle'></i> ";
 		$mod_top_alert .= "<strong>The following <u>disabled</u> custom module files were not found in the mods directory.</strong> These cannot be included or rendered if enabled:";

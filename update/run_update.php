@@ -4814,6 +4814,7 @@ $v3100_update .= "<li>Corrected an operator precedence bug that could affect BJC
 $v3100_update .= "<li>Corrected several notices affecting archived judging tables and scores views.</li>";
 $v3100_update .= "<li>Corrected an issue where opting out of the judge or steward registration cap could lock an account out of registration.</li>";
 $v3100_update .= "<li>Corrected legacy \"English\" language preference values to normalize to the current language folder.</li>";
+$v3100_update .= "<li>Added the brewCoBrewer and brewMead1-3 columns to archived brewing tables that predate their introduction, fixing a fatal error when viewing older archived entry lists.</li>";
 $v3100_update .= "<li>Minor bug fixes and security hardening.</li>";
 
 if ((check_mysql_data_type("contestEntryFee",$prefix."contest_info")) != 246) {
@@ -4957,6 +4958,43 @@ if (!check_update("prefsLanguageToggle", $prefix."preferences")) {
 	else {
 		$v3100_update .= "<li class=\"text-danger\">Runtime language toggle preference columns NOT added to the preferences table.</li>";
 		$error_count++;
+	}
+
+}
+
+/**
+ * The brewCoBrewer column (added 1.1.6.0) and brewMead1/brewMead2/brewMead3
+ * columns were never backfilled onto archived brewing_<suffix> tables the way
+ * later columns (brewABV, brewStyleType, etc.) were. Archives created before
+ * those columns existed on the live table are missing them entirely, which
+ * throws a fatal "Unknown column" error when the admin entries list query
+ * selects them by name against an old archive.
+ */
+$v310_missing_archive_cols = array(
+	'brewCoBrewer' => "VARCHAR(255) NULL DEFAULT NULL",
+	'brewMead1' => "VARCHAR(25) NULL DEFAULT NULL",
+	'brewMead2' => "VARCHAR(25) NULL DEFAULT NULL",
+	'brewMead3' => "VARCHAR(25) NULL DEFAULT NULL",
+);
+
+foreach ($archive_suffixes as $suffix) {
+
+	$archive_brewing_table = $prefix."brewing_".$suffix;
+
+	foreach ($v310_missing_archive_cols as $v310_col => $v310_col_def) {
+
+		if (!check_update($v310_col, $archive_brewing_table)) {
+
+			$sql = sprintf("ALTER TABLE `%s` ADD `%s` %s;", $archive_brewing_table, $v310_col, $v310_col_def);
+			$result = $db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() === 0) $v3100_update .= sprintf("<li>The %s column added to the %s archive table.</li>", $v310_col, $archive_brewing_table);
+			else {
+				$v3100_update .= sprintf("<li class=\"text-danger\">The %s column NOT added to the %s archive table.</li>", $v310_col, $archive_brewing_table);
+				$error_count++;
+			}
+
+		}
+
 	}
 
 }
