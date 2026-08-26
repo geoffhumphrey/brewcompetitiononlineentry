@@ -4999,6 +4999,29 @@ foreach ($archive_suffixes as $suffix) {
 
 }
 
+/**
+ * Data hygiene: userAdminObfuscate allows NULL (rows inserted before this
+ * column existed, or via any write path that didn't explicitly set it), and
+ * NULL was being treated inconsistently rather than defaulting to the safe
+ * "obfuscated" value. Separately, a bug in the make_admin form handler could
+ * leave a Top-Level Admin (userLevel 0) obfuscated if the "Obfuscate Judging
+ * Numbers?" checkbox was left checked, hiding judging numbers - and
+ * therefore Pullsheets - from their own dashboard (GitHub issue #1744).
+ */
+$v310_obfuscate_fixed = 0;
+
+$sql = sprintf("UPDATE `%s` SET `userAdminObfuscate` = 1 WHERE `userAdminObfuscate` IS NULL;", $prefix."users");
+$db_conn->rawQuery($sql);
+if ($db_conn->getLastErrno() === 0) $v310_obfuscate_fixed += $db_conn->mysqli()->affected_rows;
+else $error_count++;
+
+$sql = sprintf("UPDATE `%s` SET `userAdminObfuscate` = 0 WHERE `userLevel` = 0 AND `userAdminObfuscate` <> 0;", $prefix."users");
+$db_conn->rawQuery($sql);
+if ($db_conn->getLastErrno() === 0) $v310_obfuscate_fixed += $db_conn->mysqli()->affected_rows;
+else $error_count++;
+
+if ($v310_obfuscate_fixed > 0) $v3100_update .= "<li>Corrected ".$v310_obfuscate_fixed." user account(s) with a missing or incorrect judging-number obfuscation setting (Top-Level Admins are no longer obfuscated; NULL values now default to obfuscated).</li>";
+
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];

@@ -43,7 +43,7 @@ else $edit_user_enable = 0;
 			</div>
 			<div class="checkbox" id="obfuscate-judging-nums">
 				<label>
-					<input type="checkbox" name="userAdminObfuscate" id="" value="1" <?php if ($row_username['userAdminObfuscate'] == 1) echo "checked"; ?>> Obfuscate Judging Numbers? <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you wish to hide judging numbers from this Admin user, check the box." ?><i class="fa fa-question-circle"></i></a>
+					<input type="checkbox" name="userAdminObfuscate" id="userAdminObfuscate" value="1" <?php if ($row_username['userAdminObfuscate'] == 1) echo "checked"; ?>> Obfuscate Judging Numbers? <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you wish to hide judging numbers from this Admin user, check the box." ?><i class="fa fa-question-circle"></i></a>
 				</label>
 			</div>
 		</div>
@@ -69,22 +69,27 @@ else $edit_user_enable = 0;
 $(document).ready(function(){
 	
 	var user_level = "<?php echo $row_username['userLevel']; ?>";
-	
+
+	// Obfuscation only applies to the Admin role - a Top-Level Admin must
+	// always see judging numbers (and therefore Pullsheets), so the option
+	// is hidden rather than left for an admin to accidentally leave checked.
 	$("#obfuscate-judging-nums").hide();
-	if (user_level < 2) {
+	if (user_level == 1) {
 		$("#obfuscate-judging-nums").show();
 	}
 
 	$('input[type="radio"]').click(function() {
-        
-        if (($(this).attr('id') == 'userLevel_0') || ($(this).attr('id') == 'userLevel_1')) {
+
+        if ($(this).attr('id') == 'userLevel_1') {
             $("#obfuscate-judging-nums").show("fast");
+            // Default to obfuscated (checked) whenever Admin is actively
+            // selected - an admin must consciously opt out, not opt in.
+            $("#userAdminObfuscate").prop("checked", true);
         }
 
         else {
             $("#obfuscate-judging-nums").hide("fast");
-            $("input[name='obJudingNumbers']").prop("required", false);
-            $("input[name='obJudingNumbers']").prop("checked", true);
+            $("#userAdminObfuscate").prop("checked", false);
         }
 
     });

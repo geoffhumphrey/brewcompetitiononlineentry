@@ -154,10 +154,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			// ----- If Changing a Participant's User Level ----- //
 			if (($go == "make_admin") && ($_SESSION['userLevel'] <= 1)) {
 
+				// Top-Level Admins (userLevel 0) must never be judging-number-obfuscated,
+				// regardless of the submitted checkbox state - the checkbox is only
+				// meaningful for the Admin (userLevel 1) role.
 				$userAdminObfuscate = 1;
-				if (!isset($_POST['userAdminObfuscate'])) {
-					if ($_POST['userLevel'] < 2) $userAdminObfuscate = 0;
-				}
+				if ($_POST['userLevel'] == 0) $userAdminObfuscate = 0;
+				elseif ((!isset($_POST['userAdminObfuscate'])) && ($_POST['userLevel'] == 1)) $userAdminObfuscate = 0;
 
 				$update_table = $prefix."users";
 				$data = array(
