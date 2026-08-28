@@ -290,16 +290,24 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			exit();
 			*/
 			
-			$mail = new PHPMailer(true);
-			$mail->CharSet = 'UTF-8';
-			$mail->Encoding = 'base64';
-			$mail->addAddress($to_email, $to_name);
-			$mail->setFrom($from_competition_email, $comp_name);
-			$mail->addReplyTo($from_email, $from_name);
-			if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 1)) $mail->addBCC($from_email, $from_name);
-			$mail->Subject = $subject;
-			$mail->Body = $message;
-			sendPHPMailerMessage($mail);
+			// addAddress()/setFrom()/addReplyTo()/addBCC() validate their arguments and
+			// throw on a malformed address; sendPHPMailerMessage() only guards send()
+			// itself, so an invalid address here would otherwise be an uncaught fatal
+			// error.
+			try {
+				$mail = new PHPMailer(true);
+				$mail->CharSet = 'UTF-8';
+				$mail->Encoding = 'base64';
+				$mail->addAddress($to_email, $to_name);
+				$mail->setFrom($from_competition_email, $comp_name);
+				$mail->addReplyTo($from_email, $from_name);
+				if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 1)) $mail->addBCC($from_email, $from_name);
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				sendPHPMailerMessage($mail);
+			} catch (\Exception $e) {
+				error_log("Email not sent: ".$e->getMessage());
+			}
 
 			$redirect = $base_url."index.php?view=".str_replace(" ", "+", $to_name)."&msg=19";
 			$redirect = prep_redirect_link($redirect);

@@ -27,6 +27,55 @@ if (($table_card_output) && ($psort == "sorting-placards")) {
 
     include (DB.'styles.db.php');
 
+    // entries_by_style.db.php reads these pre-aggregated maps instead of
+    // querying per category (see admin/entries_by_style.admin.php, its other
+    // caller, for the original of this same block) - this caller was missed
+    // when that file was converted from per-category queries to map lookups,
+    // which silently zeroed out every count here (isset() on an undefined
+    // array never warns, so nothing indicated the loop was reading nothing).
+    $db_conn->where('brewPaid', '1');
+    $db_conn->where('brewReceived', '1');
+    $db_conn->where('brewConfirmed', '1');
+    $db_conn->groupBy('brewCategorySort');
+    $rows_style_counts = $db_conn->get($prefix."brewing", null, "brewCategorySort, COUNT(*) AS count");
+    $style_counts_by_cat = array();
+    foreach ($rows_style_counts as $row_style_counts) {
+        $style_counts_by_cat[$row_style_counts['brewCategorySort']] = $row_style_counts['count'];
+    }
+
+    $db_conn->where('brewConfirmed', '1');
+    $db_conn->groupBy('brewCategorySort');
+    $rows_style_counts_logged = $db_conn->get($prefix."brewing", null, "brewCategorySort, COUNT(*) AS count");
+    $style_counts_logged_by_cat = array();
+    foreach ($rows_style_counts_logged as $row_style_counts_logged) {
+        $style_counts_logged_by_cat[$row_style_counts_logged['brewCategorySort']] = $row_style_counts_logged['count'];
+    }
+
+    // Sorting placards list each logged entry's id/sub-category individually
+    // (not just a count), so also fetch every logged entry's row once and
+    // group it by category, in the same order the original per-category
+    // query used (brewCategorySort, brewSubCategory, id ascending).
+    $db_conn->where('brewConfirmed', '1');
+    $db_conn->orderBy('brewCategorySort', 'ASC');
+    $db_conn->orderBy('brewSubCategory', 'ASC');
+    $db_conn->orderBy('id', 'ASC');
+    $rows_style_entries = $db_conn->get($prefix."brewing", null, "id,brewCategorySort,brewSubCategory");
+    $style_entry_rows_by_cat = array();
+    foreach ($rows_style_entries as $row_style_entries) {
+        $style_entry_rows_by_cat[$row_style_entries['brewCategorySort']][] = $row_style_entries;
+    }
+
+    $style_type_by_cat = array();
+    foreach ($rows_styles as $row_styles_meta) {
+        if (!isset($style_type_by_cat[$row_styles_meta['brewStyleGroup']])) {
+            $style_type_by_cat[$row_styles_meta['brewStyleGroup']] = array(
+                'brewStyle' => $row_styles_meta['brewStyle'],
+                'brewStyleType' => $row_styles_meta['brewStyleType'],
+                'brewStyleCategory' => $row_styles_meta['brewStyleCategory']
+            );
+        }
+    }
+
     $table_card_output_print = "";
     $style_beer_count = array();
     $style_beer_count_logged = array();

@@ -58,14 +58,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (isset($_SESSION['loginUsername'])) && 
 		$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
 
 		if ($mail_use_smtp) {
-			$mail = new PHPMailer(true);
-			$mail->CharSet = 'UTF-8';
-			$mail->Encoding = 'base64';
-			$mail->addAddress($to_email, $to_name);
-			$mail->setFrom($from_email, $from_name);
-			$mail->Subject = $subject;
-			$mail->Body = $message;
-			sendPHPMailerMessage($mail);
+			// addAddress()/setFrom() validate their arguments and throw on a malformed
+			// address; sendPHPMailerMessage() only guards send() itself, so an invalid
+			// address here would otherwise be an uncaught fatal error.
+			try {
+				$mail = new PHPMailer(true);
+				$mail->CharSet = 'UTF-8';
+				$mail->Encoding = 'base64';
+				$mail->addAddress($to_email, $to_name);
+				$mail->setFrom($from_email, $from_name);
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				sendPHPMailerMessage($mail);
+			} catch (\Exception $e) {
+				error_log("Email not sent: ".$e->getMessage());
+			}
 			$redirect = $base_url."index.php?section=admin&go=preferences&msg=32";
 		}
 
@@ -149,15 +156,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (isset($_SESSION['loginUsername'])) && 
 					$headers .= "From: ".$from_name." <".$from_email.">"."\r\n";
 					$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
 
-					$mail = new PHPMailer(true);
-					$mail->CharSet = 'UTF-8';
-					$mail->Encoding = 'base64';
-					$mail->addAddress($to_email, $to_name);
-					$mail->setFrom($from_email, $from_name);
-					$mail->Subject = $subject;
-					$mail->Body = $message;
-					sendPHPMailerMessage($mail);
-				
+					// addAddress()/setFrom() validate their arguments and throw on a malformed
+					// address; sendPHPMailerMessage() only guards send() itself, so an invalid
+					// address here would otherwise be an uncaught fatal error.
+					try {
+						$mail = new PHPMailer(true);
+						$mail->CharSet = 'UTF-8';
+						$mail->Encoding = 'base64';
+						$mail->addAddress($to_email, $to_name);
+						$mail->setFrom($from_email, $from_name);
+						$mail->Subject = $subject;
+						$mail->Body = $message;
+						sendPHPMailerMessage($mail);
+					} catch (\Exception $e) {
+						error_log("Email not sent: ".$e->getMessage());
+					}
+
 				}
 
 			}

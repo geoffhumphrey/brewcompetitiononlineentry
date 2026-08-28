@@ -6,7 +6,10 @@ ini_set('display_errors', 1); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 1); // Change to 0 for prod; change to 1 for testing.
 error_reporting(E_ALL); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
-if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
+// CSRF: require a same-origin Referer for this session-authenticated write action.
+$referrer_ok = (isset($_SERVER['HTTP_REFERER'])) && (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === $_SERVER['SERVER_NAME']);
+
+if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0) && ($referrer_ok)) {
 
 	include_once (LIB.'admin.lib.php');
 	require_once (INCLUDES.'constants_post_lang.inc.php');
@@ -56,26 +59,24 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		$location_added = TRUE;
 		
 		// Get the new location's id
-		$query_new_location = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."judging_locations");
-		$new_location = mysqli_query($connection,$query_new_location) or die (mysqli_error($connection));
-		$row_new_location = mysqli_fetch_assoc($new_location);
+		$db_conn->orderBy('id', 'DESC');
+		$row_new_location = $db_conn->getOne($prefix."judging_locations", "id");
 
 		$new_location = ",Y-".$row_new_location['id'];
 
 		// Loop through all judges in the brewer table and update their availabilities
-		$query_judges = sprintf("SELECT id,uid,brewerJudgeLocation,brewerFirstName,brewerLastName FROM %s WHERE brewerJudge='Y';",$prefix."brewer");
-		$judges = mysqli_query($connection,$query_judges) or die (mysqli_error($connection));
-		$row_judges = mysqli_fetch_assoc($judges);
-		$totalRows_judges = mysqli_num_rows($judges);
+		$db_conn->where('brewerJudge', 'Y');
+		$rows_judges = $db_conn->get($prefix."brewer", null, "id,uid,brewerJudgeLocation,brewerFirstName,brewerLastName");
+		$totalRows_judges = $db_conn->count;
 
 		if ($totalRows_judges > 0) {
 
 			$judges_to_update = TRUE;
 
 			$update_table = $prefix."brewer";
-			$new_availability = $row_judges['brewerJudgeLocation'].$new_location;
+			$new_availability = $rows_judges[0]['brewerJudgeLocation'].$new_location;
 
-			do {
+			foreach ($rows_judges as $row_judges) {
 
 				$judges_list[] = array(
 					'uid' => $row_judges['uid'],
@@ -87,7 +88,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					'brewerJudgeLocation' => $new_availability
 				);
 				$db_conn->where ('id', $row_judges['id']);
-				
+
 				if ($testing) {
 					print_r($data);
 					echo "<br>";
@@ -96,7 +97,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 				else $result = $db_conn->update ($update_table, $data);
 
-			} while($row_judges = mysqli_fetch_assoc($judges));
+			}
 
 		}
 
@@ -126,9 +127,8 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		$result = $db_conn->insert ($update_table, $data);
 
 		// Get the id from the "users" table to insert as the uid in the "brewer" table
-		$query_new_user = sprintf("SELECT id FROM `%s` WHERE user_name = '%s'", $prefix."users", $username);
-		$new_user = mysqli_query($connection,$query_new_user);
-		$row_new_user = mysqli_fetch_assoc($new_user);
+		$db_conn->where('user_name', $username);
+		$row_new_user = $db_conn->getOne($prefix."users", "id");
 
 		$first_name = "Practice";
 		$last_name = "Entrant";
@@ -181,10 +181,11 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		// Then, add an single entry for each style type.
 		
 		// Get last brewStyleGroup for any custom styles (will be 50+)
-		$query_last_custom = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleGroup >= '50' AND brewStyleOwn='custom' ORDER BY brewStyleGroup DESC LIMIT 1;",$prefix."styles");
-		$last_custom = mysqli_query($connection,$query_last_custom) or die (mysqli_error($connection));
-		$row_last_custom = mysqli_fetch_assoc($last_custom);
-		$totalRows_last_custom = mysqli_num_rows($last_custom);
+		$db_conn->where('brewStyleGroup', '50', '>=');
+		$db_conn->where('brewStyleOwn', 'custom');
+		$db_conn->orderBy('brewStyleGroup', 'DESC');
+		$row_last_custom = $db_conn->getOne($prefix."styles", "brewStyleGroup");
+		$totalRows_last_custom = $db_conn->count;
 
 		$brewStyleGroup = 50;
 		if (($totalRows_last_custom > 0) && (is_numeric($row_last_custom['brewStyleGroup']))) $brewStyleGroup = $row_last_custom['brewStyleGroup'];	
@@ -255,9 +256,9 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				$styles_added_count++;
 				
 				// Get the id of the newly created style.
-				$query_last_added = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' ORDER BY id DESC LIMIT 1;",$prefix."styles");
-				$last_added = mysqli_query($connection,$query_last_added) or die (mysqli_error($connection));
-				$row_last_added = mysqli_fetch_assoc($last_added);
+				$db_conn->where('brewStyleOwn', 'custom');
+				$db_conn->orderBy('id', 'DESC');
+				$row_last_added = $db_conn->getOne($prefix."styles", "id");
 				
 				$added_styles[] = array(
 					'id' => $row_last_added['id'],
@@ -323,9 +324,8 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 				if ($result) {
 
-					$query_last_entry_added = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1;",$prefix."brewing");
-					$last_entry_added = mysqli_query($connection,$query_last_entry_added) or die (mysqli_error($connection));
-					$row_last_entry_added = mysqli_fetch_assoc($last_entry_added);
+					$db_conn->orderBy('id', 'DESC');
+					$row_last_entry_added = $db_conn->getOne($prefix."brewing", "id");
 
 					$added_entry_ids[] = $row_last_entry_added['id'];
 
@@ -356,10 +356,9 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		if ($result) {
 
 			$practice_table_added = TRUE;
-			
-			$query_last_table_added = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1;",$prefix."judging_tables");
-			$last_table_added = mysqli_query($connection,$query_last_table_added) or die (mysqli_error($connection));
-			$row_last_table_added = mysqli_fetch_assoc($last_table_added);
+
+			$db_conn->orderBy('id', 'DESC');
+			$row_last_table_added = $db_conn->getOne($prefix."judging_tables", "id");
 
 			foreach ($added_entry_ids as $key => $value) {
 

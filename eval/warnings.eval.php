@@ -40,7 +40,7 @@
         }
     });
 
-<?php } else { ?>
+<?php } elseif (isset($judging_end)) { ?>
 
 var judging_end = moment.tz("<?php echo $judging_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
 var label_weeks = "<?php echo strtolower($label_weeks); ?>";

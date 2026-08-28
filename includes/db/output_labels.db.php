@@ -91,13 +91,13 @@ if ($go == "participants") {
 
 	if (($action == "judging_labels") && ($id == "default")) {
 
-		$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerEmail,a.brewerJudgeRank,a.brewerJudgeMead,b.uid,b.staff_judge FROM ".$prefix."brewer"." a, ".$prefix."staff"." b WHERE a.uid = b.uid AND b.staff_judge='1' AND a.brewerJudge = 'Y' ORDER BY a.brewerLastName ASC";
+		$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerEmail,a.brewerJudgeRank,a.brewerJudgeMead,a.brewerJudgeCider,b.uid,b.staff_judge FROM ".$prefix."brewer"." a, ".$prefix."staff"." b WHERE a.uid = b.uid AND b.staff_judge='1' AND a.brewerJudge = 'Y' ORDER BY a.brewerLastName ASC";
 
 	}
 
 	if (($action == "judging_labels") && ($id != "default")) {
 
-		$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeID,brewerEmail,brewerJudgeRank,brewerJudgeMead,uid FROM ".$prefix."brewer"." WHERE id = ?";
+		$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeID,brewerEmail,brewerJudgeRank,brewerJudgeMead,brewerJudgeCider,uid FROM ".$prefix."brewer"." WHERE id = ?";
 		$params_brewer[] = $id;
 
 	}

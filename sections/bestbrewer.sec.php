@@ -277,6 +277,18 @@ if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
 			}
 
 			else {
+
+				// A brewer whose first appearance in this competition is a BOS
+				// win rather than a preliminary-round placement never gets
+				// Name/Clubs set by the loop above, since this is the only
+				// place their uid enters $bestbrewer - mirrors the equivalent
+				// branch in the preliminary-round loop above.
+				if ($_SESSION['prefsProEdition'] == 1) $bestbrewer[$bb_row_bos_scores['uid']]['Name'] = $bb_row_bos_scores['brewerBreweryName'];
+				if ($_SESSION['prefsProEdition'] == 0) {
+					$bestbrewer[$bb_row_bos_scores['uid']]['Name'] = $bb_row_bos_scores['brewerFirstName']." ".$bb_row_bos_scores['brewerLastName'];
+					$bestbrewer[$bb_row_bos_scores['uid']]['Clubs'] = $bb_row_bos_scores['brewerClubs'];
+				}
+
 				$bestbrewer[$bb_row_bos_scores['uid']]['Places'] = array(0,0,0,0,0);
 				$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'] = array();
 				$bestbrewer[$bb_row_bos_scores['uid']]['Scores'] = array();

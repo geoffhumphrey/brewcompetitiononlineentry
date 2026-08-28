@@ -45,9 +45,9 @@ if (!empty($_SESSION['jPrefsBottleNum'])) $page_info1 .= sprintf("<li><strong>%s
 $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entry_edit_deadline,$entry_edit_deadline_date);
 if (((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserEntryLimitDates']))) && (!$comp_entry_limit) && (!$comp_paid_entry_limit) && (!$disable_pay)) {
 
-	if ($remaining_entries == 0) $page_info1 .= sprintf("<li><strong>%s:</strong> %s <div style=\"padding: .6em\" class=\"badge bg-warning text-dark fw-semibold lh-sm text-wrap\">%s</div></li>",$label_entries_remaining,$remaining_entries,$alert_text_031);
+	if ($remaining_entries == 0) $page_info1 .= sprintf("<li class=\"text-danger-emphasis\"><strong>%s:</strong> %s <div style=\"padding: .6em\" class=\"badge bg-warning text-dark fw-semibold lh-sm text-wrap\">%s</div></li>",$label_entries_remaining,$remaining_entries,$alert_text_031);
 	else {
-		if ($remaining_entries_list_show) $page_info1 .= sprintf("<li><strong>%s:</strong> %s</li>",$label_entries_remaining,$remaining_entries);
+		if ($remaining_entries_list_show) $page_info1 .= sprintf("<li class=\"text-warning-emphasis\"><strong>%s:</strong> %s</li>",$label_entries_remaining,$remaining_entries);
 	}
 
 	if ($incremental) {

@@ -87,7 +87,7 @@ else {
 	}
 	$primary_page_info .= "<p class=\"lead\">";
 	if ($total_to_pay_user == 0) $primary_page_info .= sprintf("<small><span class=\"me-1 fa fa-fw fa-lg fa-check-circle text-success-emphasis\"></span> %s <strong class=\"text-success-emphasis\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees_user,2));
-	else $primary_page_info .= sprintf("<small><span class=\"me-2 fa fa-fw fa-fw fa-lg fa-info-circle text-primary-emphasis\"></span> %s <strong class=\"text-primary-emphasis\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees_user,2));
+	else $primary_page_info .= sprintf("<small><span class=\"me-2 fa fa-fw fa-lg fa-info-circle text-primary-emphasis\"></span>%s <strong class=\"text-primary-emphasis\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees_user,2));
 	if ($total_to_pay_user == 0) $primary_page_info .= sprintf(" %s <strong class=\"text-success-emphasis\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay_user,2));
 	else $primary_page_info .= sprintf(" %s <strong class=\"text-primary-emphasis\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay_user,2));
 	if (($_SESSION['prefsTransFee'] == "Y") && ($total_to_pay_user > 0)) $primary_page_info .= "<strong><span class=\"text-primary-emphasis\">*</span></strong>";

@@ -792,9 +792,9 @@ $(document).ready(function () {
 					<?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
 					<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=judging_number">By Judging Number</a></li>
 					<?php } ?>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Style</a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name"><?php if ($pro_edition == 0) echo "By Brewer Last Name"; else echo "By Organization Name"; ?></a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_name">By Entry Name</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Style</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name"><?php if ($pro_edition == 0) echo "By Brewer Last Name"; else echo "By Organization Name"; ?></a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_name">By Entry Name</a></li>
 				</ul>
 			</div>
 			<?php if (($totalRows_entry_count > $limit) && ($filter == "default")) { ?>

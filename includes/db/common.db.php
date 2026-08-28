@@ -44,6 +44,8 @@ if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_
 		session_destroy();
 		session_write_close();
 	}
+	// TEMP DIAGNOSTIC - remove after tracking down the "headers already sent" warning.
+	if (headers_sent($diag_hs_file, $diag_hs_line)) error_log("DIAGNOSTIC: headers already sent before session_start() in common.db.php - output started at $diag_hs_file:$diag_hs_line");
 	session_name($prefix_session);
 	session_start();
 	session_regenerate_id(true);

@@ -658,12 +658,40 @@ if (($action == "add") || ($action == "edit")) {
 
         }
 
+        // Pre-aggregate per-style entry counts and "already assigned to a
+        // table" lookups instead of running up to 3 queries per style below
+        // (get_table_info()'s "count"/"assigned"/"styles" methods, plus a
+        // style_convert() DB round trip per non-custom style) - a full style
+        // set can be 100+ rows, so this was 200-400+ round trips on this
+        // page. $rows_tables is already fetched for this page regardless of
+        // $action, so the "assigned" map costs no extra query at all.
+        $style_entry_count_map_jtae = array();
+        if ((!isset($_SESSION['jPrefsTablePlanning'])) || ($_SESSION['jPrefsTablePlanning'] != 1)) $db_conn->where('brewReceived', '1');
+        $db_conn->groupBy('brewCategorySort');
+        $db_conn->groupBy('brewSubCategory');
+        $rows_style_entry_counts_jtae = $db_conn->get($brewing_db_table, null, "brewCategorySort, brewSubCategory, COUNT(*) as count");
+        foreach ($rows_style_entry_counts_jtae as $row_style_entry_counts_jtae) {
+            $style_entry_count_map_jtae[$row_style_entry_counts_jtae['brewCategorySort'].'^'.$row_style_entry_counts_jtae['brewSubCategory']] = $row_style_entry_counts_jtae['count'];
+        }
+
+        $style_assigned_html_map_jtae = array();
+        foreach ($rows_tables as $row_tables_lookup_jtae) {
+            foreach (explode(",", $row_tables_lookup_jtae['tableStyles']) as $assigned_style_id_jtae) {
+                if (($assigned_style_id_jtae === "") || (isset($style_assigned_html_map_jtae[$assigned_style_id_jtae]))) continue;
+                $style_assigned_html_map_jtae[$assigned_style_id_jtae] = "<br><em>".$label_assigned_to_table." ".$row_tables_lookup_jtae['tableNumber'].": <a href='index.php?section=admin&go=judging_tables&action=edit&id=".$row_tables_lookup_jtae['id']."'>".$row_tables_lookup_jtae['tableName']."</a></em>.";
+            }
+        }
+
+        // style_convert() opens its own DB connection and runs a query every
+        // call; memoize by category so a style set with far fewer distinct
+        // categories than style rows doesn't re-run it per row.
+        $style_category_name_cache_jtae = array();
+
         foreach ($rows_styles as $row_styles) {
 
             if (array_key_exists($row_styles['id'], $styles_selected)) {
 
-                $style_value = $row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'];
-                $received_entry_count_style = get_table_info($style_value,"count","default",$dbTable,"default");
+                $received_entry_count_style = $style_entry_count_map_jtae[$row_styles['brewStyleGroup'].'^'.$row_styles['brewStyleNum']] ?? 0;
                 $table_row_class = "";
                 $style_assigned_location = "";
                 $style_no_entries = "";
@@ -684,14 +712,14 @@ if (($action == "add") || ($action == "edit")) {
                 }
 
                 if (($action == "edit") && (in_array($row_styles['id'],$current_table_styles_array))) $style_assigned_location = "<br><em>Style currently assigned to this table.</em>";
-                else $style_assigned_location = get_table_info($row_styles['id'],"assigned","default",$dbTable,"default");
+                else $style_assigned_location = $style_assigned_html_map_jtae[$row_styles['id']] ?? "";
 
                 if (!empty($style_assigned_location)) {
                     $table_row_class = "bg-danger";
                     $disabled_styles = "DISABLED";
                 }
 
-                if ($action == "edit")  $style_assigned_this = get_table_info($row_styles['id'],"styles",$row_tables_edit['id'],$dbTable,"default");
+                if ($action == "edit")  $style_assigned_this = in_array($row_styles['id'], explode(",", $row_tables_edit['tableStyles']));
                 if ((is_array($all_table_styles_array)) && (in_array($row_styles['id'],$all_table_styles_array))) $disabled_styles = "DISABLED";
                 if ((is_array($current_table_styles_array)) && (in_array($row_styles['id'],$current_table_styles_array))) $disabled_styles = "";
                 if ($style_assigned_this) {
@@ -707,14 +735,20 @@ if (($action == "add") || ($action == "edit")) {
 
                 if ($_SESSION['prefsStyleSet'] == "BA") {
                     if ($row_styles['brewStyleOwn'] == "custom") $ba_category = h($row_styles['brewStyleGroup'])." (Custom)";
-                    else $ba_category = style_convert($row_styles['brewStyleGroup'],1,$base_url);
+                    else {
+                        if (!isset($style_category_name_cache_jtae[$row_styles['brewStyleGroup']])) $style_category_name_cache_jtae[$row_styles['brewStyleGroup']] = style_convert($row_styles['brewStyleGroup'],1,$base_url);
+                        $ba_category = $style_category_name_cache_jtae[$row_styles['brewStyleGroup']];
+                    }
                     $table_styles_available .= "<td>".$ba_category."</td><td>".h($row_styles['brewStyle']).$style_no_entries.$style_assigned_location."</td>\n";
                 }
                 else {
                     $table_styles_available .= "<td><span class=\"hidden\">".$style_sort."</span>".$style_display."</td>\n";
                     $table_styles_available .= "<td>";
                     if ($row_styles['brewStyleOwn'] == "custom")  $table_styles_available .= h($row_styles['brewStyleGroup'])." (Custom)";
-                    else $table_styles_available .= style_convert($row_styles['brewStyleGroup'],1,$base_url);
+                    else {
+                        if (!isset($style_category_name_cache_jtae[$row_styles['brewStyleGroup']])) $style_category_name_cache_jtae[$row_styles['brewStyleGroup']] = style_convert($row_styles['brewStyleGroup'],1,$base_url);
+                        $table_styles_available .= $style_category_name_cache_jtae[$row_styles['brewStyleGroup']];
+                    }
                     $table_styles_available .= "</td>\n";
                     $table_styles_available .= "<td>".h($row_styles['brewStyle']).$style_no_entries.$style_assigned_location."</td>\n";
                 }

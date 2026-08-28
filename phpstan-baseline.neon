@@ -37,12 +37,6 @@ parameters:
 			path: ajax/account_checks.ajax.php
 
 		-
-			message: '#^Function is_email not found\.$#'
-			identifier: function.notFound
-			count: 3
-			path: ajax/account_checks.ajax.php
-
-		-
 			message: '#^Instantiated class HTMLPurifier not found\.$#'
 			identifier: class.notFound
 			count: 1
@@ -65,12 +59,6 @@ parameters:
 			identifier: class.notFound
 			count: 2
 			path: ajax/practice_session.ajax.php
-
-		-
-			message: '#^Function is_email not found\.$#'
-			identifier: function.notFound
-			count: 1
-			path: ajax/valid_email.ajax.php
 
 		-
 			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
@@ -219,12 +207,6 @@ parameters:
 		-
 			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
 			identifier: class.notFound
-			count: 1
-			path: includes/process/process_contacts.inc.php
-
-		-
-			message: '#^Function is_email not found\.$#'
-			identifier: function.notFound
 			count: 1
 			path: includes/process/process_contacts.inc.php
 
@@ -727,6 +709,18 @@ parameters:
 			path: sections/reg_open.sec.php
 
 		-
+			message: '#^Path in include\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\includes\\mods_sidebar_bottom\.inc\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: sections/sidebar.sec.php
+
+		-
+			message: '#^Path in include\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\includes\\mods_sidebar_top\.inc\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: sections/sidebar.sec.php
+
+		-
 			message: '#^Call to sprintf contains 1 placeholder, 3 values given\.$#'
 			identifier: argument.sprintf
 			count: 1
@@ -761,6 +755,12 @@ parameters:
 			identifier: argument.sprintf
 			count: 1
 			path: sections/winners_subcategory.sec.php
+
+		-
+			message: '#^Path in require_once\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\lib\\hosted\.lib\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: update.php
 
 		-
 			message: '#^File begins with UTF\-8 BOM character\. This may cause problems when running the code in the web browser\.$#'

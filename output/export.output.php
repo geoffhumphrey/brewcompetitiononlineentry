@@ -244,6 +244,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             
             if ($sort != "default") $date_downloaded = $sort;
             $filename = ltrim(filename($contest)."_Entries".filename($filter_filename).filename($action).filename($view).filename($date_downloaded).$loc.$extension,"_");
+            $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
             include (DB.'output_entries_export.db.php');
 
@@ -589,6 +590,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $filename .= $date_downloaded.$extension;
                 $filename = filename($filename);
                 $filename = ltrim($filename,"_");
+                $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                 header('Content-Type: text/csv; charset=utf-8');
                 header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -942,6 +944,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 
                 $filename = filename($filename);
                 $filename = ltrim($filename,"_");
+                $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                 header("Content-Type: text/csv; charset=utf-8");
                 header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -1159,6 +1162,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             $filename = filename($filename);
             $filename = ltrim($filename,"_");
+            $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
             header("Content-Type: text/csv; charset=utf-8");
             header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -1302,6 +1306,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             }
 
             $filename = ltrim(filename($contest)."_Participants".filename($date_downloaded).$loc.$extension,"_");
+            $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
             header("Content-Type: text/csv; charset=utf-8");
             header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -1345,6 +1350,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $filename = $_SESSION['contestName']."_Promo_".$date_downloaded.".doc";
             $filename = filename($filename);
             $filename = ltrim($filename,"_");
+            $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 			header('Content-Type: application/msword;');
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}
@@ -1353,6 +1359,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $filename = $_SESSION['contestName']."_Promo_".$date_downloaded.".html";
             $filename = filename($filename);
             $filename = ltrim($filename,"_");
+            $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 			header('Content-Type: text/plain;');
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}
@@ -1361,6 +1368,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $filename = $_SESSION['contestName']."_Promo_".$date_downloaded.".txt";
             $filename = filename($filename);
             $filename = ltrim($filename,"_");
+            $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 			header('Content-Type: text/plain;');
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}
@@ -1545,6 +1553,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $filename = $_SESSION['contestName']."_Winners_".$date_downloaded.".".$view;
                     $filename = filename($filename);
                     $filename = ltrim($filename,"_");
+                    $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                     $string = sprintf("%s - %s",$label_winners,html_entity_decode($_SESSION['contestName']));
                     $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));                  
@@ -2067,6 +2076,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $filename = $_SESSION['contestName']."_BOS_Results_".$date_downloaded.".".$view;
                     $filename = filename($filename);
                     $filename = ltrim($filename,"_");
+                    $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                     $a = array();
                     foreach ($rows_style_types as $row_style_types) {
@@ -2232,6 +2242,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $filename = $_SESSION['contestName']."_Results.".$view;
                     $filename = filename($filename);
                     $filename = ltrim($filename,"_");
+                    $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                     /**
                      * Winners by table/medal group
@@ -2679,6 +2690,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $filename = $_SESSION['contestName']."_BOS_Results.".$view;
                     $filename = filename($filename);
                     $filename = ltrim($filename,"_");
+                    $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                     $a = array();
 
@@ -2915,6 +2927,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $filename = $_SESSION['contestName']."_BJCP_Points_Report.".$view;
                 $filename = filename($filename);
                 $filename = ltrim($filename,"_");
+                $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                 include(CLASSES.'fpdf/fpdf.php');
                 include(CLASSES.'fpdf/exfpdf.php');
@@ -3237,6 +3250,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $filename .= $_SESSION['contestName']."_BJCP_Points_Report_".$date_downloaded.".xml";
                 $filename = filename($filename);
                 $filename = ltrim($filename,"_");
+                $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                 $all_rules_applied = TRUE;
                 $rule_org = FALSE;
@@ -3985,6 +3999,7 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
     $filename .= $date_downloaded.$extension;
     $filename = filename($filename);
     $filename = ltrim($filename,"_");
+    $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment;filename="'.$filename.'"');

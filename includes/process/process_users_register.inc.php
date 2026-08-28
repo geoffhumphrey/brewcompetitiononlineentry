@@ -373,8 +373,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						if ($brewerJudge == "Y") $brewerJudge1 = $label_yes; else $brewerJudge1 = $label_no;
 						if ($brewerSteward == "Y") $brewerSteward1 = $label_yes; else $brewerSteward1 = $label_no;
 						if ($brewerStaff == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
-						if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; 
-						elseif ($_POST['brewerProAm'] == 2) $brewerProAm1 = $label_opt_out;  
+						if ($brewerProAm == 1) $brewerProAm1 = $label_yes;
+						elseif ($brewerProAm == 2) $brewerProAm1 = $label_opt_out;
 						else $brewerProAm1 = $label_no;
 
 						if (!empty($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
@@ -398,14 +398,24 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$headers .= "From: ".$from_name." <".$from_email.">"."\r\n";
 					$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
 
-					$mail = new PHPMailer(true);
-					$mail->CharSet = 'UTF-8';
-					$mail->Encoding = 'base64';
-					$mail->addAddress($to_email, $to_name);
-					$mail->setFrom($from_email, $from_name);
-					$mail->Subject = $subject;
-					$mail->Body = $message;
-					sendPHPMailerMessage($mail);
+					// addAddress()/setFrom() validate their arguments and throw on a malformed
+					// address (e.g. a from-domain with no TLD, such as "noreply@localhost" on
+					// a bare-hostname install) - sendPHPMailerMessage() only guards send()
+					// itself, so an invalid address here would otherwise be an uncaught fatal
+					// error taking down the whole registration request after the account was
+					// already created.
+					try {
+						$mail = new PHPMailer(true);
+						$mail->CharSet = 'UTF-8';
+						$mail->Encoding = 'base64';
+						$mail->addAddress($to_email, $to_name);
+						$mail->setFrom($from_email, $from_name);
+						$mail->Subject = $subject;
+						$mail->Body = $message;
+						sendPHPMailerMessage($mail);
+					} catch (\Exception $e) {
+						error_log("Registration confirmation email not sent: ".$e->getMessage());
+					}
 					
 					/*
 					echo $url;

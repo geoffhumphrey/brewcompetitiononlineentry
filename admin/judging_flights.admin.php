@@ -191,7 +191,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 </script>
 <?php
 echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</p>"; ?>
-<p onload="updateButCount(event);">Based upon your <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>,  <?php if ($flight_count == 1) echo " this table only requires one flight."; else echo " this table can be divided into ".readable_number($flight_count)." flights.  For each entry below, designate the flight in which it will be judged."; ?></p>
+<p>Based upon your <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>,  <?php if ($flight_count == 1) echo " this table only requires one flight."; else echo " this table can be divided into ".readable_number($flight_count)." flights.  For each entry below, designate the flight in which it will be judged."; ?></p>
 <form name="flights" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>" onreset="updateButCount(event);">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <script type="text/javascript" language="javascript">
@@ -213,6 +213,13 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
 				{ "asSorting": [  ] }
 				]
 			} );
+
+			// Populate the initial per-flight totals on load - previously
+			// only ever wired to a <p onload="..."> attribute, which isn't a
+			// valid event for a <p> element and so silently never fired;
+			// counts stayed blank until the user clicked a radio button and
+			// hit the table's own onclick handler.
+			updateButCount({type: 'load'});
 
 		} );
 </script>

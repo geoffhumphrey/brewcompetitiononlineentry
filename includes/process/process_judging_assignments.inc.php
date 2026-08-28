@@ -152,10 +152,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			if ((isset($_POST['head_judge_choose'])) && (!empty($_POST['head_judge_choose']))) {
 
+				// $random is left over from the foreach above and only holds
+				// whatever value its last iteration happened to have - not a
+				// reliable reference to this table. $id is what this whole
+				// request is scoped to (the queued-mode branch below already
+				// uses it the same way for the identical purpose).
 				$update_table = $prefix."judging_assignments";
 				$data = array('assignRoles' => 'HJ');
 				$db_conn->where ('bid', sterilize($_POST['head_judge_choose']));
-				$db_conn->where ('assignTable', sterilize($_POST['assignTable'.$random]));
+				$db_conn->where ('assignTable', sterilize($id));
 				$result = $db_conn->update ($update_table,$data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();

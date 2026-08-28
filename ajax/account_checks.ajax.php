@@ -196,14 +196,21 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 				if ($mail_use_smtp) {
 
-					$mail = new PHPMailer(true);
-					$mail->CharSet = 'UTF-8';
-					$mail->Encoding = 'base64';
-					$mail->addAddress($to_email, $to_name);
-					$mail->setFrom($from_email, $from_name);
-					$mail->Subject = $subject;
-					$mail->Body = $message;
-					sendPHPMailerMessage($mail);
+					// addAddress()/setFrom() validate their arguments and throw on a malformed
+					// address; sendPHPMailerMessage() only guards send() itself, so an invalid
+					// address here would otherwise be an uncaught fatal error.
+					try {
+						$mail = new PHPMailer(true);
+						$mail->CharSet = 'UTF-8';
+						$mail->Encoding = 'base64';
+						$mail->addAddress($to_email, $to_name);
+						$mail->setFrom($from_email, $from_name);
+						$mail->Subject = $subject;
+						$mail->Body = $message;
+						sendPHPMailerMessage($mail);
+					} catch (\Exception $e) {
+						error_log("Email not sent: ".$e->getMessage());
+					}
 
 				}
 

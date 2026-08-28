@@ -950,14 +950,19 @@ function received_entries() {
 
 	foreach ($rows_styles as $row_styles) { $style_array[] = $row_styles['brewStyle']; }
 
-	$a = array();
-	foreach ($style_array as $style) {
-		$db_conn->where('brewStyle', $style);
-		$db_conn->where('brewReceived', '1');
-		$row = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
-		if ($row['count'] > 0) $a[] = $style;
+	// Was 1 query per active style (COUNT(*) WHERE brewStyle=? AND brewReceived='1')
+	// - a full style set can run 100+ round trips here. Fetch every style name with
+	// at least one received entry once, then keep $style_array's order via intersect.
+	$db_conn->where('brewReceived', '1');
+	$db_conn->groupBy('brewStyle');
+	$rows_received_styles = $db_conn->get($prefix."brewing", null, "brewStyle");
+	$received_style_names = array();
+	foreach ($rows_received_styles as $row_received_styles) {
+		$received_style_names[] = $row_received_styles['brewStyle'];
 	}
-	
+
+	$a = array_values(array_intersect($style_array, $received_style_names));
+
 	return implode(",",$a);
 
 }

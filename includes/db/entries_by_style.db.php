@@ -7,12 +7,17 @@ $other_count = FALSE;
 $cat = $key;
 $cat_convert = $key;
 
-// Counts and style metadata are pre-aggregated once in
-// admin/entries_by_style.admin.php ($style_counts_by_cat,
-// $style_counts_logged_by_cat, $style_type_by_cat) instead of being queried
-// fresh for every category here.
+// Counts and style metadata are pre-aggregated once by the caller
+// ($style_counts_by_cat, $style_counts_logged_by_cat, $style_type_by_cat)
+// instead of being queried fresh for every category here. Callers that also
+// need the individual logged-entry rows for a category (id/brewCategorySort/
+// brewSubCategory - e.g. to list them, not just count them) provide
+// $style_entry_rows_by_cat the same way; callers that don't need them (e.g.
+// admin/entries_by_style.admin.php) simply never set it, so this is an empty
+// array there rather than undefined.
 $row_style_count = array('count' => isset($style_counts_by_cat[$cat]) ? $style_counts_by_cat[$cat] : 0);
 $row_style_count_logged = array('count' => isset($style_counts_logged_by_cat[$cat]) ? $style_counts_logged_by_cat[$cat] : 0);
+$rows_style_count_logged = isset($style_entry_rows_by_cat[$cat]) ? $style_entry_rows_by_cat[$cat] : array();
 $row_style_type = isset($style_type_by_cat[$cat]) ? $style_type_by_cat[$cat] : array();
 
 if ($_SESSION['prefsStyleSet'] == "BA") {

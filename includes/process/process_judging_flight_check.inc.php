@@ -28,7 +28,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 	}
 
-	// Put all of the flightEntryIDs into an array
+	// Put all of the flightEntryIDs into an array. Initialized here rather than
+	// left to the loop below, since judging_flights can legitimately be empty
+	// (e.g. right after a table is added with no flights assigned yet), in
+	// which case the loop body never runs and $flight_array would otherwise
+	// stay undefined - fatal once passed to in_array() at line 83, since PHP 8
+	// type-hints its haystack argument as array, not just null-tolerant.
+	$flight_array = array();
 	foreach ($rows_check_flights as $row_check_flights) {
 		$flight_array[] = $row_check_flights['flightEntryID'];
 	}

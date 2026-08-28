@@ -132,6 +132,21 @@ $db_conn->orderBy ("tableNumber","ASC");
 $row_table_assignments = $db_conn->get($prefix."judging_tables");
 $totalRows_table_assignments = $db_conn->count;
 
+// Everything below - judging-end/next-session countdowns, table assignment
+// listings, per-table stats - is only ever built inside the
+// "$totalRows_table_assignments > 0" block further down. With no judging
+// tables configured yet, that block never runs and the page below just
+// renders empty with no explanation (and, previously, left warnings.eval.php
+// referencing undefined countdown variables). Surface that state instead of
+// silently leaving the dashboard blank.
+$no_table_data_alert = "";
+if ($totalRows_table_assignments == 0) {
+	$no_table_data_alert .= "<div class=\"alert alert-warning\">";
+	$no_table_data_alert .= sprintf("<p><i class=\"fa fa-exclamation-triangle\"></i> <strong>%s</strong> No judging tables have been configured yet, so there's nothing to evaluate here.</p>",$label_attention);
+	if ($admin) $no_table_data_alert .= sprintf("<p><a href=\"%s\">Add a judging table</a> and assign entries to it to populate this dashboard.</p>",$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add");
+	$no_table_data_alert .= "</div>";
+}
+
 /**
  * Batch what used to be several queries per table (get_table_info() for its
  * location, assigned_judges(), an inline judge-names query, get_evaluation_count())
@@ -1346,6 +1361,7 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
 		include (EVALS.'import_scores.eval.php');
 		echo $buttons_small_viewport;
 		echo $left_side;
+		echo $no_table_data_alert;
 		echo $admin_add_eval;
 		echo $table_assignment_entries;
 		?>

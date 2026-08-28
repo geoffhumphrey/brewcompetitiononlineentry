@@ -7,7 +7,7 @@ $rows_bb_scores = $db_conn->rawQuery($query_scores);
 $bb_totalRows_scores = $db_conn->count;
 
 if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
-    $query_bos_scores = "SELECT a.scorePlace, a.scoreEntry, b.brewCategory, b.brewCategorySort, b.brewSubCategory, c.brewerClubs, c.uid FROM ".$judging_scores_bos_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = a.bid AND a.scorePlace IS NOT NULL";
+    $query_bos_scores = "SELECT a.scorePlace, a.scoreEntry, b.brewCategory, b.brewCategorySort, b.brewSubCategory, c.brewerClubs, c.uid, c.brewerFirstName, c.brewerLastName, c.brewerBreweryName FROM ".$judging_scores_bos_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = a.bid AND a.scorePlace IS NOT NULL";
     $rows_bb_bos_scores = $db_conn->rawQuery($query_bos_scores);
     $bb_totalRows_bos_scores = $db_conn->count;
 }

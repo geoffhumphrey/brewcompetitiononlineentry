@@ -65,8 +65,16 @@ if ($filter == "judges") {
 }
 
 if ($_SESSION['jPrefsQueued'] == "N") {
+  // Only emit a header for rounds that actually have flights for this table -
+  // mirrors the table_round() gate the body loop uses below to decide whether
+  // to emit a <td>. Rounds aren't guaranteed to be populated contiguously from
+  // 1 (e.g. a table's only flight can be round 2 with no round 1 at all), so
+  // assuming every round up to the max exists left a stray header with no
+  // matching cell, shifting every row's real content one column to the left.
   for($i=1; $i<$row_flights['flightRound']+1; $i++) {
-    $output_datatables_head .= "<th>Round ".$i."</th>";
+    if (table_round($row_tables_edit['id'],$i)) {
+      $output_datatables_head .= "<th>Round ".$i."</th>";
+    }
   }
 }
 
@@ -187,6 +195,13 @@ if ($totalRows_brewer > 0) {
     $checked_minibos_judge = "";
     $roles_previously_defined = 0;
 
+    // Reset per-brewer, not per-page: without this, once any earlier brewer
+    // in this loop has a real conflict, $entry_conflict stays TRUE (it's
+    // only ever reassigned below when the CURRENT brewer has an assignment
+    // row to check) and the next assigned brewer with no conflict of their
+    // own gets silently unassigned from the table by the check further down.
+    $entry_conflict = FALSE;
+
     $judge_roles_display = "";
     $head_judge_role_display = "";
 
@@ -211,10 +226,16 @@ if ($totalRows_brewer > 0) {
       $result = $db_conn->delete ($update_table);
     }
 
-    // Get role from judging_assignments table
+    // Get role from judging_assignments table. Not scoped to a specific
+    // round: the Head Judge save (process_judging_assignments.inc.php)
+    // updates assignRoles for every row matching bid+assignTable regardless
+    // of assignRound, so checking a single round here (previously
+    // $row_flights['flightRound'] - the round of this table's
+    // highest-numbered flight, not necessarily the judge's own round) could
+    // miss the very row that was just set to 'HJ', leaving the dropdown
+    // showing no selection even though the designation is saved correctly.
     $db_conn->where ("bid", $row_brewer['uid']);
     $db_conn->where ("assignTable", $row_tables_edit['id']);
-    $db_conn->where ("assignRound", $row_flights['flightRound']);
     $row_judge_roles = $db_conn->getOne ($prefix."judging_assignments", null, "assignRoles");
   
     if ($_SESSION['jPrefsQueued'] == "N") {

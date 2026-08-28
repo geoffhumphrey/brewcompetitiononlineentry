@@ -207,7 +207,13 @@ function user_entry_count($uid,$view) {
 
 	if ($totalRows_with_entries_count > 0) {
 		foreach ($rows_with_entries_count as $row_with_entries_count) {
-			$judging_numbers[] = sprintf("%06d",$row_with_entries_count['brewJudgingNumber']);
+			// %06s, not %06d - brewJudgingNumber is a formatted string like
+			// "26-020", not a plain integer. %06d numerically casts it, and PHP
+			// truncates at the first non-digit character, so every entry in the
+			// same category (e.g. "26-020", "26-001", "26-011") collapses to the
+			// same "000026" - array_unique() below then discards all but one of
+			// them as an apparent duplicate, silently dropping real entries.
+			$judging_numbers[] = sprintf("%06s",$row_with_entries_count['brewJudgingNumber']);
 			$entry_numbers[] = sprintf("%06d",$row_with_entries_count['id']);
 		}
 

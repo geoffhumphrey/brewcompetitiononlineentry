@@ -152,14 +152,22 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2) && ($csr
         <pre>
 
         <?php
-        $mail = new PHPMailer(true);
-        $mail->CharSet = 'UTF-8';
-        $mail->Encoding = 'base64';
-        $mail->addAddress($to_email, $to_name);
-        $mail->setFrom($from_email, $from_name);
-        $mail->Subject = $subject;
-        $mail->Body = $message;
-        send_test_message($mail,$smtp_password);
+        // addAddress()/setFrom() validate their arguments and throw on a malformed
+        // address; send_test_message() only guards send() itself. Unlike the other
+        // call sites, this page exists specifically to surface email errors to the
+        // admin, so echo the failure here rather than just logging it.
+        try {
+            $mail = new PHPMailer(true);
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
+            $mail->addAddress($to_email, $to_name);
+            $mail->setFrom($from_email, $from_name);
+            $mail->Subject = $subject;
+            $mail->Body = $message;
+            send_test_message($mail,$smtp_password);
+        } catch (\Exception $e) {
+            echo "Message could not be sent. Mailer Error: ".h($e->getMessage());
+        }
         ?>
 
         </pre>

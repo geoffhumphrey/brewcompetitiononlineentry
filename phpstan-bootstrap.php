@@ -55,6 +55,12 @@ if (!function_exists('is_https')) {
     }
 }
 
+if (!function_exists('is_email')) {
+    function is_email($email, $checkDNS = false, $errorlevel = false, &$parsedata = array()) {
+        return true;
+    }
+}
+
 if (!function_exists('sterilize')) {
     function sterilize($sterilize = NULL) {
         if (is_array($sterilize)) return array_map('sterilize', $sterilize);

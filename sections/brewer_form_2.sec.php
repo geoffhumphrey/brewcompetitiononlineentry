@@ -161,7 +161,7 @@ if (!$entrant_type_brewery) {
                     </div>
                     <div class="radio">
                         <label>
-                             <input type="radio" name="brewerJudgeRank[]" value="Provisional" <?php if (($action == "edit") && in_array("Provisional",$judge_array)) echo "CHECKED"; ?>> Provisional **
+                             <input type="radio" name="brewerJudgeRank[]" value="Mead/Cider Only" <?php if (($action == "edit") && in_array("Mead/Cider Only",$judge_array)) echo "CHECKED"; ?>> BJCP Certified Mead and/or Cider Only
                         </label>
                     </div>
                     <div class="radio">
@@ -176,7 +176,17 @@ if (!$entrant_type_brewery) {
                     </div>
                     <div class="radio">
                         <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Distinguished Certified" <?php if (($action == "edit") && in_array("Distinguished Certified",$judge_array)) echo "CHECKED"; ?>> Distinguished Certified
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
                             <input type="radio" name="brewerJudgeRank[]" value="National" <?php if (($action == "edit") && in_array("National",$judge_array)) echo "CHECKED"; ?>> National
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank[]" value="Distinguished National" <?php if (($action == "edit") && in_array("Distinguished National",$judge_array)) echo "CHECKED"; ?>> Distinguished National
                         </label>
                     </div>
                     <div class="radio">

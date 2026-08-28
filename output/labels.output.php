@@ -163,9 +163,11 @@ if (isset($_SESSION['loginUsername'])) {
 									
 									if (in_array($v_loc['check'], $locations)) {
 										// Find which table this judge is assigned to for that location.
+										// judge_assignment() returns null when the judge has no table
+										// assignment yet at this location - not yet assigned, not an error.
 										$assign = judge_assignment($brewer_info[7], $v_loc['id']);
 										//$assign = explode("^", $flight);
-										$table_flights[] = $assign['tableNumber'];
+										if (!empty($assign)) $table_flights[] = $assign['tableNumber'];
 									}
 
 								}
@@ -578,7 +580,6 @@ if (isset($_SESSION['loginUsername'])) {
 								if (strpos($sp_str_sweet_carb,"high carbonation") !== false) $beer_carbonation .= "*High Carb* ";
 								
 								if ((!empty($beer_strength)) || (!empty($beer_sweeteness)) || (!empty($beer_carbonation))) {
-									$character_limit_adjust_special = $character_limit_adjust_special - 12;
 									if (!in_array($style,$mead)) $special = strtr($special,$special_strength);
 								}
 
@@ -693,6 +694,7 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($psort == "OL5275WR") 	$filename .= "_.75_Inch";
 			if ($filter == "recent")		$filename .= "_Added_After_Reg_Close";
 			$filename .= ".pdf";
+			$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
 			$pdf = new PDF_Label($psort);
 			$pdf->AddPage();
@@ -738,6 +740,7 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($psort == "OL5275WR") 	$filename .= "_.75_Inch";
 			if ($filter == "recent")	$filename .= "_Added_After_Reg_Close";
 			$filename .= ".pdf";
+			$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
 			$pdf = new PDF_Label($psort);
 			$pdf->AddPage();
@@ -782,6 +785,7 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($psort == "OL32") 		$filename .= "_.50_Inch";
 			if ($psort == "OL5275WR") 	$filename .= "_.75_Inch";
 			$filename .= ".pdf";
+			$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
 			$pdf = new PDF_Label($psort);
 			$pdf->AddPage();
@@ -977,14 +981,36 @@ if (isset($_SESSION['loginUsername'])) {
 
 						if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
 						
-						$user_entry_count1 = user_entry_count($row_brewer['uid'],$view);
+						// "entry" here (not $view) sorts the query by id to match
+						// the entry numbers actually displayed below.
+						$user_entry_count1 = user_entry_count($row_brewer['uid'],"entry");
 						$user_entry_count2 = explode("^",$user_entry_count1);
 
 						if ($user_entry_count2[0] == 1) $entry_count = $user_entry_count2[0]." Entry";
 						else $entry_count = $user_entry_count2[0]." Entries";
 
-						if ($view == "entry") $entries = $user_entry_count2[1];
-						else $entries = $user_entry_count2[2];
+						// Always entry numbers here, not $view-dependent like other
+						// reports - this label is entrant-facing (mailed to them),
+						// and its own text is hardcoded to "Entry #:" regardless of
+						// $view, so a judging number (anonymized, judge-facing only)
+						// would be both wrong and meaningless to the recipient. This
+						// report's URL doesn't pass $view at all, so the value here
+						// was whatever it happened to default to, not a deliberate
+						// per-request choice.
+						$entries = $user_entry_count2[1];
+
+						// Cap at 9 entry numbers - the label is a fixed physical
+						// size (Avery 5160/3422) and MultiCell() wraps text to fit
+						// its width but doesn't clip to its height, so text past
+						// the label's boundary silently overflows into the space
+						// reserved for the next label rather than being cut off
+						// visibly. 9 is the exact safe capacity in the worst case
+						// (a non-US address, adding a country line, combined with
+						// a name long enough to wrap to two lines) at this font
+						// size on the smaller of the two supported label formats.
+						$entries_array = explode(", ", $entries);
+						$entries_total = count($entries_array);
+						if ($entries_total > 9) $entries = implode(", ", array_slice($entries_array, 0, 9)).sprintf(", +%d more", $entries_total - 9);
 
 						if (!empty($brewer_country)) $last_line = $brewer_country."\nEntry #: ".truncate($entries,126);
 						else $last_line = "Entry #: ".truncate($entries,166);
@@ -1184,7 +1210,7 @@ if (isset($_SESSION['loginUsername'])) {
 		if ($row_brewer['brewerJudgeMead'] == "Y") $mead = "Certified Mead Judge";
 		if (in_array("Certified Cider Guide", $bjcp_rank)) $cider = "Certified Cider Guide";
 	    if (in_array("Certified Pommelier", $bjcp_rank)) $cider = "Certified Pommelier";
-		if ($row_brewer['brewerCiderMead'] == "Y") $cider = "Certified Cider Judge";
+		if ($row_brewer['brewerJudgeCider'] == "Y") $cider = "Certified Cider Judge";
 		if (in_array("Professional Brewer", $bjcp_rank)) $pro = "Professional Brewer";
 		if (in_array("Certified Cicerone", $bjcp_rank)) $cert_cicerone = "Certified Cicerone";
 		if (in_array("Advanced Cicerone", $bjcp_rank)) $adv_cicerone = "Advanced Cicerone";

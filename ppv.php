@@ -222,15 +222,22 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 			$subject = mb_convert_encoding($test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009), "UTF-8");
 
 			if ($mail_use_smtp) {
-				$mail = new PHPMailer(true);
-				$mail->CharSet = 'UTF-8';
-				$mail->Encoding = 'base64';
-				$mail->addAddress($to_email, $to_recipient);
-				$mail->addCC($cc_email, $cc_recipient);
-				$mail->setFrom($from_email, $row_logo['contestName']);
-				$mail->Subject = $subject;
-				$mail->Body = $message_all;
-				sendPHPMailerMessage($mail);
+				// addAddress()/addCC()/setFrom() validate their arguments and throw on a
+				// malformed address; sendPHPMailerMessage() only guards send() itself, so
+				// an invalid address here would otherwise be an uncaught fatal error.
+				try {
+					$mail = new PHPMailer(true);
+					$mail->CharSet = 'UTF-8';
+					$mail->Encoding = 'base64';
+					$mail->addAddress($to_email, $to_recipient);
+					$mail->addCC($cc_email, $cc_recipient);
+					$mail->setFrom($from_email, $row_logo['contestName']);
+					$mail->Subject = $subject;
+					$mail->Body = $message_all;
+					sendPHPMailerMessage($mail);
+				} catch (\Exception $e) {
+					error_log("Email not sent: ".$e->getMessage());
+				}
 			} else {
 				mail($to_email_formatted, $subject, $message_all, $headers);
 			}
@@ -302,14 +309,21 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 		$message_all_confirm = $message_top_confirm.$message_body_confirm.$message_bottom_confirm;
 
 		if ($mail_use_smtp) {
-			$mail = new PHPMailer(true);
-			$mail->CharSet = 'UTF-8';
-			$mail->Encoding = 'base64';
-			$mail->addAddress($paypal_email_address, "PayPal IPN Confirmation");
-			$mail->setFrom($from_email, $row_logo['contestName']." Server");
-			$mail->Subject = $subject_confirm;
-			$mail->Body = $message_all_confirm;
-			sendPHPMailerMessage($mail);
+			// addAddress()/setFrom() validate their arguments and throw on a malformed
+			// address; sendPHPMailerMessage() only guards send() itself, so an invalid
+			// address here would otherwise be an uncaught fatal error.
+			try {
+				$mail = new PHPMailer(true);
+				$mail->CharSet = 'UTF-8';
+				$mail->Encoding = 'base64';
+				$mail->addAddress($paypal_email_address, "PayPal IPN Confirmation");
+				$mail->setFrom($from_email, $row_logo['contestName']." Server");
+				$mail->Subject = $subject_confirm;
+				$mail->Body = $message_all_confirm;
+				sendPHPMailerMessage($mail);
+			} catch (\Exception $e) {
+				error_log("Email not sent: ".$e->getMessage());
+			}
 		} else {
 			mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
 		}

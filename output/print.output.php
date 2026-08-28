@@ -188,7 +188,6 @@ function selfPrint(){
     self.print();
 }
 setTimeout('selfPrint()',3000);
-html.push('');
 </script>
 <?php 	}
 } // end if logged in

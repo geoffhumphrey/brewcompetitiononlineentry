@@ -201,13 +201,23 @@ else {
 
 	foreach ($judging_sessions as $key => $value) {
 
-		$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,b.uid,b.staff_judge,b.staff_steward,b.staff_staff,b.staff_organizer,c.assignLocation FROM ".$prefix."brewer"." a, ".$prefix."staff"." b, ".$prefix."judging_assignments"." c WHERE a.uid = b.uid AND a.uid = c.bid";
-		$params_brewer = array();
+		$query_brewer = "SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,b.uid,b.staff_judge,b.staff_steward,b.staff_staff,b.staff_organizer,c.assignLocation FROM ".$prefix."brewer"." a, ".$prefix."staff"." b, ".$prefix."judging_assignments"." c WHERE a.uid = b.uid AND a.uid = c.bid AND c.assignLocation = ?";
+		$params_brewer = array($value['loc-id']);
 		if (SINGLE) { $query_brewer .= " AND comp_id=?"; $params_brewer[] = $_SESSION['comp_id']; }
 		if ($filter == "S") $query_brewer .= " AND b.staff_steward='1'";
 		else $query_brewer .= " AND b.staff_judge='1'";
+		// A judge/steward assigned to more than one flight or table within this
+		// location matches judging_assignments more than once, which without
+		// grouping duplicates their row on the sign-in sheet once per
+		// assignment - a sign-in sheet only needs one signature line per
+		// person. Filtering assignLocation in SQL (rather than the previous
+		// fetch-everyone-then-filter-per-location loop) is what makes this
+		// grouping safe for someone assigned across multiple locations too -
+		// each location's query only ever sees that location's own rows to
+		// collapse, never a different location's for the same person.
+		$query_brewer .= " GROUP BY a.uid";
 		$query_brewer .= " ORDER BY a.brewerLastName ASC";
-		$rows_brewer = (!empty($params_brewer)) ? $db_conn->rawQuery($query_brewer, $params_brewer) : $db_conn->rawQuery($query_brewer);
+		$rows_brewer = $db_conn->rawQuery($query_brewer, $params_brewer);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 		$totalRows_brewer = $db_conn->count;
 
@@ -218,7 +228,6 @@ else {
 
 		foreach ($rows_brewer as $row_brewer) {
 
-			if ($row_brewer['assignLocation'] == $value['loc-id']) {
 				$list_tbody .= "<tr class=\"show-me-hide-me\">";
 				$list_tbody .= "<td nowrap=\"nowrap\">".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
 				if ($filter == "J") $list_tbody .= "<td>".strtoupper(strtr($row_brewer['brewerJudgeID'],$bjcp_num_replace))."</td>";
@@ -228,7 +237,6 @@ else {
 				$list_tbody .= "</td>";
 				$list_tbody .= "<td>&nbsp;</td>";
 				$list_tbody .= "</tr>";
-			}
 
 		}
 ?>

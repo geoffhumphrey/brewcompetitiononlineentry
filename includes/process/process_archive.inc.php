@@ -471,11 +471,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$db_conn->where("id", 1);
 				$row_prefs = $db_conn->getOne($prefix."preferences");
 
-				$_SESSION['prefsTemp'] = $row_prefs['prefsTemp'];
-				$_SESSION['prefsWeight1'] = $row_prefs['prefsWeight1'];
-				$_SESSION['prefsWeight2'] = $row_prefs['prefsWeight2'];
-				$_SESSION['prefsLiquid1'] = $row_prefs['prefsLiquid1'];
-				$_SESSION['prefsLiquid2'] = $row_prefs['prefsLiquid2'];
 				$_SESSION['prefsPaypal'] = $row_prefs['prefsPaypal'];
 				$_SESSION['prefsPaypalAccount'] = $row_prefs['prefsPaypalAccount'];
 				$_SESSION['prefsCurrency'] = $row_prefs['prefsCurrency'];
@@ -641,12 +636,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // end if ($filter != $suffix)
 
 		$update_table = $prefix."archive";
-		$data = array( 
+		$data = array(
 			'archiveProEdition' => sterilize($_POST['archiveProEdition']),
 			'archiveStyleSet' => sterilize($_POST['archiveStyleSet']),
 			'archiveScoresheet' => sterilize($_POST['archiveScoresheet']),
-			'archiveWinnerMethod' => sterilize($_POST['archiveWinnerMethod']),
-			'archiveDisplayWinners' => sterilize($_POST['archiveDisplayWinners'])
+			// Both are radio buttons that get DISABLED (and so never submitted)
+			// on the edit-archive form when there's no results data for this
+			// archive to choose a winner method/display setting for.
+			'archiveWinnerMethod' => isset($_POST['archiveWinnerMethod']) ? sterilize($_POST['archiveWinnerMethod']) : null,
+			'archiveDisplayWinners' => isset($_POST['archiveDisplayWinners']) ? sterilize($_POST['archiveDisplayWinners']) : null
 			);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
