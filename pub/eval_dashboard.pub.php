@@ -345,12 +345,12 @@ if ($totalRows_table_assignments > 0) {
 
 							if (!empty($row_entries['brewMead1'])) {
 								$additional_info++;
-								$carb_display .= "<strong>".$label_carbonation.":</strong> ".$row_entries['brewMead1'];
+								$carb_display .= "<strong>".$label_carbonation.":</strong> ".translate_mead_req_value($row_entries['brewMead1']);
 							}
 
 							if (!empty($row_entries['brewMead2'])) {
 								$additional_info++;
-								$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2'];
+								$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".translate_mead_req_value($row_entries['brewMead2']);
 							}
 
 							if (!empty($row_entries['brewSweetnessLevel'])) {
