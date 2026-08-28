@@ -595,6 +595,30 @@ function check_flight_number($entry_id,$flight,$method) {
 
 }
 
+
+/**
+ * Manual pull-order map for one flight: entry id => flightEntryOrder.
+ * Empty array when no manual order has been saved for the flight
+ * (default behavior: entries stay in judging number order).
+ */
+function flight_entry_orders($table_id,$flight_number) {
+
+	require(CONFIG.'config.php');
+	$db_conn = new MysqliDb($connection);
+
+	$db_conn->where('flightTable', $table_id);
+	$db_conn->where('flightNumber', $flight_number);
+	$rows_flights_order = $db_conn->get($prefix."judging_flights", null, "flightEntryID,flightEntryOrder");
+
+	$map = array();
+	foreach ($rows_flights_order as $row_flights_order) {
+		if ($row_flights_order['flightEntryOrder'] !== NULL) $map[(int) $row_flights_order['flightEntryID']] = (int) $row_flights_order['flightEntryOrder'];
+	}
+
+	return $map;
+
+}
+
 function check_flight_round($flight_round,$round) {
 
 	if ($round == "default") {

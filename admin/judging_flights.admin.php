@@ -7,8 +7,18 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
     header($redirect_go_to);
     exit();
 }
+// Reorder view: a specific flight is being reordered via &flight=N
+$flight_reorder_view = (($filter != "default") && ($filter != "rounds") && ($flight != "default"));
 
-if (($filter != "default") && ($filter != "rounds"))  {
+// Runtime schema migration: manual pull-order column on judging_flights
+if (!check_update("flightEntryOrder", $prefix."judging_flights")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `flightEntryOrder` INT NULL DEFAULT NULL;",$prefix."judging_flights");
+	$db_conn->rawQuery($sql);
+
+}
+
+if ((($filter != "default") && ($filter != "rounds")) && (!$flight_reorder_view))  {
 
 	// get variables
 	$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
@@ -130,7 +140,51 @@ if ($totalRows_tables > 0) {
     </div>
 </div>
 <?php } else echo "<p>No tables have been defined. <a href='".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add'>Tables must be defined</a> before flights can be assigned to them.</p>";
-} if (($filter != "default") && ($filter != "rounds"))  { ?>
+} if ($flight_reorder_view) {
+
+	$flight_table = $row_tables_edit['id'];
+
+	include (DB.'admin_judging_flights.db.php');
+?>
+<p><strong>Table Location:</strong> <?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></p>
+<p class="lead">Drag and drop the rows below to set the pull order for Flight <?php echo (int) $flight; ?> of Table <?php echo h($row_tables_edit['tableNumber']); ?> &ndash; <?php echo h($row_tables_edit['tableName']); ?>. This list shows all <?php echo count($rows_reorder_entries); ?> entries assigned to this flight, across all styles, in the same order as the flight list &mdash; drag to reorder, then click Save Order.</p>
+<form name="flight-reorder" id="flight-reorder-form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=reorder_flight_entries&amp;dbTable=<?php echo $judging_flights_db_table; ?>">
+<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
+<input type="hidden" name="flightTable" value="<?php echo (int) $flight_table; ?>">
+<input type="hidden" name="flightNumber" value="<?php echo (int) $flight; ?>">
+<input type="hidden" name="entry_order" id="entry-order-input" value="">
+<table class="table table-striped table-bordered" id="flightOrderTable">
+<thead>
+	<tr>
+    	<th width="5%">Pos</th>
+        <th width="15%">Judging #</th>
+        <th width="40%">Style</th>
+        <th>Entry Name</th>
+    </tr>
+</thead>
+<tbody>
+	<?php if (!empty($rows_reorder_entries)) { $reorder_pos = 0; foreach ($rows_reorder_entries as $row_reorder_entry) { $reorder_pos++;
+
+		if ($_SESSION['prefsStyleSet'] == "BA") $reorder_style = h($row_reorder_entry['brewStyle']);
+		elseif ($_SESSION['prefsStyleSet'] == "AABC") $reorder_style = ltrim($row_reorder_entry['brewCategorySort'],"0").".".ltrim($row_reorder_entry['brewSubCategory'],"0")." ".style_convert($row_reorder_entry['brewCategorySort'],1,$base_url).": ".h($row_reorder_entry['brewStyle']);
+		else $reorder_style = $row_reorder_entry['brewCategorySort'].$row_reorder_entry['brewSubCategory']." ".style_convert($row_reorder_entry['brewCategorySort'],1,$base_url).": ".h($row_reorder_entry['brewStyle']);
+	?>
+    <tr draggable="true" data-entry-id="<?php echo (int) $row_reorder_entry['id']; ?>" style="cursor: move;">
+    	<td class="flight-order-pos"><?php echo $reorder_pos; ?></td>
+        <td><?php echo $row_reorder_entry['brewJudgingNumber']; ?></td>
+        <td><?php echo $reorder_style; ?></td>
+        <td><?php echo h($row_reorder_entry['brewName']); ?></td>
+    </tr>
+    <?php } } else { ?>
+    <tr><td colspan="4">No entries have been assigned to this flight.</td></tr>
+    <?php } ?>
+</tbody>
+</table>
+<button type="submit" class="btn btn-primary">Save Order</button>
+<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo (int) $flight_table; ?>">Cancel</a>
+</form>
+<script src="<?php echo $js_url; ?>flight_reorder.min.js"></script>
+<?php } elseif (($filter != "default") && ($filter != "rounds")) { ?>
 
 <script type="text/javascript">
 function updateButCount(e) {
@@ -192,6 +246,13 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 <?php
 echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</p>"; ?>
 <p onload="updateButCount(event);">Based upon your <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>,  <?php if ($flight_count == 1) echo " this table only requires one flight."; else echo " this table can be divided into ".readable_number($flight_count)." flights.  For each entry below, designate the flight in which it will be judged."; ?></p>
+<?php if ($action == "edit") { ?>
+<p class="hidden-print">Reorder the pull order of entries within a flight:
+<?php for($i=1; $i<$flight_count+1; $i++) { ?>
+<a class="btn btn-default btn-xs" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=<?php echo $row_tables_edit['id']; ?>&amp;flight=<?php echo $i; ?>">Flight <?php echo $i; ?></a>
+<?php } ?>
+</p>
+<?php } ?>
 <form name="flights" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>" onreset="updateButCount(event);">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <script type="text/javascript" language="javascript">
