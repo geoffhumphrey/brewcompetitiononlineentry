@@ -441,9 +441,9 @@ if ($go == "all_entry_info") {
 											if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3']."<br>";
 											if ((!empty($row_entries['brewPouring'])) && ((!empty($row_entries['brewStyleType'])) && ($row_entries['brewStyleType'] == 1))) {
 												$pouring_arr = json_decode($row_entries['brewPouring'],true);
-												$table_flight_tbody .= "<strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."<br>";
+												$table_flight_tbody .= "<strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."<br>";
 												if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $table_flight_tbody .= "<strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."<br>";
-												$table_flight_tbody .= "<strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."<br>";
+												$table_flight_tbody .= "<strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."<br>";
 											}
 											if (!empty($row_entries['brewABV'])) $table_flight_tbody .= "<strong>".$label_abv.":</strong> ".$row_entries['brewABV']."<br>";
 											
@@ -900,9 +900,9 @@ if ($go == "mini_bos") {
 
 			if ((!empty($row_entries_mini['brewPouring'])) && ((!empty($row_entries_mini['brewStyleType'])) && ($row_entries_mini['brewStyleType'] == 1))) {
 				$pouring_arr = json_decode($row_entries_mini['brewPouring'],true);
-				$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."</li>";
+				$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 				if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $table_flight_tbody .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-				$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."</li>";
+				$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 			}
 
 			if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<li><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</li>";
@@ -1096,9 +1096,9 @@ if ($go == "judging_scores_bos") {
 
 						if ((!empty($row_bos['brewPouring'])) && ((!empty($row_bos['brewStyleType'])) && ($row_bos['brewStyleType'] == 1))) {
 							$pouring_arr = json_decode($row_bos['brewPouring'],true);
-							$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."</li>";
+							$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 							if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $table_flight_tbody .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-							$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."</li>";
+							$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 						}
 
 						if (!empty($row_bos['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_bos['brewStaffNotes']."</p>";
@@ -1328,9 +1328,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 									if ((!empty($row_entries['brewPouring'])) && ((!empty($row_entries['brewStyleType'])) && ($row_entries['brewStyleType'] == 1))) {
 										$pouring_arr = json_decode($row_entries['brewPouring'],true);
-										$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."</li>";
+										$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 										if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $table_flight_tbody .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-										$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."</li>";
+										$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 									}
 
 									if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<li><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</li>";
@@ -1553,9 +1553,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 									if ((!empty($row_entries['brewPouring'])) && ((!empty($row_entries['brewStyleType'])) && ($row_entries['brewStyleType'] == 1))) {
 										$pouring_arr = json_decode($row_entries['brewPouring'],true);
-										$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."</li>";
+										$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 										if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $table_flight_tbody .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-										$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."</li>";
+										$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 									}
 
 									if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<li><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</li>";
@@ -1785,9 +1785,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 											if ((!empty($row_entries['brewPouring'])) && ((!empty($row_entries['brewStyleType'])) && ($row_entries['brewStyleType'] == 1))) {
 												$pouring_arr = json_decode($row_entries['brewPouring'],true);
-												$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."</li>";
+												$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 												if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $table_flight_tbody .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-												$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."</li>";
+												$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 											}
 
 											if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<li><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</li>";
@@ -2023,9 +2023,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 									if ((!empty($row_entries['brewPouring'])) && ((!empty($row_entries['brewStyleType'])) && ($row_entries['brewStyleType'] == 1))) {
 										$pouring_arr = json_decode($row_entries['brewPouring'],true);
-										$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."</li>";
+										$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 										if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $table_flight_tbody .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-										$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."</li>";
+										$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 									}
 
 									if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<li><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</li>";
@@ -2325,9 +2325,9 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								if ((!empty($row_entries['brewPouring'])) && ((!empty($row_entries['brewStyleType'])) && ($row_entries['brewStyleType'] == 1))) {
 									$pouring_arr = json_decode($row_entries['brewPouring'],true);
-									$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."</li>";
+									$table_flight_tbody .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 									if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $table_flight_tbody .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-									$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."</li>";
+									$table_flight_tbody .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 								}
 
 								if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<li><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</li>";
