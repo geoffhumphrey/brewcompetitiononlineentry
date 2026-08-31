@@ -471,14 +471,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
             
             if ($key['style_set_name'] == $prefsStyleSet) {
             	
-            	if ($prefsStyleSet == "BA") {
-            		
+            	if (!empty($key['style_set_no_numbering'])) {
+
             		// No hosted call since searching for custom styles
             		$db_conn->where("brewStyleOwn", "custom");
 					$db_conn->orderBy("id", "ASC");
 					$rows_style_name = $db_conn->get($styles_db_table, null, "id,brewStyleNum");
 
-					$db_conn->where("brewStyleVersion", "BA");
+					$db_conn->where("brewStyleVersion", $prefsStyleSet);
 					$db_conn->orderBy("brewStyleNum", "DESC");
 					$row_style_num = $db_conn->getOne($styles_db_table, "brewStyleNum");
 
@@ -733,7 +733,33 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			}
 
-			// Finally, if the style set has changed, add all styles 
+			/**
+			 * If the style set has changed from BA to BA2026, map
+			 * BA styles to their analogous BA2026 styles in the brewing DB.
+			 *
+			 * As a safeguard to make sure the brewing table data is updated,
+			 * perform a query for any old styles whose names have changed and/or
+			 * whose category has changed.
+			 */
+
+			if ($prefsStyleSet == "BA2026") {
+
+				include (LIB.'convert.lib.php');
+
+				if ($_SESSION['prefsStyleSet'] == "BA") {
+					include (INCLUDES.'convert/convert_ba_2026.inc.php');
+				}
+
+				$db_conn->where("brewStyle='Sweet or Cream Stout' OR brewStyle='Foreign (Export)-Style Stout' OR brewStyle='Bohemian-Style Pilsener' OR brewStyle='Non-Alcoholic Malt Beverage' OR brewStyle='Mixed Culture Brett Beer' OR brewStyle='German-Style Kölsch / Köln-Style Kölsch'");
+				$row_check_entry_styles = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
+
+				if ($row_check_entry_styles['count'] > 0) {
+					include (INCLUDES.'convert/convert_ba_2026.inc.php');
+				}
+
+			}
+
+			// Finally, if the style set has changed, add all styles
 			// in the chosen style set as active.
 
 			$prefsSelectedStyles = json_decode($row_prefs['prefsSelectedStyles'],true);

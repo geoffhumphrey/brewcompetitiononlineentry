@@ -135,10 +135,21 @@ $style_sets = array(
 		// OPTIONAL. An array of CIDER-specific style numbers/identifiers.
 		// Leave as is if no cider categories
 		"style_set_cider" => array(),
-		
-		// REQURIED. MUST BE A 2-DIGIT WHOLE NUMBER WITH LEADING ZERO. NOT ALPHANUMERIC. 
+
+		// REQURIED. MUST BE A 2-DIGIT WHOLE NUMBER WITH LEADING ZERO. NOT ALPHANUMERIC.
 		// The number of last category in the style set. If none or alpha, use "49" (leave as is).
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+
+		// OPTIONAL. Set to TRUE only for a style set whose brewStyleGroup/
+		// brewStyleNum numbering is purely this application's own internal
+		// bookkeeping and isn't part of the style set's own official
+		// guidelines (e.g. Brewers Association styles, which the BA itself
+		// does not number). When TRUE, screens that display a style
+		// (entries lists, pullsheets, winners, scoresheets, etc.) show just
+		// the style name instead of prefixing it with the group-num code.
+		// Omit entirely (or leave FALSE) for any style set whose numbering
+		// is part of its own official guidelines (BJCP, AABC, etc.).
+		"style_set_no_numbering" => FALSE
 	),
 
  */
@@ -196,7 +207,8 @@ $style_sets = array(
 		"style_set_beer_end" => "23",
 		"style_set_mead" => array("24","25","26"),
 		"style_set_cider" => array("27","28"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => FALSE
 	),
 
 	array(
@@ -254,7 +266,8 @@ $style_sets = array(
 		"style_set_beer_end" => "34",
 		"style_set_mead" => array("M1","M2","M3","M4"),
 		"style_set_cider" => array("C1","C2"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => FALSE
 	),
 
 	*/
@@ -316,7 +329,8 @@ $style_sets = array(
 		"style_set_beer_end" => "34",
 		"style_set_mead" => array("M1","M2","M3","M4"),
 		"style_set_cider" => array("C1","C2","C3","C4"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => FALSE
 	),
 
 	array(
@@ -374,7 +388,8 @@ $style_sets = array(
 		"style_set_beer_end" => "34",
 		"style_set_mead" => array("M1","M2","M3","M4"),
 		"style_set_cider" => array("C1","C2"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => FALSE
 	),
 
 	array(
@@ -405,7 +420,8 @@ $style_sets = array(
 		"style_set_beer_end" => "11",
 		"style_set_mead" => array("12"),
 		"style_set_cider" => array("12"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => TRUE
 	),
 
 	array(
@@ -442,7 +458,8 @@ $style_sets = array(
 		"style_set_beer_end" => "18",
 		"style_set_mead" => array("19"),
 		"style_set_cider" => array("20"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => FALSE
 	),
 
 	array(
@@ -479,7 +496,8 @@ $style_sets = array(
 		"style_set_beer_end" => "18",
 		"style_set_mead" => array("19"),
 		"style_set_cider" => array("20"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => FALSE
 	),
 
 	array(
@@ -516,7 +534,8 @@ $style_sets = array(
 		"style_set_beer_end" => "18",
 		"style_set_mead" => array("19"),
 		"style_set_cider" => array("20"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => FALSE
 	),
 
 	array(
@@ -542,7 +561,37 @@ $style_sets = array(
 		"style_set_beer_end" => "0",
 		"style_set_mead" => array(),
 		"style_set_cider" => array("C1","C2","C3","C4","C5","C6","C7","C8","C9"),
-		"style_set_category_end" => "49"
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => FALSE
+	),
+
+	array(
+		"id" => 8,
+		"style_set_name" => "BA2026",
+		"style_set_long_name" => "Brewers Association 2026",
+		"style_set_short_name" => "BA 2026",
+		"style_set_description" => "",
+		"style_set_display_separator" => "-",
+		"style_set_system_separator" => "-",
+		"style_set_sub_style_method" => "1",
+		"style_set_categories" => array(
+			"01" => "British Origin Ales",
+			"02" => "Irish Origin Ales",
+			"03" => "North American Origin Ales",
+			"04" => "German Origin Ales",
+			"05" => "Belgian and French Origin Ales",
+			"06" => "Other Origin Ales",
+			"07" => "European Origin Lagers",
+			"08" => "North American Origin Lagers",
+			"09" => "Other Origin Lagers",
+			// "10" => "Unused for 2026", 
+			"11" => "Hybrid/Mixed Lagers or Ales"
+		),
+		"style_set_beer_end" => "11",
+		"style_set_mead" => array(),
+		"style_set_cider" => array(),
+		"style_set_category_end" => "49",
+		"style_set_no_numbering" => TRUE
 	)
 
 );

@@ -124,21 +124,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		foreach (array_unique($a) as $value) {
 
-			if ($_SESSION['prefsStyleSet'] != "BA") {
+			if (!$_SESSION['style_set_no_numbering']) {
 				$db_conn->where('id', $value);
 				$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
 			}
 
 			if ($_SESSION['jPrefsTablePlanning'] == 1) {
 
-				if ($_SESSION['prefsStyleSet'] == "BA") { $db_conn->where('brewSubCategory', $value); }
+				if ($_SESSION['style_set_no_numbering']) { $db_conn->where('brewSubCategory', $value); }
 				else { $db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']); $db_conn->where('brewSubCategory', $row_styles['brewStyleNum']); }
 
 			}
 
 			else {
 
-				if ($_SESSION['prefsStyleSet'] == "BA") { $db_conn->where('brewSubCategory', $value); $db_conn->where('brewReceived', '1'); }
+				if ($_SESSION['style_set_no_numbering']) { $db_conn->where('brewSubCategory', $value); $db_conn->where('brewReceived', '1'); }
 				else { $db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']); $db_conn->where('brewSubCategory', $row_styles['brewStyleNum']); $db_conn->where('brewReceived', '1'); }
 
 			}
@@ -262,15 +262,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// here, so clear their score/flight assignment to it outright.
 			foreach ($removed_styles as $value) {
 
-				if ($_SESSION['prefsStyleSet'] != "BA") {
+				// $value is a bare brewSubCategory for no-numbering style sets (tableStyles
+				// stores brewSubCategory directly), or a styles-table id otherwise (looked
+				// up below for its group/num) - same split as the "add" action above.
+				if ($_SESSION['style_set_no_numbering']) {
+
+					$db_conn->where('brewSubCategory', $value);
+
+				}
+
+				else {
 
 					$db_conn->where('id', $value);
 					$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
 
+					$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
+					$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
+
 				}
 
-				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
-				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
 				if ($_SESSION['jPrefsTablePlanning'] != 1) $db_conn->where('brewReceived', '1');
 				$rows_entries = $db_conn->get($brewing_db_table, null, "id");
 
@@ -323,15 +333,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// their existing flight/score assignments stay exactly as-is.
 			foreach ($added_styles as $value) {
 
-				if ($_SESSION['prefsStyleSet'] != "BA") {
+				// $value is a bare brewSubCategory for no-numbering style sets (tableStyles
+				// stores brewSubCategory directly), or a styles-table id otherwise (looked
+				// up below for its group/num) - same split as the "add" action above.
+				if ($_SESSION['style_set_no_numbering']) {
+
+					$db_conn->where('brewSubCategory', $value);
+
+				}
+
+				else {
 
 					$db_conn->where('id', $value);
 					$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
 
+					$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
+					$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
+
 				}
 
-				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
-				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
 				if ($_SESSION['jPrefsTablePlanning'] != 1) $db_conn->where('brewReceived', '1');
 				$rows_entries = $db_conn->get($brewing_db_table, null, "id");
 
@@ -496,7 +516,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$db_conn->where('id', $id);
 				$row_entry = $db_conn->getOne($brewing_db_table, "brewCategorySort,brewSubCategory");
 
-				if ($_SESSION['prefsStyleSet'] != "BA") {
+				if (!$_SESSION['style_set_no_numbering']) {
 
 					if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 					    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);

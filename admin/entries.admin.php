@@ -10,7 +10,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 
 include (DB.'styles.db.php');
 include (DB.'styles_special.db.php');
-if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+if ($_SESSION['style_set_no_numbering']) include (INCLUDES.'ba_constants.inc.php');
 $eval_db_table = FALSE;
 
 $header1_1 = "";
@@ -285,7 +285,7 @@ if ($totalRows_log > 0) {
 		}
 
 		// Entry Style
-		if ($style_set == "BA") {
+		if (style_set_no_numbering($style_set)) {
 			if ($row_log['brewCategory'] <= 14) $entry_style_display .= h($row_log['brewStyle']);
 			else $entry_style_display .= "Custom: ".h($row_log['brewStyle']);
 		}

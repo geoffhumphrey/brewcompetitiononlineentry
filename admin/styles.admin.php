@@ -10,7 +10,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 
 if ($section != "step7") include (DB.'judging_locations.db.php');
 include (DB.'styles.db.php');
-if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+if ($_SESSION['style_set_no_numbering']) include (INCLUDES.'ba_constants.inc.php');
 
 // Build style table body
 $table_body = "";
@@ -57,7 +57,7 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			if ($bid == "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleActive".$row_styles['id']."\" type=\"checkbox\" value=\"Y\" ".$brewStyleActive."></td>";
 			if ($bid != "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleJudgingLoc".$row_styles['id']."\" type=\"checkbox\" value=\"".$bid."\" ".$brewStyleJudgingLoc."></td>";
 			$table_body .= "<td>".h($row_styles['brewStyle'])."</td>";
-			if ($_SESSION['prefsStyleSet'] == "BA") {
+			if ($_SESSION['style_set_no_numbering']) {
 				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
 				else $table_body .= "<td>".$ba_category_names[ltrim($row_styles['brewStyleGroup'],"0")]."</td>";
 			}

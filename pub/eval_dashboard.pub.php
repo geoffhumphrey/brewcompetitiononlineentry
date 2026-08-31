@@ -318,7 +318,7 @@ if ($totalRows_table_assignments > 0) {
 								
 							}
 			        		
-							if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $row_entries['brewStyle'];
+							if ($_SESSION['style_set_no_numbering']) $style_display = $row_entries['brewStyle'];
 							else {
 								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
 								$style_display = $style." ".$row_entries['brewStyle'];

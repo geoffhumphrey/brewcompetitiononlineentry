@@ -324,7 +324,7 @@ if ($totalRows_brewer > 0) {
 		$entries = $entries_by_uid_p[$uid] ?? array();
 		$parts = array();
 		foreach ($entries as $row_judge_entries) {
-			if ($_SESSION['prefsStyleSet'] == "BA") {
+			if ($_SESSION['style_set_no_numbering']) {
 				$parts[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewStyle']."</a>";
 			}
 			else {

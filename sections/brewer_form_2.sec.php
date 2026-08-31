@@ -22,7 +22,7 @@ $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
 if (!empty($styles_selected)) {
 
-    if ($_SESSION['prefsStyleSet'] == "BA") array_multisort(array_column($styles_selected, 'brewStyle'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
+    if ($_SESSION['style_set_no_numbering']) array_multisort(array_column($styles_selected, 'brewStyle'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
     else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
 
     $j_likes_form_elements = "";
@@ -49,7 +49,7 @@ if (!empty($styles_selected)) {
             $style_selected_dislikes = "";
             if (in_array($value['id'], $b)) $style_selected_dislikes = "CHECKED";
 
-            if ($_SESSION['prefsStyleSet'] == "BA") {
+            if ($_SESSION['style_set_no_numbering']) {
                 $style_display .= $value['brewStyle'];
             }
             

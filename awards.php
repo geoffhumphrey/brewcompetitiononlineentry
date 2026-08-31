@@ -246,7 +246,7 @@ if (($display_to_admin) || ($display_to_public)) {
 							// Category/Style Display
 							if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
 	       					else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
-	       					if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $row_scores['brewStyle'];
+	       					if ($_SESSION['style_set_no_numbering']) $style_display = $row_scores['brewStyle'];
 							else $style_display = $style.": ".$row_scores['brewStyle'];
 
 	       					// Name Display
@@ -336,7 +336,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				}
 			}
 
-			$category_column = ($style_set == "BA") ? "brewCategory" : "brewCategorySort";
+			$category_column = (style_set_no_numbering($style_set)) ? "brewCategory" : "brewCategorySort";
 
 			$counts_by_category = array();
 			if (table_exists($brewing_db_table)) {
@@ -370,7 +370,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					if ((isset($style)) && (is_numeric($style))) $style_pad_awards = sprintf("%02d", $style);
 					else $style_pad_awards = $style;
 
-					$lookup_key_awards = ($style_set == "BA") ? $style : $style_pad_awards;
+					$lookup_key_awards = (style_set_no_numbering($style_set)) ? $style : $style_pad_awards;
 					$row_entry_count = array('count' => $counts_by_category[$lookup_key_awards] ?? 0);
 					$table_scores_awards = $scores_by_category[$lookup_key_awards] ?? array();
 					// Deliberately counts only placed (scorePlace > 0) entries, unlike the old
@@ -393,14 +393,14 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						$slides .= "<section>";
 
-						if ($_SESSION['prefsStyleSet'] == "BA") {
+						if ($_SESSION['style_set_no_numbering']) {
 
 							include (INCLUDES.'ba_constants.inc.php');
 							$slides .= "<h1 class=\"r-fit-text tight\">";
 							$slides .= $ba_category_names[$style];
 							$slides .= "</h1>";
 
-						} // end if ($_SESSION['prefsStyleSet'] == "BA")
+						} // end if ($_SESSION['style_set_no_numbering'])
 
 						else {
 
@@ -427,7 +427,7 @@ if (($display_to_admin) || ($display_to_public)) {
 								// Category/Style Display
 								if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
 		       					else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
-		       					if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $row_scores['brewStyle'];
+		       					if ($_SESSION['style_set_no_numbering']) $style_display = $row_scores['brewStyle'];
 								else $style_display = $style.": ".$row_scores['brewStyle'];
 
 		       					// Name Display
@@ -499,14 +499,14 @@ if (($display_to_admin) || ($display_to_public)) {
 			 * lookup silently matched nothing and no subcategory winners were ever displayed.
 			 */
 
-			$category_column_sub = ($style_set == "BA") ? "brewCategory" : "brewCategorySort";
+			$category_column_sub = (style_set_no_numbering($style_set)) ? "brewCategory" : "brewCategorySort";
 
 			// Entry counts, keyed by "category|subcategory" - matches winners_subcategory.db.php's
 			// composite WHERE (category_column + brewSubCategory) used for both style sets (BA
 			// additionally filters brewReceived=1 there, preserved below).
 			$counts_by_subcategory = array();
 			if (table_exists($brewing_db_table)) {
-				if ($style_set == "BA") $db_conn->where('brewReceived', '1');
+				if (style_set_no_numbering($style_set)) $db_conn->where('brewReceived', '1');
 				$db_conn->groupBy($category_column_sub);
 				$db_conn->groupBy('brewSubCategory');
 				$rows_subcat_counts = $db_conn->get($brewing_db_table, null, "$category_column_sub, brewSubCategory, COUNT(*) as count");
@@ -517,8 +517,10 @@ if (($display_to_admin) || ($display_to_public)) {
 
 			// Mirrors includes/db/scores.db.php's winner_method==2 query exactly - including its
 			// BA quirk of filtering only brewSubCategory, not category+subcategory together - just
-			// without the per-subcategory WHERE filter, then split back apart below. BA groups by
-			// brewSubCategory alone to match that quirk; non-BA groups by the composite key.
+			// without the per-subcategory WHERE filter, then split back apart below. BA2026's
+			// brewStyleNum was made globally unique to match old BA's own flat numbering scheme
+			// (see the BA2026 "num-uniqueness" work), so grouping by the bare brewSubCategory key
+			// below is safe for both.
 			$scores_by_subcategory = array();
 			if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
 				$query_scores_all_subcat = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
@@ -528,7 +530,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				else $query_scores_all_subcat .= ", a.scorePlace ASC";
 				$rows_scores_all_subcat = $db_conn->rawQuery($query_scores_all_subcat);
 				foreach ($rows_scores_all_subcat as $row_score_subcat) {
-					if ($style_set == "BA") $group_key_sub = $row_score_subcat['brewSubCategory'];
+					if (style_set_no_numbering($style_set)) $group_key_sub = $row_score_subcat['brewSubCategory'];
 					else $group_key_sub = $row_score_subcat['brewCategorySort'].'|'.$row_score_subcat['brewSubCategory'];
 					$scores_by_subcategory[$group_key_sub][] = $row_score_subcat;
 				}
@@ -542,7 +544,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 				$row_entry_count = array('count' => $counts_by_subcategory[$value['brewStyleGroup'].'|'.$value['brewStyleNum']] ?? 0);
 
-				if ($style_set == "BA") $score_key_sub = $value['brewStyleNum'];
+				if (style_set_no_numbering($style_set)) $score_key_sub = $value['brewStyleNum'];
 				else $score_key_sub = $value['brewStyleGroup'].'|'.$value['brewStyleNum'];
 				$table_scores_sub_awards = $scores_by_subcategory[$score_key_sub] ?? array();
 				$row_score_count = array('count' => count($table_scores_sub_awards));
@@ -562,13 +564,13 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						$slides .= "<section>";
 
-						if ($_SESSION['prefsStyleSet'] == "BA") {
+						if ($_SESSION['style_set_no_numbering']) {
 
 							$slides .= "<h1 class=\"r-fit-text tight\">";
 							$slides .= $style[2];
 							$slides .= "</h1>";
 
-						} // end if ($_SESSION['prefsStyleSet'] == "BA")
+						} // end if ($_SESSION['style_set_no_numbering'])
 
 						else {
 
@@ -595,7 +597,7 @@ if (($display_to_admin) || ($display_to_public)) {
 								// Category/Style Display
 								if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
 		       					else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
-		       					if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $row_scores['brewStyle'];
+		       					if ($_SESSION['style_set_no_numbering']) $style_display = $row_scores['brewStyle'];
 								else $style_display = $style.": ".$row_scores['brewStyle'];
 
 		       					// Name Display
@@ -682,7 +684,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				// Category/Style Display
 				if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim(h($row_bos['brewCategory']),"0").".".ltrim(h($row_bos['brewSubCategory']),"0");
 					else $style = h($row_bos['brewCategory']).h($row_bos['brewSubCategory']);
-					if ($_SESSION['prefsStyleSet'] == "BA") $style_display = h($row_bos['brewStyle']);
+					if ($_SESSION['style_set_no_numbering']) $style_display = h($row_bos['brewStyle']);
 				else $style_display = $style.": ".h($row_bos['brewStyle']);
 
 					// Name Display
@@ -752,7 +754,7 @@ if (($display_to_admin) || ($display_to_public)) {
 						// Category/Style Display
 						if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim(h($row_sbd['brewerCategory']),"0").".".ltrim(h($row_sbd['brewSubCategory']),"0");
 							else $style = h($row_sbd['brewCategory']).h($row_sbd['brewSubCategory']);
-						if ($_SESSION['prefsStyleSet'] == "BA") $style_display = h($row_sbd['brewStyle']);
+						if ($_SESSION['style_set_no_numbering']) $style_display = h($row_sbd['brewStyle']);
 						else $style_display = h($row_sbd['brewCategory']).h($row_sbd['brewSubCategory']).": ".h($row_sbd['brewStyle']);
 
 							// Name Display

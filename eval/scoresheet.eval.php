@@ -375,7 +375,7 @@ if ($entry_found) {
     $entry_info_html .= $style_num." ".$row_style['brewStyle'];
     if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
     if ($_SESSION['prefsStyleSet'] == "AABC") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"http://www.aabc.org.au/docs/AABC2022CategoriesAndStyles.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
-    if ($_SESSION['prefsStyleSet'] == "BA") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    if ($_SESSION['style_set_no_numbering']) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
 
   }
 

@@ -17,7 +17,7 @@ else {
 	$judging_scores_bos_db_table = $prefix."judging_scores_bos_".$filter_clean;
 }
 
-if ($winner_style_set == "BA") $db_conn->where("brewCategory", $style);
+if (style_set_no_numbering($winner_style_set)) $db_conn->where("brewCategory", $style);
 else $db_conn->where("brewCategorySort", $style_pad);
 $db_conn->where("brewReceived", "1");
 
@@ -32,7 +32,7 @@ if (table_exists($brewing_db_table)) {
 
 if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
 
-	if ($winner_style_set == "BA") {
+	if (style_set_no_numbering($winner_style_set)) {
 		$sql_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s a, %s b, %s c WHERE b.brewCategory=? AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table);
 		$score_count_params = array($style);
 	}

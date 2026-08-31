@@ -103,7 +103,7 @@ else {
 
 					$entry_name = html_entity_decode($row_log_confirmed['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
     				$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
-					if ($_SESSION['prefsStyleSet'] == "BA") $style = $row_log_confirmed['brewStyle'];
+					if ($_SESSION['style_set_no_numbering']) $style = $row_log_confirmed['brewStyle'];
 					else $style = "Style ".$row_log_confirmed['brewCategory'].$row_log_confirmed['brewSubCategory'];
 					$entry_no = sprintf("%06s",$row_log_confirmed['id']);
 					$primary_page_info .= sprintf("<li>Entry #%s: <em>%s</em> (%s)</li>",$entry_no,$entry_name,$style);

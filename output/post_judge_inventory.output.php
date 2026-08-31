@@ -17,7 +17,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 include (DB.'output_post_judge_inventory.db.php');
 
 if (NHC) $base_url = "../";
-if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+if ($_SESSION['style_set_no_numbering']) include (INCLUDES.'ba_constants.inc.php');
 ?>
 
 <script type="text/javascript" language="javascript">
@@ -79,7 +79,7 @@ if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php'
                 ?>
             </td>
             <td>
-                <?php if ($_SESSION['prefsStyleSet'] == "BA") echo $ba_category_names[$row_post_inventory['brewCategory']].": ".$row_post_inventory['brewStyle'];
+                <?php if ($_SESSION['style_set_no_numbering']) echo $ba_category_names[$row_post_inventory['brewCategory']].": ".$row_post_inventory['brewStyle'];
                 else echo $row_post_inventory['brewCategorySort'].$row_post_inventory['brewSubCategory'].": ".$row_post_inventory['brewStyle']; ?>
             </td>
             <td>

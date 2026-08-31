@@ -122,7 +122,7 @@ foreach ($rows_brewer as $row_brewer) {
 			echo $entry_name;
 			?>	
 			</td>
-			<td><?php if ($_SESSION['prefsStyleSet'] != "BA") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": "; echo $row_log['brewStyle'] ?></td>
+			<td><?php if (!$_SESSION['style_set_no_numbering']) echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": "; echo $row_log['brewStyle'] ?></td>
 			<td><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>
 			<td><?php if (minibos_check($row_log['id'],$judging_scores_db_table)) echo "<span class =\"fa fa-lg fa-check\"></span>"; ?></td>
             <td><?php if (!empty($bos_place)) echo "<span class=\"fa fa-lg fa-trophy\"></span> ". addOrdinalNumberSuffix($bos_place); ?></td>

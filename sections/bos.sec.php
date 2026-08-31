@@ -71,7 +71,7 @@ require(DB.'winners.db.php');
 					$table_body1 .= "</td>";
 
 					$table_body1 .= "<td>";
-					if ($_SESSION['prefsStyleSet'] == "BA") $table_body1 .= h($row_bos['brewStyle']);
+					if ($_SESSION['style_set_no_numbering']) $table_body1 .= h($row_bos['brewStyle']);
 					elseif ($_SESSION['prefsStyleSet'] == "AABC") $table_body1 .= ltrim(h($row_bos['brewCategory']),"0").".".ltrim(h($row_bos['brewSubCategory']),"0").": ".h($row_bos['brewStyle']);
 					else $table_body1 .= h($row_bos['brewCategory']).h($row_bos['brewSubCategory']).": ".h($row_bos['brewStyle']);
 					$table_body1 .= "</td>";
@@ -185,7 +185,7 @@ if ($totalRows_sbi > 0) {
 					$table_body2 .= "</td>";
 
 					$table_body2 .= "<td>";
-					if ($_SESSION['prefsStyleSet'] == "BA") $table_body2 .= h($row_sbd['brewStyle']);
+					if ($_SESSION['style_set_no_numbering']) $table_body2 .= h($row_sbd['brewStyle']);
 					elseif ($_SESSION['prefsStyleSet'] == "AABC") $table_body2 .= ltrim(h($row_sbd['brewCategory']),"0").".".ltrim(h($row_sbd['brewSubCategory']),"0").": ".h($row_sbd['brewStyle']);
 					else $table_body2 .= h($row_sbd['brewCategory']).h($row_sbd['brewSubCategory']).": ".h($row_sbd['brewStyle']);
 					$table_body2 .= "</td>";

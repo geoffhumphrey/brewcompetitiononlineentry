@@ -20,12 +20,12 @@ if ($entry_window_open == 1) {
 }
 
 if ($_SESSION['prefsProEdition'] == 1) {
-	if ((((isset($_SESSION['brewerJudge'])) && ($_SESSION['brewerJudge'] == "Y")) || ((isset($_SESSION['brewerSteward'])) && ($_SESSION['brewerSteward'] == "Y"))) && ($_SESSION['userLevel'] == 2)) {
+	if (!isset($_SESSION['brewerBreweryName'])) {
 		$show_entries = FALSE;
 		$disable_pay = TRUE;
 		$add_entry_link_show = FALSE;
 		$at_a_glance_entry_info = FALSE;
-	}	
+	}
 }
 
 if ($section == "default") {

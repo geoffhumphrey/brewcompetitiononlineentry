@@ -733,7 +733,7 @@ if (($action == "add") || ($action == "edit")) {
                 $table_styles_available .= "<tr class=\"".$table_row_class."\">\n";
                 $table_styles_available .= "<td><input id=\"".$row_styles['id']."\" type=\"checkbox\" name=\"tableStyles[]\" onClick=\"update_table_total('".$row_styles['id']."');\" value=\"".$row_styles['id']."\" ".$disabled_selected_styles."></td>\n";
 
-                if ($_SESSION['prefsStyleSet'] == "BA") {
+                if ($_SESSION['style_set_no_numbering']) {
                     if ($row_styles['brewStyleOwn'] == "custom") $ba_category = h($row_styles['brewStyleGroup'])." (Custom)";
                     else {
                         if (!isset($style_category_name_cache_jtae[$row_styles['brewStyleGroup']])) $style_category_name_cache_jtae[$row_styles['brewStyleGroup']] = style_convert($row_styles['brewStyleGroup'],1,$base_url);
@@ -1533,7 +1533,7 @@ $(document).ready(function () {
 		"aoColumns": [
 			{ "asSorting": [  ] },
 			null,
-			<?php if ($_SESSION['prefsStyleSet'] != "BA") { ?>null,<?php } ?>
+			<?php if (!$_SESSION['style_set_no_numbering']) { ?>null,<?php } ?>
 			null,
 			null
 			]
@@ -1591,7 +1591,7 @@ $(document).ready(function () {
 				<thead>
 				<tr>
 					<th width="1%"><input type="checkbox" id="select-all-styles" title="Select/deselect all styles"></th>
-					<?php if ($_SESSION['prefsStyleSet'] != "BA") { ?><th width="1%">#</th><?php } ?>
+					<?php if (!$_SESSION['style_set_no_numbering']) { ?><th width="1%">#</th><?php } ?>
                     <th>Category</th>
 					<th>Style</th>
                     <th width="20%"><?php if ($_SESSION['jPrefsTablePlanning'] == 0) echo "<em>Received</em> "; ?>Entries</th>
@@ -1641,7 +1641,7 @@ $(document).ready(function () {
 		"aoColumns": [
 			{ "asSorting": [  ] },
 			null,
-			<?php if ($_SESSION['prefsStyleSet'] != "BA") { ?>null,<?php } ?>
+			<?php if (!$_SESSION['style_set_no_numbering']) { ?>null,<?php } ?>
 			null,
 			null
 			]
@@ -1696,7 +1696,7 @@ $(document).ready(function () {
 				<thead>
 				<tr>
 					<th width="1%"><input type="checkbox" id="select-all-styles" title="Select/deselect all styles"></th>
-					<?php if ($_SESSION['prefsStyleSet'] != "BA") { ?><th width="1%">#</th><?php } ?>
+					<?php if (!$_SESSION['style_set_no_numbering']) { ?><th width="1%">#</th><?php } ?>
 					<th>Category</th>
 					<th>Style</th>
                     <th width="20%"><em>Received</em> Entries</th>

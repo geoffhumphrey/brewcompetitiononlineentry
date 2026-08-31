@@ -77,7 +77,7 @@ if (($view != "default") && ($section == "styles")) {
 }
 
 if ((($section == "entry") || ($section == "brew") || ($action == "word") || ($action == "html")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) {
-	if ($_SESSION['prefsStyleSet'] == "BA") $query_styles .= " ORDER BY brewStyleType, brewStyleGroup, brewStyle ASC";
+	if ($_SESSION['style_set_no_numbering']) $query_styles .= " ORDER BY brewStyleType, brewStyleGroup, brewStyle ASC";
 	else $query_styles .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 }
 
@@ -85,7 +85,7 @@ elseif (($section == "admin") && ($go == "preferences")) $query_styles .= "  ORD
 elseif (($section == "admin") && ($go == "count_by_style")) $query_styles .= "";
 elseif (($section == "admin") && ($go == "styles")) $query_styles .= " ORDER BY brewStyleGroup, brewStyleNum ASC";
 elseif ((($section == "judge") && ($go == "judge")) || ($go == "judging_tables") || ($action == "add") || ($action == "edit")) {
-	if ($_SESSION['prefsStyleSet'] == "BA") $query_styles .= " ORDER BY brewStyleGroup, brewStyle ASC";
+	if ($_SESSION['style_set_no_numbering']) $query_styles .= " ORDER BY brewStyleGroup, brewStyle ASC";
 	else $query_styles .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 }
 
@@ -119,7 +119,7 @@ if ($section != "list") {
 	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 	elseif ($section == "brew") $query_styles2 .= " AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'";
 	else {
-		if ($styleSet == "BA") $query_styles2 .= " ORDER BY brewStyleGroup, brewStyleNum ASC";
+		if (style_set_no_numbering($styleSet)) $query_styles2 .= " ORDER BY brewStyleGroup, brewStyleNum ASC";
 		else $query_styles2 .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 	}
 	$rows_styles2 = (!empty($params_styles2)) ? $db_conn->rawQuery($query_styles2, $params_styles2) : $db_conn->rawQuery($query_styles2);

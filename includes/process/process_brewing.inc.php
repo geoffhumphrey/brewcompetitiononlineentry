@@ -97,7 +97,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if (($action == "add") || ($action == "edit")) {
 
-		if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+		if ($_SESSION['style_set_no_numbering']) include (INCLUDES.'ba_constants.inc.php');
 		include (DB.'styles_special.db.php');
 
 		// Set up vars

@@ -184,7 +184,7 @@ if (isset($_SESSION['loginUsername'])) {
               
               $page_info1 .= "<div class=\"text-center label-category-name\" style=\"margin: 0 0 20px 0; padding: 0 5px 0 5px;\" >";
               
-              if ($_SESSION['prefsStyleSet'] == "BA") {
+              if ($_SESSION['style_set_no_numbering']) {
                 $page_info1 .= "<div>".$style_name_large."</div>";
               }
               
@@ -208,7 +208,7 @@ if (isset($_SESSION['loginUsername'])) {
 
               $page_info1 .= "<div style=\"margin: 0 0 5px 0;\">";
               
-              if ($_SESSION['prefsStyleSet'] == "BA") $page_info1 .= "<strong>Cat:</strong> ".h($row_log['brewStyle']);
+              if ($_SESSION['style_set_no_numbering']) $page_info1 .= "<strong>Cat:</strong> ".h($row_log['brewStyle']);
               elseif ($_SESSION['prefsStyleSet'] == "AABC")  $page_info1 .= "<strong>".$label_category.":</strong> ".ltrim(h($row_log['brewCategory']),"0").".".ltrim(h($row_log['brewSubCategory']),"0")." ".h($row_log['brewStyle'])."</span>";
               else $page_info1 .= "<strong>".$label_category.":</strong> ".h($row_log['brewCategory']).h($row_log['brewSubCategory'])." ".h($row_log['brewStyle'])."</span>";
 

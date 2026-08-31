@@ -47,8 +47,14 @@ if (($action == "default") || ($action == "entries")) {
         }
     }
 
-    foreach ($style_sets as $style_set) {
-        
+    // Sort a local copy by style_set_long_name so like styles are grouped
+    // together in the dropdown - the global $style_sets stays in its
+    // original (styles.inc.php-defined) order for other code this request.
+    $style_sets_sorted = $style_sets;
+    usort($style_sets_sorted, function($a, $b) { return strcasecmp($a['style_set_long_name'], $b['style_set_long_name']); });
+
+    foreach ($style_sets_sorted as $style_set) {
+
         // Reset vars
         $style_set_selected = "";
         $all_exceptions_USCLEx = "";
@@ -72,7 +78,7 @@ if (($action == "default") || ($action == "entries")) {
         else $db_conn->where ("brewStyleVersion = ? AND brewStyleOwn != ?", array($style_set['style_set_name'],"custom"));
         $row_styles_all = $db_conn->get($styles_db_table, null, $cols);
 
-        if ($style_set['style_set_name'] == "BA") $method = 2;
+        if (!empty($style_set['style_set_no_numbering'])) $method = 2;
         else $method = 0;
 
         if ($row_styles_all) {
@@ -81,8 +87,8 @@ if (($action == "default") || ($action == "entries")) {
 
                 if (isset($row_styles_all['id'])) {
                     $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
-                    if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
-                    if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= h($style_set['style_set_categories'][$row_styles_all['brewStyleGroup']])." - ".h($row_styles_all['brewStyle'])."</label></div>\n";
+                    if (empty($style_set['style_set_no_numbering'])) $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
+                    if (!empty($style_set['style_set_no_numbering'])) $all_exceptions_USCLEx .= h($style_set['style_set_categories'][$row_styles_all['brewStyleGroup']])." - ".h($row_styles_all['brewStyle'])."</label></div>\n";
                     else $all_exceptions_USCLEx .= " ".h($row_styles_all['brewStyle'])."</label></div>\n";
                 }   
                 
@@ -209,7 +215,7 @@ if (($section == "admin") && ($go == "preferences")) {
         // General: reCAPTCHA
         $recaptcha_key = "";
         if (isset($row_prefs['prefsGoogleAccount'])) $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
-        if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+        if ($_SESSION['style_set_no_numbering']) include (INCLUDES.'ba_constants.inc.php');
 
     } // end if ($action == "default")
 

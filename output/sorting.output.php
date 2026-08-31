@@ -15,7 +15,7 @@ foreach ($rows_styles as $row_styles) {
 	$a[] = $row_styles['brewStyleGroup'];
 }
 
-if ($_SESSION['prefsStyleSet'] == "BA") {
+if ($_SESSION['style_set_no_numbering']) {
 	include (INCLUDES.'ba_constants.inc.php');
 	$s = array_merge($a,$ba_beer_categories);
 }
@@ -33,8 +33,8 @@ include (DB.'output_sorting.db.php');
 if ($totalRows_entries > 0) {
 	if ($totalRows_entries == 1) $total_entries = $totalRows_entries." Entry"; else $total_entries = $totalRows_entries." Entries";
 	
-	if (($_SESSION['prefsStyleSet'] == "BA") && ($style < 28))  $title = sprintf("%s<br><small><em class=\"text-muted\">%s</em></small>", $ba_category_names[$style], $total_entries);
-	elseif (($_SESSION['prefsStyleSet'] == "BA") && ($style > 28))  $title = sprintf("%s<br><small><em class=\"text-muted\">%s</em></small>", style_convert($style,1,$base_url), $total_entries);
+	if (($_SESSION['style_set_no_numbering']) && ($style < 28))  $title = sprintf("%s<br><small><em class=\"text-muted\">%s</em></small>", $ba_category_names[$style], $total_entries);
+	elseif (($_SESSION['style_set_no_numbering']) && ($style > 28))  $title = sprintf("%s<br><small><em class=\"text-muted\">%s</em></small>", style_convert($style,1,$base_url), $total_entries);
 	else $title = sprintf("%s %s: %s<br><small><em class=\"text-muted\">%s</em></small>", $label_category, ltrim($style,"0"), style_convert($style,1,$base_url), $total_entries);
 	
 	

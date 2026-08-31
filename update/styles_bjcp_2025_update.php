@@ -23,13 +23,29 @@ $data = array(
   array('brewStyleGroup' => 'C4','brewStyleNum' => 'D','brewStyle' => 'Experimental Perry','brewStyleCategory' => 'Perry','brewStyleVersion' => 'BJCP2025','brewStyleOG' => '1.045','brewStyleOGMax' => '1.1','brewStyleFG' => '0.995','brewStyleFGMax' => '1.02','brewStyleABV' => '5','brewStyleABVMax' => '12','brewStyleIBU' => NULL,'brewStyleIBUMax' => NULL,'brewStyleSRM' => NULL,'brewStyleSRMMax' => NULL,'brewStyleType' => '2','brewStyleInfo' => 'This is an open-ended, catch-all category for perry with other ingredients or for perry using other processes that result in a product not fitting any other C4 styles, such as pear-based versions of C3A and C3B (fruited or spiced perry). It may also be used for any other type of historical or regional traditional perry not already described, or for perry that otherwise meets existing guideline definitions, except that it is noticeably outside listed style parameters (e.g., strength, sweetness, carbonation). If the perry fits a previously defined style, then it is not an Experimental Perry. Products derived from other pome fruit (e.g., quince) including those berry-like fruit in the Amelanchier genus (e.g., juneberry, serviceberry, saskatoon berry) may be entered here in lieu of a separate category, provided the experimental fruit is dominant in the formulation','brewStyleLink' => '','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => '','brewStyleComEx' => 'Æppeltreow Pear Wine, Sea Cider Ginger Perry, Snow Capped Cider JalaPEARño','brewStyleEntry' => 'Entrants MUST specify the ingredients or processes that make the entry an experimental perry. Entrants MUST specify both carbonation and sweetness levels. Entrants MAY specify a base style, or provide a more detailed description of the concept.')
 );
 
+// Insert per-row (not insertMulti()) and skip any style that already exists -
+// a blind bulk insert here can re-duplicate this entire batch if this script
+// runs again against a DB state where the check_new_style() guard in
+// run_update.php (which only checks one sentinel style) doesn't catch that
+// most/all of the batch is already present. See styles_aabc_2022_update.php.
 $update_table = $prefix."styles";
-$result = $db_conn->insertMulti($update_table, $data);
-if ($result) $v3000_update .= "<li>Added BJCP 2025 Cider Styles to styles table.</li>"; 
-else {
-  $v3000_update .= "<li>Addition of BJCP 2025 Cider Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
-  $error_count += 1;
+$inserted = 0;
+$skipped = 0;
+$insert_errors = FALSE;
+foreach ($data as $row) {
+  if (check_new_style($row['brewStyleGroup'], $row['brewStyleNum'], $row['brewStyle'])) {
+    $skipped++;
+    continue;
+  }
+  if ($db_conn->insert($update_table, $row)) $inserted++;
+  else {
+    $insert_errors = TRUE;
+    $v3000_update .= "<li>Addition of ".$row['brewStyle']." failed. Error: ".$db_conn->getLastError()."</li>";
+    $error_count += 1;
+  }
 }
+if ($inserted > 0) $v3000_update .= "<li>Added ".$inserted." BJCP 2025 Cider Styles to styles table".(($skipped > 0) ? " (".$skipped." already present, skipped)" : "").".</li>";
+elseif (!$insert_errors) $v3000_update .= "<li>BJCP 2025 Cider Styles already present in styles table - nothing to add.</li>";
 
 /**
  * Convert any cider styles present in the brewing 

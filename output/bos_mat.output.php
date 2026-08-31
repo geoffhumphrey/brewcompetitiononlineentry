@@ -19,7 +19,7 @@ $go = "output";
 require (DB.'admin_common.db.php');
 require (LIB.'admin.lib.php');
 require (LIB.'output.lib.php');
-if ($_SESSION['prefsStyleSet'] == "BA") include(INCLUDES.'ba_constants.inc.php');
+if ($_SESSION['style_set_no_numbering']) include(INCLUDES.'ba_constants.inc.php');
 
 function check_table_name($id,$judging_tables_db_table) {
 	require(CONFIG.'config.php');
@@ -144,7 +144,7 @@ if (!empty($a)) {
 					elseif ($action == "pro-am") $output .= '<p style="text-align:center"><strong>*** '.$label_pro_am.': '.$style_type_info[2].' * ***</strong></p>';
 					else $output .= '<p style="text-align:center"><strong>*** '.$label_bos.': '.$style_type_info[2].' ***</strong></p>';
 					
-					if ($_SESSION['prefsStyleSet'] == "BA") {
+					if ($_SESSION['style_set_no_numbering']) {
 
 						$output .= '<h3 style="padding:0; margin: 0;">';
 						$output .= $row_scores['brewStyle'];

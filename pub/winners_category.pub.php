@@ -55,7 +55,7 @@ if ($row_scored_entries['count'] > 0) {
 		$a = styles_active(0, $filter);
 	}
 
-	$category_column = ($winner_style_set == "BA") ? "brewCategory" : "brewCategorySort";
+	$category_column = (style_set_no_numbering($winner_style_set)) ? "brewCategory" : "brewCategorySort";
 
 	$counts_by_category = array();
 	if (table_exists($brewing_db_table)) {
@@ -89,7 +89,7 @@ if ($row_scored_entries['count'] > 0) {
 			if ((isset($style)) && (is_numeric($style))) $style_pad = sprintf("%02d", $style);
 			else $style_pad = $style;
 
-			$lookup_key = ($winner_style_set == "BA") ? $style : $style_pad;
+			$lookup_key = (style_set_no_numbering($winner_style_set)) ? $style : $style_pad;
 			$row_entry_count = array('count' => $counts_by_category[$lookup_key] ?? 0);
 			$table_scores = $scores_by_category[$lookup_key] ?? array();
 			$row_score_count = array('count' => count($table_scores));
@@ -110,7 +110,7 @@ if ($row_scored_entries['count'] > 0) {
 
 
 				// Build headers
-				if ($winner_style_set == "BA") {
+				if (style_set_no_numbering($winner_style_set)) {
 					include (INCLUDES.'ba_constants.inc.php');
 					$header1_1 .= sprintf("<h3>%s <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span></h3>",$ba_category_names[$style],$row_entry_count['count'],$entries);
 
@@ -172,7 +172,7 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= "</td>";
 
 					$table_body1 .= "<td width=\"25%\">";
-					if ($winner_style_set == "BA") $table_body1 .= $row_scores['brewStyle'];
+					if (style_set_no_numbering($winner_style_set)) $table_body1 .= $row_scores['brewStyle'];
 					else $table_body1 .= $style.": ".$row_scores['brewStyle'];
 
 					if ((!empty($row_scores['brewInfo'])) && ($section != "results") && ($section != "past-winners")) {

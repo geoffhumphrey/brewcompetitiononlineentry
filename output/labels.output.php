@@ -15,7 +15,7 @@ $number_of_labels = "";
 $ba = FALSE;
 $aabc = FALSE;
 
-if ($_SESSION['prefsStyleSet'] == "BA") $ba = TRUE;
+if ($_SESSION['style_set_no_numbering']) $ba = TRUE;
 if ($_SESSION['prefsStyleSet'] == "AABC") $aabc = TRUE;
 
 function unique_multidim_array($array, $key) {

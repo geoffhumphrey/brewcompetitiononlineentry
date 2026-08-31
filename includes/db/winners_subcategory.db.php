@@ -14,7 +14,7 @@ else {
 	$judging_scores_bos_db_table = $prefix."judging_scores_bos_".$filter_clean;
 }
 
-if ($winner_style_set == "BA") {
+if (style_set_no_numbering($winner_style_set)) {
 	$category_column = "brewCategory";
 	$db_conn->where($category_column, $value['brewStyleGroup']);
 	$db_conn->where("brewSubCategory", $value['brewStyleNum']);

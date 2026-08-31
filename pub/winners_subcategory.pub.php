@@ -60,14 +60,14 @@ if ($row_scored_entries['count'] > 0) {
 		$a = styles_active(2, $filter);
 	}
 
-	$category_column = ($winner_style_set == "BA") ? "brewCategory" : "brewCategorySort";
+	$category_column = (style_set_no_numbering($winner_style_set)) ? "brewCategory" : "brewCategorySort";
 
 	// Entry counts, keyed by "category|subcategory" - matches winners_subcategory.db.php's
 	// composite WHERE (category_column + brewSubCategory) used for both style sets (BA
 	// additionally filters brewReceived=1 there, preserved below).
 	$counts_by_subcategory = array();
 	if (table_exists($brewing_db_table)) {
-		if ($winner_style_set == "BA") $db_conn->where('brewReceived', '1');
+		if (style_set_no_numbering($winner_style_set)) $db_conn->where('brewReceived', '1');
 		$db_conn->groupBy($category_column);
 		$db_conn->groupBy('brewSubCategory');
 		$rows_subcat_counts = $db_conn->get($brewing_db_table, null, "$category_column, brewSubCategory, COUNT(*) as count");
@@ -80,6 +80,9 @@ if ($row_scored_entries['count'] > 0) {
 	// BA quirk of filtering only brewSubCategory, not category+subcategory together - just
 	// without the per-subcategory WHERE filter, then split back apart below. BA groups by
 	// brewSubCategory alone to match that quirk; non-BA groups by the composite key.
+	// BA2026's brewStyleNum was made globally unique to match old BA's own flat numbering
+	// scheme (see the BA2026 "num-uniqueness" work), so the bare-brewSubCategory key below
+	// is safe for both.
 	$scores_by_subcategory = array();
 	if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
 		$query_scores_all_subcat = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
@@ -89,7 +92,7 @@ if ($row_scored_entries['count'] > 0) {
 		else $query_scores_all_subcat .= ", a.scorePlace ASC";
 		$rows_scores_all_subcat = $db_conn->rawQuery($query_scores_all_subcat);
 		foreach ($rows_scores_all_subcat as $row_score_subcat) {
-			if ($winner_style_set == "BA") $group_key = $row_score_subcat['brewSubCategory'];
+			if (style_set_no_numbering($winner_style_set)) $group_key = $row_score_subcat['brewSubCategory'];
 			else $group_key = $row_score_subcat['brewCategorySort'].'|'.$row_score_subcat['brewSubCategory'];
 			$scores_by_subcategory[$group_key][] = $row_score_subcat;
 		}
@@ -103,7 +106,7 @@ if ($row_scored_entries['count'] > 0) {
 
 		$row_entry_count = array('count' => $counts_by_subcategory[$value['brewStyleGroup'].'|'.$value['brewStyleNum']] ?? 0);
 
-		if ($winner_style_set == "BA") $score_key = $value['brewStyleNum'];
+		if (style_set_no_numbering($winner_style_set)) $score_key = $value['brewStyleNum'];
 		else $score_key = $value['brewStyleGroup'].'|'.$value['brewStyleNum'];
 		$table_scores = $scores_by_subcategory[$score_key] ?? array();
 		$row_score_count = array('count' => count($table_scores));
@@ -126,7 +129,7 @@ if ($row_scored_entries['count'] > 0) {
 			$table_body1 = "";
 
 			// Build headers
-			if ($winner_style_set == "BA") $header1_1 .= sprintf("<h3>%s <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span></h3>",$style[2],$row_entry_count['count'],$entries);
+			if (style_set_no_numbering($winner_style_set)) $header1_1 .= sprintf("<h3>%s <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span></h3>",$style[2],$row_entry_count['count'],$entries);
 			else $header1_1 .= sprintf("<h3>%s %s%s: %s <span class=\"fs-4 fw-normal text-body-secondary\">(%s %s)</span></h3>",$label_category,ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
 
 			// Build table headers
@@ -151,7 +154,7 @@ if ($row_scored_entries['count'] > 0) {
 				$entry_name = html_entity_decode($row_scores['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
     			$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
-				if ($winner_style_set == "BA") {
+				if (style_set_no_numbering($winner_style_set)) {
 
 					if (is_numeric($row_scores['brewSubCategory'])) {
 						$style = $_SESSION['styles']['data'][$row_scores['brewSubCategory'] - 1]['category']['name'];

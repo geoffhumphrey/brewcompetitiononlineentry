@@ -197,7 +197,7 @@ if ($row_scored_entries['count'] > 0) {
 						$winners_table_body_1 .= "</td>";
 
 						$winners_table_body_1 .= "<td width=\"25%\">";
-						if ($_SESSION['prefsStyleSet'] == "BA") $winners_table_body_1 .= $row_scores['brewStyle'];
+						if ($_SESSION['style_set_no_numbering']) $winners_table_body_1 .= $row_scores['brewStyle'];
 						else $winners_table_body_1 .= $style.": ".$row_scores['brewStyle'];
 
 						if ((!empty($row_scores['brewInfo'])) && ($section != "results") && ($section != "past-winners")) {

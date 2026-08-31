@@ -444,7 +444,7 @@ if ($go == "all_entry_info") {
 											$table_flight_tbody .= "</td>";
 
 											$table_flight_tbody .= "<td>";
-											if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+											if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_entries['brewStyle'];
 											else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 											$table_flight_tbody .= "</td>";
 
@@ -682,7 +682,7 @@ if ($go == "all_entry_info") {
 								$table_flight_tbody .= "</td>";
 
 								$table_flight_tbody .= "<td>";
-								if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+								if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_entries['brewStyle'];
 								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 								$table_flight_tbody .= "</td>";
 
@@ -866,7 +866,7 @@ if ($go == "mini_bos") {
 			$table_flight_tbody .= "</td>";
 
 			$table_flight_tbody .= "<td>";
-			if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries_mini['brewStyle'];
+			if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_entries_mini['brewStyle'];
 			else $table_flight_tbody .= $style." ".$row_entries_mini['brewStyle']."<em><br>".$style_convert_1_ps($row_entries_mini['brewCategorySort'])."</em>";
 			$table_flight_tbody .= "</td>";
 
@@ -1059,7 +1059,7 @@ if ($go == "judging_scores_bos") {
 						$table_flight_tbody .= "</td>";
 
 						$table_flight_tbody .= "<td>";
-						if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_bos['brewStyle'];
+						if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_bos['brewStyle'];
 						else $table_flight_tbody .= $style." ".$row_bos['brewStyle']."<em><br>".$style_convert_1_ps($row_bos['brewCategorySort'])."</em>";
 						$table_flight_tbody .= "</td>";
 
@@ -1307,7 +1307,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "</td>";
 
 									$table_flight_tbody .= "<td>";
-									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+									if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_entries['brewStyle'];
 									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
@@ -1536,7 +1536,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "</td>";
 
 									$table_flight_tbody .= "<td>";
-									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+									if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_entries['brewStyle'];
 									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
@@ -1771,7 +1771,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 										$table_flight_tbody .= "</td>";
 
 										$table_flight_tbody .= "<td>";
-										if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+										if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_entries['brewStyle'];
 										else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 										$table_flight_tbody .= "</td>";
 										$table_flight_tbody .= "<td>";
@@ -2019,7 +2019,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
-									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+									if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_entries['brewStyle'];
 									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
@@ -2325,7 +2325,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								// Style
 								$table_flight_tbody .= "<td>";
-								if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+								if ($_SESSION['style_set_no_numbering']) $table_flight_tbody .= $row_entries['brewStyle'];
 								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".$style_convert_1_ps($row_entries['brewCategorySort'])."</em>";
 								$table_flight_tbody .= "</td>";
 								

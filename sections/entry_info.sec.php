@@ -278,7 +278,7 @@ else {
 
 // Categories Accepted
 $header1_8 .= "";
-if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
+if ($_SESSION['style_set_no_numbering']) $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
 else $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_046);
 
 $style_set = $_SESSION['style_set_short_name'];

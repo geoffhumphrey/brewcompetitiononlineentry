@@ -1526,6 +1526,28 @@ function total_nopay_received($go, $id, $comp_id) {
 	return $row['count'];
 }
 
+/**
+ * Whether a given style set's brewStyleGroup/brewStyleNum numbering is
+ * purely this application's own internal bookkeeping (not part of the
+ * style set's own official guidelines - e.g. Brewers Association styles,
+ * which the BA itself does not number). Screens displaying a style should
+ * show just the style name for these, rather than a group-num prefix.
+ *
+ * Takes the style set name explicitly (rather than reading
+ * $_SESSION['prefsStyleSet']) so callers viewing an archived competition
+ * (whose archiveStyleSet may differ from the live session's active style
+ * set) get the correct answer for what they're actually displaying.
+ */
+function style_set_no_numbering($style_set_name) {
+	include (INCLUDES.'styles.inc.php');
+	foreach ($style_sets as $style_set_data) {
+		if ((!empty($style_set_data)) && ($style_set_data['style_set_name'] === $style_set_name)) {
+			return !empty($style_set_data['style_set_no_numbering']);
+		}
+	}
+	return FALSE;
+}
+
 function style_convert($number,$type,$base_url="",$archive="") {
 	
 	require(CONFIG.'config.php');
@@ -1813,7 +1835,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 			</table>";
 
 			if ($archive == "v3-public") {
-				if ($style_set == "BA") {
+				if (style_set_no_numbering($style_set)) {
 					$style_convert_1[] = "\n<span title=\"".$label_info.": ".$row_style['brewStyle']."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$row_style['brewStyle']."</a></span>";
 					$modal_title = $styleSet.": ".$row_style['brewStyle'];
 				}
@@ -1909,7 +1931,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 				else $style_name = $row_style['brewStyle'];
 
 				if ($row_style['brewStyleOwn'] == "bcoe") {
-					if ($style_set == "BA") $style_convert .= "<li class='list-inline-item me-3'>".$style_name."</li>";
+					if (style_set_no_numbering($style_set)) $style_convert .= "<li class='list-inline-item me-3'>".$style_name."</li>";
 					elseif ($style_set == "AABC") $style_convert .= "<li class='list-inline-item me-3'><strong>".ltrim($row_style['brewStyleGroup'],"0").".".ltrim($row_style['brewStyleNum'],"0").":</strong> ".$style_name."</li>";
 					else $style_convert .= "<li class='list-inline-item me-3'><strong>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].":</strong> ".$style_name."</li>";
 				}
@@ -3637,7 +3659,7 @@ function judge_entries($uid,$method) {
 	if ($totalRows_judge_entries > 0) {
 		foreach ($rows_judge_entries as $row_judge_entries) {
 
-			if ($_SESSION['prefsStyleSet'] == "BA") {
+			if ($_SESSION['style_set_no_numbering']) {
 				if ($method == 1) $entries[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewStyle']."</a>";
 				else $entries[] = $row_judge_entries['brewStyle'];
 			}
@@ -3819,7 +3841,7 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	if ($row_style) $style_id = $row_style['id'];
 
 	// BA Styles
-	if ($_SESSION['prefsStyleSet'] == "BA") {
+	if ($_SESSION['style_set_no_numbering']) {
 		$db_conn->where('brewBrewerID', $uid);
 		$db_conn->where('brewSubCategory', $style_break[1]);
 		$row_check = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
@@ -4707,7 +4729,7 @@ function style_number_const($style_category_number,$style_sub,$style_set_display
 	switch ($method) {
 		case 0:
 			if (isset($_SESSION['prefsStyleSet'])) {
-				if ($_SESSION['prefsStyleSet'] == "BA") return "";
+				if ($_SESSION['style_set_no_numbering']) return "";
 				elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
 				else return $style_category_number.$style_set_display_separator.$style_sub;
 			}

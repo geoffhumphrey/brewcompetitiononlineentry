@@ -7,7 +7,7 @@
  */
 
 include (DB.'styles.db.php');
-if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+if ($_SESSION['style_set_no_numbering']) include (INCLUDES.'ba_constants.inc.php');
 include (DB.'styles_special.db.php');
 
 // Disable fields trigger
@@ -950,7 +950,7 @@ echo $add_edit_entry_modals;
 
     <?php } // end if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { ?>
 
-    <?php if (($_SESSION['prefsSpecific'] == 0) && ($_SESSION['prefsStyleSet'] != "BA")) { ?>
+    <?php if (($_SESSION['prefsSpecific'] == 0) && (!$_SESSION['style_set_no_numbering'])) { ?>
     <!-- Enter Brewer's Specifics -->
     <div class="form-group">
         <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_brewer_specifics; ?></label>

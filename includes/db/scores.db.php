@@ -17,7 +17,7 @@ if ($winner_method == 0) {
 // Display by Category
 if ($winner_method == 1) {
 
-    if ($style_set == "BA") {
+    if (style_set_no_numbering($style_set)) {
         $query_scores = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE b.brewCategory=? AND a.eid = b.id AND c.uid = b.brewBrewerID";
         $params_scores = array($style);
     }
@@ -30,9 +30,12 @@ if ($winner_method == 1) {
 }
 
 // Display by Subcategory
+// BA2026's brewStyleNum was made globally unique to match old BA's own flat numbering
+// scheme (see the BA2026 "num-uniqueness" work), so the bare-brewSubCategory query below
+// is safe for both.
 if ($winner_method == 2) {
 
-    if ($style_set == "BA") {
+    if (style_set_no_numbering($style_set)) {
         $query_scores = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE b.brewSubCategory=? AND a.eid = b.id  AND c.uid = b.brewBrewerID";
         $params_scores = array($value['brewStyleNum']);
     }

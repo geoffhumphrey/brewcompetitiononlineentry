@@ -563,7 +563,7 @@ $no_entry_form_array = array("0","1","2","E","C");
 if ($logged_in) $location_target = "_blank";
 else $location_target = "_self";
 
-if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BA")) {
+if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['style_set_no_numbering'])) {
     $optional_info_styles = array();
 }
 elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "AABC")) {

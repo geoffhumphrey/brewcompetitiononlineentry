@@ -52,7 +52,7 @@ if ($row_scored_entries['count'] > 0) {
 				$table_head1 = "";
 				$table_body1 = "";
 
-				if ($winner_style_set == "BA") {
+				if (style_set_no_numbering($winner_style_set)) {
 					include (INCLUDES.'ba_constants.inc.php');
 					$header1_1 .= sprintf("<h3>%s <small>%s %s</small></h3>",$ba_category_names[$style],$row_entry_count['count'],$entries);
 
@@ -113,7 +113,7 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= "</td>";
 
 					$table_body1 .= "<td width=\"25%\">";
-					if ($winner_style_set == "BA") $table_body1 .= $row_scores['brewStyle'];
+					if (style_set_no_numbering($winner_style_set)) $table_body1 .= $row_scores['brewStyle'];
 					else $table_body1 .= $style.": ".$row_scores['brewStyle'];
 
 					if ((!empty($row_scores['brewInfo'])) && ($section != "results") && ($section != "past-winners")) {

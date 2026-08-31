@@ -85,12 +85,18 @@ $versions = array(
 $pre_update_version_index = $versions[$row_pv['version']];
 $post_update_version_index = $versions[$current_version];
 
-flush();
-
 $setup_running = FALSE;
 if (!isset($update_running)) $update_running = FALSE;
 if (isset($output)) $setup_running = TRUE;
 else $output = "";
+
+// Only flush for live progress display on the dedicated setup/update admin
+// page (identified by $output already being set by the caller before this
+// file was included). site/bootstrap.php also includes this file inline on
+// ordinary page loads whenever a version bump makes $force_update true, and
+// flushing there commits the response headers before common.db.php gets a
+// chance to call session_start(), breaking the session for that request.
+if ($setup_running) flush();
 
 if ($update_running) $setup_running = FALSE;
 
@@ -2845,6 +2851,45 @@ else {
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
+ * Correct New Zealand Pilsner miscategorization - the AABC 2022 seed data
+ * filed it under group 04 (Pale Ale); per the AABC style categories (2022
+ * and unchanged in 2025) it belongs under group 02 (Pale Lager). Fixed in
+ * update/styles_aabc_2022_update.php for fresh installs; this corrects
+ * existing installs that already seeded the old group/category.
+ * Added after Beta release.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$update_table = $styles_db_table;
+$data = array('brewStyleGroup' => '02', 'brewStyleNum' => '09', 'brewStyleCategory' => 'Pale Lager');
+$db_conn->where ('brewStyleGroup', '04');
+$db_conn->where ('brewStyleNum', '07');
+$db_conn->where ('brewStyle', 'New Zealand Pilsner [BJCP X5]');
+$db_conn->where ('brewStyleVersion', 'AABC2022');
+if ($db_conn->update ($update_table, $data)) $v2500_update .= "<li>Corrected New Zealand Pilsner group/category (Pale Ale to Pale Lager) in styles table.</li>";
+else {
+	$v2500_update .= "<li>Correction of New Zealand Pilsner group/category failed in styles table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count++;
+}
+
+// Only re-tag existing entries if this install is actually using an AABC
+// style set - brewCategorySort/brewSubCategory codes are only meaningful
+// relative to whichever style set is active, and group 04/num 07 means
+// something entirely different under other style sets.
+if ((!empty($row_current_prefs)) && (in_array($row_current_prefs['prefsStyleSet'], array('AABC2022','AABC2025')))) {
+	$update_table = $prefix."brewing";
+	$data = array('brewCategorySort' => '02', 'brewSubCategory' => '09');
+	$db_conn->where ('brewCategorySort', '04');
+	$db_conn->where ('brewSubCategory', '07');
+	if ($db_conn->update ($update_table, $data)) $v2500_update .= "<li>Corrected New Zealand Pilsner entries' category in brewing table.</li>";
+	else {
+		$v2500_update .= "<li>Correction of New Zealand Pilsner entries' category failed in brewing table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$error_count++;
+	}
+}
+
+/**
+ * ----------------------------------------------- 2.5.0 ---------------------------------------------
  * Correct character limit bug in judging_scores and judging_scores_bos table.
  * Added after Beta release.
  * ---------------------------------------------------------------------------------------------------
@@ -4644,7 +4689,8 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
 
 /**
  * ----------------------------------------------- 3.0.3 ----------------------------------------------
- * 
+ * Extend prefsEntryForm to utilize INT(2) so that a value greater than 9 can be entered.
+ * Parallel to the expansion of bottle label options.
  */
 
 $v3030_update = "";
@@ -4686,6 +4732,8 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
 
 /**
  * ----------------------------------------------- 3.0.4 ----------------------------------------------
+ * Unreleased version.
+ * 
  * Corrects existing data affected by a double/triple HTML-entity-encoding bug: several plain-text
  * fields were run through HTMLPurifier and sterilize() in an order that encoded characters like "&"
  * more than once before storage, so they later displayed literally as "&amp;" instead of "&". The
@@ -4699,12 +4747,12 @@ $v3040_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
 	$v3040_update .= "<p>";
-	$v3040_update .= "<strong>Version 3.0.4.0 Updates</strong>";
+	$v3040_update .= "<strong>Version 3.0.4.0 Updates (Unreleased Working Version)</strong>";
 	$v3040_update .= "</p>";
 }
 
 elseif ($update_running) {
-	$v3040_update .= "<h4>Version 3.0.4</h4>";
+	$v3040_update .= "<h4>Version 3.0.4 (Unreleased Working Version)</h4>";
 }
 
 // Begin version unordered list
@@ -4835,6 +4883,7 @@ if ((check_mysql_data_type("contestEntryFee",$prefix."contest_info")) != 246) {
 
 }
 /**
+ * ----------------------------------------------- 3.1.0 ----------------------------------------------
  * Normalize competition timestamps saved before the to_utc_epoch() fix.
  *
  * Prior to 3.1.0, competition date fields were stored via bare strtotime()
@@ -4899,12 +4948,11 @@ $v310_changed += $v310_ts_migrate($db_conn, $prefix."preferences", array(
 
 if ($v310_changed > 0) $v3100_update .= "<li>Normalized ".$v310_changed." stored competition timestamp(s) to UTC epoch (timezone-consistent storage).</li>";
 
-
 if (!check_update("prefsHeroImages", $prefix."preferences")) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `prefsHeroImages` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'JSON map of hero banner image filename to active flag';",$prefix."preferences");
 	$result = $db_conn->rawQuery($sql);
-	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Hero banner image preferences column added to the preferences table.</li>";
+	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Added hero banner management. Hero banner image preferences column added to the preferences table.</li>";
 	else {
 		$v3100_update .= "<li class=\"text-danger\">Hero banner image preferences column NOT added to the preferences table.</li>";
 		$error_count++;
@@ -4926,9 +4974,7 @@ if (!check_update("prefsLanguageToggle", $prefix."preferences")) {
 
 		// Carry forward any existing config.php-based settings, so installs that
 		// already turned this on via $enable_language_toggle don't silently lose
-		// it on upgrade. From here on this is fully superseded by the DB-backed
-		// prefsLanguageToggle / prefsLanguageOptions preferences - config.php is
-		// no longer consulted at runtime.
+		// it on upgrade.
 		$v310_lang_toggle = ((isset($enable_language_toggle)) && ($enable_language_toggle)) ? 'Y' : 'N';
 
 		if ((isset($override_languages)) && (is_array($override_languages)) && (!empty($override_languages))) {
@@ -4963,6 +5009,7 @@ if (!check_update("prefsLanguageToggle", $prefix."preferences")) {
 }
 
 /**
+ * ----------------------------------------------- 3.1.0 ----------------------------------------------
  * The brewCoBrewer column (added 1.1.6.0) and brewMead1/brewMead2/brewMead3
  * columns were never backfilled onto archived brewing_<suffix> tables the way
  * later columns (brewABV, brewStyleType, etc.) were. Archives created before
@@ -5000,6 +5047,7 @@ foreach ($archive_suffixes as $suffix) {
 }
 
 /**
+ * ----------------------------------------------- 3.1.0 ----------------------------------------------
  * Data hygiene: userAdminObfuscate allows NULL (rows inserted before this
  * column existed, or via any write path that didn't explicitly set it), and
  * NULL was being treated inconsistently rather than defaulting to the safe
@@ -5021,6 +5069,13 @@ if ($db_conn->getLastErrno() === 0) $v310_obfuscate_fixed += $db_conn->mysqli()-
 else $error_count++;
 
 if ($v310_obfuscate_fixed > 0) $v3100_update .= "<li>Corrected ".$v310_obfuscate_fixed." user account(s) with a missing or incorrect judging-number obfuscation setting (Top-Level Admins are no longer obfuscated; NULL values now default to obfuscated).</li>";
+
+$sql = sprintf("UPDATE `%s` SET `brewStyleGroup` = '11' WHERE `brewStyleVersion` = 'BA2026' AND `brewStyleGroup` = '10';", $prefix."styles");
+$result = $db_conn->rawQuery($sql);
+if (($db_conn->getLastErrno() === 0) && ($db_conn->count > 0)) $v3100_update .= "<li>Corrected ".$db_conn->count." BA2026 Hybrid/Mixed Lagers or Ales style(s) from group 10 to group 11.</li>";
+
+// Add BA 2026 Style Updates
+if (($section == "setup") || (!check_new_style("01","01","Ordinary Bitter"))) include (UPDATE.'styles_ba_2026_update.php');
 
 if (!$setup_running) $v3100_update .= "</ul>";
 

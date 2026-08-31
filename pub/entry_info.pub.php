@@ -433,7 +433,7 @@ if (!empty($page_info16)) {
 
 if ($row_styles) {
 
-	if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
+	if ($_SESSION['style_set_no_numbering']) $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
 	else $page_info8 .= sprintf("<p>%s</p>", $entry_info_text_057);
 
 	$style_set = $_SESSION['style_set_short_name'];

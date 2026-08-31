@@ -157,11 +157,27 @@ $data = array(
 );
 
 $update_table = $prefix."styles";
-$result = $db_conn->insertMulti($update_table, $data);
-if ($result) $v2400_update .= "<li>Added BJCP 2021 Styles to styles table.</li>"; 
-else {
-  $v2400_update .= "<li>Addition of BJCP 2021 Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
-  $error_count += 1;
+// Insert per-row (not insertMulti()) and skip any style that already exists -
+// a blind bulk insert here can re-duplicate this entire batch if this script
+// runs again against a DB state where the check_new_style() guard in
+// run_update.php (which only checks one sentinel style) doesn't catch that
+// most/all of the batch is already present. See styles_aabc_2022_update.php.
+$inserted = 0;
+$skipped = 0;
+$insert_errors = FALSE;
+foreach ($data as $row) {
+  if (check_new_style($row['brewStyleGroup'], $row['brewStyleNum'], $row['brewStyle'])) {
+    $skipped++;
+    continue;
+  }
+  if ($db_conn->insert($update_table, $row)) $inserted++;
+  else {
+    $insert_errors = TRUE;
+    $v2400_update .= "<li>Addition of ".$row['brewStyle']." failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
+    $error_count += 1;
+  }
 }
+if ($inserted > 0) $v2400_update .= "<li>Added ".$inserted." BJCP 2021 Styles to styles table".(($skipped > 0) ? " (".$skipped." already present, skipped)" : "").".</li>";
+elseif (!$insert_errors) $v2400_update .= "<li>BJCP 2021 Styles already present in styles table - nothing to add.</li>";
 
 ?>

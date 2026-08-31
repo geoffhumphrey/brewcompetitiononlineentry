@@ -1434,7 +1434,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 		foreach ($rows_styles as $row_styles) {
             if (array_key_exists($row_styles['id'], $styles_selected)) {
                 $output .= "\t<li>";
-                if ($_SESSION['prefsStyleSet'] != "BA") $output .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ";
+                if (!$_SESSION['style_set_no_numbering']) $output .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ";
                 $output .= $row_styles['brewStyle'];
                 if ($row_styles['brewStyleOwn'] == "custom") $output .= " (Special style: ".$_SESSION['contestName'].")";
                 $output .= "</li>\n";
@@ -1740,7 +1740,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $actual_styles = styles_active(0, $filter);
                         }
 
-                        $category_column_export = ($_SESSION['prefsStyleSet'] == "BA") ? "brewCategory" : "brewCategorySort";
+                        $category_column_export = ($_SESSION['style_set_no_numbering']) ? "brewCategory" : "brewCategorySort";
 
                         $counts_by_category_export = array();
                         if (table_exists($brewing_db_table)) {
@@ -1785,7 +1785,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 if ((isset($style)) && (is_numeric($style))) $style_pad_export = sprintf("%02d", $style);
                                 else $style_pad_export = $style;
-                                $lookup_key_export = ($_SESSION['prefsStyleSet'] == "BA") ? $style : $style_pad_export;
+                                $lookup_key_export = ($_SESSION['style_set_no_numbering']) ? $style : $style_pad_export;
 
                                 $row_entry_count = array('count' => $counts_by_category_export[$lookup_key_export] ?? 0);
                                 $row_score_count = array('count' => $counts_judged_by_category_export[$lookup_key_export] ?? 0);
@@ -1802,7 +1802,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                     if (!empty($rows_scores)) {
 
-                                        if ($_SESSION['prefsStyleSet'] == "BA") {
+                                        if ($_SESSION['style_set_no_numbering']) {
                                             include (INCLUDES.'ba_constants.inc.php');
                                             $title = sprintf("%s (%s %s)",$ba_category_names[$style],$row_entry_count['count'],$entries);
                                         }
@@ -1928,13 +1928,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         }
 
                         $winner_style_set_export_sub = ($filter == "default") ? $_SESSION['prefsStyleSet'] : $row_disp_archive_winners['archiveStyleSet'];
-                        $category_column_export_sub = ($winner_style_set_export_sub == "BA") ? "brewCategory" : "brewCategorySort";
+                        $category_column_export_sub = (style_set_no_numbering($winner_style_set_export_sub)) ? "brewCategory" : "brewCategorySort";
 
                         // Entry counts - mirrors winners_subcategory.db.php's row_entry_count
                         // exactly, including its quirk of only filtering brewReceived=1 for BA.
                         $counts_by_subcategory_export = array();
                         if (table_exists($brewing_db_table)) {
-                            if ($winner_style_set_export_sub == "BA") $db_conn->where('brewReceived', '1');
+                            if (style_set_no_numbering($winner_style_set_export_sub)) $db_conn->where('brewReceived', '1');
                             $db_conn->groupBy($category_column_export_sub);
                             $db_conn->groupBy('brewSubCategory');
                             $rows_subcat_counts_export = $db_conn->get($brewing_db_table, null, "$category_column_export_sub, brewSubCategory, COUNT(*) as count");
@@ -1959,6 +1959,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         // Mirrors includes/db/scores.db.php's winner_method==2 query exactly -
                         // including its BA quirk of filtering only brewSubCategory, not
                         // category+subcategory together.
+                        // BA2026's brewStyleNum was made globally unique to match old BA's own flat
+                        // numbering scheme (see the BA2026 "num-uniqueness" work), so the bare-
+                        // brewSubCategory key below is safe for both.
                         $scores_by_subcategory_export = array();
                         if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
                             $query_scores_sub_export = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
@@ -1968,7 +1971,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             else $query_scores_sub_export .= ", a.scorePlace ASC";
                             $rows_scores_sub_export = $db_conn->rawQuery($query_scores_sub_export);
                             foreach ($rows_scores_sub_export as $row_scores_sub_export) {
-                                if ($winner_style_set_export_sub == "BA") $group_key_export_sub = $row_scores_sub_export['brewSubCategory'];
+                                if (style_set_no_numbering($winner_style_set_export_sub)) $group_key_export_sub = $row_scores_sub_export['brewSubCategory'];
                                 else $group_key_export_sub = $row_scores_sub_export['brewCategorySort'].'|'.$row_scores_sub_export['brewSubCategory'];
                                 $scores_by_subcategory_export[$group_key_export_sub][] = $row_scores_sub_export;
                             }
@@ -1987,13 +1990,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 // Pulled from the batched fetch above instead of a fresh
                                 // include(DB.'scores.db.php') query per subcategory.
-                                $score_key_export_sub = ($winner_style_set_export_sub == "BA") ? $value['brewStyleNum'] : $count_key_export_sub;
+                                $score_key_export_sub = (style_set_no_numbering($winner_style_set_export_sub)) ? $value['brewStyleNum'] : $count_key_export_sub;
                                 $rows_scores = $scores_by_subcategory_export[$score_key_export_sub] ?? array();
                                 $totalRows_scores = count($rows_scores);
 
                                 if ($rows_scores) {
 
-                                    if ($_SESSION['prefsStyleSet'] == "BA") $title = sprintf("%s (%s %s)",$value['brewStyle'],$row_entry_count['count'],$entries);
+                                    if ($_SESSION['style_set_no_numbering']) $title = sprintf("%s (%s %s)",$value['brewStyle'],$row_entry_count['count'],$entries);
                                     else $title = sprintf("%s%s: %s (%s %s)",ltrim($value['brewStyleGroup'],"0"),$value['brewStyleNum'],$value['brewStyle'],$row_entry_count['count'],$entries);
                                     $title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $title)));
 
@@ -2408,7 +2411,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $a = styles_active(0, $filter);
                         }
 
-                        $category_column_export_h = ($_SESSION['prefsStyleSet'] == "BA") ? "brewCategory" : "brewCategorySort";
+                        $category_column_export_h = ($_SESSION['style_set_no_numbering']) ? "brewCategory" : "brewCategorySort";
 
                         $counts_by_category_export_h = array();
                         if (table_exists($brewing_db_table)) {
@@ -2453,7 +2456,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 if ((isset($style)) && (is_numeric($style))) $style_pad_export_h = sprintf("%02d", $style);
                                 else $style_pad_export_h = $style;
-                                $lookup_key_export_h = ($_SESSION['prefsStyleSet'] == "BA") ? $style : $style_pad_export_h;
+                                $lookup_key_export_h = ($_SESSION['style_set_no_numbering']) ? $style : $style_pad_export_h;
 
                                 $row_entry_count = array('count' => $counts_by_category_export_h[$lookup_key_export_h] ?? 0);
                                 $row_score_count = array('count' => $counts_judged_by_category_export_h[$lookup_key_export_h] ?? 0);
@@ -2471,7 +2474,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                     $style_trimmed = ltrim($style,"0");
 
-                                    if ($_SESSION['prefsStyleSet'] == "BA") {
+                                    if ($_SESSION['style_set_no_numbering']) {
                                         include (INCLUDES.'ba_constants.inc.php');
                                         $html .= '<h2>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
                                     }
@@ -2558,13 +2561,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         }
 
                         $winner_style_set_export_h_sub = ($filter == "default") ? $_SESSION['prefsStyleSet'] : $row_disp_archive_winners['archiveStyleSet'];
-                        $category_column_export_h_sub = ($winner_style_set_export_h_sub == "BA") ? "brewCategory" : "brewCategorySort";
+                        $category_column_export_h_sub = (style_set_no_numbering($winner_style_set_export_h_sub)) ? "brewCategory" : "brewCategorySort";
 
                         // Entry counts - mirrors winners_subcategory.db.php's row_entry_count
                         // exactly, including its quirk of only filtering brewReceived=1 for BA.
                         $counts_by_subcategory_export_h = array();
                         if (table_exists($brewing_db_table)) {
-                            if ($winner_style_set_export_h_sub == "BA") $db_conn->where('brewReceived', '1');
+                            if (style_set_no_numbering($winner_style_set_export_h_sub)) $db_conn->where('brewReceived', '1');
                             $db_conn->groupBy($category_column_export_h_sub);
                             $db_conn->groupBy('brewSubCategory');
                             $rows_subcat_counts_export_h = $db_conn->get($brewing_db_table, null, "$category_column_export_h_sub, brewSubCategory, COUNT(*) as count");
@@ -2589,6 +2592,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         // Mirrors includes/db/scores.db.php's winner_method==2 query exactly -
                         // including its BA quirk of filtering only brewSubCategory, not
                         // category+subcategory together.
+                        // BA2026's brewStyleNum was made globally unique to match old BA's own flat
+                        // numbering scheme (see the BA2026 "num-uniqueness" work), so the bare-
+                        // brewSubCategory key below is safe for both.
                         $scores_by_subcategory_export_h = array();
                         if ((table_exists($judging_scores_db_table)) && (table_exists($brewing_db_table)) && (table_exists($brewer_db_table))) {
                             $query_scores_sub_export_h = "SELECT * FROM ".$judging_scores_db_table." a, ".$brewing_db_table." b, ".$brewer_db_table." c WHERE a.eid = b.id AND c.uid = b.brewBrewerID";
@@ -2598,7 +2604,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             else $query_scores_sub_export_h .= ", a.scorePlace ASC";
                             $rows_scores_sub_export_h = $db_conn->rawQuery($query_scores_sub_export_h);
                             foreach ($rows_scores_sub_export_h as $row_scores_sub_export_h) {
-                                if ($winner_style_set_export_h_sub == "BA") $group_key_export_h_sub = $row_scores_sub_export_h['brewSubCategory'];
+                                if (style_set_no_numbering($winner_style_set_export_h_sub)) $group_key_export_h_sub = $row_scores_sub_export_h['brewSubCategory'];
                                 else $group_key_export_h_sub = $row_scores_sub_export_h['brewCategorySort'].'|'.$row_scores_sub_export_h['brewSubCategory'];
                                 $scores_by_subcategory_export_h[$group_key_export_h_sub][] = $row_scores_sub_export_h;
                             }
@@ -2619,11 +2625,11 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 // Pulled from the batched fetch above instead of a fresh
                                 // include(DB.'scores.db.php') query per subcategory.
-                                $score_key_export_h_sub = ($winner_style_set_export_h_sub == "BA") ? $style[1] : $count_key_export_h_sub;
+                                $score_key_export_h_sub = (style_set_no_numbering($winner_style_set_export_h_sub)) ? $style[1] : $count_key_export_h_sub;
                                 $rows_scores = $scores_by_subcategory_export_h[$score_key_export_h_sub] ?? array();
                                 $totalRows_scores = count($rows_scores);
 
-                                if ($_SESSION['prefsStyleSet'] == "BA") $html .= '<h2>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+                                if ($_SESSION['style_set_no_numbering']) $html .= '<h2>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
                                 else $html .= '<h2>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 
                                 $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';

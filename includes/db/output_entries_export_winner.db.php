@@ -160,7 +160,7 @@ if ($winner_method == 1) {
 
 			$style_pad = sprintf("%02d", $style);
 
-			if ($winner_style_set == "BA") {
+			if (style_set_no_numbering($winner_style_set)) {
 				$query_scores = "SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM ".$prefix."judging_scores".$archive_suffix." a, ".$prefix."brewing".$archive_suffix." b, ".$prefix."brewer".$archive_suffix." c WHERE b.brewCategory=? AND a.eid = b.id AND c.uid = b.brewBrewerID";
 				$params_scores = array($style);
 			}
@@ -330,7 +330,10 @@ if ($winner_method == 2) {
 			// Note: the non-BA branch below concatenates $archive_suffix onto the brewer table name
 			// TWICE (pre-existing bug, e.g. "..._brewer_2024_2024" instead of "..._brewer_2024") —
 			// preserved exactly since this pass only parameterizes queries, it doesn't fix logic.
-			if ($_SESSION['prefsStyleSet'] != "BA") {
+			// BA2026's brewStyleNum was made globally unique to match old BA's own flat numbering
+			// scheme (see the BA2026 "num-uniqueness" work), so the bare-num WHERE b.brewSubCategory=?
+			// branch below (and the ORDER BY further down) is safe for both.
+			if (!$_SESSION['style_set_no_numbering']) {
 				$query_scores = "SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryInfo, c.brewerBreweryName FROM ".$prefix."judging_scores".$archive_suffix." a, ".$prefix."brewing".$archive_suffix." b, ".$prefix."brewer".$archive_suffix." c WHERE b.brewCategorySort=? AND b.brewSubCategory=? AND a.eid = b.id  AND c.uid = b.brewBrewerID";
 				$params_scores = array($style[0], $style[1]);
 			}
@@ -341,7 +344,7 @@ if ($winner_method == 2) {
 			}
 
 			$query_scores .= " AND a.scorePlace IS NOT NULL";
-			if ($_SESSION['prefsStyleSet'] == "BA") $query_scores .= " ORDER BY b.brewStyle,a.scorePlace ASC";
+			if ($_SESSION['style_set_no_numbering']) $query_scores .= " ORDER BY b.brewStyle,a.scorePlace ASC";
 			else $query_scores .= " ORDER BY b.brewCategory,b.brewSubCategory,a.scorePlace";
 
 			// echo $query_scores."<br><br>";

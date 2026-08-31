@@ -118,7 +118,7 @@ foreach ($subcats as $key => $value) {
 
 		$html .= "<td>";
 		$html .= "<span class=\"hidden\">".$substyle[0]."</span>";
-		if ($_SESSION['prefsStyleSet'] != "BA") {
+		if (!$_SESSION['style_set_no_numbering']) {
 			if ($_SESSION['prefsStyleSet'] == "AABC") $html .= ltrim($substyle[0],"0").".".ltrim($substyle[1],"0")." ";
 			else $html .= $substyle[0].$substyle[1]." - ";
 		}
@@ -296,7 +296,7 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) { ?>
 			"sDom": 'fprtp',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			<?php if ($_SESSION['prefsStyleSet'] == "BA") { ?>"aaSorting": [[1,'asc'],[0,'asc']],
+			<?php if ($_SESSION['style_set_no_numbering']) { ?>"aaSorting": [[1,'asc'],[0,'asc']],
 			<?php } else { ?>"aaSorting": [[4,'asc'],[0,'asc']],<?php } ?>
 			"aoColumns": [
 				null,

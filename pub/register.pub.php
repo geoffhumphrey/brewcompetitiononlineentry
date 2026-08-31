@@ -1059,7 +1059,7 @@ if ($go == "default") {  ?>
             <p class="mb-1 small text-danger"><strong><?php echo $brewer_text_012; ?></strong></p>
                 <?php foreach ($rows_styles as $row_styles) {
                     $style_display = "";
-                    if ($_SESSION['prefsStyleSet'] == "BA") {
+                    if ($_SESSION['style_set_no_numbering']) {
                         if ($row_styles['brewStyleOwn'] == "bcoe") $style_display .= $row_styles['brewStyleCategory'].": ".$row_styles['brewStyle'];
                         elseif ($row_styles['brewStyleOwn'] == "custom") $style_display .= "Custom: ".$row_styles['brewStyle'];
                         else $style_display .= $row_styles['brewStyle'];
@@ -1090,7 +1090,7 @@ if ($go == "default") {  ?>
                 <p class="mb-1 small text-danger"><strong><?php echo $brewer_text_014; ?></strong></p>
                 <?php foreach ($rows_styles2 as $row_styles2) {
                     $style_display = "";
-                    if ($_SESSION['prefsStyleSet'] == "BA") {
+                    if ($_SESSION['style_set_no_numbering']) {
                         if ($row_styles2['brewStyleOwn'] == "bcoe") $style_display .= $row_styles2['brewStyleCategory'].": ".$row_styles2['brewStyle'];
                         elseif ($row_styles2['brewStyleOwn'] == "custom") $style_display .= "Custom: ".$row_styles2['brewStyle'];
                         else $style_display .= $row_styles2['brewStyle'];

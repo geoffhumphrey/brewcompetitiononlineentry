@@ -36,7 +36,7 @@ foreach ($eval_scores as $key => $value) {
 
 				// Style Info
 				$style_otf = style_number_const($row_entry['brewCategorySort'],$row_entry['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-	        	if ($_SESSION['prefsStyleSet'] == "BA") $style_display_otf = $row_entry['brewStyle'];
+	        	if ($_SESSION['style_set_no_numbering']) $style_display_otf = $row_entry['brewStyle'];
 	        	else $style_display_otf = $style_otf.": ".$row_entry['brewStyle'];
 
 				// Get recorded evaluation entries

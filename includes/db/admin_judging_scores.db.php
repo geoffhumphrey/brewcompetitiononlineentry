@@ -5,7 +5,7 @@ else $dbTable = $dbTable;
 // This query is ONLY used in the judging_scores function when entering scores for a particular table
 $select_cols = "id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber,brewName";
 
-if ($_SESSION['prefsStyleSet'] == "BA") {
+if ($_SESSION['style_set_no_numbering']) {
 
 	if ($value > 500) {
 

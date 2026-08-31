@@ -52,7 +52,7 @@ if ($row_scored_entries['count'] > 0) {
 			$table_body1 = "";
 
 			// Build headers
-			if ($winner_style_set == "BA") $header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$value,$row_entry_count['count'],$entries);
+			if (style_set_no_numbering($winner_style_set)) $header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$value,$row_entry_count['count'],$entries);
 			else $header1_1 .= sprintf("<h3>%s %s%s: %s <small>%s %s</small></h3>",$label_category,ltrim($value['brewStyleGroup'],"0"),$value['brewStyleNum'],$value['brewStyle'],$row_entry_count['count'],$entries);
 
 			// Build table headers
@@ -76,7 +76,7 @@ if ($row_scored_entries['count'] > 0) {
 				$entry_name = html_entity_decode($row_scores['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
     			$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
-				if ($winner_style_set == "BA") {
+				if (style_set_no_numbering($winner_style_set)) {
 
 					if (is_numeric($row_scores['brewSubCategory'])) {
 						$style = $_SESSION['styles']['data'][$row_scores['brewSubCategory'] - 1]['category']['name'];
