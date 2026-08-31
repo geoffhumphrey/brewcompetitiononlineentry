@@ -373,7 +373,7 @@ if ($totalRows_table_assignments > 0) {
 
 							if (!empty($row_entries['brewMead3'])) {
 								$additional_info++;
-								$strength_display .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+								$strength_display .= "<strong>".$label_strength.":</strong> ".translate_mead_strength_value($row_entries['brewMead3']);
 							}
 
 							if (!empty($row_entries['brewPossAllergens'])) {

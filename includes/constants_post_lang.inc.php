@@ -43,6 +43,15 @@ $mead_sweetness_translations = array(
     "Semi-Sweet"   => $label_semi_sweet,
 );
 
+/**
+ * Mead strength map (brewMead3): Hydromel/Standard/Sack.
+ */
+$mead_strength_translations = array(
+    "Hydromel" => $label_hydromel,
+    "Standard" => $label_standard,
+    "Sack"     => $label_sack,
+);
+
 // Bootstrap layout containers
 if (($section == "admin") || ($view == "admin")) {
     $container_main = "container-fluid";

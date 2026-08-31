@@ -438,7 +438,7 @@ if ($entry_found) {
   if (!empty($row_entry_info['brewMead3'])) {
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_strength."</strong></div>";
-    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead3']."</div>";
+    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".translate_mead_strength_value($row_entry_info['brewMead3'])."</div>";
     $entry_info_html .= "</div>";
   }
 

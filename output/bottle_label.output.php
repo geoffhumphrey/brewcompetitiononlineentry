@@ -222,9 +222,9 @@ if (isset($_SESSION['loginUsername'])) {
               $brewMeadCider = "";
 
               if ((!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
-                if (!empty($row_log['brewMead1'])) $brewMeadCider .= h($row_log['brewMead1'])."&nbsp;&nbsp;";
-                if (!empty($row_log['brewMead2'])) $brewMeadCider .= h($row_log['brewMead2'])."&nbsp;&nbsp;";
-                if (!empty($row_log['brewMead3'])) $brewMeadCider .= h($row_log['brewMead3']);
+                if (!empty($row_log['brewMead1'])) $brewMeadCider .= translate_mead_req_value(h($row_log['brewMead1']))."&nbsp;&nbsp;";
+                if (!empty($row_log['brewMead2'])) $brewMeadCider .= translate_mead_req_value(h($row_log['brewMead2']))."&nbsp;&nbsp;";
+                if (!empty($row_log['brewMead3'])) $brewMeadCider .= translate_mead_strength_value(h($row_log['brewMead3']));
               }
 
               if (!empty($row_log['brewInfo'])) {

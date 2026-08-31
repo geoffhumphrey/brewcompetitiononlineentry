@@ -234,31 +234,26 @@ function translate_mead_req_value($value) {
 
 }
 
+/**
+ * Translate a stored mead strength value (brewMead3:
+ * Hydromel/Standard/Sack). Unknown values pass through unchanged.
+ */
+function translate_mead_strength_value($value) {
+
+	global $mead_strength_translations;
+
+	if (isset($mead_strength_translations[$value])) return $mead_strength_translations[$value];
+	return $value;
+
+}
+
 function designations($judge_array,$display) {
 	$return = "";
 	$rank1 = explode(",",$judge_array);
 	foreach ($rank1 as $rank2) {
-		 if ($rank2 != $display) {
-			// Parse [other:text] format for custom designations
-			if (preg_match('/^\[other:(.*)\]$/', $rank2, $m)) {
-				$return .= "<br />".$m[1]."";
-			} else {
-				$return .= "<br />".$rank2."";
-			}
-		}
+		 if ($rank2 != $display) $return .= "<br />".$rank2."";
 	}
 	return $return;
-}
-
-/**
- * Strip [other:text] tags and return clean designation text.
- * Used for scoresheets, labels, exports, and admin views.
- * @param string $rank_string The brewerJudgeRank value (comma-separated)
- * @return string Cleaned string with [other:text] replaced by text
- */
-function clean_designation_other($rank_string) {
-	if (empty($rank_string)) return $rank_string;
-	return preg_replace('/\[other:(.*?)\]/', '$1', $rank_string);
 }
 
 function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$method=0,$tooltip_text="default") {

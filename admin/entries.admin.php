@@ -216,7 +216,7 @@ if ($totalRows_log > 0) {
 
 		}
 
-		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".h($row_log['brewMead3'])."</li>";
+		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".translate_mead_strength_value(h($row_log['brewMead3']))."</li>";
 
 		if (!empty($cider_mead_req_info)) $required_info .= $cider_mead_req_info;
 
