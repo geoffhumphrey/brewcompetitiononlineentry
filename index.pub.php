@@ -35,21 +35,12 @@
         include_once (LIB.'hero_images.lib.php');
     }
 
-    // Hardcoded fallback array for backwards compatibility
-    $bg_hero_images_fallback = array(
-        "0-a" => "misc-cropped-bottles_3000x500.webp",
-        "0-b" => "misc-brussels-bottles_3000x500.webp",
-        "0-c" => "misc-plzen-fermenters_3000x500.webp",
-        "0-d" => "misc-bottles_3000x500.webp",
-        "1-a" => "beer-barley-malt_3000x500.webp",
-        "1-b" => "beer-brussels-barrels_3000x500.webp",
-        "1-c" => "beer-hop-cones_3000x500.webp",
-        "1-d" => "beer-kegs_3000x500.webp",
-        "1-e" => "beer-munich-mugs_3000x500.webp",
-        "1-f" => "beer-on-bar_3000x500.webp",
-        "2-a" => "cider-bottles_3000x500.webp",
-        "3-a" => "mead-bottles_3000x500.webp",     
-    );
+    // Fallback list for backwards compatibility - the app's own bundled banner
+    // images (in /images), same list the admin's hero_images.admin.php offers
+    // as always-available, non-deletable options. Centralized in
+    // lib/hero_images.lib.php's get_bundled_hero_images() so this list can't
+    // drift out of sync between the two places it's needed.
+    $bg_hero_images_fallback = function_exists('get_bundled_hero_images') ? get_bundled_hero_images() : array();
 
     // Get session style types for filtering
     if ((!isset($_SESSION['bg_hero_image_types'])) || (empty($_SESSION['bg_hero_image_types']))) {
@@ -66,8 +57,10 @@
         $_SESSION['bg_hero_image_types'] = array_unique($actual_styles_types);
     }
 
-    // Try to get images from /images using saved JSON preferences
+    // Try to get images from /user_images (or enabled bundled /images banners)
+    // using saved JSON preferences
     $hero_background = "";
+    $hero_background_url = "";
 
     if ((isset($db_conn)) && (isset($prefix)) && (function_exists('get_active_hero_images'))) {
         $pref_images = get_active_hero_images($db_conn, $prefix, $_SESSION['bg_hero_image_types']);
@@ -75,23 +68,29 @@
             // Randomly select from preference images
             $i = rand(0, count($pref_images)-1);
             $hero_background = $pref_images[$i];
+            // Each selected image resolves its own URL - it may be an
+            // admin-uploaded image (/user_images, installation-exclusive) or
+            // an enabled bundled image (/images, $images_url) - see
+            // hero_image_url() / is_bundled_hero_image().
+            $hero_background_url = hero_image_url($hero_background, $base_url, $images_url);
         }
     }
 
-    // Fall back to hardcoded array if preference images not available
+    // Fall back to the bundled banner images (in /images) if preference images not available
     if (empty($hero_background)) {
         if ((!isset($_SESSION['bg_hero_image_display'])) || (empty($_SESSION['bg_hero_image_display']))) {
             $_SESSION['bg_hero_image_display'] = array();
 
-            foreach ($bg_hero_images_fallback as $key => $value) {
-                $image_style_type = explode("-",$key);
-                if (in_array($image_style_type[0],$_SESSION['bg_hero_image_types'])) $_SESSION['bg_hero_image_display'][] = $value;
+            foreach ($bg_hero_images_fallback as $value) {
+                $image_style_type = function_exists('hero_image_category_from_filename') ? hero_image_category_from_filename($value) : "0";
+                if (in_array($image_style_type,$_SESSION['bg_hero_image_types'])) $_SESSION['bg_hero_image_display'][] = $value;
             }
         }
-        
+
         if (!empty($_SESSION['bg_hero_image_display'])) {
             $i = rand(0, count($_SESSION['bg_hero_image_display'])-1);
             $hero_background = $_SESSION['bg_hero_image_display'][$i];
+            $hero_background_url = $images_url.$hero_background;
         }
     }
     include (DB.'sponsors.db.php');
@@ -263,7 +262,7 @@
     /* Hero background (random via php script) */
     
     .layout-hero {
-        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('<?php echo htmlspecialchars($images_url.$hero_background, ENT_QUOTES, 'UTF-8'); ?>');
+        background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('<?php echo htmlspecialchars($hero_background_url, ENT_QUOTES, 'UTF-8'); ?>');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center top;

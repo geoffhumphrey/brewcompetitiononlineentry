@@ -773,7 +773,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				else {
 					$db_conn->where("brewStyleVersion", $prefsStyleSet);
 				}
-				$rows_styles_default = $db_conn->get($styles_db_table, null, "id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion");
+				$rows_styles_default = $db_conn->get($styles_db_table, null, "id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType");
 
 				if ($rows_styles_default) {
 
@@ -783,7 +783,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							'brewStyle' => $row_styles_default['brewStyle'],
 							'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
 							'brewStyleNum' => $row_styles_default['brewStyleNum'],
-							'brewStyleVersion' => $row_styles_default['brewStyleVersion']
+							'brewStyleVersion' => $row_styles_default['brewStyleVersion'],
+							'brewStyleType' => $row_styles_default['brewStyleType']
 						);
 
 					}

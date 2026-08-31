@@ -92,7 +92,7 @@ function is_hero_image_candidate($filename) {
     }
 
     // Filename conventions are not required: include wide banner-like images.
-    $image_path = IMAGES.$filename;
+    $image_path = USER_IMAGES.$filename;
     if (file_exists($image_path)) {
         $size = @getimagesize($image_path);
         if (($size !== false) && isset($size[0]) && isset($size[1]) && ((int)$size[1] > 0)) {
@@ -125,7 +125,59 @@ function get_default_hero_preferences($all_images) {
 }
 
 /**
- * Scan /images folder and get all available hero images grouped by category.
+ * Filenames bundled with the app itself (shipped in /images, not uploaded)
+ * that are always offered as toggleable hero images - a failsafe fallback
+ * set so hero banners can never end up with nothing to show. These can be
+ * enabled/disabled via the admin UI like any other hero image, but never
+ * deleted - see is_bundled_hero_image() / hero_image_directory(). Same
+ * misc-/beer-/cider-/mead- naming convention as uploaded images, so
+ * hero_image_category_from_filename() categorizes them the same way.
+ */
+function get_bundled_hero_images() {
+    return array(
+        "misc-cropped-bottles_3000x500.webp",
+        "misc-brussels-bottles_3000x500.webp",
+        "misc-plzen-fermenters_3000x500.webp",
+        "misc-bottles_3000x500.webp",
+        "beer-barley-malt_3000x500.webp",
+        "beer-brussels-barrels_3000x500.webp",
+        "beer-hop-cones_3000x500.webp",
+        "beer-kegs_3000x500.webp",
+        "beer-munich-mugs_3000x500.webp",
+        "beer-on-bar_3000x500.webp",
+        "cider-bottles_3000x500.webp",
+        "mead-bottles_3000x500.webp",
+    );
+}
+
+/**
+ * Whether $filename is one of the app's bundled fallback hero images (in
+ * /images) rather than an admin-uploaded one (in /user_images).
+ */
+function is_bundled_hero_image($filename) {
+    return in_array($filename, get_bundled_hero_images(), true);
+}
+
+/**
+ * Filesystem directory a hero image actually lives in.
+ */
+function hero_image_directory($filename) {
+    return is_bundled_hero_image($filename) ? IMAGES : USER_IMAGES;
+}
+
+/**
+ * Public URL for a hero image, matching hero_image_directory()'s split.
+ * $images_url is the caller's own (possibly HOSTED-shared) /images URL;
+ * admin-uploaded images always resolve to this installation's own
+ * /user_images, regardless of HOSTED status.
+ */
+function hero_image_url($filename, $base_url, $images_url) {
+    return is_bundled_hero_image($filename) ? ($images_url.$filename) : ($base_url."user_images/".$filename);
+}
+
+/**
+ * Scan /user_images for uploaded hero images, plus the bundled fallback
+ * images (in /images, see get_bundled_hero_images()), grouped by category.
  */
 function get_all_available_hero_images() {
     $hero_images = array(
@@ -140,12 +192,22 @@ function get_all_available_hero_images() {
     // extension instead so this doesn't depend on GLOB_BRACE being available.
     $files = array();
     foreach (array('jpg', 'jpeg', 'png', 'gif', 'webp') as $extension) {
-        $matches = glob(IMAGES.'*.'.$extension);
+        $matches = glob(USER_IMAGES.'*.'.$extension);
         if ($matches !== false) $files = array_merge($files, $matches);
     }
 
+    $filenames = array();
     foreach ($files as $path) {
-        $file = basename($path);
+        $filenames[] = basename($path);
+    }
+
+    foreach (get_bundled_hero_images() as $bundled_filename) {
+        if ((!in_array($bundled_filename, $filenames)) && (file_exists(IMAGES.$bundled_filename))) {
+            $filenames[] = $bundled_filename;
+        }
+    }
+
+    foreach ($filenames as $file) {
         if (!is_hero_image_candidate($file)) continue;
 
         $category = hero_image_category_from_filename($file);

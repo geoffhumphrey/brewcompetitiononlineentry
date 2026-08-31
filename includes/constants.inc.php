@@ -677,7 +677,8 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
                         'brewStyle' => sterilize($row_styles_default['brewStyle']),
                         'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
                         'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
-                        'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion'])
+                        'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion']),
+                        'brewStyleType' => sterilize($row_styles_default['brewStyleType'])
                     );
                 }
             }

@@ -22,7 +22,7 @@ $category_prefixes = array(
 
 $allowed_extensions = array("jpg", "jpeg", "png", "gif", "webp");
 $allowed_mime_types = array("image/jpeg", "image/png", "image/gif", "image/webp");
-$max_upload_bytes = 5 * 1024 * 1024; // 5 MB
+$max_upload_bytes = 2 * 1024 * 1024; // 5 MB
 
 function is_valid_hero_token() {
     return (
@@ -121,12 +121,12 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                 do {
                     $counter_suffix = ($counter > 0) ? "-".$counter : "";
                     $target_filename = $base_filename.$counter_suffix.".".$extension;
-                    $target_path = IMAGES.$target_filename;
+                    $target_path = USER_IMAGES.$target_filename;
                     $counter++;
                 } while (file_exists($target_path));
 
                 if (!move_uploaded_file($_FILES['hero_image_file']['tmp_name'], $target_path)) {
-                    $save_error = "Unable to save uploaded file to /images. Check folder permissions.";
+                    $save_error = "Unable to save uploaded file to /user_images. Check folder permissions.";
                 }
                 else {
                     $save_message = "Banner image uploaded successfully.";
@@ -157,8 +157,11 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         if (($delete_image === "") || (!in_array($delete_image, $all_known_images))) {
             $save_error = "Please choose a valid image to delete.";
         }
+        elseif (is_bundled_hero_image($delete_image)) {
+            $save_error = "This is a built-in banner image and can't be deleted - you can still enable or disable it below.";
+        }
         else {
-            $delete_path = IMAGES.$delete_image;
+            $delete_path = hero_image_directory($delete_image).$delete_image;
             if (!file_exists($delete_path)) {
                 $save_error = "The selected image file could not be found.";
             }
@@ -229,8 +232,12 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     <p><?php echo isset($lang['admin_hero_images_description']) ? $lang['admin_hero_images_description'] : "Select which banner images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types."; ?></p>
 
     <div class="well well-sm">
-        <strong><?php echo isset($lang['admin_hero_how_it_works_title']) ? $lang['admin_hero_how_it_works_title'] : "How it works"; ?>:</strong>
-        <?php echo isset($lang['admin_hero_how_it_works_body']) ? $lang['admin_hero_how_it_works_body'] : "Banner images appear as a large background strip at the top of the competition homepage. One image is picked at random each time a visitor loads the page. Images are grouped by category &mdash; Miscellaneous images can appear at any time, while Beer, Cider, and Mead images only appear when your competition accepts entries in those categories. Use the checkboxes below to choose which images are in the rotation, then click <strong>Save Changes</strong>. To add a new image, use the upload panel and choose the matching category."; ?>
+        <p><strong><?php echo isset($lang['admin_hero_how_it_works_title']) ? $lang['admin_hero_how_it_works_title'] : "How it Works"; ?></strong></p>
+        
+        <?php echo isset($lang['admin_hero_how_it_works_body']) ? $lang['admin_hero_how_it_works_body'] : "<p>Banner images appear as a large background strip at the top of the competition homepage. One image is picked at random each time a visitor loads the page. Images are grouped by category &ndash; Miscellaneous images can appear at any time, while Beer, Cider, and Mead images only appear when your competition accepts entries in those categories.</p>
+        <p>Use the checkboxes below to choose which images are in the rotation, then click <strong>Save Changes</strong>. Please note that if no images are selected here, the fallback is the app's default (random selection of the built-in images).</p>
+        <p>To add a new image, use the upload panel and choose the matching category. Built-in images ship with the software &ndash; you can enable or disable their display, but they cannot be deleted here.</p>"; ?>
+        
     </div>
 
     <div class="panel panel-default">
@@ -243,9 +250,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                 <input type="hidden" name="action" value="upload">
                 <input type="hidden" name="user_session_token" value="<?php echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 
-                <p class="help-block" style="margin-bottom: 12px;">
-                    Step 1: choose a category. Step 2: choose the image file and upload it.
-                </p>
+                <p style="margin-bottom: 12px;">Step 1: choose a category.</p>
 
                 <div class="form-group" style="margin-right: 10px; margin-bottom: 10px;">
                     <label for="hero_image_category" class="sr-only"><?php echo isset($lang['hero_images_text_007']) ? $lang['hero_images_text_007'] : "Category"; ?></label>
@@ -258,20 +263,21 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                     </select>
                 </div>
 
-                <div class="form-group" id="hero_image_file_group" style="margin-right: 10px; margin-bottom: 10px; display:none;">
-                    <label for="hero_image_file" class="sr-only"><?php echo isset($lang['hero_images_text_004']) ? $lang['hero_images_text_004'] : "Image File"; ?></label>
-                    <input type="file" class="form-control" id="hero_image_file" name="hero_image_file" accept=".jpg,.jpeg,.png,.gif,.webp" required>
+                <div id="hero_image_file_group" class="fileinput fileinput-new" data-provides="fileinput">
+                    <p>Step 2: choose the image file and upload it.</p>
+                    <span class="btn btn-default btn-file"><span><?php echo isset($lang['hero_images_text_004']) ? $lang['hero_images_text_004'] : "Choose Image File"; ?></span><input type="file" id="hero_image_file" name="hero_image_file" accept=".jpg,.jpeg,.png,.gif,.webp" required /></span>
+                    <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
                 </div>
 
                 <button type="submit" id="hero_image_upload_button" class="btn btn-success" style="margin-bottom: 10px; display:none;" disabled>
-                    <span class="glyphicon glyphicon-upload"></span> <?php echo isset($lang['hero_images_text_012']) ? $lang['hero_images_text_012'] : "Upload Image"; ?>
+                    <i class="fa fa-sm fa-fw fa-upload"></i> <?php echo isset($lang['hero_images_text_012']) ? $lang['hero_images_text_012'] : "Upload Image"; ?>
                 </button>
             </form>
-            <div class="help-block" style="margin-top:12px;">
+            <div style="margin-top:12px;">
                 <p><strong><?php echo isset($lang['admin_hero_upload_note_title']) ? $lang['admin_hero_upload_note_title'] : "File naming"; ?>:</strong>
                 <?php echo isset($lang['admin_hero_upload_note_body']) ? $lang['admin_hero_upload_note_body'] : "The uploaded file is automatically renamed using the selected category as a prefix &mdash; for example, uploading <em>sunset.jpg</em> in the Beer category saves as <code>beer-sunset.jpg</code>. You do not need to rename the file before uploading."; ?></p>
-                <p><strong><?php echo isset($lang['admin_hero_upload_note_size_title']) ? $lang['admin_hero_upload_note_size_title'] : "Size &amp; format"; ?>:</strong> 
-                <?php echo isset($lang['admin_hero_upload_note_size_body']) ? $lang['admin_hero_upload_note_size_body'] : "Recommended 3000&times;500 px (6:1 ratio). Minimum width 1200 px with at least a 3.5:1 aspect ratio. Accepted formats: JPG, PNG, GIF, WebP. Maximum file size: 5 MB."; ?></p>
+                <p><strong><?php echo isset($lang['admin_hero_upload_note_size_title']) ? $lang['admin_hero_upload_note_size_title'] : "Size and format"; ?>:</strong> 
+                <?php echo isset($lang['admin_hero_upload_note_size_body']) ? $lang['admin_hero_upload_note_size_body'] : "Recommended 3000&times;500 px (6:1 ratio). Minimum width 1200 px with at least a 3.5:1 aspect ratio. Accepted formats: JPG, PNG, GIF, WebP. Maximum file size is 2 MB for an optimal user experience."; ?></p>
             </div>
         </div>
     </div>
@@ -281,7 +287,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         <input type="hidden" name="action" value="save">
         <input type="hidden" name="user_session_token" value="<?php echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 
-        <p class="help-block"><?php echo isset($lang['hero_images_text_009']) ? $lang['hero_images_text_009'] : "Images are randomly selected based on your competition's accepted style types. Miscellaneous images appear on all pages."; ?></p>
+        <p><?php echo isset($lang['hero_images_text_009']) ? $lang['hero_images_text_009'] : "Images are randomly selected based on your competition's accepted style types. Miscellaneous images appear on all pages."; ?></p>
 
         <?php
         $category_blocks = array(
@@ -309,11 +315,11 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
             <div class="panel-heading">
                 <div class="hero-panel-heading-row">
                     <div>
-                        <h4 class="panel-title"><?php echo $meta['title']; ?></h4>
-                        <small><?php echo $meta['help']; ?></small>
+                        <h4 class="panel-title"><?php echo $meta['title']; ?><em style="font-size: .75em; color: #666; margin-left: 15px;"><?php echo $meta['help']; ?></em></h4>   
+                                      
                     </div>
                     <?php if (!empty($all_images[$category])): ?>
-                    <button type="button" class="btn btn-primary btn-xs hero-toggle-all-button"
+                    <button type="button" class="btn btn-dark btn-xs hero-toggle-all-button"
                         data-hero-category="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>"
                         data-label-select="<?php echo htmlspecialchars(isset($lang['admin_hero_select_all']) ? $lang['admin_hero_select_all'] : "Select All", ENT_QUOTES, 'UTF-8'); ?>"
                         data-label-deselect="<?php echo htmlspecialchars(isset($lang['admin_hero_deselect_all']) ? $lang['admin_hero_deselect_all'] : "Deselect All", ENT_QUOTES, 'UTF-8'); ?>">
@@ -330,18 +336,23 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                         <?php foreach ($all_images[$category] as $image):
                             $checkbox_name = "hero_image_".preg_replace('/[^a-zA-Z0-9_]/', '_', $image);
                             $is_checked = (isset($hero_prefs[$image])) ? $hero_prefs[$image] : false;
+                            $is_bundled = is_bundled_hero_image($image);
                         ?>
                         <div class="hero-image-item">
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="<?php echo $checkbox_name; ?>" value="1" <?php echo ($is_checked) ? 'checked' : ''; ?>>
-                                    <span class="image-name"><?php echo htmlspecialchars($image); ?></span>
+                                    <span class="image-name small"><?php echo htmlspecialchars($image); ?></span>
                                 </label>
                             </div>
-                            <img src="<?php echo htmlspecialchars($images_url.$image, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
+                            <img src="<?php echo htmlspecialchars(hero_image_url($image, $base_url, $images_url), ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($image); ?>" class="hero-thumbnail">
+                            <?php if ($is_bundled): ?>
+                            <span class="text-muted hero-image-builtin-label"><span class="fa fa-sm fa-fw fa-lock"></span> Built-in</span>
+                            <?php else: ?>
                             <button type="button" class="btn btn-link btn-xs hero-image-delete-button" data-hero-image="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>">
-                                <span class="glyphicon glyphicon-trash"></span> <?php echo isset($lang['delete']) ? $lang['delete'] : "Delete"; ?>
+                                <span class="fa fa-sm fa-fw fa-trash"></span> <?php echo isset($lang['delete']) ? $lang['delete'] : "Delete"; ?>
                             </button>
+                            <?php endif; ?>
                         </div>
                         <?php endforeach; ?>
                     </div>
@@ -353,10 +364,10 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-12">
                 <button type="submit" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-floppy-disk"></span> <?php echo isset($lang['admin_hero_save_button']) ? $lang['admin_hero_save_button'] : "Save Changes"; ?>
+                    <i class="fa fa-sm fa-fw fa-save"></i></i> <?php echo isset($lang['admin_hero_save_button']) ? $lang['admin_hero_save_button'] : "Save Changes"; ?>
                 </button>
                 <button type="button" class="btn btn-default" onclick="location.reload();">
-                    <span class="glyphicon glyphicon-refresh"></span> <?php echo isset($lang['cancel']) ? $lang['cancel'] : "Cancel"; ?>
+                    <i class="fa fa-sm fa-fw fa-rotate-left"></i> <?php echo isset($lang['cancel']) ? $lang['cancel'] : "Cancel"; ?>
                 </button>
             </div>
         </div>
@@ -425,6 +436,12 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     color: #888;
     text-decoration: none;
     box-shadow: none;
+}
+
+#hero_images_admin .hero-image-builtin-label {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
 }
 
 #hero_images_admin .hero-image-delete-button:hover,
