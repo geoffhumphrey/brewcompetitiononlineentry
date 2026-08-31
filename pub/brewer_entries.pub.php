@@ -222,9 +222,9 @@ if ($totalRows_log > 0) {
 
 		if ((!empty($row_log['brewPouring'])) && ((!empty($row_log['brewStyleType'])) && ($row_log['brewStyleType'] == 1))) {
 			$pouring_arr = json_decode($row_log['brewPouring'],true);
-			$required_info .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
+			$required_info .= "<li><strong>".$label_pouring.":</strong> ".translate_pouring_value($pouring_arr['pouring'])."</li>";
 			if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $required_info .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-			$required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".$pouring_arr['pouring_rouse']."</li>";
+			$required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".translate_pouring_rouse_value($pouring_arr['pouring_rouse'])."</li>";
 		}
 
 		if (!empty($row_log['brewPossAllergens'])) {

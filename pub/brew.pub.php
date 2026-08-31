@@ -868,15 +868,15 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
 		    <label for="brewPouringInst" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_pouring; ?></strong></label>
 		    <div class="col-xs-12 col-sm-9 col-lg-10">
 		        <div class="form-check form-check-inline">
-                	<input class="form-check-input" type="radio" name="brewPouringInst" id="brewPouringInst-Fast" value="<?php echo $label_fast; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_fast)) echo "CHECKED"; ?>>
+                	<input class="form-check-input" type="radio" name="brewPouringInst" id="brewPouringInst-Fast" value="fast" <?php if (($action == "edit") && (($pouring_arr['pouring'] == "fast") || ($pouring_arr['pouring'] == $label_fast))) echo "CHECKED"; ?>>
                 	<label class="form-check-label" for="brewPouringInst-Fast"><?php echo $label_fast; ?></label>
-                </div>
-                <div class="form-check form-check-inline">
-                	<input class="form-check-input" type="radio" name="brewPouringInst" id="brewPouringInst-Normal" value="<?php echo $label_normal; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring'] == $label_normal)) echo "CHECKED"; ?>>
+                	</div>
+                	<div class="form-check form-check-inline">
+                	<input class="form-check-input" type="radio" name="brewPouringInst" id="brewPouringInst-Normal" value="normal" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && (($pouring_arr['pouring'] == "normal") || ($pouring_arr['pouring'] == $label_normal))) echo "CHECKED"; ?>>
                 	<label class="form-check-label" for="brewPouringInst-Normal"><?php echo $label_normal; ?></label>
-                </div>
-                <div class="form-check form-check-inline">
-                	<input class="form-check-input" type="radio" name="brewPouringInst" id="brewPouringInst-Slow" value="<?php echo $label_slow; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_slow)) echo "CHECKED"; ?>>
+                	</div>
+                	<div class="form-check form-check-inline">
+                	<input class="form-check-input" type="radio" name="brewPouringInst" id="brewPouringInst-Slow" value="slow" <?php if (($action == "edit") && (($pouring_arr['pouring'] == "slow") || ($pouring_arr['pouring'] == $label_slow))) echo "CHECKED"; ?>>
                 	<label class="form-check-label" for="brewPouringInst-Slow"><?php echo $label_slow; ?></label>
                 </div>
                 <div>
@@ -889,11 +889,11 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
 		    <label for="brewPouringRouse" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_rouse_yeast; ?></strong></label>
 		    <div class="col-xs-12 col-sm-9 col-lg-10">
 		    	<div class="form-check form-check-inline">
-                	<input class="form-check-input" type="radio" name="brewPouringRouse" id="brewPouringRouse-Yes" value="<?php echo $label_yes; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_yes)) echo "CHECKED"; ?>>
+                	<input class="form-check-input" type="radio" name="brewPouringRouse" id="brewPouringRouse-Yes" value="yes" <?php if (($action == "edit") && (($pouring_arr['pouring_rouse'] == "yes") || ($pouring_arr['pouring_rouse'] == $label_yes))) echo "CHECKED"; ?>>
                 	<label class="form-check-label" for="brewPouringRouse-Yes"><?php echo $label_yes; ?></label>
-                </div>
-                <div class="form-check form-check-inline">
-                	<input class="form-check-input" type="radio" name="brewPouringRouse" id="brewPouringRouse-No" value="<?php echo $label_no; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_no)) echo "CHECKED"; ?>>
+                	</div>
+                	<div class="form-check form-check-inline">
+                	<input class="form-check-input" type="radio" name="brewPouringRouse" id="brewPouringRouse-No" value="no" <?php if (($action == "edit") && (($pouring_arr['pouring_rouse'] == "no") || ($pouring_arr['pouring_rouse'] == $label_no))) echo "CHECKED"; ?>>
                 	<label class="form-check-label" for="brewPouringRouse-No"><?php echo $label_no; ?></label>
                 </div>
                 <div>
