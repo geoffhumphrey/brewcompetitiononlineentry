@@ -20,7 +20,8 @@ if (!function_exists("get_default_language")) {
         static $cached = NULL;
         if ($cached !== NULL) return $cached;
 
-        $row = $db_conn->where("id", 1)->getOne($prefix."preferences", "prefsLanguage");
+        $db_conn->where("id", 1);
+        $row = $db_conn->getOne($prefix."preferences", "prefsLanguage");
         if (($db_conn->count == 0) || (empty($row['prefsLanguage']))) {
             $cached = array('lang' => 'en-US', 'folder' => 'en');
             return $cached;
