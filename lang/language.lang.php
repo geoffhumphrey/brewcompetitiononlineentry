@@ -30,7 +30,7 @@ if (HOSTED) {
     $current_parsed_host = explode('.', $current_parsed_url['host']);
   }
 
-  if (!isset($_SESSION['prefsEmailFrom'])) $_SESSION['prefsEmailFrom'] = "noreply@".$current_parsed_host[1].".".$current_parsed_host[2];
+  if (!isset($_SESSION['prefsEmailFrom'])) $_SESSION['prefsEmailFrom'] = "noreply@".implode('.', array_slice($current_parsed_host, -2));
   
 }
 

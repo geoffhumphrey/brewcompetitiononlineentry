@@ -405,10 +405,20 @@ if ($setup_success) {
 	$js_url = $base_url."js_includes/";
 	
 	if (HOSTED) {
+	    
+	    $full_url =  $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-		$css_url = $base_url_hosted."_3.X_shared/css/";
-		$images_url = $base_url_hosted."_3.X_shared/images/";
-		$js_url = $base_url_hosted."_3.X_shared/js_includes/";
+	    if ((strpos($full_url, "/testhosted") !== false)) {
+	        $css_url = $base_url_hosted."_bcoem_shared_test/css/";
+		    $images_url = $base_url_hosted."_bcoem_shared_test/images/";
+	    	$js_url = $base_url_hosted."_bcoem_shared_test/js_includes/";
+	    }
+	    
+	    else {
+	        $css_url = $base_url_hosted."_3.X_shared/css/";
+		    $images_url = $base_url_hosted."_3.X_shared/images/";
+		    $js_url = $base_url_hosted."_3.X_shared/js_includes/";
+	    }
 	
 	}
 

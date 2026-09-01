@@ -129,9 +129,49 @@ $brewing = $connection;
  * $prefix = 'bcoem1_';
  * OR
  * $prefix = 'comp1_';
+ *
+ * HOSTED installations only - the HOSTED constant is defined in paths.php.
+ * Leave the block below exactly as-is for a normal, single-tenant install;
+ * it's inert (falls straight to the plain $prefix = ''; default) unless
+ * HOSTED is TRUE.
+ *
+ * Multiple installations under one hosting account, each in its own
+ * subdirectory, derive their own $prefix automatically from that
+ * subdirectory's name instead of it being hand-edited per install. This also
+ * canonicalizes access: if an install is reached via a subdomain matching its
+ * own folder name (e.g. a legacy "installname.brewingcompetitions.com" URL
+ * still pointing here), it's redirected to the canonical path-based URL
+ * instead of serving duplicate content at two addresses.
+ *
+ * The exit() after header() is required. Without it, PHP keeps executing
+ * and renders the entire page body after the redirect header - wasted work
+ * on that request, and since this file is require()'d (not require_once()'d)
+ * from many places elsewhere in the app, the exact same header() call fires
+ * again on a later re-inclusion within the same request, by which point real
+ * page output has already started - producing a "headers already sent"
+ * warning instead of the redirect actually happening.
  */
 
-$prefix = '';
+$path = dirname(__FILE__);
+
+if (HOSTED) {
+
+	$path_parts = explode(DIRECTORY_SEPARATOR, $path);
+	$install_folder = $path_parts[count($path_parts) - 2];
+	$subdomain = explode('.', $_SERVER['HTTP_HOST'])[0];
+
+	$prefix = $install_folder."_";
+
+	if ($subdomain == $install_folder) {
+		$redirect = "https://brewingcompetitions.com/".$install_folder;
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+		header($redirect_go_to);
+		exit();
+	}
+
+}
+
+else $prefix = '';
 
 /*
  * ******************************************************************************

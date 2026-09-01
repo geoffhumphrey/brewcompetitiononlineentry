@@ -174,7 +174,7 @@ $mouthfeel_points = 5;
 $overall_points = 10;
 $descriptors = array();
 
-if (!empty($query_style)) {
+if (!empty($row_style)) {
 
   if ($row_style['brewStyleType'] == 2) {
     $aroma_points = 10;
