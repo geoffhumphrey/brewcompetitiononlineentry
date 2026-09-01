@@ -91,6 +91,30 @@ parameters:
 			path: includes/constants_post_lang.inc.php
 
 		-
+			message: '#^Path in include\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\sso\\available_judges\.db\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 2
+			path: includes/db/brewer.db.php
+
+		-
+			message: '#^Path in include\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\sso\\available_stewards\.db\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 2
+			path: includes/db/brewer.db.php
+
+		-
+			message: '#^Path in include\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\sso\\assigned_judges\.db\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: includes/db/brewer.db.php
+
+		-
+			message: '#^Path in include\(\) "C\:\\Users\\buy\\OneDrive\\Desktop\\BCOEM\\brewcompetitiononlineentry\\sso\\assigned_stewards\.db\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: includes/db/brewer.db.php
+
+		-
 			message: '#^Array has 2 duplicate keys with value ''C1\-D'' \("C1\-D", "C1\-D"\)\.$#'
 			identifier: array.duplicateKey
 			count: 1
@@ -629,18 +653,6 @@ parameters:
 			identifier: class.notFound
 			count: 6
 			path: pub/entry_info.pub.php
-
-		-
-			message: '#^Path in include\(\) "judge_info\.sec\.php" is not a file or it does not exist\.$#'
-			identifier: include.fileNotFound
-			count: 1
-			path: pub/judge.pub.php
-
-		-
-			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'
-			identifier: class.notFound
-			count: 1
-			path: pub/reg_closed.pub.php
 
 		-
 			message: '#^Call to static method instance\(\) on an unknown class Parsedown\.$#'

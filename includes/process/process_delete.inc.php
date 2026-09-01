@@ -456,7 +456,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	elseif (($admin_superuser) && ($go == "archive")) {
 
-		$delete_suffix = "_".$filter; 
+		// Same explicit alphanumeric-only clean process_archive.inc.php applies before
+		// splicing a filter/suffix value into a table name for DDL (DROP TABLE below) -
+		// $filter is already sterilize()'d in url_variables.inc.php, but that alone still
+		// permits non-alphanumeric characters through.
+		$filter_clean = preg_replace("/[^a-zA-Z0-9]+/", "", $filter);
+		$delete_suffix = "_".$filter_clean;
 
 		$drop_tables_array = array(
 			$prefix."brewer".$delete_suffix,
@@ -570,9 +575,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$tables_array = array($brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table);
 
+			// Same explicit alphanumeric-only clean process_archive.inc.php applies before
+			// splicing a filter/suffix value into a table name for DDL (DROP TABLE below) -
+			// $filter is already sterilize()'d in url_variables.inc.php, but that alone still
+			// permits non-alphanumeric characters through.
+			$filter_clean = preg_replace("/[^a-zA-Z0-9]+/", "", $filter);
+
 			foreach ($tables_array as $table) {
 
-				$table = $table."_".$filter;
+				$table = $table."_".$filter_clean;
 
 				if (table_exists($table)) {
 

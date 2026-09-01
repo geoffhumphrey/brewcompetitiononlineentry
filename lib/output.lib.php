@@ -136,10 +136,6 @@ function filename($input) {
 	return $return;
 }
 
-// --------------------------------------------------------
-// The following applies to entry.output.php
-// --------------------------------------------------------
-
 function pay_to_print($prefs_pay,$entry_paid) {
 	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
 	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;

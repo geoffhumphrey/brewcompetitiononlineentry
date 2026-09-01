@@ -53,18 +53,7 @@ if (!check_setup($prefix."evaluation",$database)) {
 
 if (!check_update("jPrefsScoresheet", $prefix."judging_preferences")) {
   
-  /*
-  $updateSQL = sprintf("ALTER TABLE `%s` 
-    ADD `jPrefsJudgingOpen` int(15) NULL DEFAULT NULL AFTER `jPrefsBottleNum`, 
-    ADD `jPrefsJudgingClosed` int(15) NULL DEFAULT NULL AFTER `jPrefsJudgingOpen`, 
-    ADD `jPrefsScoresheet` tinyint(2) NULL DEFAULT NULL AFTER `jPrefsJudgingClosed`, 
-    ADD `jPrefsScoreDispMax` tinyint(2) NULL DEFAULT NULL COMMENT 'Maximum disparity of entry scores between judges' AFTER `jPrefsScoresheet`;
-    ", $prefix."judging_preferences");
-  mysqli_real_escape_string($connection,$updateSQL);
-  $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-  */
-
-  $sql = sprintf("ALTER TABLE `%s` 
+  $sql = sprintf("ALTER TABLE `%s`
     ADD `jPrefsJudgingOpen` int(15) NULL DEFAULT NULL AFTER `jPrefsBottleNum`, 
     ADD `jPrefsJudgingClosed` int(15) NULL DEFAULT NULL AFTER `jPrefsJudgingOpen`, 
     ADD `jPrefsScoresheet` tinyint(2) NULL DEFAULT NULL AFTER `jPrefsJudgingClosed`, 
@@ -74,13 +63,6 @@ if (!check_update("jPrefsScoresheet", $prefix."judging_preferences")) {
 
   $timestamp = time();
   $plus_one_week = strtotime('+14 days', $timestamp);
-
-  /*
-  // Add default values for the 
-  $updateSQL = sprintf("UPDATE %s SET jPrefsJudgingOpen='%s', jPrefsJudgingClosed='%s', jPrefsScoresheet='1', jPrefsScoreDispMax='7' WHERE id='1'", $prefix."judging_preferences", $timestamp, $plus_one_week);
-  mysqli_real_escape_string($connection,$updateSQL);
-  $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-  */
 
   $update_table = $prefix."judging_preferences";
   $data = array(

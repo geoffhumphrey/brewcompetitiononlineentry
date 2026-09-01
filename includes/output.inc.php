@@ -57,9 +57,7 @@ if (in_array($section,$label_sections)) {
 if (in_array($section,$entry_sections)) {
 	include (LIB.'admin.lib.php');
 	require (LIB.'output.lib.php');
-	include (CLASSES.'tiny_but_strong/tbs_class.php');
 	include (DB.'output_entry.db.php');
-	// if ($section == "entry-form") include (OUTPUT.'entry.output.php');
 	if (($section == "entry-form") || ($section == "entry-form-multi")) include (OUTPUT.'bottle_label.output.php');
 }
 
