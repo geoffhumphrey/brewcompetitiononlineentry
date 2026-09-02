@@ -1,14 +1,5 @@
 <?php 
 
-/*
-// Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-*/
 
 if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($go != "entrant") && ($section != "step2"))) { 
 
@@ -179,7 +170,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         <div class="mb-3 row">
             <label for="userQuestionAnswer" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_security_answer; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
-                <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>">
+                <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="">
                 <div class="help-block"><?php echo $register_text_050; ?></div>
                 <div class="help-block mb-1 invalid-feedback text-danger"><?php echo $brewer_text_034; ?></div>
             </div>

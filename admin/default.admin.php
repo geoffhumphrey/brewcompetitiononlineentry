@@ -7,10 +7,8 @@
 
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 1))) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
+    if (function_exists('redirect_or_exit')) redirect_or_exit("../../403.php");
+    else { header("Location: ../../403.php"); exit(); }
 }
 
 $server_environ_0 = "<p><strong>Reporting an issue?</strong> Here's your server environment information:</p>";

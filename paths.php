@@ -4,10 +4,20 @@
  * Module:      paths.php
  * Description: This module sets global file folder paths. Also houses
  *              specific, site-wide variables.
- * 
+ *
  * The following are file path definitions for various
  * script and document storage folders used/accessed by the
  * application.
+ *
+ * ******************************************************************************
+ * UPDATING AN EXISTING INSTALLATION?
+ * ******************************************************************************
+ * This file is part of the application code and gets overwritten every time
+ * you upload an update. Before uploading any updated files to your server,
+ * back up your database first. The update process makes real changes to
+ * your existing data, and a backup lets you restore your competition's
+ * information if anything goes wrong during the update.
+ * ******************************************************************************
  */
 
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
@@ -60,22 +70,6 @@ define('EVALUATION', TRUE);
  */
 
 define('MAINT', FALSE);
-
-/**
- * Disable the following to utilize the Load Libraries
- * Locally option if your installation is having trouble
- * loading libraries via CDN or if you wish to host libraries
- * in the root folder of your installation.
- * If set to FALSE, the local libraries must be in place
- * PRIOR to proceeding through the setup process.
- * @see http://www.brewingcompetitions.com/local-load
- * Default is TRUE.
- * 
- * Support for local libraries deprecated as of 3.0.0
- * No discernable reason to keep.
- */
-
-define('CDN', TRUE);
 
 /**
  * Enable the following to put the site into "test mode"

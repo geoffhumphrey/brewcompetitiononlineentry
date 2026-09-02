@@ -1,14 +1,5 @@
 <?php 
 
-/*
-// Redirect if directly accessed without authenticated session
-if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (!isset($base_url)))) {
-    $redirect = "../../403.php";
-    $redirect_go_to = sprintf("Location: %s", $redirect);
-    header($redirect_go_to);
-    exit();
-}
-*/
 
 if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($go != "entrant") && ($section != "step2"))) { 
 
@@ -184,7 +175,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
                 <div class="input-group has-warning">
                     <span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
-                    <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>" data-error="<?php echo $brewer_text_034; ?>">
+                    <input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" data-error="<?php echo $brewer_text_034; ?>">
                 </div>
                 <div class="help-block"><?php echo $register_text_050; ?></div>
                 <div class="help-block with-errors"></div>

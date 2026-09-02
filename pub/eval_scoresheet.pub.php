@@ -1226,7 +1226,7 @@ if ($entry_found) {
 <script src="<?php echo $js_url; ?>save_my_form.min.js"></script>
 
 <script type="text/javascript">
-var style_type = <?php echo $row_style['brewStyleType']; ?>;
+var style_type = <?php echo isset($row_style['brewStyleType']) ? $row_style['brewStyleType'] : 'null'; ?>;
 var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
 
 $(function() {

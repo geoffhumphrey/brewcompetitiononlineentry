@@ -20,6 +20,13 @@
  * contains your real credentials and should never be committed to a public
  * repository or shared publicly.
  * ******************************************************************************
+ *
+ * ALREADY RUNNING BCOE&M AND UPDATING TO A NEW VERSION?
+ * Before uploading any updated files to your server, back up your database
+ * first. The update process makes real changes to your existing data, and
+ * a backup lets you restore your competition's information if anything
+ * goes wrong during the update.
+ * ******************************************************************************
  */
 
 /**
@@ -81,8 +88,8 @@ $database_port = ini_get('mysqli.default_port');
 /**
  * Reuse the existing connection via $GLOBALS if one is already open and alive, 
  * rather than opening a brand new mysqli connection every time - on hosts with 
- * a low per-account connection limit, a single page load touching many such functions can
- * otherwise exhaust the limit mid-request.
+ * a low per-account connection limit, a single page load touching many such
+ * functions can otherwise exhaust the limit mid-request.
  */
 
 if ((isset($GLOBALS['connection'])) && ($GLOBALS['connection'] instanceof mysqli) && (@$GLOBALS['connection']->ping())) {
@@ -130,7 +137,8 @@ $brewing = $connection;
  * OR
  * $prefix = 'comp1_';
  *
- * HOSTED installations only - the HOSTED constant is defined in paths.php.
+ * For HOSTED installations only:
+ * The HOSTED constant is defined in paths.php.
  * Leave the block below exactly as-is for a normal, single-tenant install;
  * it's inert (falls straight to the plain $prefix = ''; default) unless
  * HOSTED is TRUE.

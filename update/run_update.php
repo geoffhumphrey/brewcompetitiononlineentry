@@ -4718,9 +4718,8 @@ else {
 }
 
 $v3030_update .= "<li>Expanded bottle label options to include seven anonymous and four standard choices.</li>";
-$v3030_update .= "<li>Added BCJP Certified Cider and/or Mead Only (for those judges that do not have a beer rank), Distinguished Certified, and Distinguished National ranks.</li>";
+$v3030_update .= "<li>Added BJCP Certified Cider and/or Mead Only (for those judges that do not have a beer rank), Distinguished Certified, and Distinguished National ranks.</li>";
 $v3030_update .= "<li>Corrected bug where shipping information was showing when shipping info display is disabled.</li>";
-$v3030_update .= "<li>Corrected bug where Admins are being shown a judge or steward account's hashed security question response. Should be hidden.</li>";
 $v3030_update .= "<li>Corrected bug where Admins were not able to switch to the AABC 2025 style set.</li>";
 $v3030_update .= "<li>Corrected minor security issues.</li>";
 
@@ -4854,16 +4853,108 @@ elseif ($update_running) {
 if (!$setup_running) $v3100_update .= "<ul>";
 
 // Updates Below
-$v3100_update .= "<li>Extended the double/triple HTML-entity-encoding detection and cleanup tool to cover Custom Categories, mods, sponsors, and evaluation data, including archived competitions.</li>";
-$v3100_update .= "<li>Corrected a double-encoding bug affecting Custom Categories comments.</li>";
-$v3100_update .= "<li>Added the missing \"Keep Evaluations\" option to the archive competition process and corrected its underlying logic.</li>";
-$v3100_update .= "<li>Corrected an issue where filenames with apostrophes or special characters silently failed to upload using the multiple file upload tool.</li>";
-$v3100_update .= "<li>Corrected an operator precedence bug that could affect BJCP 2025 / AABC 2025 style set selection.</li>";
-$v3100_update .= "<li>Corrected several notices affecting archived judging tables and scores views.</li>";
-$v3100_update .= "<li>Corrected an issue where opting out of the judge or steward registration cap could lock an account out of registration.</li>";
-$v3100_update .= "<li>Corrected legacy \"English\" language preference values to normalize to the current language folder.</li>";
-$v3100_update .= "<li>Added the brewCoBrewer and brewMead1-3 columns to archived brewing tables that predate their introduction, fixing a fatal error when viewing older archived entry lists.</li>";
+$v3100_update .= "<li>Fixed a bug that could cause special characters in Custom Categories comments to display incorrectly.</li>";
+$v3100_update .= "<li>When archiving a competition, you can now choose to keep judge evaluations instead of losing them.</li>";
+$v3100_update .= "<li>Fixed an issue where files with apostrophes or special characters in the name would fail to upload with no error shown.</li>";
+$v3100_update .= "<li>Fixed a bug that could produce incorrect results when using the BJCP 2025 or AABC 2025 style sets.</li>";
+$v3100_update .= "<li>Fixed minor display issues on archived judging tables and scores pages.</li>";
+$v3100_update .= "<li>Fixed a bug that could lock a judge or steward out of registration if they opted out of the registration limit.</li>";
+$v3100_update .= "<li>Fixed an old language setting on some installs that could prevent language selection from working correctly.</li>";
+$v3100_update .= "<li>Fixed BJCP entry-count reporting to follow BJCP's official judged, received, paid, total precedence.</li>";
+$v3100_update .= "<li>Fixed the BJCP export incorrectly counting ribbon winners as Best of Show entries when no BOS panel was held.</li>";
+$v3100_update .= "<li>Fixed judge ID validation to accept the newer BJCP TEMP#### ID format.</li>";
+$v3100_update .= "<li>Fixed several errors in BJCP judge point calculations, including sessions being counted more than once, the daily point cap not always applying correctly, and BOS-only judges not receiving credit for their session.</li>";
+$v3100_update .= "<li>Judges and Regular Admins can now use several judging/scoring pages that previously failed to load correctly for them.</li>";
+$v3100_update .= "<li>Fixed missing checklist items on some structured judging scoresheets, including the Northwest Cider Cup form, when editing a previously saved evaluation.</li>";
+$v3100_update .= "<li>Fixed a display bug that prevented descriptors from showing on the full scoresheet display and download.</li>";
 $v3100_update .= "<li>Minor bug fixes and security hardening.</li>";
+
+/**
+ * ----------------------------------------------- 3.1.0 ----------------------------------------------
+ * Extends the 3.0.4 double/triple HTML-entity-encoding cleanup (above) to the tables and archives it
+ * missed. The 3.0.4 pass only covered brewer, judging_tables, style_types, and preferences on the
+ * live tables. Reuses the same fully_decode()/cleanup_field_set() logic defined there; only the
+ * table/column list and the archive loop are new here.
+ */
+$v3100_dbl_enc_cleanup_ttb = function ($db_conn, $table) use ($v304_fully_decode, $purifier) {
+	$changed = 0;
+	$rows = $db_conn->get($table);
+	foreach ($rows as $row) {
+		if (empty($row['brewerBreweryInfo'])) continue;
+		$info = json_decode($row['brewerBreweryInfo'], true);
+		if ((!is_array($info)) || (!isset($info['TTB'])) || ($info['TTB'] === '')) continue;
+		$normalized = strtoupper($purifier->purify($v304_fully_decode($info['TTB'])));
+		if ($normalized !== $info['TTB']) {
+			$changed++;
+			$info['TTB'] = $normalized;
+			$db_conn->where('id', $row['id']);
+			$db_conn->update($table, array('brewerBreweryInfo' => json_encode($info)));
+		}
+	}
+	return $changed;
+};
+
+$v3100_dbl_enc_changed = 0;
+
+// --- live tables the 3.0.4 pass missed ---
+$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $prefix."brewing", array('brewName', 'brewComments', 'brewCoBrewer', 'brewPossAllergens', 'brewAdminNotes', 'brewStaffNotes', 'brewBoxNum', 'brewPouring', 'brewInfo', 'brewInfoOptional'), $v304_purify_normalize);
+$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $prefix."mods", array('mod_name', 'mod_description'), $v304_plain_normalize);
+$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $prefix."sponsors", array('sponsorName', 'sponsorText'), $v304_purify_normalize);
+$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $prefix."special_best_info", array('sbi_name', 'sbi_description'), $v304_plain_normalize);
+$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $prefix."special_best_data", array('sbd_comments'), $v304_plain_normalize);
+
+$v3100_dbl_enc_evaluation_table = $prefix."evaluation";
+if (table_exists($v3100_dbl_enc_evaluation_table)) {
+	$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $v3100_dbl_enc_evaluation_table, array('evalSpecialIngredients', 'evalOtherNotes', 'evalAromaComments', 'evalAppearanceComments', 'evalFlavorComments', 'evalMouthfeelComments', 'evalOverallComments', 'evalBottleNotes'), $v304_purify_normalize);
+}
+
+// --- archived competitions: preferences, mods, and sponsors are never archived (only one live copy
+// of each ever exists, already covered above), but brewer, brewing, judging_tables, style_types,
+// special_best_info, special_best_data, and evaluation each get a per-archive suffixed table. Not
+// every archive necessarily has every one of these (older archives predate some features, and
+// evaluation is only archived if that installation had the evaluation feature in use at the time),
+// so each is checked with table_exists() first and skipped if absent.
+foreach ($archive_suffixes as $v3100_dbl_enc_suffix) {
+
+	$v3100_dbl_enc_archived_brewer = $prefix."brewer_".$v3100_dbl_enc_suffix;
+	if (table_exists($v3100_dbl_enc_archived_brewer)) {
+		$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $v3100_dbl_enc_archived_brewer, array('brewerJudgeID', 'brewerBreweryName', 'brewerJudgeNotes', 'brewerFirstName', 'brewerLastName', 'brewerAddress', 'brewerCity', 'brewerState'), $v304_purify_normalize);
+		$v3100_dbl_enc_changed += $v3100_dbl_enc_cleanup_ttb($db_conn, $v3100_dbl_enc_archived_brewer);
+	}
+
+	$v3100_dbl_enc_archived_brewing = $prefix."brewing_".$v3100_dbl_enc_suffix;
+	if (table_exists($v3100_dbl_enc_archived_brewing)) {
+		$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $v3100_dbl_enc_archived_brewing, array('brewName', 'brewComments', 'brewCoBrewer', 'brewPossAllergens', 'brewAdminNotes', 'brewStaffNotes', 'brewBoxNum', 'brewPouring', 'brewInfo', 'brewInfoOptional'), $v304_purify_normalize);
+	}
+
+	$v3100_dbl_enc_archived_judging_tables = $prefix."judging_tables_".$v3100_dbl_enc_suffix;
+	if (table_exists($v3100_dbl_enc_archived_judging_tables)) {
+		$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $v3100_dbl_enc_archived_judging_tables, array('tableName'), $v304_plain_normalize);
+	}
+
+	$v3100_dbl_enc_archived_style_types = $prefix."style_types_".$v3100_dbl_enc_suffix;
+	if (table_exists($v3100_dbl_enc_archived_style_types)) {
+		$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $v3100_dbl_enc_archived_style_types, array('styleTypeName'), $v304_plain_normalize);
+	}
+
+	$v3100_dbl_enc_archived_sbi = $prefix."special_best_info_".$v3100_dbl_enc_suffix;
+	if (table_exists($v3100_dbl_enc_archived_sbi)) {
+		$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $v3100_dbl_enc_archived_sbi, array('sbi_name', 'sbi_description'), $v304_plain_normalize);
+	}
+
+	$v3100_dbl_enc_archived_sbd = $prefix."special_best_data_".$v3100_dbl_enc_suffix;
+	if (table_exists($v3100_dbl_enc_archived_sbd)) {
+		$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $v3100_dbl_enc_archived_sbd, array('sbd_comments'), $v304_plain_normalize);
+	}
+
+	$v3100_dbl_enc_archived_evaluation = $prefix."evaluation_".$v3100_dbl_enc_suffix;
+	if (table_exists($v3100_dbl_enc_archived_evaluation)) {
+		$v3100_dbl_enc_changed += $v304_cleanup_field_set($db_conn, $v3100_dbl_enc_archived_evaluation, array('evalSpecialIngredients', 'evalOtherNotes', 'evalAromaComments', 'evalAppearanceComments', 'evalFlavorComments', 'evalMouthfeelComments', 'evalOverallComments', 'evalBottleNotes'), $v304_purify_normalize);
+	}
+
+}
+
+if ($v3100_dbl_enc_changed > 0) $v3100_update .= "<li>Fixed garbled special characters (like curly quotes turning into strange symbols) showing up in more places: entry names and comments, Custom Categories, Mods, Sponsors, and judge evaluation data, including in archived competitions (".$v3100_dbl_enc_changed." field(s) normalized).</li>";
 
 if ((check_mysql_data_type("contestEntryFee",$prefix."contest_info")) != 246) {
 
@@ -4875,9 +4966,9 @@ if ((check_mysql_data_type("contestEntryFee",$prefix."contest_info")) != 246) {
 		CHANGE `contestEntryFeePasswordNum` `contestEntryFeePasswordNum` DECIMAL(9,2) DEFAULT NULL;",
 		$prefix."contest_info");
 	$result = $db_conn->rawQuery($sql);
-	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Entry fee columns widened to better support foreign currencies.</li>";
+	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Entry fee amounts now support more foreign currency formats without being cut off.</li>";
 	else {
-		$v3100_update .= "<li class=\"text-danger\">Entry fee columns NOT widened to better support foreign currencies.</li>";
+		$v3100_update .= "<li class=\"text-danger\">Entry fee amounts were NOT updated to support more foreign currency formats. Please contact support.</li>";
 		$error_count++;
 	}
 
@@ -4946,15 +5037,15 @@ $v310_changed += $v310_ts_migrate($db_conn, $prefix."preferences", array(
 	'prefsWinnerDelay'
 ));
 
-if ($v310_changed > 0) $v3100_update .= "<li>Normalized ".$v310_changed." stored competition timestamp(s) to UTC epoch (timezone-consistent storage).</li>";
+if ($v310_changed > 0) $v3100_update .= "<li>Corrected ".$v310_changed." competition date/time value(s) that could have displayed incorrectly due to a timezone bug.</li>";
 
 if (!check_update("prefsHeroImages", $prefix."preferences")) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `prefsHeroImages` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'JSON map of hero banner image filename to active flag';",$prefix."preferences");
 	$result = $db_conn->rawQuery($sql);
-	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Added hero banner management. Hero banner image preferences column added to the preferences table.</li>";
+	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Added the ability to manage hero banner images for your competition's homepage.</li>";
 	else {
-		$v3100_update .= "<li class=\"text-danger\">Hero banner image preferences column NOT added to the preferences table.</li>";
+		$v3100_update .= "<li class=\"text-danger\">Hero banner image management could NOT be enabled. Please contact support.</li>";
 		$error_count++;
 	}
 
@@ -4970,7 +5061,7 @@ if (!check_update("prefsLanguageToggle", $prefix."preferences")) {
 
 	if ($db_conn->getLastErrno() === 0) {
 
-		$v3100_update .= "<li>Runtime language toggle preference columns added to the preferences table.</li>";
+		$v3100_update .= "<li>Added a language toggle so visitors can switch the site's display language.</li>";
 
 		// Carry forward any existing config.php-based settings, so installs that
 		// already turned this on via $enable_language_toggle don't silently lose
@@ -4993,16 +5084,16 @@ if (!check_update("prefsLanguageToggle", $prefix."preferences")) {
 		$result = $db_conn->update ($update_table, $data);
 
 		if ($db_conn->getLastErrno() === 0) {
-			$v3100_update .= "<li>Runtime language toggle preferences initialized".(($v310_lang_toggle == 'Y') ? " (carried forward from config.php)" : "").".</li>";
+			$v3100_update .= "<li>Language toggle settings were set up".(($v310_lang_toggle == 'Y') ? ", carrying over your existing default language" : "").".</li>";
 		}
 		else {
-			$v3100_update .= "<li class=\"text-danger\">Runtime language toggle preferences NOT initialized. Error: ".$db_conn->getLastError()."</li>";
+			$v3100_update .= "<li class=\"text-danger\">The language toggle could NOT be fully set up. Please contact support.</li>";
 			$error_count++;
 		}
 
 	}
 	else {
-		$v3100_update .= "<li class=\"text-danger\">Runtime language toggle preference columns NOT added to the preferences table.</li>";
+		$v3100_update .= "<li class=\"text-danger\">The language toggle feature could NOT be enabled. Please contact support.</li>";
 		$error_count++;
 	}
 
@@ -5024,6 +5115,9 @@ $v310_missing_archive_cols = array(
 	'brewMead3' => "VARCHAR(25) NULL DEFAULT NULL",
 );
 
+$v310_archive_tables_fixed = array();
+$v310_archive_col_errors = 0;
+
 foreach ($archive_suffixes as $suffix) {
 
 	$archive_brewing_table = $prefix."brewing_".$suffix;
@@ -5034,16 +5128,19 @@ foreach ($archive_suffixes as $suffix) {
 
 			$sql = sprintf("ALTER TABLE `%s` ADD `%s` %s;", $archive_brewing_table, $v310_col, $v310_col_def);
 			$result = $db_conn->rawQuery($sql);
-			if ($db_conn->getLastErrno() === 0) $v3100_update .= sprintf("<li>The %s column added to the %s archive table.</li>", $v310_col, $archive_brewing_table);
-			else {
-				$v3100_update .= sprintf("<li class=\"text-danger\">The %s column NOT added to the %s archive table.</li>", $v310_col, $archive_brewing_table);
-				$error_count++;
-			}
+			if ($db_conn->getLastErrno() === 0) $v310_archive_tables_fixed[$suffix] = TRUE;
+			else $v310_archive_col_errors++;
 
 		}
 
 	}
 
+}
+
+if (count($v310_archive_tables_fixed) > 0) $v3100_update .= "<li>Fixed a crash that could happen when viewing entry lists from ".count($v310_archive_tables_fixed)." older archived competition(s).</li>";
+if ($v310_archive_col_errors > 0) {
+	$v3100_update .= "<li class=\"text-danger\">Some older archived competitions could NOT be fixed. Please contact support.</li>";
+	$error_count++;
 }
 
 /**
@@ -5068,11 +5165,11 @@ $db_conn->rawQuery($sql);
 if ($db_conn->getLastErrno() === 0) $v310_obfuscate_fixed += $db_conn->mysqli()->affected_rows;
 else $error_count++;
 
-if ($v310_obfuscate_fixed > 0) $v3100_update .= "<li>Corrected ".$v310_obfuscate_fixed." user account(s) with a missing or incorrect judging-number obfuscation setting (Top-Level Admins are no longer obfuscated; NULL values now default to obfuscated).</li>";
+if ($v310_obfuscate_fixed > 0) $v3100_update .= "<li>Fixed a setting that could incorrectly hide judging numbers from ".$v310_obfuscate_fixed." account(s), including Top-Level Admins.</li>";
 
 $sql = sprintf("UPDATE `%s` SET `brewStyleGroup` = '11' WHERE `brewStyleVersion` = 'BA2026' AND `brewStyleGroup` = '10';", $prefix."styles");
 $result = $db_conn->rawQuery($sql);
-if (($db_conn->getLastErrno() === 0) && ($db_conn->count > 0)) $v3100_update .= "<li>Corrected ".$db_conn->count." BA2026 Hybrid/Mixed Lagers or Ales style(s) from group 10 to group 11.</li>";
+if (($db_conn->getLastErrno() === 0) && ($db_conn->count > 0)) $v3100_update .= "<li>Fixed ".$db_conn->count." BA 2026 style(s) that were listed under the wrong category.</li>";
 
 // Add BA 2026 Style Updates
 if (($section == "setup") || (!check_new_style("01","01","Ordinary Bitter"))) include (UPDATE.'styles_ba_2026_update.php');

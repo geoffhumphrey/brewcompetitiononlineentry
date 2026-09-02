@@ -3836,7 +3836,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $output .= "The report cannot be generated for the following reasons:";
                     if ($rule_org) $output .= "\n- No organizer has been designated. The BJCP will not accept an XML report without a named Organizer. Designate the Organizer by going to Admin > Entries and Participants > Assign Staff. Choose the Organizer's name from the drop-down list near the top of the page. If the Organizer's name is not present in the drop-down, an account will need to be created for them.";
                     if ($rule_sessions) $output .= "\n- Judging sessions exceed the maximum of three (3) per day.";
-                    if ($rule_comp_id) $output .= "\n- The BCJP Competition ID is missing. A Competition ID is required for submittal to the BJCP and can be found in the registration confirmation email sent by the BJCP. Add the Competition ID via Admin > Competition Preparation > Edit Competition Info.";
+                    if ($rule_comp_id) $output .= "\n- The BJCP Competition ID is missing. A Competition ID is required for submittal to the BJCP and can be found in the registration confirmation email sent by the BJCP. Add the Competition ID via Admin > Competition Preparation > Edit Competition Info.";
                 }
 
                 header('Content-Type: application/force-download');

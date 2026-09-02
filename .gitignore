@@ -32,3 +32,4 @@ lint-all.ps1
 cleanup_double_encoding.php
 *.code-workspace
 vendor/
+tools/*

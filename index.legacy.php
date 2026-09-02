@@ -300,7 +300,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 </div>
 <?php //if ((!in_array($go,$datetime_load)) || ($go == "default") || (($section == "admin") && ($go == "evaluation"))) { ?>
 <!-- Session Timer Displays and Auto Logout -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.6.3/moment-timezone-with-data.min.js"></script>
 <script>
 var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
 var session_end_min = "<?php echo $session_expire_after; ?>";
@@ -338,7 +338,11 @@ if (($_SESSION['prefsEval'] == 1) && ($section == "admin") && ($go == "evaluatio
     var brewer_staff = "<?php if (isset($row_brewer['brewerStaff'])) echo $row_brewer['brewerStaff']; ?>";
     var brewer_brewery_ttb = <?php echo $brewery_ttb; ?>;
     var brewer_brewery_prod = <?php echo $brewery_prod; ?>;
-    var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>";
+    // Deliberately always empty - only the bcrypt hash of the answer is ever
+    // stored (see includes/process/process_users_register.inc.php), so
+    // there is no plaintext to usefully pre-fill this field with, and
+    // echoing the hash here would expose it to anyone viewing page source.
+    var user_question_answer = "";
 </script>
 
 <?php } // end if ($logged_in) ?>

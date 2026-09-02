@@ -66,7 +66,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalAppearanceClarity" name="evalAppearanceClarity" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_opaque; ?>", "<?php echo $label_cloudy; ?>", "<?php echo $label_hazy; ?>", "<?php echo $label_clear; ?>", "<?php echo $label_brilliant; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceClarity']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalAppearanceClarity" name="evalAppearanceClarity" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_opaque; ?>", "<?php echo $label_cloudy; ?>", "<?php echo $label_hazy; ?>", "<?php echo $label_clear; ?>", "<?php echo $label_brilliant; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($appearance_data['evalAppearanceClarity']))) echo $appearance_data['evalAppearanceClarity']; ?>" data-slider-tooltip="hide" required>
 		</div>
 		<div class="help-block invalid-feedback"></div>
 	</div>
@@ -85,7 +85,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalAppearanceCarb" name="evalAppearanceCarb" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_still; ?>", "", "<?php echo $label_petillant; ?>", "", "<?php echo $label_sparkling; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $appearance_data['evalAppearanceCarb']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalAppearanceCarb" name="evalAppearanceCarb" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_still; ?>", "", "<?php echo $label_petillant; ?>", "", "<?php echo $label_sparkling; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($appearance_data['evalAppearanceCarb']))) echo $appearance_data['evalAppearanceCarb']; ?>" data-slider-tooltip="hide" required>
 			<div class="help-block invalid-feedback"></div>
 		</div>
 	</div>
@@ -118,7 +118,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalAromaIntensity" name="evalAromaIntensity" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $aroma_data['evalAromaIntensity']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalAromaIntensity" name="evalAromaIntensity" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($aroma_data['evalAromaIntensity']))) echo $aroma_data['evalAromaIntensity']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block invalid-feedback"></div>
 		</div>
 	</div>
@@ -137,7 +137,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalAromaQuality" name="evalAromaQuality" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $aroma_data['evalAromaQuality']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalAromaQuality" name="evalAromaQuality" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($aroma_data['evalAromaQuality']))) echo $aroma_data['evalAromaQuality']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>
@@ -172,7 +172,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalFlavorIntensity" name="evalFlavorIntensity" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $flavor_data['evalFlavorIntensity']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalFlavorIntensity" name="evalFlavorIntensity" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($flavor_data['evalFlavorIntensity']))) echo $flavor_data['evalFlavorIntensity']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>
@@ -191,7 +191,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalFlavorQuality" name="evalFlavorQuality" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $flavor_data['evalFlavorQuality']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalFlavorQuality" name="evalFlavorQuality" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($flavor_data['evalFlavorQuality']))) echo $flavor_data['evalFlavorQuality']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>
@@ -249,7 +249,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalMouthfeelAcidity" name="evalMouthfeelAcidity" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data['evalMouthfeelAcidity']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalMouthfeelAcidity" name="evalMouthfeelAcidity" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($mouthfeel_data['evalMouthfeelAcidity']))) echo $mouthfeel_data['evalMouthfeelAcidity']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>
@@ -268,7 +268,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalMouthfeelTanninBitter" name="evalMouthfeelTanninBitter" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data['evalMouthfeelTanninBitter']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalMouthfeelTanninBitter" name="evalMouthfeelTanninBitter" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($mouthfeel_data['evalMouthfeelTanninBitter']))) echo $mouthfeel_data['evalMouthfeelTanninBitter']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>
@@ -287,7 +287,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalMouthfeelTanninAstringency" name="evalMouthfeelTanninAstringency" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data['evalMouthfeelTanninAstringency']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalMouthfeelTanninAstringency" name="evalMouthfeelTanninAstringency" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($mouthfeel_data['evalMouthfeelTanninAstringency']))) echo $mouthfeel_data['evalMouthfeelTanninAstringency']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>
@@ -306,7 +306,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalMouthfeelBody" name="evalMouthfeelBody" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data['evalMouthfeelBody']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalMouthfeelBody" name="evalMouthfeelBody" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($mouthfeel_data['evalMouthfeelBody']))) echo $mouthfeel_data['evalMouthfeelBody']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>
@@ -325,7 +325,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalMouthfeelLength" name="evalMouthfeelLength" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data['evalMouthfeelLength']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalMouthfeelLength" name="evalMouthfeelLength" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($mouthfeel_data['evalMouthfeelLength']))) echo $mouthfeel_data['evalMouthfeelLength']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>
@@ -344,7 +344,7 @@ if ((isset($appearance_data['evalAppearanceColorOther'])) && (!in_array($appeara
 	</div>
 	<div class="col-12 col-sm-12 col-md-3 small">
 		<div class="ms-2 small">
-			<input class="form-control" type="text" id="evalMouthfeelBalance" name="evalMouthfeelBalance" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if ($action == "edit") echo $mouthfeel_data['evalMouthfeelBalance']; ?>" data-slider-tooltip="hide" required>
+			<input class="form-control" type="text" id="evalMouthfeelBalance" name="evalMouthfeelBalance" data-provide="slider" data-slider-ticks="[0,1,2,3,4]" data-slider-ticks-labels='["<?php echo $label_low; ?>", "", "<?php echo $label_medium; ?>", "", "<?php echo $label_high; ?>"]' data-slider-step="1" data-slider-value="<?php if (($action == "edit") && (isset($mouthfeel_data['evalMouthfeelBalance']))) echo $mouthfeel_data['evalMouthfeelBalance']; ?>" data-slider-tooltip="hide" required>
 		<div class="help-block small invalid-feedback"></div>
 		</div>
 	</div>

@@ -39,7 +39,6 @@ define('NHC', FALSE);
 define('SINGLE', FALSE);
 define('EVALUATION', TRUE);
 define('MAINT', FALSE);
-define('CDN', TRUE);
 define('TESTING', TRUE);
 define('DEBUG', TRUE);
 define('DEBUG_SESSION_VARS', FALSE);

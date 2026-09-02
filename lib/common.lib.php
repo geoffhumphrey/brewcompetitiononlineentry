@@ -81,7 +81,7 @@ function has_double_encoded_data($db_conn) {
 	// been used), so it's added separately rather than assumed present like the tables above.
 	$evaluation_table = $prefix."evaluation";
 	if (table_exists($evaluation_table)) {
-		$tables_columns[$evaluation_table] = array('evalSpecialIngredients', 'evalOtherNotes', 'evalAromaComments', 'evalAppearanceComments', 'evalFlavorComments', 'evalMouthfeelComments', 'evalOverallComments', 'evalIntangibles', 'evalBottleNotes');
+		$tables_columns[$evaluation_table] = array('evalSpecialIngredients', 'evalOtherNotes', 'evalAromaComments', 'evalAppearanceComments', 'evalFlavorComments', 'evalMouthfeelComments', 'evalOverallComments', 'evalBottleNotes');
 	}
 
 	foreach ($tables_columns as $table => $columns) {
@@ -139,6 +139,24 @@ function upgrade_legacy_password_hash($db_conn, $table, $id_column, $id_value, $
 	$new_hash = password_hash($plaintext_password, PASSWORD_BCRYPT);
 	$db_conn->where($id_column, $id_value);
 	$db_conn->update($table, array('password' => $new_hash));
+}
+
+/**
+ * Redirects to $location and halts execution - a drop-in replacement for
+ * the repeated `header("Location: ...")); exit();` access-guard pattern used
+ * throughout admin/*.admin.php, which fails silently (a PHP warning, no
+ * actual redirect) whenever it runs after output has already started, e.g.
+ * from load_cdn_libraries_admin.inc.php's CDN <link>/<script> tags loaded
+ * earlier in the same page. Falls back to a JS redirect in that case, which
+ * works regardless of how much of the page has already been flushed.
+ */
+function redirect_or_exit($location) {
+	if (!headers_sent()) {
+		header(sprintf("Location: %s", $location));
+	} else {
+		echo "<script>window.location.href=".json_encode($location).";</script>";
+	}
+	exit();
 }
 
 /**

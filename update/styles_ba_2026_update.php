@@ -188,11 +188,11 @@ foreach ($data as $row) {
 	if ($db_conn->insert($update_table, $row)) $inserted++;
 	else {
 		$insert_errors = TRUE;
-		$v3100_update .= "<li>Addition of ".$row['brewStyle']." failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$v3100_update .= "<li class=\"text-danger\">Could not add the \"".$row['brewStyle']."\" style. Please contact support.</li>";
 		$error_count += 1;
 	}
 }
-if ($inserted > 0) $v3100_update .= "<li>Added ".$inserted." new 2026 BA Styles to styles table".(($skipped > 0) ? " (".$skipped." already present, skipped)" : "").".</li>";
-elseif (!$insert_errors) $v3100_update .= "<li>2026 BA Styles already present in styles table - nothing to add.</li>";
+if ($inserted > 0) $v3100_update .= "<li>Added the new 2026 Brewers Association style guidelines (".$inserted." styles).</li>";
+elseif (!$insert_errors) $v3100_update .= "<li>The 2026 Brewers Association style guidelines are already up to date.</li>";
 
 ?>

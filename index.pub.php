@@ -711,7 +711,11 @@ if ($logged_in) {
         var brewer_staff = "N";
         var brewer_brewery_ttb = <?php echo $brewery_ttb; ?>;
         var brewer_brewery_prod = <?php echo $brewery_prod; ?>;
-        var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>"
+        // Deliberately always empty - only the bcrypt hash of the answer is
+        // ever stored, so there is no plaintext to usefully pre-fill this
+        // field with, and echoing the hash here would expose it to anyone
+        // viewing page source.
+        var user_question_answer = ""
         if (action == "edit") {
             var brewer_country = "<?php if (isset($row_brewer['brewerCountry'])) echo $row_brewer['brewerCountry']; ?>";
             var brewer_judge = "<?php if (isset($row_brewer['brewerJudge'])) echo $row_brewer['brewerJudge']; ?>";
