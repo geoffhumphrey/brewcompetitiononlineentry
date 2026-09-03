@@ -10,6 +10,17 @@ html {
     scroll-behavior: smooth;
 }
 
+/** Bootstrap 3's dropdown-menu does no viewport-aware repositioning or overflow
+    handling on its own - a long list (e.g. "Choose a Table" with 30+ tables)
+    just renders past the bottom of the screen with no way to scroll to the rest.
+    Viewport-relative so it self-adjusts to screen size; a no-op for any dropdown
+    already short enough to fit. **/
+
+.dropdown-menu {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
 .anchor {
     padding-top: 50px;
     margin-top: -50px;
