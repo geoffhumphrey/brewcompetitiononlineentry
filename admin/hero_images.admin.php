@@ -76,7 +76,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         }
         elseif (!isset($_FILES['hero_image_file']['size']) || ((int)$_FILES['hero_image_file']['size'] <= 0) || ((int)$_FILES['hero_image_file']['size'] > $max_upload_bytes)) {
             $current_size = (isset($_FILES['hero_image_file']['size'])) ? number_format((int)$_FILES['hero_image_file']['size']) : "unknown";
-            $save_error = "Image size must be between 1 byte and 2 MB. Uploaded size: ".$current_size." bytes.";
+            $save_error = "Image size must be between 1 byte and 2 MB (2,000,000 bytes). Uploaded size: ".$current_size." bytes.";
         }
         elseif ((!isset($_FILES['hero_image_file']['tmp_name'])) || (!is_uploaded_file($_FILES['hero_image_file']['tmp_name']))) {
             $save_error = "Invalid upload payload.";
@@ -207,8 +207,6 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
 
 <div id="hero_images_admin" class="admin-section">
 
-    <h2><?php echo isset($lang['admin_hero_images_title']) ? $lang['admin_hero_images_title'] : "Banner Images"; ?></h2>
-
     <?php if (!empty($save_message)): ?>
     <div class="alert alert-success alert-dismissible fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -227,9 +225,21 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     </div>
     <?php endif; ?>
 
+    <p class="lead"><?php echo h($_SESSION['contestName']).": Set Preferences"; ?></p>
+    
+    <div class="bcoem-admin-element hidden-print">
+            <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> General Preferences</a>
+            <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries"><span class="fa fa-beer"></span> Entry Preferences</a>
+            <a class="btn btn-primary disabled" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=hero_images"><span class="fa fa-image"></span> Banner Images</a>
+            <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email"><span class="fa fa-envelope"></span> Email Sending / Contact Display Preferences</a>
+            <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment"><span class="fa fa-money"></span> Currency and Payment Preferences</a>
+            <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best"><span class="fa fa-trophy"></span> Best Brewer and/or Club Preferences</a>
+            <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-gavel"></span> Judging/Competition Organization Preferences</a>
+    </div>
+
     <p><?php echo isset($lang['admin_hero_images_description']) ? $lang['admin_hero_images_description'] : "Select which banner images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types."; ?></p>
 
-    <div class="well well-sm">
+    <div class="alert alert-info">
         <p><strong><?php echo isset($lang['admin_hero_how_it_works_title']) ? $lang['admin_hero_how_it_works_title'] : "How it Works"; ?></strong></p>
         
         <?php echo isset($lang['admin_hero_how_it_works_body']) ? $lang['admin_hero_how_it_works_body'] : "<p>Banner images appear as a large background strip at the top of the competition homepage. One image is picked at random each time a visitor loads the page. Images are grouped by category &ndash; Miscellaneous images can appear at any time, while Beer, Cider, and Mead images only appear when your competition accepts entries in those categories.</p>

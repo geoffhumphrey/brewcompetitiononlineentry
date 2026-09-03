@@ -600,6 +600,11 @@ switch($section) {
 				else $header_output .= ": Entry Evaluations";
 				break;
 
+				case "hero_images":
+				if (isset($lang['admin_hero_images_title'])) $header_output .= ": ".$lang['admin_hero_images_title']; 
+				else  $header_output .= ": Banner Images";
+				break;
+
 			}
 
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);

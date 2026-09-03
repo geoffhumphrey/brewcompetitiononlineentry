@@ -4854,12 +4854,9 @@ if (!$setup_running) $v3100_update .= "<ul>";
 
 // Updates Below
 $v3100_update .= "<li>Fixed a bug that could cause special characters in Custom Categories comments to display incorrectly.</li>";
-$v3100_update .= "<li>When archiving a competition, you can now choose to keep judge evaluations instead of losing them.</li>";
 $v3100_update .= "<li>Fixed an issue where files with apostrophes or special characters in the name would fail to upload with no error shown.</li>";
 $v3100_update .= "<li>Fixed a bug that could produce incorrect results when using the BJCP 2025 or AABC 2025 style sets.</li>";
 $v3100_update .= "<li>Fixed minor display issues on archived judging tables and scores pages.</li>";
-$v3100_update .= "<li>Fixed a bug that could lock a judge or steward out of registration if they opted out of the registration limit.</li>";
-$v3100_update .= "<li>Fixed an old language setting on some installs that could prevent language selection from working correctly.</li>";
 $v3100_update .= "<li>Fixed BJCP entry-count reporting to follow BJCP's official judged, received, paid, total precedence.</li>";
 $v3100_update .= "<li>Fixed the BJCP export incorrectly counting ribbon winners as Best of Show entries when no BOS panel was held.</li>";
 $v3100_update .= "<li>Fixed judge ID validation to accept the newer BJCP TEMP#### ID format.</li>";

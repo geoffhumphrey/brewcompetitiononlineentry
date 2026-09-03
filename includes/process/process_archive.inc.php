@@ -27,10 +27,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	// Rename current tables and recreate new ones based upon user input
 	$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
-	// Only rename evaluation away (emptying the live table) when it's not being kept - when
-	// it is, the block below copies it into the archive instead, leaving the live table alone,
-	// matching how keepSpecialBest/keepStyleTypes handle the same choice.
-	if (($eval_db_exist) && (!isset($_POST['keepEvaluations']))) $tables_array[] = $prefix."evaluation";
+	// Evaluations are entry-dependent data, same as the entries themselves (brewing, judging
+	// scores, etc. above) - always archived along with them, no option to retain in the live
+	// tables, to keep the relational data consistent.
+	if ($eval_db_exist) $tables_array[] = $prefix."evaluation";
 
 	if ($go == "add") {
 
@@ -141,9 +141,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!isset($_POST['keepDropoff'])) $truncate_tables_array[] = $drop_off_db_table;
 		if (!isset($_POST['keepSponsors'])) $truncate_tables_array[] = $sponsors_db_table;
 		if (!isset($_POST['keepLocations'])) $truncate_tables_array[] = $judging_locations_db_table;
-		// evaluation isn't added here: when not kept, it's already emptied by the rename+recreate
-		// in $tables_array above (truncating an already-empty table would be a no-op); when kept,
-		// the block below leaves the live table alone entirely.
+		// evaluation isn't added here: it's always emptied by the rename+recreate in
+		// $tables_array above, so truncating it here too would just be a no-op.
 
 		$keep_participants = FALSE;
 
@@ -230,26 +229,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 		
-		if (($eval_db_exist) && (isset($_POST['keepEvaluations']))) {
-
-			$evaluation_table = $prefix."evaluation";
-
-			$sql = sprintf("CREATE TABLE %s LIKE %s", $evaluation_table."_".$suffix, $evaluation_table);
-			$db_conn->rawQuery($sql);
-			if ($db_conn->getLastErrno() !== 0) {
-				$error_output[] = $db_conn->getLastError();
-				$errors = TRUE;
-			}
-
-			$sql = sprintf("INSERT INTO %s SELECT * FROM %s", $evaluation_table."_".$suffix, $evaluation_table);
-			$db_conn->rawQuery($sql);
-			if ($db_conn->getLastErrno() !== 0) {
-				$error_output[] = $db_conn->getLastError();
-				$errors = TRUE;
-			}
-
-		}
-
 		foreach ($tables_array as $table) {
 
 			$sql = sprintf("RENAME TABLE %s TO %s", $table, $table."_".$suffix);

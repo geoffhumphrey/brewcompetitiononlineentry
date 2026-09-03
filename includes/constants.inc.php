@@ -598,7 +598,7 @@ if (HOSTED) $_SESSION['prefsCAPTCHA'] = 1;
 // Load libraries only when needed - for performance
 $tinymce_load = array("contest_info","default","step4");
 $datetime_load = array("contest_info","evaluation","testing","preferences","step4","step5","step6","default","judging","judging_preferences","dates","non-judging");
-$datatables_load = array("admin","list","default","step4","evaluation");
+$datatables_load = array("admin","list","default","step4","evaluation","past-winners");
 
 $specialty_ipa_subs = array();
 $historical_subs = array();

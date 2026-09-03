@@ -129,13 +129,6 @@ foreach ($style_sets as $style_set) {
                     <input type="checkbox" name="keepSponsors" id="retain_3" value="Y"> <?php echo $label_sponsors; ?>
                 </label>
             </div>
-            <?php if (check_setup($prefix."evaluation", $database)) { ?>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="keepEvaluations" id="retain_6" value="Y"> <?php echo $label_evaluations; ?>
-                </label>
-            </div>
-            <?php } ?>
         </div>
         <div id="helpBlock" class="help-block" style="margin-top: 10px;"><?php echo $archive_text_012; ?></div>
     </div>
