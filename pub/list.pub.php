@@ -231,18 +231,6 @@ $(document).ready(function() {
     */
 
 
- 	$(".entry-print").on("click", function() {
-		
-		if ($(".entry-print:checked").length > 0) {
-			$('#btn').prop('disabled', false);
-		}
-		
-		else {
-			$('#btn').prop('disabled', true);
-		}
-		
-	});
-
 	$(".entry-print").change(function() {
 	    
 	    //uncheck "select all", if one of the listed checkbox item is unchecked
@@ -259,17 +247,122 @@ $(document).ready(function() {
 
 	$("#select_all").change(function() {
 		
-		$("input:checkbox").prop('checked', $(this).prop("checked"));
-		
-		if ($(".entry-print:checked").length > 0) {
-			$('#btn').prop('disabled', false);
-		}
-		
-		else {
-			$('#btn').prop('disabled', true);
-		}
+        $(".entry-print").prop('checked', $(this).prop("checked"));
 	
 	});
+
+    var entryPrintModalElement = document.getElementById("entryPrintModal");
+    var entryPrintModal = entryPrintModalElement ? new bootstrap.Modal(entryPrintModalElement) : null;
+    var submitPrintForm = false;
+    var entryPrintLabelEntry = <?php echo json_encode($label_entry); ?>;
+    var entryPrintSelectOneAlert = <?php echo json_encode($brewer_entries_text_032); ?>;
+
+    function normalizeEntryPrintSelection() {
+        var seen = {};
+        $(".entry-print:checked").each(function() {
+            var value = $(this).val();
+            if (seen[value]) {
+                $(this).prop("checked", false);
+            }
+            else {
+                seen[value] = true;
+            }
+        });
+    }
+
+    function buildEntryPrintModalList() {
+        var uniqueEntries = {};
+        $(".entry-print").each(function() {
+            var entryId = $(this).val();
+            if (!uniqueEntries[entryId]) {
+                uniqueEntries[entryId] = {
+                    id: entryId,
+                    name: $(this).data("entry-name") || (entryPrintLabelEntry + " " + entryId),
+                    number: $(this).data("entry-number") || ""
+                };
+            }
+        });
+
+        var modalListHtml = "";
+        $.each(uniqueEntries, function(key, entry) {
+            var entryLabel = entry.number ? ("#" + entry.number + " - " + entry.name) : entry.name;
+            modalListHtml += "<label class=\"list-group-item\"><input class=\"form-check-input me-2 entry-print-modal-item\" type=\"checkbox\" value=\"" + entry.id + "\">" + entryLabel + "</label>";
+        });
+
+        $("#entryPrintModalList").html(modalListHtml);
+    }
+
+    $("form[name='form1']").on("submit", function(event) {
+        if (submitPrintForm) {
+            submitPrintForm = false;
+            return true;
+        }
+
+        normalizeEntryPrintSelection();
+
+        if ($(".entry-print:checked").length > 0) {
+            return true;
+        }
+
+        if (!entryPrintModal) {
+            return false;
+        }
+
+        event.preventDefault();
+        buildEntryPrintModalList();
+        $("#entryPrintModalPrompt").removeClass("d-none");
+        $("#entryPrintModalChooser").addClass("d-none");
+        $("#entryPrintChooseBtn").removeClass("d-none");
+        $("#entryPrintAllBtn").removeClass("d-none");
+        $("#entryPrintChosenBtn").addClass("d-none");
+        entryPrintModal.show();
+        return false;
+    });
+
+    $("#entryPrintAllBtn").on("click", function() {
+        $(".entry-print").prop("checked", false);
+        var seen = {};
+        $(".entry-print").each(function() {
+            var value = $(this).val();
+            if (!seen[value]) {
+                $(this).prop("checked", true);
+                seen[value] = true;
+            }
+        });
+        $("#select_all").prop("checked", true);
+        submitPrintForm = true;
+        entryPrintModal.hide();
+        $("form[name='form1']").trigger("submit");
+    });
+
+    $("#entryPrintChooseBtn").on("click", function() {
+        $("#entryPrintModalPrompt").addClass("d-none");
+        $("#entryPrintModalChooser").removeClass("d-none");
+        $("#entryPrintChooseBtn").addClass("d-none");
+        $("#entryPrintAllBtn").addClass("d-none");
+        $("#entryPrintChosenBtn").removeClass("d-none");
+    });
+
+    $("#entryPrintChosenBtn").on("click", function() {
+        var chosenEntryIds = [];
+        $(".entry-print-modal-item:checked").each(function() {
+            chosenEntryIds.push($(this).val());
+        });
+
+        if (chosenEntryIds.length === 0) {
+            window.alert(entryPrintSelectOneAlert);
+            return;
+        }
+
+        $(".entry-print").prop("checked", false);
+        $.each(chosenEntryIds, function(index, entryId) {
+            $(".entry-print[value='" + entryId + "']").first().prop("checked", true);
+        });
+        $("#select_all").prop("checked", chosenEntryIds.length === $(".entry-print").map(function(){ return $(this).val(); }).get().filter(function(value, index, array){ return array.indexOf(value) === index; }).length);
+        submitPrintForm = true;
+        entryPrintModal.hide();
+        $("form[name='form1']").trigger("submit");
+    });
 
 	$('#sortable').dataTable( {
 	"bPaginate" : false,
