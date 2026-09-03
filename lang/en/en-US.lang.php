@@ -1461,6 +1461,7 @@ $brewer_entries_text_021 = "Check the entries to print their bottle/can labels. 
 $brewer_entries_text_022 = "Print Labels for All Entries Checked Above";
 $brewer_entries_text_023 = "The labels will open in a new tab or window.";
 $brewer_entries_text_024 = "Print Selected Entry Labels";
+$brewer_entries_text_027 = "Select at least one entry to enable label printing.";
 
 /**
  * ------------------------------------------

@@ -1457,6 +1457,7 @@ $brewer_entries_text_021 = "Jelölje be a nevezéseket a palack-/doboz címkék 
 $brewer_entries_text_022 = "A fent bejelölt összes nevezés címkéjének nyomtatása";
 $brewer_entries_text_023 = "A címkék új lapon vagy ablakban nyílnak meg.";
 $brewer_entries_text_024 = "Kiválasztott nevezések címkéinek nyomtatása";
+$brewer_entries_text_027 = "A címkenyomtatás engedélyezéséhez jelöljön be legalább egy nevezést.";
 
 /**
  * ------------------------------------------

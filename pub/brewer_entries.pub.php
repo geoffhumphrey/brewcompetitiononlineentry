@@ -754,7 +754,9 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 		<div class="col-sm-12 col-md-3">
 			<div class="d-grid mb-1">
 			<?php if (!$show_scores) { ?>
-				<button type="submit" id="btn" class="btn btn-primary" disabled data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-html="true" data-bs-content="<?php echo sprintf("%s %s",$brewer_entries_text_023,$bottle_labels_008); ?>"><i class='fa fa-print me-2'></i><?php echo $brewer_entries_text_024; ?></button>
+				<span id="btn-tooltip" class="d-block" tabindex="0" data-bs-toggle="popover" data-bs-container="body" data-bs-trigger="hover focus" data-bs-placement="auto" data-bs-title="<?php echo $brewer_entries_text_024; ?>" data-bs-html="true" data-bs-content="<?php echo $brewer_entries_text_027; ?>" data-content-disabled="<?php echo htmlspecialchars($brewer_entries_text_027, ENT_QUOTES, 'UTF-8'); ?>" data-content-enabled="<?php echo htmlspecialchars(sprintf("%s %s",$brewer_entries_text_023,$bottle_labels_008), ENT_QUOTES, 'UTF-8'); ?>">
+					<button type="submit" id="btn" class="btn btn-primary w-100" disabled><i class='fa fa-print me-2'></i><?php echo $brewer_entries_text_024; ?></button>
+				</span>
 			<?php } ?>
 			</div>
 		</div>

@@ -1462,6 +1462,7 @@ $brewer_entries_text_021 = "Marque las entradas para imprimir sus etiquetas de b
 $brewer_entries_text_022 = "Imprimir Todas las Etiquetas de Botellas de las Entradas Marcadas";
 $brewer_entries_text_023 = "Las etiquetas de botellas se abrirán en una nueva pestaña o ventana.";
 $brewer_entries_text_024 = "Imprimir Etiquetas de Botellas";
+$brewer_entries_text_027 = "Seleccione al menos una entrada para habilitar la impresión de etiquetas.";
 
 /**
  * ------------------------------------------------------------------------

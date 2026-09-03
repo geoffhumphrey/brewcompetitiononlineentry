@@ -1456,6 +1456,7 @@ $brewer_entries_text_021 = "Verifique as entradas para imprimir suas etiquetas d
 $brewer_entries_text_022 = "Imprimir Todas as Etiquetas de Garrafas para Entradas Verificadas";
 $brewer_entries_text_023 = "Os rótulos dos frascos serão abertos em uma nova guia ou janela.";
 $brewer_entries_text_024 = "Imprimir Etiquetas de Garrafa";
+$brewer_entries_text_027 = "Selecione pelo menos uma entrada para habilitar a impressão de etiquetas.";
 
 /**
  * ------------------------------------------------------------------------

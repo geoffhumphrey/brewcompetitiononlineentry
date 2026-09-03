@@ -1364,6 +1364,7 @@ $brewer_entries_text_021 = "Zaškrtněte vzorky k tisku štítků. Zvolte zaškr
 $brewer_entries_text_022 = "Vytisknout štítky lahví všech zaškrtnutých vzorků";
 $brewer_entries_text_023 = "Štítky lahví se otevřou na nové záložce nebo v novém okně.";
 $brewer_entries_text_024 = "Vytisknout štítky lahví";
+$brewer_entries_text_027 = "Pro povolení tisku štítků zaškrtněte alespoň jeden vzorek.";
 
 /**
  * ------------------------------------------------------------------------

@@ -231,44 +231,66 @@ $(document).ready(function() {
     */
 
 
- 	$(".entry-print").on("click", function() {
-		
+	// Swaps the "Print Selected Entry Labels" button's popover text between its
+	// disabled reason (nothing checked yet) and its enabled/ready-to-print content.
+	// The popover trigger lives on the #btn-tooltip wrapper span, not the button
+	// itself - Bootstrap's own CSS sets pointer-events:none on disabled buttons,
+	// so a disabled <button> never receives the hover/focus events a popover
+	// trigger needs; wrapping it in an always-hoverable span is Bootstrap's own
+	// documented pattern for tooltips/popovers on disabled controls. Also, a
+	// Popover instance caches its content at construction time, so changing the
+	// data-bs-content attribute alone wouldn't update an already-initialized one.
+	function updatePrintButtonTooltip(enabled) {
+		var wrapper = document.getElementById('btn-tooltip');
+		if (!wrapper || typeof bootstrap === "undefined") return;
+		var content = wrapper.getAttribute(enabled ? 'data-content-enabled' : 'data-content-disabled');
+		var instance = bootstrap.Popover.getOrCreateInstance(wrapper);
+		instance.setContent({ '.popover-body': content });
+	}
+
+	// Shared by every place that needs to recompute the print button's enabled state
+	// and tooltip after a checkbox change, so the logic isn't duplicated per handler.
+	function updatePrintButtonState() {
 		if ($(".entry-print:checked").length > 0) {
 			$('#btn').prop('disabled', false);
+			updatePrintButtonTooltip(true);
 		}
-		
+
 		else {
 			$('#btn').prop('disabled', true);
+			updatePrintButtonTooltip(false);
 		}
-		
-	});
+	}
 
 	$(".entry-print").change(function() {
-	    
+
+		// Each entry has two checkboxes - one in the table view, one in the card
+		// view - sharing the same value (the entry id) but otherwise independent
+		// DOM elements. Mirror this change onto the sibling in the other view.
+		// .prop() never fires "change", so this can't cascade/loop.
+		var val = $.escapeSelector(String($(this).val()));
+		$(".entry-print[value='" + val + "']").not(this).prop("checked", $(this).prop("checked"));
+
 	    //uncheck "select all", if one of the listed checkbox item is unchecked
 	    if (false == $(this).prop("checked")) {
 	        $("#select_all").prop('checked', false);
 	    }
-	    
+
 	    //check "select all" if all checkbox items are checked
-	    if ($('.checkbox:checked').length == $('.checkbox').length) {
+	    if ($('.entry-print:checked').length == $('.entry-print').length) {
 	        $("#select_all").prop('checked', true);
 	    }
-	
+
+		updatePrintButtonState();
+
 	});
 
 	$("#select_all").change(function() {
-		
+
 		$("input:checkbox").prop('checked', $(this).prop("checked"));
-		
-		if ($(".entry-print:checked").length > 0) {
-			$('#btn').prop('disabled', false);
-		}
-		
-		else {
-			$('#btn').prop('disabled', true);
-		}
-	
+
+		updatePrintButtonState();
+
 	});
 
 	$('#sortable').dataTable( {

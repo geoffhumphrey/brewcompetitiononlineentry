@@ -1459,6 +1459,7 @@ $brewer_entries_text_021 = "Cochez les inscriptions pour imprimer leurs étiquet
 $brewer_entries_text_022 = "Imprimer toutes les étiquettes de bouteilles pour les inscriptions cochées";
 $brewer_entries_text_023 = "Les étiquettes de bouteilles s'ouvriront dans un nouvel onglet ou une nouvelle fenêtre.";
 $brewer_entries_text_024 = "Imprimer les étiquettes de bouteilles";
+$brewer_entries_text_027 = "Cochez au moins une inscription pour activer l'impression des étiquettes.";
 
 /**
  * ------------------------------------------------------------------------
