@@ -1754,6 +1754,8 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								foreach ($rows_entries as $row_entries) {
 
+									$table_flight_tbody = "";
+
 									// Pulled from the batched map above instead of a fresh
 							// check_flight_number() query per entry per flight.
 							$flight_round = $check_flight_number_ps($row_entries['id'],$i);
