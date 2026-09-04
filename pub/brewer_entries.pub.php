@@ -498,7 +498,11 @@ if ($totalRows_log > 0) {
 		if (($row_log['brewCategory'] < 10) && (preg_match("/^[[:digit:]]+$/",$row_log['brewCategory']))) $brewCategory = "0".$row_log['brewCategory'];
 		else $brewCategory = $row_log['brewCategory'];
 
-		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $entry_edit_deadline))) {
+		// Use the calendar-only entry window state here, not $entry_window_open - that global gets
+		// forced to "closed" (2) once the competition-wide entry cap is reached, which is meant to
+		// stop new submissions, not demote an existing entry's edit eligibility to the (often
+		// earlier) drop-off/shipping-based edit deadline. See includes/constants.inc.php.
+		if ((($entry_window_open_calendar == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open_calendar != 1) && ($row_log['brewReceived'] == 0) && (time() < $entry_edit_deadline))) {
 
 			$edit_link .= "<a role=\"button\" href=\"".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id'];
 			if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory'];
@@ -546,7 +550,9 @@ if ($totalRows_log > 0) {
 		$delete_alt_title = sprintf("%s %s",$label_delete, $entry_name);
 		$delete_warning = sprintf("%s %s? %s.",$label_delete, $entry_name, $label_undone);
 		
-		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $entry_edit_deadline))) {
+		// Calendar-only state, same reasoning as the edit link above - a reached entry-limit cap
+		// shouldn't demote an existing entry's delete eligibility to the edit deadline.
+		if ((($entry_window_open_calendar == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open_calendar != 1) && ($row_log['brewReceived'] == 0) && (time() < $entry_edit_deadline))) {
 			$delete_link = sprintf("<a class=\"hide-loader\" role=\"button\" data-bs-toggle=\"tooltip\" title=\"%s\" data-confirm-title=\"%s\" data-confirm-cancel=\"%s\" data-confirm-proceed=\"%s\" href=\"%s\" data-confirm=\"%s.\"><i class=\"fa fa-fw fa-lg fa-trash-can\"></i></a>",$delete_alt_title,$label_please_confirm,$label_cancel,$label_delete,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
 		}
 
@@ -580,17 +586,15 @@ if ($totalRows_log > 0) {
 				if (!$judging_started) $entry_output .= "<span class=\"me-1\">".$print_forms_link."</span>";
 			}
 
-			// If the entry window is open, display delete
-			// A paid entry (where there's an entry fee) can't be deleted - reassign $delete_link
-			// itself, not just $entry_output, since the card view below reuses $delete_link too.
-			if ($entry_window_open == 1) {
-				if (($row_log['brewPaid'] == 1) && ($_SESSION['contestEntryFee'] > 0)) {
-					$delete_link = sprintf("<a class=\"hide-loader\" role=\"button\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"%s\"><i class=\"fa fa-lg fa-trash-can text-muted\"></i></a>",$brewer_entries_text_015);
-				}
-				$entry_output .= "<span class=\"me-1\">".$delete_link."</span>";
+			// A paid entry (where there's an entry fee) can't be deleted by the brewer - reassign
+			// $delete_link itself, not just $entry_output, since the card view below reuses
+			// $delete_link too. Applies whenever deletion is otherwise being considered, not just
+			// while the entry window is open - a paid entry shouldn't become self-deletable just
+			// because it's now being evaluated against the edit-deadline fallback above instead.
+			if (($row_log['brewPaid'] == 1) && ($_SESSION['contestEntryFee'] > 0)) {
+				$delete_link = sprintf("<a class=\"hide-loader\" role=\"button\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"%s\"><i class=\"fa fa-lg fa-trash-can text-muted\"></i></a>",$brewer_entries_text_015);
 			}
-
-			else $entry_output .= "<span class=\"me-1\">".$delete_link."</span>";
+			$entry_output .= "<span class=\"me-1\">".$delete_link."</span>";
 
 		}
 

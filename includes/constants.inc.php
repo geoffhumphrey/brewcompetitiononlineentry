@@ -162,6 +162,11 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
         $registration_open = open_or_closed(time(), $row_contest_dates['contestRegistrationOpen'], $row_contest_dates['contestRegistrationDeadline']);
         $entry_window_open = open_or_closed(time(), $row_contest_dates['contestEntryOpen'], $row_contest_dates['contestEntryDeadline']);
+        // Snapshot the calendar-only state before anything below (judging started, entry-limit
+        // reached) repurposes $entry_window_open's "closed" value (2) for unrelated UI gating.
+        // Existing-entry edit/delete eligibility needs the true calendar state, not the overridden
+        // one - see pub/brewer_entries.pub.php.
+        $entry_window_open_calendar = $entry_window_open;
         $judge_window_open = open_or_closed(time(), $row_contest_dates['contestJudgeOpen'], $row_contest_dates['contestJudgeDeadline']);
         if ((!empty($row_contest_dates['contestDropoffOpen'])) && (!empty($row_contest_dates['contestDropoffDeadline']))) $dropoff_window_open = open_or_closed(time(), $row_contest_dates['contestDropoffOpen'], $row_contest_dates['contestDropoffDeadline']);
         else $dropoff_window_open = 1;
