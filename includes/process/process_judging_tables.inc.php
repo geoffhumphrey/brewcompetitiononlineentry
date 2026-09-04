@@ -229,6 +229,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		else $insertGoTo = $_POST['relocate']."&msg=13";
 		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
 
+		// Carry the session-scoped table view (if any) back through, so adding a table from
+		// within a scoped view lands back in that same view instead of the unfiltered list.
+		if ((isset($view)) && ($view != "default")) $insertGoTo .= "&view=".$view;
+
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 
@@ -571,6 +575,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=2";
 		if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=3";
+
+		// Carry the session-scoped table view (if any) back through, so editing a table from
+		// within a scoped view lands back in that same view instead of the unfiltered list.
+		if ((isset($view)) && ($view != "default")) $updateGoTo .= "&view=".$view;
+
 		$updateGoTo = prep_redirect_link($updateGoTo);
 		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 

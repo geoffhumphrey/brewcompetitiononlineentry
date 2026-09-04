@@ -41,6 +41,21 @@ $manage_tables_default = FALSE;
 $judging_session = FALSE;
 if (($totalRows_judging > 0) || ($dbTable != "default")) $judging_session = TRUE;
 
+// Is ?view=<id> a real, currently-viewable judging session? Computed unconditionally (not just on
+// the default/default action/filter branch below) since the add/edit forms and their tableLocation
+// pre-fill need it too. Guards against a stale/deleted location id or a type-2 "non-judging
+// location" silently producing a broken scoped view.
+$view_valid = FALSE;
+if ($view != "default") {
+    foreach ($rows_judging as $row_judging_view_check_jt) {
+        if (($row_judging_view_check_jt['id'] == $view) && ($row_judging_view_check_jt['judgingLocType'] < 2)) {
+            $view_valid = TRUE;
+            break;
+        }
+    }
+}
+$view_qs = $view_valid ? "&amp;view=".$view : "";
+
 // Establish Vars
 $output_at_table_modals = "";
 $sub_lead_text = "";
@@ -339,10 +354,6 @@ if (($action == "default") && ($filter == "default")) {
 
     }
 
-
-
-
-
     $query_steward_avail = sprintf("SELECT * FROM %s a, %s b WHERE a.brewerSteward='Y' AND b.staff_steward='1' AND a.uid = b.uid", $prefix."brewer", $prefix."staff");
     $db_conn->returnType = "array";
     $rows_steward_avail = $db_conn->rawQuery($query_steward_avail);
@@ -359,7 +370,6 @@ if (($action == "default") && ($filter == "default")) {
         $steward_availability = explode(",",$steward_availability);
 
     }
-
 
     foreach ($rows_judging as $row_judging) {
 
@@ -378,10 +388,11 @@ if (($action == "default") && ($filter == "default")) {
 
             $sidebar_assigned_entries_by_location .= "<div class=\"bcoem-sidebar-panel\">";
             $sidebar_assigned_entries_by_location .= "<strong class=\"text-info\">";
-            //if ($view != $row_judging['id']) $sidebar_assigned_entries_by_location .= sprintf("<a href=\"%sindex.php?section=admin&go=judging_tables&view=%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View only the tables assigned to %s.\">",$base_url,$row_judging['id'],$row_judging['judgingLocName']);
+            $sidebar_this_location_viewed = (($view_valid) && ($view == $row_judging['id']));
+            if (!$sidebar_this_location_viewed) $sidebar_assigned_entries_by_location .= sprintf("<a href=\"%sindex.php?section=admin&amp;go=judging_tables&amp;view=%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View only the tables assigned to %s.\">",$base_url,$row_judging['id'],h($row_judging['judgingLocName']));
             if ($row_judging) $sidebar_assigned_entries_by_location .= h($row_judging['judgingLocName']);
             $sidebar_assigned_entries_by_location .= "</strong>";
-            //if ($view != $row_judging['id']) $sidebar_assigned_entries_by_location .= "</a>";
+            if (!$sidebar_this_location_viewed) $sidebar_assigned_entries_by_location .= "</a>";
             $sidebar_assigned_entries_by_location .= "<span class=\"pull-right\">";
             $sidebar_assigned_entries_by_location .= $loc_total;
             $sidebar_assigned_entries_by_location .= "</span>";
@@ -411,9 +422,19 @@ if (($action == "default") && ($filter == "default")) {
 
     }
 
+    // Scope the visible table list to the session picked in the sidebar, if any. Every map/count
+    // built above stays computed over ALL tables/locations - the sidebar shows every session's
+    // totals simultaneously regardless of which one is currently being viewed.
+    $rows_tables_for_display = $rows_tables;
+    if ($view_valid) {
+        $rows_tables_for_display = array_values(array_filter($rows_tables, function($row_tables_filter_jt) use ($view) {
+            return $row_tables_filter_jt['tableLocation'] == $view;
+        }));
+    }
+
     if ($totalRows_tables > 0) {
 
-        foreach ($rows_tables as $row_tables) {
+        foreach ($rows_tables_for_display as $row_tables) {
 
             // Pulled from the batched maps above instead of 4 fresh get_table_info()/
             // table_location() queries per table (one of which - "list" - was
@@ -497,7 +518,7 @@ if (($action == "default") && ($filter == "default")) {
             $manage_tables_default_tbody .= "\n\n<td class=\"hidden-xs hidden-sm\">".$assigned_stewards;
             if ($dbTable == "default") $manage_tables_default_tbody .= "<div class=\"text-muted small\">[<span id=\"delete-stewards-".$row_tables['id']."-all-count\" class=\"delete-stewards-".$table_location_class."\">".$steward_avail."</span> available]";
             $manage_tables_default_tbody .= "</div></td>";
-            if (($totalRows_judging > 1) && ($dbTable == "default")) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$table_location."</td>";
+            if (($totalRows_judging > 1) && ($dbTable == "default") && (!$view_valid)) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$table_location."</td>";
             
 
             // Set js cookies of initial judge / steward available counts for each location
@@ -509,7 +530,7 @@ if (($action == "default") && ($filter == "default")) {
 
                 // Build edit link
                 $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go;
-                $manage_tables_default_tbody .= "&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit Table ".h($row_tables['tableNumber']).": ".h($row_tables['tableName'])."\">";
+                $manage_tables_default_tbody .= "&amp;action=edit&amp;id=".$row_tables['id'].$view_qs."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit Table ".h($row_tables['tableNumber']).": ".h($row_tables['tableName'])."\">";
                 $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-pencil\"></span>";
                 $manage_tables_default_tbody .= "</a> ";
 
@@ -648,6 +669,7 @@ if (($action == "add") || ($action == "edit")) {
             $disabled_table_location = "";
 
             if (($action == "edit") && ($row_tables_edit['tableLocation'] == $row_judging['id'])) $selected_table_location = " SELECTED";
+            if (($action == "add") && ($view_valid) && ($view == $row_judging['id'])) $selected_table_location = " SELECTED";
             if ($row_judging['judgingLocType'] < 2) {
                 $table_locations_available .= "<option value=\"".$row_judging['id']."\"".$selected_table_location.">";
                 $table_locations_available .= h($row_judging['judgingLocName'])." (".h(getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt")).")";
@@ -925,8 +947,13 @@ $(document).ready(function(){
 </div><!-- /.modal -->
 
 <?php } ?>
-<p class="lead"><?php echo h($_SESSION['contestName']).$title;  ?></p>
+<p class="lead"><?php echo h($_SESSION['contestName']).$title;  ?>
+<?php if (($dbTable == "default") && (($view_valid) && ($action == "default") && ($filter == "default"))) { ?>
+    <span class="label label-default" style="margin:0 0 25px 10px; font-size: .8em;"><i class="fa fa-fw fa-sm fa-filter"></i> Viewing tables for <?php echo h($judging_locations_by_id_jt[$view]['judgingLocName']); ?></span>
+<?php } ?>
+</p>
 <?php if ($dbTable == "default") { ?>
+
 <div id="mode-alert" class="alert <?php echo $mode_alert_color; ?> hidden-print"><?php echo $sub_lead_text; ?></div>
 <?php if ($action == "default") { ?>
 <!-- Planning Mode Button -->
@@ -948,16 +975,17 @@ $(document).ready(function(){
     </div>
 	<?php } ?>
     <?php if ($dbTable == "default") { ?>
-	<?php if (($action != "default") || ($filter != "default")) { ?>
+    
+	<?php if (($action != "default") || ($filter != "default") || ($view_valid)) { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="allTables">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables"><span class="fa fa-arrow-circle-left"></span> <?php echo (($action == "default") && ($filter == "default") && ($view_valid)) ? "View All Sessions" : "All Tables"; ?></a>
     </div>
     <?php } ?>
     <?php if ($action == "default") { ?>
     <!-- Postion 2: Add Button -->
     <div class="btn-group" role="group" aria-label="addTable">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Table</a>
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add<?php echo $view_qs; ?>"><span class="fa fa-plus-circle"></span> Add a Table</a>
     </div>
     <?php } ?>
 	<!-- View Button Group Dropdown -->
@@ -1104,7 +1132,7 @@ $(document).ready(function() {
 						<div id="collapseStep2" class="panel-collapse collapse">
 							<div class="panel-body">
 								<ul class="list-unstyled">
-                                	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add">Add a Table</a></li>
+                                	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add<?php echo $view_qs; ?>">Add a Table</a></li>
 									<li><a href="#" data-toggle="modal" data-target="#orphanModal">Styles Not Assigned to Tables</a></li>
                                 </ul>
 							</div>
@@ -1233,7 +1261,7 @@ $(document).ready(function() {
                 </div>
                 <div class="bcoem-sidebar-panel">
                 	<strong class="text-info">
-                        <?php if ($view != "default") echo sprintf("<a href=\"%sindex.php?section=admin&amp;go=judging_tables\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all tables.\">All Judging Sessions</a>",$base_url); else echo "All Judging Sessions"; ?>
+                        <?php if ($view_valid) echo sprintf("<a href=\"%sindex.php?section=admin&amp;go=judging_tables\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all tables.\">All Judging Sessions</a>",$base_url); else echo "All Judging Sessions"; ?>
                     
                     </strong>
                     <span class="pull-right"><?php echo array_sum($all_loc_total); if ($_SESSION['jPrefsTablePlanning'] == 0) { ?> of <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries" data-toggle="tooltip" data-placement="top" title="View all entries."><?php echo $row_entry_count['count']; ?></a><?php } ?></span>
@@ -1350,7 +1378,7 @@ if (($manage_tables_default) && ($judging_session)) { ?>
     </div>
 <?php } ?>
 <?php
-if ($totalRows_tables > 0) { ?>
+if (!empty($manage_tables_default_tbody)) { ?>
 <!-- Table of Judging Tables -->
 <script>
  $(document).ready(function() {
@@ -1370,7 +1398,7 @@ if ($totalRows_tables > 0) { ?>
 			null,
 			null,
             <?php if ($limits_by_table) { ?>null,<?php } ?>
-			<?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>null,<?php } ?>
+			<?php if (($totalRows_judging > 1) && ($dbTable == "default") && (!$view_valid))  { ?>null,<?php } ?>
 			<?php if ($dbTable == "default") { ?>{ "asSorting": [  ] }<?php } ?>
 			]
 		} );
@@ -1389,7 +1417,7 @@ if ($totalRows_tables > 0) { ?>
         <th nowrap="nowrap" class="hidden-xs hidden-sm"><em>Scored</em> Entries</th>
         <th class="hidden-xs hidden-sm">Judge Assignments</th>
         <th class="hidden-xs hidden-sm">Steward Assignments</th>
-        <?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>
+        <?php if (($totalRows_judging > 1) && ($dbTable == "default") && (!$view_valid))  { ?>
         <th class="hidden-xs hidden-sm">Location</th>
         <?php } ?>
         <?php if (($action != "print") && ($dbTable == "default")) { ?>
@@ -1404,7 +1432,11 @@ if ($totalRows_tables > 0) { ?>
 
 <?php }
 else {
-    if ($judging_session) echo "<p>No tables have been defined yet.</p><p><a class=\"btn btn-primary\" role=\"button\" href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add\"><span class=\"fa fa-plus-circle\"></span> Add a table?</a></p>";
+    if ($judging_session) {
+        if (($view_valid) && (isset($judging_locations_by_id_jt[$view]))) echo "<p>No tables are assigned to <strong>".h($judging_locations_by_id_jt[$view]['judgingLocName'])."</strong> yet.</p>";
+        else echo "<p>No tables have been defined yet.</p>";
+        echo "<p><a class=\"btn btn-primary\" role=\"button\" href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add".$view_qs."\"><span class=\"fa fa-plus-circle\"></span> Add a table?</a></p>";
+    }
     }
 } // end if ($action == "default") ?>
 
@@ -1539,7 +1571,7 @@ $(document).ready(function () {
 	} );
 </script>
 
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go; ?>" name="form1" id="form1">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go; ?><?php echo $view_qs; ?>" name="form1" id="form1">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="bcoem-admin-element hidden-print">
     <div class="form-group">
@@ -1646,7 +1678,7 @@ $(document).ready(function () {
 		} );
 	} );
 </script>
-<form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go."&amp;id=".$row_tables_edit['id']; ?>" name="form1" id="form1">
+<form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go."&amp;id=".$row_tables_edit['id']; ?><?php echo $view_qs; ?>" name="form1" id="form1">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="bcoem-admin-element hidden-print">
 
