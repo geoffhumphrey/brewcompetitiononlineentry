@@ -573,6 +573,11 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	<?php } ?>
 
     <?php if ($filter == "judges") { ?>
+    <div class="btn-group" role="group" aria-label="...">
+        <a class="btn <?php echo (($view != "mead") && ($view != "cider")) ? "btn-primary" : "btn-default"; ?>" href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges"><span class="fa fa-sm fa-fw fa-filter"></span> All Judges</a>
+        <a class="btn <?php echo ($view == "mead") ? "btn-primary" : "btn-default"; ?>" href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges&amp;view=mead">Mead Judges Only</a>
+        <a class="btn <?php echo ($view == "cider") ? "btn-primary" : "btn-default"; ?>" href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges&amp;view=cider">Cider Judges Only</a>
+    </div>
     <div class="btn-group hidden-xs" role="group" aria-label="...">
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#judgeEmailModal">
               Assigned Judge Email Addresses

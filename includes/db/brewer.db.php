@@ -162,6 +162,8 @@ if (isset($_SESSION['user_id'])) {
 		else {
 
 			$db_conn->where("brewerJudge", "Y");
+			if ($view == "mead") $db_conn->where("brewerJudgeMead", "Y");
+			elseif ($view == "cider") $db_conn->where("brewerJudgeCider", "Y");
 			$rows_brewer = $db_conn->get($brewer_db_table);
 			$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 			$totalRows_brewer = $db_conn->count;
@@ -188,25 +190,34 @@ if (isset($_SESSION['user_id'])) {
 
 	// Assign staff query
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "staff")  && ($dbTable == "default") && ($action == "assign")) {
-		$sql = sprintf("SELECT * FROM %s", $brewer_db_table);
-		$params = array();
-		if (SINGLE) { $sql .= " WHERE FIND_IN_SET(?,brewerCompParticipant) > 0"; $params[] = $_SESSION['comp_id']; }
-		if ((!SINGLE) && ($view == "yes")) $sql .= " WHERE brewerStaff='Y'";
-		if ((SINGLE) && ($view == "yes")) $sql .= " AND brewerStaff='Y'";
-		$rows_brewer = $db_conn->rawQuery($sql, $params);
+
+		if (SINGLE) $db_conn->where("FIND_IN_SET(?,brewerCompParticipant) > 0", array($_SESSION['comp_id']));
+		if ($view == "yes") $db_conn->where("brewerStaff", "Y");
+
+		$rows_brewer = $db_conn->get($brewer_db_table);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 		$totalRows_brewer = $db_conn->count;
+
 	}
 
 	// Assign BOS judges query
 	elseif (($section == "admin") && ($go == "judging") && ($filter == "bos") && ($dbTable == "default") && ($action == "assign")) {
 
-		if ($view == "ranked") $sql = "SELECT * FROM ".$brewer_db_table." WHERE (brewerJudgeRank LIKE 'Recognized%' OR brewerJudgeRank LIKE 'Certified%' OR brewerJudgeRank LIKE 'National%' OR brewerJudgeRank LIKE 'Master%' OR brewerJudgeRank LIKE '%Cicerone' OR brewerJudgeRank LIKE 'Grand%' OR brewerJudgeMead='Y' OR brewerJudgeCider='Y') AND brewerJudge='Y'";
-		else $sql = "SELECT * FROM ".$brewer_db_table." WHERE brewerJudge='Y'";
+		$db_conn->where("brewerJudge", "Y");
 
-		$params = array();
-		if (SINGLE) { $sql .= " AND brewerJudge=? AND FIND_IN_SET(?,brewerCompParticipant) > 0"; $params[] = "Y-".$_SESSION['comp_id']; $params[] = $_SESSION['comp_id']; }
-		$rows_brewer = $db_conn->rawQuery($sql, $params);
+		// Grouped OR condition kept as one raw where() (same pattern already used at
+		// includes/process/process_brewing.inc.php:343,758) - this DB wrapper's where()/orWhere()
+		// concatenate flat with no parenthesization, so chaining separate where()/orWhere() calls
+		// here would silently produce "brewerJudge = ? AND rank LIKE ? OR ... OR cider = ?" (AND
+		// binds tighter than OR), not "brewerJudge = ? AND (rank LIKE ? OR ... OR cider = ?)".
+		if ($view == "ranked") $db_conn->where("(brewerJudgeRank LIKE ? OR brewerJudgeRank LIKE ? OR brewerJudgeRank LIKE ? OR brewerJudgeRank LIKE ? OR brewerJudgeRank LIKE ? OR brewerJudgeRank LIKE ? OR brewerJudgeMead = ? OR brewerJudgeCider = ?)", array("Recognized%","Certified%","National%","Master%","%Cicerone","Grand%","Y","Y"));
+
+		if (SINGLE) {
+			$db_conn->where("brewerJudge", "Y-".$_SESSION['comp_id']);
+			$db_conn->where("FIND_IN_SET(?,brewerCompParticipant) > 0", array($_SESSION['comp_id']));
+		}
+
+		$rows_brewer = $db_conn->get($brewer_db_table);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 		$totalRows_brewer = $db_conn->count;
 
