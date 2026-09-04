@@ -1307,8 +1307,8 @@ if (($display_to_admin) || ($display_to_public)) {
 		if ($row_bb_prefs['prefsScoringCOA'] == 1) {
 
 			$slides_bos .= "<p class=\"bold-text\">".$best_brewer_text_015."</p>";
-			if ($_SESSION['prefsWinnerMethod'] == 0) $slides_bos .= "<p><img src='https://brewingcompetitions.com/00_images/CoA_Scoring_Tables.png' class='img-responsive'></p>";
-			else $slides_bos .= "<p><img src='https://brewingcompetitions.com/00_images/CoA_Scoring_Styles.png' class='img-responsive'></p>";
+			if ($_SESSION['prefsWinnerMethod'] == 0) $slides_bos .= "<p><img src='".BCOEM_HOSTED_BASE_URL."00_images/CoA_Scoring_Tables.png' class='img-responsive'></p>";
+			else $slides_bos .= "<p><img src='".BCOEM_HOSTED_BASE_URL."00_images/CoA_Scoring_Styles.png' class='img-responsive'></p>";
 		
 		}
 

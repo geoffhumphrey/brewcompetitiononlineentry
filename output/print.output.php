@@ -101,7 +101,9 @@ else {
     	    $script = 'var a="'.$key.'";var b=a.split("").sort().join("");var c="'.$cipher_text.'";var d="";';
     	    $script.= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
     	    $script.= 'document.getElementById("'.$id.'").innerHTML="<a href=\\"mailto:"+d+"\\">"+d+"</a>"';
-    	    $script = "eval(\"".str_replace(array("\\",'"'),array("\\\\",'\"'), $script)."\")"; 
+    	    // Run the generated JS directly rather than wrapping it in eval() - the JS is static in
+    	    // shape and gets written straight into a <script> tag either way, so the eval() wrapper
+    	    // (and the extra escaping pass it required) served no functional purpose    	    
     	    $script = '<script type="text/javascript">/*<![CDATA[*/'.$script.'/*]]>*/</script>';
     	   
     	    return '<span id="'.$id.'">[email address obfuscated]</span>'.$script;

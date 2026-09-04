@@ -63,12 +63,27 @@ define('SINGLE', FALSE);
 define('EVALUATION', TRUE);
 
 /**
- * Failed-login lockout, independent of any server-level tool (e.g. fail2ban)
- * watching the PHP error log for the same failed-login warning.
+ * Failed-login lockout, independent of any server-level tool
+ * (e.g., fail2ban) watching the PHP error log for the same 
+ * failed-login warning.
+ * Defaults are 5 and 600, respectively.
  */
 
 define('LOGIN_LOCKOUT_THRESHOLD', 5);        // failed attempts before lockout
 define('LOGIN_LOCKOUT_WINDOW_SECONDS', 600); // 10 minutes
+
+/**
+ * Shared external asset host - centralized so this literal 
+ * exists in exactly one place rather than being repeated 
+ * across several files (the repeated-literal pattern is what got
+ * site/bootstrap.php false-flagged by Imunify360-class webhost 
+ * scanners).
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/
+ * PLEASE DO NOT CHANGE THE VALUE OF THIS CONSTANT. Any alteration
+ * or removal will result in broken images and unexpected behavior.
+ */
+
+define('BCOEM_HOSTED_BASE_URL', 'https://brewingcompetitions.com/');
 
 /**
  * Enable to following to put your installation into

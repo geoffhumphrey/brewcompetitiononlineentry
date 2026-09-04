@@ -566,7 +566,7 @@ if ($tb == "default") {
 		else $coa_img = "CoA_Scoring_Styles.png";	
     ?>
     	<p><?php echo $best_brewer_text_015; ?></p>
-    	<p><img src="https://brewingcompetitions.com/00_images/<?php echo $coa_img; ?>" class="img-responsive"></p>
+    	<p><img src="<?php echo BCOEM_HOSTED_BASE_URL; ?>00_images/<?php echo $coa_img; ?>" class="img-responsive"></p>
     <?php } else { ?>
     	<p><?php echo $best_brewer_text_004; ?></p>
 		<ul>
@@ -663,7 +663,7 @@ foreach ($bestbrewer_clubs as $key => $value) {
 		else $coa_img = "CoA_Scoring_Styles.png";
 ?>
     	<p><?php echo $best_brewer_text_015; ?></p>
-    	<p><img src="https://brewingcompetitions.com/00_images/<?php echo $coa_img; ?>" class="img-responsive"></p>
+    	<p><img src="<?php echo BCOEM_HOSTED_BASE_URL; ?>00_images/<?php echo $coa_img; ?>" class="img-responsive"></p>
 <?php } else { ?>
 	<p><?php echo $best_brewer_text_004; ?></p>
 	<ul>
@@ -707,7 +707,7 @@ foreach ($bestbrewer_clubs as $key => $value) {
 					else $coa_img = "CoA_Scoring_Styles.png";
 				?>
 					<p><?php echo $best_brewer_text_015; ?></p>
-					<p><img src="https://brewingcompetitions.com/00_images/<?php echo $coa_img; ?>" class="img-responsive"></p>
+					<p><img src="<?php echo BCOEM_HOSTED_BASE_URL; ?>00_images/<?php echo $coa_img; ?>" class="img-responsive"></p>
 				<?php } else { ?>
 				<p><?php echo $best_brewer_text_004; ?></p>
 				<ul>

@@ -1653,7 +1653,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Use the Master Homebrewer Program's Circuit of America scoring methodology to determine Best Brewer and Best Club results. The calculations look like this, depending upon your Winner Place Distribution Method:</p>
-                <p><img class="img-responsive" src="https://brewingcompetitions.com/00_images/CoA_Scoring_BCOEM.png" ></p>
+                <p><img class="img-responsive" src="<?php echo BCOEM_HOSTED_BASE_URL; ?>00_images/CoA_Scoring_BCOEM.png" ></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

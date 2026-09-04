@@ -315,7 +315,7 @@ if ($setup_free_access == TRUE) {
 			'id' => 1,
 			'contestName' => 'Install Placeholder',
 			'contestHost' => 'BCOEM',
-			'contestHostWebsite' => 'http://www.brewingcompetitions.com',
+			'contestHostWebsite' => NULL,
 			'contestHostLocation' => 'Denver, CO',
 			'contestRegistrationOpen' => '1438322400',
 			'contestRegistrationDeadline' => '1483253940',
