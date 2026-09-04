@@ -62,6 +62,7 @@ switch($section) {
 		}
 		elseif ($msg == "20") $output = sprintf("<strong>%s</strong> %s",$header_text_041,$header_text_008); // Contact email NOT sent.
 		elseif ($msg == "21") $output = sprintf("<strong>%s</strong>",$header_text_014); // There was a problem with the last request. Please try again.
+		elseif ($msg == "24") { $output = sprintf("<strong>%s</strong> %s",$header_text_117,sprintf($header_text_118,(int) ceil(LOGIN_LOCKOUT_WINDOW_SECONDS / 60))); $output_extend = ""; } // Account temporarily locked (warning) - minute count is derived from LOGIN_LOCKOUT_WINDOW_SECONDS (paths.php), never hardcoded
 
 	break;
 
@@ -661,6 +662,7 @@ switch($section) {
 		elseif ($msg == "35") $output = sprintf("<strong>%s</strong>",$header_text_111);
 		elseif ($msg == "36") $output = sprintf("<strong>%s</strong>",$header_text_115);
 		elseif ($msg == "37") $output = sprintf("<strong>%s</strong> %s","Please Note!", "Since your style set has changed, by default, all styles have been marked as active. Review and update below the styles your competition will and will not accept.");
+		elseif ($msg == "38") $output = sprintf("<strong>%s</strong>",$header_text_119); // Account unlocked (success)
 		elseif ($msg == "755") $output = sprintf("<strong>%s</strong> ",$header_text_094,$header_text_095);
 		else $output = "";
 	break;

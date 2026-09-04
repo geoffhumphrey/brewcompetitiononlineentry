@@ -63,6 +63,14 @@ define('SINGLE', FALSE);
 define('EVALUATION', TRUE);
 
 /**
+ * Failed-login lockout, independent of any server-level tool (e.g. fail2ban)
+ * watching the PHP error log for the same failed-login warning.
+ */
+
+define('LOGIN_LOCKOUT_THRESHOLD', 5);        // failed attempts before lockout
+define('LOGIN_LOCKOUT_WINDOW_SECONDS', 600); // 10 minutes
+
+/**
  * Enable to following to put your installation into
  * "mainenance mode" - bypasses the default index.php script
  * and displays the maintenance.php file to alert visitors.

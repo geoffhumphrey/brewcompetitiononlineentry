@@ -57,7 +57,7 @@ if (isset($_SESSION['user_id'])) {
 
 	// Viewing all participants in current comp DB query
 	elseif ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) || ($section == "participant_summary") || ($section == "particpant-entries")) {
-		$sql = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate FROM %s a, %s b WHERE a.brewerEmail = b.user_name ORDER BY brewerLastName ASC", $brewer_db_table, $users_db_table);
+		$sql = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate, b.userFailedLogins, b.userFailedLoginTime FROM %s a, %s b WHERE a.brewerEmail = b.user_name ORDER BY brewerLastName ASC", $brewer_db_table, $users_db_table);
 		$rows_brewer = $db_conn->rawQuery($sql);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 		$totalRows_brewer = $db_conn->count;
@@ -78,7 +78,7 @@ if (isset($_SESSION['user_id'])) {
 
 		else {
 
-			$sql = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate FROM %s a, %s b WHERE a.brewerEmail = b.user_name", $brewer_db_table, $users_db_table);
+			$sql = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate, b.userFailedLogins, b.userFailedLoginTime FROM %s a, %s b WHERE a.brewerEmail = b.user_name", $brewer_db_table, $users_db_table);
 			$params = array();
 			if ($id == "default") $sql .= " AND brewerJudge='Y'";
 			if ($id != "default") { $sql .= " AND a.id=?"; $params[] = $id; }
@@ -98,7 +98,7 @@ if (isset($_SESSION['user_id'])) {
 
 		else {
 
-			$sql = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate FROM %s a, %s b WHERE a.brewerEmail = b.user_name", $brewer_db_table, $users_db_table);
+			$sql = sprintf("SELECT a.*, b.id AS user_id, b.user_name, b.userLevel, b.userAdminObfuscate, b.userFailedLogins, b.userFailedLoginTime FROM %s a, %s b WHERE a.brewerEmail = b.user_name", $brewer_db_table, $users_db_table);
 			$params = array();
 			if ($id == "default") $sql .= " AND brewerSteward='Y'";
 			if ($id != "default") { $sql .= " AND a.id=?"; $params[] = $id; }

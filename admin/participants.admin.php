@@ -384,6 +384,7 @@ if ($totalRows_brewer > 0) {
 					$output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
 					$output_datatables_other_link2 = "<span class=\"fa fa-lg fa-user text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
 					$output_datatables_change_pwd = "<span class=\"fa fa-lg fa-key text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
+					$output_datatables_unlock_link = "";
 					$output_datatables_phone_link = "<span class=\"fa fa-lg fa-phone text-muted\"></span></a>";
 			}
 
@@ -434,13 +435,28 @@ if ($totalRows_brewer > 0) {
 
 				else $output_datatables_change_pwd = "";
 
+				// Only shown when the account is actually currently locked out from failed logins -
+				// omitted entirely otherwise (not muted), same as $output_datatables_other_link/2 above.
+				// Available to userLevel <= 1 (not just the top-admin/owner) so a second Admin can
+				// clear a locked-out account - e.g. the owner's own account - without waiting out
+				// the window, matching change_user_password's existing <=1 gate on the process side:
+				// unlocking is strictly less powerful than a full password reset, which <=1 admins
+				// can already do.
+				$row_locked = (((int) $row_brewer['userFailedLogins'] >= LOGIN_LOCKOUT_THRESHOLD) && ((time() - (int) $row_brewer['userFailedLoginTime']) < LOGIN_LOCKOUT_WINDOW_SECONDS));
+
+				if (($_SESSION['userLevel'] <= 1) && ($row_locked)) {
+					$output_datatables_unlock_link = "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=unlock_user&amp;dbTable=".$users_db_table."&amp;action=unlock_user&amp;id=".$row_brewer['user_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Unlock ".h($brewer_tooltip_display_name)."'s account\" data-confirm=\"Are you sure you want to unlock ".h($brewer_tooltip_display_name)."'s account?\"><span class=\"fa fa-lg fa-unlock\"></span></a>";
+				}
+
+				else $output_datatables_unlock_link = "";
+
 			}
 
 			$output_datatables_email_link .= "<a class=\"hide-loader\" href=\"mailto:".h($row_brewer['brewerEmail'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".h($brewer_tooltip_display_name)." at ".h($row_brewer['brewerEmail'])."\"><span class=\"fa fa-lg fa-envelope\"></span></a>";
 
 			$output_datatables_add_link = build_action_link("fa-beer",$base_url,"admin","entries","add",$row_brewer['uid'],"default","default","default",0,"Add an entry for ".$brewer_tooltip_display_name); // /index.php?section=admin&go=entries&action=add&bid=864
 
-			$output_actions_arr = array($output_datatables_add_link, $output_datatables_edit_link, $output_datatables_delete_link, $output_datatables_other_link, $output_datatables_email_link, $output_datatables_phone_link, $output_datatables_other_link2, $output_datatables_change_pwd, $output_datatables_view_link, $output_datatables_view_link2);
+			$output_actions_arr = array($output_datatables_add_link, $output_datatables_edit_link, $output_datatables_delete_link, $output_datatables_other_link, $output_datatables_email_link, $output_datatables_phone_link, $output_datatables_other_link2, $output_datatables_change_pwd, $output_datatables_unlock_link, $output_datatables_view_link, $output_datatables_view_link2);
 
 			$output_datatables_actions = "";
 			foreach ($output_actions_arr as $value) {

@@ -363,6 +363,35 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	} // end if (($action == "edit") && ($_POST['userEdit'] == 1))
 
+	// --------------------------- Admin: manually unlock a locked-out account ------------------ //
+	// A plain GET link (no form/POST body), so this must sit outside the userEdit==1 POST-gated
+	// block above. Gated <=1 (not just top-admin) to match change_user_password's existing gate -
+	// unlocking is strictly less powerful than a full password reset, which <=1 admins can already
+	// do, and a second Admin needs to be able to clear the owner's own lockout if they're the only
+	// other admin available (e.g. during time-sensitive judging).
+	if (($action == "unlock_user") && ($_SESSION['userLevel'] <= 1)) {
+
+		$update_table = $prefix."users";
+		$data = array(
+			'userFailedLogins' => 0,
+			'userFailedLoginTime' => NULL
+		);
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+		$redirect = $base_url."index.php?section=admin&go=participants&msg=38";
+		if ($errors) $redirect = $base_url."index.php?section=admin&go=participants&msg=3";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+
+	} // end if (($action == "unlock_user") && ($_SESSION['userLevel'] <= 1))
+
 } else {
 	
 	$redirect = $base_url."index.php?msg=98";
