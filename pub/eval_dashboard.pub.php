@@ -168,6 +168,14 @@ if ($totalRows_table_assignments > 0) {
 
 		$table_assignment_start[] = $location_start_date;
 
+		// Per-table/session defense-in-depth signal: is THIS table's own judging session
+		// currently active, independent of the global jPrefsJudgingOpen/jPrefsJudgingClosed
+		// window? Protects against a misconfigured or stale global window when this specific
+		// session's own dates say judging should be happening right now (see issue #1607).
+		$table_session_open = TRUE;
+		if ((!empty($table_location[0])) && (time() < $table_location[0])) $table_session_open = FALSE;
+		if ((!empty($table_location[1])) && (time() > $table_location[1])) $table_session_open = FALSE;
+
 		/**
 		 * Open up for non-admins 10 minutes before the stated session start time.
 		 * Useful when judging is in-person and judges wish to review their assigned
@@ -399,7 +407,7 @@ if ($totalRows_table_assignments > 0) {
 			        		include (PUB.'eval_judging_dashboard.pub.php');
 				            
 				            // Build table data
-				            if (($judging_open) || ((!$judging_open) && ($scored_by_user))) {
+				            if (($judging_open) || ($table_session_open) || ($scored_by_user)) {
 					            if ($add_disabled) $table_assignment_data .= "<tr class=\"text-muted\">";
 					            elseif ((!$queued) && (!$add_disabled)) $table_assignment_data .= "<tr class=\"text-primary\">";
 					            else $table_assignment_data .= "<tr>";

@@ -209,7 +209,7 @@ if ($action == "edit") {
  
   if ($id == "default") {
     $db_conn->where("evalToken", $token);
-    $row_eval = $db_conn->getOne("evaluation");
+    $row_eval = $db_conn->getOne($prefix."evaluation");
   }
   else {
     $db_conn->where("id", $id);

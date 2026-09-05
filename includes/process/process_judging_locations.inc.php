@@ -46,12 +46,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	);
 
 	if ($action == "add") {
-		
+
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
+
+		// Keep the Judging Open/Close window in sync with this session's dates, even when it's
+		// added after the window was last saved (see issue #1607).
+		if ((!$errors) && ($judgingLocType <= 1)) sync_judging_prefs_to_session($prefix, $judgingDate, $judgingDateEnd);
 
 		if ($section == "setup") {
 
@@ -87,6 +91,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
+
+		// Keep the Judging Open/Close window in sync with this session's (possibly just-edited)
+		// dates (see issue #1607).
+		if ((!$errors) && ($judgingLocType <= 1)) sync_judging_prefs_to_session($prefix, $judgingDate, $judgingDateEnd);
 
 		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
 		$updateGoTo = prep_redirect_link($updateGoTo);

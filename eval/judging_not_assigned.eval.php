@@ -24,7 +24,7 @@ foreach ($eval_scores as $key => $value) {
 
 				// Entry Number
 				if ($_SESSION['prefsDisplaySpecial'] == "J") $number_otf = sprintf("%06s",$row_entry['brewJudgingNumber']);
-	        	else $number_otf = sprintf("%06s",$row_entries['id']);
+	        	else $number_otf = sprintf("%06s",$row_entry['id']);
 
 	        	$table_info = get_table_info(1,"basic",$value['table'],"default","default");
 				$table_info = explode("^", $table_info);

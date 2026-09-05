@@ -78,7 +78,7 @@ define('LOGIN_LOCKOUT_WINDOW_SECONDS', 600); // 10 minutes
  * across several files (the repeated-literal pattern is what got
  * site/bootstrap.php false-flagged by Imunify360-class webhost 
  * scanners).
- * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1609
  * PLEASE DO NOT CHANGE THE VALUE OF THIS CONSTANT. Any alteration
  * or removal will result in broken images and unexpected behavior.
  */

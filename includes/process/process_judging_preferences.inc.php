@@ -135,107 +135,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			}
 
-			$judging_dates = array();
-			$judging_earliest_date = "";
-			$judging_latest_date = "";
-			$jPrefsJudgingOpen = "";
-			$jPrefsJudgingClosed = "";
-			
-		    // Check whether any judging sessions have been defined. 
-		    // If so, loop through and find the earliest and the latest dates.
-		    $db_conn->where('judgingLocType', '1', '<=');
-		    $rows_judging_locations = $db_conn->get($prefix."judging_locations", null, "id, judgingDate, judgingDateEnd");
-		    $totalRows_judging_locations = $db_conn->count;
+			$judging_range = get_judging_session_date_range($prefix);
+			$judging_earliest_date = $judging_range['earliest'];
+			$judging_latest_date = $judging_range['latest'];
 
-		    if ($totalRows_judging_locations > 0) {
-
-		        foreach ($rows_judging_locations as $row_judging_locations) {
-
-		            if (!empty($row_judging_locations['judgingDate'])) $judging_dates[] = $row_judging_locations['judgingDate'];
-		            if (!empty($row_judging_locations['judgingDateEnd'])) $judging_dates[] = $row_judging_locations['judgingDateEnd'];
-
-		        }
-
-		        $judging_earliest_date = min($judging_dates);
-		        if ((max($judging_dates) > $judging_earliest_date)) $judging_latest_date = max($judging_dates);
-
-		    }
-
-		    // If an opening date is posted
-		    if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) {
-
-		    	// If no defined earliest judging session date, use the posted date
-		    	if (empty($judging_earliest_date)) $jPrefsJudgingOpen = to_utc_epoch(sterilize($_POST['jPrefsJudgingOpen']), $timezone_raw);
-		    	
-		    	// Otherwise...
-		    	else {
-
-		    		// If the earliest judging session date defined is after the posted date, use the posted date
-		    		if ($judging_earliest_date > $_POST['jPrefsJudgingOpen']) $jPrefsJudgingOpen = to_utc_epoch(sterilize($_POST['jPrefsJudgingOpen']), $timezone_raw);
-
-		    		// Otherwise, use the earliest defined judging session date
-		    		else $jPrefsJudgingOpen = $judging_earliest_date;
-
-		    	}	    	
-
-		    }
-
-		    // If no opening date is posted
-		    else {
-
-		    	// If no defined earliest judging session date, default to today at midnight
-		    	if (empty($judging_earliest_date)) {
-		    		$date = new DateTime('today 00:00:00', new DateTimeZone($timezone_prefs));
-			    	$jPrefsJudgingOpen = $date->getTimestamp();
-		    	}
-
-		    	// Otherwise, use the earliest defined judging session date
-		    	else $jPrefsJudgingOpen = $judging_earliest_date;
-
-		    }
-
-		    // If a closing date is posted
-		    if ((isset($_POST['jPrefsJudgingClosed'])) && (!empty($_POST['jPrefsJudgingClosed']))) {
-
-		    	// If no defined earlies judging session date, use the posted date
-		    	if (empty($judging_latest_date)) $jPrefsJudgingClosed = to_utc_epoch(sterilize($_POST['jPrefsJudgingClosed']), $timezone_raw);
-		    	
-		    	// Otherwise...
-		    	else {
-
-		    		// If the latest judging session date defined is prior to the posted date, use the posted date
-		    		if ($judging_latest_date < $_POST['jPrefsJudgingClosed']) $jPrefsJudgingClosed = to_utc_epoch(sterilize($_POST['jPrefsJudgingClosed']), $timezone_raw);
-
-		    		// Otherwise, use the latest defined judging session date
-		    		else $jPrefsJudgingClosed = $judging_latest_date;
-
-		    	}
-
-		    }
-
-		    // If no closing date is posted
-		    else {
-
-		    	// No defined latest judging session date
-		    	if (empty($judging_latest_date)) {
-		    		
-		    		// If open dated posted, add 1 day to it
-		    		if ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen']))) $jPrefsJudgingClosed = to_utc_epoch(sterilize($_POST['jPrefsJudgingOpen']), $timezone_raw) + 86400;
-
-		    		// If not, and the earliest judging date is defined, add one day to it
-		    		elseif (!empty($judging_earliest_date)) $jPrefsJudgingClosed = $judging_earliest_date + 86400;
-		    		
-		    		// If no dates are defined, fall back to tomorrow at midnight
-		    		else {
-		    			$date = new DateTime('tomorrow 00:00:00', new DateTimeZone($timezone_prefs));
-		    			$jPrefsJudgingClosed = $date->getTimestamp();
-		    		}
-		    		
-		    	}
-
-		    	else $jPrefsJudgingClosed = $judging_latest_date;
-		    	
-		    }
+			$posted_open  = ((isset($_POST['jPrefsJudgingOpen'])) && (!empty($_POST['jPrefsJudgingOpen'])))  ? to_utc_epoch(sterilize($_POST['jPrefsJudgingOpen']), $timezone_raw)  : "";
+			$posted_close = ((isset($_POST['jPrefsJudgingClosed'])) && (!empty($_POST['jPrefsJudgingClosed']))) ? to_utc_epoch(sterilize($_POST['jPrefsJudgingClosed']), $timezone_raw) : "";
+			list($jPrefsJudgingOpen, $jPrefsJudgingClosed) = widen_judging_prefs_window($posted_open, $posted_close, $judging_earliest_date, $judging_latest_date, $timezone_prefs);
 
 			$jPrefsScoresheet = blank_to_null(sterilize($_POST['jPrefsScoresheet']));
 			$jPrefsMinWords = blank_to_null(sterilize($_POST['jPrefsMinWords']));			

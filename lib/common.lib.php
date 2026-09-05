@@ -3112,8 +3112,18 @@ function check_special_ingredients($style,$style_version) {
 	}
 	else $chosen_style_version = $style_version;
 
-	$query_brews = "SELECT brewStyleReqSpec FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-	$row_brews = $db_conn->rawQueryOne($query_brews, array($chosen_style_version, $style_explodies[0], $style_explodies[1]));
+	// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
+	// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
+	// zero rows for those, same fix pattern already used correctly in
+	// includes/db/styles_special.db.php.
+	if ($style_version == "AABC2025") {
+		$query_brews = "SELECT brewStyleReqSpec FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
+		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_explodies[0], $style_explodies[1]));
+	}
+	else {
+		$query_brews = "SELECT brewStyleReqSpec FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
+		$row_brews = $db_conn->rawQueryOne($query_brews, array($chosen_style_version, $style_explodies[0], $style_explodies[1]));
+	}
 
 	if ((!empty($row_brews)) && ($row_brews['brewStyleReqSpec'] == 1)) {
 		
@@ -3814,6 +3824,135 @@ function open_or_closed($now,$date1,$date2) {
 	}
 
 	return $output;
+
+}
+
+/**
+ * Earliest/latest dates across all real judging sessions (judgingLocType <= 1, excludes
+ * type-2 non-judging/staff locations), used to keep the Judging Open/Close window
+ * (jPrefsJudgingOpen/jPrefsJudgingClosed) in sync with actual session dates. Shared by
+ * process_dates.inc.php and process_judging_preferences.inc.php so they can't diverge.
+ * See issue #1607.
+ */
+function get_judging_session_date_range($prefix) {
+
+	global $db_conn;
+
+	$judging_dates = array();
+	$db_conn->where('judgingLocType', '1', '<=');
+	$rows = $db_conn->get($prefix."judging_locations", null, "id, judgingDate, judgingDateEnd");
+
+	foreach ($rows as $row) {
+		if (!empty($row['judgingDate'])) $judging_dates[] = $row['judgingDate'];
+		if (!empty($row['judgingDateEnd'])) $judging_dates[] = $row['judgingDateEnd'];
+	}
+
+	if (empty($judging_dates)) return array('earliest' => "", 'latest' => "");
+
+	$earliest = min($judging_dates);
+	$latest_candidate = max($judging_dates);
+	$latest = ($latest_candidate > $earliest) ? $latest_candidate : "";
+
+	return array('earliest' => $earliest, 'latest' => $latest);
+
+}
+
+/**
+ * Widens a posted Judging Open/Close window to encompass known judging session dates,
+ * rather than saving a value that leaves a real session outside the window (see issue
+ * #1607). $posted_open/$posted_close must already be converted to epoch (or "" if not
+ * posted/blank) by the caller - this function only ever compares epoch ints, it never
+ * reads $_POST itself, so it can't silently reintroduce the int-vs-formatted-date-string
+ * comparison bug this replaced.
+ */
+function widen_judging_prefs_window($posted_open, $posted_close, $earliest, $latest, $timezone_prefs) {
+
+	if ($posted_open !== "") {
+
+		if (empty($earliest)) $jPrefsJudgingOpen = $posted_open;
+
+		else {
+			if ($earliest > $posted_open) $jPrefsJudgingOpen = $posted_open;
+			else $jPrefsJudgingOpen = $earliest;
+		}
+
+	}
+
+	else {
+
+		if (empty($earliest)) {
+			$date = new DateTime('today 00:00:00', new DateTimeZone($timezone_prefs));
+			$jPrefsJudgingOpen = $date->getTimestamp();
+		}
+
+		else $jPrefsJudgingOpen = $earliest;
+
+	}
+
+	if ($posted_close !== "") {
+
+		if (empty($latest)) $jPrefsJudgingClosed = $posted_close;
+
+		else {
+			if ($latest < $posted_close) $jPrefsJudgingClosed = $posted_close;
+			else $jPrefsJudgingClosed = $latest;
+		}
+
+	}
+
+	else {
+
+		if (empty($latest)) {
+
+			if ($posted_open !== "") $jPrefsJudgingClosed = $posted_open + 86400;
+			elseif (!empty($earliest)) $jPrefsJudgingClosed = $earliest + 86400;
+
+			else {
+				$date = new DateTime('tomorrow 00:00:00', new DateTimeZone($timezone_prefs));
+				$jPrefsJudgingClosed = $date->getTimestamp();
+			}
+
+		}
+
+		else $jPrefsJudgingClosed = $latest;
+
+	}
+
+	return array($jPrefsJudgingOpen, $jPrefsJudgingClosed);
+
+}
+
+/**
+ * Widens the saved Judging Open/Close window (if needed) to encompass one judging
+ * session's own dates - called after a session is added/edited, so the window stays in
+ * sync even when a session is created after the window was last saved (the gap issue
+ * #1607 was actually about). Never invents an end date for a start-only session, matching
+ * how open-ended sessions are already treated as "never closes" elsewhere in this app.
+ */
+function sync_judging_prefs_to_session($prefix, $session_start, $session_end) {
+
+	global $db_conn;
+
+	if ((empty($session_start)) && (empty($session_end))) return;
+
+	$row_prefs = $db_conn->getOne($prefix."judging_preferences", "jPrefsJudgingOpen, jPrefsJudgingClosed");
+	if (!$row_prefs) return;
+
+	$data = array();
+
+	if ((!empty($session_start)) && ((empty($row_prefs['jPrefsJudgingOpen'])) || ($session_start < $row_prefs['jPrefsJudgingOpen']))) {
+		$data['jPrefsJudgingOpen'] = $session_start;
+	}
+
+	if ((!empty($session_end)) && ((empty($row_prefs['jPrefsJudgingClosed'])) || ($session_end > $row_prefs['jPrefsJudgingClosed']))) {
+		$data['jPrefsJudgingClosed'] = $session_end;
+	}
+
+	if (!empty($data)) {
+		$db_conn->where('id', 1);
+		$db_conn->update($prefix."judging_preferences", $data);
+		foreach ($data as $key => $value) $_SESSION[$key] = $value;
+	}
 
 }
 
