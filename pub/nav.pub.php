@@ -21,7 +21,12 @@ if ($entry_window_open == 1) {
 
 if ($_SESSION['prefsProEdition'] == 1) {
 	if (!isset($_SESSION['brewerBreweryName'])) {
-		$show_entries = FALSE;
+		// $show_entries also gates entry_info.pub.php's public shipping/drop-off/acceptance-rules
+		// content on the homepage - that's general competition info, not account-specific, and
+		// must stay visible to an anonymous visitor who hasn't registered as a brewery yet (the
+		// exact audience that needs to know where to ship). Only suppress it for a logged-in,
+		// non-brewery account (e.g. a judge), matching the pre-3.0.0 behavior.
+		if ($logged_in) $show_entries = FALSE;
 		$disable_pay = TRUE;
 		$add_entry_link_show = FALSE;
 		$at_a_glance_entry_info = FALSE;
