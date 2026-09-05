@@ -260,6 +260,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">General</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries">Entry</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=hero_images">Banner Image</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=email">Email Sending</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=payment">Currency and Payment</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=best">Best Brewer and/or Club</a></li>

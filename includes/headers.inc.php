@@ -603,7 +603,7 @@ switch($section) {
 
 				case "hero_images":
 				if (isset($lang['admin_hero_images_title'])) $header_output .= ": ".$lang['admin_hero_images_title']; 
-				else  $header_output .= ": Banner Images";
+				else  $header_output .= ": Banner Image Preferences";
 				break;
 
 			}

@@ -351,7 +351,7 @@ if ($setup_free_access == TRUE) {
 			'contestCheckInPassword' => NULL,
 		);
 
-		$result = $db_conn->update ($update_table, $data);
+		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
