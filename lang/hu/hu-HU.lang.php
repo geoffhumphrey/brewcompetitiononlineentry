@@ -2156,6 +2156,7 @@ $label_recorded = "Rögzítve";
 $label_other_info = "Egyéb információ";
 
 $brewer_text_056 = "Válassza a fenti &quot;Lemondás&quot; lehetőséget, ha nem kíván részt venni a versenyhez kapcsolódó Pro-Am lehetőségekben.";
+$brewer_text_057 = "A BJCP bírói azonosítónak 5 karakterből kell állnia (pl. A1234), vagy a TEMP betűkből, amelyeket 4 számjegy követ (pl. TEMP0001).";
 
 $brew_text_056 = "Kérjük, adja meg a nevezés szénsavszintjét.";
 $brew_text_057 = "Kérjük, adja meg a nevezés édességi szintjét.";

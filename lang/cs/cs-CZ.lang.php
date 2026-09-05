@@ -2096,6 +2096,7 @@ $label_recorded = "Zaznamenaný";
 $label_other_info = "Další informace"; 
 
 $brewer_text_056 = "Vyberte &quot;Odhlásit se&quot; výše, pokud se nechcete účastnit žádných Pro-Am příležitostí spojených s touto soutěží.";
+$brewer_text_057 = "BJCP ID rozhodčího musí mít 5 znaků (např. A1234), nebo písmena TEMP následovaná 4 číslicemi (např. TEMP0001).";
 
 $brew_text_056 = "Prosím uveďte úroveň sycení přihlášky.";
 $brew_text_057 = "Prosím uveďte úroveň sladkosti přihlášky.";

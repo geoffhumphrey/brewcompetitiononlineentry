@@ -49,6 +49,12 @@ elseif (($go != "admin") && ($id != "default") && ($id == $_SESSION['user_id']))
 if (isset($_POST['brewerJudgeID'])) {
     $brewerJudgeID = $purifier->purify($_POST['brewerJudgeID']);
     $brewerJudgeID = strtoupper($brewerJudgeID);
+
+    // A malformed ID (e.g. a typo'd extra digit) previously saved as-is, silently miscategorizing
+    // the person as non-BJCP wherever validate_bjcp_id() is later checked in reports/exports - the
+    // form itself only has client-side (pattern-attribute) validation as a first line of defense,
+    // so also reject it server-side rather than persist a value known to be invalid.
+    if ((!empty($brewerJudgeID)) && (!validate_bjcp_id($brewerJudgeID))) $brewerJudgeID = "";
 }
 
 if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);

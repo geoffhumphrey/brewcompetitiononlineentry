@@ -2160,6 +2160,7 @@ $label_recorded = "Recorded";
 $label_other_info = "Other Info"; 
 
 $brewer_text_056 = "Select &quot;Opt Out&quot; above if you do not wish to participate in any Pro-Am opportunities associated with this competition.";
+$brewer_text_057 = "BJCP Judge ID must be 5 characters (e.g., A1234), or the letters TEMP followed by 4 digits (e.g., TEMP0001).";
 
 $brew_text_056 = "Please provide the entry's carbonation level.";
 $brew_text_057 = "Please provide the entry's sweetness level.";

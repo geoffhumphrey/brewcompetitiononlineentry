@@ -507,7 +507,9 @@ if ($show_entries) {
 	
 	if (!empty($_SESSION['jPrefsBottleNum'])) $page_info9 .= sprintf("<p><strong>%s: %s</strong></p>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
 
-	if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
+	// Kept visible until judging actually starts (not just until drop-off/shipping closes) so a
+	// traveling judge/entrant bringing an entry in after the receiving deadline can still find it.
+	if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2) || (!$judging_started))) {
 		$header1_9 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_acceptance_rules);
 
 		if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestBottles']))) { 
@@ -521,8 +523,9 @@ if ($show_entries) {
 
 	}
 
-	// Shipping Locations
-	if ((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2) && ($_SESSION['prefsShipping'] == 1)) {
+	// Shipping Locations - same "keep visible until judging starts" reasoning as Entry Acceptance
+	// above, since Packaging & Shipping rules text is nested inside this same block.
+	if ((isset($_SESSION['contestShippingAddress'])) && (($shipping_window_open < 2) || (!$judging_started)) && ($_SESSION['prefsShipping'] == 1)) {
 
 		if (!empty($shipping_open)) $entry_info_text_001 = "&mdash;";
 		

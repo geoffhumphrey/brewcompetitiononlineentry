@@ -2175,6 +2175,7 @@ $label_recorded = "Registrado";
 $label_other_info = "Otra información"; 
 
 $brewer_text_056 = "Seleccione &quot;Darse de baja&quot; arriba si no desea participar en ninguna oportunidad Pro-Am asociada con esta competencia.";
+$brewer_text_057 = "El ID de Juez BJCP debe tener 5 caracteres (por ejemplo, A1234), o las letras TEMP seguidas de 4 dígitos (por ejemplo, TEMP0001).";
 
 $brew_text_056 = "Por favor proporcione el nivel de carbonatación de la inscripción.";
 $brew_text_057 = "Por favor proporcione el nivel de dulzura de la inscripción.";

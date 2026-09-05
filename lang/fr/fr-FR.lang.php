@@ -2176,6 +2176,7 @@ $label_recorded = "Enregistré";
 $label_other_info = "Autres informations";
 
 $brewer_text_056 = "Sélectionnez &quot;Se désinscrire&quot; ci-dessus si vous ne souhaitez pas participer aux opportunités Pro-Am associées à cette compétition.";
+$brewer_text_057 = "L'ID de Juge BJCP doit comporter 5 caractères (par exemple, A1234), ou les lettres TEMP suivies de 4 chiffres (par exemple, TEMP0001).";
 
 $brew_text_056 = "Veuillez indiquer le niveau de carbonatation de l'inscription.";
 $brew_text_057 = "Veuillez indiquer le niveau de sucrosité de l'inscription.";

@@ -289,15 +289,7 @@ function total_flights() {
 
 }
 
-function validate_bjcp_id($input) {
-	// BJCP also issues "TEMPDDDD" ids (judges who passed the online exam but not
-	// yet the tasting exam) alongside the standard single-letter + 4-digit ids
-	if (preg_match('/^TEMP\d{4}$/i', (string) $input)) return TRUE;
-	$length = strlen($input);
-	if ($length != 5) return FALSE;
-	elseif (!preg_match('([a-zA-Z])',$input)) return FALSE;
-	else return TRUE;
-}
+// validate_bjcp_id() moved to lib/common.lib.php so process/*.inc.php handlers can reach it too.
 
 function total_points($total_entries,$method) {
 

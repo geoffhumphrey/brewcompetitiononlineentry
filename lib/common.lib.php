@@ -5502,5 +5502,19 @@ function simpleDecrypt($data,$key,$salt) {
 
 }
 
+/**
+ * Moved here from lib/output.lib.php (report generation) so it's also reachable from the
+ * process/*.inc.php handlers (which never load output.lib.php) - needed to validate a BJCP
+ * Judge ID at entry time rather than only when a report later renders it.
+ */
+function validate_bjcp_id($input) {
+	// BJCP also issues "TEMPDDDD" ids (judges who passed the online exam but not
+	// yet the tasting exam) alongside the standard single-letter + 4-digit ids
+	if (preg_match('/^TEMP\d{4}$/i', (string) $input)) return TRUE;
+	$length = strlen($input);
+	if ($length != 5) return FALSE;
+	elseif (!preg_match('([a-zA-Z])',$input)) return FALSE;
+	else return TRUE;
+}
 
 ?>

@@ -97,7 +97,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     <div id="bjcp-id" class="mb-3 row">
         <label for="brewerJudgeID" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_bjcp_id; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
+            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" pattern="(TEMP|temp)\d{4}|(?=.*[A-Za-z]).{5}" title="<?php echo $brewer_text_057; ?>" <?php if ($psort == "judge") echo "autofocus"; ?>>
+            <div class="invalid-feedback"><?php echo $brewer_text_057; ?></div>
         </div>
     </div>
 
