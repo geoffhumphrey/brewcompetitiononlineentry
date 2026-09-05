@@ -123,8 +123,11 @@ if (($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) {
 	// Disable adding of entries
 	$add_entry_disable = TRUE;
 
-	// Can edit until either drop off closes or judging dates pass
-	if (($judging_started) || (time() > $_SESSION['contestDropoffDeadline'])) $edit_entry_disable = TRUE;
+	// Can edit until either drop off closes or judging dates pass. Uses $entry_edit_deadline
+	// (constants.inc.php) rather than the raw $_SESSION['contestDropoffDeadline'] - that session
+	// value is null when no drop-off deadline is configured, and time() > null resolves to
+	// time() > 0 (always true), disabling editing immediately instead of falling back sensibly.
+	if (($judging_started) || (time() > $entry_edit_deadline)) $edit_entry_disable = TRUE;
 }
 
 if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($_SESSION['userLevel'] == 2)) {
