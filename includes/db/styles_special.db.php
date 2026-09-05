@@ -269,8 +269,15 @@ $req_sweetness_styles = array();
 $req_carb_styles = array();
 $req_pouring = array();
 
-$cider_sweetness_custom_styles = array();
-$mead_sweetness_custom_styles = array();
+// Complete lists of every cider-type/mead-type style id (standard and custom alike), used by
+// entry.js's disp_sweetness() to decide which sweetness UI to show. Previously entry.js guessed
+// from the style code's first letter ("C"/"M") instead, which misfired for any custom style whose
+// admin-chosen code happened to start with that letter for an unrelated reason (e.g. a custom beer
+// category named "Chocolate" coded "CHK1") - the wrong sweetness fields got shown/required, and the
+// value the entrant submitted was then silently discarded by process_brewing.inc.php's strict
+// brewStyleType check, leaving the entry flagged Unconfirmed.
+$cider_sweetness_styles = array();
+$mead_sweetness_styles = array();
 
 foreach ($rows_required_optional as $row_required_optional) {
 
@@ -281,8 +288,8 @@ foreach ($rows_required_optional as $row_required_optional) {
 	if ($row_required_optional['brewStyleStrength'] == 1) $req_strength_styles[] = $style_id;
 	if ($row_required_optional['brewStyleSweet'] == 1) $req_sweetness_styles[] = $style_id;
 	if ($row_required_optional['brewStyleCarb'] == 1) $req_carb_styles[] = $style_id;
-	if (($row_required_optional['brewStyleType'] == 2) && (is_numeric($row_required_optional['brewStyleGroup']))) $cider_sweetness_custom_styles[] = $style_id;
-	if (($row_required_optional['brewStyleType'] == 3) && (is_numeric($row_required_optional['brewStyleGroup']))) $mead_sweetness_custom_styles[] = $style_id;
+	if ($row_required_optional['brewStyleType'] == 2) $cider_sweetness_styles[] = $style_id;
+	if ($row_required_optional['brewStyleType'] == 3) $mead_sweetness_styles[] = $style_id;
 
 	// If BJCP 2021, add style 2A to the list
 	if (($row_required_optional['brewStyleVersion'] == "BJCP2021") && ($style_id == "2-A")) {
