@@ -14,10 +14,24 @@ require (CLASSES.'phpmailer/src/SMTP.php');
  * internally for the SMTP path; the plain PHP mail() fallback does not, so
  * a non-ASCII name (accented characters, etc.) reaches the recipient's mail
  * server unencoded and can be rejected as a malformed header.
+ *
+ * Separately, RFC 5322 requires a display-name containing any "specials"
+ * character (, ; : \ " ( ) < > @ [ ]) to be wrapped in a quoted-string - a
+ * bare comma (e.g. a competition name like "Mile High Brew Off, Inc.") is
+ * otherwise read as an address-list separator, producing a malformed header
+ * strict receivers like Gmail reject outright. mb_encode_mimeheader() leaves
+ * plain-ASCII input untouched, so that case is handled here explicitly; a
+ * MIME encoded-word (the non-ASCII branch) is already a safe atom and never
+ * needs this additional quoting.
  */
 function mime_encode_header_name($name) {
     if (($name === null) || ($name === "")) return $name;
-    return mb_encode_mimeheader($name, "UTF-8", "B", "\r\n");
+    $encoded = mb_encode_mimeheader($name, "UTF-8", "B", "\r\n");
+    if (($encoded === $name) && (preg_match('/[,;:\\\\"()<>@\[\]]/', $name))) {
+        $escaped = str_replace(array('\\', '"'), array('\\\\', '\\"'), $name);
+        return '"'.$escaped.'"';
+    }
+    return $encoded;
 }
 
 function sendPHPMailerMessage($mail) {
