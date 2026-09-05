@@ -607,9 +607,9 @@ if (isset($_SESSION['loginUsername'])) {
 						
 						if (in_array($style,$mead)) {
 
-							if (!empty($row_log['brewMead1'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead1']);
-							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead2']);
-							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead3']);
+							if (!empty($row_log['brewMead1'])) $entry_str_sweet_carb .= sprintf("*%s* ",h(translate_mead_req_value($row_log['brewMead1'])));
+							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*%s* ",h(translate_mead_req_value($row_log['brewMead2'])));
+							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*%s* ",h(translate_mead_strength_value($row_log['brewMead3'])));
 
 							$entry_str_sweet_carb = str_replace("Medium Sweet", "Med Sweet", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Medium Dry", "Med Dry", $entry_str_sweet_carb);

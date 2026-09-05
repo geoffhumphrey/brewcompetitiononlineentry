@@ -353,12 +353,12 @@ if ($totalRows_table_assignments > 0) {
 
 							if (!empty($row_entries['brewMead1'])) {
 								$additional_info++;
-								$carb_display .= "<strong>".$label_carbonation.":</strong> ".$row_entries['brewMead1'];
+								$carb_display .= "<strong>".$label_carbonation.":</strong> ".h(translate_mead_req_value($row_entries['brewMead1']));
 							}
 
 							if (!empty($row_entries['brewMead2'])) {
 								$additional_info++;
-								$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2'];
+								$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".h(translate_mead_req_value($row_entries['brewMead2']));
 							}
 
 							if (!empty($row_entries['brewSweetnessLevel'])) {
@@ -381,7 +381,7 @@ if ($totalRows_table_assignments > 0) {
 
 							if (!empty($row_entries['brewMead3'])) {
 								$additional_info++;
-								$strength_display .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+								$strength_display .= "<strong>".$label_strength.":</strong> ".h(translate_mead_strength_value($row_entries['brewMead3']));
 							}
 
 							if (!empty($row_entries['brewPossAllergens'])) {

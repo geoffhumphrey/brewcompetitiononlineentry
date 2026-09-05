@@ -236,6 +236,35 @@ function in_string($haystack,$needle) {
 	if (strpos($haystack,$needle) !== false) return TRUE;
 }
 
+/**
+ * Translate a stored mead/cider required-info value (brewMead1/brewMead2)
+ * into its display-label decode. Unknown values pass through unchanged,
+ * so legacy data and other style sets are unaffected.
+ * Maps are defined in constants_post_lang.inc.php (after language load).
+ */
+function translate_mead_req_value($value) {
+
+	global $mead_carb_translations, $mead_sweetness_translations;
+
+	if (isset($mead_sweetness_translations[$value])) return $mead_sweetness_translations[$value];
+	if (isset($mead_carb_translations[$value])) return $mead_carb_translations[$value];
+	return $value;
+
+}
+
+/**
+ * Translate a stored mead strength value (brewMead3:
+ * Hydromel/Standard/Sack). Unknown values pass through unchanged.
+ */
+function translate_mead_strength_value($value) {
+
+	global $mead_strength_translations;
+
+	if (isset($mead_strength_translations[$value])) return $mead_strength_translations[$value];
+	return $value;
+
+}
+
 function designations($judge_array,$display) {
 	$return = "";
 	$rank1 = explode(",",$judge_array);
