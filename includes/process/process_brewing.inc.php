@@ -340,7 +340,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		else $style_version = $_SESSION['prefsStyleSet'];
 
-		$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $styleFix, $style[1]));
+		// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
+		// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
+		// zero rows for those, same fix pattern already used correctly in
+		// includes/db/styles_special.db.php.
+		if ($_SESSION['prefsStyleSet'] == "AABC2025") $db_conn->where("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom') AND brewStyleGroup = ? AND brewStyleNum = ?", array($styleFix, $style[1]));
+		else $db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $styleFix, $style[1]));
 		$row_style_name = $db_conn->getOne($prefix."styles", "id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType");
 		
 		$styleName = $row_style_name['brewStyle'];
@@ -755,7 +760,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		else $style_version = $_SESSION['prefsStyleSet'];
 
-		$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']));
+		// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
+		// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
+		// zero rows for those, same fix pattern already used correctly in
+		// includes/db/styles_special.db.php.
+		if ($_SESSION['prefsStyleSet'] == "AABC2025") $db_conn->where("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom') AND brewStyleGroup = ? AND brewStyleNum = ?", array($row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']));
+		else $db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $row_current_style['brewCategorySort'], $row_current_style['brewSubCategory']));
 		$row_current_style_id = $db_conn->getOne($prefix."styles", "id");
 
 		if ($row_user['userLevel'] <= 1) {

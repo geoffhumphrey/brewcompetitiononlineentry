@@ -275,8 +275,18 @@ function check_sweetness($style,$styleSet) {
 
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
-	$query_brews = "SELECT brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
-	$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
+	// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
+	// zero rows for those, same fix pattern already used correctly in
+	// includes/db/styles_special.db.php.
+	if ($_SESSION['prefsStyleSet'] == "AABC2025") {
+		$query_brews = "SELECT brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1]));
+	}
+	else {
+		$query_brews = "SELECT brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
+		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	}
 
 	if ($row_brews['brewStyleSweet'] == 1) return TRUE;
 	else return FALSE;
@@ -308,8 +318,18 @@ function check_carb($style,$styleSet) {
 
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
-	$query_brews = "SELECT brewStyleCarb FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
-	$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
+	// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
+	// zero rows for those, same fix pattern already used correctly in
+	// includes/db/styles_special.db.php.
+	if ($_SESSION['prefsStyleSet'] == "AABC2025") {
+		$query_brews = "SELECT brewStyleCarb FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1]));
+	}
+	else {
+		$query_brews = "SELECT brewStyleCarb FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
+		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	}
 
 	if ($row_brews['brewStyleCarb'] == 1) return TRUE;
 	else return FALSE;
@@ -335,8 +355,18 @@ function check_mead_strength($style,$styleSet) {
 
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
-	$query_brews = "SELECT brewStyleStrength FROM ".$styles_db_table." WHERE brewStyleGroup = ? AND brewStyleNum = ? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
-	$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
+	// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
+	// zero rows for those, same fix pattern already used correctly in
+	// includes/db/styles_special.db.php.
+	if ($_SESSION['prefsStyleSet'] == "AABC2025") {
+		$query_brews = "SELECT brewStyleStrength FROM ".$styles_db_table." WHERE brewStyleGroup = ? AND brewStyleNum = ? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1]));
+	}
+	else {
+		$query_brews = "SELECT brewStyleStrength FROM ".$styles_db_table." WHERE brewStyleGroup = ? AND brewStyleNum = ? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
+		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
+	}
 
 	if ($row_brews['brewStyleStrength'] == 1) return TRUE;
 	else return FALSE;

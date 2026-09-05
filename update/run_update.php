@@ -5171,6 +5171,31 @@ if (($db_conn->getLastErrno() === 0) && ($db_conn->count > 0)) $v3100_update .= 
 // Add BA 2026 Style Updates
 if (($section == "setup") || (!check_new_style("01","01","Ordinary Bitter"))) include (UPDATE.'styles_ba_2026_update.php');
 
+/**
+ * Backfill brewStyle/brewStyleType for AABC 2025 beer/mead entries saved blank by a
+ * since-fixed bug: process_brewing.inc.php (and its check_carb()/check_sweetness()/
+ * check_mead_strength()/check_special_ingredients() dependencies) only special-cased
+ * BJCP2025's cider/non-cider split, not AABC2025's - so under an AABC2025 competition,
+ * any entry whose style was a beer or mead (not a cider) resolved zero rows against
+ * brewStyleVersion='AABC2025' alone (those styles remain under brewStyleVersion=
+ * 'AABC2022'), leaving brewStyle/brewStyleType permanently NULL from the moment of
+ * submission. Uses the same mixed-version predicate already proven correct in
+ * includes/db/styles_special.db.php. Scoped to installs currently on AABC2025, for the
+ * same reason as the New Zealand Pilsner re-tag above - brewCategorySort/brewSubCategory
+ * codes are only meaningful relative to whichever style set is active. Safe to run more
+ * than once: only ever touches rows where brewStyle is still blank.
+ * See GitHub issue #1677.
+ */
+if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "AABC2025")) {
+	$sql = sprintf("UPDATE `%s` b JOIN `%s` s ON b.brewCategorySort = s.brewStyleGroup AND b.brewSubCategory = s.brewStyleNum SET b.brewStyle = s.brewStyle, b.brewStyleType = s.brewStyleType WHERE (b.brewStyle IS NULL OR b.brewStyle = '') AND ((s.brewStyleVersion='AABC2025' AND s.brewStyleType='2') OR (s.brewStyleVersion='AABC2022' AND s.brewStyleType !='2') OR s.brewStyleOwn='custom');", $prefix."brewing", $prefix."styles");
+	$db_conn->rawQuery($sql);
+	if (($db_conn->getLastErrno() === 0) && ($db_conn->count > 0)) $v3100_update .= "<li>Backfilled the style name for ".$db_conn->count." AABC 2025 beer/mead entries that were saved with a blank style due to a since-fixed bug.</li>";
+	elseif ($db_conn->getLastErrno() !== 0) {
+		$v3100_update .= "<li>Backfill of AABC 2025 beer/mead entry style names failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$error_count++;
+	}
+}
+
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];
