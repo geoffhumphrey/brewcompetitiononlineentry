@@ -169,17 +169,15 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 				$message = "<html>" . "\r\n";
 				$message .= "<body>" . "\r\n";
 
-				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>" . "\r\n";
 
-				$message = "<html>" . "\r\n";
-				$message .= "<body>" . "\r\n";
-				$message .= sprintf("<p>%s,</p>",$first_name);
-				$message .= sprintf("<p>%s %s %s</p>",$pwd_email_reset_text_003,$_SESSION['contestName'],$pwd_email_reset_text_004);
-				$message .= sprintf("<p>%s</p>",$pwd_email_reset_text_005);
-				$message .= sprintf("<p><a href=\"%s\">%s</a></p>", $reset_url, $reset_url);
-				$message .= ucwords($_SESSION['contestName'])." Server";
-				$message .= "<p><small>".$paypal_response_text_003."</small></p>";
-				if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+				$message .= sprintf("<p>%s,</p>",$first_name) . "\r\n";
+				$message .= sprintf("<p>%s %s %s</p>",$pwd_email_reset_text_003,$_SESSION['contestName'],$pwd_email_reset_text_004) . "\r\n";
+				$message .= sprintf("<p>%s</p>",$pwd_email_reset_text_005) . "\r\n";
+				$message .= sprintf("<p><a href=\"%s\">%s</a></p>", $reset_url, $reset_url) . "\r\n";
+				$message .= ucwords($_SESSION['contestName'])." Server" . "\r\n";
+				$message .= "<p><small>".$paypal_response_text_003."</small></p>" . "\r\n";
+				if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>" . "\r\n";
 				$message .= "</body>" . "\r\n";
 				$message .= "</html>";
 
