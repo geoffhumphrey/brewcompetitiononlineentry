@@ -1058,10 +1058,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	} // end if ($action == "update")
 
+	// Carries the current category/brewer/paid-status filter through the redirect below, back to
+	// the same filtered view - otherwise an admin scoping "mark shown as paid" to one category
+	// gets bounced to the unfiltered list and has to re-apply the filter before the next bulk
+	// action (e.g. marking that same category as received right after).
+	$bulk_action_redirect_qs = "";
+	if ($filter != "default") $bulk_action_redirect_qs .= "&filter=".urlencode($filter);
+	if ($bid != "default") $bulk_action_redirect_qs .= "&bid=".urlencode($bid);
+	if ($view != "default") $bulk_action_redirect_qs .= "&view=".urlencode($view);
+
 	if ($action == "paid") {
 
 		$update_table = $prefix."brewing";
 		$data = array('brewPaid' => '1');
+		// Scope to whatever category/brewer/paid-status filter was showing on the entries list -
+		// matches includes/db/entries.db.php's identical $filter/$bid/$view predicate, so "mark
+		// shown as X" affects exactly what the admin was looking at. No filter applied (all
+		// "default") leaves this a no-op, preserving the original "mark ALL" behavior.
+		if ($filter != "default") $db_conn->where('brewCategorySort', $filter);
+		if ($bid != "default") $db_conn->where('brewBrewerID', $bid);
+		if ($view == "paid") $db_conn->where('brewPaid', '1');
+		elseif ($view == "unpaid") $db_conn->where("(brewPaid = '' OR brewPaid = '0' OR brewPaid IS NULL)", array());
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -1070,8 +1087,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
-		else $redirect = $base_url."index.php?section=admin&go=entries&msg=20";
+		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3".$bulk_action_redirect_qs;
+		else $redirect = $base_url."index.php?section=admin&go=entries&msg=20".$bulk_action_redirect_qs;
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
 
@@ -1081,6 +1098,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."brewing";
 		$data = array('brewPaid' => '0');
+		if ($filter != "default") $db_conn->where('brewCategorySort', $filter);
+		if ($bid != "default") $db_conn->where('brewBrewerID', $bid);
+		if ($view == "paid") $db_conn->where('brewPaid', '1');
+		elseif ($view == "unpaid") $db_conn->where("(brewPaid = '' OR brewPaid = '0' OR brewPaid IS NULL)", array());
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -1089,8 +1110,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
-		else $redirect = $base_url."index.php?section=admin&go=entries&msg=34";
+		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3".$bulk_action_redirect_qs;
+		else $redirect = $base_url."index.php?section=admin&go=entries&msg=34".$bulk_action_redirect_qs;
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
 
@@ -1100,6 +1121,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."brewing";
 		$data = array('brewReceived' => '1');
+		if ($filter != "default") $db_conn->where('brewCategorySort', $filter);
+		if ($bid != "default") $db_conn->where('brewBrewerID', $bid);
+		if ($view == "paid") $db_conn->where('brewPaid', '1');
+		elseif ($view == "unpaid") $db_conn->where("(brewPaid = '' OR brewPaid = '0' OR brewPaid IS NULL)", array());
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -1108,8 +1133,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
-		else $redirect = $base_url."index.php?section=admin&go=entries&msg=21";
+		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3".$bulk_action_redirect_qs;
+		else $redirect = $base_url."index.php?section=admin&go=entries&msg=21".$bulk_action_redirect_qs;
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
 
@@ -1119,6 +1144,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."brewing";
 		$data = array('brewReceived' => '0');
+		if ($filter != "default") $db_conn->where('brewCategorySort', $filter);
+		if ($bid != "default") $db_conn->where('brewBrewerID', $bid);
+		if ($view == "paid") $db_conn->where('brewPaid', '1');
+		elseif ($view == "unpaid") $db_conn->where("(brewPaid = '' OR brewPaid = '0' OR brewPaid IS NULL)", array());
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -1127,8 +1156,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
-		else $redirect = $base_url."index.php?section=admin&go=entries&msg=35";
+		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3".$bulk_action_redirect_qs;
+		else $redirect = $base_url."index.php?section=admin&go=entries&msg=35".$bulk_action_redirect_qs;
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
 
@@ -1138,6 +1167,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."brewing";
 		$data = array('brewConfirmed' => '1');
+		if ($filter != "default") $db_conn->where('brewCategorySort', $filter);
+		if ($bid != "default") $db_conn->where('brewBrewerID', $bid);
+		if ($view == "paid") $db_conn->where('brewPaid', '1');
+		elseif ($view == "unpaid") $db_conn->where("(brewPaid = '' OR brewPaid = '0' OR brewPaid IS NULL)", array());
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -1146,8 +1179,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3";
-		else $redirect = $base_url."index.php?section=admin&go=entries&msg=22";
+		if ($errors) $redirect = $base_url."index.php?section=admin&go=entries&msg=3".$bulk_action_redirect_qs;
+		else $redirect = $base_url."index.php?section=admin&go=entries&msg=22".$bulk_action_redirect_qs;
 		$redirect = prep_redirect_link($redirect);
 		$redirect_go_to = sprintf("Location: %s", $redirect);
 

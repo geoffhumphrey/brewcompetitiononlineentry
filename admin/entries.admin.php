@@ -812,7 +812,19 @@ $(document).ready(function () {
 			<?php } ?>
 		</div><!-- ./button group -->
 		<?php } ?>
-		<?php if (($filter == "default") && ($bid == "default") && ($view == "default") && ($totalRows_log > 0)) { ?>
+		<?php if ($totalRows_log > 0) {
+
+			// Whenever a category/brewer/paid-status filter is applied, scope the bulk actions
+			// below to just what's currently shown instead of the whole entries table - see
+			// process_brewing.inc.php's matching where() scoping for action=paid/unpaid/received/
+			// not-received/confirmed, which mirrors this same $filter/$bid/$view combination.
+			$bulk_action_filtered = (($filter != "default") || ($bid != "default") || ($view != "default"));
+			$bulk_action_qs = "";
+			if ($filter != "default") $bulk_action_qs .= "&amp;filter=".urlencode($filter);
+			if ($bid != "default") $bulk_action_qs .= "&amp;bid=".urlencode($bid);
+			if ($view != "default") $bulk_action_qs .= "&amp;view=".urlencode($view);
+			$bulk_action_scope_label = $bulk_action_filtered ? "the ".$totalRows_log." entries shown" : "ALL entries";
+		?>
 		<div class="btn-group" role="group" aria-label="markEntriesAs">
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -820,14 +832,16 @@ $(document).ready(function () {
 				<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table; ?>" data-confirm="Are you sure? This will mark ALL entries as paid and could be a large pain to undo.">Mark All as Paid</a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=unpaid&amp;dbTable=<?php echo $brewing_db_table; ?>" data-confirm="Are you sure? This will mark ALL entries as unpaid and could be a large pain to undo.">Un-Mark All as Paid</a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table; ?>" data-confirm="Are you sure? This will mark ALL entries as received and could be a large pain to undo.">Mark All as Received</a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=not-received&amp;dbTable=<?php echo $brewing_db_table; ?>" data-confirm="Are you sure? This will mark ALL entries as NOT received and could be a large pain to undo.">Un-Mark All as Received</a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" data-confirm="Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.">Confirm All Entries</a></li>
+					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as paid and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Mark Shown as Paid" : "Mark All as Paid"; ?></a></li>
+					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=unpaid&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as unpaid and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Un-Mark Shown as Paid" : "Un-Mark All as Paid"; ?></a></li>
+					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as received and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Mark Shown as Received" : "Mark All as Received"; ?></a></li>
+					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=not-received&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as NOT received and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Un-Mark Shown as Received" : "Un-Mark All as Received"; ?></a></li>
+					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as confirmed and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Confirm Shown Entries" : "Confirm All Entries"; ?></a></li>
+					<?php if (!$bulk_action_filtered) { ?>
 					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unconfirmed" data-confirm="Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.">Purge All Unconfirmed Entries</a></li>
 					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unpaid" data-confirm="Are you sure? This will delete ALL unpaid entries from the database and cannot be undone.">Purge All Unpaid Entries</a></li>
-					<?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+					<?php } ?>
+					<?php if ((!$bulk_action_filtered) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=default">Regenerate Judging Numbers (Random)</a></li>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database. PLEASE NOTE that judging numbers will be in the following format: XX-123 (where XX is the category number or name)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=legacy">Regenerate Judging Numbers (With Style Number Prefix)</a></li>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Regenerate Judging Numbers (Same as Entry Numbers)</a></li>
