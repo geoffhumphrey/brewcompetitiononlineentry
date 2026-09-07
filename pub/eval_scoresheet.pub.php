@@ -265,7 +265,12 @@ if ($totalRows_entry_info > 0) {
     if (isset($row_eval['evalFinalScore'])) $my_consensus_score .= sprintf("%s: <span id=\"my-consensus-score\">".$row_eval['evalFinalScore']."</span>",$label_your_consensus_score);
   }
 
-  if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore']));
+  // Always exclude this judge's own already-saved score from the comparison set while editing -
+  // not just when it currently disagrees with the others. Previously, a lone judge (or one whose
+  // score already matched everyone else's) kept seeing their own prior value in this set, so
+  // typing a different consensus score triggered a false "doesn't match the other judge" warning
+  // against themselves. See GitHub issue #1469.
+  if ($action == "edit") $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore']));
 
   if (isset($_POST['entry_number'])) {
     
