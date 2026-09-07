@@ -27,9 +27,47 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-	if ($_POST['tableStyles'] != "") $tableStyles = implode(",",$_POST['tableStyles']); 
+	if ($_POST['tableStyles'] != "") $tableStyles = implode(",",$_POST['tableStyles']);
 	else $tableStyles = $_POST['tableStyles'];
 	$tableStyles = sterilize($tableStyles);
+
+	/**
+	 * Defense-in-depth against GitHub issue #1637: judging_tables.admin.php only disables an
+	 * already-claimed style's checkbox at render time - a stale page, two admins editing
+	 * concurrently, or a direct POST can still submit a style another table already owns.
+	 * A style claimed by two tables lets the same entry appear on both tables' "Add/Edit
+	 * Scores" forms (admin_judging_scores.db.php matches entries purely by current style, not
+	 * by any table assignment), and whichever table's scores get saved/resaved last silently
+	 * overwrites judging_scores.scoreTable for that entry - even if it was correctly judged at
+	 * a different table. Strip any posted style already claimed by another table before saving.
+	 */
+	$tableStyles_posted_array = array_filter(explode(",", (string) $tableStyles), function($v) { return $v !== ""; });
+	$tableStyles_conflicts = array();
+
+	if (!empty($tableStyles_posted_array)) {
+
+		$rows_other_table_styles = $db_conn->get($prefix."judging_tables", null, "id,tableStyles");
+
+		foreach ($rows_other_table_styles as $row_other_table_styles) {
+
+			if (($action == "edit") && ($row_other_table_styles['id'] == $id)) continue;
+
+			$other_table_styles_array = array_filter(explode(",", (string) $row_other_table_styles['tableStyles']), function($v) { return $v !== ""; });
+
+			foreach (array_intersect($tableStyles_posted_array, $other_table_styles_array) as $conflicting_style_id) {
+				$tableStyles_conflicts[$conflicting_style_id] = TRUE;
+			}
+
+		}
+
+	}
+
+	if (!empty($tableStyles_conflicts)) {
+		$tableStyles_posted_array = array_diff($tableStyles_posted_array, array_keys($tableStyles_conflicts));
+		$tableStyles = implode(",", $tableStyles_posted_array);
+		$error_output[] = "One or more selected styles are already assigned to another table and were not saved to this table. Remove the style from the other table first if you want to move it here.";
+		$errors = TRUE;
+	}
 
 	$tableName = "";
 	if (isset($_POST['tableName'])) {
