@@ -1,7 +1,6 @@
 <?php
-// The payments table is only created when an Admin enables the PayPal IPN
-// preference (see includes/process/process_prefs.inc.php) - installs that
-// never have are expected to not have this table yet.
+// The payments table is created unconditionally at install/update time (GitHub issue #1523),
+// but this guard is kept for installs that upgraded before that migration ran.
 if (table_exists($prefix."payments")) {
 	$rows_payments = $db_conn->get($prefix."payments");
 	$row_payments = ($rows_payments && count($rows_payments) > 0) ? $rows_payments[0] : null;

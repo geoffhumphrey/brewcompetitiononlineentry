@@ -39,6 +39,25 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 	$data['payment_amount'] = sterilize($_POST['mc_gross']);
 	$data['payment_currency'] = sterilize($_POST['mc_currency']);
 	$data['txn_id'] = sterilize($_POST['txn_id']);
+
+	/**
+	 * PayPal can and does resend the same IPN notification more than once - both as normal
+	 * behavior and especially whenever the receiving script doesn't send back a 200 OK in
+	 * time (GitHub issue #1523: a fatal error on a then-missing payments table meant PayPal
+	 * never got that acknowledgment and kept retrying for days, each retry re-sending a
+	 * duplicate confirmation email even though only one payment was ever made). If this
+	 * transaction was already logged, acknowledge and stop here rather than re-running any
+	 * of it.
+	 */
+	if (!empty($data['txn_id'])) {
+		$db_conn->where('txn_id', $data['txn_id']);
+		$row_existing_payment = $db_conn->getOne($prefix."payments", "id");
+		if ($row_existing_payment) {
+			header("HTTP/1.1 200 OK");
+			exit();
+		}
+	}
+
 	$data['receiver_email'] = filter_var($_POST['receiver_email'],FILTER_SANITIZE_EMAIL);
 	$data['first_name'] = sterilize($_POST['first_name']);
 	$data['last_name'] = sterilize($_POST['last_name']);

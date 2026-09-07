@@ -5251,6 +5251,44 @@ if (!$row_flight_entry_unique) {
 
 }
 
+if (!check_setup($prefix."payments", $database)) {
+
+	/**
+	 * GitHub issue #1523: the payments log table was previously only ever created at the moment
+	 * an admin submitted the Payment Preferences form (or initial setup step 3) with PayPal IPN
+	 * turned on - includes/process/process_prefs.inc.php. Any install where prefsPaypalIPN ended
+	 * up "1" some other way (a value already set before that safety net existed, a restored
+	 * backup, etc.) never got the table, and nothing in the version-upgrade path ever created it
+	 * either - so ppv.php's IPN handler fatal errors on every payment notification. That fatal
+	 * happens before the script can send PayPal its required 200 OK acknowledgment, so PayPal
+	 * retries the same notification for days, and each retry re-sends a duplicate confirmation
+	 * email before hitting the same fatal again. Now created unconditionally, like any other core
+	 * table, regardless of whether PayPal IPN is currently enabled.
+	 */
+
+	$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`uid` int(11) DEFAULT NULL,
+		`item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`payment_gross` float(10,2) DEFAULT NULL,
+		`currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		PRIMARY KEY (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Added the payments log table, needed for PayPal payment notifications to be recorded correctly.</li>";
+	else {
+		$v3100_update .= "<li class=\"text-danger\">The payments log table could NOT be added. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];

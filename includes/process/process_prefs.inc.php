@@ -548,35 +548,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$db_conn->where ('brewStyleVersion', sterilize($_POST['prefsStyleSet']));
 		$result = $db_conn->update ($prefix."styles", $data);
 
-		if ($_POST['prefsPaypalIPN'] == 1) {
-
-			// Only install the payments db table if enabled and if not there already
-			if (!check_setup($prefix."payments", $database)) {
-
-				$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
-				  `id` int(11) NOT NULL AUTO_INCREMENT,
-				  `uid` int(11) DEFAULT NULL,
-				  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-				  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-				  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-				  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-				  `payment_gross` float(10,2) DEFAULT NULL,
-				  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-				  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-				  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-				  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-				  PRIMARY KEY (`id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
-				
-				$db_conn->rawQuery($sql);
-				if ($db_conn->getLastErrno() !== 0) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
-
-			}
-
-		} // end if ($_POST['prefsPaypalIPN'] == 1)
+		// The payments table is now created unconditionally at install/update time
+		// (setup/install_db.setup.php, update/run_update.php) rather than here on first
+		// enabling PayPal IPN - see GitHub issue #1523 for why that was unreliable.
 
 		// Check to see if processed correctly.
 		$row_prefs_check = $db_conn->getOne($prefix."preferences", "COUNT(*) as 'count'");
@@ -618,39 +592,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$errors = TRUE;
 		}
 
-		if ($go == "payment") {
-
-			if ($_POST['prefsPaypalIPN'] == 1) {
-
-				// Only install the payments db table if enabled and if not there already
-				if (!check_setup($prefix."payments", $database)) {
-
-					$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
-					  `id` int(11) NOT NULL AUTO_INCREMENT,
-					  `uid` int(11) DEFAULT NULL,
-					  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_gross` float(10,2) DEFAULT NULL,
-					  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  PRIMARY KEY (`id`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
-					
-					$db_conn->rawQuery($sql);
-					if ($db_conn->getLastErrno() !== 0) {
-						$error_output[] = $db_conn->getLastError();
-						$errors = TRUE;
-					}
-
-				}
-
-			} // end if ($_POST['prefsPaypalIPN'] == 1)
-
-		}
+		// The payments table is now created unconditionally at install/update time
+		// (setup/install_db.setup.php, update/run_update.php) rather than here on first
+		// enabling PayPal IPN - see GitHub issue #1523 for why that was unreliable.
 
 		if ($go == "entries") {
 

@@ -618,6 +618,35 @@ if ($setup_free_access == TRUE) {
 
 		/**
 		 * --------------------------------------
+		 * Payments Table
+		 * --------------------------------------
+		 */
+
+		$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			`uid` int(11) DEFAULT NULL,
+			`item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`payment_gross` float(10,2) DEFAULT NULL,
+			`currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			PRIMARY KEY (`id`)
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci
+			", $payments_db_table);
+		$db_conn->rawQuery($sql);
+		if (!check_setup($payments_db_table,$database)) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> The <strong>Payments</strong> table was NOT installed successfully.</li>";
+		}
+		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Payments</strong> table was installed successfully.</li>";
+
+		/**
+		 * --------------------------------------
 		 * Preferences Table
 		 * --------------------------------------
 		 */
