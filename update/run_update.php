@@ -5196,6 +5196,18 @@ if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "AAB
 	}
 }
 
+if (!check_update("prefsSessionTimeout", $prefix."preferences")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `prefsSessionTimeout` INT(4) NULL DEFAULT NULL COMMENT 'Minutes of inactivity before auto-logout; NULL falls back to \$session_expire_after in config.php';",$prefix."preferences");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Added the ability to set a custom session (auto-logout) timeout for your competition.</li>";
+	else {
+		$v3100_update .= "<li class=\"text-danger\">Custom session timeout could NOT be enabled. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];

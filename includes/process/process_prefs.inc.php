@@ -199,9 +199,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$prefsLanguageOptions = array_values(array_intersect(get_available_language_codes(), $posted_language_options));
 			if (empty($prefsLanguageOptions)) $prefsLanguageOptions = array('en-US');
 
+			// Blank/non-numeric/zero-or-less all fall back to NULL, which paths.php already
+			// treats as "use the $session_expire_after default from config.php". A value that's
+			// too low is clamped up to a 3-minute floor instead - the auto-logout warning modals
+			// fire at 2:00 and 0:30 remaining, so anything at or below that leaves no room for a
+			// normal countdown and re-fires the 2-minute warning every time the countdown resets
+			// (e.g. on "Stay Logged In" or any throttled activity heartbeat), trapping the user.
+			$posted_session_timeout = sterilize($_POST['prefsSessionTimeout']);
+			if ((is_numeric($posted_session_timeout)) && ($posted_session_timeout > 0)) {
+				$prefsSessionTimeout = ((int) $posted_session_timeout < 3) ? 3 : (int) $posted_session_timeout;
+			} else {
+				$prefsSessionTimeout = null;
+			}
+
 			$data_1 = array(
 
 				'prefsProEdition' => sterilize($_POST['prefsProEdition']),
+				'prefsSessionTimeout' => $prefsSessionTimeout,
 				'prefsMHPDisplay' => $prefsMHPDisplay,
 				'prefsDisplayWinners' => sterilize($_POST['prefsDisplayWinners']),
 				'prefsWinnerDelay' => $prefsWinnerDelay,

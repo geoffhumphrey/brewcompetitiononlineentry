@@ -1105,6 +1105,15 @@ $(document).ready(function(){
     </div>
 </div>
 <div class="form-group">
+    <label for="prefsSessionTimeout" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Timeout (Minutes)</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control" id="prefsSessionTimeout" name="prefsSessionTimeout" type="number" min="3" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="<?php if ($section != "step3") echo $row_prefs['prefsSessionTimeout']; ?>" placeholder="<?php echo $session_expire_after; ?>">
+        <div class="help-block">How many minutes of inactivity before an admin or participant is automatically logged out. Leave blank to use the installation default (the value of the <code>$session_expire_after</code> variable, set in config.php).</div>
+        <div class="help-block">Must be a whole number of 3 or more minutes &ndash; the logout warning popups need that much time or more to show normally.</div>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+<div class="form-group">
     <label for="prefsAutoPurge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Automatically Purge Unconfirmed Entries and Perform Data Clean Up</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">            

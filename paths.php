@@ -270,6 +270,12 @@ $db_conn = new MysqliDb($connection);
 
 require_once (INCLUDES.'current_version.inc.php');
 
+// Admin-configurable override (preferences.prefsSessionTimeout, GitHub issue #870) - only
+// available once $_SESSION['prefs'.$prefix_session] has been populated by a prior request
+// (includes/db/common.db.php), so the very first request of a session still uses the
+// config.php default below; every later request in the same session picks up the override.
+if ((isset($_SESSION['prefsSessionTimeout'])) && (!empty($_SESSION['prefsSessionTimeout']))) $session_expire_after = $_SESSION['prefsSessionTimeout'];
+
 if (isset($_SESSION['last_action'])) {
     $seconds_inactive = time() - $_SESSION['last_action'];
     $session_expire_after_seconds = $session_expire_after * 60;

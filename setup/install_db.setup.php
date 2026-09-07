@@ -694,6 +694,7 @@ if ($setup_free_access == TRUE) {
 			`prefsDropOff` tinyint(1) DEFAULT NULL,
 			`prefsShipping` tinyint(1) DEFAULT NULL,
 			`prefsHeroImages` mediumtext COLLATE utf8mb4_unicode_ci COMMENT 'JSON map of hero banner image filename to active flag',
+			`prefsSessionTimeout` int(4) DEFAULT NULL COMMENT 'Minutes of inactivity before auto-logout; NULL falls back to $session_expire_after in config.php',
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		", $preferences_db_table);

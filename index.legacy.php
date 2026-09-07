@@ -255,8 +255,14 @@ echo $output_query_count;
 </footer><!-- ./footer -->
 <!-- ./ Footer -->
 <?php 
-session_write_close(); 
+session_write_close();
 if ($logged_in) {
+// Re-check the override here (not just rely on paths.php's copy) - if the admin just saved a new
+// prefsSessionTimeout this same request, paths.php's own check ran before
+// includes/db/common.db.php refreshed $_SESSION with the new value, so $session_expire_after at
+// that point was still the pre-save one. This is what actually renders the countdown, so it
+// needs the freshest value available, not the request-start snapshot.
+if ((isset($_SESSION['prefsSessionTimeout'])) && (!empty($_SESSION['prefsSessionTimeout']))) $session_expire_after = $_SESSION['prefsSessionTimeout'];
 $session_end_seconds = (time() + ($session_expire_after * 60));
 $session_end = date('Y-m-d H:i:s',$session_end_seconds);
 if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
@@ -273,7 +279,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
         <p><?php echo $alert_text_090; ?></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_stay_here; ?></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="heartbeat(true)"><?php echo $label_stay_here; ?></button>
         <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
       </div>
