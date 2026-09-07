@@ -115,9 +115,6 @@ if ($section == "admin") {
 
 require_once (INCLUDES.'constants_post_lang.inc.php');
 
-// Hosted installations only
-if (HOSTED) require_once (LIB.'hosted.lib.php');
-
 // Pay modal is defined here to make sure it's top-level
 // Otherwise, the modal does not render correctly.
 $pay_modal = "";

@@ -32,7 +32,6 @@ require_once (INCLUDES.'constants.inc.php');
 require_once (LANG.'language.lang.php');
 require_once (INCLUDES.'headers.inc.php');
 require_once (INCLUDES.'scrubber.inc.php');
-if (HOSTED) require_once (LIB.'hosted.lib.php');
 
 $system_db_table = $prefix."bcoem_sys";
 $row_system = $db_conn->getOne($system_db_table, "version");

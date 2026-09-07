@@ -90,6 +90,20 @@ if ($check == 1) {
 	// Register the session variable
 	$_SESSION['loginUsername'] = $loginUsername;
 
+	/**
+	 * Hosted-platform maintenance check (brewingcompetitions.com/brewcomp.com only). Previously
+	 * ran unconditionally on every index.php/update.php page load, for any visitor, on any
+	 * hosted install - now scoped to run at most once per session, only when a Top-Level Admin
+	 * (userLevel 0) actually logs in. Only a Top-Level Admin can delete another Top-Level Admin,
+	 * so a login by one is the one moment worth re-verifying the maintainer account wasn't
+	 * removed/demoted.
+	 */
+	if ((HOSTED) && ($row_login['userLevel'] == 0) && (empty($_SESSION['hosted_admin_checked']))) {
+		require_once (LIB.'hosted.lib.php');
+		$_SESSION['hosted_admin_checked'] = TRUE;
+		$_SESSION['hosted_admin_email'] = $hosted_admin_email;
+	}
+
 	// Rotate CSRF token on successful login
 	csrf_token_generate(true);
 	

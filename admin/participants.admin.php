@@ -378,7 +378,7 @@ if ($totalRows_brewer > 0) {
 
 		if (!$archive_display) {
 
-			if ((HOSTED) && ($row_brewer['brewerEmail'] == $hosted_admin_email)) {
+			if ((HOSTED) && (isset($_SESSION['hosted_admin_email'])) && ($row_brewer['brewerEmail'] == $_SESSION['hosted_admin_email'])) {
 					$output_datatables_edit_link = "<span class=\"fa fa-lg fa-pencil text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
 					$output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be deleted.\"></span>";
 					$output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
