@@ -180,12 +180,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($go == "default") {
 
 			if ($_POST['prefsProEdition'] == 1) $prefsMHPDisplay = 0;
-			else $prefsMHPDisplay = sterilize($_POST['prefsMHPDisplay']);
+			// Checkbox - unchecked means it's simply absent from the POST, not blank.
+			else $prefsMHPDisplay = isset($_POST['prefsMHPDisplay']) ? sterilize($_POST['prefsMHPDisplay']) : 0;
 
 			// CAPTCHA uses prefsGoogleAccount column
 			if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1'])) && (isset($_POST['prefsGoogleAccount2']))) $prefsGoogleAccount = sterilize($_POST['prefsGoogleAccount0'])."|".sterilize($_POST['prefsGoogleAccount1'])."|".sterilize($_POST['prefsGoogleAccount2']);
 			if (HOSTED) $prefsCAPTCHA = 1;
-			else $prefsCAPTCHA = sterilize($_POST['prefsCAPTCHA']);
+			// Checkbox - unchecked means it's simply absent from the POST, not blank.
+			else $prefsCAPTCHA = isset($_POST['prefsCAPTCHA']) ? sterilize($_POST['prefsCAPTCHA']) : 0;
 
 			if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = to_utc_epoch(sterilize($_POST['prefsWinnerDelay']), $timezone_raw);
 			else $prefsWinnerDelay = 2145916800;
@@ -376,7 +378,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			// branch below already falls back to the existing saved value in that case anyway.
 			$prefsEmailPort = isset($_POST['prefsEmailPort']) ? sterilize($_POST['prefsEmailPort']) : null;
 			if (HOSTED) $prefsEmailCC = 0;
-			else $prefsEmailCC = sterilize($_POST['prefsEmailCC']);
+			// Checkbox - unchecked means it's simply absent from the POST, not blank.
+			else $prefsEmailCC = isset($_POST['prefsEmailCC']) ? sterilize($_POST['prefsEmailCC']) : 0;
 
 			if ($_POST['change-email-password-choice'] == 1) {
 
