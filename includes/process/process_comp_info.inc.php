@@ -193,7 +193,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
-			if ($errors) $base_url."setup.php?section=step5&msg=3";
+			if ($errors) $insertGoTo = $base_url."setup.php?section=step5&msg=3";
 			else $insertGoTo = $base_url."setup.php?section=step5";
 
 		}
@@ -311,8 +311,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		if ($errors) $updateGoTo = sterilize($_POST['relocate']."&msg=3");
-		else $updateGoTo = sterilize($_POST['relocate']."&msg=2");
+		// $updateGoTo was already set to the next setup step above ($section == "setup" block)
+		// - don't let the $_POST['relocate']-based logic below overwrite it, or completing this
+		// step during initial setup sends the admin back to the Site Preferences dashboard
+		// instead of continuing the setup wizard.
+		if ($section != "setup") {
+			if ($errors) $updateGoTo = sterilize($_POST['relocate']."&msg=3");
+			else $updateGoTo = sterilize($_POST['relocate']."&msg=2");
+		}
+
 		$updateGoTo = prep_redirect_link($updateGoTo);
 		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 

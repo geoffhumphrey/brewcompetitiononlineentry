@@ -53,7 +53,13 @@ if ($section == "past-winners") {
 
     }
 
-    if (!$archive_winner_display) header(sprintf("Location: %s", $base_url."index.php?msg=8"));
+    if (!$archive_winner_display) {
+        header(sprintf("Location: %s", $base_url."index.php?msg=8"));
+        // Without exit(), the rest of this file and the whole page-build that includes it
+        // (index.php) kept running and rendering the "past winners" page against archive data
+        // that was just determined not to be ready/configured, instead of stopping here.
+        exit();
+    }
 }
 
 if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['update_date'] >= (time() - 86400))) {

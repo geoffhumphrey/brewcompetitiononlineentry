@@ -192,6 +192,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			session_unset();
 			session_destroy();
 			session_write_close();
+			// A regenerated ID needs an active session to attach to - session_destroy() just
+			// tore the old one down, so start a fresh one first. Matches the same
+			// destroy-then-restart sequence already used in includes/db/common.db.php.
+			session_name($prefix_session);
+			session_start();
 			session_regenerate_id(true);
 
 			$update_table = $prefix."bcoem_sys";

@@ -265,6 +265,26 @@ if (session_status() == PHP_SESSION_NONE) {
  */
 
 require_once (CONFIG.'config.php');
+
+/**
+ * MysqliDb.php never backtick-quotes table names (see $this->_tableName usage throughout
+ * its query builder), so a $prefix containing anything outside letters, digits, and
+ * underscores - a hyphen, most commonly, e.g. "comp-2026_" - breaks nearly every query in
+ * the app with a raw, uncaught SQL syntax error (a confusing blank 500) rather than a clear
+ * message. Catch it here, as early as possible, before any such query can run.
+ */
+if ((isset($prefix)) && (!empty($prefix)) && (!preg_match('/^[A-Za-z0-9_]+$/', $prefix))) {
+
+    http_response_code(500);
+    echo '<!DOCTYPE html><html><head><title>Configuration Error</title></head><body style="font-family:sans-serif;max-width:640px;margin:60px auto;line-height:1.5;">';
+    echo '<h1 style="color:#a94442;">Configuration Error</h1>';
+    echo '<p>The <code>$prefix</code> value in your <code>site/config.php</code> file (currently <code>'.htmlspecialchars($prefix, ENT_QUOTES).'</code>) contains a character that is not allowed in a database table name.</p>';
+    echo '<p>Only letters, numbers, and underscores are supported - for example, <code>bcoem1_</code> or <code>comp1_</code>. Edit <code>site/config.php</code>, change the <code>$prefix</code> value, then reload this page.</p>';
+    echo '</body></html>';
+    exit();
+
+}
+
 require_once (CONFIG.'MysqliDb.php');
 $db_conn = new MysqliDb($connection);
 

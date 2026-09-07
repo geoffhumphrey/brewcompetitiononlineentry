@@ -21,6 +21,19 @@ html {
     overflow-y: auto;
 }
 
+/** bootstrap-select (the "selectpicker" class, e.g. the Overall Entry Limit dropdown) manages
+    its own dropdown sizing/scrolling internally - it computes and applies an inline max-height
+    directly on its .inner list container based on the data-size attribute. Its outer wrapper
+    also carries the plain "dropdown-menu" class, so the viewport-cap rule above was stacking a
+    second, redundant scrollbar on top of bootstrap-select's own. Since bootstrap-select's sizing
+    is set inline, it always wins over this class-level reset regardless - this only removes the
+    unwanted second scrollbar on the outer wrapper. See GitHub issue #1695 follow-up. **/
+
+.bootstrap-select .dropdown-menu {
+    max-height: none;
+    overflow-y: visible;
+}
+
 .anchor {
     padding-top: 50px;
     margin-top: -50px;

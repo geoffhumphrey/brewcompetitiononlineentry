@@ -301,5 +301,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 } else {
 	header("Location: https://pbs.twimg.com/media/CGx6dsDVIAAV0am.png");
+	exit();
 }
 ?>

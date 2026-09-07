@@ -371,7 +371,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$prefsEmailUsername = trim($_POST['prefsEmailUsername']);
 			$prefsEmailHost = sterilize($_POST['prefsEmailHost']);
 			$prefsEmailEncrypt = sterilize($_POST['prefsEmailEncrypt']);
-			$prefsEmailPort = sterilize($_POST['prefsEmailPort']);
+			// The port field is conditionally hidden/disabled in the form until SMTP sending is
+			// enabled, so a save with SMTP off doesn't submit it at all - the $prefsEmailSMTP==0
+			// branch below already falls back to the existing saved value in that case anyway.
+			$prefsEmailPort = isset($_POST['prefsEmailPort']) ? sterilize($_POST['prefsEmailPort']) : null;
 			if (HOSTED) $prefsEmailCC = 0;
 			else $prefsEmailCC = sterilize($_POST['prefsEmailCC']);
 

@@ -33,3 +33,4 @@ cleanup_double_encoding.php
 *.code-workspace
 vendor/
 tools/*
+ajax/practice_session.ajax.php

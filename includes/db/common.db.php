@@ -35,6 +35,10 @@ if (empty($version)) {
 	$redirect = prep_redirect_link($redirect);
 	$redirect_go_to = sprintf("Location: %s", $redirect);
 	header($redirect_go_to);
+	// header() only queues the response header - without exit(), the rest of this file (and
+	// whatever included it) keeps running against tables that were just confirmed not to
+	// exist, producing an uncaught fatal instead of the intended redirect to setup.
+	exit();
 }
 
 // Check to see if the session_set variable is corrupted or hijacked. If so, destroy the session and reset.
@@ -65,7 +69,7 @@ if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 // Get the general info for the competition from the DB and store in session variables
 if ((!isset($_SESSION['contest_info_general'.$prefix_session])) || (empty($_SESSION['contest_info_general'.$prefix_session]))) {
 
-	if (strpos($section, "step") === FALSE) {
+	if ((strpos($section, "step") === FALSE) && (check_setup($prefix."contest_info", $database))) {
 
 		$db_conn->where ("id", 1);
 		$row_contest_info = $db_conn->getOne ($prefix."contest_info");
