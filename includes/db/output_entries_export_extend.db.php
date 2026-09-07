@@ -7,6 +7,10 @@ $row_scores = $db_conn->rawQueryOne($query_scores, $params_scores);
 $query_flight = "SELECT * FROM ".$prefix."judging_flights WHERE flightEntryID=?";
 $params_flight = array($row_sql['id']);
 if (SINGLE) { $query_flight .= " AND comp_id=?"; $params_flight[] = $_SESSION['comp_id']; }
+// An entry can end up with more than one judging_flights row (see GitHub issue #1641) - take
+// the most recently created one so this always agrees with the other reports/exports that do
+// the same ordered lookup, instead of leaving it to whatever order MySQL happens to return.
+$query_flight .= " ORDER BY id DESC LIMIT 1";
 $row_flight = $db_conn->rawQueryOne($query_flight, $params_flight);
 
 $query_bos = "SELECT scorePlace FROM ".$prefix."judging_scores_bos WHERE eid=?";

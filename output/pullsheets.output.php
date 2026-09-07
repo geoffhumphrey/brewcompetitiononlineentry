@@ -167,6 +167,11 @@ $max_flight_by_table_ps = array();
 $flight_round_by_table_flight_ps = array();
 $flight_by_entry_id_ps = array();
 if (table_exists($judging_flights_db_table)) {
+	// Ordered newest-first so that, if an entry ever ends up with more than one row (GitHub
+	// issue #1641), the "keep the first one found" below lands on the most recently created
+	// row - matching check_flight_number()'s now-identical ORDER BY id DESC tie-break, so this
+	// report and that one always agree on which table an entry is on.
+	$db_conn->orderBy('id', 'DESC');
 	$rows_all_flights_ps = $db_conn->get($judging_flights_db_table);
 	foreach ($rows_all_flights_ps as $row_flight_ps) {
 		$fr_key_ps = $row_flight_ps['flightTable'].'|'.$row_flight_ps['flightRound'];
@@ -175,9 +180,6 @@ if (table_exists($judging_flights_db_table)) {
 			$max_flight_by_table_ps[$row_flight_ps['flightTable']] = $row_flight_ps['flightNumber'];
 		}
 		$flight_round_by_table_flight_ps[$row_flight_ps['flightTable'].'|'.$row_flight_ps['flightNumber']] = $row_flight_ps['flightRound'];
-		// check_flight_number()'s getOne() has no ORDER BY, so it's only ever
-		// guaranteed to return *a* matching row when more than one exists for
-		// the same entry - keeping the first one found here matches that.
 		if (!isset($flight_by_entry_id_ps[$row_flight_ps['flightEntryID']])) $flight_by_entry_id_ps[$row_flight_ps['flightEntryID']] = $row_flight_ps;
 	}
 }

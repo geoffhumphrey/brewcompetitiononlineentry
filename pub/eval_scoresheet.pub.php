@@ -271,6 +271,7 @@ if ($totalRows_entry_info > 0) {
     
     // Get table info
     $db_conn->where("flightEntryID", $row_entry_info['id']);
+    $db_conn->orderBy('id', 'DESC');
     $row_flight_info = $db_conn->getOne($prefix."judging_flights", "flightTable");
 
     if ($row_flight_info) $filter = $row_flight_info['flightTable'];

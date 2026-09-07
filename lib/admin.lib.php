@@ -703,6 +703,7 @@ function flight_entry_info($entry_id) {
 	$db_conn = new MysqliDb($connection);
 
 	$db_conn->where('flightEntryID', $entry_id);
+	$db_conn->orderBy('id', 'DESC');
 	$row_flight_number = $db_conn->getOne($prefix."judging_flights", "id,flightNumber,flightEntryID,flightRound");
 
 	if ($row_flight_number) return $row_flight_number['id']."^".$row_flight_number['flightNumber']."^".$row_flight_number['flightEntryID']."^".$row_flight_number['flightRound'];

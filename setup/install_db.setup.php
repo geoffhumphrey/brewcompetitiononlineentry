@@ -425,7 +425,8 @@ if ($setup_free_access == TRUE) {
 			`flightNumber` int(8) DEFAULT NULL,
 			`flightEntryID` int(11) DEFAULT NULL COMMENT 'id of entry from the brewing table',
 			`flightRound` int(8) DEFAULT NULL,
-			PRIMARY KEY (`id`)
+			PRIMARY KEY (`id`),
+			UNIQUE KEY `flightEntryID` (`flightEntryID`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $judging_flights_db_table);
 		$db_conn->rawQuery($sql);

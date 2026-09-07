@@ -4578,6 +4578,7 @@ function entry_flight_assignment($eid,$table_id) {
 
 	$db_conn->where('flightEntryID', $eid);
 	$db_conn->where('flightTable', $table_id);
+	$db_conn->orderBy('id', 'DESC');
 	$row_flight_assign = $db_conn->getOne($prefix."judging_flights", "flightNumber");
 
 	return $row_flight_assign['flightNumber'];
@@ -4595,6 +4596,7 @@ function flight_count_info($eid,$method) {
 	);
 
 	$db_conn->where('flightEntryID', $eid);
+	$db_conn->orderBy('id', 'DESC');
 	$row_flight_assign = $db_conn->getOne($prefix."judging_flights", "flightNumber,flightTable");
 
 	if (($method == 0) && (!empty($row_flight_assign))) {

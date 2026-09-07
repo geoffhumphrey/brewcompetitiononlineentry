@@ -5208,6 +5208,49 @@ if (!check_update("prefsSessionTimeout", $prefix."preferences")) {
 
 }
 
+// Queries information_schema rather than SHOW INDEX - some MySQL/MariaDB versions don't
+// support preparing SHOW statements at all, and MysqliDb always prepares queries, so a
+// SHOW-based check can fail outright on those servers. Matches the styles-table PRIMARY KEY
+// check earlier in this file.
+$db_conn->where('table_schema', $database);
+$db_conn->where('table_name', $prefix."judging_flights");
+$db_conn->where('index_name', 'flightEntryID');
+$row_flight_entry_unique = $db_conn->getOne('information_schema.statistics');
+
+if (!$row_flight_entry_unique) {
+
+	/**
+	 * GitHub issues #1641, #1415, #1041: judging_flights never enforced one row per entry,
+	 * and the "Define Flights" add-action (process_judging_flights.inc.php) would blindly
+	 * INSERT a row for an entry without checking whether it already had one from a previous
+	 * table assignment (e.g. its style/category was later moved to a different, not-yet-
+	 * flighted table). The result: some entries end up with two judging_flights rows - one
+	 * stale, one current - and every report that looks up "this entry's table" with no
+	 * ORDER BY can non-deterministically return either one, so different reports (pullsheets
+	 * vs. the CSV export, for example) can disagree about which table an entry is on. Clean
+	 * up any duplicates already on disk (keeping the highest id - the most recently created
+	 * row, i.e. the last assignment actually made) before adding a constraint that prevents
+	 * this from ever happening again.
+	 */
+
+	$sql = sprintf("DELETE jf1 FROM `%s` jf1 INNER JOIN `%s` jf2 ON jf1.flightEntryID = jf2.flightEntryID AND jf1.id < jf2.id WHERE jf1.flightEntryID IS NOT NULL;",$prefix."judging_flights",$prefix."judging_flights");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() !== 0) {
+		$v3100_update .= "<li class=\"text-danger\">Could not check for duplicate judging table assignment records. Please contact support.</li>";
+		$error_count++;
+	}
+	elseif ($db_conn->count > 0) $v3100_update .= "<li>Resolved ".$db_conn->count." duplicate judging table assignment record(s) that could have caused an entry to show an incorrect table on some reports.</li>";
+
+	$sql = sprintf("ALTER TABLE `%s` ADD UNIQUE KEY `flightEntryID` (`flightEntryID`);",$prefix."judging_flights");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Strengthened judging table assignments to prevent an entry from ever being recorded on two tables at once.</li>";
+	else {
+		$v3100_update .= "<li class=\"text-danger\">Judging table assignments could NOT be strengthened against duplicate records. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];

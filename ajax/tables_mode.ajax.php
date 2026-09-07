@@ -113,7 +113,21 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 									'flightEntryID' => $row_entries['id'],
 									'flightRound' => $row_fl_round['flightRound']
 								);
-								$result = $db_conn->insert ($update_table, $data);
+
+								// An entry can already have a judging_flights row (e.g. it was
+								// previously flighted at a different table) - update it instead
+								// of blindly inserting a duplicate. See GitHub issue #1641.
+								$db_conn->where('flightEntryID', $row_entries['id']);
+								$db_conn->orderBy('id', 'DESC');
+								$row_existing_flight = $db_conn->getOne($prefix."judging_flights", "id");
+
+								if ($row_existing_flight) {
+									$db_conn->where('id', $row_existing_flight['id']);
+									$result = $db_conn->update($update_table, $data);
+								} else {
+									$result = $db_conn->insert ($update_table, $data);
+								}
+
 								if (!$result) $error_count += 1;
 
 							}

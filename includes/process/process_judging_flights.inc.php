@@ -28,7 +28,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'flightEntryID' => blank_to_null($flightEntryID),
 				'flightRound' => blank_to_null($flightRound),
 			);
-			$result = $db_conn->insert ($update_table, $data);
+
+			// This table is being flighted for the first time (that's what makes this the
+			// "add" action rather than "edit" - see table_choose() in admin.lib.php), but the
+			// entry itself may already have a row from a previous table assignment (e.g. its
+			// style/category was later moved here from a table that already had flights
+			// defined). Update that row instead of blindly inserting a second one for the
+			// same entry - see GitHub issue #1641.
+			$db_conn->where('flightEntryID', $flightEntryID);
+			$db_conn->orderBy('id', 'DESC');
+			$row_existing_flight = $db_conn->getOne($prefix."judging_flights", "id");
+
+			if ($row_existing_flight) {
+				$db_conn->where('id', $row_existing_flight['id']);
+				$result = $db_conn->update ($update_table, $data);
+			} else {
+				$result = $db_conn->insert ($update_table, $data);
+			}
+
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
@@ -77,7 +94,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					'flightNumber' => blank_to_null($flightNumber),
 					'flightEntryID' => blank_to_null($flightEntryID)
 				);
-				$result = $db_conn->insert ($update_table, $data);
+
+				// $id > 999999 means flight_entry_info() (admin/judging_flights.admin.php)
+				// found no existing row for this entry when the page was rendered, but check
+				// again here rather than trust that - it's possible for one to exist under a
+				// different table by now (e.g. a concurrent edit). Same reasoning as the "add"
+				// action above - see GitHub issue #1641.
+				$db_conn->where('flightEntryID', $flightEntryID);
+				$db_conn->orderBy('id', 'DESC');
+				$row_existing_flight = $db_conn->getOne($prefix."judging_flights", "id");
+
+				if ($row_existing_flight) {
+					$db_conn->where('id', $row_existing_flight['id']);
+					$result = $db_conn->update ($update_table, $data);
+				} else {
+					$result = $db_conn->insert ($update_table, $data);
+				}
+
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;

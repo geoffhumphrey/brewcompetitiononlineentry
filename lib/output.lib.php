@@ -578,6 +578,7 @@ function check_flight_number($entry_id,$flight,$method) {
   $r = "";
 
 	$db_conn->where('flightEntryID', $entry_id);
+  $db_conn->orderBy('id', 'DESC');
   $row_flights = $db_conn->getOne($prefix."judging_flights", "flightNumber,flightRound");
 
   if ($row_flights) {
@@ -623,6 +624,7 @@ function get_flight_info($id) {
     $db_conn = new MysqliDb($connection);
 
     $db_conn->where('flightEntryID', $id);
+    $db_conn->orderBy('id', 'DESC');
     $row_flights = $db_conn->getOne($prefix."judging_flights");
     $totalRows_flights = $db_conn->count;
 
