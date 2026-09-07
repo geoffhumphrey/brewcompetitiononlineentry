@@ -34,6 +34,21 @@ function mime_encode_header_name($name) {
     return $encoded;
 }
 
+/**
+ * RFC 2047 MIME-encode an email Subject header for the plain PHP mail() fallback. PHPMailer's
+ * send() already does this internally for the SMTP path; mail() does not, so a non-ASCII
+ * Subject - e.g. a "TM" superscript or accented character carried over from the competition
+ * name - reaches the recipient's mail server as raw, unencoded bytes. Some receivers reject
+ * that outright as a malformed header (confirmed: Yahoo, error 554 "[299]" - GitHub issue
+ * #1589). Unlike mime_encode_header_name()'s display-name case, Subject is free text rather
+ * than an address list, so no RFC 5322 "specials" quoting applies - mb_encode_mimeheader()
+ * alone is correct here, and is a no-op for plain-ASCII input.
+ */
+function mime_encode_header_subject($subject) {
+    if (($subject === null) || ($subject === "")) return $subject;
+    return mb_encode_mimeheader($subject, "UTF-8", "B", "\r\n");
+}
+
 function sendPHPMailerMessage($mail) {
 
     require (CONFIG.'config.php');

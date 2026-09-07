@@ -214,8 +214,8 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 
 				// Fallback for password recovery only - attempt to email using mail() function
 				else {
-					
-					$fallback_mail = mail($to_email_formatted, $subject, $message, $headers);
+
+					$fallback_mail = mail($to_email_formatted, mime_encode_header_subject($subject), $message, $headers);
 					if (!$fallback_mail) $error_output .= "Sending email via the PHP mail() function failed. Contact the competition officials to reset your password.";
 
 				}

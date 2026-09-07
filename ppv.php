@@ -239,7 +239,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 					error_log("Email not sent: ".$e->getMessage());
 				}
 			} else {
-				mail($to_email_formatted, $subject, $message_all, $headers);
+				mail($to_email_formatted, mime_encode_header_subject($subject), $message_all, $headers);
 			}
 
 	    }
@@ -325,7 +325,7 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 				error_log("Email not sent: ".$e->getMessage());
 			}
 		} else {
-			mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
+			mail($confirm_to_email_address, mime_encode_header_subject($subject_confirm), $message_all_confirm, $headers_confirm);
 		}
 	
 	}
