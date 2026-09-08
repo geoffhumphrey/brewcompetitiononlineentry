@@ -34,7 +34,7 @@ function check_judging_num($input) {
 	$db_conn->where('brewJudgingNumber', $input);
 	$row_brewing_styles = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
-	$files = array_slice(scandir(USER_DOCS), 2);
+	$files = is_dir(USER_DOCS) ? array_slice(scandir(USER_DOCS), 2) : array();
 	$scoresheet_file_name_judging = strtolower($input).".pdf";
 
 	if (($row_brewing_styles['count'] == 0) && (!in_array($scoresheet_file_name_judging,$files))) return TRUE;
@@ -187,7 +187,7 @@ function generate_judging_numbers($brewing_db_table,$method) {
 
 	if ($method == "default") {
 
-		$files = array_slice(scandir(USER_DOCS), 2);
+		$files = is_dir(USER_DOCS) ? array_slice(scandir(USER_DOCS), 2) : array();
 
 		foreach ($rows_judging_numbers as $row_judging_numbers) {
 

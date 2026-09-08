@@ -126,7 +126,7 @@ if (!is_dir_empty(USER_DOCS)) {
 	$filelist_head .= "</thead>\n";
 	$filelist_head .= "<tbody>\n";
 
-	$files = new FilesystemIterator(USER_DOCS);
+	$files = is_dir(USER_DOCS) ? new FilesystemIterator(USER_DOCS) : array();
 
 	foreach($files as $file) {
 

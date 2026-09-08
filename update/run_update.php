@@ -1255,16 +1255,20 @@ elseif ($update_running) {
 // Begin version unordered list
 if (!$setup_running) $v21110_update .= "<ul>";
 
-$files = new FilesystemIterator(USER_DOCS);
+if (is_dir(USER_DOCS)) {
 
-foreach($files as $file) {
+	$files = new FilesystemIterator(USER_DOCS);
 
-	$mime = mime_content_type($file->getPathname());
+	foreach($files as $file) {
 
-	if (stripos($mime, "pdf") !== false) {
-		$file_name_current = $file->getFilename();
-		$file_name_new = strtolower($file->getFilename());
-		rename(USER_DOCS.$file_name_current, USER_DOCS.$file_name_new);
+		$mime = mime_content_type($file->getPathname());
+
+		if (stripos($mime, "pdf") !== false) {
+			$file_name_current = $file->getFilename();
+			$file_name_new = strtolower($file->getFilename());
+			rename(USER_DOCS.$file_name_current, USER_DOCS.$file_name_new);
+		}
+
 	}
 
 }

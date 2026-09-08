@@ -34,3 +34,7 @@ cleanup_double_encoding.php
 vendor/
 tools/*
 ajax/practice_session.ajax.php
+user_docs/*
+!user_docs/.gitkeep
+user_temp/*
+!user_temp/.gitkeep

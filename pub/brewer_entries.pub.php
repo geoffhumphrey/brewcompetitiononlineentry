@@ -328,7 +328,7 @@ if ($totalRows_log > 0) {
 			 * how old they are.
 			 */
 
-			$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+			$tempfiles = is_dir(USER_TEMP) ? array_diff(scandir(USER_TEMP), array('..', '.')) : array();
 			
 			foreach ($tempfiles as $file) {
 				

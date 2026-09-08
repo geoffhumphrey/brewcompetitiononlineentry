@@ -433,7 +433,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		$files = array_slice(scandir(USER_DOCS), 2);
+		$files = is_dir(USER_DOCS) ? array_slice(scandir(USER_DOCS), 2) : array();
 		$judging_number_looper = TRUE;
 
 		while($judging_number_looper) {
