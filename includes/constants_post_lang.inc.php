@@ -19,6 +19,22 @@ if (DEBUG) include (DEBUGGING.'query_count_begin.debug.php');
 
 csrf_token_generate(false);
 
+/**
+ * Pouring instruction maps (brewPouring JSON). Historic entries stored the
+ * translated literal (locale-dependent); new entries store locale-neutral
+ * keys. Values not present in the map pass through unchanged and display
+ * as stored (backwards compatibility with legacy locale-dependent data).
+ */
+$pouring_translations = array(
+    "fast"   => $label_fast,
+    "normal" => $label_normal,
+    "slow"   => $label_slow,
+);
+
+$pouring_rouse_translations = array(
+    "yes" => $label_yes,
+    "no"  => $label_no,
+);
 // Bootstrap layout containers
 if (($section == "admin") || ($view == "admin")) {
     $container_main = "container-fluid";

@@ -769,13 +769,13 @@ echo $add_edit_entry_modals;
 		    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		        <div class="input-group" id="brewPouringInst">
 				    <label class="radio-inline">
-				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Fast" value="<?php echo $label_fast; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_fast)) echo "CHECKED"; ?>> <?php echo $label_fast; ?>
+				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Fast" value="fast" <?php if (($action == "edit") && (($pouring_arr['pouring'] == "fast") || ($pouring_arr['pouring'] == $label_fast))) echo "CHECKED"; ?>> <?php echo $label_fast; ?>
 				    </label>
 				    <label class="radio-inline">
-				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Normal" value="<?php echo $label_normal; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring'] == $label_normal)) echo "CHECKED"; ?>> <?php echo $label_normal; ?>
+				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Normal" value="normal" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && (($pouring_arr['pouring'] == "normal") || ($pouring_arr['pouring'] == $label_normal))) echo "CHECKED"; ?>> <?php echo $label_normal; ?>
 				    </label>
 				    <label class="radio-inline">
-				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Slow" value="<?php echo $label_slow; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_slow)) echo "CHECKED"; ?>> <?php echo $label_slow; ?>
+				      <input name="brewPouringInst" type="radio" id="brewPouringInst-Slow" value="slow" <?php if (($action == "edit") && (($pouring_arr['pouring'] == "slow") || ($pouring_arr['pouring'] == $label_slow))) echo "CHECKED"; ?>> <?php echo $label_slow; ?>
 				    </label>
 				</div>
 				<div class="help-block with-errors"></div>
@@ -787,10 +787,10 @@ echo $add_edit_entry_modals;
 		    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		        <div class="input-group" id="brewPouringRouse">
 				    <label class="radio-inline">
-				      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-Yes" value="<?php echo $label_yes; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_yes)) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
+				      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-Yes" value="yes" <?php if (($action == "edit") && (($pouring_arr['pouring_rouse'] == "yes") || ($pouring_arr['pouring_rouse'] == $label_yes))) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
 				    </label>
 				    <label class="radio-inline">
-				      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-No" value="<?php echo $label_no; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_no)) echo "CHECKED"; ?>> <?php echo $label_no; ?>
+				      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-No" value="no" <?php if (($action == "edit") && (($pouring_arr['pouring_rouse'] == "no") || ($pouring_arr['pouring_rouse'] == $label_no))) echo "CHECKED"; ?>> <?php echo $label_no; ?>
 				    </label>
 				</div>
 				<div class="help-block with-errors"></div>

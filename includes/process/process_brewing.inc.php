@@ -235,11 +235,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$pouring_instructions = array();
 
 		if ((isset($_POST['brewPouringInst'])) && (!empty($_POST['brewPouringInst']))) {
-			$pouring_instructions['pouring'] = sterilize($_POST['brewPouringInst']);		
+			$pouring_instructions['pouring'] = sterilize($_POST['brewPouringInst']);
 		}
 
 		if ((isset($_POST['brewPouringRouse'])) && (!empty($_POST['brewPouringRouse']))) {
-			$pouring_instructions['pouring_rouse'] = sterilize($_POST['brewPouringRouse']);		
+			$pouring_instructions['pouring_rouse'] = sterilize($_POST['brewPouringRouse']);
 		}
 
 		if ((isset($_POST['brewPouringNotes'])) && (!empty($_POST['brewPouringNotes']))) {
@@ -247,6 +247,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$pouring_instructions['pouring_notes'] = $brewPouringNotes;
 		}
 
+		// On edit, if the pouring radio fields were absent from the POST
+		// (cross-locale edit where the legacy stored literal doesn't match
+		// any radio in the current locale, so no radio is pre-selected and
+		// the browser submits nothing), preserve the existing stored
+		// brewPouring values rather than overwriting them with empty.
+		if (($action == "edit") && (!isset($_POST['brewPouringInst']) || !isset($_POST['brewPouringRouse']))) {
+			$db_conn->where("id", $id);
+			$row_existing_pouring = $db_conn->getOne($brewing_db_table, "brewPouring");
+			if (!empty($row_existing_pouring['brewPouring'])) {
+				$existing_pouring_arr = json_decode($row_existing_pouring['brewPouring'], true);
+				if (!isset($pouring_instructions['pouring']) && isset($existing_pouring_arr['pouring']))
+					$pouring_instructions['pouring'] = $existing_pouring_arr['pouring'];
+				if (!isset($pouring_instructions['pouring_rouse']) && isset($existing_pouring_arr['pouring_rouse']))
+					$pouring_instructions['pouring_rouse'] = $existing_pouring_arr['pouring_rouse'];
+				if (!isset($pouring_instructions['pouring_notes']) && isset($existing_pouring_arr['pouring_notes']))
+					$pouring_instructions['pouring_notes'] = $existing_pouring_arr['pouring_notes'];
+			}
+		}
 		$brewPouring = json_encode($pouring_instructions);
 
 		if (isset($_POST['brewPackaging'])) $brewPackaging = sterilize($_POST['brewPackaging']);

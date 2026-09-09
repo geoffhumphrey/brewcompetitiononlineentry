@@ -236,6 +236,39 @@ function in_string($haystack,$needle) {
 	if (strpos($haystack,$needle) !== false) return TRUE;
 }
 
+/**
+ * Translate a stored pouring instruction (brewPouring JSON: 'pouring').
+ * Maps cover the locale-neutral keys written by the entry forms. Values
+ * not in the map (e.g. legacy entries stored as translated literals in
+ * another locale, such as a Spanish 'Si') pass through unchanged and
+ * display as stored - intentional backwards compatibility for legacy
+ * data. Maps are defined in constants_post_lang.inc.php (after language
+ * load).
+ */
+function translate_pouring_value($value) {
+
+	global $pouring_translations;
+
+	if (isset($pouring_translations[$value])) return $pouring_translations[$value];
+	return $value;
+
+}
+
+/**
+ * Translate a stored rouse-yeast answer (brewPouring JSON:
+ * 'pouring_rouse'). Same map-and-fallback handling as
+ * translate_pouring_value(): values not in the map pass through
+ * unchanged and display as stored (backwards compatibility).
+ */
+function translate_pouring_rouse_value($value) {
+
+	global $pouring_rouse_translations;
+
+	if (isset($pouring_rouse_translations[$value])) return $pouring_rouse_translations[$value];
+	return $value;
+
+}
+
 function designations($judge_array,$display) {
 	$return = "";
 	$rank1 = explode(",",$judge_array);
