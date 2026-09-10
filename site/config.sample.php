@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
