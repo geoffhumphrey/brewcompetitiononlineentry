@@ -24,6 +24,9 @@ else $scoresheet_display[] = $id;
 foreach ($scoresheet_display as $id) {
 	
 	include (EVALS.'db.eval.php');
+
+    if ($eval_access_denied) continue;
+
     include (EVALS.'scoresheet_head.eval.php');
 
     // Display scoresheet based upon type declared in the record

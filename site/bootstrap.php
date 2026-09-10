@@ -220,6 +220,8 @@ if ($setup_success) {
 				'prefsCompLogoSize' => '300',
 				'prefsDisplayWinners' => 'Y',
 				'prefsWinnerDelay' => '1616974200',
+				'prefsDisplayScoresheets' => 'N',
+				'prefsScoresheetDelay' => NULL,
 				'prefsWinnerMethod' => '0',
 				'prefsDisplaySpecial' => 'J',
 				'prefsBOSMead' => 'N',

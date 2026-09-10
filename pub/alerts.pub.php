@@ -382,7 +382,17 @@ else {
 
   if (($steward_limit) && ($section == "register") && ($go == "steward")) { 
     $stacked_alert_msg_warning .= "<p class=\"mb-1\">".$alert_text_079."</p>";
-  } 
+  }
+
+  // Scoresheet early-release notice - guests only, so logged-in entrants
+  // (who already see scoresheet links directly on their entries) aren't
+  // nagged with a banner every homepage visit. Reuses $default_page_text_025
+  // rather than a new alert-specific string. Suppressed once official
+  // results are out (judging_winner_display on prefsWinnerDelay), since the
+  // main results section covers it by then.
+  if (($section == "default") && (!$ua) && ($judging_past == 0) && ($msg == "default") && ($_SESSION['prefsDisplayScoresheets'] == "Y") && (judging_winner_display($_SESSION['prefsScoresheetDelay'])) && (!(($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))))) {
+    $stacked_alert_msg_info .= "<p class=\"mb-1\">".$default_page_text_025."</p>";
+  }
 
 } // end if (!$logged_in) 
 

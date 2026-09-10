@@ -2248,6 +2248,16 @@ $entry_info_text_058 = "Faça login para ver o local e seu endereço, se dispon�
 $contact_text_014 = "A exibição dos contatos da competição foi desativada pelos administradores do site. Utilize outros meios para entrar em contato com qualquer representante da competição (redes sociais, site da organização, etc.).";
 
 /**
+ * ------------------------------------------
+ * Version 3.2.0 Additions
+ * ------------------------------------------
+ */
+
+$default_page_text_024 = "As folhas de pontuação estarão disponíveis para visualização ou download a partir de";
+$default_page_text_025 = "As folhas de pontuação já estão disponíveis para visualização ou download.";
+$label_scoresheets_available = "Folhas de Pontuação Disponíveis para Download";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

@@ -2246,6 +2246,16 @@ $contact_text_014 = "Display of competition contacts has been disabled by the si
 
 /**
  * ------------------------------------------
+ * Version 3.2.0 Additions
+ * ------------------------------------------
+ */
+
+$default_page_text_024 = "Scoresheets will be available for viewing or download on or after";
+$default_page_text_025 = "Scoresheets are now available to view or download.";
+$label_scoresheets_available = "Scoresheets Available for Download";
+
+/**
+ * ------------------------------------------
  * END TRANSLATIONS
  * ------------------------------------------
  *

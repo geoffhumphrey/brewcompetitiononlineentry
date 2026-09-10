@@ -2181,6 +2181,16 @@ $entry_info_text_058 = "Přihlaste se pro zobrazení místa a jeho adresy, pokud
 $contact_text_014 = "Správci stránek zakázali zveřejňování kontaktních údajů na soutěž. Pro kontaktování pořadatelů soutěže využijte jiné způsoby (sociální sítě, webové stránky organizace atd.).";
 
 /**
+ * ------------------------------------------
+ * Version 3.2.0 Additions
+ * ------------------------------------------
+ */
+
+$default_page_text_024 = "Degustační listy budou k dispozici k prohlížení nebo stažení počínaje";
+$default_page_text_025 = "Degustační listy jsou nyní k dispozici k prohlížení nebo stažení.";
+$label_scoresheets_available = "Degustační listy k dispozici ke stažení";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

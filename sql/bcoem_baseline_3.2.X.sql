@@ -9,7 +9,7 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- Sets up a basic install and baseline data for version 3.0.X.
+-- Sets up a basic install and baseline data for version 3.2.X.
 -- Import this DB structure and dummy data via phpMyAdmin or shell access.
 -- Adds a top-level admin user:
 --   - Username: user.baseline@brewingcompetitions.com
@@ -559,6 +559,8 @@ CREATE TABLE `baseline_preferences` (
   `prefsCompLogoSize` varchar(255) DEFAULT NULL,
   `prefsDisplayWinners` char(1) DEFAULT NULL,
   `prefsWinnerDelay` varchar(15) DEFAULT NULL COMMENT 'Unix timestamp to display winners',
+  `prefsDisplayScoresheets` char(1) DEFAULT NULL,
+  `prefsScoresheetDelay` varchar(15) DEFAULT NULL COMMENT 'Unix timestamp to display scoresheets to entrants early, ahead of the Results Display date',
   `prefsWinnerMethod` int(11) DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category',
   `prefsDisplaySpecial` char(1) DEFAULT NULL,
   `prefsBOSMead` char(1) DEFAULT 'N',

@@ -2243,6 +2243,16 @@ $contact_text_014 = "A verseny kapcsolattartóinak megjelenítését a webhely r
 
 /**
  * ------------------------------------------
+ * Version 3.2.0 Additions
+ * ------------------------------------------
+ */
+
+$default_page_text_024 = "A pontozólapok megtekintése vagy letöltése a következő dátumtól válik elérhetővé:";
+$default_page_text_025 = "A pontozólapok mostantól megtekinthetők vagy letölthetők.";
+$label_scoresheets_available = "Pontozólapok letöltésre elérhetők";
+
+/**
+ * ------------------------------------------
  * END TRANSLATIONS
  * ------------------------------------------
  *

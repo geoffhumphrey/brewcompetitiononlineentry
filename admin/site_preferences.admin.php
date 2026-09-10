@@ -952,6 +952,16 @@ $(document).ready(function(){
         <div class="help-block with-errors"></div>
     </div>
 </div>
+<?php if (strpos($section, "step") === FALSE) { ?>
+<div class="form-group">
+    <label for="prefsScoresheetDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Early-Release Date/Time</label>
+    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
+            <input class="form-control date-time-picker-system" id="prefsScoresheetDelay" name="prefsScoresheetDelay" type="text" value="<?php if (!empty($row_prefs['prefsScoresheetDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsScoresheetDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+        <div class="help-block">Date and time when entrants can begin viewing their own scoresheets, independent of (and typically before) the Results Display date above. If left blank, scoresheets remain gated by the Results Display date only.</div>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+<?php } ?>
 <div class="form-group">
     <label for="prefsWinnerMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Place Distribution Method</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

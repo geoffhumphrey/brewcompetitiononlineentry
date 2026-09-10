@@ -256,7 +256,12 @@ if ($totalRows_log > 0) {
 		$scoresheet_link = "";
 		$scoresheet_link_eval = "";
 
-		if (($show_scores) && ($show_scoresheets)) {
+		// $user_has_scoresheet (computed once in list.pub.php, which is the only
+		// place this file is ever included from) is FALSE only when none of the
+		// user's entries have a scoresheet at all - skips the in_array()/
+		// file_exists() checks below for every row in that case, with no change
+		// in what renders, since they'd all come up empty anyway.
+		if (($show_scoresheets) && ($user_has_scoresheet)) {
 
 			if ($_SESSION['prefsEval'] == 1) {
 						
@@ -463,6 +468,8 @@ if ($totalRows_log > 0) {
 		// Display if Closed, Judging Dates have passed, winner display is enabled, and the winner display delay time period has passed
 		if ($show_scores) {
 
+			$score = score_check($row_log['id'],$judging_scores_db_table);
+
 			$medal_winner = winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$_SESSION['prefsWinnerMethod']);
 			
 			$winner_place = strpos($medal_winner, ':');
@@ -471,7 +478,6 @@ if ($totalRows_log > 0) {
 				$winner_place = preg_replace("/[^0-9\s.-]/", "", $winner_place);
 			}
 			
-			$score = score_check($row_log['id'],$judging_scores_db_table);
 	 		$entry_mini_bos = FALSE;
 	 		if (minibos_check($row_log['id'],$judging_scores_db_table)) $entry_mini_bos = TRUE;
 
@@ -645,13 +651,21 @@ if ($totalRows_log > 0) {
 		$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>", $label_entry_number, $entry_number);
 		if (!empty($row_log['brewCoBrewer'])) $entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_cobrewer,$row_log['brewCoBrewer']);
 
+		if (($scoresheet) || ($show_scores)) $entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_judging_number, $judging_number);
+
 		if ($show_scores) {
-			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_judging_number, $judging_number);
-			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_score, $score);
-			if (minibos_check($row_log['id'],$judging_scores_db_table)) $entry_output_cards .= sprintf("<li><strong>%s:</strong> <i class=\"fa fa-sm fa-check text-success\"></i></li>",$label_mini_bos);
 			if (!empty($medal_winner)) $entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",str_replace("?", "", $label_winner), str_replace(":", " -", $medal_winner));
-			if ($scoresheet) $entry_output_cards .= sprintf("<li><strong>%s:</strong> %s%s %s</li>", $label_scoresheet, $scoresheet_link_eval, $scoresheet_link, $scoresheet_mixed);
 			// $entry_output_cards .= "<li><hr class=\"mt-1 mb-1\"></li>";
+		}
+
+		// Scoresheet availability is gated independently of $show_scores (it can release
+		// before official results/scores), so this can't rely on $score above, which is
+		// only ever computed inside if ($show_scores) - look it up fresh here instead.
+		if ($scoresheet) {
+			$scoresheet_score = score_check($row_log['id'],$judging_scores_db_table);
+			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>",$label_score, $scoresheet_score);
+			if (minibos_check($row_log['id'],$judging_scores_db_table)) $entry_output_cards .= sprintf("<li><strong>%s:</strong> <i class=\"fa fa-sm fa-check text-success\"></i></li>",$label_mini_bos);
+			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s%s %s</li>", $label_scoresheet, $scoresheet_link_eval, $scoresheet_link, $scoresheet_mixed);
 		}
 
 		$entry_output_cards .= $required_info;

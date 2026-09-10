@@ -244,7 +244,7 @@ if ($totalRows_log > 0) {
 		$scoresheet_link = "";
 		$scoresheet_link_eval = "";
 
-		if (($show_scores) && ($show_scoresheets)) {
+		if ($show_scoresheets) {
 
 			if ($_SESSION['prefsEval'] == 1) {
 						

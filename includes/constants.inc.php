@@ -538,6 +538,9 @@ if ((strpos($section, "step") === FALSE) && ($section != "setup") && ($judging_p
             $show_scoresheets = TRUE;
         }
     }
+    if (($logged_in) && (!$show_scoresheets) && ($_SESSION['prefsDisplayScoresheets'] == "Y") && (judging_winner_display($_SESSION['prefsScoresheetDelay']))) {
+        $show_scoresheets = TRUE;
+    }
 }
 
 // DataTables Default Values

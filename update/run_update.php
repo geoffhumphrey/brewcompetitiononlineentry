@@ -79,7 +79,8 @@ $versions = array(
 	"3.0.2.0" => 33,
 	"3.0.3.0" => 34,
 	"3.0.4.0" => 35,
-	"3.1.0.0" => 36
+	"3.1.0.0" => 36,
+	"3.2.0.0" => 37
 );
 
 $pre_update_version_index = $versions[$row_pv['version']];
@@ -5297,6 +5298,44 @@ if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];
 if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3100_update;
+
+/**
+ * ----------------------------------------------- 3.2.0 ----------------------------------------------
+ * Adds the ability to release scoresheets to entrants before official results/winners are published,
+ * via a new admin-defined date independent of the existing Results Display date (#694).
+ */
+
+$v3200_update = "";
+
+if ((!$setup_running) && (!$update_running)) {
+	$v3200_update .= "<p>";
+	$v3200_update .= "<strong>Version 3.2.0.0 Updates</strong>";
+	$v3200_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$v3200_update .= "<h4>Version 3.2.0</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $v3200_update .= "<ul>";
+
+if (!check_update("prefsScoresheetDelay", $prefix."preferences")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `prefsDisplayScoresheets` CHAR(1) NULL DEFAULT 'N', ADD `prefsScoresheetDelay` VARCHAR(15) NULL DEFAULT NULL COMMENT 'Unix timestamp to display scoresheets to entrants early, ahead of the Results Display date';",$prefix."preferences");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3200_update .= "<li>Added the ability to release scoresheets to entrants before official results are published.</li>";
+	else {
+		$v3200_update .= "<li class=\"text-danger\">Early scoresheet release could NOT be enabled. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
+if (!$setup_running) $v3200_update .= "</ul>";
+
+$this_update_version_block = $versions['3.2.0.0'];
+if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3200_update;
 
 
 /**

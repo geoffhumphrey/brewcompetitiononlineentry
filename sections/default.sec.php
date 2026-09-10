@@ -178,6 +178,15 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 
 		else {
 			if (isset($page_info)) echo $page_info;
+
+			if ($_SESSION['prefsDisplayScoresheets'] == "Y") {
+				if (judging_winner_display($_SESSION['prefsScoresheetDelay'])) {
+					echo "<p>".$default_page_text_025."</p>";
+				}
+				else {
+					echo sprintf("<p>%s %s.</p>",$default_page_text_024,getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsScoresheetDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
+				}
+			}
 		}
 	}
 }

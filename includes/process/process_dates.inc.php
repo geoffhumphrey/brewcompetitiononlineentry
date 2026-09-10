@@ -121,21 +121,37 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	// Results Publish
 	$prefsWinnerDelay = "";
 	$prefsDisplayWinners = "N";
-	
+
 	if (isset($_POST['prefsWinnerDelay'])) {
-		
+
 		if (!empty($_POST['prefsWinnerDelay'])) {
 			$prefsWinnerDelay = to_utc_epoch(sterilize($_POST['prefsWinnerDelay']), $timezone_raw);
 			$prefsDisplayWinners = "Y";
 		}
-			
+
 		else $prefsDisplayWinners = "N";
+	}
+
+	// Scoresheet Early Release
+	$prefsScoresheetDelay = "";
+	$prefsDisplayScoresheets = "N";
+
+	if (isset($_POST['prefsScoresheetDelay'])) {
+
+		if (!empty($_POST['prefsScoresheetDelay'])) {
+			$prefsScoresheetDelay = to_utc_epoch(sterilize($_POST['prefsScoresheetDelay']), $timezone_raw);
+			$prefsDisplayScoresheets = "Y";
+		}
+
+		else $prefsDisplayScoresheets = "N";
 	}
 
 	$update_table = $prefix."preferences";
 	$data = array(
 		'prefsWinnerDelay' => blank_to_null($prefsWinnerDelay),
-		'prefsDisplayWinners' => blank_to_null($prefsDisplayWinners)
+		'prefsDisplayWinners' => blank_to_null($prefsDisplayWinners),
+		'prefsScoresheetDelay' => blank_to_null($prefsScoresheetDelay),
+		'prefsDisplayScoresheets' => blank_to_null($prefsDisplayScoresheets)
 	);
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);

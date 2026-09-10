@@ -192,6 +192,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = to_utc_epoch(sterilize($_POST['prefsWinnerDelay']), $timezone_raw);
 			else $prefsWinnerDelay = 2145916800;
 
+			// Scoresheet Early Release - optional, and not part of the setup wizard, so
+			// $_POST won't have it there; leave disabled (blank/"N") in that case.
+			$prefsScoresheetDelay = "";
+			$prefsDisplayScoresheets = "N";
+
+			if (isset($_POST['prefsScoresheetDelay'])) {
+
+				if (!empty($_POST['prefsScoresheetDelay'])) {
+					$prefsScoresheetDelay = to_utc_epoch(sterilize($_POST['prefsScoresheetDelay']), $timezone_raw);
+					$prefsDisplayScoresheets = "Y";
+				}
+
+				else $prefsDisplayScoresheets = "N";
+			}
+
 			// Restrict the selected languages to known, valid codes regardless of
 			// what was posted, and never allow the list to end up empty.
 			// get_available_language_codes() (lib/common.lib.php, already loaded
@@ -221,6 +236,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'prefsMHPDisplay' => $prefsMHPDisplay,
 				'prefsDisplayWinners' => sterilize($_POST['prefsDisplayWinners']),
 				'prefsWinnerDelay' => $prefsWinnerDelay,
+				'prefsDisplayScoresheets' => blank_to_null($prefsDisplayScoresheets),
+				'prefsScoresheetDelay' => blank_to_null($prefsScoresheetDelay),
 				'prefsWinnerMethod' => sterilize($_POST['prefsWinnerMethod']),
 				'prefsTheme' => sterilize($_POST['prefsTheme']),
 				'prefsSEF' => sterilize($_POST['prefsSEF']),

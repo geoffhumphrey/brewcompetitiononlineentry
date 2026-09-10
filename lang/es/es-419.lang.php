@@ -2260,6 +2260,16 @@ $entry_info_text_058 = "Inicie sesión para ver la ubicación y su dirección, s
 $contact_text_014 = "Los administradores del sitio han desactivado la visualización de los datos de contacto de la competencia. Utiliza otros medios para ponerte en contacto con cualquier responsable de la competencia (redes sociales, el sitio web de la organización, etc.).";
 
 /**
+ * ------------------------------------------
+ * Version 3.2.0 Additions
+ * ------------------------------------------
+ */
+
+$default_page_text_024 = "Las hojas de puntuación estarán disponibles para ver o descargar a partir del";
+$default_page_text_025 = "Las hojas de puntuación ya están disponibles para ver o descargar.";
+$label_scoresheets_available = "Hojas de Puntuación Disponibles para Descargar";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

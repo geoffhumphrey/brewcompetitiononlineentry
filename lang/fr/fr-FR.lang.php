@@ -2261,6 +2261,16 @@ $entry_info_text_058 = "Connectez-vous pour voir le lieu et son adresse, si disp
 $contact_text_014 = "L'affichage des coordonnées des responsables de la compétition a été désactivé par les administrateurs du site. Veuillez utiliser d'autres moyens pour contacter les responsables de la compétition (réseaux sociaux, site web de l'organisation, etc.).";
 
 /**
+ * ------------------------------------------
+ * Version 3.2.0 Additions
+ * ------------------------------------------
+ */
+
+$default_page_text_024 = "Les fiches de dégustation seront disponibles pour consultation ou téléchargement à partir du";
+$default_page_text_025 = "Les fiches de dégustation sont désormais disponibles pour consultation ou téléchargement.";
+$label_scoresheets_available = "Fiches de notation disponibles au téléchargement";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS 
  * ----------------------------------------------------------------------------------

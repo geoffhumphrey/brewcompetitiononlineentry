@@ -48,4 +48,23 @@ else {
 
 $db_conn->where("id", $row_eval['eid']);
 $row_entry_info = $db_conn->getOne($prefix."brewing".$archive_suffix);
+
+// Staff/judges (userLevel <= 1) may view any scoresheet. A logged-in entrant
+// (userLevel > 1) may only view scoresheets for their own entries. Anonymous
+// access is only valid with a token matching this specific evaluation's
+// evalToken - previously $token was never actually checked against the row.
+$eval_access_denied = FALSE;
+if ((isset($_SESSION['loginUsername'])) && ($token == "default")) {
+	if (($_SESSION['userLevel'] > 1) && ((empty($row_entry_info)) || ($row_entry_info['brewBrewerID'] != $_SESSION['user_id']))) {
+		$eval_access_denied = TRUE;
+	}
+}
+elseif ($token != "default") {
+	if ((empty($row_eval['evalToken'])) || ($token != $row_eval['evalToken'])) {
+		$eval_access_denied = TRUE;
+	}
+}
+else {
+	$eval_access_denied = TRUE;
+}
 ?>
