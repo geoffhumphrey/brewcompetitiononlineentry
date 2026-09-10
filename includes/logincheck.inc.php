@@ -34,8 +34,11 @@ $failed_count = 0;
 
 if ($totalRows_login > 0) {
 
-	$failed_count = (int) $row_login['userFailedLogins'];
-	$failed_time = (int) $row_login['userFailedLoginTime'];
+	// Pre-2.1.10.0 data won't have these columns yet - default to "no failed attempts
+	// recorded" rather than warning, since a login here is likely on its way to
+	// update.php, which is what adds them.
+	$failed_count = (int) ($row_login['userFailedLogins'] ?? 0);
+	$failed_time = (int) ($row_login['userFailedLoginTime'] ?? 0);
 
 	if (($failed_count >= LOGIN_LOCKOUT_THRESHOLD) && ((time() - $failed_time) < LOGIN_LOCKOUT_WINDOW_SECONDS)) {
 		$account_locked = TRUE;
@@ -80,8 +83,17 @@ if ($check == 1) {
 
 	// Register the loginUsername but first update the db record to make sure the the user name is stored as all lowercase.
 	// Also reset the failed-login counter now that a valid login has succeeded.
-	$db_conn->where('id', $row_login['id']);
-	$db_conn->update($prefix."users", array('user_name' => $loginUsername, 'userFailedLogins' => 0, 'userFailedLoginTime' => NULL));
+	try {
+		$db_conn->where('id', $row_login['id']);
+		$db_conn->update($prefix."users", array('user_name' => $loginUsername, 'userFailedLogins' => 0, 'userFailedLoginTime' => NULL));
+	}
+	catch (mysqli_sql_exception $e) {
+		// Pre-2.1.10.0 data: those two columns don't exist yet. Don't let a login that's
+		// likely on its way to update.php (which adds them) crash here - retry with just
+		// the field that's always been present.
+		$db_conn->where('id', $row_login['id']);
+		$db_conn->update($prefix."users", array('user_name' => $loginUsername));
+	}
 
 	// Convert email address in the user's accociated record in the "brewer" table
 	$db_conn->where('uid', $row_login['id']);
@@ -125,8 +137,13 @@ else {
 	$location = $base_url."index.php?msg=11";
 
 	if ($totalRows_login > 0) {
-		$db_conn->where('id', $row_login['id']);
-		$db_conn->update($prefix."users", array('userFailedLogins' => $failed_count + 1, 'userFailedLoginTime' => time()));
+		try {
+			$db_conn->where('id', $row_login['id']);
+			$db_conn->update($prefix."users", array('userFailedLogins' => $failed_count + 1, 'userFailedLoginTime' => time()));
+		}
+		catch (mysqli_sql_exception $e) {
+			// Pre-2.1.10.0 data: nothing to record yet, but don't let it crash the login flow.
+		}
 	}
 
 	session_destroy();

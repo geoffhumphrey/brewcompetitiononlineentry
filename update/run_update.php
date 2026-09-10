@@ -147,6 +147,7 @@ $row_current_prefs = $db_conn->rawQueryOne($query_current_prefs);
  */
 
 
+$error_count_before_v2150 = $error_count;
 $v2150_update = "";
 
 if (!$setup_running) $v2150_update .= "<ul>";
@@ -273,7 +274,7 @@ if (!check_update("brewStyleComEx", $styles_db_table)) {
 if (!$setup_running) $v2150_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.5.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2150_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2150)) $output_run_update .= $v2150_update;
 
 /**
  * ----------------------------------------------- 2.1.8 -----------------------------------------------
@@ -282,6 +283,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * -----------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2180 = $error_count;
 $v2180_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -573,7 +575,7 @@ $v2180_update .= "</li>";
 if (!$setup_running) $v2180_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.8.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2180_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2180)) $output_run_update .= $v2180_update;
 
 /**
  * ----------------------------------------------- 2.1.9 -----------------------------------------------
@@ -581,6 +583,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * -----------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2190 = $error_count;
 $v2190_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -644,7 +647,7 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
 if (!$setup_running) $v2190_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.9.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2190_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2190)) $output_run_update .= $v2190_update;
 
 /**
  * ----------------------------------------------- 2.1.10 ----------------------------------------------
@@ -656,6 +659,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * -----------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v21100 = $error_count;
 $v21100_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -1232,7 +1236,7 @@ if ($totalRows_entry_names > 0) {
 }
 
 $this_update_version_block = $versions['2.1.10.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v21100_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v21100)) $output_run_update .= $v21100_update;
 
 /**
  * ----------------------------------------------- 2.1.11 ----------------------------------------------
@@ -1240,6 +1244,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * -----------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v21110 = $error_count;
 $v21110_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -1278,7 +1283,7 @@ $v21110_update .= "<li>PDF file names in the user_docs directory converted to lo
 if (!$setup_running) $v21110_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.11.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v21110_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v21110)) $output_run_update .= $v21110_update;
 
 /**
  * ----------------------------------------------- 2.1.12 ----------------------------------------------
@@ -1287,6 +1292,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * Saves the preference from current when archiving for correct display of archived scoresheets
  */
 
+$error_count_before_v21120 = $error_count;
 $v21120_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -1357,7 +1363,7 @@ if (($update_counter == 0) && (!$setup_running)) $v21120_update .= "<li>No updat
 if (!$setup_running) $v21120_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.12.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v21120_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v21120)) $output_run_update .= $v21120_update;
 
 /**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
@@ -1366,6 +1372,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * -----------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v21130 = $error_count;
 $v21130_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -1621,7 +1628,7 @@ foreach ($style_type_convert as $key => $value) {
 if (!$setup_running) $v21130_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.13.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v21130_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v21130)) $output_run_update .= $v21130_update;
 
 /**
  * ----------------------------------------------- 2.1.14 ----------------------------------------------
@@ -1629,6 +1636,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * -----------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v21140 = $error_count;
 $v21140_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -1680,7 +1688,7 @@ if (($update_counter == 0) && (!$setup_running)) $v21140_update .= "<li>No updat
 if (!$setup_running) $v21140_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.14.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v21140_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v21140)) $output_run_update .= $v21140_update;
 
 
 /**
@@ -1690,6 +1698,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * -----------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v21150 = $error_count;
 $v21150_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -1731,7 +1740,7 @@ else {
 if (!$setup_running) $v21150_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.15.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v21150_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v21150)) $output_run_update .= $v21150_update;
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
@@ -1739,6 +1748,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * -----------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v21190 = $error_count;
 $v21190_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -2044,7 +2054,7 @@ else {
 if (!$setup_running) $v21190_update .= "</ul>";
 
 $this_update_version_block = $versions['2.1.19.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v21190_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v21190)) $output_run_update .= $v21190_update;
 
 /**
  * ----------------------------------------------- 2.2.0 ---------------------------------------------
@@ -2055,6 +2065,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2200 = $error_count;
 $v2200_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -2465,7 +2476,7 @@ if (($update_counter == 0) && (!$setup_running)) $v2200_update .= "<li>No update
 if (!$setup_running) $v2200_update .= "</ul>";
 
 $this_update_version_block = $versions['2.2.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2200_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2200)) $output_run_update .= $v2200_update;
 
 /**
  * ----------------------------------------------- 2.3.0 ---------------------------------------------
@@ -2474,6 +2485,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2300 = $error_count;
 $v2300_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -2524,7 +2536,7 @@ if (($update_counter == 0) && (!$setup_running)) $v2300_update .= "<li>No update
 if (!$setup_running) $v2300_update .= "</ul>";
 
 $this_update_version_block = $versions['2.3.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2300_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2300)) $output_run_update .= $v2300_update;
 
 /**
  * ----------------------------------------------- 2.3.2 ---------------------------------------------
@@ -2532,6 +2544,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2320 = $error_count;
 $v2320_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -2562,7 +2575,7 @@ else {
 if (!$setup_running) $v2320_update .= "</ul>";
 
 $this_update_version_block = $versions['2.3.2.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2320_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2320)) $output_run_update .= $v2320_update;
 
 /**
  * ----------------------------------------------- 2.4.0 ---------------------------------------------
@@ -2572,6 +2585,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2400 = $error_count;
 $v2400_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -2692,7 +2706,7 @@ else {
 if (!$setup_running) $v2400_update .= "</ul>";
 
 $this_update_version_block = $versions['2.4.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2400_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2400)) $output_run_update .= $v2400_update;
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
@@ -2701,6 +2715,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2500 = $error_count;
 $v2500_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -2939,7 +2954,7 @@ if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
 if (!$setup_running) $v2500_update .= "</ul>";
 
 $this_update_version_block = $versions['2.5.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2500_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2500)) $output_run_update .= $v2500_update;
 
 /**
  * ----------------------------------------------- 2.6.0 ---------------------------------------------
@@ -2948,6 +2963,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2600 = $error_count;
 $v2600_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -3408,7 +3424,7 @@ if ($row_current_styleset) {
 if (!$setup_running) $v2600_update .= "</ul>";
 
 $this_update_version_block = $versions['2.6.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2600_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2600)) $output_run_update .= $v2600_update;
 
 /**
  * ----------------------------------------------- 2.6.1 ---------------------------------------------
@@ -3416,6 +3432,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2610 = $error_count;
 $v2610_update = "";
 
 if (!check_update("userAdminObfuscate", $prefix."users")) {
@@ -3474,7 +3491,7 @@ if (check_update("contestClubs", $prefix."contest_info")) {
 }
 
 $this_update_version_block = $versions['2.6.1.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2610_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2610)) $output_run_update .= $v2610_update;
 
 /**
  * ----------------------------------------------- 2.6.2 ---------------------------------------------
@@ -3494,6 +3511,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2620 = $error_count;
 $v2620_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -3700,7 +3718,7 @@ if (!check_update("prefsSelectedStyles", $prefix."preferences")) {
 if (!$setup_running) $v2620_update .= "</ul>";
 
 $this_update_version_block = $versions['2.6.2.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2620_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2620)) $output_run_update .= $v2620_update;
 
 /**
  * ----------------------------------------------- 2.7.0 ---------------------------------------------
@@ -3712,6 +3730,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2700 = $error_count;
 $v2700_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -4204,7 +4223,7 @@ if ($nw_cider_update_errors > 0) {
 if (!$setup_running) $v2700_update .= "</ul>";
 
 $this_update_version_block = $versions['2.7.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2700_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2700)) $output_run_update .= $v2700_update;
 
 /**
  * ----------------------------------------------- 2.7.1 ---------------------------------------------
@@ -4215,6 +4234,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * ---------------------------------------------------------------------------------------------------
  */
 
+$error_count_before_v2710 = $error_count;
 $v2710_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -4346,7 +4366,7 @@ $v2710_update .= "<li>Claussenii and Naardenensis themes are deprecated and were
 if (!$setup_running) $v2710_update .= "</ul>";
 
 $this_update_version_block = $versions['2.7.1.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v2710_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v2710)) $output_run_update .= $v2710_update;
 
 /**
  * ----------------------------------------------- 3.0.0 ----------------------------------------------
@@ -4358,6 +4378,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * Update Doppelbock entry instructions to "The entrant must specify whether the entry is a pale or a dark variant."
  */
 
+$error_count_before_v3000 = $error_count;
 $v3000_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -4629,13 +4650,14 @@ include (UPDATE.'styles_nw_cider_cup_2025.php');
 if (!$setup_running) $v3000_update .= "</ul>";
 
 $this_update_version_block = $versions['3.0.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3000_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3000)) $output_run_update .= $v3000_update;
 
 /**
  * ----------------------------------------------- 3.0.1 ----------------------------------------------
  * 
  */
 
+$error_count_before_v3010 = $error_count;
 $v3010_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -4660,7 +4682,7 @@ $v3010_update .= "<li>Fixed display bug where non-judging sessions were showing 
 if (!$setup_running) $v3010_update .= "</ul>";
 
 $this_update_version_block = $versions['3.0.1.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3010_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3010)) $output_run_update .= $v3010_update;
 
 
 /**
@@ -4668,6 +4690,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * 
  */
 
+$error_count_before_v3020 = $error_count;
 $v3020_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -4689,7 +4712,7 @@ $v3020_update .= "<li>Moved clubs master list to primary and secondary CDN sourc
 if (!$setup_running) $v3020_update .= "</ul>";
 
 $this_update_version_block = $versions['3.0.2.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3020_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3020)) $output_run_update .= $v3020_update;
 
 
 /**
@@ -4698,6 +4721,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * Parallel to the expansion of bottle label options.
  */
 
+$error_count_before_v3030 = $error_count;
 $v3030_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -4731,7 +4755,7 @@ $v3030_update .= "<li>Corrected minor security issues.</li>";
 if (!$setup_running) $v3030_update .= "</ul>";
 
 $this_update_version_block = $versions['3.0.3.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3030_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3030)) $output_run_update .= $v3030_update;
 
 
 /**
@@ -4747,6 +4771,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * reapplying exactly the sanitization the fixed code now uses.
  */
 
+$error_count_before_v3040 = $error_count;
 $v3040_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -4832,7 +4857,7 @@ if ($v304_total_changed > 0) $v3040_update .= "<li>Corrected data affected by a 
 if (!$setup_running) $v3040_update .= "</ul>";
 
 $this_update_version_block = $versions['3.0.4.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3040_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3040)) $output_run_update .= $v3040_update;
 
 
 /**
@@ -4842,6 +4867,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * QA pass, and widens the entry fee columns to better support foreign currencies (#1714).
  */
 
+$error_count_before_v3100 = $error_count;
 $v3100_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -5297,7 +5323,7 @@ if (!check_setup($prefix."payments", $database)) {
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3100_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3100)) $output_run_update .= $v3100_update;
 
 /**
  * ----------------------------------------------- 3.2.0 ----------------------------------------------
@@ -5305,6 +5331,7 @@ if ($pre_update_version_index < $this_update_version_block) $output_run_update .
  * via a new admin-defined date independent of the existing Results Display date (#694).
  */
 
+$error_count_before_v3200 = $error_count;
 $v3200_update = "";
 
 if ((!$setup_running) && (!$update_running)) {
@@ -5335,7 +5362,7 @@ if (!check_update("prefsScoresheetDelay", $prefix."preferences")) {
 if (!$setup_running) $v3200_update .= "</ul>";
 
 $this_update_version_block = $versions['3.2.0.0'];
-if ($pre_update_version_index < $this_update_version_block) $output_run_update .= $v3200_update;
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3200)) $output_run_update .= $v3200_update;
 
 
 /**

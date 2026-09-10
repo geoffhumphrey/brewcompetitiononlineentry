@@ -165,8 +165,11 @@ if ($setup_success) {
 		// If not usf8mb4, convert DB and all tables
 		if ($row_character_check['Value'] != "utf8mb4") {
 
+			// ALTER DATABASE cannot be run as a prepared statement (a real mysqli/MySQL
+			// protocol limitation) - $db_conn->rawQuery() always prepares, so this one
+			// statement has to go through the raw mysqli connection instead.
 			$sql = sprintf("ALTER DATABASE `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$database);
-			$db_conn->rawQuery($sql);
+			mysqli_query($connection, $sql);
 
 			foreach ($db_table_array as $table) {
 

@@ -269,7 +269,7 @@ if (!empty($tabs)) {
 
 			if ($set) {
 
-				$db_conn->rawQuery("ALTER TABLE {$tab} MODIFY {$name} COLLATE {$target_collate}");
+				$db_conn->rawQuery("ALTER TABLE {$tab} MODIFY {$name} {$type} COLLATE {$target_collate}");
 				$output .= MysqlError($connection);
 				$count[] = 1;
 
@@ -308,7 +308,10 @@ if (!empty($tabs)) {
 	}
 
 	// set database charset
-	$db_conn->rawQuery("ALTER DATABASE {$database} DEFAULT CHARACTER SET {$target_charset} COLLATE {$target_collate}");
+	// ALTER DATABASE cannot be run as a prepared statement (a real mysqli/MySQL
+	// protocol limitation) - $db_conn->rawQuery() always prepares, so this one
+	// statement has to go through the raw mysqli connection instead.
+	mysqli_query($connection, "ALTER DATABASE {$database} DEFAULT CHARACTER SET {$target_charset} COLLATE {$target_collate}");
 	$output .= MysqlError($connection);
 	$count[] = 1;
 

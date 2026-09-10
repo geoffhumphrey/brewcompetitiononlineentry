@@ -16,7 +16,14 @@ if (check_setup($prefix."system",$database)) {
 	$row_system = $db_conn->getOne($prefix."system");
 
 	if ($row_system['version'] != $current_version) {
-		unset($_SESSION['session_set_'.$prefix_session]);
+		// Only invalidate the cached version-check result here, not the
+		// session_set_ marker - that marker exists purely to detect a
+		// corrupted/hijacked session (see common.db.php), and is unrelated to
+		// version tracking. Clearing it made common.db.php treat every
+		// version-mismatched request as a corrupted session and wipe the
+		// entire session (including a just-established login), which made it
+		// impossible to ever log in and reach update.php on an install old
+		// enough to need updating in the first place.
 		unset($_SESSION['currentVersion']);
 	}
 
@@ -32,7 +39,14 @@ if (check_setup($prefix."bcoem_sys",$database)) {
 	$row_system = $db_conn->getOne($prefix."bcoem_sys");
 	
 	if ($row_system['version'] != $current_version) {
-		unset($_SESSION['session_set_'.$prefix_session]);
+		// Only invalidate the cached version-check result here, not the
+		// session_set_ marker - that marker exists purely to detect a
+		// corrupted/hijacked session (see common.db.php), and is unrelated to
+		// version tracking. Clearing it made common.db.php treat every
+		// version-mismatched request as a corrupted session and wipe the
+		// entire session (including a just-established login), which made it
+		// impossible to ever log in and reach update.php on an install old
+		// enough to need updating in the first place.
 		unset($_SESSION['currentVersion']);
 	}
 
@@ -133,7 +147,7 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 		header ($setup_relocate);
 		exit();
-		
+
 	}
 
 } // end if (!isset($_SESSION['currentVersion']))
