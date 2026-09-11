@@ -5256,20 +5256,25 @@ if (!$row_flight_entry_unique) {
 }
 
 /**
- * GitHub issue #1751: process_judging_flights.inc.php's "edit flights" action never set
- * flightRound when inserting a brand-new row for an entry that wasn't flighted anywhere
- * yet (e.g. a late-arriving entry added into an already-running table), leaving it NULL.
- * Every round-scoped lookup on the judge/steward assignment screen (table_round(),
+ * GitHub issue #1751: two separate bugs left judging_flights.flightRound unusable.
+ * (1) process_judging_flights.inc.php's "edit flights" action never set flightRound when
+ * inserting a brand-new row for an entry that wasn't flighted anywhere yet (e.g. a
+ * late-arriving entry added into an already-running table), leaving it NULL. (2)
+ * process_judging_tables.inc.php's table add/edit actions only auto-assigned round 1 when
+ * the table's location had EXACTLY one judging round configured - any other round count
+ * (0, NULL, or more than 1) left it blank, which MySQL silently coerces to 0 in this int
+ * column. Every round-scoped lookup on the judge/steward assignment screen (table_round(),
  * unassign(), already_assigned(), judge_alert()) does an exact WHERE ...Round = ?
- * comparison, which never matches NULL - so any table with even one such row ends up with
- * broken judge-conflict shading, "already assigned" state always showing unchecked, and
- * both new assignments and role updates silently failing to save for that table. Backfill
- * from another flighted round already in use for the same table/flight, falling back to
- * any other flighted round for the same table, and finally to round 1 if the table has no
- * other flighted round at all. Safe to run more than once: only ever touches rows that are
- * still NULL after the previous pass.
+ * comparison: NULL never matches anything, so a table with even one such row gets broken
+ * judge-conflict shading and an "already assigned" state that always shows unchecked; 0 is
+ * a real value so those lookups still match, but it fails the "> 0" check in
+ * process_judging_assignments.inc.php, so assignments/role updates silently never save
+ * either way. Backfill from another flighted round already in use for the same
+ * table/flight, falling back to any other flighted round for the same table, and finally
+ * to round 1 if the table has no other flighted round at all. Safe to run more than once:
+ * only ever touches rows that are still NULL/0 after the previous pass.
  */
-$sql = sprintf("UPDATE `%s` jf JOIN (SELECT flightTable, flightNumber, MAX(flightRound) AS round FROM `%s` WHERE flightRound IS NOT NULL GROUP BY flightTable, flightNumber) same_flight ON same_flight.flightTable = jf.flightTable AND same_flight.flightNumber = jf.flightNumber SET jf.flightRound = same_flight.round WHERE jf.flightRound IS NULL;",$prefix."judging_flights",$prefix."judging_flights");
+$sql = sprintf("UPDATE `%s` jf JOIN (SELECT flightTable, flightNumber, MAX(flightRound) AS round FROM `%s` WHERE flightRound IS NOT NULL AND flightRound != 0 GROUP BY flightTable, flightNumber) same_flight ON same_flight.flightTable = jf.flightTable AND same_flight.flightNumber = jf.flightNumber SET jf.flightRound = same_flight.round WHERE jf.flightRound IS NULL OR jf.flightRound = 0;",$prefix."judging_flights",$prefix."judging_flights");
 $result = $db_conn->rawQuery($sql);
 $flight_round_backfill_count = 0;
 if ($db_conn->getLastErrno() === 0) $flight_round_backfill_count += $db_conn->count;
@@ -5278,7 +5283,7 @@ else {
 	$error_count++;
 }
 
-$sql = sprintf("UPDATE `%s` jf JOIN (SELECT flightTable, MAX(flightRound) AS round FROM `%s` WHERE flightRound IS NOT NULL GROUP BY flightTable) same_table ON same_table.flightTable = jf.flightTable SET jf.flightRound = same_table.round WHERE jf.flightRound IS NULL;",$prefix."judging_flights",$prefix."judging_flights");
+$sql = sprintf("UPDATE `%s` jf JOIN (SELECT flightTable, MAX(flightRound) AS round FROM `%s` WHERE flightRound IS NOT NULL AND flightRound != 0 GROUP BY flightTable) same_table ON same_table.flightTable = jf.flightTable SET jf.flightRound = same_table.round WHERE jf.flightRound IS NULL OR jf.flightRound = 0;",$prefix."judging_flights",$prefix."judging_flights");
 $result = $db_conn->rawQuery($sql);
 if ($db_conn->getLastErrno() === 0) $flight_round_backfill_count += $db_conn->count;
 else {
@@ -5286,7 +5291,7 @@ else {
 	$error_count++;
 }
 
-$sql = sprintf("UPDATE `%s` SET flightRound = 1 WHERE flightRound IS NULL;",$prefix."judging_flights");
+$sql = sprintf("UPDATE `%s` SET flightRound = 1 WHERE flightRound IS NULL OR flightRound = 0;",$prefix."judging_flights");
 $result = $db_conn->rawQuery($sql);
 if ($db_conn->getLastErrno() === 0) $flight_round_backfill_count += $db_conn->count;
 else {
@@ -5295,6 +5300,51 @@ else {
 }
 
 if ($flight_round_backfill_count > 0) $v3100_update .= "<li>Resolved ".$flight_round_backfill_count." judging table assignment record(s) that were missing a judging round, which could have prevented judges/stewards from being assigned or their roles saved at that table.</li>";
+
+/**
+ * GitHub issue #1751: process_judging_locations.inc.php ran judgingLocName, judgingLocation,
+ * and judgingLocNotes through sterilize() before saving, which HTML-entity-encodes non-numeric
+ * strings (e.g. "Dan's Garage" -> "Dan&#39;s Garage"). Every display of these columns then
+ * encodes them again via h(), so a location name/venue/notes containing any of & < > " ' shows
+ * up on-screen as visibly broken entity text instead of the character the admin typed. The
+ * save-time code is now fixed to store plain text, but rows saved before that fix still have
+ * the entity-encoded text baked into the database and need a one-time decode back to plain
+ * characters. html_entity_decode() only touches rows that actually contain an encoded
+ * character, so it's a no-op (and safe to run again) for any row that was never affected.
+ */
+$db_conn->orderBy('id', 'ASC');
+$rows_location_encoding = $db_conn->get($prefix."judging_locations", null, "id,judgingLocName,judgingLocation,judgingLocNotes");
+$location_encoding_fix_count = 0;
+
+if (!empty($rows_location_encoding)) {
+
+	foreach ($rows_location_encoding as $row_location_encoding) {
+
+		$data = array();
+
+		foreach (array('judgingLocName','judgingLocation','judgingLocNotes') as $col) {
+			if ($row_location_encoding[$col] === null) continue;
+			$decoded = html_entity_decode($row_location_encoding[$col], ENT_QUOTES, 'UTF-8');
+			if ($decoded !== $row_location_encoding[$col]) $data[$col] = $decoded;
+		}
+
+		if (!empty($data)) {
+
+			$db_conn->where('id', $row_location_encoding['id']);
+			$result = $db_conn->update($prefix."judging_locations", $data);
+			if (!$result) {
+				$v3100_update .= "<li class=\"text-danger\">Could not repair double-encoded text for judging location #".$row_location_encoding['id'].". <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+				$error_count++;
+			}
+			else $location_encoding_fix_count++;
+
+		}
+
+	}
+
+}
+
+if ($location_encoding_fix_count > 0) $v3100_update .= "<li>Repaired ".$location_encoding_fix_count." judging location(s) whose name, venue, or notes were saved with visibly broken double-encoded text (e.g. \"Dan&amp;#39;s Garage\" instead of \"Dan's Garage\").</li>";
 
 if (!check_setup($prefix."payments", $database)) {
 
