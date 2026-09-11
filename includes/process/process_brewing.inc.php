@@ -835,6 +835,91 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				table_limit($row_current_style_id['id'],1);
 				table_limit($row_style_name['id'],1);
 			}
+
+			/**
+			 * GitHub issue #1751: editing an entry's category here never touched
+			 * judging_flights, judging_scores, or evaluation - so an entry already flighted
+			 * to a table under its OLD category kept pointing at that table forever after
+			 * being recategorized, with nothing to indicate the mismatch. It could go
+			 * invisible on every pullsheet: no longer matched by its old table (which
+			 * filters by CURRENT category) and never moved to its new (correct) table.
+			 * flight_entry_info() - the one place an admin might have noticed via "Define
+			 * Flights" - looked up by entry id alone with no table filter, so it showed the
+			 * entry as already flighted using the stale row instead of flagging it as
+			 * missing from the new table (see the companion fix in lib/admin.lib.php).
+			 * Mirrors the style-added/removed handling already in
+			 * process_judging_tables.inc.php's "edit" action, just keyed by one entry's
+			 * old/new category instead of a table's whole style list.
+			 */
+			if (($row_current_style['brewCategorySort'] != $styleFix) || ($row_current_style['brewSubCategory'] != $style[1])) {
+
+				$rows_all_tables_pb = $db_conn->get($prefix."judging_tables", null, "id,tableStyles");
+
+				$find_table_for_style_pb = function($style_id_lookup, $bare_subcategory) use ($rows_all_tables_pb) {
+					foreach ($rows_all_tables_pb as $row_table_pb) {
+						$table_styles_pb = array_filter(explode(",", (string) $row_table_pb['tableStyles']), function($v) { return $v !== ""; });
+						$needle_pb = ($_SESSION['style_set_no_numbering']) ? $bare_subcategory : $style_id_lookup;
+						if (in_array((string) $needle_pb, $table_styles_pb, true)) return $row_table_pb['id'];
+					}
+					return null;
+				};
+
+				$old_table_id_pb = $find_table_for_style_pb($row_current_style_id['id'] ?? null, $row_current_style['brewSubCategory']);
+				$new_table_id_pb = $find_table_for_style_pb($row_style_name['id'] ?? null, $style[1]);
+
+				if (($old_table_id_pb) && ($old_table_id_pb != $new_table_id_pb)) {
+
+					$db_conn->where('eid', $id);
+					$db_conn->where('scoreTable', $old_table_id_pb);
+					$db_conn->delete($prefix."judging_scores");
+
+					$db_conn->where('flightEntryID', $id);
+					$db_conn->where('flightTable', $old_table_id_pb);
+					$db_conn->delete($prefix."judging_flights");
+
+				}
+
+				if (($new_table_id_pb) && ($old_table_id_pb != $new_table_id_pb) && (($row_table_planning['jPrefsTablePlanning'] == 1) || ($brewReceived == 1))) {
+
+					$db_conn->where('eid', $id);
+					$db_conn->update($prefix."judging_scores", array('scoreTable' => $new_table_id_pb));
+
+					$db_conn->where('eid', $id);
+					$db_conn->update($prefix."evaluation", array('evalTable' => $new_table_id_pb));
+
+					$db_conn->where('flightEntryID', $id);
+					$row_existing_flight_pb = $db_conn->getOne($prefix."judging_flights", "id");
+
+					if ($row_existing_flight_pb) {
+						$db_conn->where('id', $row_existing_flight_pb['id']);
+						$db_conn->update($prefix."judging_flights", array('flightTable' => $new_table_id_pb));
+					}
+
+					else {
+
+						$db_conn->where('flightTable', $new_table_id_pb);
+						$db_conn->orderBy('flightNumber', 'DESC');
+						$row_last_flight_pb = $db_conn->getOne($prefix."judging_flights", "flightNumber,flightRound");
+						$next_flight_number_pb = (!empty($row_last_flight_pb['flightNumber'])) ? ((int) $row_last_flight_pb['flightNumber'] + 1) : 1;
+
+						// Inherit the round already in use for the new table (its most recent
+						// flight), falling back to round 1 if it has none yet - same
+						// reasoning as the fix to process_judging_flights.inc.php's "edit"
+						// action for this same issue.
+						$new_flight_round_pb = (!empty($row_last_flight_pb['flightRound'])) ? $row_last_flight_pb['flightRound'] : 1;
+
+						$db_conn->insert($prefix."judging_flights", array(
+							'flightTable' => $new_table_id_pb,
+							'flightNumber' => $next_flight_number_pb,
+							'flightEntryID' => $id,
+							'flightRound' => $new_flight_round_pb
+						));
+
+					}
+
+				}
+
+			}
 		}
 
 		else {

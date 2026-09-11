@@ -352,46 +352,50 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	elseif (($admin_user) && ($go == "judging_tables")) {
 
-		$db_conn->where('scoreTable', $id);
-		$rows_delete_assign = $db_conn->get($judging_scores_db_table, null, "id");
-		$totalRows_delete_assign = $db_conn->count;
-
 		$a = array();
 		$b = array();
-		$z = array();
 		$c = array();
 
-		if ($totalRows_delete_assign > 0) {
+		/**
+		 * GitHub issue #1751: this used to fetch judging_scores.id for this table (an
+		 * entirely different table's primary key) and delete judging_assignments WHERE
+		 * id = <that score id> - deleting assignment rows by an unrelated table's row id
+		 * instead of by assignTable, so it never actually cleared this table's real judge/
+		 * steward assignments (they're left pointing at a now-deleted table id, exactly as
+		 * reported), and could just as easily have deleted a completely unrelated
+		 * assignment elsewhere that happened to share that numeric id. It was also gated
+		 * behind this table having existing score rows at all, so a table deleted before
+		 * judging started (no scores yet) skipped assignment cleanup entirely regardless.
+		 * Delete by the actual foreign key, unconditionally.
+		 */
+		$db_conn->where('assignTable', $id);
+		$rows_delete_judging_assignments = $db_conn->get($judging_assignments_db_table, null, "id");
 
-			foreach ($rows_delete_assign as $row_delete_assign) { $z[] = $row_delete_assign['id']; }
+		foreach ($rows_delete_judging_assignments as $row_delete_judging_assignment) {
 
-			foreach ($z as $aid) {
-
-				$update_table = $prefix."judging_assignments";
-				$db_conn->where ('id', $aid);
-				$result = $db_conn->delete($update_table);
-				if (!$result) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
-
+			$update_table = $prefix."judging_assignments";
+			$db_conn->where ('id', $row_delete_judging_assignment['id']);
+			$result = $db_conn->delete($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
-			$db_conn->where('scoreTable', $id);
-			$rows_delete_scores = $db_conn->get($judging_scores_db_table, null, "id,eid");
+		}
 
-			foreach ($rows_delete_scores as $row_delete_scores) { $a[] = $row_delete_scores['id']; $c[] = $row_delete_scores['eid']; }
+		$db_conn->where('scoreTable', $id);
+		$rows_delete_scores = $db_conn->get($judging_scores_db_table, null, "id,eid");
 
-			foreach ($a as $sid) {
+		foreach ($rows_delete_scores as $row_delete_scores) { $a[] = $row_delete_scores['id']; $c[] = $row_delete_scores['eid']; }
 
-				$update_table = $prefix."judging_scores";
-				$db_conn->where ('id', $sid);
-				$result = $db_conn->delete($update_table);
-				if (!$result) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
+		foreach ($a as $sid) {
 
+			$update_table = $prefix."judging_scores";
+			$db_conn->where ('id', $sid);
+			$result = $db_conn->delete($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
 		}

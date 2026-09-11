@@ -21,6 +21,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$flightEntryID = sterilize($id);
 			$flightRound = 1;
 
+			/**
+			 * GitHub issue #1751: a blank/missing id[] value here (cause not fully
+			 * pinned down - a stray form row is the leading suspect) used to fall
+			 * through to a real INSERT every time: the dedup check just below matches
+			 * on `WHERE flightEntryID = ?`, and MysqliDb renders a null value as the
+			 * literal `= NULL`, which never matches any row (not even other NULL rows)
+			 * under standard SQL - so it always looked like "no existing row" and
+			 * inserted a fresh flightEntryID-less row instead of ever finding/reusing
+			 * one it had already created. Each of those phantom rows still counts
+			 * toward flight_entry_count()'s "N entries in this flight" display, quietly
+			 * inflating it with entries that don't exist. Skip rather than insert junk.
+			 */
+			if (empty($flightEntryID)) continue;
+
 			$update_table = $prefix."judging_flights";
 			$data = array(
 				'flightTable' => blank_to_null($flightTable),
@@ -87,6 +101,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($id > "999999") {
 
 				$flightEntryID = sterilize($_POST['flightEntryID'.$id]);
+
+				// See the matching guard in the "add" action above (GitHub issue #1751) -
+				// a blank/missing flightEntryID here would insert the same kind of
+				// entry-less phantom row via the insert() path further down.
+				if (empty($flightEntryID)) continue;
 
 				/**
 				 * GitHub issue #1751: this branch never set flightRound, unlike the "add"

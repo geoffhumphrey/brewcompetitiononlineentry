@@ -32,7 +32,7 @@ if (($filter != "default") && ($filter != "rounds"))  {
 				$checked = "";
 
 				if ($action == "edit") {
-					$flight_number_entry = flight_entry_info($row_entries['id']);
+					$flight_number_entry = flight_entry_info($row_entries['id'], $row_tables_edit['id']);
 					$flight_number_value = explode("^",$flight_number_entry);
 				}
 

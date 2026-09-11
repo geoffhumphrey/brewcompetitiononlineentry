@@ -5302,6 +5302,47 @@ else {
 if ($flight_round_backfill_count > 0) $v3100_update .= "<li>Resolved ".$flight_round_backfill_count." judging table assignment record(s) that were missing a judging round, which could have prevented judges/stewards from being assigned or their roles saved at that table.</li>";
 
 /**
+ * GitHub issue #1751: a blank/missing entry id in a "Define Flights" form submission used
+ * to insert a judging_flights row with no flightEntryID rather than being rejected or
+ * matched against an existing row - the dedup check there compares with `WHERE
+ * flightEntryID = ?`, and MysqliDb renders a null value as the literal `= NULL`, which
+ * never matches any row (not even other NULL rows) under standard SQL, so every occurrence
+ * inserted a fresh phantom row instead of ever finding one already created. These
+ * entry-less rows still count toward flight_entry_count()'s "N entries in this flight"
+ * display, inflating it with entries that don't exist. The save-time code now skips a
+ * blank id instead of inserting one; this just removes the junk rows already on disk.
+ */
+$sql = sprintf("DELETE FROM `%s` WHERE flightEntryID IS NULL;",$prefix."judging_flights");
+$result = $db_conn->rawQuery($sql);
+if ($db_conn->getLastErrno() === 0) {
+	if ($db_conn->count > 0) $v3100_update .= "<li>Removed ".$db_conn->count." judging table flight record(s) that had no entry attached, which could have inflated an \"entries in this flight\" count.</li>";
+}
+else {
+	$v3100_update .= "<li class=\"text-danger\">Could not remove entry-less judging table flight records. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count++;
+}
+
+/**
+ * GitHub issue #1751: deleting a judging table used to try to clear its judge/steward
+ * assignments by fetching judging_scores.id for that table (an unrelated table's row id)
+ * and deleting judging_assignments WHERE id = <that score id> - deleting by the wrong
+ * table's primary key instead of by assignTable, so the table's real assignments were
+ * left behind pointing at a table id that no longer exists (and, if the id happened to
+ * coincide, could have deleted a completely unrelated assignment elsewhere instead). Any
+ * table ever deleted before the fix (see process_delete.inc.php) could have left orphaned
+ * rows behind - clean up every judging_assignments row whose assignTable no longer exists.
+ */
+$sql = sprintf("DELETE ja FROM `%s` ja LEFT JOIN `%s` jt ON jt.id = ja.assignTable WHERE jt.id IS NULL;",$prefix."judging_assignments",$prefix."judging_tables");
+$result = $db_conn->rawQuery($sql);
+if ($db_conn->getLastErrno() === 0) {
+	if ($db_conn->count > 0) $v3100_update .= "<li>Removed ".$db_conn->count." judge/steward assignment record(s) left over from a previously-deleted table.</li>";
+}
+else {
+	$v3100_update .= "<li class=\"text-danger\">Could not remove judge/steward assignments orphaned by a previously-deleted table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count++;
+}
+
+/**
  * GitHub issue #1751: process_judging_locations.inc.php ran judgingLocName, judgingLocation,
  * and judgingLocNotes through sterilize() before saving, which HTML-entity-encodes non-numeric
  * strings (e.g. "Dan's Garage" -> "Dan&#39;s Garage"). Every display of these columns then
