@@ -5255,6 +5255,47 @@ if (!$row_flight_entry_unique) {
 
 }
 
+/**
+ * GitHub issue #1751: process_judging_flights.inc.php's "edit flights" action never set
+ * flightRound when inserting a brand-new row for an entry that wasn't flighted anywhere
+ * yet (e.g. a late-arriving entry added into an already-running table), leaving it NULL.
+ * Every round-scoped lookup on the judge/steward assignment screen (table_round(),
+ * unassign(), already_assigned(), judge_alert()) does an exact WHERE ...Round = ?
+ * comparison, which never matches NULL - so any table with even one such row ends up with
+ * broken judge-conflict shading, "already assigned" state always showing unchecked, and
+ * both new assignments and role updates silently failing to save for that table. Backfill
+ * from another flighted round already in use for the same table/flight, falling back to
+ * any other flighted round for the same table, and finally to round 1 if the table has no
+ * other flighted round at all. Safe to run more than once: only ever touches rows that are
+ * still NULL after the previous pass.
+ */
+$sql = sprintf("UPDATE `%s` jf JOIN (SELECT flightTable, flightNumber, MAX(flightRound) AS round FROM `%s` WHERE flightRound IS NOT NULL GROUP BY flightTable, flightNumber) same_flight ON same_flight.flightTable = jf.flightTable AND same_flight.flightNumber = jf.flightNumber SET jf.flightRound = same_flight.round WHERE jf.flightRound IS NULL;",$prefix."judging_flights",$prefix."judging_flights");
+$result = $db_conn->rawQuery($sql);
+$flight_round_backfill_count = 0;
+if ($db_conn->getLastErrno() === 0) $flight_round_backfill_count += $db_conn->count;
+else {
+	$v3100_update .= "<li class=\"text-danger\">Could not backfill missing judging round assignments (same-flight pass). <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count++;
+}
+
+$sql = sprintf("UPDATE `%s` jf JOIN (SELECT flightTable, MAX(flightRound) AS round FROM `%s` WHERE flightRound IS NOT NULL GROUP BY flightTable) same_table ON same_table.flightTable = jf.flightTable SET jf.flightRound = same_table.round WHERE jf.flightRound IS NULL;",$prefix."judging_flights",$prefix."judging_flights");
+$result = $db_conn->rawQuery($sql);
+if ($db_conn->getLastErrno() === 0) $flight_round_backfill_count += $db_conn->count;
+else {
+	$v3100_update .= "<li class=\"text-danger\">Could not backfill missing judging round assignments (same-table pass). <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count++;
+}
+
+$sql = sprintf("UPDATE `%s` SET flightRound = 1 WHERE flightRound IS NULL;",$prefix."judging_flights");
+$result = $db_conn->rawQuery($sql);
+if ($db_conn->getLastErrno() === 0) $flight_round_backfill_count += $db_conn->count;
+else {
+	$v3100_update .= "<li class=\"text-danger\">Could not backfill missing judging round assignments (default-round pass). <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count++;
+}
+
+if ($flight_round_backfill_count > 0) $v3100_update .= "<li>Resolved ".$flight_round_backfill_count." judging table assignment record(s) that were missing a judging round, which could have prevented judges/stewards from being assigned or their roles saved at that table.</li>";
+
 if (!check_setup($prefix."payments", $database)) {
 
 	/**

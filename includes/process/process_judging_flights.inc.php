@@ -88,11 +88,49 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				$flightEntryID = sterilize($_POST['flightEntryID'.$id]);
 
+				/**
+				 * GitHub issue #1751: this branch never set flightRound, unlike the "add"
+				 * action above - a brand-new row (no existing flightEntryID match, so it
+				 * falls through to insert() below) silently defaulted to NULL. Every
+				 * round-scoped lookup on the judge/steward assignment screen (table_round(),
+				 * unassign(), already_assigned(), judge_alert(), etc.) does an exact
+				 * WHERE ...Round = ? comparison, which never matches NULL in SQL - so a table
+				 * with even one such row ends up with broken shading, "already assigned"
+				 * state always showing unchecked, and both new assignments and role updates
+				 * silently failing to save for that table. Inherit the round already in use
+				 * for this table's flight (or the table generally) instead of leaving it unset.
+				 */
+				$db_conn->where('flightTable', $flightTable);
+				$db_conn->where('flightNumber', $flightNumber);
+				$db_conn->where('flightRound', NULL, 'IS NOT');
+				$db_conn->orderBy('id', 'DESC');
+				$row_existing_round = $db_conn->getOne($prefix."judging_flights", "flightRound");
+
+				if (empty($row_existing_round)) {
+					$db_conn->where('flightTable', $flightTable);
+					$db_conn->where('flightRound', NULL, 'IS NOT');
+					$db_conn->orderBy('id', 'DESC');
+					$row_existing_round = $db_conn->getOne($prefix."judging_flights", "flightRound");
+				}
+
+				if (!empty($row_existing_round)) $flightRound = $row_existing_round['flightRound'];
+				else {
+					// No other flighted round to inherit from (this is the table's very
+					// first flight row) - fall back to the same single-round default
+					// process_judging_tables.inc.php already uses.
+					$db_conn->where('id', $flightTable);
+					$row_table_location = $db_conn->getOne($prefix."judging_tables", "tableLocation");
+					$db_conn->where('id', $row_table_location['tableLocation']);
+					$row_table_rounds = $db_conn->getOne($prefix."judging_locations", "judgingRounds");
+					$flightRound = ($row_table_rounds['judgingRounds'] == 1) ? 1 : null;
+				}
+
 				$update_table = $prefix."judging_flights";
 				$data = array(
 					'flightTable' => blank_to_null($flightTable),
 					'flightNumber' => blank_to_null($flightNumber),
-					'flightEntryID' => blank_to_null($flightEntryID)
+					'flightEntryID' => blank_to_null($flightEntryID),
+					'flightRound' => blank_to_null($flightRound)
 				);
 
 				// $id > 999999 means flight_entry_info() (admin/judging_flights.admin.php)
