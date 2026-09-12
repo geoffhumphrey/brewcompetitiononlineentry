@@ -42,8 +42,33 @@ $brewerAssignment = "";
 
 // Ownership check: the "admin" path (editing another participant's judging/steward assignment)
 // requires an actual admin session; otherwise a user may only affect their own assignment records.
-if (($go == "admin") && (isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) $user_id = $filter;
-elseif (($go != "admin") && ($id != "default") && ($id == $_SESSION['user_id'])) $user_id = $id;
+//
+// GitHub issue #1752: the self-edit branch used to compare $id (the posted "id" query param,
+// which sections/brewer.sec.php's form action sets to $row_brewer['id'] - the brewer table's
+// own auto-increment PK) against $_SESSION['user_id'] (users.id, i.e. brewer.uid) - two
+// different id spaces that only match by numeric coincidence. That left $user_id empty on a
+// genuine self-edit almost every time, silently skipping every judging_assignments cleanup
+// block below (lines 184-377) - so a judge who removed their own availability for a session,
+// or opted out of judging/stewarding entirely, kept a stale table assignment forever, with
+// nothing to indicate the cleanup never ran. Use the posted "uid" hidden field instead, which
+// sections/brewer.sec.php:334 already populates with the real brewer.uid for a self-edit -
+// same id space as $_SESSION['user_id'], so the ownership check (a non-admin may only affect
+// their own records) still holds, just correctly this time.
+/**
+ * GitHub issue #1752 (found during live testing): the app has two different real
+ * admin-edit URL shapes in active use - admin/judging_assign.admin.php:394 and
+ * admin/judging_locations.admin.php:342 link to section=brewer&go=admin, while the
+ * actual "Administration: Participants" pencil-icon edit link (the primary path)
+ * goes to section=admin&go=brewer. Checking $go=="admin" alone only ever matched the
+ * first, so editing a participant via the pencil-icon link - $go=="brewer",
+ * $section=="admin" - fell through to neither branch, left $user_id empty, and
+ * silently skipped every judging_assignments cleanup below (confirmed empirically:
+ * a real pencil-icon submission logged section='admin' go='brewer', resolved
+ * user_id=''). Recognize either shape as an admin edit.
+ */
+$is_admin_edit_pb = ((($section ?? null) == "admin") || (($go ?? null) == "admin")) && (isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1);
+if ($is_admin_edit_pb) $user_id = $filter;
+elseif ((!$is_admin_edit_pb) && (isset($_POST['uid'])) && (isset($_SESSION['user_id'])) && (sterilize($_POST['uid']) == $_SESSION['user_id'])) $user_id = sterilize($_POST['uid']);
 
 // Gather, convert, and/or sanitize info from the form
 if (isset($_POST['brewerJudgeID'])) {
@@ -167,22 +192,120 @@ else $brewerBreweryInfo = json_encode($brewerBreweryInfo);
  * Table assignments not updating if a user or admin indicates they are not
  * available for a particular judging session.
  * Need to search through array of location availablities for any that are "N"
- * and search for the corresponding location/uid combo in the judging_assignments 
+ * and search for the corresponding location/uid combo in the judging_assignments
  * table and delete the records.
  */
 
-if (($brewerJudge == "Y") || ($brewerStaff == "Y")) {
-    
-    if ((isset($_POST['brewerJudgeLocation'])) && (is_array($_POST['brewerJudgeLocation']))) {
-        
-        foreach ($_POST['brewerJudgeLocation'] as $value) {
-            
-            $loc = explode("-",$value);
-            
-            if ($loc[0] == "N") {
+/**
+ * GitHub issue #1752: a judge/steward who removes their own availability (or opts out
+ * of judging/stewarding entirely) while still assigned to a table left that assignment
+ * dangling with no warning - the assignment cleanup above/below still runs, but nothing
+ * told the person (or a coordinator) that doing so would pull them off a table they'd
+ * committed to, and by the time anyone noticed, the UI hid them from the fix (see the
+ * companion fix to admin/judging_assign.admin.php). For a SELF-edit only (an admin
+ * already has full visibility there and is presumed to be acting deliberately), block
+ * the disabling change and surface a warning instead, unless the request explicitly
+ * confirms it wants to proceed anyway.
+ */
+// $is_admin_edit_pb is computed above (GitHub issue #1752) - recognizes both real
+// admin-edit URL shapes this app uses, not just $go=="admin".
+$is_self_edit_pb = !$is_admin_edit_pb;
 
-                if (!empty($user_id)) {
+$assignment_conflict_check_pb = function($assignment_type, $location = null) use ($db_conn, $prefix, $user_id) {
+    if (empty($user_id)) return null;
+    $db_conn->where('bid', $user_id);
+    $db_conn->where('assignment', $assignment_type);
+    if ($location !== null) $db_conn->where('assignLocation', $location);
+    $db_conn->orderBy('id', 'ASC');
+    $row = $db_conn->getOne($prefix."judging_assignments", "id,assignTable,assignLocation");
+    return $row ? $row : null;
+};
 
+$describe_assignment_conflict_pb = function($row_conflict) use ($db_conn, $prefix) {
+    $db_conn->where('id', $row_conflict['assignTable']);
+    $row_table = $db_conn->getOne($prefix."judging_tables", "tableNumber,tableName");
+    $db_conn->where('id', $row_conflict['assignLocation']);
+    $row_location = $db_conn->getOne($prefix."judging_locations", "judgingLocName");
+    $table_desc = ($row_table) ? ("Table ".$row_table['tableNumber'].": ".$row_table['tableName']) : "a table";
+    $location_desc = ($row_location) ? $row_location['judgingLocName'] : "that session";
+    return $table_desc." at ".$location_desc;
+};
+
+// Full opt-out (brewerJudge/brewerSteward -> "N") is blocked here, before the location-
+// preference blocks below run, so a block can cleanly preserve the person's EXISTING
+// location list untouched instead of trying to reconcile it with whatever the form
+// happened to post for a now-hidden/irrelevant location checklist.
+$judge_location_already_handled_pb = false;
+$steward_location_already_handled_pb = false;
+
+if (($brewerJudge == "N") && ($is_self_edit_pb)) {
+
+    $row_conflict = $assignment_conflict_check_pb('J');
+
+    if (($row_conflict) && (empty($_POST['confirmDeregisterJudgeAll']))) {
+
+        $brewerJudge = "Y";
+        $db_conn->where('uid', $user_id);
+        $row_current_brewer_pb = $db_conn->getOne($prefix."brewer", "brewerJudgeLocation");
+        $location_pref1 = $row_current_brewer_pb['brewerJudgeLocation'] ?? "";
+        $judge_location_already_handled_pb = true;
+        $error_output[] = "You're still assigned to judge ".$describe_assignment_conflict_pb($row_conflict).". Check the confirmation box if you want to opt out of judging entirely anyway, or contact a competition coordinator to be unassigned first.";
+        $errors = TRUE;
+
+    }
+
+}
+
+if (($brewerSteward == "N") && ($is_self_edit_pb)) {
+
+    $row_conflict = $assignment_conflict_check_pb('S');
+
+    if (($row_conflict) && (empty($_POST['confirmDeregisterStewardAll']))) {
+
+        $brewerSteward = "Y";
+        $db_conn->where('uid', $user_id);
+        $row_current_brewer_pb = $db_conn->getOne($prefix."brewer", "brewerStewardLocation");
+        $location_pref2 = $row_current_brewer_pb['brewerStewardLocation'] ?? "";
+        $steward_location_already_handled_pb = true;
+        $error_output[] = "You're still assigned to steward ".$describe_assignment_conflict_pb($row_conflict).". Check the confirmation box if you want to opt out of stewarding entirely anyway, or contact a competition coordinator to be unassigned first.";
+        $errors = TRUE;
+
+    }
+
+}
+
+if ((($brewerJudge == "Y") || ($brewerStaff == "Y")) && (!$judge_location_already_handled_pb)) {
+
+    $posted_judge_locations_pb = array();
+    if (isset($_POST['brewerJudgeLocation'])) {
+        $posted_judge_locations_pb = is_array($_POST['brewerJudgeLocation']) ? $_POST['brewerJudgeLocation'] : array($_POST['brewerJudgeLocation']);
+    }
+
+    $rebuilt_judge_locations_pb = array();
+
+    foreach ($posted_judge_locations_pb as $value) {
+
+        $loc = explode("-",$value);
+
+        if ($loc[0] == "N") {
+
+            $row_conflict = $assignment_conflict_check_pb('J', $loc[1]);
+            $confirmed_locations_pb = (array) ($_POST['confirmDeregisterAssigned'] ?? array());
+
+            if (($row_conflict) && ($is_self_edit_pb) && (!in_array($loc[1], $confirmed_locations_pb))) {
+
+                // Blocked: keep them available here instead of silently reverting.
+                $rebuilt_judge_locations_pb[] = "Y-".$loc[1];
+                $error_output[] = "You're still assigned to judge ".$describe_assignment_conflict_pb($row_conflict).". Check the confirmation box for that session if you want to remove your availability anyway, or contact a competition coordinator to be unassigned first.";
+                $errors = TRUE;
+
+            }
+
+            else {
+
+                $rebuilt_judge_locations_pb[] = $value;
+
+                if ((!empty($user_id)) && ($row_conflict)) {
                     $update_table = $prefix."judging_assignments";
                     $db_conn->where ('bid', $user_id);
                     $db_conn->where ('assignment', 'J');
@@ -192,46 +315,21 @@ if (($brewerJudge == "Y") || ($brewerStaff == "Y")) {
                         $error_output[] = $db_conn->getLastError();
                         $errors = TRUE;
                     }
-
-                } // if (!empty($user_id))
-
-            } // end if ($loc[0] == "N")
-       
-        } // end foreach
-
-        $location_pref1 = sterilize(implode(",",$_POST['brewerJudgeLocation']));
-    
-    } // end if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation'])))
-
-    elseif ((isset($_POST['brewerJudgeLocation'])) && (!is_array($_POST['brewerJudgeLocation']))) {
-
-        $loc = explode("-",$_POST['brewerJudgeLocation']);
-
-        if ($loc[0] == "N") {
-            
-            if (!empty($user_id)) {
-
-                $update_table = $prefix."judging_assignments";
-                $db_conn->where ('bid', $user_id);
-                $db_conn->where ('assignment', 'J');
-                $db_conn->where ('assignLocation', $loc[1]);
-                $result = $db_conn->delete($update_table);
-                if (!$result) {
-                    $error_output[] = $db_conn->getLastError();
-                    $errors = TRUE;
                 }
 
-            } // end if (!empty($user_id))
+            }
 
         } // end if ($loc[0] == "N")
 
-        $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
+        else $rebuilt_judge_locations_pb[] = $value;
 
-    } // elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation'])))
+    } // end foreach
 
-} // end if ($brewerJudge == "Y")
+    $location_pref1 = sterilize(implode(",",$rebuilt_judge_locations_pb));
 
-if ($brewerJudge == "N") {
+} // end if ((($brewerJudge == "Y") || ($brewerStaff == "Y")) && (!$judge_location_already_handled_pb))
+
+if (($brewerJudge == "N") && (!$judge_location_already_handled_pb)) {
 
     if ($brewerStaff == "N") {
 
@@ -299,18 +397,38 @@ if ($brewerJudge == "N") {
 
 } // end if ($brewerJudge == "N") 
 
-if ($brewerSteward == "Y") {
+if (($brewerSteward == "Y") && (!$steward_location_already_handled_pb)) {
 
-    if ((isset($_POST['brewerStewardLocation'])) && (is_array($_POST['brewerStewardLocation']))) {
+    $posted_steward_locations_pb = array();
+    if (isset($_POST['brewerStewardLocation'])) {
+        $posted_steward_locations_pb = is_array($_POST['brewerStewardLocation']) ? $_POST['brewerStewardLocation'] : array($_POST['brewerStewardLocation']);
+    }
 
-        foreach ($_POST['brewerStewardLocation'] as $value) {
-            
-            $loc = explode("-",$value);
-            
-            if ($loc[0] == "N") {
-                
-                if (!empty($user_id)) {
+    $rebuilt_steward_locations_pb = array();
 
+    foreach ($posted_steward_locations_pb as $value) {
+
+        $loc = explode("-",$value);
+
+        if ($loc[0] == "N") {
+
+            $row_conflict = $assignment_conflict_check_pb('S', $loc[1]);
+            $confirmed_locations_pb = (array) ($_POST['confirmDeregisterAssigned'] ?? array());
+
+            if (($row_conflict) && ($is_self_edit_pb) && (!in_array($loc[1], $confirmed_locations_pb))) {
+
+                // Blocked: keep them available here instead of silently reverting.
+                $rebuilt_steward_locations_pb[] = "Y-".$loc[1];
+                $error_output[] = "You're still assigned to steward ".$describe_assignment_conflict_pb($row_conflict).". Check the confirmation box for that session if you want to remove your availability anyway, or contact a competition coordinator to be unassigned first.";
+                $errors = TRUE;
+
+            }
+
+            else {
+
+                $rebuilt_steward_locations_pb[] = $value;
+
+                if ((!empty($user_id)) && ($row_conflict)) {
                     $update_table = $prefix."judging_assignments";
                     $db_conn->where ('bid', $user_id);
                     $db_conn->where ('assignment', 'S');
@@ -320,46 +438,21 @@ if ($brewerSteward == "Y") {
                         $error_output[] = $db_conn->getLastError();
                         $errors = TRUE;
                     }
-
-                } // end if (!empty($user_id))
-
-            } // end if ($loc[0] == "N")
-
-        } // end foreach
-
-        $location_pref2 = sterilize(implode(",",$_POST['brewerStewardLocation']));
-
-    } // end if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation'])))
-
-    elseif ((isset($_POST['brewerStewardLocation'])) && (!is_array($_POST['brewerStewardLocation']))) {
-
-        $loc = explode("-",$_POST['brewerStewardLocation']);
-
-        if ($loc[0] == "N") {
-            
-            if (!empty($user_id)) {
-
-                $update_table = $prefix."judging_assignments";
-                $db_conn->where ('bid', $user_id);
-                $db_conn->where ('assignment', 'S');
-                $db_conn->where ('assignLocation', $loc[1]);
-                $result = $db_conn->delete($update_table);
-                if (!$result) {
-                    $error_output[] = $db_conn->getLastError();
-                    $errors = TRUE;
                 }
 
-            } // end if (!empty($user_id))
+            }
 
         } // end if ($loc[0] == "N")
 
-        $location_pref2 = sterilize($_POST['brewerStewardLocation']);
+        else $rebuilt_steward_locations_pb[] = $value;
 
-    } // end elseif (($_POST['brewerStewardLocation'] != "") && (!is_array($_POST['brewerStewardLocation'])))
+    } // end foreach
 
-} // end if ($brewerSteward == "Y")
+    $location_pref2 = sterilize(implode(",",$rebuilt_steward_locations_pb));
 
-if ($brewerSteward == "N") { 
+} // end if (($brewerSteward == "Y") && (!$steward_location_already_handled_pb))
+
+if (($brewerSteward == "N") && (!$steward_location_already_handled_pb)) {
 
     if (!empty($user_id)) {
 
@@ -374,7 +467,7 @@ if ($brewerSteward == "N") {
 
     }
 
-} // end if ($brewerSteward == "N")
+} // end if (($brewerSteward == "N") && (!$steward_location_already_handled_pb))
 
 if (isset($_POST['brewerJudgeLikes'])) {
     if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",$_POST['brewerJudgeLikes']);

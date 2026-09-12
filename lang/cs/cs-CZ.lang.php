@@ -2182,6 +2182,13 @@ $contact_text_014 = "Správci stránek zakázali zveřejňování kontaktních �
 
 /**
  * ------------------------------------------
+ * NEW FOR 3.1.0 - GitHub issue #1752
+ * ------------------------------------------
+ */
+$brewer_text_058 = "Administrátoři právě organizují přiřazení stolů. Pro změnu dostupnosti na dané session nebo odstoupení z role rozhodčího/pomocníka se prosím obraťte na pořadatele soutěže.";
+
+/**
+ * ------------------------------------------
  * Version 3.2.0 Additions
  * ------------------------------------------
  */

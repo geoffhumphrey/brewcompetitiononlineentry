@@ -184,6 +184,27 @@ $judge_location_avail = "";
 $steward_location_avail = "";
 $staff_location_avail = "";
 
+/**
+ * GitHub issue #1752: fed into a data-currently-assigned attribute on each location's
+ * availability dropdown below, so JS can warn before someone removes their own
+ * availability for a session they're still actually assigned to judge/steward at - the
+ * server-side check in process_brewer_info.inc.php is what's authoritative (this is a
+ * convenience heads-up only), but showing nothing here would leave the person with no
+ * indication anything's wrong until after they submit and get bounced back.
+ */
+$brewer_edit_assignments_by_type_location = array();
+$judge_has_any_assignment = FALSE;
+$steward_has_any_assignment = FALSE;
+if (($action == "edit") && (!empty($row_brewer['uid']))) {
+    $db_conn->where('bid', $row_brewer['uid']);
+    $rows_brewer_edit_assignments = $db_conn->get($prefix."judging_assignments", null, "assignment,assignLocation");
+    foreach ($rows_brewer_edit_assignments as $row_brewer_edit_assignment) {
+        $brewer_edit_assignments_by_type_location[$row_brewer_edit_assignment['assignment']."|".$row_brewer_edit_assignment['assignLocation']] = TRUE;
+        if ($row_brewer_edit_assignment['assignment'] == "J") $judge_has_any_assignment = TRUE;
+        if ($row_brewer_edit_assignment['assignment'] == "S") $steward_has_any_assignment = TRUE;
+    }
+}
+
 if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
     foreach ($rows_judging3 as $row_judging3) {
@@ -244,10 +265,14 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
             $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
 
-            $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation".$row_judging3['id']."\" data-width=\"auto\">";
+            $judge_currently_assigned = isset($brewer_edit_assignments_by_type_location["J|".$row_judging3['id']]) ? " data-currently-assigned=\"1\"" : "";
+            $judge_avail_option .= "<select class=\"selectpicker judge-location-avail\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation".$row_judging3['id']."\" data-location-id=\"".$row_judging3['id']."\"".$judge_currently_assigned." data-width=\"auto\">";
             $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
             $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
             $judge_avail_option .= "</select>";
+            $judge_avail_option .= "<div class=\"alert alert-warning bcoem-deregister-warning\" id=\"deregister-warning-judge-".$row_judging3['id']."\" style=\"display:none;margin-top:5px;\">";
+            $judge_avail_option .= "<label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"confirmDeregisterAssigned[]\" value=\"".$row_judging3['id']."\"> This user is currently assigned to judge a table at this session. Check this box to remove their availability anyway.</label>";
+            $judge_avail_option .= "</div>";
             
             if ((time() < $row_judging3['judgingDate'])  || (($section == "admin") && ($filter != "default"))) {
                 $judge_location_avail .= $judge_avail_info;
@@ -256,10 +281,14 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
             $steward_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
 
-            $steward_avail_option .= "<select class=\"selectpicker\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation".$row_judging3['id']."\" data-width=\"auto\">";
+            $steward_currently_assigned = isset($brewer_edit_assignments_by_type_location["S|".$row_judging3['id']]) ? " data-currently-assigned=\"1\"" : "";
+            $steward_avail_option .= "<select class=\"selectpicker steward-location-avail\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation".$row_judging3['id']."\" data-location-id=\"".$row_judging3['id']."\"".$steward_currently_assigned." data-width=\"auto\">";
             $steward_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_no,$label_no);
             $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_yes,$label_yes);
             $steward_avail_option .= "</select>";
+            $steward_avail_option .= "<div class=\"alert alert-warning bcoem-deregister-warning\" id=\"deregister-warning-steward-".$row_judging3['id']."\" style=\"display:none;margin-top:5px;\">";
+            $steward_avail_option .= "<label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"confirmDeregisterAssigned[]\" value=\"".$row_judging3['id']."\"> This user is currently assigned to steward a table at this session. Check this box to remove their availability anyway.</label>";
+            $steward_avail_option .= "</div>";
 
             if ((time() < $row_judging3['judgingDate'])  || (($section == "admin") && ($filter != "default"))) {
                 $steward_location_avail .= $steward_avail_info;

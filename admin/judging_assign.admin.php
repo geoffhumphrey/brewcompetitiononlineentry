@@ -364,9 +364,24 @@ if ($totalRows_brewer > 0) {
   	if ($filter == "stewards") $locations = explode(",",$judge_info[7]);
   	else $locations = explode(",",$judge_info[8]);
 
-  	if (in_array($table_location,$locations)) {
+  	/**
+  	 * GitHub issue #1752: this gate used to be a plain in_array() check, so anyone
+  	 * assigned to this table who has since become unavailable for its location (or
+  	 * opted out of judging/stewarding entirely) was dropped from the list outright -
+  	 * hiding both the stale assignment and the only UI that could remove it, forcing
+  	 * a coordinator to re-register the person first just to be able to un-assign them.
+  	 * $row_table_assignments (fetched above at ~line 210) already tells us whether
+  	 * this person has an assignment row for this specific table, independent of their
+  	 * current availability - admit them on that basis too, and flag them so the row
+  	 * still visibly calls out that they're no longer eligible here.
+  	 */
+  	$ineligible_but_assigned = (!empty($row_table_assignments)) && (!in_array($table_location,$locations));
 
-        $total_count += 1;
+  	if ((in_array($table_location,$locations)) || (!empty($row_table_assignments))) {
+
+        // Someone rendered only because they're stuck on an assignment they're no
+        // longer eligible for isn't actually "available" - don't count them as such.
+        if (!$ineligible_but_assigned) $total_count += 1;
         $output_datatables_body .= "<tr class=\"".$assign_row_color."\">\n";
 
       /*
@@ -377,6 +392,7 @@ if ($totalRows_brewer > 0) {
       // Name Column
   		$output_datatables_body .= "<td>";
   		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".h($judge_info[0])." ".h($judge_info[1])."&rsquo;s account info\">".h($judge_info[1]).", ".h($judge_info[0])."</a>";
+      if ($ineligible_but_assigned) $output_datatables_body .= "<br><span class=\"label label-danger\" data-toggle=\"tooltip\" title=\"".h($judge_info[0])." ".h($judge_info[1])." is currently assigned to this table but is no longer available for this session - uncheck/unassign below or update their availability.\"><span class=\"fa fa-lg fa-fw fa-exclamation-triangle\"></span> No Longer Available - Unassign Now!</span>";
       //if ($ind_aff_flag) $output_datatables_body .= "<br>Affiliation Flag";
       if ($filter == "judges") {
         $output_datatables_body .= "<br><strong>Comps Judged:</strong> ";

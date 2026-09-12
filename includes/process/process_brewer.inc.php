@@ -787,7 +787,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
+		// Pre-existing typo: this set $insertGoTo (discarded here - the "add" action's own
+		// variable) instead of $updateGoTo, so an error on this "edit" action never actually
+		// redirected back to the form with msg=3 - it silently followed the same "success"
+		// URL chosen above regardless of $errors. Only $_SESSION['error_output'] made it
+		// through, so this only actually surfaced to the user if the destination page
+		// happens to render that session's error banner - GitHub issue #1752's new
+		// deregister-while-assigned warning (further up in this action, and in
+		// process_brewer_info.inc.php) depends on the user seeing an error result here to
+		// actually be useful, so this needed fixing alongside it.
+		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
 		$updateGoTo = prep_redirect_link($updateGoTo);
 		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 

@@ -16,17 +16,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$purifier = new HTMLPurifier($config_html_purifier);
 
 	$judgingDate = to_utc_epoch(sterilize($_POST['judgingDate']), $timezone_raw);
-	$judgingLocName = sterilize($_POST['judgingLocName']);
+	/**
+	 * GitHub issue #1751: sterilize() HTML-entity-encodes non-numeric strings
+	 * (FILTER_SANITIZE_FULL_SPECIAL_CHARS - e.g. "Dan's Garage" -> "Dan&#39;s Garage"), which
+	 * is the right call for a value going straight to an attribute/query, but wrong for a
+	 * plain display field: every read of these columns goes through h() at output (see
+	 * admin/judging_tables.admin.php and elsewhere), which then encodes the ALREADY-encoded
+	 * text a second time, turning "Dan&#39;s Garage" into visibly broken "Dan&amp;#39;s
+	 * Garage" on the page. tableName (process_judging_tables.inc.php) already gets this
+	 * right - strip_tags()/trim() only, no entity-encoding, encoded once by h() at display -
+	 * match that pattern here instead.
+	 */
+	$judgingLocName = trim(strip_tags($_POST['judgingLocName']));
 	$judgingLocName = $purifier->purify($judgingLocName);
-	$judgingLocation = sterilize($_POST['judgingLocation']);
+	$judgingLocation = trim(strip_tags($_POST['judgingLocation']));
 	$judgingLocation = $purifier->purify($judgingLocation);
 	$judgingLocType = sterilize($_POST['judgingLocType']);
 	$judgingRounds = "";
 	$judgingDateEnd = "";
 	$judgingLocNotes = "";
-	
+
 	if (isset($_POST['judgingLocNotes'])) {
-		$judgingLocNotes = sterilize($_POST['judgingLocNotes']);
+		$judgingLocNotes = trim(strip_tags($_POST['judgingLocNotes']));
 		$judgingLocNotes = $purifier->purify($judgingLocNotes);
 	}
 	

@@ -2261,6 +2261,13 @@ $contact_text_014 = "Los administradores del sitio han desactivado la visualizac
 
 /**
  * ------------------------------------------
+ * NEW FOR 3.1.0 - GitHub issue #1752
+ * ------------------------------------------
+ */
+$brewer_text_058 = "Los administradores están organizando actualmente las asignaciones de mesas. Comuníquese con un funcionario de la competencia para cambiar su disponibilidad de sesión o retirarse de su función de juez/asistente.";
+
+/**
+ * ------------------------------------------
  * Version 3.2.0 Additions
  * ------------------------------------------
  */

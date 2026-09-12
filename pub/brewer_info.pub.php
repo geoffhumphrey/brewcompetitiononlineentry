@@ -253,6 +253,33 @@ if ($_SESSION['jPrefsTablePlanning'] == 0) {
 	else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
 }
 
+/**
+ * GitHub issue #1752: while admins are actively reorganizing tables (Table Planning
+ * Mode), a self-service change to judge/steward availability could silently pull
+ * someone off a table an admin is mid-way through arranging - see the matching
+ * server-side gate in process_brewer_info.inc.php. Rather than build the same
+ * interactive per-field warning into the self-service edit form (which mostly
+ * wouldn't even be reachable there - see pub/brewer.pub.php's pre-existing
+ * $table_assignment gate, which hides that form's judge/steward fields entirely once
+ * assigned), replace the "Change" link on this account summary page with an
+ * explanatory message instead, so the person is informed rather than met with a
+ * dead end. Table Planning Mode specifically (not the general case) is when
+ * assignments are actively in flux and most at risk of this.
+ */
+$judge_has_any_assignment_tp = FALSE;
+$steward_has_any_assignment_tp = FALSE;
+if ($_SESSION['jPrefsTablePlanning'] == 1) {
+	$db_conn->where('bid', $_SESSION['user_id']);
+	$db_conn->where('assignment', 'J');
+	$row_judge_assignment_tp = $db_conn->getOne($prefix."judging_assignments", "id");
+	$judge_has_any_assignment_tp = !empty($row_judge_assignment_tp);
+
+	$db_conn->where('bid', $_SESSION['user_id']);
+	$db_conn->where('assignment', 'S');
+	$row_steward_assignment_tp = $db_conn->getOne($prefix."judging_assignments", "id");
+	$steward_has_any_assignment_tp = !empty($row_steward_assignment_tp);
+}
+
 if ($_SESSION['brewerJudgeLikes'] != "") {
 	$judgeLikes = style_convert($_SESSION['brewerJudgeLikes'],4,$base_url,"v3-public");
 	$exploder_likes = explode("|",$judgeLikes);
@@ -474,8 +501,11 @@ if ($show_judge_steward_fields) {
 	$account_display .= "<div class=\"".$display_right_cols."\">";
 	if ((!empty($_SESSION['brewerJudge'])) && ($action != "print")) {
 		$account_display .= yes_no($_SESSION['brewerJudge'],$base_url,2);
-		$link = build_public_url("brewer","account","edit",$row_brewer['id'],$sef,$base_url,"default");
-		if (!$show_scores) $account_display .= sprintf("<a href=\"%s#judge-info\" style=\"--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .4rem; --bs-btn-font-size: .75rem;\" class=\"btn btn-dark btn-sm ms-2 d-print-none\">%s</a>",$link,explode(" ", $label_change_email)[0]);
+		if (($judge_has_any_assignment_tp) && (!$show_scores)) $account_display .= sprintf("<div class=\"text-muted small mt-1 d-print-none\">%s</div>",$brewer_text_058);
+		else {
+			$link = build_public_url("brewer","account","edit",$row_brewer['id'],$sef,$base_url,"default");
+			if (!$show_scores) $account_display .= sprintf("<a href=\"%s#judge-info\" style=\"--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .4rem; --bs-btn-font-size: .75rem;\" class=\"btn btn-dark btn-sm ms-2 d-print-none\">%s</a>",$link,explode(" ", $label_change_email)[0]);
+		}
 	}
 	else $account_display .= "None entered";
 	$account_display .= "</div>";
@@ -599,8 +629,11 @@ if ($show_judge_steward_fields) {
 	if (!empty($_SESSION['brewerSteward'])) {
 		if ($action == "print") $account_display .= yes_no($_SESSION['brewerSteward'],$base_url);
 		else $account_display .= yes_no($_SESSION['brewerSteward'],$base_url,2);
-		$link = build_public_url("brewer","account","edit",$row_brewer['id'],$sef,$base_url,"default");
-		if (!$show_scores) $account_display .= sprintf("<a href=\"%s#steward-info\" style=\"--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .4rem; --bs-btn-font-size: .75rem;\" class=\"btn btn-dark btn-sm ms-2 d-print-none\">%s</a>",$link,explode(" ", $label_change_email)[0]);
+		if (($steward_has_any_assignment_tp) && (!$show_scores)) $account_display .= sprintf("<div class=\"text-muted small mt-1 d-print-none\">%s</div>",$brewer_text_058);
+		else {
+			$link = build_public_url("brewer","account","edit",$row_brewer['id'],$sef,$base_url,"default");
+			if (!$show_scores) $account_display .= sprintf("<a href=\"%s#steward-info\" style=\"--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .4rem; --bs-btn-font-size: .75rem;\" class=\"btn btn-dark btn-sm ms-2 d-print-none\">%s</a>",$link,explode(" ", $label_change_email)[0]);
+		}
 	}
 	else $account_display .= $label_none_entered;
 	$account_display .= "</div>";

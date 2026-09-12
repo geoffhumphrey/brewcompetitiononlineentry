@@ -2249,6 +2249,13 @@ $contact_text_014 = "A exibição dos contatos da competição foi desativada pe
 
 /**
  * ------------------------------------------
+ * NEW FOR 3.1.0 - GitHub issue #1752
+ * ------------------------------------------
+ */
+$brewer_text_058 = "Os administradores estão organizando as atribuições de mesas no momento. Entre em contato com um responsável da competição para alterar sua disponibilidade para a sessão ou para desistir de sua função de juiz/assistente.";
+
+/**
+ * ------------------------------------------
  * Version 3.2.0 Additions
  * ------------------------------------------
  */

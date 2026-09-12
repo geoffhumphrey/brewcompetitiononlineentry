@@ -85,7 +85,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 <label class="form-check-label"><?php echo $label_yes; ?></label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (!$judge_checked) echo "CHECKED"; ?>> 
+                <input class="form-check-input" type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (!$judge_checked) echo "CHECKED"; ?>>
                 <label class="form-check-label">
                     <?php echo $label_no; ?>
                 </label>
@@ -322,7 +322,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 <label class="form-check-label"><?php echo $label_yes; ?></label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && (($row_brewer['brewerSteward'] == "N") || ($row_brewer['brewerSteward'] == ""))) echo "CHECKED"; ?>> 
+                <input class="form-check-input" type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && (($row_brewer['brewerSteward'] == "N") || ($row_brewer['brewerSteward'] == ""))) echo "CHECKED"; ?>>
                 <label class="form-check-label"><?php echo $label_no; ?></label>
             </div>
             <div class="help-block mt-1"><?php echo $brewer_text_015; ?></div>
@@ -370,4 +370,41 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     </div>
 </section>
 
+<?php }
+/**
+ * GitHub issue #1752: when this block is suppressed for a self-edit (most commonly
+ * $table_assignment - the person already has a real table assignment somewhere, so
+ * this whole section is hidden and they're told to contact an admin instead), the
+ * brewerJudge/brewerSteward radios and every location <select> simply never render.
+ * A browser can't submit form fields that were never in the DOM, so $_POST[
+ * 'brewerJudge']/['brewerSteward'] end up absent from ANY edit of this profile - even
+ * one that has nothing to do with judging (address, phone, whatever). process_brewer_
+ * info.inc.php defaults $brewerJudge/$brewerSteward to "N" when they're not posted,
+ * which then triggers the FULL opt-out delete path - silently wiping every
+ * judging_assignments row for that person as a side effect of an unrelated edit they
+ * never intended to make to their judging status at all. Preserve their current
+ * values with hidden fields instead of omitting them, so an edit that can't reach
+ * this section is a no-op for judge/steward status rather than an accidental full
+ * de-registration - same fix shape already used elsewhere in this file family
+ * (sections/brewer.sec.php:329,336) for a different case that hides these same two
+ * fields, just hardcoded to "N" there because that case is a brand-new signup who
+ * genuinely isn't a judge yet.
+ */
+else {
+    // brewerJudgeLocation/brewerStewardLocation are posted by the interactive form as
+    // one array entry per location ("Y-9", "N-15", ...) via repeated brewerJudgeLocation[]
+    // selects - preserve that same shape here, not the raw comma-joined DB string, or
+    // process_brewer_info.inc.php's per-location loop would explode() one giant
+    // malformed "value" instead of each location's own token.
+    $preserve_judge_locations_pb = array_filter(explode(",", (string) ($row_brewer['brewerJudgeLocation'] ?? "")), function($v) { return $v !== ""; });
+    $preserve_steward_locations_pb = array_filter(explode(",", (string) ($row_brewer['brewerStewardLocation'] ?? "")), function($v) { return $v !== ""; });
+    ?>
+<input type="hidden" name="brewerJudge" value="<?php echo h($row_brewer['brewerJudge']); ?>">
+<input type="hidden" name="brewerSteward" value="<?php echo h($row_brewer['brewerSteward']); ?>">
+<?php foreach ($preserve_judge_locations_pb as $preserve_judge_location_pb) { ?>
+<input type="hidden" name="brewerJudgeLocation[]" value="<?php echo h($preserve_judge_location_pb); ?>">
+<?php } ?>
+<?php foreach ($preserve_steward_locations_pb as $preserve_steward_location_pb) { ?>
+<input type="hidden" name="brewerStewardLocation[]" value="<?php echo h($preserve_steward_location_pb); ?>">
+<?php } ?>
 <?php } // end if ((!$table_assignment) || ($go == "admin")) ?>

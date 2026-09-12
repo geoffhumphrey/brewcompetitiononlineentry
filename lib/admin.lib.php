@@ -697,12 +697,27 @@ function total_discount() {
 	return $return;
 }
 
-function flight_entry_info($entry_id) {
+function flight_entry_info($entry_id, $table_id) {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
 
+	/**
+	 * GitHub issue #1751: this used to look up an entry's judging_flights row by
+	 * flightEntryID alone, with no flightTable filter. process_brewing.inc.php never
+	 * updates judging_flights when an entry's category is edited, so an entry moved to a
+	 * new category after already being flighted keeps a stale row pointing at its OLD
+	 * table. The "Define Flights" screen for the entry's NEW (correct) table called this
+	 * to decide whether the entry was already flighted here - unscoped, it found that
+	 * stale row and displayed the entry as already flighted, using the old table's
+	 * flight/round values, with nothing to indicate the row actually belongs elsewhere.
+	 * That hid the orphaned row from the one screen an admin would normally notice it on.
+	 * Scoping to the table actually being edited makes an orphaned entry show up as NOT
+	 * yet flighted here, so saving this screen correctly moves it (process_judging_flights.
+	 * inc.php's "add" path) instead of silently leaving its old row untouched.
+	 */
 	$db_conn->where('flightEntryID', $entry_id);
+	$db_conn->where('flightTable', $table_id);
 	$db_conn->orderBy('id', 'DESC');
 	$row_flight_number = $db_conn->getOne($prefix."judging_flights", "id,flightNumber,flightEntryID,flightRound");
 

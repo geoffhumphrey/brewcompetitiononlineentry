@@ -104,7 +104,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$db_conn->where('id', $row_table['tableLocation']);
 		$row_table_rounds = $db_conn->getOne($judging_locations_db_table, "judgingRounds");
-		if ($row_table_rounds['judgingRounds'] == 1) $rounds = "1"; else $rounds = "";
+		/**
+		 * GitHub issue #1751: a location with any round count other than exactly 1 (0, NULL,
+		 * or more than 1) left $rounds as "" here, which this table's freshly-inserted
+		 * judging_flights rows then took as their flightRound - MySQL silently coerces that
+		 * blank string to 0 in the int column. 0 is not NULL, so it doesn't trip the
+		 * round-lookup bug fixed in process_judging_flights.inc.php, but it still fails the
+		 * "> 0" check in process_judging_assignments.inc.php, so no judge/steward assignment
+		 * (new or role update) can ever be saved at that table until someone notices and
+		 * assigns it a real round. Default to round 1 regardless of the location's round
+		 * count - an admin can always move the table to a different round afterward via
+		 * "Assign Tables to Rounds", but starting at an invalid 0 silently breaks assignment
+		 * saving with no error shown.
+		 */
+		$rounds = "1";
 
 		$a = explode(",",$tableStyles);
 
@@ -356,7 +369,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$db_conn->where('id', $row_table['tableLocation']);
 			$row_table_rounds = $db_conn->getOne($judging_locations_db_table, "judgingRounds");
-			if ($row_table_rounds['judgingRounds'] == 1) $rounds = "1"; else $rounds = "";
+			// See GitHub issue #1751 / the matching comment in the "add" action above -
+			// default to round 1 rather than leaving a blank round (which becomes an
+			// invalid 0, silently breaking assignment saving) for any location whose
+			// round count isn't exactly 1.
+			$rounds = "1";
 
 			// Newly added entries go into a fresh flight after any that
 			// already exist for this table, rather than always flight 1 -

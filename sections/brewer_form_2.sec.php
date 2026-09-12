@@ -92,10 +92,16 @@ if (!$entrant_type_brewery) {
                     <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0" <?php if ($judge_checked) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (!$judge_checked) echo "CHECKED"; ?>> <?php echo $label_no; ?>
+                    <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" data-has-any-assignment="<?php echo (!empty($judge_has_any_assignment)) ? "1" : "0"; ?>" <?php if (!$judge_checked) echo "CHECKED"; ?>> <?php echo $label_no; ?>
                 </label>
             </div>
             <span class="help-block"><?php echo $brewer_text_006; ?></span>
+            <?php if (!empty($judge_has_any_assignment)) { ?>
+            <!-- GitHub issue #1752: warn before a full judging opt-out orphans an existing table assignment - see the matching server-side check in process_brewer_info.inc.php -->
+            <div class="alert alert-warning bcoem-deregister-warning" id="deregister-warning-judge-all" style="display:none;margin-top:5px;">
+                <label class="checkbox-inline"><input type="checkbox" name="confirmDeregisterJudgeAll" value="1"> This user is currently assigned to judge at least one table. Check this box to opt out of judging entirely anyway.</label>
+            </div>
+            <?php } ?>
         </div>
     </div>
     <div id="bjcp-id" class="form-group">
@@ -332,10 +338,16 @@ if (!$entrant_type_brewery) {
                     <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "checked"; ?>> <?php echo $label_yes; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "checked"; ?>> <?php echo $label_no; ?>
+                    <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" data-has-any-assignment="<?php echo (!empty($steward_has_any_assignment)) ? "1" : "0"; ?>" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) echo "checked"; ?>> <?php echo $label_no; ?>
                 </label>
             </div>
             <span class="help-block"><?php echo $brewer_text_015; ?></span>
+            <?php if (!empty($steward_has_any_assignment)) { ?>
+            <!-- GitHub issue #1752: warn before a full stewarding opt-out orphans an existing table assignment - see the matching server-side check in process_brewer_info.inc.php -->
+            <div class="alert alert-warning bcoem-deregister-warning" id="deregister-warning-steward-all" style="display:none;margin-top:5px;">
+                <label class="checkbox-inline"><input type="checkbox" name="confirmDeregisterStewardAll" value="1"> This user is currently assigned to steward at least one table. Check this box to opt out of stewarding entirely anyway.</label>
+            </div>
+            <?php } ?>
         </div>
     </div>
     <?php if (($totalRows_judging == 1) && (($go != "admin") && ($filter == "default"))) {?>
@@ -400,3 +412,49 @@ if (!$entrant_type_brewery) {
 </section>
 <?php } // end if ($show_partners_orgs) ?>
 <?php } // end if (!$entrant_type_brewery) ?>
+<script type="text/javascript">
+/**
+ * GitHub issue #1752: heads-up only - the authoritative check is server-side in
+ * process_brewer_info.inc.php. This just warns before submit so a judge/steward isn't
+ * surprised to learn (after the fact, via the error banner) that removing their
+ * availability would have orphaned a table assignment, and surfaces the confirmation
+ * control they'd otherwise have no way to know exists.
+ */
+$(document).ready(function() {
+
+    function bcoemToggleLocationWarning() {
+        var $select = $(this);
+        var warningId = "#deregister-warning-" + ($select.hasClass("steward-location-avail") ? "steward" : "judge") + "-" + $select.data("location-id");
+        var isNo = (String($select.val() || "").indexOf("N-") === 0);
+        var $warning = $(warningId);
+        if ((isNo) && ($select.data("currently-assigned") == 1)) {
+            $warning.show();
+        }
+        else {
+            $warning.hide();
+            $warning.find("input[type=checkbox]").prop("checked", false);
+        }
+    }
+
+    $(".judge-location-avail, .steward-location-avail")
+        .on("change changed.bs.select", bcoemToggleLocationWarning)
+        .each(bcoemToggleLocationWarning);
+
+    function bcoemToggleAllWarning(radioId, warningId) {
+        var $radio = $(radioId);
+        if ($radio.length === 0) return;
+        var $warning = $(warningId);
+        if (($radio.is(":checked")) && ($radio.data("has-any-assignment") == 1)) $warning.show();
+        else {
+            $warning.hide();
+            $warning.find("input[type=checkbox]").prop("checked", false);
+        }
+    }
+
+    $("input[name='brewerJudge']").on("change", function() { bcoemToggleAllWarning("#brewerJudge_1", "#deregister-warning-judge-all"); });
+    $("input[name='brewerSteward']").on("change", function() { bcoemToggleAllWarning("#brewerSteward_1", "#deregister-warning-steward-all"); });
+    bcoemToggleAllWarning("#brewerJudge_1", "#deregister-warning-judge-all");
+    bcoemToggleAllWarning("#brewerSteward_1", "#deregister-warning-steward-all");
+
+});
+</script>

@@ -2247,6 +2247,13 @@ $contact_text_014 = "Display of competition contacts has been disabled by the si
 
 /**
  * ------------------------------------------
+ * NEW FOR 3.1.0 - GitHub issue #1752
+ * ------------------------------------------
+ */
+$brewer_text_058 = "Admins are currently sorting out table assignments. Please contact a competition official to change your session availability or withdraw your judging/stewarding role.";
+
+/**
+ * ------------------------------------------
  * Version 3.2.0 Additions
  * ------------------------------------------
  */

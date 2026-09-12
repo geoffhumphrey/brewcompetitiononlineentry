@@ -198,8 +198,8 @@ $non_judging_location_count = 0;
 if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
     $judge_staff_locations = explode(",", $row_brewer['brewerJudgeLocation']);
-    $steward_locations = explode(",", $row_brewer['brewerStewardLocation']); 
-    
+    $steward_locations = explode(",", $row_brewer['brewerStewardLocation']);
+
     foreach ($rows_judging3 as $row_judging3) {
 
         $location_yes = "";

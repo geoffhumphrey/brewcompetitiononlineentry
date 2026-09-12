@@ -2243,6 +2243,13 @@ $contact_text_014 = "A verseny kapcsolattartóinak megjelenítését a webhely r
 
 /**
  * ------------------------------------------
+ * NEW FOR 3.1.0 - GitHub issue #1752
+ * ------------------------------------------
+ */
+$brewer_text_058 = "Az adminisztrátorok jelenleg az asztalbeosztásokat rendezik. Kérjük, lépjen kapcsolatba a verseny egyik tisztségviselőjével, ha módosítani szeretné a foglalkozás-elérhetőségét, vagy le szeretne mondani a bírói/segítői szerepéről.";
+
+/**
+ * ------------------------------------------
  * Version 3.2.0 Additions
  * ------------------------------------------
  */
