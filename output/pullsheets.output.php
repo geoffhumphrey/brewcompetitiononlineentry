@@ -67,7 +67,7 @@ $style_convert_1_ps = function($number) use ($style_convert_type1_by_group_ps, $
 	$style_convert = "";
 	$row_style = $style_convert_type1_by_group_ps[$number] ?? null;
 	if ($row_style) {
-		$custom = ($row_style['brewStyleOwn'] != "bcoe");
+		$custom = ($row_style['brewStyleOwn'] == "custom");
 		$padded_number = $number;
 		if (is_numeric($padded_number)) $padded_number = sprintf('%02d', $padded_number);
 		if ($custom) $style_convert = $row_style['brewStyle']." (Custom Style)";

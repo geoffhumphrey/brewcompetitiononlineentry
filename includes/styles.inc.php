@@ -595,4 +595,67 @@ $style_sets = array(
 	)
 
 );
+
+/**
+ * Merge in any admin-uploaded ("imported") style sets stored in the
+ * {prefix}style_sets_imported table (Admin-Uploaded Style Sets feature).
+ * Guarded by table_exists() so an un-migrated install (table not yet
+ * created by run_update.php) doesn't break. Synthetic ids are offset by
+ * +1000 to stay well clear of the built-in ids reserved above (0-20).
+ *
+ * This file is include()'d from many different scopes, including from
+ * inside functions (e.g. style_set_no_numbering() in common.lib.php) that
+ * don't already have $prefix/$db_conn set up in their local scope - PHP's
+ * include() runs in the including scope, so this can't assume either
+ * variable is available. Sets up its own connection instead, exactly like
+ * table_exists() and style_convert() already do for the same reason.
+ *
+ * table_exists() itself (defined in common.lib.php) is assumed already
+ * loaded by every include site of this file, matching every other
+ * function this file's callers already rely on (style_type(), h(), etc.
+ * are never re-loaded defensively either) - includes/process.inc.php was
+ * the one call path that loaded this file before common.lib.php; its
+ * include order was fixed instead of trying to load common.lib.php
+ * defensively from here, since several entry points (site/bootstrap.php,
+ * handle.php) load common.lib.php via a plain require/include rather than
+ * *_once, and a require_once here would still collide with those and
+ * fatal on "Cannot redeclare" the moment this file runs after any of them.
+ */
+require(CONFIG.'config.php');
+$db_conn_style_sets_imported = new MysqliDb($connection);
+
+if (table_exists($prefix."style_sets_imported")) {
+
+	$db_conn_style_sets_imported->orderBy("style_set_long_name", "ASC");
+	$rows_style_sets_imported = $db_conn_style_sets_imported->get($prefix."style_sets_imported");
+
+	if ($rows_style_sets_imported) {
+		foreach ($rows_style_sets_imported as $row_style_set_imported) {
+
+			$style_sets[] = array(
+				"id" => $row_style_set_imported['id'] + 1000,
+				"style_set_name" => $row_style_set_imported['style_set_name'],
+				"style_set_long_name" => $row_style_set_imported['style_set_long_name'],
+				"style_set_short_name" => $row_style_set_imported['style_set_short_name'],
+				"style_set_display_separator" => $row_style_set_imported['style_set_display_separator'],
+				"style_set_system_separator" => $row_style_set_imported['style_set_system_separator'],
+				"style_set_sub_style_method" => $row_style_set_imported['style_set_sub_style_method'],
+				"style_set_categories" => json_decode($row_style_set_imported['style_set_categories'], true),
+				"style_set_beer_end" => $row_style_set_imported['style_set_beer_end'],
+				"style_set_mead" => json_decode($row_style_set_imported['style_set_mead'], true),
+				"style_set_cider" => json_decode($row_style_set_imported['style_set_cider'], true),
+				"style_set_category_end" => $row_style_set_imported['style_set_category_end'],
+				"style_set_no_numbering" => (bool)$row_style_set_imported['style_set_no_numbering'],
+				// Broader grouping tier above style_set_categories (e.g. GABF's
+				// "Hybrid/Mixed Lagers or Ales" spanning many numbered
+				// categories). Optional - null-coalesce for installs that
+				// haven't yet run the migration adding this column, and for
+				// sets that never defined one.
+				"style_set_overall_categories" => json_decode($row_style_set_imported['style_set_overall_categories'] ?? 'null', true) ?: array()
+			);
+
+		}
+	}
+
+}
 ?>

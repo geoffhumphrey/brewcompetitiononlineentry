@@ -145,6 +145,7 @@ include (SECTIONS.'alerts.sec.php');
                 // V3 - use legacy edit user name builds for Admin
                 if ($go == "user") include (SECTIONS.'user.sec.php');
                 if ($go == "styles") include (ADMIN.'styles.admin.php');
+                if ($go == "styles_import") include (ADMIN.'styles_import.admin.php');
                 if ($go == "archive") include (ADMIN.'archive.admin.php');
                 if ($go == "make_admin") include (ADMIN.'make_admin.admin.php');
                 if ($go == "contest_info") include (ADMIN.'competition_info.admin.php');

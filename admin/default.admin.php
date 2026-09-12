@@ -745,6 +745,7 @@ if ($recently_updated) {
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">Add</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles_import">Import</a></li>
                                     </ul>
                                 </div>
                             </div>

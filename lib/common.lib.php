@@ -1610,7 +1610,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		if ($row_style) {
 
-			if ($row_style['brewStyleOwn'] != "bcoe") $custom = TRUE;
+			if ($row_style['brewStyleOwn'] == "custom") $custom = TRUE;
 
 			// if numeric make two-digit by adding leading zero just in case
 			if (is_numeric($number)) $number = sprintf('%02d', $number); 
@@ -1948,13 +1948,14 @@ function style_convert($number,$type,$base_url="",$archive="") {
 				if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
 				else $style_name = $row_style['brewStyle'];
 
-				if ($row_style['brewStyleOwn'] == "bcoe") {
+				if ($row_style['brewStyleOwn'] == "custom") $style_convert .= "<li class='list-inline-item me-3'><strong>".$label_custom_style.":</strong> ".$row_style['brewStyle']."</li>";
+
+				else {
+					// 'bcoe' and 'imported' both render with real group/num identifiers
 					if (style_set_no_numbering($style_set)) $style_convert .= "<li class='list-inline-item me-3'>".$style_name."</li>";
 					elseif ($style_set == "AABC") $style_convert .= "<li class='list-inline-item me-3'><strong>".ltrim($row_style['brewStyleGroup'],"0").".".ltrim($row_style['brewStyleNum'],"0").":</strong> ".$style_name."</li>";
 					else $style_convert .= "<li class='list-inline-item me-3'><strong>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].":</strong> ".$style_name."</li>";
 				}
-
-				else $style_convert .= "<li class='list-inline-item me-3'><strong>".$label_custom_style.":</strong> ".$row_style['brewStyle']."</li>";
 
 			}
 				

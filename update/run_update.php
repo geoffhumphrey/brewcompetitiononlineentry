@@ -5359,6 +5359,51 @@ if (!check_update("prefsScoresheetDelay", $prefix."preferences")) {
 
 }
 
+if (!table_exists($prefix."style_sets_imported")) {
+
+	$sql = sprintf("
+		CREATE TABLE IF NOT EXISTS `%s` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`style_set_name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+		`style_set_long_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`style_set_short_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`style_set_description` mediumtext COLLATE utf8mb4_unicode_ci,
+		`style_set_display_separator` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT '',
+		`style_set_system_separator` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT '-',
+		`style_set_sub_style_method` char(1) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+		`style_set_categories` mediumtext COLLATE utf8mb4_unicode_ci,
+		`style_set_beer_end` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT '00',
+		`style_set_mead` mediumtext COLLATE utf8mb4_unicode_ci,
+		`style_set_cider` mediumtext COLLATE utf8mb4_unicode_ci,
+		`style_set_category_end` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT '49',
+		`style_set_no_numbering` tinyint(1) NOT NULL DEFAULT 0,
+		`createdBy` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		`createdOn` int(11) DEFAULT NULL,
+		PRIMARY KEY (`id`),
+		UNIQUE KEY `style_set_name` (`style_set_name`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+		", $prefix."style_sets_imported");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3200_update .= "<li>Added support for admin-uploaded (imported) style sets.</li>";
+	else {
+		$v3200_update .= "<li class=\"text-danger\">The imported style sets table could NOT be created. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
+if ((table_exists($prefix."style_sets_imported")) && (!check_update("style_set_overall_categories", $prefix."style_sets_imported"))) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `style_set_overall_categories` mediumtext COLLATE utf8mb4_unicode_ci;", $prefix."style_sets_imported");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3200_update .= "<li>Added support for a broader \"Overall Category\" grouping on admin-uploaded style sets.</li>";
+	else {
+		$v3200_update .= "<li class=\"text-danger\">The Overall Category column could NOT be added to imported style sets. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
 if (!$setup_running) $v3200_update .= "</ul>";
 
 $this_update_version_block = $versions['3.2.0.0'];

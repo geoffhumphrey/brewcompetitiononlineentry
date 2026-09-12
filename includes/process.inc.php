@@ -11,9 +11,13 @@ ini_set('display_errors', '0');
 
 require ('../paths.php');
 require (INCLUDES.'url_variables.inc.php');
-require (INCLUDES.'styles.inc.php');
 include (INCLUDES.'scrubber.inc.php');
+// common.lib.php must load before styles.inc.php - the latter's imported-
+// style-sets merge block calls table_exists() (defined in common.lib.php)
+// unconditionally, matching every other function this file already
+// assumes is loaded by its various include sites.
 include (LIB.'common.lib.php');
+require (INCLUDES.'styles.inc.php');
 require (INCLUDES.'db_tables.inc.php');
 include (LIB.'update.lib.php');
 require (DB.'common.db.php');
@@ -400,7 +404,10 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	
 	// Updates to associated entry, acct registration, judge/steward registration, and judging dates
 	elseif (($action == "dates") && ($dbTable == "default")) include (PROCESS.'process_dates.inc.php');
-	
+
+	// Admin-uploaded ("imported") style sets - confirm+insert, whole-set delete, and metadata edit
+	elseif (($action == "styles_import") || ($action == "styles_import_delete") || ($action == "styles_import_edit")) include (PROCESS.'process_styles_import.inc.php');
+
 	// Update to various DB Tables as called out in process URL
 	else {
 

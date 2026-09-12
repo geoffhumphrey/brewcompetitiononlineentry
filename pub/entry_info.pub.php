@@ -446,16 +446,100 @@ if ($row_styles) {
 	if ($entry_window_open < 2) $header1_8 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_styles_accepted);
 	else $header1_8 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_judging_styles);
 
-	$page_info8 .= "<table class=\"table table-striped table-bordered table-responsive border-dark-subtle\">";
-	$page_info8 .= "<tr>";
+	// Broader "Overall Category" grouping (optional - currently only set by
+	// admin-uploaded style sets, e.g. GABF's "Lager Beer Styles" spanning many
+	// numbered categories). When the active set doesn't define one, the
+	// original flat single-table rendering below runs completely unchanged.
+	$active_overall_categories = array();
+	foreach ($style_sets as $style_set_data) {
+		if ((!empty($style_set_data)) && ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet'])) {
+			if (!empty($style_set_data['style_set_overall_categories'])) $active_overall_categories = $style_set_data['style_set_overall_categories'];
+			break;
+		}
+	}
 
-	$styles_endRow = 0;
 	$styles_columns = 3;   // number of columns
-	$styles_hloopRow1 = 0; // first row flag
 
+	if (empty($active_overall_categories)) {
+
+		$page_info8 .= "<table class=\"table table-striped table-bordered table-responsive border-dark-subtle\">";
+		$page_info8 .= "<tr>";
+
+		$styles_endRow = 0;
+		$styles_hloopRow1 = 0; // first row flag
+
+			foreach ($rows_styles as $row_styles) {
+
+				if (array_key_exists($row_styles['id'], $styles_selected)) {
+
+					if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
+
+					$page_info8 .= "<td width=\"33%\">";
+
+					$style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+
+					if ($row_styles['brewStyleAtLimit'] == 1) $page_info8 .= sprintf("<span class=\"text-muted\">%s %s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i>",$style_number,$row_styles['brewStyle'],$entry_info_text_056);
+
+					else {
+
+						$page_info8 .= $style_number." ".$row_styles['brewStyle'];
+						if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
+						if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-orange ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
+						if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-purple ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
+						if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-teal ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
+						if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-warning-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
+
+					}
+
+					$page_info8 .= "</td>";
+					$styles_endRow++;
+
+					if ($styles_endRow >= $styles_columns) {
+						$styles_endRow = 0;
+					}
+
+				}
+
+			}
+
+
+		if ($styles_endRow != 0) {
+				while ($styles_endRow < $styles_columns) {
+					$page_info8 .= "<td>&nbsp;</td>";
+					$styles_endRow++;
+				}
+			$page_info8 .= "</tr>";
+		}
+
+		$page_info8 .= "</table>";
+
+	}
+
+	else {
+
+		// Bucket the same selected/sorted rows by Overall Category. $rows_styles
+		// is already sorted brewStyleType/brewStyleGroup/brewStyleNum, so buckets
+		// naturally come out in ascending-group order with no separate header
+		// ordering list needed. Styles whose group has no Overall Category entry
+		// fall into a final "Other" bucket rather than being silently dropped.
+		$buckets = array();
 		foreach ($rows_styles as $row_styles) {
+			if (!array_key_exists($row_styles['id'], $styles_selected)) continue;
+			$bucket_name = $active_overall_categories[$row_styles['brewStyleGroup']] ?? 'Other';
+			if (!isset($buckets[$bucket_name])) $buckets[$bucket_name] = array();
+			$buckets[$bucket_name][] = $row_styles;
+		}
 
-			if (array_key_exists($row_styles['id'], $styles_selected)) {
+		foreach ($buckets as $bucket_name => $bucket_rows) {
+
+			$page_info8 .= sprintf("<h4>%s</h4>", h($bucket_name));
+			$page_info8 .= "<table class=\"table table-striped table-bordered table-responsive border-dark-subtle\">";
+			$page_info8 .= "<tr>";
+
+			$styles_endRow = 0;
+			$styles_hloopRow1 = 0; // first row flag
+
+			foreach ($bucket_rows as $row_styles) {
 
 				if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
 
@@ -485,18 +569,19 @@ if ($row_styles) {
 
 			}
 
+			if ($styles_endRow != 0) {
+				while ($styles_endRow < $styles_columns) {
+					$page_info8 .= "<td>&nbsp;</td>";
+					$styles_endRow++;
+				}
+				$page_info8 .= "</tr>";
+			}
+
+			$page_info8 .= "</table>";
+
 		}
 
-
-	if ($styles_endRow != 0) {
-			while ($styles_endRow < $styles_columns) {
-				$page_info8 .= "<td>&nbsp;</td>";
-				$styles_endRow++;
-			}
-		$page_info8 .= "</tr>";
 	}
-
-	$page_info8 .= "</table>";
 
 }
 

@@ -10,6 +10,18 @@ if ($section != "step7") include (DB.'judging_locations.db.php');
 include (DB.'styles.db.php');
 if ($_SESSION['style_set_no_numbering']) include (INCLUDES.'ba_constants.inc.php');
 
+// Broader "Overall Category" grouping (optional, currently only ever set
+// by admin-uploaded style sets - e.g. GABF's "Lager Beer Styles" spanning
+// many numbered categories). Looked up once here rather than per-row.
+require (INCLUDES.'styles.inc.php');
+$active_overall_categories = array();
+foreach ($style_sets as $style_set_data) {
+	if ((!empty($style_set_data)) && ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet'])) {
+		if (!empty($style_set_data['style_set_overall_categories'])) $active_overall_categories = $style_set_data['style_set_overall_categories'];
+		break;
+	}
+}
+
 // Build style table body
 $table_body = "";
 
@@ -31,7 +43,7 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 
 			$brewStyleOwn_prefix = "";
 			$brewStyleOwn_suffix = "";
-			 if ($row_styles['brewStyleOwn'] != "bcoe") {
+			 if ($row_styles['brewStyleOwn'] == "custom") {
 				 $brewStyleOwn_prefix = "*";
 				 $brewStyleOwn_suffix = " - Custom Style";
 			 }
@@ -55,13 +67,13 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			if ($bid == "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleActive".$row_styles['id']."\" type=\"checkbox\" value=\"Y\" ".$brewStyleActive."></td>";
 			if ($bid != "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleJudgingLoc".$row_styles['id']."\" type=\"checkbox\" value=\"".$bid."\" ".$brewStyleJudgingLoc."></td>";
 			$table_body .= "<td>".h($row_styles['brewStyle'])."</td>";
-			if ($_SESSION['style_set_no_numbering']) {
-				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
-				else $table_body .= "<td>".$ba_category_names[ltrim($row_styles['brewStyleGroup'],"0")]."</td>";
+			if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
+			elseif (isset($active_overall_categories[$row_styles['brewStyleGroup']])) $table_body .= "<td>".h($active_overall_categories[$row_styles['brewStyleGroup']])."</td>";
+			elseif ($_SESSION['style_set_no_numbering']) {
+				$table_body .= "<td>".$ba_category_names[ltrim($row_styles['brewStyleGroup'],"0")]."</td>";
 			}
 			elseif ($_SESSION['prefsStyleSet'] == "AABC") {
-				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
-				else $table_body .= "<td>".ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")."</td>";
+				$table_body .= "<td>".ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")."</td>";
 			}
 			else $table_body .= "<td>".$brewStyleOwn_prefix.$row_styles['brewStyleGroup'].$row_styles['brewStyleNum'].$brewStyleOwn_suffix."</td>";
 			$table_body .= "<td>".style_type($row_styles['brewStyleType'],"2",$style_own)."</td>";

@@ -84,11 +84,23 @@ if (($action == "default") || ($action == "entries")) {
             foreach ($row_styles_all as $row_styles_all) {
 
                 if (isset($row_styles_all['id'])) {
+                    // Broader "Overall Category" grouping (optional - currently
+                    // only set by admin-uploaded style sets, e.g. GABF's
+                    // "Lager Beer Styles" spanning many numbered categories).
+                    // When present, it prepends the existing group/num + style
+                    // name display (e.g. "Hybrid/Mixed Lagers or Ales - 001A
+                    // American-Style Wheat Beer") rather than replacing it -
+                    // the existing no_numbering-driven style_set_categories
+                    // prepend used by BA/BA2026 is untouched for sets that
+                    // don't define an Overall Category.
+                    $overall_category = $style_set['style_set_overall_categories'][$row_styles_all['brewStyleGroup']] ?? '';
+
                     $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
+                    if ($overall_category !== '') $all_exceptions_USCLEx .= h($overall_category)." - ";
                     if (empty($style_set['style_set_no_numbering'])) $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
-                    if (!empty($style_set['style_set_no_numbering'])) $all_exceptions_USCLEx .= h($style_set['style_set_categories'][$row_styles_all['brewStyleGroup']])." - ".h($row_styles_all['brewStyle'])."</label></div>\n";
+                    if (($overall_category === '') && (!empty($style_set['style_set_no_numbering']))) $all_exceptions_USCLEx .= h($style_set['style_set_categories'][$row_styles_all['brewStyleGroup']])." - ".h($row_styles_all['brewStyle'])."</label></div>\n";
                     else $all_exceptions_USCLEx .= " ".h($row_styles_all['brewStyle'])."</label></div>\n";
-                }   
+                }
                 
             } 
         
@@ -224,6 +236,18 @@ if (($section == "admin") && ($go == "preferences")) {
         $styles_selected = array();
         $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
+        // Broader "Overall Category" grouping (optional - currently only set
+        // by admin-uploaded style sets, e.g. GABF's "Lager Beer Styles"
+        // spanning many numbered categories). Active set only, since this
+        // block (unlike $all_exceptions below) isn't per-style-set.
+        $active_overall_categories = array();
+        foreach ($style_sets as $style_set_data) {
+            if ((!empty($style_set_data)) && ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet'])) {
+                if (!empty($style_set_data['style_set_overall_categories'])) $active_overall_categories = $style_set_data['style_set_overall_categories'];
+                break;
+            }
+        }
+
         if ($row_styles) {
 
             // Generate the default sub-style exception list (current settings)
@@ -243,7 +267,9 @@ if (($section == "admin") && ($go == "preferences")) {
 
                     if ($row_styles['id'] != "") {
                         $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
-                        $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".h($row_styles['brewStyle'])."</label></div>\n";
+                        $overall_category_prefix = "";
+                        if (isset($active_overall_categories[$row_styles['brewStyleGroup']])) $overall_category_prefix = h($active_overall_categories[$row_styles['brewStyleGroup']])." - ";
+                        $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$overall_category_prefix.$style_number." ".h($row_styles['brewStyle'])."</label></div>\n";
                     }
 
                 }

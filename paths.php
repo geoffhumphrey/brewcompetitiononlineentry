@@ -138,7 +138,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', FALSE);
+define('ENABLE_MARKDOWN', TRUE);
 
 /**
  * Set the following to TRUE if you would like to use
