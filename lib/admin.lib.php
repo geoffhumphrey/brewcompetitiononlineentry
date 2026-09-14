@@ -1491,37 +1491,45 @@ return $r;
 */
 
 function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id,$ind_aff_flag) {
-	
-	if (table_round($tid,$round)) {
-		
-		$unavailable = unavailable($bid,$location,$round,$tid);
-		$entry_conflict = entry_conflict($bid,$table_styles);
-		$at_table = at_table($bid,$tid);
-		
-		if ($unavailable) {
-		    
-		    $r = "bg-purple text-purple|";
-		    if ($ind_aff_flag) $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span><br><span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
-		    else $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span>";
-		    
-		}
-		
-		if ($entry_conflict) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.</span>";
 
-		if ((!$unavailable) && (!$entry_conflict)) {
-			
-			if ($ind_aff_flag) {
-				
-				$r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+	/**
+	 * GitHub issue #1751: this used to return a totally blank string - no color, no
+	 * text, for every candidate - whenever the table had no judging_flights rows yet
+	 * for this round (a table set up before all of its entries arrived, and not yet
+	 * run through "Define Flights"). But entry_conflict() and like_dislike() below
+	 * have nothing to do with rounds or flights and can be computed regardless -
+	 * only unavailable() genuinely needs a real round to check "is this judge
+	 * already committed to a different table this round". Skip just that one check
+	 * instead of everything, so the grid still gives an admin a useful signal on a
+	 * not-yet-flighted table instead of going silent with no explanation.
+	 */
+	$has_round = table_round($tid,$round);
 
-			}
-			
-			$r = like_dislike($likes,$dislikes,$table_styles);
-		}
+	$unavailable = $has_round ? unavailable($bid,$location,$round,$tid) : FALSE;
+	$entry_conflict = entry_conflict($bid,$table_styles);
+	$at_table = at_table($bid,$tid);
+
+	if ($unavailable) {
+
+	    $r = "bg-purple text-purple|";
+	    if ($ind_aff_flag) $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span><br><span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+	    else $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span>";
 
 	}
-	
-	else $r = '';
+
+	if ($entry_conflict) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.</span>";
+
+	if ((!$unavailable) && (!$entry_conflict)) {
+
+		if ($ind_aff_flag) {
+
+			$r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+
+		}
+
+		$r = like_dislike($likes,$dislikes,$table_styles);
+	}
+
 	return $r;
 }
 

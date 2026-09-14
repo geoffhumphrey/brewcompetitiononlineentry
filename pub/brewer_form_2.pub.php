@@ -6,82 +6,121 @@
 $already_judge = (($action == "edit") && ($row_brewer['brewerJudge'] == "Y"));
 $already_steward = (($action == "edit") && ($row_brewer['brewerSteward'] == "Y"));
 
-if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
+/**
+ * GitHub issue #1752: $table_assignment (the person already has a real table
+ * assignment somewhere, so changing their Judge/Steward Y/N status or session
+ * availability could orphan/conflict with it) used to gate this ENTIRE file - not
+ * just those two fields, but every unrelated preference too (Likes/Dislikes, BJCP
+ * Rank, Mead/Cider certification, BJCP ID, Experience, Notes). None of those have
+ * anything to do with table assignments, and were being needlessly locked (and,
+ * before a since-fixed bug, silently wiped on any edit - see the hidden-field
+ * preservation below) for any already-assigned judge/steward. Confirmed live against
+ * a real assigned judge (Daniel Perrigan, motownmash_) whose Likes/Dislikes had
+ * gone NULL this way. $show_assignment_sensitive_fields_pb now scopes the
+ * table-assignment gate to just Judge/Steward Y/N + session availability per role;
+ * everything else renders normally regardless of table assignment, gated only by
+ * $entrant_type_brewery (a separate, legitimate reason to hide all of it - a
+ * brewery-type entrant doesn't judge/steward at all).
+ */
+$show_assignment_sensitive_fields_pb = (!$table_assignment) || ($go == "admin");
 
-    if (((!$judge_limit || $already_judge) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) {
+$show_judge_section_pb = ((((!$judge_limit) || $already_judge) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) && (!$entrant_type_brewery);
+$show_steward_section_pb = ((((!$steward_limit) || $already_steward) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) && (!$entrant_type_brewery);
 
-        $styles_selected = array();
-        $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
+if ($show_judge_section_pb) {
 
-        if (!empty($styles_selected)) {
+    $styles_selected = array();
+    $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
-            if ($_SESSION['style_set_no_numbering']) array_multisort(array_column($styles_selected, 'brewStyle'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
-            else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
+    if (!empty($styles_selected)) {
 
-            $j_likes_form_elements = "";
-            $j_dislikes_form_elements = "";
+        /**
+         * The one-time migration that originally populated prefsSelectedStyles
+         * (v2.6.2.0, update/run_update.php) never wrote an 'id' key into each entry's
+         * value - only later code paths (adding a custom style; the "Accepted
+         * Styles" bulk resubmit in admin/styles.admin.php) started doing that. Every
+         * entry's own array key has always correctly been the style id in every
+         * format, though - backfill it into the value here (before array_multisort()
+         * below re-indexes the array itself, which would otherwise make the array
+         * key useless as a fallback) so the isset($value['id']) check a few lines
+         * down doesn't silently skip every style from that original migration
+         * format, which is exactly what made every Likes/Non-Preferred style
+         * checkbox vanish for any install that had never since done a full
+         * "Accepted Styles" resubmit.
+         */
+        foreach ($styles_selected as $style_key_pb => &$style_value_pb) {
+            if ((!isset($style_value_pb['id'])) || ($style_value_pb['id'] === "")) $style_value_pb['id'] = $style_key_pb;
+        }
+        unset($style_value_pb);
 
-            $a = array();
-            $b = array();
+        if ($_SESSION['style_set_no_numbering']) array_multisort(array_column($styles_selected, 'brewStyle'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
+        else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
 
-            if (isset($row_brewer['brewerJudgeLikes'])) { 
-                $a = explode(",", $row_brewer['brewerJudgeLikes']);
-            }
+        $j_likes_form_elements = "";
+        $j_dislikes_form_elements = "";
 
-            if (isset($row_brewer['brewerJudgeDislikes'])) { 
-                $b = explode(",", $row_brewer['brewerJudgeDislikes']);
-            }
+        $a = array();
+        $b = array();
 
-            foreach($styles_selected as $key => $value) {
+        if (isset($row_brewer['brewerJudgeLikes'])) {
+            $a = explode(",", $row_brewer['brewerJudgeLikes']);
+        }
 
-                if ((isset($value['id'])) && (!empty($value['id']))) {
-                    
-                    $style_display = "";
-                    $style_selected_likes = "";
-                    if (in_array($value['id'], $a)) $style_selected_likes = "CHECKED";
+        if (isset($row_brewer['brewerJudgeDislikes'])) {
+            $b = explode(",", $row_brewer['brewerJudgeDislikes']);
+        }
 
-                    $style_selected_dislikes = "";
-                    if (in_array($value['id'], $b)) $style_selected_dislikes = "CHECKED";
+        foreach($styles_selected as $key => $value) {
 
-                    if ($_SESSION['style_set_no_numbering']) {
-                        $style_display .= $value['brewStyle'];
-                    }
-                    
-                    else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
+            if ((isset($value['id'])) && (!empty($value['id']))) {
 
-                    $j_likes_form_elements .= "<div class=\"checkbox\">\n";
-                    $j_likes_form_elements .= "<label>\n";
-                    $j_likes_form_elements .= sprintf("<input name=\"brewerJudgeLikes[]\" type=\"checkbox\" value=\"%s\" %s>\n", $value['id'], $style_selected_likes);
-                    $j_likes_form_elements .= $style_display;
-                    $j_likes_form_elements .= "\n</label>\n";
-                    $j_likes_form_elements .= "</div>\n";
+                $style_display = "";
+                $style_selected_likes = "";
+                if (in_array($value['id'], $a)) $style_selected_likes = "CHECKED";
 
-                    $j_dislikes_form_elements .= "<div class=\"checkbox\">\n";
-                    $j_dislikes_form_elements .= "<label>\n";
-                    $j_dislikes_form_elements .= sprintf("<input name=\"brewerJudgeDislikes[]\" type=\"checkbox\" value=\"%s\" %s>\n", $value['id'], $style_selected_dislikes);
-                    $j_dislikes_form_elements .= $style_display;
-                    $j_dislikes_form_elements .= "\n</label>\n";
-                    $j_dislikes_form_elements .= "</div>\n";
-                
+                $style_selected_dislikes = "";
+                if (in_array($value['id'], $b)) $style_selected_dislikes = "CHECKED";
+
+                if ($_SESSION['style_set_no_numbering']) {
+                    $style_display .= $value['brewStyle'];
                 }
-                
+
+                else $style_display .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ".$value['brewStyle'];
+
+                $j_likes_form_elements .= "<div class=\"checkbox\">\n";
+                $j_likes_form_elements .= "<label>\n";
+                $j_likes_form_elements .= sprintf("<input name=\"brewerJudgeLikes[]\" type=\"checkbox\" value=\"%s\" %s>\n", $value['id'], $style_selected_likes);
+                $j_likes_form_elements .= $style_display;
+                $j_likes_form_elements .= "\n</label>\n";
+                $j_likes_form_elements .= "</div>\n";
+
+                $j_dislikes_form_elements .= "<div class=\"checkbox\">\n";
+                $j_dislikes_form_elements .= "<label>\n";
+                $j_dislikes_form_elements .= sprintf("<input name=\"brewerJudgeDislikes[]\" type=\"checkbox\" value=\"%s\" %s>\n", $value['id'], $style_selected_dislikes);
+                $j_dislikes_form_elements .= $style_display;
+                $j_dislikes_form_elements .= "\n</label>\n";
+                $j_dislikes_form_elements .= "</div>\n";
+
             }
 
         }
-        
 
-        $judge_checked = FALSE;
-        if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
-        if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
+    }
+
+
+    $judge_checked = FALSE;
+    if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
+    if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
 
 ?>
 <a name="judge-info"></a>
 <section id="judge-preferences">
+    <?php if ($show_assignment_sensitive_fields_pb) { ?>
     <div class="mb-3 row">
         <label for="brewerJudge" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judging; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="brewerJudge" value="Y" id="brewerJudge_0" <?php if ($judge_checked) echo "CHECKED"; ?>> 
+                <input class="form-check-input" type="radio" name="brewerJudge" value="Y" id="brewerJudge_0" <?php if ($judge_checked) echo "CHECKED"; ?>>
                 <label class="form-check-label"><?php echo $label_yes; ?></label>
             </div>
             <div class="form-check form-check-inline">
@@ -93,6 +132,9 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             <div class="help-block mt-1"><?php echo $brewer_text_006; ?></div>
         </div>
     </div>
+    <?php } else { ?>
+    <input type="hidden" name="brewerJudge" value="<?php echo h($row_brewer['brewerJudge']); ?>">
+    <?php } ?>
 
     <div id="bjcp-id" class="mb-3 row">
         <label for="brewerJudgeID" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_bjcp_id; ?></strong></label>
@@ -103,6 +145,8 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     </div>
 
     <div id="brewerJudgeFields">
+
+        <?php if ($show_assignment_sensitive_fields_pb) { ?>
 
         <?php if (($judging_location_count == 1) && (($go != "admin") && ($filter == "default"))) echo $judge_single_option; ?>
 
@@ -117,20 +161,32 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
         <?php } ?>
 
+        <?php } else {
+        // GitHub issue #1752: brewerJudgeLocation is posted by the interactive form as
+        // one array entry per location ("Y-9", "N-15", ...) via repeated
+        // brewerJudgeLocation[] selects - preserve that same shape here, not the raw
+        // comma-joined DB string, or process_brewer_info.inc.php's per-location loop
+        // would explode() one giant malformed "value" instead of each location's own
+        // token.
+        $preserve_judge_locations_pb = array_filter(explode(",", (string) ($row_brewer['brewerJudgeLocation'] ?? "")), function($v) { return $v !== ""; });
+        foreach ($preserve_judge_locations_pb as $preserve_judge_location_pb) { ?>
+        <input type="hidden" name="brewerJudgeLocation[]" value="<?php echo h($preserve_judge_location_pb); ?>">
+        <?php } } ?>
+
         <div class="mb-3 row">
             <label for="brewerJudgeMead" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong>BJCP <?php echo $label_bjcp_mead; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?>> 
+                    <input class="form-check-input" type="radio" name="brewerJudgeMead" value="Y" id="brewerJudgeMead_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeMead'] == "Y")) echo "CHECKED"; ?>>
                     <label class="form-check-label"><?php echo $label_yes; ?></label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "edit") && (($row_brewer['brewerJudgeMead'] == "N") || ($row_brewer['brewerJudgeMead'] == ""))) echo "CHECKED"; ?>> 
+                    <input class="form-check-input" type="radio" name="brewerJudgeMead" value="N" id="brewerJudgeMead_1" <?php if (($action == "edit") && (($row_brewer['brewerJudgeMead'] == "N") || ($row_brewer['brewerJudgeMead'] == ""))) echo "CHECKED"; ?>>
                     <label class="form-check-label">
                         <?php echo $label_no; ?>
                     </label>
                 </div>
-                <div class="help-block mt-1"><?php echo $brewer_text_007; ?></div> 
+                <div class="help-block mt-1"><?php echo $brewer_text_007; ?></div>
             </div>
         </div>
 
@@ -138,11 +194,11 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             <label for="brewerJudgeCider" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong>BJCP <?php echo $label_bjcp_cider; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-lg-10">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerJudgeCider" value="Y" id="brewerJudgeCider_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeCider'] == "Y")) echo "CHECKED"; ?>> 
+                    <input class="form-check-input" type="radio" name="brewerJudgeCider" value="Y" id="brewerJudgeCider_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeCider'] == "Y")) echo "CHECKED"; ?>>
                     <label class="form-check-label"><?php echo $label_yes; ?></label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="brewerJudgeCider" value="N" id="brewerJudgeCider_1" <?php if (($action == "edit") && (($row_brewer['brewerJudgeCider'] == "N") || ($row_brewer['brewerJudgeCider'] == ""))) echo "CHECKED"; ?>> 
+                    <input class="form-check-input" type="radio" name="brewerJudgeCider" value="N" id="brewerJudgeCider_1" <?php if (($action == "edit") && (($row_brewer['brewerJudgeCider'] == "N") || ($row_brewer['brewerJudgeCider'] == ""))) echo "CHECKED"; ?>>
                     <label class="form-check-label">
                         <?php echo $label_no; ?>
                     </label>
@@ -161,7 +217,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Mead/Cider Only" <?php if (($action == "edit") && (in_array("Mead/Cider Only",$judge_array))) echo "CHECKED"; else echo "CHECKED" ?>>
-                    <label class="form-check-label">BJCP Certified Mead and/or Cider Only</label> 
+                    <label class="form-check-label">BJCP Certified Mead and/or Cider Only</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="brewerJudgeRank[]" value="Rank Pending" <?php if (($action == "edit")  && in_array("Rank Pending",$judge_array)) echo "CHECKED"; ?>>
@@ -268,7 +324,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
 
         <?php if (!empty($styles_selected)) { ?>
-        
+
         <div class="mb-3 row">
             <label for="brewerJudgeLikes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_judge_preferred; ?></strong></label>
             <div class="col-xs-12 col-sm-9 col-md-6 d-grid">
@@ -309,16 +365,51 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
 
     </div><!-- ./ brewerJudgeFields -->
 </section><!-- ./ judge-preferences -->
-<?php } // end if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
+<?php }
+/**
+ * GitHub issue #1752: the whole judge section above is unreachable here (judge cap
+ * reached and this person was never already a judge, or an unrelated
+ * entrant_type_brewery edit) - preserve every field it owns via hidden fields so an
+ * edit that can't reach this section is a no-op rather than resetting them, matching
+ * the fix shape used throughout this file family. Harmless even for the judge-cap
+ * case (someone who was never a judge has nothing real to preserve), and necessary
+ * for the entrant_type_brewery case (switching entrant type on an existing account
+ * that previously had real judge data).
+ */
+else {
+    $preserve_judge_locations_pb = array_filter(explode(",", (string) ($row_brewer['brewerJudgeLocation'] ?? "")), function($v) { return $v !== ""; });
+    $preserve_judge_likes_pb = array_filter(explode(",", (string) ($row_brewer['brewerJudgeLikes'] ?? "")), function($v) { return $v !== ""; });
+    $preserve_judge_dislikes_pb = array_filter(explode(",", (string) ($row_brewer['brewerJudgeDislikes'] ?? "")), function($v) { return $v !== ""; });
+    $preserve_judge_rank_pb = array_filter(explode(",", (string) ($row_brewer['brewerJudgeRank'] ?? "")), function($v) { return $v !== ""; });
+    ?>
+<input type="hidden" name="brewerJudge" value="<?php echo h($row_brewer['brewerJudge']); ?>">
+<input type="hidden" name="brewerJudgeMead" value="<?php echo h($row_brewer['brewerJudgeMead']); ?>">
+<input type="hidden" name="brewerJudgeCider" value="<?php echo h($row_brewer['brewerJudgeCider']); ?>">
+<input type="hidden" name="brewerJudgeID" value="<?php echo h($row_brewer['brewerJudgeID']); ?>">
+<input type="hidden" name="brewerJudgeExp" value="<?php echo h($row_brewer['brewerJudgeExp']); ?>">
+<?php foreach ($preserve_judge_locations_pb as $preserve_judge_location_pb) { ?>
+<input type="hidden" name="brewerJudgeLocation[]" value="<?php echo h($preserve_judge_location_pb); ?>">
+<?php } ?>
+<?php foreach ($preserve_judge_likes_pb as $preserve_judge_like_pb) { ?>
+<input type="hidden" name="brewerJudgeLikes[]" value="<?php echo h($preserve_judge_like_pb); ?>">
+<?php } ?>
+<?php foreach ($preserve_judge_dislikes_pb as $preserve_judge_dislike_pb) { ?>
+<input type="hidden" name="brewerJudgeDislikes[]" value="<?php echo h($preserve_judge_dislike_pb); ?>">
+<?php } ?>
+<?php foreach ($preserve_judge_rank_pb as $preserve_judge_rank_item_pb) { ?>
+<input type="hidden" name="brewerJudgeRank[]" value="<?php echo h($preserve_judge_rank_item_pb); ?>">
+<?php } ?>
+<?php } // end if ($show_judge_section_pb) / else ?>
 
-<?php if (((!$steward_limit || $already_steward) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
+<?php if ($show_steward_section_pb) { ?>
 <a name="steward-info"></a>
 <section id="steward-preferences">
+    <?php if ($show_assignment_sensitive_fields_pb) { ?>
     <div class="mb-3 row">
         <label for="brewerSteward" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_stewarding; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "CHECKED"; ?>> 
+                <input class="form-check-input" type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) echo "CHECKED"; ?>>
                 <label class="form-check-label"><?php echo $label_yes; ?></label>
             </div>
             <div class="form-check form-check-inline">
@@ -328,9 +419,14 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
             <div class="help-block mt-1"><?php echo $brewer_text_015; ?></div>
         </div>
     </div>
+    <?php } else { ?>
+    <input type="hidden" name="brewerSteward" value="<?php echo h($row_brewer['brewerSteward']); ?>">
+    <?php } ?>
+
+    <?php if ($show_assignment_sensitive_fields_pb) { ?>
 
     <?php if (($judging_location_count == 1) && (($go != "admin") && ($filter == "default"))) echo $steward_single_option; ?>
-   
+
     <?php if (($judging_location_count > 1) || (($go == "admin") && ($filter != "default"))) { ?>
     <div id="brewerStewardFields">
         <?php if (!empty($steward_location_avail)) { ?>
@@ -344,9 +440,25 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
     </div>
     <?php } // end if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) ?>
 
-</section><!-- ./ steward-preferences -->
-<?php } // end if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
+    <?php } else {
+    // GitHub issue #1752: same shape/reasoning as brewerJudgeLocation above.
+    $preserve_steward_locations_pb = array_filter(explode(",", (string) ($row_brewer['brewerStewardLocation'] ?? "")), function($v) { return $v !== ""; });
+    foreach ($preserve_steward_locations_pb as $preserve_steward_location_pb) { ?>
+    <input type="hidden" name="brewerStewardLocation[]" value="<?php echo h($preserve_steward_location_pb); ?>">
+    <?php } } ?>
 
+</section><!-- ./ steward-preferences -->
+<?php }
+// GitHub issue #1752: same reasoning as the judge section's else branch above.
+else { ?>
+<input type="hidden" name="brewerSteward" value="<?php echo h($row_brewer['brewerSteward']); ?>">
+<?php
+$preserve_steward_locations_pb = array_filter(explode(",", (string) ($row_brewer['brewerStewardLocation'] ?? "")), function($v) { return $v !== ""; });
+foreach ($preserve_steward_locations_pb as $preserve_steward_location_pb) { ?>
+<input type="hidden" name="brewerStewardLocation[]" value="<?php echo h($preserve_steward_location_pb); ?>">
+<?php } } // end if ($show_steward_section_pb) / else ?>
+
+<?php if (!$entrant_type_brewery) { ?>
 <section id="judge-steward-waiver">
     <div id="judge-waiver" class="mb-3 row">
         <label for="brewerJudgeWaiver" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_waiver; ?></strong></label>
@@ -369,42 +481,13 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         </div>
     </div>
 </section>
-
 <?php }
 /**
- * GitHub issue #1752: when this block is suppressed for a self-edit (most commonly
- * $table_assignment - the person already has a real table assignment somewhere, so
- * this whole section is hidden and they're told to contact an admin instead), the
- * brewerJudge/brewerSteward radios and every location <select> simply never render.
- * A browser can't submit form fields that were never in the DOM, so $_POST[
- * 'brewerJudge']/['brewerSteward'] end up absent from ANY edit of this profile - even
- * one that has nothing to do with judging (address, phone, whatever). process_brewer_
- * info.inc.php defaults $brewerJudge/$brewerSteward to "N" when they're not posted,
- * which then triggers the FULL opt-out delete path - silently wiping every
- * judging_assignments row for that person as a side effect of an unrelated edit they
- * never intended to make to their judging status at all. Preserve their current
- * values with hidden fields instead of omitting them, so an edit that can't reach
- * this section is a no-op for judge/steward status rather than an accidental full
- * de-registration - same fix shape already used elsewhere in this file family
- * (sections/brewer.sec.php:329,336) for a different case that hides these same two
- * fields, just hardcoded to "N" there because that case is a brand-new signup who
- * genuinely isn't a judge yet.
+ * GitHub issue #1752: brewerJudgeWaiver isn't preserved here - it's a mandatory,
+ * always-"Y", always-required checkbox on the interactive form, so
+ * process_brewer_info.inc.php's "Y" default already matches the only value it could
+ * ever legitimately hold. brewerJudgeNotes has no such safe default, though.
  */
-else {
-    // brewerJudgeLocation/brewerStewardLocation are posted by the interactive form as
-    // one array entry per location ("Y-9", "N-15", ...) via repeated brewerJudgeLocation[]
-    // selects - preserve that same shape here, not the raw comma-joined DB string, or
-    // process_brewer_info.inc.php's per-location loop would explode() one giant
-    // malformed "value" instead of each location's own token.
-    $preserve_judge_locations_pb = array_filter(explode(",", (string) ($row_brewer['brewerJudgeLocation'] ?? "")), function($v) { return $v !== ""; });
-    $preserve_steward_locations_pb = array_filter(explode(",", (string) ($row_brewer['brewerStewardLocation'] ?? "")), function($v) { return $v !== ""; });
-    ?>
-<input type="hidden" name="brewerJudge" value="<?php echo h($row_brewer['brewerJudge']); ?>">
-<input type="hidden" name="brewerSteward" value="<?php echo h($row_brewer['brewerSteward']); ?>">
-<?php foreach ($preserve_judge_locations_pb as $preserve_judge_location_pb) { ?>
-<input type="hidden" name="brewerJudgeLocation[]" value="<?php echo h($preserve_judge_location_pb); ?>">
+else { ?>
+<input type="hidden" name="brewerJudgeNotes" value="<?php echo h($row_brewer['brewerJudgeNotes']); ?>">
 <?php } ?>
-<?php foreach ($preserve_steward_locations_pb as $preserve_steward_location_pb) { ?>
-<input type="hidden" name="brewerStewardLocation[]" value="<?php echo h($preserve_steward_location_pb); ?>">
-<?php } ?>
-<?php } // end if ((!$table_assignment) || ($go == "admin")) ?>
