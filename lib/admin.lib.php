@@ -1226,13 +1226,26 @@ function unassign($bid,$location,$round,$tid) {
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('bid', $bid);
 	$db_conn->where('assignRound', $round);
-	$db_conn->where('assignLocation', $location);
+	/**
+	 * GitHub issue #1754: this used to match on assignLocation instead of assignTable
+	 * (despite $tid already being passed in) - assignLocation is a snapshot of the
+	 * table's location taken when the assignment was made, and editing a table's
+	 * location afterward (process_judging_tables.inc.php) does not retroactively
+	 * update it on already-assigned judges. Matching by the table's current location
+	 * therefore silently fails to find that judge's row at all once the table's
+	 * location changes, so the id needed to actually remove them from a given table
+	 * never resolves - the "unassign" checkbox/radio then has nothing to act on and
+	 * the judge appears stuck on the table no matter how many times an admin tries to
+	 * remove them. Matching by assignTable instead identifies the correct row
+	 * unambiguously and is immune to a stale assignLocation.
+	 */
+	$db_conn->where('assignTable', $tid);
 	$row_assignments = $db_conn->getOne($prefix."judging_assignments", "id");
 
 
 	if (!empty($row_assignments)) $r = $row_assignments['id'];
 	else $r = 0;
-	
+
 	return $r;
 }
          
