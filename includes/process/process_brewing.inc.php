@@ -19,6 +19,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	include (DB.'entries.db.php');
 	include (INCLUDES.'constants.inc.php');
+	require_once (LIB.'styles_import.lib.php');
 
 	$db_conn->where("user_name", $_SESSION['loginUsername']);
 	$row_user = $db_conn->getOne($users_db_table, "id,userLevel");
@@ -301,10 +302,43 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// For a purely numeric group, match by numeric value instead so it
 		// works regardless of padding width; non-numeric groups (BJCP2025's
 		// "C"-prefixed cider codes) keep the exact string match since they
-		// were never zero-padded. Shared by both the style-limit flagging
-		// below and the style-name lookup further down.
+		// were never zero-padded. Used by the style-name lookup right below,
+		// which resolves the DB's own correctly-padded brewStyleGroup back
+		// into $styleFix for the style-limit flagging further below.
 		if (preg_match("/^[[:digit:]]+$/",$style[0])) { $group_where_clause = "CAST(brewStyleGroup AS UNSIGNED) = ?"; $group_where_param = (int)$style[0]; }
 		else { $group_where_clause = "brewStyleGroup = ?"; $group_where_param = $styleFix; }
+
+		// Style Name
+
+		// Determine if the style chosen is a cider - if so, run a different query
+		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+			$first_character = mb_substr($styleFix, 0, 1);
+			if ($first_character == "C") $style_version = "BJCP2025";
+			else $style_version = "BJCP2021";
+		}
+
+		else $style_version = $_SESSION['prefsStyleSet'];
+
+		// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
+		// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
+		// zero rows for those, same fix pattern already used correctly in
+		// includes/db/styles_special.db.php.
+		// $group_where_clause/$group_where_param computed earlier, right
+		// after $style was parsed - shared with the style-limit flagging
+		// below.
+		if ($_SESSION['prefsStyleSet'] == "AABC2025") $db_conn->where("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom') AND ".$group_where_clause." AND brewStyleNum = ?", array($group_where_param, $style[1]));
+		else $db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND ".$group_where_clause." AND brewStyleNum = ?", array($style_version, "custom", $group_where_param, $style[1]));
+		$row_style_name = $db_conn->getOne($prefix."styles", "id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType");
+
+		$styleName = $row_style_name['brewStyle'];
+
+		// Trust the DB's own zero-padding for brewCategorySort/brewStyleGroup
+		// (used below and elsewhere) rather than the 2-digit guess computed
+		// above - that guess is only ever right for 2-digit sets by
+		// coincidence. This is also the key style_set_categories (and so
+		// prefsStyleLimits) is actually stored under for an imported set
+		// like GABF, whose group codes aren't 2-digit-padded.
+		if (!empty($row_style_name['brewStyleGroup'])) $styleFix = $row_style_name['brewStyleGroup'];
 
 		// Array from constants.inc.php
 		// Check to see if there are any style limits
@@ -327,59 +361,53 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$all_style_limits = json_decode($_SESSION['prefsStyleLimits'],true);
 
+			// Keyed by $styleFix (the DB's own zero-padded brewStyleGroup,
+			// just resolved above), not the raw, un-padded $style[0] - a
+			// style_set_categories key (what prefsStyleLimits is actually
+			// keyed by) is only ever guaranteed to equal $style[0] for a
+			// 2-digit-padded set; an imported set like GABF pads to a
+			// different width and would otherwise never match here.
+			//
+			// For a style set with style_set_overall_categories (GABF, etc.),
+			// $styleFix is one individual style's own group code, but a
+			// stored limit's key is the representative group code for the
+			// whole rolled-up grouping it belongs to - expand via
+			// style_group_limit_siblings() so an entry counted under any
+			// sibling group is checked against, and can trip, the shared
+			// limit. Unchanged (array($styleFix) only) for every set without
+			// overall categories.
+			$style_limit_siblings = style_group_limit_siblings($_SESSION['prefsStyleSet'], $styleFix);
+			$style_limit_key = null;
+			foreach ($style_limit_siblings as $sibling) {
+				if (isset($all_style_limits[$sibling])) { $style_limit_key = $sibling; break; }
+			}
+
 			// A custom style is tagged with the literal active style set at creation time
 			// (process_styles.inc.php), never with the cider-only BJCP2025 exception applied
 			// above - so a custom (non-cider) style added while BJCP2025 was active never
 			// matches $chosen_style_set here. Admit brewStyleOwn='custom' as a fallback, same
 			// as the already-correct lookup a few hundred lines below in this same file.
-			if ((isset($all_style_limits[$style[0]])) && ($all_style_limits[$style[0]] >= $style_limit_entry_count_display[$style[0]])) {
+			if (($style_limit_key !== null) && ($all_style_limits[$style_limit_key] >= $style_limit_entry_count_display[$style_limit_key])) {
 
 				$update_table_styles = $prefix."styles";
 				$data = array('brewStyleAtLimit' => 1);
-				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND ".$group_where_clause, array($chosen_style_set, "custom", $group_where_param));
+				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?)", array($chosen_style_set, "custom"));
+				$db_conn->where ("brewStyleGroup", $style_limit_siblings, 'IN');
 				$result = $db_conn->update ($update_table_styles, $data);
 
 			}
 
-			if ((isset($all_style_limits[$style[0]])) && ($all_style_limits[$style[0]] < $style_limit_entry_count_display[$style[0]])) {
+			if (($style_limit_key !== null) && ($all_style_limits[$style_limit_key] < $style_limit_entry_count_display[$style_limit_key])) {
 
 				$update_table_styles = $prefix."styles";
 				$data = array('brewStyleAtLimit' => 0);
-				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND ".$group_where_clause, array($chosen_style_set, "custom", $group_where_param));
+				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?)", array($chosen_style_set, "custom"));
+				$db_conn->where ("brewStyleGroup", $style_limit_siblings, 'IN');
 				$result = $db_conn->update ($update_table_styles, $data);
 
 			}
 
 		}
-
-		// Style Name
-
-		// Determine if the style chosen is a cider - if so, run a different query
-		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
-			$first_character = mb_substr($styleFix, 0, 1);
-			if ($first_character == "C") $style_version = "BJCP2025";
-			else $style_version = "BJCP2021";
-		}
-
-		else $style_version = $_SESSION['prefsStyleSet'];
-
-		// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
-		// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
-		// zero rows for those, same fix pattern already used correctly in
-		// includes/db/styles_special.db.php.
-		// $group_where_clause/$group_where_param computed earlier, right
-		// after $style was parsed - shared with the style-limit flagging
-		// above.
-		if ($_SESSION['prefsStyleSet'] == "AABC2025") $db_conn->where("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom') AND ".$group_where_clause." AND brewStyleNum = ?", array($group_where_param, $style[1]));
-		else $db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND ".$group_where_clause." AND brewStyleNum = ?", array($style_version, "custom", $group_where_param, $style[1]));
-		$row_style_name = $db_conn->getOne($prefix."styles", "id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType");
-
-		$styleName = $row_style_name['brewStyle'];
-
-		// Trust the DB's own zero-padding for brewCategorySort (used below
-		// and elsewhere) rather than the 2-digit guess computed above -
-		// that guess is only ever right for 2-digit sets by coincidence.
-		if (!empty($row_style_name['brewStyleGroup'])) $styleFix = $row_style_name['brewStyleGroup'];
 
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = 1;

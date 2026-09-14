@@ -135,6 +135,199 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1) && ($referrer_ok)) {
 
 	} // END if ($action == "brewing")
 
+	if ($action == "styles") {
+
+		$styles_db_table = $prefix."styles";
+
+		if ($go == "brewStyleAtLimit") {
+
+			$input = sterilize($_POST['brewStyleAtLimit']);
+			$data = array('brewStyleAtLimit' => (!empty($input)) ? 1 : NULL);
+
+			$db_conn->where ('id', $id);
+			if ($db_conn->update ($styles_db_table, $data)) $status = 1;
+			else $error_type = 3; // SQL error
+
+		} // end if ($go == "brewStyleAtLimit")
+
+		if ($go == "brewStyleActive") {
+
+			$input = sterilize($_POST['brewStyleActive']);
+
+			// "Accepted" styles aren't a column on the styles table itself -
+			// they're a JSON map (id => style summary) on
+			// {prefix}preferences.prefsSelectedStyles, the same one
+			// includes/process/process_styles.inc.php's batch "update"
+			// action (the Update Accepted Styles fallback form) maintains.
+			//
+			// A "select all" click fires this save for every visible style
+			// at once, so a PHP-side read-decode-modify-encode-write here
+			// (read the JSON, change one key, write the whole thing back)
+			// would lose updates: many concurrent requests each read the
+			// same starting snapshot, and whichever finishes last overwrites
+			// the DB with a version that only reflects its own change, not
+			// the others' - the exact "each row said Saved, but nothing
+			// stuck" symptom. JSON_MERGE_PATCH (RFC 7396: a key set to null
+			// in the patch removes that key; any other key is added/
+			// replaced) pushes the single-key add/remove into one atomic
+			// UPDATE that MySQL/MariaDB itself row-locks, so concurrent
+			// saves for different styles can never clobber each other.
+			// (JSON_SET/JSON_REMOVE would work too, but JSON_SET's non-JSON
+			// argument needs CAST(... AS JSON) to be treated as a document
+			// rather than a scalar string - syntax MariaDB doesn't support -
+			// so JSON_MERGE_PATCH's whole-document patch argument, which
+			// needs no such cast, is used for both directions instead.)
+			if (!empty($input)) {
+
+				$db_conn->where("id", $id);
+				$row_style = $db_conn->getOne($styles_db_table, "id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType");
+
+				if ($row_style) {
+					$patch = json_encode(array((string)$id => array(
+						'id' => $row_style['id'],
+						'brewStyle' => sterilize($row_style['brewStyle']),
+						'brewStyleGroup' => sterilize($row_style['brewStyleGroup']),
+						'brewStyleNum' => sterilize($row_style['brewStyleNum']),
+						'brewStyleVersion' => sterilize($row_style['brewStyleVersion']),
+						'brewStyleType' => $row_style['brewStyleType']
+					)));
+				}
+
+			}
+
+			else {
+				$patch = json_encode(array((string)$id => null));
+			}
+
+			if (!empty($patch)) {
+				$sql = "UPDATE ".$prefix."preferences SET prefsSelectedStyles = JSON_MERGE_PATCH(COALESCE(NULLIF(prefsSelectedStyles, ''), '{}'), ?) WHERE id = 1";
+				$db_conn->rawQuery($sql, array($patch));
+				if ($db_conn->getLastErrno() === 0) {
+					$status = 1;
+					// $_SESSION['prefsSelectedStyles'] (and every other
+					// prefs* session var) is only ever reloaded from the DB
+					// when $_SESSION['prefs'.$prefix_session] is unset -
+					// includes/db/common.db.php's cache guard - so this
+					// direct DB write would otherwise leave the admin's own
+					// session showing stale (pre-save) checkbox state on
+					// every page view until they log out, no matter how
+					// many successful saves happen. Unsetting it here forces
+					// exactly one fresh reload on the next page load, same
+					// as the batch fallback in process_styles.inc.php
+					// already does after its own save.
+					unset($_SESSION['prefs'.$prefix_session]);
+				}
+				else $error_type = 3; // SQL error
+			}
+
+		} // end if ($go == "brewStyleActive")
+
+		// Batched counterparts of the two handlers above, used by a
+		// "select all" checkbox on index.php?section=admin&go=styles:
+		// applying the SAME new value to every affected style as one SQL
+		// statement instead of one request (and one MyISAM table-lock
+		// acquisition - {prefix}styles and {prefix}preferences are both
+		// MyISAM, table-level-locked on every write) per style. Confirmed
+		// live: one row at a time, "select all" on a ~195-style set took
+		// ~25 seconds and, sent concurrently instead of sequentially,
+		// occasionally dropped a handful of saves outright once the DB's
+		// max_connections was exceeded. Folding the whole batch into a
+		// single statement removes both problems - there's only ever one
+		// request and one lock acquisition, no matter how many rows.
+		if (($go == "brewStyleAtLimitAll") || ($go == "brewStyleActiveAll")) {
+
+			$ids = json_decode($_POST['ids'] ?? '[]', true);
+			$ids = is_array($ids) ? array_values(array_filter(array_map('intval', $ids))) : array();
+
+			if (!empty($ids)) {
+
+				if ($go == "brewStyleAtLimitAll") {
+
+					$input = sterilize($_POST['brewStyleAtLimit']);
+					$data = array('brewStyleAtLimit' => (!empty($input)) ? 1 : NULL);
+
+					$db_conn->where('id', $ids, 'IN');
+					if ($db_conn->update($styles_db_table, $data)) $status = 1;
+					else $error_type = 3; // SQL error
+
+				}
+
+				if ($go == "brewStyleActiveAll") {
+
+					$input = sterilize($_POST['brewStyleActive']);
+
+					// Confirmed live (2026-09-15): MariaDB 10.4.32's
+					// JSON_MERGE_PATCH() intermittently drops one key
+					// (observed at different positions in different runs,
+					// not consistently "the first key") whenever the
+					// removals it's asked to apply bring the resulting
+					// document close to/exactly empty - reproduced
+					// deterministically outside this app via a plain
+					// SELECT JSON_MERGE_PATCH(doc, patch) against the real
+					// prefsSelectedStyles document, including when chunked
+					// into smaller per-call patches (the LAST chunk still
+					// drains the document to near-empty, since the earlier
+					// chunks already removed most of it) - an engine
+					// limitation, not an application bug, and not one
+					// avoidable by staying under some patch-size threshold.
+					//
+					// The single-style handler above still uses
+					// JSON_MERGE_PATCH, because it genuinely needs
+					// concurrency-safety against OTHER simultaneous single-
+					// style saves (e.g. a second browser tab). This batch
+					// endpoint doesn't have that problem to begin with -
+					// it's already exactly one request for the whole
+					// "select all" click, so there's nothing else to race
+					// against - so it reads, modifies in PHP, and writes
+					// back the whole document in one UPDATE instead,
+					// sidestepping the buggy function entirely.
+					$db_conn->where('id', 1);
+					$row_prefs_selected_styles = $db_conn->getOne($prefix."preferences", "prefsSelectedStyles");
+					$selected_styles = json_decode($row_prefs_selected_styles['prefsSelectedStyles'] ?? '', true);
+					if (!is_array($selected_styles)) $selected_styles = array();
+
+					if (!empty($input)) {
+
+						$db_conn->where('id', $ids, 'IN');
+						$rows_style_batch = $db_conn->get($styles_db_table, null, "id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType");
+
+						if ($rows_style_batch) {
+							foreach ($rows_style_batch as $row_style_batch) {
+								$selected_styles[$row_style_batch['id']] = array(
+									'id' => $row_style_batch['id'],
+									'brewStyle' => sterilize($row_style_batch['brewStyle']),
+									'brewStyleGroup' => sterilize($row_style_batch['brewStyleGroup']),
+									'brewStyleNum' => sterilize($row_style_batch['brewStyleNum']),
+									'brewStyleVersion' => sterilize($row_style_batch['brewStyleVersion']),
+									'brewStyleType' => $row_style_batch['brewStyleType']
+								);
+							}
+						}
+
+					}
+
+					else {
+						foreach ($ids as $batch_id) unset($selected_styles[$batch_id]);
+					}
+
+					$data = array('prefsSelectedStyles' => json_encode($selected_styles));
+					$db_conn->where('id', 1);
+					if ($db_conn->update($prefix."preferences", $data)) {
+						$status = 1;
+						// See the single-style brewStyleActive handler
+						// above for why this is needed.
+						unset($_SESSION['prefs'.$prefix_session]);
+					}
+					else $error_type = 3; // SQL error
+
+				}
+
+			}
+
+		} // end if brewStyleAtLimitAll / brewStyleActiveAll
+
+	} // END if ($action == "styles")
+
 	if ($action == "sponsors") {
 
 		if ($go == "sponsorEnable") {

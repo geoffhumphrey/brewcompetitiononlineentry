@@ -11,6 +11,8 @@ else
 */
 $styles_db_table = $prefix."styles";
 
+require_once (LIB.'styles_import.lib.php');
+
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))) || ($setup_free_access))) {
 
 	$errors = FALSE;
@@ -813,7 +815,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				foreach ($style_limits as $key => $value) {
 
-					$db_conn->where("brewCategorySort", $key);
+					// $key is stored as one representative brewStyleGroup code.
+					// For a style set with style_set_overall_categories (e.g.
+					// GABF, where each individual style has its own group
+					// number and the broad grouping an admin actually limits
+					// by spans many of them), expand it to every sibling group
+					// sharing that broad grouping so the limit is enforced -
+					// and its entry count reflects - the whole rolled-up
+					// group, not just $key's own individual style. For every
+					// other set (no overall categories defined) this is
+					// always just array($key), unchanged single-group behavior.
+					$sibling_groups = style_group_limit_siblings($prefsStyleSet, $key);
+
+					$db_conn->where("brewCategorySort", $sibling_groups, 'IN');
 					$row_style_limit_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
 					if ($prefsStyleSet == "BJCP2025") {
@@ -831,13 +845,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					// as the already-correct lookup in process_brewing.inc.php.
 					if ($row_style_limit_entry_count['count'] >= $value) {
 						$data = array('brewStyleAtLimit' => 1);
-						$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ?", array($chosen_style_set, "custom", $key));
+						$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?)", array($chosen_style_set, "custom"));
+						$db_conn->where ("brewStyleGroup", $sibling_groups, 'IN');
 						$result = $db_conn->update ($prefix."styles", $data);
 					}
 
 					if ($row_style_limit_entry_count['count'] < $value) {
 						$data = array('brewStyleAtLimit' => 0);
-						$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ?", array($chosen_style_set, "custom", $key));
+						$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?)", array($chosen_style_set, "custom"));
+						$db_conn->where ("brewStyleGroup", $sibling_groups, 'IN');
 						$result = $db_conn->update ($prefix."styles", $data);
 					}
 

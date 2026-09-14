@@ -47,15 +47,30 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "update") {
 
+		// Start from whatever's already saved, not empty - DataTables on
+		// index.php?section=admin&go=styles only keeps the currently
+		// visible/paged rows in the DOM, so a search or page change leaves
+		// every other style's hidden id[]/brewStyleActive{id} fields out of
+		// this submission entirely. Rebuilding from scratch using only
+		// $_POST['id'] silently dropped (unaccepted) every style that
+		// wasn't part of this particular submission; merging onto the
+		// existing saved list instead means only the styles actually
+		// present in $_POST['id'] this time - the ones that were visible
+		// and so could have been toggled - are added or removed, and
+		// everything else keeps its prior state.
 		$update_selected_styles = array();
+		$db_conn->where('id', 1);
+		$row_prefs_selected_styles = $db_conn->getOne($prefix."preferences", "prefsSelectedStyles");
+		$existing_selected_styles = json_decode($row_prefs_selected_styles['prefsSelectedStyles'] ?? '', true);
+		if (is_array($existing_selected_styles)) $update_selected_styles = $existing_selected_styles;
 
 		foreach($_POST['id'] as $id) {
 
 			if ($filter == "default") {
+
+				$style_id = sterilize($id);
 				
 				if (isset($_POST['brewStyleActive'.$id])) {
-
-					$style_id = sterilize($id);
 
 					if (isset($_POST['brewStyleAtLimit'.$id])) $brewStyleAtLimit = 1;
 					else $brewStyleAtLimit = NULL;
@@ -81,6 +96,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					$result = $db_conn->update ($update_table, $data);
 				
 				} // if (isset($_POST['brewStyleActive'.$id]))
+
+				else {
+					// Its id[] was present (the row was visible/
+					// interactable this submission) but the checkbox
+					// wasn't checked - an explicit uncheck, same as the
+					// original behavior for a submitted-but-unchecked row.
+					unset($update_selected_styles[$style_id]);
+				}
 
 			} // end if ($filter == "default")
 

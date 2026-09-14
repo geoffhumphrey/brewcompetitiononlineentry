@@ -35,6 +35,8 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 
 		if ($row_styles['id'] != "") {
 
+			$saving_random_num = random_generator(8,2);
+
 			$brewStyleActive = "";
 			if (array_key_exists($row_styles['id'],$current_styles_active)) $brewStyleActive = "CHECKED";
 
@@ -64,8 +66,16 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 
 			$table_body .= "<tr>";
 			$table_body .= "<input type=\"hidden\" name=\"id[]\" value=\"".$row_styles['id']."\" />";
-			if ($bid == "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleActive".$row_styles['id']."\" type=\"checkbox\" value=\"Y\" ".$brewStyleActive."></td>";
-			if ($bid != "default") $table_body .= "<td width=\"1%\" nowrap><input class=\"enable-style\" name=\"brewStyleJudgingLoc".$row_styles['id']."\" type=\"checkbox\" value=\"".$bid."\" ".$brewStyleJudgingLoc."></td>";
+			if ($bid == "default") {
+				$table_body .= "<td nowrap>";
+				$table_body .= "<div class=\"form-group\" id=\"active-ajax-".$saving_random_num."-brewStyleActive-form-group\">";
+				$table_body .= "<input class=\"enable-style\" name=\"brewStyleActive".$row_styles['id']."\" id=\"active-ajax-".$saving_random_num."\" data-style-id=\"".$row_styles['id']."\" type=\"checkbox\" value=\"Y\" onclick=\"$(this).attr('value', this.checked ? 'Y' : '');return save_column('".$ajax_url."','brewStyleActive','styles','".$row_styles['id']."','default','default','default','default','active-ajax-".$saving_random_num."','value')\" ".$brewStyleActive.">";
+				$table_body .= "</div>";
+				$table_body .= "<span style=\"margin-left:5px;\" id=\"active-ajax-".$saving_random_num."-brewStyleActive-status\"></span>";
+				$table_body .= "<span style=\"margin-left:5px;\" id=\"active-ajax-".$saving_random_num."-brewStyleActive-status-msg\"></span>";
+				$table_body .= "</td>";
+			}
+			if ($bid != "default") $table_body .= "<td nowrap><input class=\"enable-style\" name=\"brewStyleJudgingLoc".$row_styles['id']."\" type=\"checkbox\" value=\"".$bid."\" ".$brewStyleJudgingLoc."></td>";
 			$table_body .= "<td>".h($row_styles['brewStyle'])."</td>";
 			if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
 			elseif (isset($active_overall_categories[$row_styles['brewStyleGroup']])) $table_body .= "<td>".h($active_overall_categories[$row_styles['brewStyleGroup']])."</td>";
@@ -78,7 +88,13 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			else $table_body .= "<td>".$brewStyleOwn_prefix.$row_styles['brewStyleGroup'].$row_styles['brewStyleNum'].$brewStyleOwn_suffix."</td>";
 			$table_body .= "<td>".style_type($row_styles['brewStyleType'],"2",$style_own)."</td>";
 			$table_body .= "<td>".$brewStyleReqSpec.$brewStyleStrength.$brewStyleCarb.$brewStyleSweet."</td>";
-			$table_body .= "<td width=\"1%\" nowrap><input class=\"limit-style\" name=\"brewStyleAtLimit".$row_styles['id']."\" type=\"checkbox\" value=\"1\" ".$brewStyleAtLimit."></td>";
+			$table_body .= "<td nowrap>";
+			$table_body .= "<div class=\"form-group\" id=\"limit-ajax-".$saving_random_num."-brewStyleAtLimit-form-group\">";
+			$table_body .= "<input class=\"limit-style\" name=\"brewStyleAtLimit".$row_styles['id']."\" id=\"limit-ajax-".$saving_random_num."\" data-style-id=\"".$row_styles['id']."\" type=\"checkbox\" value=\"1\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);return save_column('".$ajax_url."','brewStyleAtLimit','styles','".$row_styles['id']."','default','default','default','default','limit-ajax-".$saving_random_num."','value')\" ".$brewStyleAtLimit.">";
+			$table_body .= "</div>";
+			$table_body .= "<span style=\"margin-left:5px;\" id=\"limit-ajax-".$saving_random_num."-brewStyleAtLimit-status\"> </span>";
+			$table_body .= "<span style=\"margin-left:5px;\" id=\"limit-ajax-".$saving_random_num."-brewStyleAtLimit-status-msg\"></span> ";
+			$table_body .= "</td>";
 			$table_body .= "<td class=\"hidden-print\">";
 			if ($section != "step7") {
 				if ($row_styles['brewStyleOwn'] != "bcoe") $table_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;id=".$row_styles['id']."&amp;view=".$row_styles['brewStyleType']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit ".h($row_styles['brewStyle'])."\"><span class=\"fa fa-lg fa-pencil\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=".$go."&amp;dbTable=".$styles_db_table."&amp;action=delete&amp;id=".$row_styles['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".h($row_styles['brewStyle'])."\" data-confirm=\"Are you sure you want to delete ".h($row_styles['brewStyle'])."? This cannot be undone. Deleting a custom style will remove it and associated entries from any public past winner lists. To avoid this, simply deactivate the style.\"><span class=\"fa fa-lg fa-trash-o\"></span></a> ";
@@ -121,6 +137,8 @@ if ($section != "step7") { ?>
 <?php } if ((($action == "default") && ($filter == "default")) || ($section == "step7") || (($action == "default") && ($filter == "judging") && ($bid != "default"))) { ?>
 
 <script type="text/javascript" language="javascript">
+var stylesAjaxUrl = "<?php echo $ajax_url; ?>";
+
 function syncSelectAll($selectAll, $group) {
   const allChecked = $group.length === $group.filter(':checked').length;
   $selectAll.prop('checked', allChecked);
@@ -128,8 +146,41 @@ function syncSelectAll($selectAll, $group) {
 
 function handleSelectAll($selectAll, $group) {
   const allChecked = $group.length === $group.filter(':checked').length;
-  $group.prop('checked', !allChecked);
-  $selectAll.prop('checked', !allChecked);
+  const newState = !allChecked;
+  $selectAll.prop('checked', newState);
+
+  // Every checkbox in this column saves to a MyISAM-engine table
+  // (table-level locking, not row-level - both {prefix}styles and
+  // {prefix}preferences use it). Saving each row as its own request -
+  // whether all at once (concurrent) or one after another (sequential) -
+  // means one PHP/DB round trip per row: concurrently, that's dozens/
+  // hundreds of requests queued on the same table lock and can exceed the
+  // DB's max_connections for a large style set (confirmed live: ~150
+  // simultaneous saves silently fail a handful of requests); sequentially
+  // it's reliable but still N round trips (confirmed live: ~195 styles
+  // took ~25 seconds). Since "select all" always applies the exact same
+  // new state to every row, the whole batch instead goes through as ONE
+  // request carrying every affected style's id, which the server folds
+  // into one SQL statement - one DB round trip and one MyISAM table-lock
+  // acquisition total, regardless of how many rows changed.
+  var toChange = $group.toArray().filter(function (el) {
+    return el.checked !== newState;
+  });
+  if (toChange.length === 0) return;
+
+  toChange.forEach(function (el) { el.checked = newState; });
+
+  var ids = toChange.map(function (el) { return $(el).data('style-id'); });
+  var is_active_column = $(toChange[0]).hasClass('enable-style');
+  var column = is_active_column ? 'brewStyleActive' : 'brewStyleAtLimit';
+  var value = is_active_column ? (newState ? 'Y' : '') : (newState ? 1 : 0);
+
+  // One status indicator next to the "select all" checkbox itself, not
+  // one per row - this is a single batched save covering potentially
+  // hundreds of rows, so flashing "Saved" on every individual row's
+  // status spans wouldn't reflect what's actually happening (one request)
+  // and is a lot of needless DOM churn for a large style set.
+  save_column_batch(stylesAjaxUrl, column, 'styles', ids, [$selectAll.attr('id')], value);
 }
 
 $(document).ready(function () {
@@ -138,6 +189,10 @@ $(document).ready(function () {
   const $selectAllLimit  = $('#select-all-limit');
   const $enableBoxes     = $('.enable-style');
   const $limitBoxes      = $('.limit-style');
+
+  <?php if ($bid == "default") { ?>
+  disable_update_button('styles');
+  <?php } ?>
 
   // Select-all checkbox click handlers
   $selectAllEnable.on('change', function () {
@@ -180,17 +235,18 @@ $(document).ready(function () {
 
 });
 </script>
+<script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step7") echo "setup"; else echo $section; ?>&amp;action=update&amp;dbTable=<?php echo $styles_db_table; ?>&amp;filter=<?php echo $filter; if ($bid != "default") echo "&amp;bid=".$bid; ?>">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <table class="table table-responsive table-striped table-bordered" id="sortable">
 <thead>
  <tr>
-  <th><input type="checkbox" id="select-all-enable" /></th>
+  <th width="10%"><input type="checkbox" id="select-all-enable" /> Enable/Disable All <span style="margin-left:5px;" id="select-all-enable-brewStyleActive-status"></span><span style="margin-left:5px;" id="select-all-enable-brewStyleActive-status-msg"></span></th>
   <th>Style Name</th>
   <th><?php if (strpos($_SESSION['prefsStyleSet'],"BJCP") === false) echo "Overall Category"; else echo "#"; ?></th>
   <th>Style Type</th>
   <th>Requirements</th>
-  <th nowrap="nowrap"><input type="checkbox" id="select-all-limit" /> Restrict Entries <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you want to restrict further entries for a style on the fly, check its corresponding box in this column and then select Update at the bottom of the page. <span class='text-primary'><strong>Please Note:</strong> This will override any table-level restriction if using Table Limits in Tables Planning Mode.</span>" ?><i class="fa fa-question-circle"></i></a></th>
+  <th nowrap="nowrap"><input type="checkbox" id="select-all-limit" /> Restrict Entries <span style="margin-left:5px;"  id="select-all-limit-brewStyleAtLimit-status"></span><span style="margin-left:5px;" id="select-all-limit-brewStyleAtLimit-status-msg"></span> <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you want to restrict further entries for a style on the fly, check its corresponding box in this column - it saves automatically. <span class='text-primary'><strong>Please Note:</strong> This will override any table-level restriction if using Table Limits in Tables Planning Mode.</span>" ?><i class="fa fa-question-circle"></i></a></th>
   <th class="hidden-print">Actions</th>
  </tr>
  </thead>
@@ -199,8 +255,14 @@ $(document).ready(function () {
  </tbody>
  </table>
  <div class="bcoem-admin-element hidden-print">
-	<input type="submit" name="Submit" id="helpUpdateStyles" class="btn btn-primary" aria-describedby="helpBlock" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" />
-    <span id="helpBlock" class="help-block">Select "<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?> <em>before</em> paging through records.</span>
+	<?php if ($bid == "default") { ?>
+	<input type="submit" name="Submit" id="styles-submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Accepted Styles" disabled />
+	<span id="styles-update-button-enabled" class="help-block">Select "Update Accepted Styles" <em>before</em> paging through records.</span>
+	<span id="styles-update-button-disabled" class="help-block">The "Update Accepted Styles" button has been disabled since data is being saved automatically as it is entered. It will re-enable itself if a save fails, so you can retry from here.</span>
+	<?php } else { ?>
+	<input type="submit" name="Submit" id="helpUpdateStyles" class="btn btn-primary" aria-describedby="helpBlock" value="Update <?php echo $row_judging['judgingLocName']; ?>" />
+	<span id="helpBlock" class="help-block">Select "Update <?php echo $row_judging['judgingLocName']; ?>" <em>before</em> paging through records.</span>
+	<?php } ?>
 </div>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">

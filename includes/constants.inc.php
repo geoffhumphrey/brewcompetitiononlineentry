@@ -372,13 +372,24 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
         if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimits']) > 1)) {
 
+            require_once (LIB.'styles_import.lib.php');
+
             foreach (json_decode($_SESSION['prefsStyleLimits'],true) as $key => $value) {
 
-                $db_conn->where('brewCategorySort', $key);
+                // $key is stored as one representative brewStyleGroup code -
+                // expand it to every sibling group sharing its rolled-up
+                // style_set_overall_categories grouping (GABF, etc.) so the
+                // displayed/enforced count reflects the whole rolled-up
+                // group, not just $key's own individual style. Unchanged
+                // (array($key) only) for every set without overall
+                // categories.
+                $sibling_groups = style_group_limit_siblings($_SESSION['prefsStyleSet'] ?? '', $key);
+
+                $db_conn->where('brewCategorySort', $sibling_groups, 'IN');
                 $row_style_limit_entry_count = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
 
                 $style_limit_entry_count_display[$key] = $row_style_limit_entry_count['count'];
-            
+
             }
 
         }

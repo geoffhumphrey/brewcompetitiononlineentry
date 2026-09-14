@@ -93,6 +93,76 @@ function style_set_export_rows($style_set_name, $prefix, $db_conn) {
 }
 
 /**
+ * Entry Limits by Style stores and enforces one limit per
+ * style_set_categories key (a single brewStyleGroup code) - fine for the
+ * built-in sets, whose own group numbering already puts the broad grouping
+ * an admin wants (e.g. BJCP's "21" Cider) at that level. An imported set
+ * like GABF instead gives every individual style its own group number, so
+ * style_set_categories has one entry per style (~110 for GABF) and the
+ * broad grouping the admin actually wants ("Ale Beer Styles", etc.) only
+ * exists one tier up, in style_set_overall_categories, which maps every
+ * one of those group codes to just a handful of shared values.
+ *
+ * Given one (representative) group code, returns every group code that
+ * shares its style_set_overall_categories value - i.e. every group a
+ * stored/enforced limit for $group_code should actually apply to. For a
+ * set with no style_set_overall_categories defined (every built-in set,
+ * and any imported set that doesn't define one), or a group code with no
+ * entry there, this is always just array($group_code) - unchanged,
+ * single-group behavior.
+ */
+function style_group_limit_siblings($style_set_name, $group_code) {
+
+    global $style_sets;
+
+    if (is_array($style_sets)) {
+        foreach ($style_sets as $set) {
+            if (empty($set['style_set_name']) || ($set['style_set_name'] != $style_set_name)) continue;
+            if (empty($set['style_set_overall_categories']) || (!isset($set['style_set_overall_categories'][$group_code]))) break;
+            $overall_value = $set['style_set_overall_categories'][$group_code];
+            $siblings = array_keys($set['style_set_overall_categories'], $overall_value, true);
+            if (!empty($siblings)) return $siblings;
+            break;
+        }
+    }
+
+    return array($group_code);
+
+}
+
+/**
+ * The rolled-up rows Entry Limits by Style should actually display/store
+ * one limit editor row for, given a style set's full style_set_categories
+ * array: one representative key per unique style_set_overall_categories
+ * value (labeled with that overall category's name) when the set defines
+ * overall categories, otherwise every style_set_categories key unchanged
+ * (labeled with its own name), exactly as before this rollup existed.
+ * Preserves style_set_categories's own key order.
+ */
+function style_group_limit_rollup($style_set) {
+
+    $rollup = array();
+
+    if (!empty($style_set['style_set_overall_categories'])) {
+        $seen_values = array();
+        foreach ($style_set['style_set_categories'] as $key => $value) {
+            $overall_value = $style_set['style_set_overall_categories'][$key] ?? null;
+            if ($overall_value === null) {
+                $rollup[$key] = $value;
+                continue;
+            }
+            if (isset($seen_values[$overall_value])) continue;
+            $seen_values[$overall_value] = true;
+            $rollup[$key] = $overall_value;
+        }
+        return $rollup;
+    }
+
+    return $style_set['style_set_categories'];
+
+}
+
+/**
  * Set-level (metadata-only) validation, shared by a new upload and by
  * editing an already-imported set's metadata. $exclude_set_name lets an
  * edit pass its own current name through the "already exists" check

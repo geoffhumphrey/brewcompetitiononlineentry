@@ -5,6 +5,8 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
     else { header("Location: ../../403.php"); exit(); }
 }
 
+require_once (LIB.'styles_import.lib.php');
+
 $style_set_dropdown = "";
 $style_set_description = "";
 $entry_limit_by_style = "";
@@ -124,14 +126,14 @@ if (($action == "default") || ($action == "entries")) {
             $current_entry_limits_by_style .= "<label for=\"styleLimitsEdit\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Entry Limits per ".$style_set['style_set_name']." Style</label>\n";
             $current_entry_limits_by_style .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-12\">\n";
 
-            foreach ($style_set['style_set_categories'] as $key => $value) {
+            foreach (style_group_limit_rollup($style_set) as $key => $value) {
 
                 $limit_value = "";
                 if ((isset($style_limits[$key])) && (!empty($style_limits[$key]))) $limit_value = $style_limits[$key];
 
                 $current_entry_limits_by_style .= "
                     <div class=\"form-group small\">
-                        <div for=\"".$style_set['style_set_name']."-".$key."\" class=\"col-sm-3 col-md-2\">".$key." - ".$value."</div>
+                        <div for=\"".$style_set['style_set_name']."-".$key."\" class=\"col-sm-3 col-md-2\">".$value."</div>
                         <div class=\"col-sm-9 col-md-5\">
                         <input type=\"number\" min=\"0\" pattern=\" 0+\.[0-9]*[1-9][0-9]*$\" onkeypress=\"return event.charCode >= 48 && event.charCode <= 57\" oninput=\"validity.valid||(value='');\" name=\"styleEntryLimitCurrent-".$style_set['style_set_name']."-".$key."\" class=\"form-control input-sm current-style-limit\" id=\"".$style_set['style_set_name']."-".$key."\" value=\"".$limit_value."\" placeholder=\"\">
                         </div>
@@ -149,11 +151,11 @@ if (($action == "default") || ($action == "entries")) {
         $entry_limit_by_style .= "<label for=\"styleLimitsEdit\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Entry Limits per ".$style_set['style_set_name']." Style</label>\n";
         $entry_limit_by_style .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-12\">\n";
 
-        foreach ($style_set['style_set_categories'] as $key => $value) {
+        foreach (style_group_limit_rollup($style_set) as $key => $value) {
 
             $entry_limit_by_style .= "
                 <div class=\"form-group small\">
-                    <div for=\"".$style_set['style_set_name']."-".$key."\" class=\"col-sm-3 col-md-2\">".$key." - ".$value."</div>
+                    <div for=\"".$style_set['style_set_name']."-".$key."\" class=\"col-sm-3 col-md-2\">".$value."</div>
                     <div class=\"col-sm-9 col-md-5\">
                     <input type=\"number\" min=\"0\" pattern=\" 0+\.[0-9]*[1-9][0-9]*$\" onkeypress=\"return event.charCode >= 48 && event.charCode <= 57\" oninput=\"validity.valid||(value='');\" name=\"styleEntryLimit-".$style_set['style_set_name']."-".$key."\" class=\"form-control input-sm current-style-limit\" id=\"".$style_set['style_set_name']."-".$key."\" placeholder=\"\">
                     </div>

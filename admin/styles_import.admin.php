@@ -1,5 +1,4 @@
 <?php
-
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] > 0))) {
     if (function_exists('redirect_or_exit')) redirect_or_exit("../../403.php");
@@ -301,7 +300,7 @@ else {
 <?php if (!empty($styles_import_upload_error)) { ?>
 <div class="alert alert-danger"><?php echo h($styles_import_upload_error); ?></div>
 <?php } ?>
-
+<?php if ($editing_set === null) { ?>
 <h3>Built-In Style Sets</h3>
 <p class="bcoem-admin-element">The style sets that ship with this app. Read-only here (no Edit/Delete) - export them for backup/portability the same way as an imported set.</p>
 <?php if (empty($builtin_sets)) { ?>
@@ -333,7 +332,6 @@ else {
 </tbody>
 </table>
 <?php } ?>
-
 <h3>Existing Imported Sets</h3>
 <?php if (empty($rows_imported_sets)) { ?>
 <p><em>No style sets have been imported yet.</em></p>
@@ -372,7 +370,6 @@ else {
 </tbody>
 </table>
 <?php } ?>
-
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {
 	$('#sortable-builtin-sets').dataTable( {
@@ -399,11 +396,8 @@ $(document).ready(function() {
 	} );
 } );
 </script>
-
 <?php if ($staged_report !== null) { ?>
-
 <h3>Validation Report: <?php echo h($staged_report['meta']['style_set_name']); ?></h3>
-
 <?php if (!empty($staged_report['meta_errors'])) { ?>
 <div class="alert alert-danger">
     <strong>This upload cannot be imported:</strong>
@@ -414,13 +408,11 @@ $(document).ready(function() {
     </ul>
 </div>
 <?php } else {
-
     $valid_count = 0;
     $invalid_count = 0;
     foreach ($staged_report['rows'] as $r) { if ($r['valid']) $valid_count++; else $invalid_count++; }
 ?>
 <p><?php echo $valid_count; ?> row(s) valid, <?php echo $invalid_count; ?> row(s) with errors. Rows with errors will not be imported unless fixed and re-uploaded.</p>
-
 <?php if ($valid_count > 0) { ?>
 <form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=styles_import&amp;action=styles_import">
 <input type="hidden" name="user_session_token" value="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
@@ -448,20 +440,16 @@ $(document).ready(function() {
 <?php } ?>
 </tbody>
 </table>
-
 <?php if ($valid_count > 0) { ?>
 <input type="submit" class="btn btn-primary" value="Confirm Import">
 </form>
 <?php } ?>
-
 <?php } ?>
-
 <?php } ?>
+<?php } // end if ($editing_set === null) ?>
 
 <?php if ($editing_set !== null) { ?>
-
 <h3>Edit Style Set: <?php echo h($editing_set['style_set_name']); ?></h3>
-
 <?php if (!empty($_SESSION['styles_import_edit_errors'])) { ?>
 <div class="alert alert-danger">
     <strong>This style set could not be saved:</strong>
