@@ -5519,4 +5519,44 @@ function validate_bjcp_id($input) {
 	else return TRUE;
 }
 
+/**
+ * Build mailto: links for the competition's judge coordinator and organizer contacts.
+ *
+ * Returns an empty string unless the contact form is disabled and the contact list is shown
+ * (prefsContact == "N") - the same condition under which the Contact page already publishes
+ * these addresses. Roles are not stored in their own column, so contacts are matched on the
+ * free-text contactPosition. Used on the My Account page for participants who are assigned to
+ * a table and therefore cannot change their own judge/steward role. See GitHub issue #1752.
+ */
+function coordinator_mailto_links($db_conn, $prefix) {
+
+	if ((!isset($_SESSION['prefsContact'])) || ($_SESSION['prefsContact'] != "N")) return "";
+
+	$db_conn->orderBy("contactLastName", "ASC");
+	$db_conn->orderBy("contactPosition", "ASC");
+	$rows_contact = $db_conn->get($prefix."contacts");
+
+	$links = array();
+
+	if (!empty($rows_contact)) {
+
+		foreach ($rows_contact as $row_contact) {
+
+			$position = (string) $row_contact['contactPosition'];
+			if ((stripos($position, "coordinator") === FALSE) && (stripos($position, "organizer") === FALSE) && (stripos($position, "organiser") === FALSE)) continue;
+			if (empty($row_contact['contactEmail'])) continue;
+
+			$name = trim($row_contact['contactFirstName']." ".$row_contact['contactLastName']);
+			if ($name != "") $name .= ", ";
+
+			$links[] = sprintf("<a href='mailto:%s'>%s</a>", h($row_contact['contactEmail']), h($name.$position));
+
+		}
+
+	}
+
+	return implode(", ", $links);
+
+}
+
 ?>

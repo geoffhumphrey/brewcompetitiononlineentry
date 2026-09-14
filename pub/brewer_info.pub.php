@@ -246,11 +246,20 @@ foreach ($a as $value) {
 
 }
 
-if ($_SESSION['jPrefsTablePlanning'] == 0) {
-	if ($action == "print") $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
-	else $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
-	if ($action == "print") $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
-	else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+// Resolve table assignments in both Tables Planning and Competition Mode so an assigned
+// participant can see why their judge/steward fields are locked. This previously ran only
+// in Competition Mode. See GitHub issue #1752.
+if ($action == "print") $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+else $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+if ($action == "print") $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+
+// Coordinator/organizer mailto links for the "already assigned" guidance, falling back to
+// the contact page when contacts are not published.
+$coordinator_links = "";
+if ((!empty($table_assign_judge)) || (!empty($table_assign_steward))) {
+	$coordinator_links = coordinator_mailto_links($db_conn, $prefix);
+	if (empty($coordinator_links)) $coordinator_links = sprintf("<a href=\"%s\">%s</a>",build_public_url("contact","default","default","default",$sef,$base_url),$label_contact);
 }
 
 /**
@@ -592,7 +601,10 @@ if ($show_judge_steward_fields) {
 				}
 			}
 
-			if (!empty($table_assign_judge)) $account_display .= sprintf("<p><strong class=\"text-success\">%s %s.</strong></p><p>%s</p>",$brewer_info_008,$label_judge,$brewer_info_009);
+			if (!empty($table_assign_judge)) {
+				$account_display .= sprintf("<p><strong class=\"text-success\">%s %s.</strong></p><p>%s</p>",$brewer_info_008,$label_judge,$brewer_info_009);
+				if (!empty($coordinator_links)) $account_display .= sprintf("<p>%s</p>",$coordinator_links);
+			}
 			elseif ((in_array("Steward",$assignment_array)) && (!empty($assignment))) $account_display .= sprintf("%s %s.",$brewer_info_010,$label_steward);
 			$account_display .= "</div>";
 			$account_display .= "</div>";
@@ -666,7 +678,10 @@ if ($show_judge_steward_fields) {
 
 				else $account_display .= "";
 			}
-			if ((!empty($table_assign_steward)) && (!empty($assignment))) $account_display .= sprintf("<p><strong class=\"text-success\">You have already been assigned as a %s to a table</strong>.</p><p>If you wish to change your availabilty and/or withdraw your role, <a href=\"%s\">contact</a> the competition organizer or judge coordinator.</p>",$assignment,build_public_url("contact","default","default","default",$sef,$base_url));
+			if ((!empty($table_assign_steward)) && (!empty($assignment))) {
+				$account_display .= sprintf("<p><strong class=\"text-success\">%s %s.</strong></p><p>%s</p>",$brewer_info_008,$label_steward,$brewer_info_009);
+				if (!empty($coordinator_links)) $account_display .= sprintf("<p>%s</p>",$coordinator_links);
+			}
 			elseif ((in_array("Judge",$assignment_array)) && (!empty($assignment))) $account_display .= sprintf("You have already been assigned as a %s.",$assignment);
 			$account_display .= "</div>";
 			$account_display .= "</div>";
