@@ -292,9 +292,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		else $styleFix = $style[0];
 		$styleID = $style[1];
 
+		// $styleFix (and $style[0] itself) assume every style set pads its
+		// group number to exactly 2 digits (true for the built-in BJCP/BA/
+		// AABC sets this file was originally written for) - an admin-
+		// uploaded set like GABF pads to however many digits its own
+		// category range needs (GABF: 3, up to "205"), so an exact-string
+		// match against $style[0] silently finds nothing for those sets.
+		// For a purely numeric group, match by numeric value instead so it
+		// works regardless of padding width; non-numeric groups (BJCP2025's
+		// "C"-prefixed cider codes) keep the exact string match since they
+		// were never zero-padded. Shared by both the style-limit flagging
+		// below and the style-name lookup further down.
+		if (preg_match("/^[[:digit:]]+$/",$style[0])) { $group_where_clause = "CAST(brewStyleGroup AS UNSIGNED) = ?"; $group_where_param = (int)$style[0]; }
+		else { $group_where_clause = "brewStyleGroup = ?"; $group_where_param = $styleFix; }
+
 		// Array from constants.inc.php
 		// Check to see if there are any style limits
-		// If so, check if the 
+		// If so, check if the
 		if ((is_array($style_limit_entry_count_display)) && (!empty($style_limit_entry_count_display))) {
 
 			// Was $_SESSION['sprefsStyleSet'] (an extra leading "s" - never a real session key)
@@ -322,7 +336,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				$update_table_styles = $prefix."styles";
 				$data = array('brewStyleAtLimit' => 1);
-				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ?", array($chosen_style_set, "custom", $style[0]));
+				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND ".$group_where_clause, array($chosen_style_set, "custom", $group_where_param));
 				$result = $db_conn->update ($update_table_styles, $data);
 
 			}
@@ -331,7 +345,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				$update_table_styles = $prefix."styles";
 				$data = array('brewStyleAtLimit' => 0);
-				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ?", array($chosen_style_set, "custom", $style[0]));
+				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND ".$group_where_clause, array($chosen_style_set, "custom", $group_where_param));
 				$result = $db_conn->update ($update_table_styles, $data);
 
 			}
@@ -353,18 +367,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
 		// zero rows for those, same fix pattern already used correctly in
 		// includes/db/styles_special.db.php.
-		// $styleFix above assumes every style set pads its group number to
-		// exactly 2 digits (true for the built-in BJCP/BA/AABC sets it was
-		// written for) - an admin-uploaded set like GABF pads to however
-		// many digits its own category range needs (GABF: 3, up to "205"),
-		// so that guess doesn't match what's actually stored and this
-		// lookup would silently find nothing. For a purely numeric group,
-		// match by numeric value instead so it works regardless of padding
-		// width; non-numeric groups (BJCP2025's "C"-prefixed cider codes)
-		// keep the exact string match since they were never zero-padded.
-		if (preg_match("/^[[:digit:]]+$/",$style[0])) { $group_where_clause = "CAST(brewStyleGroup AS UNSIGNED) = ?"; $group_where_param = (int)$style[0]; }
-		else { $group_where_clause = "brewStyleGroup = ?"; $group_where_param = $styleFix; }
-
+		// $group_where_clause/$group_where_param computed earlier, right
+		// after $style was parsed - shared with the style-limit flagging
+		// above.
 		if ($_SESSION['prefsStyleSet'] == "AABC2025") $db_conn->where("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom') AND ".$group_where_clause." AND brewStyleNum = ?", array($group_where_param, $style[1]));
 		else $db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND ".$group_where_clause." AND brewStyleNum = ?", array($style_version, "custom", $group_where_param, $style[1]));
 		$row_style_name = $db_conn->getOne($prefix."styles", "id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType");
