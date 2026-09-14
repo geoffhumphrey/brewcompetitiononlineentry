@@ -5269,6 +5269,27 @@ elseif ($db_conn->getLastErrno() !== 0) {
 	$error_count++;
 }
 
+/**
+ * GitHub issue #1754: judging_assignments.assignLocation is a snapshot of a table's
+ * location taken when each assignment was made, not a live reference - editing a
+ * table's location afterward (process_judging_tables.inc.php) never retroactively
+ * updated it on judges/stewards already assigned there (now fixed). Left stale, it
+ * broke unassign() (lib/admin.lib.php, also now fixed to match by assignTable
+ * instead) - the id needed to remove that person from the table never resolved, so
+ * they appeared permanently stuck no matter how many times an admin tried to remove
+ * them - and it could still cause incorrect cross-table conflict detection elsewhere
+ * (unavailable()) even after that fix. Re-sync every assignment's assignLocation to
+ * its table's current location. Safe to run more than once: only touches rows that
+ * still differ.
+ */
+$sql = sprintf("UPDATE `%s` ja JOIN `%s` jt ON jt.id = ja.assignTable SET ja.assignLocation = jt.tableLocation WHERE NOT (ja.assignLocation <=> jt.tableLocation);", $prefix."judging_assignments", $prefix."judging_tables");
+$db_conn->rawQuery($sql);
+if (($db_conn->getLastErrno() === 0) && ($db_conn->count > 0)) $v3100_update .= "<li>Corrected ".$db_conn->count." judge/steward table assignment(s) with an outdated session location, which could have prevented removing that person from a table due to a since-fixed bug.</li>";
+elseif ($db_conn->getLastErrno() !== 0) {
+	$v3100_update .= "<li>Could not check judge/steward table assignments for an outdated session location. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count++;
+}
+
 if (!check_update("prefsSessionTimeout", $prefix."preferences")) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `prefsSessionTimeout` INT(4) NULL DEFAULT NULL COMMENT 'Minutes of inactivity before auto-logout; NULL falls back to \$session_expire_after in config.php';",$prefix."preferences");

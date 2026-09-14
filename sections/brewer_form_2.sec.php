@@ -22,6 +22,24 @@ $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
 if (!empty($styles_selected)) {
 
+    /**
+     * The one-time migration that originally populated prefsSelectedStyles (v2.6.2.0,
+     * update/run_update.php) never wrote an 'id' key into each entry's value - only
+     * later code paths (adding a custom style; the "Accepted Styles" bulk resubmit
+     * in admin/styles.admin.php) started doing that. Every entry's own array key has
+     * always correctly been the style id in every format, though - backfill it into
+     * the value here (before array_multisort() below re-indexes the array itself,
+     * which would otherwise make the array key useless as a fallback) so the
+     * isset($value['id']) check a few lines down doesn't silently skip every style
+     * from that original migration format, which is exactly what made every Likes/
+     * Non-Preferred style checkbox vanish for any install that had never since done a
+     * full "Accepted Styles" resubmit.
+     */
+    foreach ($styles_selected as $style_key_pb => &$style_value_pb) {
+        if ((!isset($style_value_pb['id'])) || ($style_value_pb['id'] === "")) $style_value_pb['id'] = $style_key_pb;
+    }
+    unset($style_value_pb);
+
     if ($_SESSION['style_set_no_numbering']) array_multisort(array_column($styles_selected, 'brewStyle'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
     else array_multisort(array_column($styles_selected, 'brewStyleGroup'), SORT_ASC, array_column($styles_selected, 'brewStyleNum'), SORT_ASC, $styles_selected);
 

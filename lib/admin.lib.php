@@ -1226,13 +1226,26 @@ function unassign($bid,$location,$round,$tid) {
 	$db_conn = new MysqliDb($connection);
 	$db_conn->where('bid', $bid);
 	$db_conn->where('assignRound', $round);
-	$db_conn->where('assignLocation', $location);
+	/**
+	 * GitHub issue #1754: this used to match on assignLocation instead of assignTable
+	 * (despite $tid already being passed in) - assignLocation is a snapshot of the
+	 * table's location taken when the assignment was made, and editing a table's
+	 * location afterward (process_judging_tables.inc.php) does not retroactively
+	 * update it on already-assigned judges. Matching by the table's current location
+	 * therefore silently fails to find that judge's row at all once the table's
+	 * location changes, so the id needed to actually remove them from a given table
+	 * never resolves - the "unassign" checkbox/radio then has nothing to act on and
+	 * the judge appears stuck on the table no matter how many times an admin tries to
+	 * remove them. Matching by assignTable instead identifies the correct row
+	 * unambiguously and is immune to a stale assignLocation.
+	 */
+	$db_conn->where('assignTable', $tid);
 	$row_assignments = $db_conn->getOne($prefix."judging_assignments", "id");
 
 
 	if (!empty($row_assignments)) $r = $row_assignments['id'];
 	else $r = 0;
-	
+
 	return $r;
 }
          
@@ -1478,37 +1491,45 @@ return $r;
 */
 
 function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id,$ind_aff_flag) {
-	
-	if (table_round($tid,$round)) {
-		
-		$unavailable = unavailable($bid,$location,$round,$tid);
-		$entry_conflict = entry_conflict($bid,$table_styles);
-		$at_table = at_table($bid,$tid);
-		
-		if ($unavailable) {
-		    
-		    $r = "bg-purple text-purple|";
-		    if ($ind_aff_flag) $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span><br><span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
-		    else $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span>";
-		    
-		}
-		
-		if ($entry_conflict) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.</span>";
 
-		if ((!$unavailable) && (!$entry_conflict)) {
-			
-			if ($ind_aff_flag) {
-				
-				$r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+	/**
+	 * GitHub issue #1751: this used to return a totally blank string - no color, no
+	 * text, for every candidate - whenever the table had no judging_flights rows yet
+	 * for this round (a table set up before all of its entries arrived, and not yet
+	 * run through "Define Flights"). But entry_conflict() and like_dislike() below
+	 * have nothing to do with rounds or flights and can be computed regardless -
+	 * only unavailable() genuinely needs a real round to check "is this judge
+	 * already committed to a different table this round". Skip just that one check
+	 * instead of everything, so the grid still gives an admin a useful signal on a
+	 * not-yet-flighted table instead of going silent with no explanation.
+	 */
+	$has_round = table_round($tid,$round);
 
-			}
-			
-			$r = like_dislike($likes,$dislikes,$table_styles);
-		}
+	$unavailable = $has_round ? unavailable($bid,$location,$round,$tid) : FALSE;
+	$entry_conflict = entry_conflict($bid,$table_styles);
+	$at_table = at_table($bid,$tid);
+
+	if ($unavailable) {
+
+	    $r = "bg-purple text-purple|";
+	    if ($ind_aff_flag) $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span><br><span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+	    else $r .= "<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to another table in this round.</span>";
 
 	}
-	
-	else $r = '';
+
+	if ($entry_conflict) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.</span>";
+
+	if ((!$unavailable) && (!$entry_conflict)) {
+
+		if ($ind_aff_flag) {
+
+			$r = "bg-teal text-teal|<span class=\"fa fa-exclamation-circle\"></span> <strong>Conflict.</strong> Participant has reported an affiliation with one or more participants who have entries at this table. <strong>You are able to assign them to this table if you wish, but do so with caution and due diligence by checking their affiliation(s) via Manage Entries.</strong>";
+
+		}
+
+		$r = like_dislike($likes,$dislikes,$table_styles);
+	}
+
 	return $r;
 }
 

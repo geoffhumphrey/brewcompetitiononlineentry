@@ -293,7 +293,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Check to see if table styles are different.
 		$db_conn->where('id', $id);
-		$row_table = $db_conn->getOne($judging_tables_db_table, "id,tableStyles");
+		$row_table = $db_conn->getOne($judging_tables_db_table, "id,tableStyles,tableLocation");
 
 		$a = explode(",",$tableStyles);
 
@@ -503,6 +503,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
+		}
+
+		/**
+		 * GitHub issue #1754: assignLocation on judging_assignments is a snapshot of
+		 * this table's location taken when each assignment was made, not a live
+		 * reference - so moving a table to a different location left every judge/
+		 * steward already assigned to it stuck with a stale assignLocation, which
+		 * unassign() (lib/admin.lib.php) depended on to find the right row to delete.
+		 * That's fixed separately (unassign() now matches by assignTable instead),
+		 * but assignLocation is also read elsewhere (unavailable()'s cross-table
+		 * conflict check, in particular) where the stale value would still cause
+		 * incorrect results. Keep it in sync with the table's current location
+		 * whenever that location actually changes.
+		 */
+		if (((string) $row_table['tableLocation']) !== ((string) $tableLocation)) {
+			$update_table = $prefix."judging_assignments";
+			$data = array('assignLocation' => blank_to_null($tableLocation));
+			$db_conn->where ('assignTable', $id);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 		}
 
 		if ((!empty($tableEntryLimit)) && (!empty($tableStyles))) {

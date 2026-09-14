@@ -225,11 +225,37 @@ if (isset($_SESSION['user_id'])) {
 
 	// Assigned judges at table query
 	elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "judges") && ($dbTable == "default")) {
-		$sql = "SELECT a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, b.uid FROM ".$brewer_db_table." a, ".$staff_db_table." b WHERE b.staff_judge='1' AND a.uid=b.uid";
+		$sql = "SELECT a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeMead, a.brewerJudgeCider, b.uid FROM ".$brewer_db_table." a, ".$staff_db_table." b WHERE b.staff_judge='1' AND a.uid=b.uid";
 		$params = array();
 		if (SINGLE) { $sql .= " AND comp_id=?"; $params[] = $_SESSION['comp_id']; }
 		$sql .= " ORDER BY a.brewerLastName ASC";
 		$rows_brewer = $db_conn->rawQuery($sql, $params);
+		/**
+		 * GitHub issue #1751: this candidate list was sorted alphabetically by last
+		 * name only - the assign screen is meant to surface higher-ranked judges
+		 * first, using the same rank hierarchy bjcp_rank() already encodes ("Level
+		 * 0" Non-BJCP through "Level 6" Grand Master). Re-sort by that level,
+		 * descending, keeping last name as the secondary/tie-break order the SQL
+		 * already provided. Mirrors the same "take the first of a comma-separated
+		 * rank list, but a Level 0 non-BJCP judge who's a certified cider/mead judge
+		 * counts as Level 3" handling admin/judging_assign.admin.php already applies
+		 * when rendering each row's rank, so the sort order always matches what's
+		 * shown (computed here from already-fetched columns rather than re-querying
+		 * per row via judge_info()).
+		 */
+		if (!empty($rows_brewer)) {
+			$rank_level = function($row) {
+				$bjcp_rank_parts = explode(",", (string) $row['brewerJudgeRank']);
+				$rank_display = bjcp_rank($bjcp_rank_parts[0], "1");
+				if ((strpos($rank_display, "Level 0:") !== false) && (($row['brewerJudgeMead'] == "Y") || ($row['brewerJudgeCider'] == "Y"))) $rank_display = "Level 3: Certified Cider or Mead Judge";
+				preg_match('/Level (\d+):/', $rank_display, $m);
+				return (int) ($m[1] ?? 0);
+			};
+			usort($rows_brewer, function($a, $b) use ($rank_level) {
+				$level_diff = $rank_level($b) - $rank_level($a);
+				return ($level_diff !== 0) ? $level_diff : strcmp((string) $a['brewerLastName'], (string) $b['brewerLastName']);
+			});
+		}
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 		$totalRows_brewer = $db_conn->count;
 	}
@@ -249,6 +275,11 @@ if (isset($_SESSION['user_id'])) {
 		$sql = "SELECT a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, b.uid FROM ".$brewer_db_table." a, ".$staff_db_table." b WHERE b.staff_steward='1' AND a.uid=b.uid";
 		$params = array();
 		if (SINGLE) { $sql .= " AND comp_id=?"; $params[] = $_SESSION['comp_id']; }
+		// GitHub issue #1751: this query had no ORDER BY at all (unsorted, effectively
+		// insertion order) - give it the same deterministic last-name order the judges
+		// query above already had before its own sort fix. Stewards don't carry a BJCP
+		// judge rank, so there's no rank hierarchy to sort by here.
+		$sql .= " ORDER BY a.brewerLastName ASC";
 		$rows_brewer = $db_conn->rawQuery($sql, $params);
 		$row_brewer = ($rows_brewer && count($rows_brewer) > 0) ? $rows_brewer[0] : null;
 		$totalRows_brewer = $db_conn->count;

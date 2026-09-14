@@ -127,24 +127,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				} // end if (($roles_only_update) && ($_POST['id'.$random] > 0))
 
 				if (($unassign > 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] == 0))) {
-					
-					$db_conn->where("bid", sterilize($_POST['bid'.$random]));
-					$db_conn->where("assignRound", sterilize($_POST['assignRound'.$random]));
-					$db_conn->where("assignLocation", sterilize($_POST['assignLocation'.$random]));
-					$row_flights = $db_conn->getOne($judging_assignments_db_table, "id");
-					$totalRows_flights = $db_conn->count;
 
-					if ($totalRows_flights > 0) {
-
-						$update_table = $prefix."judging_assignments";
-						$db_conn->where ('id', sterilize($row_flights['id']));
-						$result = $db_conn->delete($update_table);
-						if (!$result) {
-							$error_output[] = $db_conn->getLastError();
-							$errors = TRUE;
-						}
-
-					} // end if ($totalRows_flights > 0)
+					/**
+					 * GitHub issue #1751/#1754: this used to re-derive the row to delete via
+					 * its own bid+assignRound+assignLocation lookup rather than just using
+					 * $unassign (already the correct, assignTable-scoped id - lib/admin.lib.php's
+					 * unassign() computed it at render time and posted it as this exact field).
+					 * assignLocation is only a snapshot of the table's location taken when the
+					 * assignment was made, not a live reference, so that re-lookup could silently
+					 * miss the intended row (if the table's location had since changed) or match a
+					 * different table's row entirely (if another assignment happened to share the
+					 * same bid+round+location) - either way deleting the wrong thing or nothing at
+					 * all. Delete by the id already in hand instead, matching the equivalent Queued
+					 * Judging branch below (~line 263), which never had this indirection.
+					 */
+					$update_table = $prefix."judging_assignments";
+					$db_conn->where ('id', sterilize($unassign));
+					$result = $db_conn->delete($update_table);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
 				} // end if (($unassign > 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] == 0)))
 
@@ -213,9 +216,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 					// Perform check to see if a record is in the DB. If not, insert a new record.
 					// If so, update
+					/**
+					 * GitHub issue #1751: this checked bid+assignRound+assignLocation only, with
+					 * no assignTable filter - so a judge already assigned to a DIFFERENT table that
+					 * happens to share the same round+location (common; multiple tables commonly
+					 * run at the same session) made this count come back >0, and the new assignment
+					 * for the table actually being edited was silently skipped - no error, no
+					 * insert, "Info Edited Successfully" shown regardless. Scope to this table
+					 * instead of matching by location: assignTable+assignRound+bid already uniquely
+					 * identifies "this judge's assignment at this table for this round" on its own,
+					 * and unlike assignLocation (a snapshot taken when the assignment was made, not
+					 * a live reference - see the assignLocation staleness bug fixed for issue #1754)
+					 * it can never go stale. Matches the equivalent non-Queued check above (~line 71).
+					 */
 					$db_conn->where("bid", sterilize($_POST['bid'.$random]));
+					$db_conn->where("assignTable", $assignTable);
 					$db_conn->where("assignRound", sterilize($_POST['assignRound'.$random]));
-					$db_conn->where("assignLocation", sterilize($_POST['assignLocation'.$random]));
 					$row_flights = $db_conn->getOne($judging_assignments_db_table, "COUNT(*) as 'count'");
 
 					if ($row_flights['count'] == 0) {
