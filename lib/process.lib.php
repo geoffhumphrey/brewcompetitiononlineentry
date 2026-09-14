@@ -264,8 +264,15 @@ function check_sweetness($style,$styleSet) {
 
 	$style_explodies = explode("-",$style);
 
-	if (preg_match("/^[[:digit:]]+$/",$style_explodies[0])) $style_0 = sprintf('%02d',$style_explodies[0]);
-	else $style_0 = $style_explodies[0];
+	// A purely-numeric group is matched by numeric value, not exact string,
+	// since not every style set zero-pads its group number to the same
+	// width the old sprintf('%02d', ...) here assumed (built-in sets do;
+	// an admin-uploaded set like GABF pads to 3 digits) - matching the
+	// exact-width guess against a set that doesn't use it silently found
+	// zero rows, leaving $row_brews null. Non-numeric groups (BJCP2025's
+	// "C"-prefixed cider codes) keep the exact string match as before.
+	if (preg_match("/^[[:digit:]]+$/",$style_explodies[0])) { $group_where_clause = "CAST(brewStyleGroup AS UNSIGNED) = ?"; $style_0 = (int)$style_explodies[0]; }
+	else { $group_where_clause = "brewStyleGroup = ?"; $style_0 = $style_explodies[0]; }
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 	    $first_character = mb_substr($style_explodies[0], 0, 1);
@@ -280,15 +287,15 @@ function check_sweetness($style,$styleSet) {
 	// zero rows for those, same fix pattern already used correctly in
 	// includes/db/styles_special.db.php.
 	if ($_SESSION['prefsStyleSet'] == "AABC2025") {
-		$query_brews = "SELECT brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+		$query_brews = "SELECT brewStyleSweet FROM ".$styles_db_table." WHERE ".$group_where_clause." AND brewStyleNum=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1]));
 	}
 	else {
-		$query_brews = "SELECT brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
+		$query_brews = "SELECT brewStyleSweet FROM ".$styles_db_table." WHERE ".$group_where_clause." AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
 		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
 	}
 
-	if ($row_brews['brewStyleSweet'] == 1) return TRUE;
+	if ((!empty($row_brews)) && ($row_brews['brewStyleSweet'] == 1)) return TRUE;
 	else return FALSE;
 
 }
@@ -307,8 +314,11 @@ function check_carb($style,$styleSet) {
 
 	$style_explodies = explode("-",$style);
 
-	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style_explodies[0]);
-	else $style_0 = $style_explodies[0];
+	// See check_sweetness()'s comment above - matching by numeric value
+	// works regardless of how many digits this style set pads its group
+	// number to, unlike the old fixed-width sprintf('%02d', ...) guess.
+	if (preg_match("/^[[:digit:]]+$/",$style_explodies[0])) { $group_where_clause = "CAST(brewStyleGroup AS UNSIGNED) = ?"; $style_0 = (int)$style_explodies[0]; }
+	else { $group_where_clause = "brewStyleGroup = ?"; $style_0 = $style_explodies[0]; }
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 	    $first_character = mb_substr($style_explodies[0], 0, 1);
@@ -323,15 +333,15 @@ function check_carb($style,$styleSet) {
 	// zero rows for those, same fix pattern already used correctly in
 	// includes/db/styles_special.db.php.
 	if ($_SESSION['prefsStyleSet'] == "AABC2025") {
-		$query_brews = "SELECT brewStyleCarb FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+		$query_brews = "SELECT brewStyleCarb FROM ".$styles_db_table." WHERE ".$group_where_clause." AND brewStyleNum=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1]));
 	}
 	else {
-		$query_brews = "SELECT brewStyleCarb FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
+		$query_brews = "SELECT brewStyleCarb FROM ".$styles_db_table." WHERE ".$group_where_clause." AND brewStyleNum=? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
 		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
 	}
 
-	if ($row_brews['brewStyleCarb'] == 1) return TRUE;
+	if ((!empty($row_brews)) && ($row_brews['brewStyleCarb'] == 1)) return TRUE;
 	else return FALSE;
 
 }
@@ -344,8 +354,11 @@ function check_mead_strength($style,$styleSet) {
 	$style_explodies = explode("-",$style);
 	$styles_db_table = $prefix."styles";
 
-	if (preg_match("/^[[:digit:]]+$/",$style_explodies[0])) $style_0 = sprintf('%02d',$style_explodies[0]);
-	else $style_0 = $style_explodies[0];
+	// See check_sweetness()'s comment above - matching by numeric value
+	// works regardless of how many digits this style set pads its group
+	// number to, unlike the old fixed-width sprintf('%02d', ...) guess.
+	if (preg_match("/^[[:digit:]]+$/",$style_explodies[0])) { $group_where_clause = "CAST(brewStyleGroup AS UNSIGNED) = ?"; $style_0 = (int)$style_explodies[0]; }
+	else { $group_where_clause = "brewStyleGroup = ?"; $style_0 = $style_explodies[0]; }
 
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 	    $first_character = mb_substr($style_explodies[0], 0, 1);
@@ -360,15 +373,15 @@ function check_mead_strength($style,$styleSet) {
 	// zero rows for those, same fix pattern already used correctly in
 	// includes/db/styles_special.db.php.
 	if ($_SESSION['prefsStyleSet'] == "AABC2025") {
-		$query_brews = "SELECT brewStyleStrength FROM ".$styles_db_table." WHERE brewStyleGroup = ? AND brewStyleNum = ? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+		$query_brews = "SELECT brewStyleStrength FROM ".$styles_db_table." WHERE ".$group_where_clause." AND brewStyleNum = ? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1]));
 	}
 	else {
-		$query_brews = "SELECT brewStyleStrength FROM ".$styles_db_table." WHERE brewStyleGroup = ? AND brewStyleNum = ? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
+		$query_brews = "SELECT brewStyleStrength FROM ".$styles_db_table." WHERE ".$group_where_clause." AND brewStyleNum = ? AND (brewStyleVersion=? OR brewStyleOwn='custom')";
 		$row_brews = $db_conn->rawQueryOne($query_brews, array($style_0, $style_explodies[1], $chosen_style_set));
 	}
 
-	if ($row_brews['brewStyleStrength'] == 1) return TRUE;
+	if ((!empty($row_brews)) && ($row_brews['brewStyleStrength'] == 1)) return TRUE;
 	else return FALSE;
 
 }

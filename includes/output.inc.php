@@ -27,7 +27,7 @@ function convert_to_entities($input) {
 }
 
 $print_sections = array("admin", "assignments", "bos-mat", "dropoff", "summary", "particpant-entries", "inventory", "pullsheets", "results", "sorting", "staff", "table-cards", "notes", "styles", "shipping-label", "evaluation", "contact");
-$export_sections = array("export-entries", "export-loc", "export-emails", "export-participants", "export-promo", "export-results", "export-staff", "export-personal-results");
+$export_sections = array("export-entries", "export-loc", "export-emails", "export-participants", "export-promo", "export-results", "export-staff", "export-personal-results", "export-styles");
 $label_sections = array("labels-admin","labels-participant","labels-judge");
 $entry_sections = array("entry-form","entry-form-multi");
 $scoresheet_sections = array("scoresheet");

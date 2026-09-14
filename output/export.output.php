@@ -3856,9 +3856,164 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 	} // END if ($section == "export-staff")
 
+	/* -------------- STYLES Exports (Admin-Uploaded Style Sets) -------------- */
+
+	if ($section == "export-styles") {
+
+		// Owner-only, matching admin/styles_import.admin.php's own gate exactly -
+		// the outer ($admin_role) wrapper above this block permits userLevel 0
+		// or 1, looser than this feature's access rule everywhere else.
+		if ((!isset($_SESSION['loginUsername'])) || ($_SESSION['userLevel'] > 0)) {
+			$redirect_go_to = sprintf("Location: %s", "../../403.php");
+			header($redirect_go_to);
+			exit();
+		}
+
+		require_once (LIB.'styles_import.lib.php');
+		require (INCLUDES.'styles.inc.php');
+
+		// $filter carries the style set's own name, same convention as
+		// export-entries&filter=<archiveSuffix> etc. elsewhere in this file.
+		// $style_sets (just loaded) already unifies built-in AND admin-
+		// imported sets into one shape - a single lookup covers both, no
+		// separate {prefix}style_sets_imported query needed for either.
+		$row_set = null;
+		foreach ($style_sets as $set_entry) {
+			if ((!empty($set_entry['style_set_name'])) && ($set_entry['style_set_name'] === $filter)) {
+				$row_set = $set_entry;
+				break;
+			}
+		}
+
+		if (!$row_set) {
+			header("HTTP/1.1 404 Not Found");
+			exit("Style set not found.");
+		}
+
+		$categories = ((!empty($row_set['style_set_categories'])) && (is_array($row_set['style_set_categories']))) ? $row_set['style_set_categories'] : array();
+		$overall_categories = ((!empty($row_set['style_set_overall_categories'])) && (is_array($row_set['style_set_overall_categories']))) ? $row_set['style_set_overall_categories'] : array();
+
+		// Reverse brewStyleType id -> style_type name. A fresh, self-contained
+		// query rather than reusing includes/db/admin_common.db.php's
+		// $rows_style_type - that file's population is gated on a hardcoded
+		// $go allowlist that doesn't include json/csv. Looked up with a blank
+		// fallback, not assumed to resolve - an admin can delete a custom
+		// style type later (admin/style_types.admin.php has no usage check),
+		// which would orphan brewStyleType on existing imported rows.
+		$rows_style_types = $db_conn->get($prefix."style_types");
+		$style_type_names = array();
+		if ($rows_style_types) {
+			foreach ($rows_style_types as $row_style_type) {
+				$style_type_names[$row_style_type['id']] = $row_style_type['styleTypeName'];
+			}
+		}
+
+		// style_set_export_rows() handles the two built-in pairs
+		// (BJCP2025/BJCP2021, AABC2025/AABC2022) whose real rows are split
+		// across both brewStyleVersion values by brewStyleType, excludes
+		// brewStyleOwn='custom' rows that might incidentally share a
+		// brewStyleVersion stamp, and collapses exact-content duplicate
+		// rows (a real data issue found in AABC2022 - see its own comment
+		// in lib/styles_import.lib.php) - shared with the "Styles" count
+		// column on admin/styles_import.admin.php so the two always agree.
+		$rows_export = style_set_export_rows($row_set['style_set_name'], $prefix, $db_conn);
+
+		$export_rows = array();
+		foreach ($rows_export as $row_style) {
+			$group = $row_style['brewStyleGroup'];
+			$export_rows[] = array(
+				'brewStyleGroup' => $group,
+				'brewStyleNum' => $row_style['brewStyleNum'],
+				'brewStyle' => $row_style['brewStyle'],
+				'brewStyleCategory' => isset($categories[$group]) ? $categories[$group] : '',
+				'brewStyleOverallCategory' => isset($overall_categories[$group]) ? $overall_categories[$group] : '',
+				'style_type' => isset($style_type_names[$row_style['brewStyleType']]) ? $style_type_names[$row_style['brewStyleType']] : '',
+				'brewStyleOG' => $row_style['brewStyleOG'],
+				'brewStyleOGMax' => $row_style['brewStyleOGMax'],
+				'brewStyleFG' => $row_style['brewStyleFG'],
+				'brewStyleFGMax' => $row_style['brewStyleFGMax'],
+				'brewStyleABV' => $row_style['brewStyleABV'],
+				'brewStyleABVMax' => $row_style['brewStyleABVMax'],
+				'brewStyleIBU' => $row_style['brewStyleIBU'],
+				'brewStyleIBUMax' => $row_style['brewStyleIBUMax'],
+				'brewStyleSRM' => $row_style['brewStyleSRM'],
+				'brewStyleSRMMax' => $row_style['brewStyleSRMMax'],
+				'brewStyleInfo' => $row_style['brewStyleInfo'],
+				'brewStyleLink' => $row_style['brewStyleLink'],
+				'brewStyleEntry' => $row_style['brewStyleEntry'],
+				'brewStyleReqSpec' => (int)$row_style['brewStyleReqSpec'],
+				'brewStyleStrength' => (int)$row_style['brewStyleStrength'],
+				'brewStyleCarb' => (int)$row_style['brewStyleCarb'],
+				'brewStyleSweet' => (int)$row_style['brewStyleSweet']
+			);
+		}
+
+		$filename = ltrim(filename($row_set['style_set_name'])."_StyleSet","_");
+		$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
+
+		if ($go == "json") {
+
+			$export_meta = array(
+				'style_set_name' => $row_set['style_set_name'],
+				'style_set_long_name' => $row_set['style_set_long_name'],
+				'style_set_short_name' => $row_set['style_set_short_name'],
+				'style_set_display_separator' => $row_set['style_set_display_separator'],
+				'style_set_sub_style_method' => $row_set['style_set_sub_style_method'],
+				'style_set_beer_end' => $row_set['style_set_beer_end'],
+				'style_set_category_end' => $row_set['style_set_category_end'],
+				'style_set_no_numbering' => !empty($row_set['style_set_no_numbering']),
+				'styles' => $export_rows
+			);
+
+			header("Content-Type: application/json; charset=utf-8");
+			header('Content-Disposition: attachment;filename="'.$filename.'.json"');
+			header('Pragma: no-cache');
+			header('Expires: 0');
+			echo json_encode($export_meta, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+		} // END if ($go == "json")
+
+		if ($go == "csv") {
+
+			$headers = array('brewStyleGroup', 'brewStyleNum', 'brewStyle', 'brewStyleCategory', 'brewStyleOverallCategory', 'style_type', 'brewStyleOG', 'brewStyleOGMax', 'brewStyleFG', 'brewStyleFGMax', 'brewStyleABV', 'brewStyleABVMax', 'brewStyleIBU', 'brewStyleIBUMax', 'brewStyleSRM', 'brewStyleSRMMax', 'brewStyleInfo', 'brewStyleLink', 'brewStyleEntry', 'brewStyleReqSpec', 'brewStyleStrength', 'brewStyleCarb', 'brewStyleSweet');
+
+			header("Content-Type: text/csv; charset=utf-8");
+			header('Content-Disposition: attachment;filename="'.$filename.'.csv"');
+			header('Pragma: no-cache');
+			header('Expires: 0');
+
+			$fp = fopen('php://output', 'w');
+			fprintf($fp, chr(0xEF).chr(0xBB).chr(0xBF));
+
+			// Meta fields aren't read from the CSV file by the importer (they
+			// come from a companion form at upload time) - emitted here as
+			// comment lines purely so an admin restoring from this file can
+			// copy them into that form. styles_import_parse_csv() skips
+			// leading "#" lines, so this file can even be re-uploaded as-is.
+			fputcsv($fp, array("# BCOE&M Style Set Export - lines starting with # are ignored on import"));
+			fputcsv($fp, array("# style_set_name: ".$row_set['style_set_name']));
+			fputcsv($fp, array("# style_set_long_name: ".$row_set['style_set_long_name']));
+			fputcsv($fp, array("# style_set_short_name: ".$row_set['style_set_short_name']));
+			fputcsv($fp, array("# style_set_display_separator: ".$row_set['style_set_display_separator']));
+			fputcsv($fp, array("# style_set_sub_style_method: ".$row_set['style_set_sub_style_method']." (".($row_set['style_set_sub_style_method'] == "1" ? "Numeric" : "Alpha").")"));
+			fputcsv($fp, array("# style_set_beer_end: ".$row_set['style_set_beer_end']));
+			fputcsv($fp, array("# style_set_category_end: ".$row_set['style_set_category_end']));
+			fputcsv($fp, array("# style_set_no_numbering: ".(!empty($row_set['style_set_no_numbering']) ? "Yes" : "No")));
+
+			fputcsv($fp, $headers);
+			foreach ($export_rows as $export_row) fputcsv($fp, $export_row);
+
+			fclose($fp);
+
+		} // END if ($go == "csv")
+
+		exit();
+
+	} // END if ($section == "export-styles")
+
 } // end if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2))))
 
-else echo "Not allowed."; 
+else echo "Not allowed.";
 
 if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results") && ($id != "default") && (($admin_role) || ($id == $_SESSION['user_id']))) {
 

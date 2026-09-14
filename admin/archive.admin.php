@@ -71,7 +71,7 @@ foreach ($style_sets as $style_set) {
 	   <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> <?php echo $label_admin_archives; ?></a>
     </div><!-- ./button group -->
 </div>
-<form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive&go=<?php echo $action; if ($action == "edit") echo "&filter=".$row_archive['archiveSuffix']."&id=".$id; ?>" method="post" name="form1">
+<form data-toggle="validator" role="form" id="formfield" class="form-horizontal hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive&go=<?php echo $action; if ($action == "edit") echo "&filter=".$row_archive['archiveSuffix']."&id=".$id; ?>" method="post" name="form1" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <input type="hidden" name="action" value="add_form" />
 <div class="bcoem-admin-element hidden-print">

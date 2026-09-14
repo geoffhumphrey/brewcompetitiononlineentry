@@ -1571,7 +1571,7 @@ $(document).ready(function () {
 	} );
 </script>
 
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go; ?><?php echo $view_qs; ?>" name="form1" id="form1">
+<form data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_tables_db_table; ?>&amp;go=<?php echo $go; ?><?php echo $view_qs; ?>" name="form1" id="form1" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="bcoem-admin-element hidden-print">
     <div class="form-group">

@@ -463,7 +463,7 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "<span class=\"fa fa-lg fa-pencil\"></span>";
 			$entry_actions .= "</a> ";
 			$entry_actions .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$entry_name."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$entry_name."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
-			$entry_actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$base_url."includes/output.inc.php?section=entry-form-multi&amp;action=print&amp;id=".$row_log['id']."&amp;bid=".$row_log['uid']."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$entry_name."&rdquo;\"><span class=\"fa fa-lg fa-print <?php echo $hidden_sm; ?>\"></a> ";
+			$entry_actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$base_url."includes/output.inc.php?section=entry-form-multi&amp;action=print&amp;id=".$row_log['id']."&amp;bid=".$row_log['uid']."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$entry_name."&rdquo;\"><span class=\"fa fa-lg fa-print ".$hidden_sm."\"></a> ";
 			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".h($row_log['brewerEmail'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$row_log['brewerFirstName']." ".$row_log['brewerLastName'].", at ".h($row_log['brewerEmail'])."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 		}
 
@@ -542,10 +542,10 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= sprintf("%06s",$row_log['id']);
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_md; ?>\">";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_md."\">";
 		$tbody_rows .= $entry_name;
 		if (!empty($required_info)) {
-			$tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle <?php echo $hidden_sm; ?>\"></span></a> ";
+			$tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle ".$hidden_sm."\"></span></a> ";
 			$tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
 			
 			$tbody_rows .= "<div class=\"collapse small alert alert-info\" style=\"margin-top:5px;margin-bottom:5px;\" id=\"collapseEntryInfo".$row_log['id']."\">";
@@ -585,17 +585,17 @@ if ($totalRows_log > 0) {
 	    $tbody_rows .= "</div>";
 	    $tbody_rows .= "</section>";
 
-		if ($row_log['brewerProAm'] >= 1) $tbody_rows .= "<p><span class=\"label label-info hidden-print <?php echo $hidden_sm; ?>\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
+		if ($row_log['brewerProAm'] >= 1) $tbody_rows .= "<p><span class=\"label label-info hidden-print ".$hidden_sm."\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
 		$tbody_rows .= "</td>";
-		$tbody_rows .= "\n\t<td nowrap=\"nowrap\" class=\"<?php echo $hidden_sm; ?>\">".$entry_brewer_display."</td>";
-		if ($pro_edition == 0) $tbody_rows .= "<td class=\"<?php echo $hidden_md; ?> hidden-print\">".h($row_log['brewerClubs'])."</td>";
-		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_md; ?> hidden-print\">".$entry_updated_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_sm; ?>\">".$entry_paid_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_sm; ?>\">".$entry_received_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_md; ?> \">".$entry_admin_notes_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_md; ?> \">".$entry_staff_notes_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_sm; ?>\">".$entry_box_num_display."</td>";
-		if ($action != "print") $tbody_rows .= "<td class=\"<?php echo $hidden_sm; ?>\" nowrap>".$entry_actions."</td>";
+		$tbody_rows .= "\n\t<td nowrap=\"nowrap\" class=\"".$hidden_sm."\">".$entry_brewer_display."</td>";
+		if ($pro_edition == 0) $tbody_rows .= "<td class=\"".$hidden_md." hidden-print\">".h($row_log['brewerClubs'])."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_md." hidden-print\">".$entry_updated_display."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_paid_display."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_received_display."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_md." \">".$entry_admin_notes_display."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_md." \">".$entry_staff_notes_display."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_box_num_display."</td>";
+		if ($action != "print") $tbody_rows .= "<td class=\"".$hidden_sm."\" nowrap>".$entry_actions."</td>";
 		$tbody_rows .= "\n</tr>";
 
 		// Build all brewer email array

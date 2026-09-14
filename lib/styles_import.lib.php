@@ -5,7 +5,92 @@
  *              Used by admin/styles_import.admin.php (new upload, phase 1)
  *              and includes/process/process_styles_import.inc.php (editing
  *              an already-imported set's metadata) so both stay in sync.
+ *              Also now home to style_set_export_predicate(), shared by the
+ *              style-set export feature (output/export.output.php) and the
+ *              built-in-sets row-count column (admin/styles_import.admin.php)
+ *              since exporting isn't limited to admin-uploaded sets.
  */
+
+/**
+ * The {prefix}styles WHERE-clause needed to fetch exactly the rows that
+ * make up a given style set, for export or a row count. Returns
+ * array($sql, $params) for use with $db_conn->where($sql, $params).
+ *
+ * BJCP2025 and AABC2025 don't ship their own beer/mead styles - only their
+ * updated cider styles - and pull the rest in from BJCP2021/AABC2022 by
+ * brewStyleType, matching the exact predicate the app itself uses when
+ * either is the active set (includes/db/styles.db.php). This is
+ * one-directional: BJCP2021 and AABC2022 are each fully self-contained
+ * under their own brewStyleVersion INCLUDING their own (older, un-revised)
+ * cider rows - selecting either as the active set does not pull in the
+ * newer "2025" cider styles, so exporting them must not either. Every
+ * other set (built-in or imported) is likewise fully self-contained.
+ * brewStyleOwn != 'custom' excludes stray custom-owned rows that might
+ * incidentally share a brewStyleVersion stamp (a custom row's
+ * brewStyleVersion is just a snapshot of whichever set was active when it
+ * was last touched, not a real pointer to any particular set).
+ */
+function style_set_export_predicate($style_set_name) {
+
+    if ($style_set_name == "BJCP2025") {
+        return array("((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType!='2')) AND brewStyleOwn != 'custom'", array());
+    }
+
+    if ($style_set_name == "AABC2025") {
+        return array("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType!='2')) AND brewStyleOwn != 'custom'", array());
+    }
+
+    return array("brewStyleVersion = ? AND brewStyleOwn != 'custom'", array($style_set_name));
+
+}
+
+/**
+ * The actual {prefix}styles rows that make up a given style set - built-in
+ * or imported - via style_set_export_predicate(), with exact-content
+ * duplicate rows collapsed to one each. Used by both the style-set export
+ * (output/export.output.php) and the "Styles" count column
+ * (admin/styles_import.admin.php) so the two numbers always agree.
+ *
+ * The dedup exists because AABC2022 was found to have every one of its
+ * styles stored 2-3x with fully identical content - a migration guard
+ * (update/run_update.php's check_new_style() gate before including
+ * update/styles_aabc_2022_update.php) apparently didn't prevent re-seeding
+ * on some installs. The only fields that ever differed between such
+ * duplicates were brewStyleActive/brewStyleAtLimit (competition-runtime
+ * state, not part of a style's own definition, and never part of the
+ * exported format) - so collapsing by every other field is always
+ * correct, not a heuristic, and needs no per-set special-casing to stay
+ * safe if the same kind of duplication ever turns up elsewhere.
+ */
+function style_set_export_rows($style_set_name, $prefix, $db_conn) {
+
+    list($predicate_sql, $predicate_params) = style_set_export_predicate($style_set_name);
+    $db_conn->where($predicate_sql, $predicate_params);
+    $db_conn->orderBy('brewStyleGroup', 'ASC');
+    $db_conn->orderBy('brewStyleNum', 'ASC');
+    $rows = $db_conn->get($prefix."styles");
+    if (!$rows) return array();
+
+    $deduped = array();
+    $seen_signatures = array();
+    foreach ($rows as $row) {
+        $signature = implode("\x1f", array(
+            $row['brewStyleGroup'], $row['brewStyleNum'], $row['brewStyle'],
+            $row['brewStyleCategory'], $row['brewStyleType'],
+            $row['brewStyleOG'], $row['brewStyleOGMax'], $row['brewStyleFG'], $row['brewStyleFGMax'],
+            $row['brewStyleABV'], $row['brewStyleABVMax'], $row['brewStyleIBU'], $row['brewStyleIBUMax'],
+            $row['brewStyleSRM'], $row['brewStyleSRMMax'], $row['brewStyleInfo'], $row['brewStyleLink'],
+            $row['brewStyleEntry'], $row['brewStyleReqSpec'], $row['brewStyleStrength'],
+            $row['brewStyleCarb'], $row['brewStyleSweet']
+        ));
+        if (isset($seen_signatures[$signature])) continue;
+        $seen_signatures[$signature] = true;
+        $deduped[] = $row;
+    }
+
+    return $deduped;
+
+}
 
 /**
  * Set-level (metadata-only) validation, shared by a new upload and by
@@ -59,6 +144,27 @@ function styles_import_validate($meta, $rows, $style_sets, $prefix, $db_conn) {
         }
     }
 
+    // Normalize purely-numeric group/sub-style numbers to a consistent
+    // zero-padded width, so the string-based ORDER BY sorts used throughout
+    // the app (including the Add Entry style dropdown) come out in numeric
+    // order (001, 002, ... 010 ...) instead of lexical order (1, 10, 100,
+    // 101, 2, 20, ...). This matters even for a source file that WAS
+    // correctly zero-padded, because spreadsheet software (Excel, Sheets)
+    // silently strips leading zeros from a numeric-looking CSV column on
+    // open/re-save. Group width comes from the admin-provided "Last
+    // Category #" field; Num width (Numeric sub-style method only) is
+    // derived from the widest numeric Num actually present in this upload,
+    // since there's no equivalent explicit bound for it.
+    $group_pad_width = (!empty($meta['style_set_category_end'])) ? strlen((string)$meta['style_set_category_end']) : 0;
+
+    $num_pad_width = 0;
+    if (!empty($meta['style_set_sub_style_method'])) { // "1" = Numeric
+        foreach ($rows as $row) {
+            $num_candidate = trim((string)($row['brewStyleNum'] ?? ''));
+            if ((ctype_digit($num_candidate)) && (strlen($num_candidate) > $num_pad_width)) $num_pad_width = strlen($num_candidate);
+        }
+    }
+
     $seen_group_num = array();
     $validated_rows = array();
     $derived_categories = array();
@@ -70,16 +176,28 @@ function styles_import_validate($meta, $rows, $style_sets, $prefix, $db_conn) {
 
         $row_errors = array();
 
-        $group = trim((string)($row['brewStyleGroup'] ?? ''));
-        $num = trim((string)($row['brewStyleNum'] ?? ''));
-        $name = trim((string)($row['brewStyle'] ?? ''));
-        $type_name = trim((string)($row['style_type'] ?? ''));
-        $category_name = trim((string)($row['brewStyleCategory'] ?? ''));
-        $overall_category_name = trim((string)($row['brewStyleOverallCategory'] ?? ''));
+        // is_scalar() guards against a malformed source file where one of
+        // these fields is accidentally an array/object (e.g. a JSON
+        // authoring slip like "brewStyleGroup": ["1"]) - without it,
+        // (string) on an array silently produces the literal text "Array"
+        // instead of a PHP warning, which would then pass every empty-
+        // string check below as if it were a real, valid value.
+        $group = ((isset($row['brewStyleGroup'])) && (is_scalar($row['brewStyleGroup']))) ? trim((string)$row['brewStyleGroup']) : '';
+        $num = ((isset($row['brewStyleNum'])) && (is_scalar($row['brewStyleNum']))) ? trim((string)$row['brewStyleNum']) : '';
+        if ((ctype_digit($group)) && ($group_pad_width > 0)) $group = str_pad($group, $group_pad_width, '0', STR_PAD_LEFT);
+        if ((ctype_digit($num)) && ($num_pad_width > 0)) $num = str_pad($num, $num_pad_width, '0', STR_PAD_LEFT);
+        $name = ((isset($row['brewStyle'])) && (is_scalar($row['brewStyle']))) ? trim((string)$row['brewStyle']) : '';
+        $type_name = ((isset($row['style_type'])) && (is_scalar($row['style_type']))) ? trim((string)$row['style_type']) : '';
+        $category_name = ((isset($row['brewStyleCategory'])) && (is_scalar($row['brewStyleCategory']))) ? trim((string)$row['brewStyleCategory']) : '';
+        $overall_category_name = ((isset($row['brewStyleOverallCategory'])) && (is_scalar($row['brewStyleOverallCategory']))) ? trim((string)$row['brewStyleOverallCategory']) : '';
+        $entry_text = ((isset($row['brewStyleEntry'])) && (is_scalar($row['brewStyleEntry']))) ? trim((string)$row['brewStyleEntry']) : '';
+        $req_spec = (!empty($row['brewStyleReqSpec'])) ? 1 : 0;
 
         if ($group === '') $row_errors[] = "brewStyleGroup is required.";
         if ($num === '') $row_errors[] = "brewStyleNum is required.";
         if ($name === '') $row_errors[] = "brewStyle (name) is required.";
+        if ($category_name === '') $row_errors[] = "brewStyleCategory is required.";
+        if (($req_spec == 1) && ($entry_text === '')) $row_errors[] = "brewStyleEntry is required when brewStyleReqSpec (Required Info) is set to 1.";
 
         $resolved_type_id = null;
         if ($type_name === '') $row_errors[] = "style_type is required.";
@@ -138,8 +256,8 @@ function styles_import_validate($meta, $rows, $style_sets, $prefix, $db_conn) {
             'brewStyleSRMMax' => trim((string)($row['brewStyleSRMMax'] ?? '')),
             'brewStyleInfo' => trim((string)($row['brewStyleInfo'] ?? '')),
             'brewStyleLink' => trim((string)($row['brewStyleLink'] ?? '')),
-            'brewStyleEntry' => trim((string)($row['brewStyleEntry'] ?? '')),
-            'brewStyleReqSpec' => (!empty($row['brewStyleReqSpec'])) ? 1 : 0,
+            'brewStyleEntry' => $entry_text,
+            'brewStyleReqSpec' => $req_spec,
             'brewStyleStrength' => (!empty($row['brewStyleStrength'])) ? 1 : 0,
             'brewStyleCarb' => (!empty($row['brewStyleCarb'])) ? 1 : 0,
             'brewStyleSweet' => (!empty($row['brewStyleSweet'])) ? 1 : 0

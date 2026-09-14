@@ -166,11 +166,17 @@ function styles_import_parse_json($file_contents) {
         'style_set_no_numbering' => !empty($decoded['style_set_no_numbering'])
     );
 
+    if ((!isset($decoded['styles'])) || (!is_array($decoded['styles'])) || (empty($decoded['styles']))) {
+        return array('ok' => FALSE, 'error' => "The uploaded JSON file has no \"styles\" array (or it's empty). Nothing to import.");
+    }
+
     $rows = array();
-    if ((isset($decoded['styles'])) && (is_array($decoded['styles']))) {
-        foreach ($decoded['styles'] as $row) {
-            if (is_array($row)) $rows[] = $row;
-        }
+    foreach ($decoded['styles'] as $row) {
+        if (is_array($row)) $rows[] = $row;
+    }
+
+    if (empty($rows)) {
+        return array('ok' => FALSE, 'error' => "The uploaded JSON file's \"styles\" array doesn't contain any valid style entries.");
     }
 
     return array('ok' => TRUE, 'meta' => $meta, 'rows' => $rows);
@@ -183,6 +189,13 @@ function styles_import_parse_json($file_contents) {
  */
 function styles_import_parse_csv($file_contents, $companion_meta) {
 
+    // Strip a leading UTF-8 BOM (the export feature writes one, matching this
+    // app's other CSV exports, and some spreadsheet software adds one too) -
+    // left in place, it prefixes the first line's first character, which
+    // broke the "starts with #" comment-line check below for a line that
+    // otherwise looked identical to every other comment line.
+    if (substr($file_contents, 0, 3) === "\xEF\xBB\xBF") $file_contents = substr($file_contents, 3);
+
     $lines = preg_split('/\r\n|\r|\n/', trim($file_contents));
     if (count($lines) < 2) {
         return array('ok' => FALSE, 'error' => "The uploaded CSV file has no data rows.");
@@ -192,13 +205,32 @@ function styles_import_parse_csv($file_contents, $companion_meta) {
     fwrite($handle, $file_contents);
     rewind($handle);
 
+    // Skip leading "#" comment lines - the style-set export feature emits the
+    // set-level metadata (which this CSV format doesn't otherwise carry) as
+    // comment lines for the admin to read/copy, so an exported file can be
+    // re-uploaded as-is without hand-editing.
     $header = fgetcsv($handle);
+    while (($header !== FALSE) && (isset($header[0])) && (strpos(trim((string)$header[0]), '#') === 0)) {
+        $header = fgetcsv($handle);
+    }
+
     if (!$header) {
         fclose($handle);
         return array('ok' => FALSE, 'error' => "The uploaded CSV file's header row could not be read.");
     }
 
     $header = array_map('trim', $header);
+
+    // Catch a wrong/unrelated CSV outright with one clear message, rather
+    // than silently processing it into rows that are all missing every
+    // required column - which would otherwise surface as a wall of
+    // identical per-row errors instead of one obvious cause.
+    $required_columns = array('brewStyleGroup', 'brewStyleNum', 'brewStyle', 'brewStyleCategory', 'style_type');
+    $missing_columns = array_diff($required_columns, $header);
+    if (!empty($missing_columns)) {
+        fclose($handle);
+        return array('ok' => FALSE, 'error' => "The uploaded CSV file is missing required column(s): " . implode(", ", $missing_columns) . ".");
+    }
 
     $rows = array();
     while (($csv_row = fgetcsv($handle)) !== FALSE) {
@@ -225,6 +257,18 @@ if (table_exists($prefix."style_sets_imported")) {
     $db_conn->orderBy("style_set_long_name", "ASC");
     $rows_imported_sets = $db_conn->get($prefix."style_sets_imported");
     if (!$rows_imported_sets) $rows_imported_sets = array();
+}
+
+// Built-in sets, for the export-only list below - every $style_sets entry
+// that ISN'T one of the imported sets just queried above. No hardcoded
+// list of built-in names to maintain: this stays correct automatically if
+// a built-in set is ever added to or retired from includes/styles.inc.php.
+$imported_set_names = array_column($rows_imported_sets, 'style_set_name');
+$builtin_sets = array();
+foreach ($style_sets as $set_entry) {
+    if (empty($set_entry['style_set_name'])) continue;
+    if (in_array($set_entry['style_set_name'], $imported_set_names)) continue;
+    $builtin_sets[] = $set_entry;
 }
 
 // Edit mode - ?action=edit&id=X shows a prefilled metadata-edit form in
@@ -254,35 +298,73 @@ else {
 }
 
 ?>
-<p class="lead">Import a Style Set</p>
-<p class="bcoem-admin-element">Upload a self-contained style set (JSON or CSV) instead of having a developer hand-write a migration. Once imported, the set appears in the Style Set dropdown on Site Preferences like any built-in set.</p>
-
 <?php if (!empty($styles_import_upload_error)) { ?>
 <div class="alert alert-danger"><?php echo h($styles_import_upload_error); ?></div>
+<?php } ?>
+
+<h3>Built-In Style Sets</h3>
+<p class="bcoem-admin-element">The style sets that ship with this app. Read-only here (no Edit/Delete) - export them for backup/portability the same way as an imported set.</p>
+<?php if (empty($builtin_sets)) { ?>
+<p><em>No built-in style sets found.</em></p>
+<?php } else { ?>
+<table class="table table-bordered table-striped" id="sortable-builtin-sets">
+<thead>
+    <tr>
+        <th width="25%">Name</th>
+        <th width="40%">Long Name</th>
+        <th width="20%">Styles</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+<tbody>
+<?php foreach ($builtin_sets as $builtin_set) {
+    $builtin_set_row_count = count(style_set_export_rows($builtin_set['style_set_name'], $prefix, $db_conn));
+?>
+<tr>
+    <td><?php echo h($builtin_set['style_set_name']); ?></td>
+    <td><?php echo h($builtin_set['style_set_long_name']); ?></td>
+    <td><?php echo $builtin_set_row_count; ?></td>
+    <td>
+    <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-styles&amp;go=json&amp;filter=<?php echo urlencode($builtin_set['style_set_name']); ?>" data-toggle="tooltip" data-placement="top" title="Export <?php echo h($builtin_set['style_set_name']); ?> as JSON"><span class="fa fa-fw fa-lg fa-file-code"></span></a>
+    <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-styles&amp;go=csv&amp;filter=<?php echo urlencode($builtin_set['style_set_name']); ?>" data-toggle="tooltip" data-placement="top" title="Export <?php echo h($builtin_set['style_set_name']); ?> as CSV"><span class="fa fa-fw fa-lg fa-file-excel"></span></a>
+    </td>
+</tr>
+<?php } ?>
+</tbody>
+</table>
 <?php } ?>
 
 <h3>Existing Imported Sets</h3>
 <?php if (empty($rows_imported_sets)) { ?>
 <p><em>No style sets have been imported yet.</em></p>
 <?php } else { ?>
-<table class="table table-bordered table-striped">
-<thead><tr><th>Name</th><th>Long Name</th><th>Styles</th><th>Actions</th></tr></thead>
+<p>To select an imported style as your competition's style set, go to <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences&amp;action=entries">Entry Preferences</a>. Your currently selected competition style set is <?php echo $_SESSION['prefsStyleSet']; ?></p>
+<table class="table table-bordered table-striped" id="sortable-imported-sets">
+<thead>
+    <tr>
+        <th width="25%">Name</th>
+        <th width="40%">Long Name</th>
+        <th width="20%">Styles</th>
+        <th>Actions</th>
+    </tr>
+</thead>
 <tbody>
 <?php foreach ($rows_imported_sets as $row_imported_set) {
     $is_active = ($row_imported_set['style_set_name'] == $_SESSION['prefsStyleSet']);
-    $db_conn->where('brewStyleVersion', $row_imported_set['style_set_name']);
-    $row_count = $db_conn->getOne($prefix."styles", "COUNT(*) AS count");
+    $imported_set_row_count = count(style_set_export_rows($row_imported_set['style_set_name'], $prefix, $db_conn));
 ?>
 <tr>
     <td><?php echo h($row_imported_set['style_set_name']); ?></td>
     <td><?php echo h($row_imported_set['style_set_long_name']); ?></td>
-    <td><?php echo (int)$row_count['count']; ?></td>
+    <td><?php echo $imported_set_row_count; ?></td>
     <td>
-    <a class="hide-loader" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles_import&amp;action=edit&amp;id=<?php echo $row_imported_set['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo h($row_imported_set['style_set_name']); ?>"><span class="fa fa-lg fa-pencil"></span></a>
+    <a class="hide-loader" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles_import&amp;action=edit&amp;id=<?php echo $row_imported_set['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo h($row_imported_set['style_set_name']); ?> style set parameters. To edit individual styles, go to the Admin Dashboard > Manage Styles Accepted screen."><span class="fa fa-lg fa-fw fa-pencil"></span></a>
+    <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-styles&amp;go=json&amp;filter=<?php echo urlencode($row_imported_set['style_set_name']); ?>" data-toggle="tooltip" data-placement="top" title="Export <?php echo h($row_imported_set['style_set_name']); ?> as JSON"><span class="fa fa-lg fa-fw fa-file-code"></span></a>
+    <a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-styles&amp;go=csv&amp;filter=<?php echo urlencode($row_imported_set['style_set_name']); ?>" data-toggle="tooltip" data-placement="top" title="Export <?php echo h($row_imported_set['style_set_name']); ?> as CSV"><span class="fa fa-lg fa-fw fa-file-excel"></span></a>
     <?php if ($is_active) { ?>
-        <span class="fa fa-lg fa-trash-o text-muted" data-toggle="tooltip" data-placement="top" title="Can't delete the currently active style set - switch to a different set first"></span>
+        <span class="fa fa-lg fa-trash-o text-muted" data-toggle="tooltip" data-placement="top" title="The currently active style set cannot be deleted - switch to a different set first."></span>
     <?php } else { ?>
-        <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=styles_import&amp;action=styles_import_delete&amp;id=<?php echo $row_imported_set['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo h($row_imported_set['style_set_name']); ?>" data-confirm="Are you sure you want to delete the imported style set &quot;<?php echo h($row_imported_set['style_set_name']); ?>&quot;? This will remove all of its styles. This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
+        <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=styles_import&amp;action=styles_import_delete&amp;id=<?php echo $row_imported_set['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo h($row_imported_set['style_set_name']); ?>" data-confirm="Are you sure you want to delete the imported style set &quot;<?php echo h($row_imported_set['style_set_name']); ?>&quot;? This will remove all of its styles. This cannot be undone."><span class="fa fa-lg fa-fw fa-trash-o"></span></a>
     <?php } ?>
     </td>
 </tr>
@@ -290,6 +372,33 @@ else {
 </tbody>
 </table>
 <?php } ?>
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {
+	$('#sortable-builtin-sets').dataTable( {
+		"bPaginate" : <?php echo $output_datatables_bPaginate; ?>,
+		"sPaginationType" : "<?php echo $output_datatables_sPaginationType; ?>",
+		"bLengthChange" : <?php echo $output_datatables_bLengthChange; ?>,
+		"iDisplayLength" : <?php echo round($_SESSION['prefsRecordPaging']); ?>,
+		"sDom": '<?php echo $output_datatables_sDom; ?>',
+		"bStateSave" : <?php echo $output_datatables_bStateSave; ?>,
+		"aaSorting": [[0,'asc']],
+		"bProcessing" : <?php echo $output_datatables_bProcessing; ?>,
+		"aoColumns": [ null, null, null, { "bSortable": false } ]
+	} );
+	$('#sortable-imported-sets').dataTable( {
+		"bPaginate" : <?php echo $output_datatables_bPaginate; ?>,
+		"sPaginationType" : "<?php echo $output_datatables_sPaginationType; ?>",
+		"bLengthChange" : <?php echo $output_datatables_bLengthChange; ?>,
+		"iDisplayLength" : <?php echo round($_SESSION['prefsRecordPaging']); ?>,
+		"sDom": '<?php echo $output_datatables_sDom; ?>',
+		"bStateSave" : <?php echo $output_datatables_bStateSave; ?>,
+		"aaSorting": [[0,'asc']],
+		"bProcessing" : <?php echo $output_datatables_bProcessing; ?>,
+		"aoColumns": [ null, null, null, { "bSortable": false } ]
+	} );
+} );
+</script>
 
 <?php if ($staged_report !== null) { ?>
 
@@ -317,11 +426,19 @@ else {
 <input type="hidden" name="user_session_token" value="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <?php } ?>
 <table class="table table-bordered table-striped">
-<thead><tr><th></th><th>Group</th><th>Num</th><th>Style</th><th>Type</th><th>Errors</th></tr></thead>
+    <tr>
+        <th></th>
+        <th>Group</th>
+        <th>Num</th>
+        <th>Style</th>
+        <th>Type</th>
+        <th>Errors</th>
+    </tr>
+</thead>
 <tbody>
 <?php foreach ($staged_report['rows'] as $i => $r) { ?>
 <tr class="<?php echo $r['valid'] ? '' : 'danger'; ?>">
-    <td><?php if ($r['valid']) { ?><input type="checkbox" name="include_row[]" value="<?php echo $i; ?>" checked><?php } else { ?><span class="fa fa-times text-danger"></span><?php } ?></td>
+    <td><?php if ($r['valid']) { ?><input type="checkbox" name="include_row[]" value="<?php echo $i; ?>" checked><?php } else { ?><span class="fa fa-fw fa-times text-danger"></span><?php } ?></td>
     <td><?php echo h($r['brewStyleGroup']); ?></td>
     <td><?php echo h($r['brewStyleNum']); ?></td>
     <td><?php echo h($r['brewStyle']); ?></td>
@@ -414,89 +531,107 @@ else {
     </div>
 </div>
 
-<div class="bcoem-admin-element hidden-print">
-    <input type="submit" class="btn btn-primary" value="Save Changes">
-    <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles_import">Cancel</a>
+<div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12"></div>
+    <div class="bcoem-admin-element hidden-print col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input type="submit" class="btn btn-primary" value="Save Changes">
+        <a style="margin-left:10px;" class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles_import">Cancel</a>
+    </div>
 </div>
 </form>
 
 <?php } else { ?>
+<?php if ($staged_report === null) { ?>
+<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#upload-style-set" aria-expanded="false" aria-controls="upload-style-set">Import a Style Set</button>
+<div style="margin-top:15px;" class="collapse" id="upload-style-set">
+    <h3>Import a Style Set</h3>
+    <p class="bcoem-admin-element">Upload a self-contained style set (JSON or CSV) instead of having a developer hand-write a migration. Once imported, the set appears in the Style Set dropdown on Site Preferences like any built-in set.</p>
+    <form class="form-horizontal hide-loader-form-submit" data-toggle="validator" role="form"  method="post" action="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles_import" enctype="multipart/form-data" id="styles-import-form" novalidate>
+    <input type="hidden" name="user_session_token" value="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="styles_import_upload" value="1">
+    <div class="form-group">
+        <label for="styles_import_file" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">File</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <div class="fileinput fileinput-new" data-provides="fileinput">
+                <span class="btn btn-default btn-file"><span>Choose JSON or CSV File</span><input type="file" name="styles_import_file" id="styles_import_file" accept=".json,.csv" required onchange="styles_import_toggle_csv_fields(this);" /></span>
+                <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
+            </div>
+            <div class="help-block">
+                <p>Acceptable file types are <code>.json</code> or <code>.csv</code>. Maximum file size is 5 MB. Choosing a .csv file will reveal the additional fields below that CSV imports require (JSON files should already carry this information within the file itself).</p>
+                <p>Download <a class="hide-loader" href="https://info.brewingcompetitions.com/00_downloads/import-style-set-templates.zip" target="_blank">JSON/CSV templates</a> (zip archive).</p>
+            </div>
+        </div>
+    </div>
 
-<h3>Upload a Style Set</h3>
-<form class="form-horizontal" method="post" action="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles_import" enctype="multipart/form-data" id="styles-import-form">
-<input type="hidden" name="user_session_token" value="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
-<input type="hidden" name="styles_import_upload" value="1">
-
-<div class="form-group">
-    <label for="styles_import_file" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">File</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input type="file" class="form-control" name="styles_import_file" id="styles_import_file" accept=".json,.csv" required onchange="styles_import_toggle_csv_fields(this);">
-        <div class="help-block">Acceptable file types are .json or .csv. Maximum file size is 5 MB. Choosing a .csv file will reveal the additional fields below that CSV imports require (JSON files carry this information within the file itself).</div>
+    <div id="styles-import-csv-meta" style="display:none;">
+        <h4>Style Set Details (CSV only)</h4>
+        <div class="form-group">
+            <label for="style_set_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Set Name</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <input class="form-control" type="text" name="style_set_name" id="style_set_name" maxlength="20" pattern="[A-Za-z0-9_\-]{1,20}" data-error="The set name is required and must be 1-20 characters, letters/numbers/underscore/hyphen only (no spaces)" required>
+                <div class="help-block">No spaces. 1-20 characters, letters/numbers/underscore/hyphen only. Must be unique. Matches the value stored for each style in this set.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="style_set_long_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Long Name</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <input class="form-control" type="text" name="style_set_long_name" id="style_set_long_name" data-error="The long name is required" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="style_set_short_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Short Name</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <input class="form-control" type="text" name="style_set_short_name" id="style_set_short_name" data-error="The short name is required" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="style_set_display_separator" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Separator</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <input class="form-control" type="text" name="style_set_display_separator" id="style_set_display_separator" maxlength="5">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sub-Style Method</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <label class="radio-inline"><input type="radio" name="style_set_sub_style_method" value="0" checked required> Alpha</label>
+                <label class="radio-inline"><input type="radio" name="style_set_sub_style_method" value="1" required> Numeric</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="style_set_beer_end" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Beer Category End #</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <input class="form-control" type="text" name="style_set_beer_end" id="style_set_beer_end" maxlength="3" pattern="[0-9]{1,3}" data-error="The beer category end number is required and must be numeric" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="style_set_category_end" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Last Category #</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <input class="form-control" type="text" name="style_set_category_end" id="style_set_category_end" maxlength="3" pattern="[0-9]{1,3}" data-error="The last category number is required and must be numeric" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">No Numbering</label>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <label class="radio-inline"><input type="radio" name="style_set_no_numbering" value="1" required> Yes</label>
+                <label class="radio-inline"><input type="radio" name="style_set_no_numbering" value="0" checked required> No</label>
+                <div class="help-block">Set to Yes only if this set's group/num numbering is purely this application's own bookkeeping, not part of the set's own official guidelines.</div>
+                <div class="well">
+                    <p><strong>CSV columns:</strong> brewStyleGroup, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOverallCategory, style_type, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleInfo, brewStyleLink, brewStyleEntry, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet.</p>
+                    <p>Column order does not matter, but brewStyleGroup, brewStyleNum, brewStyle, brewStyleCategory, and style_type columns must all be present and every row must have a value in each - rows missing one are rejected. brewStyleEntry is also required, but only for rows with brewStyleReqSpec set to 1. brewStyleOverallCategory is optional - a broader grouping spanning multiple categories (e.g. GABF's "Lager Beer Styles" covering many numbered categories); leave blank if your set doesn't use one.</p>
+                </div>
+            </div>
+        </div>
+        
     </div>
-</div>
-
-<div id="styles-import-csv-meta" style="display:none;">
-    <p class="lead">Style Set Details (CSV only)</p>
-    <div class="form-group">
-        <label for="style_set_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Set Name</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" type="text" name="style_set_name" id="style_set_name" maxlength="20" pattern="[A-Za-z0-9_\-]{1,20}" data-error="The set name is required and must be 1-20 characters, letters/numbers/underscore/hyphen only (no spaces)" required>
-            <div class="help-block">No spaces. 1-20 characters, letters/numbers/underscore/hyphen only. Must be unique. Matches the value stored for each style in this set.</div>
+    <div class="row">
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12"></div>
+        <div class="bcoem-admin-element hidden-print col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <input type="submit" class="btn btn-primary" value="Import and Validate">
         </div>
     </div>
-    <div class="form-group">
-        <label for="style_set_long_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Long Name</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" type="text" name="style_set_long_name" id="style_set_long_name" data-error="The long name is required" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="style_set_short_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Short Name</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" type="text" name="style_set_short_name" id="style_set_short_name" data-error="The short name is required" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="style_set_display_separator" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Separator</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" type="text" name="style_set_display_separator" id="style_set_display_separator" maxlength="5">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sub-Style Method</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <label class="radio-inline"><input type="radio" name="style_set_sub_style_method" value="0" checked required> Alpha</label>
-            <label class="radio-inline"><input type="radio" name="style_set_sub_style_method" value="1" required> Numeric</label>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="style_set_beer_end" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Beer Category End #</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" type="text" name="style_set_beer_end" id="style_set_beer_end" maxlength="3" pattern="[0-9]{1,3}" data-error="The beer category end number is required and must be numeric" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="style_set_category_end" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Last Category #</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" type="text" name="style_set_category_end" id="style_set_category_end" maxlength="3" pattern="[0-9]{1,3}" data-error="The last category number is required and must be numeric" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">No Numbering</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <label class="radio-inline"><input type="radio" name="style_set_no_numbering" value="1" required> Yes</label>
-            <label class="radio-inline"><input type="radio" name="style_set_no_numbering" value="0" checked required> No</label>
-            <div class="help-block">Set to Yes only if this set's group/num numbering is purely this application's own bookkeeping, not part of the set's own official guidelines.</div>
-        </div>
-    </div>
-    <p class="bcoem-admin-element"><strong>CSV columns:</strong> brewStyleGroup, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOverallCategory, style_type, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleInfo, brewStyleLink, brewStyleEntry, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet. Column order does not matter. brewStyleOverallCategory is optional - a broader grouping spanning multiple categories (e.g. GABF's "Lager Beer Styles" covering many numbered categories); leave blank if your set doesn't use one.</p>
-</div>
-
-<div class="bcoem-admin-element hidden-print">
-    <input type="submit" class="btn btn-primary" value="Upload &amp; Validate">
-</div>
 </form>
-
+</div>
+<?php } ?>
 <script>
 function styles_import_toggle_csv_fields(input) {
     var filename = (input.files && input.files[0]) ? input.files[0].name : input.value;

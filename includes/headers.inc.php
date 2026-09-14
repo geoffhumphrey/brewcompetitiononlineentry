@@ -607,7 +607,7 @@ switch($section) {
 				break;
 
 				case "styles_import":
-				$header_output .= ": Import a Style Set";
+				$header_output .= ": Import or Export a Style Set";
 				break;
 
 			}

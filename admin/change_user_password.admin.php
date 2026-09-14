@@ -36,7 +36,7 @@ include (DB.'brewer.db.php');
         });
 </script>
 <p class="lead">Change Password for <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?></p>
-<form role="form" name="form1" data-toggle="validator" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=change_user_password&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;id=<?php echo $id; ?>" method="post">
+<form role="form" name="form1" data-toggle="validator" class="form-horizontal hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=change_user_password&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;id=<?php echo $id; ?>" method="post" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <input type="hidden" name="userEdit" value="1">
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->

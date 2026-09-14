@@ -149,7 +149,7 @@ $eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fif
 
 <p class="lead"><?php echo h($_SESSION['contestName'])." Competition-Related Dates"; ?></p>
 <p>All competition-related dates for various functions are listed below. Useful when resetting the software for another competition instance after archiving or purging or to adjust any function's date/time for the current competition iteration.</p>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=dates&amp;dbTable=default">
+<form data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=dates&amp;dbTable=default" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <h3>Entry-Related</h3>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->

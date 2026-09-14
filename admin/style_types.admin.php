@@ -126,7 +126,7 @@ if ($action == "default") {
 </table>
 <?php } // END if ($action == "default")?>
 <?php if (($action == "add") || ($action == "edit")) { ?>
-<form data-toggle="validator" role="form" class="form-horizontal" name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $style_types_db_table; if ($action == "edit") echo "&id=".$id; ?>">
+<form data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $style_types_db_table; if ($action == "edit") echo "&id=".$id; ?>" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="form-group">
 	<label for="styleTypeName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>

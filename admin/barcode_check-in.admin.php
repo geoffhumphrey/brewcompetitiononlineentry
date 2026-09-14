@@ -130,7 +130,7 @@ $(function() {
         </div>
     </div>
 </div><!-- ./modal -->
-<form method="post" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;action=barcode_check_in<?php if ($filter != "default") echo "&amp;go=".$filter; ?>" id="form1" onsubmit = "return(p)">
+<form method="post" data-toggle="validator" class="hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;action=barcode_check_in<?php if ($filter != "default") echo "&amp;go=".$filter; ?>" id="form1" onsubmit = "return(p)" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="form-inline">
 	<?php 

@@ -344,11 +344,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// brewStyleVersion='AABC2022' - the plain (version OR custom) predicate below would match
 		// zero rows for those, same fix pattern already used correctly in
 		// includes/db/styles_special.db.php.
-		if ($_SESSION['prefsStyleSet'] == "AABC2025") $db_conn->where("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom') AND brewStyleGroup = ? AND brewStyleNum = ?", array($styleFix, $style[1]));
-		else $db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($style_version, "custom", $styleFix, $style[1]));
+		// $styleFix above assumes every style set pads its group number to
+		// exactly 2 digits (true for the built-in BJCP/BA/AABC sets it was
+		// written for) - an admin-uploaded set like GABF pads to however
+		// many digits its own category range needs (GABF: 3, up to "205"),
+		// so that guess doesn't match what's actually stored and this
+		// lookup would silently find nothing. For a purely numeric group,
+		// match by numeric value instead so it works regardless of padding
+		// width; non-numeric groups (BJCP2025's "C"-prefixed cider codes)
+		// keep the exact string match since they were never zero-padded.
+		if (preg_match("/^[[:digit:]]+$/",$style[0])) { $group_where_clause = "CAST(brewStyleGroup AS UNSIGNED) = ?"; $group_where_param = (int)$style[0]; }
+		else { $group_where_clause = "brewStyleGroup = ?"; $group_where_param = $styleFix; }
+
+		if ($_SESSION['prefsStyleSet'] == "AABC2025") $db_conn->where("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom') AND ".$group_where_clause." AND brewStyleNum = ?", array($group_where_param, $style[1]));
+		else $db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND ".$group_where_clause." AND brewStyleNum = ?", array($style_version, "custom", $group_where_param, $style[1]));
 		$row_style_name = $db_conn->getOne($prefix."styles", "id, brewStyleGroup, brewStyleNum, brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType");
-		
+
 		$styleName = $row_style_name['brewStyle'];
+
+		// Trust the DB's own zero-padding for brewCategorySort (used below
+		// and elsewhere) rather than the 2-digit guess computed above -
+		// that guess is only ever right for 2-digit sets by coincidence.
+		if (!empty($row_style_name['brewStyleGroup'])) $styleFix = $row_style_name['brewStyleGroup'];
 
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = 1;

@@ -46,7 +46,7 @@ if ($section != "step6") {
 </div>
 
 <?php if ((($action == "add") || ($action == "edit")) || ($section == "step6")) { ?>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step6") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step6") echo "add"; else echo $action; ?>&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
+<form data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step6") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step6") echo "add"; else echo $action; ?>&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;go=<?php if ($go == "default") echo "setup"; else echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="bcoem-admin-element hidden-print">
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
