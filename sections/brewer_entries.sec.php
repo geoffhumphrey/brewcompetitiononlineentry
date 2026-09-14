@@ -258,9 +258,12 @@ if ($totalRows_log > 0) {
 
 					else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
-					$db_conn->where('brewStyleVersion', $chosen_style_set);
-					$db_conn->where('brewStyleGroup', $row_log['brewCategorySort']);
-					$db_conn->where('brewStyleNum', $row_log['brewSubCategory']);
+					// A custom style is tagged with the literal active style set at creation time
+					// (process_styles.inc.php), never with the cider-only BJCP2025 exception applied
+					// above - so a custom (non-cider) style added while BJCP2025 was active never
+					// matches $chosen_style_set here. Admit brewStyleOwn='custom' as a fallback, same
+					// as the already-correct lookup in process_brewing.inc.php.
+					$db_conn->where("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ? AND brewStyleNum = ?", array($chosen_style_set, "custom", $row_log['brewCategorySort'], $row_log['brewSubCategory']));
 					$row_style = $db_conn->getOne($prefix."styles", "id,brewStyleType");
 
 					$scoresheet = TRUE;

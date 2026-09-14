@@ -297,32 +297,41 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// If so, check if the 
 		if ((is_array($style_limit_entry_count_display)) && (!empty($style_limit_entry_count_display))) {
 
-			if ($_SESSION['sprefsStyleSet'] == "BJCP2025") {
-				$first_character = mb_substr($key, 0, 1);
+			// Was $_SESSION['sprefsStyleSet'] (an extra leading "s" - never a real session key)
+			// and $key (never defined in this function - $style[0] is the group number in
+			// scope here, per the style-limit lookups just below). Together these meant the
+			// BJCP2025 cider-only check below always fell through to an always-undefined
+			// $chosen_style_set, so this brewStyleAtLimit flagging never matched any style
+			// row, custom or not.
+			if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+				$first_character = mb_substr($style[0], 0, 1);
 				if ($first_character == "C") $chosen_style_set = "BJCP2025";
 				else $chosen_style_set = "BJCP2021";
 			}
 
-			else $chosen_style_set = $_SESSION['sprefsStyleSet'];
+			else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 			$all_style_limits = json_decode($_SESSION['prefsStyleLimits'],true);
-			
+
+			// A custom style is tagged with the literal active style set at creation time
+			// (process_styles.inc.php), never with the cider-only BJCP2025 exception applied
+			// above - so a custom (non-cider) style added while BJCP2025 was active never
+			// matches $chosen_style_set here. Admit brewStyleOwn='custom' as a fallback, same
+			// as the already-correct lookup a few hundred lines below in this same file.
 			if ((isset($all_style_limits[$style[0]])) && ($all_style_limits[$style[0]] >= $style_limit_entry_count_display[$style[0]])) {
 
 				$update_table_styles = $prefix."styles";
 				$data = array('brewStyleAtLimit' => 1);
-				$db_conn->where ('brewStyleGroup', $style[0]);
-				$db_conn->where ('brewStyleVersion', $chosen_style_set);
+				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ?", array($chosen_style_set, "custom", $style[0]));
 				$result = $db_conn->update ($update_table_styles, $data);
-				
+
 			}
 
 			if ((isset($all_style_limits[$style[0]])) && ($all_style_limits[$style[0]] < $style_limit_entry_count_display[$style[0]])) {
 
 				$update_table_styles = $prefix."styles";
 				$data = array('brewStyleAtLimit' => 0);
-				$db_conn->where ('brewStyleGroup', $style[0]);
-				$db_conn->where ('brewStyleVersion', $chosen_style_set);
+				$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ?", array($chosen_style_set, "custom", $style[0]));
 				$result = $db_conn->update ($update_table_styles, $data);
 
 			}

@@ -824,19 +824,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					else $chosen_style_set = $prefsStyleSet;
 
+					// A custom style is tagged with the literal active style set at creation time
+					// (process_styles.inc.php), never with the cider-only BJCP2025 exception applied
+					// above - so a custom (non-cider) style added while BJCP2025 was active never
+					// matches $chosen_style_set here. Admit brewStyleOwn='custom' as a fallback, same
+					// as the already-correct lookup in process_brewing.inc.php.
 					if ($row_style_limit_entry_count['count'] >= $value) {
 						$data = array('brewStyleAtLimit' => 1);
-						$db_conn->where ('brewStyleGroup', $key);
-						$db_conn->where ('brewStyleVersion', $chosen_style_set);
+						$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ?", array($chosen_style_set, "custom", $key));
 						$result = $db_conn->update ($prefix."styles", $data);
-					}  
+					}
 
 					if ($row_style_limit_entry_count['count'] < $value) {
 						$data = array('brewStyleAtLimit' => 0);
-						$db_conn->where ('brewStyleGroup', $key);
-						$db_conn->where ('brewStyleVersion', $chosen_style_set);
+						$db_conn->where ("(brewStyleVersion = ? OR brewStyleOwn = ?) AND brewStyleGroup = ?", array($chosen_style_set, "custom", $key));
 						$result = $db_conn->update ($prefix."styles", $data);
-					}		
+					}
 
 				}
 
