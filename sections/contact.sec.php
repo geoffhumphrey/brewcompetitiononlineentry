@@ -28,7 +28,12 @@ if ($_SESSION['prefsContact'] == "N") {
     	$page_info .= sprintf("<p>%s</p>",$contact_text_000);
     	$page_info .= "<ul>";
     	foreach ($rows_contact as $row_contact) {
-    		$page_info .= "<li>".h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName']).", ".h($row_contact['contactPosition'])." &ndash; <a href='mailto:".h($row_contact['contactEmail'])."'>".h($row_contact['contactEmail'])."</a></li>";
+    		// contactFirstName/contactLastName/contactPosition are HTML-entity-encoded at
+    		// save time (process_contacts.inc.php's sterilize()) - applying h() again here
+    		// double-encodes them (e.g. "Steve & Marsha" stored as "Steve &amp; Marsha"
+    		// renders as literal "Steve &amp; Marsha" once h() re-encodes the "&"). Print
+    		// as-is; contactEmail isn't pre-encoded the same way, so it still needs h().
+    		$page_info .= "<li>".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition']." &ndash; <a href='mailto:".h($row_contact['contactEmail'])."'>".h($row_contact['contactEmail'])."</a></li>";
     	}
     	$page_info .= "</ul>";
     }
@@ -51,7 +56,9 @@ if ($_SESSION['prefsContact'] == "Y") {
     		if(isset($_COOKIE['to'])) {
     			if ($row_contact['id'] == $_COOKIE['to']) $option .= " SELECTED";
     			}
-    		$option .= ">".h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName'])." &ndash; ".h($row_contact['contactPosition'])."</option>";
+    		// See the matching comment above - these three fields are already
+    		// HTML-entity-encoded at save time, so h() here would double-encode them.
+    		$option .= ">".$row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']."</option>";
 
 
     	}
