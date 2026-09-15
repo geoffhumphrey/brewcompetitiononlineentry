@@ -228,7 +228,10 @@ if (isset($_SESSION['loginUsername'])) {
               }
 
               if (!empty($row_log['brewInfo'])) {
-                $brewInfo = h($row_log['brewInfo']);
+                // brewInfo is HTML-entity-encoded at save time (purify()) - h() here would
+                // double-encode it, unlike output/export.output.php's brewInfo handling
+                // (~line 740), which correctly prints it raw.
+                $brewInfo = $row_log['brewInfo'];
                 if (strpos($row_log['brewInfo'],"^") !== FALSE) $brewInfo = str_replace("^", "&nbsp;", $brewInfo);
                 if (empty($brewMeadCider)) $brewInfo = truncate($brewInfo,200,"&hellip;");
                 else $brewInfo = truncate($brewInfo,150,"&hellip;");

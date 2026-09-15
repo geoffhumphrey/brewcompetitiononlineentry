@@ -385,7 +385,10 @@ else {
 <input type="hidden" name="brewerJudge" value="<?php echo h($row_brewer['brewerJudge']); ?>">
 <input type="hidden" name="brewerJudgeMead" value="<?php echo h($row_brewer['brewerJudgeMead']); ?>">
 <input type="hidden" name="brewerJudgeCider" value="<?php echo h($row_brewer['brewerJudgeCider']); ?>">
-<input type="hidden" name="brewerJudgeID" value="<?php echo h($row_brewer['brewerJudgeID']); ?>">
+<!-- brewerJudgeID is HTML-entity-encoded at save time (process_brewer_info.inc.php's
+     purify()) - h() here would double-encode it, unlike the interactive field above
+     (line 142) which correctly prints it raw. -->
+<input type="hidden" name="brewerJudgeID" value="<?php echo $row_brewer['brewerJudgeID']; ?>">
 <input type="hidden" name="brewerJudgeExp" value="<?php echo h($row_brewer['brewerJudgeExp']); ?>">
 <?php foreach ($preserve_judge_locations_pb as $preserve_judge_location_pb) { ?>
 <input type="hidden" name="brewerJudgeLocation[]" value="<?php echo h($preserve_judge_location_pb); ?>">
@@ -489,5 +492,8 @@ foreach ($preserve_steward_locations_pb as $preserve_steward_location_pb) { ?>
  * ever legitimately hold. brewerJudgeNotes has no such safe default, though.
  */
 else { ?>
-<input type="hidden" name="brewerJudgeNotes" value="<?php echo h($row_brewer['brewerJudgeNotes']); ?>">
+<!-- brewerJudgeNotes is HTML-entity-encoded at save time (process_brewer_info.inc.php's
+     purify()) - h() here would double-encode it, unlike the interactive field above
+     (line 479) which correctly prints it raw. -->
+<input type="hidden" name="brewerJudgeNotes" value="<?php echo $row_brewer['brewerJudgeNotes']; ?>">
 <?php } ?>
