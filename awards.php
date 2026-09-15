@@ -699,7 +699,10 @@ if (($display_to_admin) || ($display_to_public)) {
 				$slides_bos .= "<div class=\"fragment justify-right col-right\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."\"><i class=\"fa fa-trophy icon pos-".$place_heirarchy."-medal-color\"></i>".$display_place."</div>";
 				$slides_bos .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">";
 				$slides_bos .= $brewer_name;
-				if (!empty($row_bos['brewCoBrewer'])) $slides_bos .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string(h($row_bos['brewCoBrewer']),20," ")."</em></span>";
+				// brewCoBrewer is HTML-entity-encoded at save time (purify()) - h() here would
+				// double-encode it, unlike this file's other brewCoBrewer prints (~lines 267,
+				// 445, 615), which correctly print it raw.
+				if (!empty($row_bos['brewCoBrewer'])) $slides_bos .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string($row_bos['brewCoBrewer'],20," ")."</em></span>";
 				$slides_bos .= "</div>";
 
 				if ($_SESSION['prefsProEdition'] == 0) $slides_bos .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
