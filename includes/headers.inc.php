@@ -193,7 +193,10 @@ switch($section) {
 			$db_conn->where('id', $id);
 			$row_contact = $db_conn->getOne($contacts_db_table, "contactFirstName,contactLastName,contactPosition");
 
-			$output = sprintf("<strong>%s ".h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName']).", ".h($row_contact['contactPosition']).".</strong>",$header_text_040);
+			// contactFirstName/contactLastName/contactPosition are already HTML-entity-
+			// encoded at save time (process_contacts.inc.php's sterilize()) - h() here
+			// would double-encode them.
+			$output = sprintf("<strong>%s ".$row_contact['contactFirstName']." ".$row_contact['contactLastName'].", ".$row_contact['contactPosition'].".</strong>",$header_text_040);
 		}
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong> %s",$header_text_041,$header_text_008);
 		else $output = "";

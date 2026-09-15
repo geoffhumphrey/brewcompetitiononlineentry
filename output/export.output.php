@@ -1393,7 +1393,11 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 		$output .= "<ul>\n";
 		foreach ($rows_contact as $row_contact) {
-		$output .= "\t<li>".h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName'])." &mdash; ".h($row_contact['contactPosition'])." (".h($row_contact['contactEmail']).")</li>\n";
+		// contactFirstName/contactLastName/contactPosition are already HTML-entity-
+		// encoded at save time (process_contacts.inc.php's sterilize()) - h() here
+		// would double-encode them. contactEmail isn't pre-encoded the same way, so
+		// it still needs h().
+		$output .= "\t<li>".$row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition']." (".h($row_contact['contactEmail']).")</li>\n";
 		}
 		$output .= "</ul>\n";
 		if ($_SESSION['prefsSponsors'] == "Y") {

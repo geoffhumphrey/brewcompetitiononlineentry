@@ -122,7 +122,11 @@ else {
     	
     	if ($row_contact) {
 
-    		$page_info .= sprintf("<h2><strong>%s &ndash; %s %s</strong><br><small>%s</small></h2>",$label_contact,h($row_contact['contactFirstName']),h($row_contact['contactLastName']),h($row_contact['contactPosition']));
+    		// contactFirstName/contactLastName/contactPosition are already HTML-entity-
+    		// encoded at save time (process_contacts.inc.php's sterilize()) - h() here
+    		// would double-encode them (e.g. a stored "Steve &amp; Marsha" would render
+    		// as literal "Steve &amp; Marsha").
+    		$page_info .= sprintf("<h2><strong>%s &ndash; %s %s</strong><br><small>%s</small></h2>",$label_contact,$row_contact['contactFirstName'],$row_contact['contactLastName'],$row_contact['contactPosition']);
     		$page_info .= sprintf("<p><strong>%s</strong></p>",hide_email($row_contact['contactEmail']));
     		$page_info .= sprintf("<p>%s</p>",$contact_text_011);
     		$page_info .= sprintf("<p><small><em>%s</em></small></p>",$contact_text_012);

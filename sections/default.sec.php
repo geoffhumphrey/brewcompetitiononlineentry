@@ -90,7 +90,11 @@ else {
 			$page_info10 .= "<ul>";
 			foreach ($rows_contact as $row_contact) {
 				$page_info10 .= "<li>";
-				$page_info10 .= h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName'])." &mdash; ".h($row_contact['contactPosition']);
+				// contactFirstName/contactLastName/contactPosition are already HTML-entity-
+				// encoded at save time (process_contacts.inc.php's sterilize()) - h() here
+				// would double-encode them. contactEmail below isn't pre-encoded the same
+				// way, so it still needs h().
+				$page_info10 .= $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition'];
 				if ($action == "print") $page_info10 .= " (".h($row_contact['contactEmail']).")";
 				$page_info10 .= "</li>";
 			}

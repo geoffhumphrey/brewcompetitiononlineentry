@@ -64,7 +64,7 @@ elseif ($show_contact_list) {
             $link = sprintf('%06d', $row_contact['id']);
             $link = simpleEncrypt($link, $secretKey, $nacl);
             $email_redirect_link = sprintf("%sincludes/output.inc.php?section=contact&action=edit&tb=no-print&token=%s",$base_url,rawurlencode($link));
-            $page_info .= sprintf("<li><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">%s %s</a> &ndash; %s</li>",$email_redirect_link,h($row_contact['contactFirstName']),h($row_contact['contactLastName']),h($row_contact['contactPosition']));
+            $page_info .= sprintf("<li><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">%s %s</a> &ndash; %s</li>",$email_redirect_link,$row_contact['contactFirstName'],$row_contact['contactLastName'],$row_contact['contactPosition']);
 
     	}
     	
@@ -91,7 +91,7 @@ elseif ($show_contact_form) {
     			// if ($row_contact['id'] == $_COOKIE['to']) $option .= " SELECTED";
     		}
 
-    		$option .= ">".h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName'])." &ndash; ".h($row_contact['contactPosition'])."</option>";
+    		$option .= ">".$row_contact['contactFirstName']." ".$row_contact['contactLastName']." &ndash; ".$row_contact['contactPosition']."</option>";
 
 
     	}
