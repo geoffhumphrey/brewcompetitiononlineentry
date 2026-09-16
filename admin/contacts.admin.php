@@ -16,12 +16,12 @@ include (DB.'contacts.db.php');
 	<?php if (($action == "add") || ($action == "edit")) { ?>
 	<!-- Postion 1: View All Button -->
 	<div class="btn-group" role="group" aria-label="...">
-		<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts"><span class="fa fa-eye"></span> View All Contacts</a>
+		<a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts"><span class="fa fa-eye"></span> View All Contacts</a>
     </div><!-- ./button group -->
 	<?php } else { ?>
 	<!-- Postion 1: View All Button -->
 	<div class="btn-group" role="group" aria-label="...">
-		<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Contact</a>
+		<a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Contact</a>
     </div><!-- ./button group -->
 	<?php } ?>
 </div>
@@ -82,65 +82,49 @@ include (DB.'contacts.db.php');
 $form_url = $base_url."includes/process.inc.php?action=".$action."&amp;dbTable=".$contacts_db_table;
 if ($action == "edit") $form_url .= "&amp;id=".$id;
 ?>
-<form data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" method="post" action="<?php echo $form_url; ?>" name="form1" novalidate>
+<form class="form-horizontal hide-loader-form-submit needs-validation" role="form" method="post" action="<?php echo $form_url; ?>" name="form1" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="bcoem-admin-element hidden-print">
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="contactFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<div class="input-group has-warning">
-			<!-- Input Here -->
-			<!-- contactFirstName is already HTML-entity-encoded at save time
-			     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
-			<input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php if ($action == "edit") echo $row_contact['contactFirstName']; ?>" placeholder="" data-error="The contact's first name is required" autofocus required>
-			<span class="input-group-addon" id="contactFirstName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-		</div>
-        <div class="help-block with-errors"></div>
+<div class="row mb-3">
+	<label for="contactFirstName" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>First Name</label>
+	<div class="col-xs-12 col-sm-8 col-lg-6">
+		<!-- contactFirstName is already HTML-entity-encoded at save time
+		     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
+		<input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php if ($action == "edit") echo $row_contact['contactFirstName']; ?>" placeholder="" autofocus required>
+        <div class="help-block invalid-feedback text-danger">The contact's first name is required.</div>
 	</div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="contactLastName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Last Name</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<div class="input-group has-warning">
-			<!-- Input Here -->
-			<!-- contactLastName is already HTML-entity-encoded at save time
-			     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
-			<input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php if ($action == "edit") echo $row_contact['contactLastName']; ?>" placeholder="" data-error="The contact's last name is required" required>
-			<span class="input-group-addon" id="contactLastName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-		</div>
-        <div class="help-block with-errors"></div>
+</div>
+<div class="row mb-3">
+	<label for="contactLastName" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Last Name</label>
+	<div class="col-xs-12 col-sm-8 col-lg-6">
+		<!-- contactLastName is already HTML-entity-encoded at save time
+		     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
+		<input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php if ($action == "edit") echo $row_contact['contactLastName']; ?>" placeholder="" required>
+        <div class="help-block invalid-feedback text-danger">The contact's last name is required.</div>
 	</div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="contactPosition" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Position</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<div class="input-group has-warning">
-			<!-- Input Here -->
-			<!-- contactPosition is already HTML-entity-encoded at save time
-			     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
-			<input class="form-control" id="contactPosition" name="contactPosition" type="text" value="<?php if ($action == "edit") echo $row_contact['contactPosition']; ?>" placeholder="" data-error="The contact's position is required" required>
-			<span class="input-group-addon" id="contactPosition-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-		</div>
-        <div class="help-block with-errors"></div>
+</div>
+<div class="row mb-3">
+	<label for="contactPosition" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Position</label>
+	<div class="col-xs-12 col-sm-8 col-lg-6">
+		<!-- contactPosition is already HTML-entity-encoded at save time
+		     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
+		<input class="form-control" id="contactPosition" name="contactPosition" type="text" value="<?php if ($action == "edit") echo $row_contact['contactPosition']; ?>" placeholder="" required>
+        <div class="help-block invalid-feedback text-danger">The contact's position is required.</div>
 	</div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="contactEmail" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email</label>
-	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<div class="input-group has-warning">
-			<!-- Input Here -->
-			<input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php if ($action == "edit") echo h($row_contact['contactEmail']); ?>" placeholder="" data-error="The contact's email address is required or invalid" required>
-			<span class="input-group-addon" id="contactEmail-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-		</div>
-        <div class="help-block with-errors"></div>
+</div>
+<div class="row mb-3">
+	<label for="contactEmail" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Email</label>
+	<div class="col-xs-12 col-sm-8 col-lg-6">
+		<input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php if ($action == "edit") echo h($row_contact['contactEmail']); ?>" placeholder="" required>
+        <div class="help-block invalid-feedback text-danger">The contact's email address is required or invalid.</div>
 		<span id="helpBlock" class="help-block">Email addresses are <strong>not</strong> displayed. Used only for contact purposes via the site&rsquo;s <a href="<?php echo $base_url; ?>#contact">contact form</a>.</span>
 	</div>
-</div><!-- ./Form Group -->
+</div>
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=contacts","default",$msg,$id); ?>">
 </div>
 <div class="bcoem-admin-element hidden-print">
-	<div class="form-group">
-		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+	<div class="row mb-3">
+		<div class="col-xs-12 col-sm-8 col-lg-6 offset-sm-4 offset-lg-2">
 			<input type="submit" name="Submit" id="updateConatact" class="btn btn-primary" value="<?php if ($action == "add") echo "Add"; else echo "Edit"; ?> Contact" />
 		</div>
 	</div>

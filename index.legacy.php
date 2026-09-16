@@ -142,8 +142,6 @@ include (SECTIONS.'alerts.sec.php');
 
             if ($_SESSION['userLevel'] == "0") {
 
-                // V3 - use legacy edit user name builds for Admin
-                if ($go == "user") include (SECTIONS.'user.sec.php');
                 if ($go == "styles") include (ADMIN.'styles.admin.php');
                 if ($go == "styles_import") include (ADMIN.'styles_import.admin.php');
                 if ($go == "archive") include (ADMIN.'archive.admin.php');
@@ -199,15 +197,8 @@ include (SECTIONS.'alerts.sec.php');
 
             else {
 
-                if (($section == "default") || ($section == "past-winners")) include (SECTIONS.'default.sec.php');
-                if ($section == "entry") include (SECTIONS.'entry_info.sec.php');
-                if ($section == "contact") include (SECTIONS.'contact.sec.php');
-                if ($section == "volunteers") include (SECTIONS.'volunteers.sec.php');
-                if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
                 if ($section == "register") include (SECTIONS.'register.sec.php');
                 if ($section == "login") include (SECTIONS.'login.sec.php');
-                // if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
-                if ($section == "competition") include (SECTIONS.'custom_competition_info.sec.php');
 
                 if ($logged_in) {
                     // if ($section == "brewer") include (SECTIONS.'brewer.sec.php');
@@ -222,7 +213,6 @@ include (SECTIONS.'alerts.sec.php');
         ?>
         </div><!-- ./left column -->
         <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
-            <?php include (SECTIONS.'sidebar.sec.php'); ?>
         </div><!-- ./sidebar -->
     </div><!-- ./row -->
     <!-- ./Public Pages -->
@@ -407,5 +397,14 @@ if (strpos($section, 'step') === FALSE)  {
 }
 
 ?>
+<?php if (in_array($go, $admin_bs5_pages)) { ?>
+<!-- Bootstrap 5 JS bundle - must load at the end of body, not in <head> (where the CDN
+     loader include runs), because Bootstrap 5's own jQuery-plugin shim reads
+     document.body at script-execution time; document.body is still null that early,
+     so a <head>-positioned load throws before the shim can register .modal()/.dropdown()
+     etc. as jQuery plugins. Matches index.pub.php's proven placement exactly. -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<?php } ?>
 <script src="<?php echo $js_app_url; ?>"></script>
 </body>

@@ -390,7 +390,7 @@ if ($totalRows_brewer > 0) {
 
 			else {
 
-				$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"admin","brewer","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"default",0,"Edit ".$brewer_tooltip_display_name."'s user account information");
+				$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"default",0,"Edit ".$brewer_tooltip_display_name."'s user account information");
 
 				if ($_SESSION['userLevel'] == 0) {
 
@@ -401,7 +401,7 @@ if ($totalRows_brewer > 0) {
 					if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link = build_action_link("fa-lock",$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."'s User Level");
 					else $output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".$_SESSION['brewerFirstName'].".\"></span>";
 
-					$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"admin","user","username","admin",$row_brewer['user_id'],"default","default",0,"Change ".$brewer_tooltip_display_name."'s email address");
+					$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['user_id'],"default","default",0,"Change ".$brewer_tooltip_display_name."'s email address");
 
 				}
 
