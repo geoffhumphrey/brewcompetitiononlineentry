@@ -947,7 +947,7 @@ $(document).ready(function(){
 </div><!-- /.modal -->
 
 <?php } ?>
-<p class="lead"><?php echo h($_SESSION['contestName']).$title;  ?>
+<p class="lead"><?php echo $_SESSION['contestName'].$title;  ?>
 <?php if (($dbTable == "default") && (($view_valid) && ($action == "default") && ($filter == "default"))) { ?>
     <span class="label label-default" style="margin:0 0 25px 10px; font-size: .8em;"><i class="fa fa-fw fa-sm fa-filter"></i> Viewing tables for <?php echo h($judging_locations_by_id_jt[$view]['judgingLocName']); ?></span>
 <?php } ?>

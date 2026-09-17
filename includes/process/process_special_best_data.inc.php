@@ -9,7 +9,11 @@ $table_id = $id;
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 		if ($action == "add") {
-			
+
+			// array_sum() below requires $a to be a defined array even when every
+			// judging-number field is left blank and the loop body never appends to it.
+			$a = array();
+
 			foreach($_POST['id'] as $id){
 				
 				if ($_POST['sbd_judging_no'.$id] != "") {
@@ -86,6 +90,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($action == "edit") {
 
+			// array_sum() below requires $a to be a defined array even when every
+			// judging-number field is left blank and the loop body never appends to it.
+			$a = array();
+
 			foreach($_POST['id'] as $id) {
 
 				/*
@@ -105,7 +113,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				if ($_POST['entry_exists'.$id] == "Y") {
 
-					if ($totalRows_entry == 1) {
+					if ((trim($_POST['sbd_judging_no'.$id]) === "") && (trim($_POST['sbd_place'.$id]) === "")) {
+
+						// Blanking both fields on an already-saved winner means "remove this
+						// place's winner" - matches the symmetry already used for new/optional
+						// slots below (blank = no winner for this place) instead of silently
+						// failing when a blank judging number can't be matched to any entry.
+						$db_conn->where('id', sterilize($id));
+						$result = $db_conn->delete($special_best_data_db_table);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
+
+						$a[] = 0;
+
+					}
+
+					else if ($totalRows_entry == 1) {
 
 						if (isset($_POST['sbd_place'.$id])) $sbd_place = sterilize($_POST['sbd_place'.$id]);
 						else $sbd_place = "";
@@ -135,7 +160,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					}
 
 					else $a[] = 1;
-				
+
 				}
 
 				if (($_POST['entry_exists'.$id] == "N") && ($_POST['sbd_judging_no'.$id] != "")) {

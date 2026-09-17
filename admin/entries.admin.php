@@ -263,12 +263,12 @@ if ($totalRows_log > 0) {
 
 		// Judging Number
 		if (isset($row_log['brewJudgingNumber'])) {
-			$entry_judging_num_hidden .= "<span class=\"hidden visible-print-inline\">".$judging_number."</span>";
+			$entry_judging_num_hidden .= "<span class=\"d-none visible-print-inline\">".$judging_number."</span>";
 			$entry_judging_num .= $judging_number;
 		}
 
 		if (($action != "print") && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) {
-			$entry_judging_num_display .= "<div class=\"form-group\" id=\"judging-number-ajax-".$saving_random_num."-brewJudgingNumber-form-group\">";
+			$entry_judging_num_display .= "<div id=\"judging-number-ajax-".$saving_random_num."-brewJudgingNumber-form-group\">";
 			$entry_judging_num_display .= $entry_judging_num_hidden;
 			$entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"judging-number-ajax-".$saving_random_num."\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" pattern=\".{6,}\" title=\"Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use.\" size=\"8\" maxlength=\"6\" value=\"".$entry_judging_num."\" onblur=\"save_column('".$ajax_url."','brewJudgingNumber','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','judging-number-ajax-".$saving_random_num."')\" /> ";
 			$entry_judging_num_display .= "</div>";
@@ -284,18 +284,18 @@ if ($totalRows_log > 0) {
 
 		// Entry Style
 		if (style_set_no_numbering($style_set)) {
-			if ($row_log['brewCategory'] <= 14) $entry_style_display .= h($row_log['brewStyle']);
-			else $entry_style_display .= "Custom: ".h($row_log['brewStyle']);
+			if ($row_log['brewCategory'] <= 14) $entry_style_display .= $row_log['brewStyle'];
+			else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
 		}
 
 		else {
 
 			if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default"))
-			$entry_style_display .= "<span class=\"hidden\">".h($row_log['brewCategorySort'])."</span><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".h($row_log['brewCategorySort'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only the category ".h(ltrim($row_log['brewCategorySort'],"0"))." entries\" >";
+			$entry_style_display .= "<span class=\"d-none\">".h($row_log['brewCategorySort'])."</span><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".h($row_log['brewCategorySort'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only the category ".h(ltrim($row_log['brewCategorySort'],"0"))." entries\" >";
 
 			if ((!empty($row_log['brewCategorySort'])) && ($row_log['brewCategorySort'] != "00")) {
 				$entry_style_display .= style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-				$entry_style_display .= ": ".h($row_log['brewStyle']);
+				$entry_style_display .= ": ".$row_log['brewStyle'];
 			}
 
 			else $entry_style_display .= "<span class=\"text-danger\"><strong>Style NOT Specified</strong></span>";
@@ -307,7 +307,7 @@ if ($totalRows_log > 0) {
 		if (($row_log['brewerFirstName'] != "") && ($row_log['brewerLastName'] != "") && ($pro_edition == 0)) {
 
 			if (($bid == "default") && ($dbTable == "default")) {
-				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See entires for ".$row_log['brewerFirstName']." ".$row_log['brewerLastName']." only.\">";
+				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See entires for ".h($row_log['brewerFirstName'])." ".h($row_log['brewerLastName'])." only.\">";
 			}
 
 			$entry_brewer_display .=  $row_log['brewerLastName'].", ".$row_log['brewerFirstName'];
@@ -317,13 +317,13 @@ if ($totalRows_log > 0) {
 
 			if ($row_log['brewerCountry'] == "United States") {
 				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= h(format_phone_us($row_log['brewerPhone1']));
+				$entry_brewer_display .= format_phone_us($row_log['brewerPhone1']);
 			}
 
 			else {
-				$entry_brewer_display .= ", ".h($row_log['brewerCountry']);
+				$entry_brewer_display .= ", ".$row_log['brewerCountry'];
 				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= h($row_log['brewerPhone1']);
+				$entry_brewer_display .= $row_log['brewerPhone1'];
 			}
 
 			if ($co_brewer) {
@@ -338,7 +338,7 @@ if ($totalRows_log > 0) {
 		elseif (($row_log['brewerBreweryName'] != "&nbsp;") && ($pro_edition == 1)) {
 
 			if (($bid == "default") && ($dbTable == "default")) {
-				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$row_log['brewerBreweryName']."&rsquo;s entries\">";
+				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".h($row_log['brewerBreweryName'])."&rsquo;s entries\">";
 			}
 
 			$entry_brewer_display .=  $row_log['brewerBreweryName'];
@@ -346,14 +346,14 @@ if ($totalRows_log > 0) {
 			$entry_brewer_display .= "<br><small>";
 			$entry_brewer_display .= rtrim($row_log['brewerCity']).", ".$row_log['brewerState'];
 			if ($row_log['brewerCountry'] != "United States") {
-				$entry_brewer_display .= ", ".h($row_log['brewerCountry']);
+				$entry_brewer_display .= ", ".$row_log['brewerCountry'];
 				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= h($row_log['brewerPhone1']);
+				$entry_brewer_display .= $row_log['brewerPhone1'];
 				$entry_brewer_display .= "</small>";
 			}
 			else {
 				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= h(format_phone_us($row_log['brewerPhone1']));
+				$entry_brewer_display .= format_phone_us($row_log['brewerPhone1']);
 				$entry_brewer_display .= "</small>";
 			}
 
@@ -362,20 +362,21 @@ if ($totalRows_log > 0) {
 		else $entry_brewer_display .= "&nbsp;";
 
 		// Updated
-		if ($row_log['brewUpdated'] != "") $entry_updated_display .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
+		if ($row_log['brewUpdated'] != "") $entry_updated_display .= "<span class=\"d-none\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 		else $entry_updated_display .= "&nbsp;";
 
 		// Paid
 		if (($action != "print") && ($dbTable == "default")) {
-			
-			$entry_paid_display .= "<span class=\"hidden\">".h($row_log['brewPaid'])."</span>";
+
+			$entry_paid_display .= "<span class=\"d-none\">".h($row_log['brewPaid'])."</span>";
 			$entry_paid_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Paid</span>";
-			$entry_paid_display .= "<div class=\"form-group\" id=\"paid-ajax-".$saving_random_num."-brewPaid-form-group\">";
-			$entry_paid_display .= "<div class=\"checkbox\"><label>";
-			$entry_paid_display .= "<input type=\"checkbox\" value=\"1\" id=\"paid-ajax-".$saving_random_num."\" name=\"brewPaid".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".h($row_log['brewPaid'])."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$ajax_url."','brewPaid','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','paid-ajax-".$saving_random_num."','value')\"";
+			$entry_paid_display .= "<div id=\"paid-ajax-".$saving_random_num."-brewPaid-form-group\">";
+			$entry_paid_display .= "<div class=\"form-check\">";
+			$entry_paid_display .= "<input class=\"form-check-input\" type=\"checkbox\" value=\"1\" id=\"paid-ajax-".$saving_random_num."\" name=\"brewPaid".$row_log['id']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$ajax_url."','brewPaid','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','paid-ajax-".$saving_random_num."','value')\"";
 			if ($row_log['brewPaid'] == "1") $entry_paid_display .= " checked>";
 			else $entry_paid_display .= ">";
-			$entry_paid_display .= "</label></div>";
+			$entry_paid_display .= "<label class=\"form-check-label\" for=\"paid-ajax-".$saving_random_num."\"></label>";
+			$entry_paid_display .= "</div>";
 			if ($row_log['brewerDiscount'] == "Y") $entry_paid_display .= "&nbsp;<a tabindex=\"0\" role=\"button\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This entry has been discounted to ".$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2).".\"><span class=\"fa fa-lg fa-star\"></span></a>";
 			$entry_paid_display .= "</div>";
 			$entry_paid_display .= "<div>";
@@ -393,12 +394,12 @@ if ($totalRows_log > 0) {
 		// Received
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_received_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Received</span>";
-			$entry_received_display .= "<span class=\"hidden\">".h($row_log['brewReceived'])."</span>";
-			$entry_received_display .= "<div class=\"form-group\" id=\"received-ajax-".$saving_random_num."-brewReceived-form-group\">";
-			$entry_received_display .= "<div class=\"checkbox\"><label><input name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"received-ajax-".$saving_random_num."\" name=\"brewReceived".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".h($row_log['brewReceived'])."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$ajax_url."','brewReceived','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','received-ajax-".$saving_random_num."','value')\"";
+			$entry_received_display .= "<span class=\"d-none\">".h($row_log['brewReceived'])."</span>";
+			$entry_received_display .= "<div id=\"received-ajax-".$saving_random_num."-brewReceived-form-group\">";
+			$entry_received_display .= "<div class=\"form-check\"><input class=\"form-check-input\" type=\"checkbox\" value=\"1\" id=\"received-ajax-".$saving_random_num."\" name=\"brewReceived".$row_log['id']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$ajax_url."','brewReceived','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','received-ajax-".$saving_random_num."','value')\"";
 			if ($row_log['brewReceived'] == "1") $entry_received_display .= " checked>";
 			else $entry_received_display .= ">";
-			$entry_received_display .= "</label></div>";
+			$entry_received_display .= "<label class=\"form-check-label\" for=\"received-ajax-".$saving_random_num."\"></label></div>";
 			$entry_received_display .= "</div>";
 			$entry_received_display .= "<div>";
 			$entry_received_display .= "<span id=\"received-ajax-".$saving_random_num."-brewReceived-status\"></span>";
@@ -413,8 +414,8 @@ if ($totalRows_log > 0) {
 
 		// Box Number
 		if (($action != "print") && ($dbTable == "default")) {
-			$entry_box_num_display .= "<div class=\"form-group\" id=\"box-num-ajax-".$saving_random_num."-brewBoxNum-form-group\">";
-			$entry_box_num_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewBoxNum']."</span>";
+			$entry_box_num_display .= "<div id=\"box-num-ajax-".$saving_random_num."-brewBoxNum-form-group\">";
+			$entry_box_num_display .= "<span class=\"d-none visible-print-inline\">".$row_log['brewBoxNum']."</span>";
 			$entry_box_num_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Box: </span><input class=\"form-control input-sm hidden-print\" id=\"box-num-ajax-".$saving_random_num."\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" onblur=\"save_column('".$ajax_url."','brewBoxNum','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','box-num-ajax-".$saving_random_num."','html')\"/>";
 			$entry_box_num_display .= "</div>";
 			$entry_box_num_display .= "<div>";
@@ -426,8 +427,8 @@ if ($totalRows_log > 0) {
 
 		// Notes to Staff
 		if (($action != "print") && ($dbTable == "default")) {
-			$entry_staff_notes_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewStaffNotes']."</span>";
-			$entry_staff_notes_display .= "<div class=\"form-group\" id=\"staff-notes-ajax-".$saving_random_num."-brewStaffNotes-form-group\">";
+			$entry_staff_notes_display .= "<span class=\"d-none visible-print-inline\">".$row_log['brewStaffNotes']."</span>";
+			$entry_staff_notes_display .= "<div id=\"staff-notes-ajax-".$saving_random_num."-brewStaffNotes-form-group\">";
 			$entry_staff_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Staff Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"staff-notes-ajax-".$saving_random_num."\" name=\"brewStaffNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$ajax_url."','brewStaffNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','staff-notes-ajax-".$saving_random_num."','html')\"  />".$row_log['brewStaffNotes']."</textarea>";
 			$entry_staff_notes_display .= "</div>";
 			$entry_staff_notes_display .= "<div>";
@@ -442,8 +443,8 @@ if ($totalRows_log > 0) {
 
 		// Notes to Admin
 		if (($action != "print") && ($dbTable == "default")) {
-			$entry_admin_notes_display.= "<span class=\"hidden visible-print-inline\">".$row_log['brewAdminNotes']."</span>";
-			$entry_admin_notes_display .= "<div class=\"form-group\" id=\"admin-notes-ajax-".$saving_random_num."-brewAdminNotes-form-group\">";
+			$entry_admin_notes_display.= "<span class=\"d-none visible-print-inline\">".$row_log['brewAdminNotes']."</span>";
+			$entry_admin_notes_display .= "<div id=\"admin-notes-ajax-".$saving_random_num."-brewAdminNotes-form-group\">";
 			$entry_admin_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Admin Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"admin-notes-ajax-".$saving_random_num."\" name=\"brewAdminNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$ajax_url."','brewAdminNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','admin-notes-ajax-".$saving_random_num."','html')\" />".$row_log['brewAdminNotes']."</textarea>";
 			$entry_admin_notes_display .= "</div>";
 			$entry_admin_notes_display .= "<div>";
@@ -464,7 +465,7 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "</a> ";
 			$entry_actions .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$entry_name."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$entry_name."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
 			$entry_actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$base_url."includes/output.inc.php?section=entry-form-multi&amp;action=print&amp;id=".$row_log['id']."&amp;bid=".$row_log['uid']."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$entry_name."&rdquo;\"><span class=\"fa fa-lg fa-print ".$hidden_sm."\"></a> ";
-			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".h($row_log['brewerEmail'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$row_log['brewerFirstName']." ".$row_log['brewerLastName'].", at ".h($row_log['brewerEmail'])."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
+			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".h($row_log['brewerEmail'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".h($row_log['brewerFirstName'])." ".h($row_log['brewerLastName']).", at ".h($row_log['brewerEmail'])."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 		}
 
 		if ($eval_db_table) {
@@ -542,11 +543,11 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= sprintf("%06s",$row_log['id']);
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"".$hidden_md."\">";
+		$tbody_rows .= "\n\t<td>";
 		$tbody_rows .= $entry_name;
 		if (!empty($required_info)) {
-			$tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle ".$hidden_sm."\"></span></a> ";
-			$tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
+			$tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle ".$hidden_sm."\"></span></a> ";
+			$tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
 			
 			$tbody_rows .= "<div class=\"collapse small alert alert-info\" style=\"margin-top:5px;margin-bottom:5px;\" id=\"collapseEntryInfo".$row_log['id']."\">";
 			$tbody_rows .= "<ul class='list-unstyled'>";
@@ -557,7 +558,7 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td>";
 
-		$tbody_rows .= "<span class=\"hidden\">".$row_log['brewCategorySort'].$row_log['brewSubCategory']."</span>";
+		$tbody_rows .= "<span class=\"d-none\">".$row_log['brewCategorySort'].$row_log['brewSubCategory']."</span>";
 
 		if (!$entry_confirmed) {
 			$unconfirmed_entry_link = $base_url."index.php?section=admin&amp;go=".$go."&amp;bid=".$row_log['uid']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory'];
@@ -571,31 +572,17 @@ if ($totalRows_log > 0) {
 	    $tbody_rows .= $entry_unconfirmed_display;
 		$tbody_rows .= $entry_allergens_display;
 
-	    $tbody_rows .= "<section class=\"visible-sm visible-xs hidden-print\">";
-		$tbody_rows .= "<div style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-default btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseAdminMenu".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseAdminMenu".$row_log['id']."\">Admin Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
-
-	    $tbody_rows .= "<div class=\"collapse small well\" id=\"collapseAdminMenu".$row_log['id']."\">";
-	    $tbody_rows .= "<p><strong>".$label_brewer.": </strong>".$entry_brewer_display."</p>";
-	    $tbody_rows .= "<p><strong>".$label_paid.":</strong> ".yes_no($row_log['brewPaid'],$base_url)."</p>";
-	    $tbody_rows .= "<p><strong>".$label_received.":</strong> ".yes_no($row_log['brewReceived'],$base_url)."</p>";
-	    if (!empty($row_log['brewAdminNotes'])) $tbody_rows .= "<p><strong>".$label_admin." ".$label_notes.":</strong> ".$row_log['brewAdminNotes']."</p>";
-	    if (!empty($row_log['brewStaffNotes'])) $tbody_rows .= "<p><strong>".$label_staff." ".$label_notes.":</strong> ".$row_log['brewStaffNotes']."</p>";
-	    if (!empty($row_log['brewBoxNum'])) $tbody_rows .= "<p><strong>".$label_box."/".$label_location.":</strong> ".$row_log['brewBoxNum']."</p>";
-	    $tbody_rows .= "<p><strong>Actions:</strong> ".$entry_actions."</p>";
-	    $tbody_rows .= "</div>";
-	    $tbody_rows .= "</section>";
-
 		if ($row_log['brewerProAm'] >= 1) $tbody_rows .= "<p><span class=\"label label-info hidden-print ".$hidden_sm."\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
 		$tbody_rows .= "</td>";
-		$tbody_rows .= "\n\t<td nowrap=\"nowrap\" class=\"".$hidden_sm."\">".$entry_brewer_display."</td>";
-		if ($pro_edition == 0) $tbody_rows .= "<td class=\"".$hidden_md." hidden-print\">".h($row_log['brewerClubs'])."</td>";
-		$tbody_rows .= "\n\t<td class=\"".$hidden_md." hidden-print\">".$entry_updated_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_paid_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_received_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"".$hidden_md." \">".$entry_admin_notes_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"".$hidden_md." \">".$entry_staff_notes_display."</td>";
-		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_box_num_display."</td>";
-		if ($action != "print") $tbody_rows .= "<td class=\"".$hidden_sm."\" nowrap>".$entry_actions."</td>";
+		$tbody_rows .= "\n\t<td nowrap=\"nowrap\">".$entry_brewer_display."</td>";
+		if ($pro_edition == 0) $tbody_rows .= "<td class=\"hidden-print\">".$row_log['brewerClubs']."</td>";
+		$tbody_rows .= "\n\t<td class=\"hidden-print\">".$entry_updated_display."</td>";
+		$tbody_rows .= "\n\t<td>".$entry_paid_display."</td>";
+		$tbody_rows .= "\n\t<td>".$entry_received_display."</td>";
+		$tbody_rows .= "\n\t<td>".$entry_admin_notes_display."</td>";
+		$tbody_rows .= "\n\t<td>".$entry_staff_notes_display."</td>";
+		$tbody_rows .= "\n\t<td>".$entry_box_num_display."</td>";
+		if ($action != "print") $tbody_rows .= "<td class=\"hidden-print\" nowrap>".$entry_actions."</td>";
 		$tbody_rows .= "\n</tr>";
 
 		// Build all brewer email array
@@ -744,7 +731,7 @@ $(document).ready(function () {
 <?php if ($action != "print") { ?>
 <?php if ($dbTable != "default") { ?>
 <div class="btn-group" role="group" aria-label="...">
-	<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
+	<a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
 </div><!-- ./button group -->
 <?php } ?>
 <?php if ($dbTable == "default") { ?>
@@ -752,25 +739,24 @@ $(document).ready(function () {
 	<div class="col-md-12">
 		<?php if (($filter != "default") || ($bid != "default") || ($view != "default")) { ?>
 		<div class="btn-group" role="group" aria-label="allEntriesNav">
-			<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries"><span class="fa fa-arrow-circle-left"></span> <?php if ($filter != "default") echo "All Styles"; if ($bid != "default") echo "All Entries"; if ($view != "default") echo "All Entries"; ?></a>
+			<a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries"><span class="fa fa-arrow-circle-left"></span> <?php if ($filter != "default") echo "All Styles"; if ($bid != "default") echo "All Entries"; if ($view != "default") echo "All Entries"; ?></a>
 		</div><!-- ./button group -->
 		<?php } // end if (($filter != "default") || ($bid != "default") || ($view != "default")) ?>
 		<?php if ($totalRows_log > 0) { ?>
 		<!-- View Entries Dropdown -->
 		<div class="btn-group" role="group">
-			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<span class="fa fa-eye"></span> View...
-			<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu">
 				<?php if ($view != "default") { ?>
-				<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">All Entries</a></li>
+				<li class="small"><a class="dropdown-item" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">All Entries</a></li>
 				<?php } ?>
 				<?php if ($view != "paid") {  ?>
-				<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;view=paid">Paid Entries</a><li>
+				<li class="small"><a class="dropdown-item" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;view=paid">Paid Entries</a><li>
 				<?php } ?>
 				<?php if (($view != "unpaid") && ($totalRows_log_paid < $row_total_count['count'])) { ?>
-				<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;view=unpaid">Unpaid Entries</a><li>
+				<li class="small"><a class="dropdown-item" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;view=unpaid">Unpaid Entries</a><li>
 				<?php } ?>
 			</ul>
 		</div><!-- ./button group -->
@@ -781,32 +767,30 @@ $(document).ready(function () {
 		<?php if ($totalRows_log > 0) { ?>
 		<div class="btn-group <?php echo $hidden_sm; ?>" role="group" aria-label="printCurrent">
 			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<span class="fa fa-print"></span> Print Current View...
-				<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_number">By Entry Number</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_number">By Entry Number</a></li>
 					<?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
-					<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=judging_number">By Judging Number</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=judging_number">By Judging Number</a></li>
 					<?php } ?>
-					<li class="small"><a data-fancybox data-type="iframe" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Style</a></li>
-					<li class="small"><a data-fancybox data-type="iframe" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name"><?php if ($pro_edition == 0) echo "By Brewer Last Name"; else echo "By Organization Name"; ?></a></li>
-					<li class="small"><a data-fancybox data-type="iframe" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_name">By Entry Name</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Style</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name"><?php if ($pro_edition == 0) echo "By Brewer Last Name"; else echo "By Organization Name"; ?></a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_name">By Entry Name</a></li>
 				</ul>
 			</div>
 			<?php if (($totalRows_entry_count > $limit) && ($filter == "default")) { ?>
 				<div class="btn-group" role="group">
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<span class="fa fa-print"></span> Print All...
-				<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=entry_number">By Entry Number</a></li>
-					<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=judging_number">By Judging Number</a></li>
-					<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=category">By Style</a></li>
-					<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=brewer_name">By Brewer Last Name</a></li>
-					<li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=entry_name">By Entry Name</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=entry_number">By Entry Number</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=judging_number">By Judging Number</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=category">By Style</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=brewer_name">By Brewer Last Name</a></li>
+					<li class="small"><a data-fancybox data-type="iframe" class="dropdown-item modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=entry_name">By Entry Name</a></li>
 				</ul>
 			</div>
 			<?php } ?>
@@ -827,33 +811,31 @@ $(document).ready(function () {
 		?>
 		<div class="btn-group" role="group" aria-label="markEntriesAs">
 			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<span class="fa fa-check-circle"></span> Admin Actions
-				<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as paid and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Mark Shown as Paid" : "Mark All as Paid"; ?></a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=unpaid&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as unpaid and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Un-Mark Shown as Paid" : "Un-Mark All as Paid"; ?></a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as received and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Mark Shown as Received" : "Mark All as Received"; ?></a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=not-received&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as NOT received and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Un-Mark Shown as Received" : "Un-Mark All as Received"; ?></a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as confirmed and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Confirm Shown Entries" : "Confirm All Entries"; ?></a></li>
+					<li class="small"><a class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=paid&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as paid and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Mark Shown as Paid" : "Mark All as Paid"; ?></a></li>
+					<li class="small"><a class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=unpaid&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as unpaid and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Un-Mark Shown as Paid" : "Un-Mark All as Paid"; ?></a></li>
+					<li class="small"><a class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=received&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as received and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Mark Shown as Received" : "Mark All as Received"; ?></a></li>
+					<li class="small"><a class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=not-received&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as NOT received and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Un-Mark Shown as Received" : "Un-Mark All as Received"; ?></a></li>
+					<li class="small"><a class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table.$bulk_action_qs; ?>" data-confirm="Are you sure? This will mark <?php echo $bulk_action_scope_label; ?> as confirmed and could be a large pain to undo."><?php echo $bulk_action_filtered ? "Confirm Shown Entries" : "Confirm All Entries"; ?></a></li>
 					<?php if (!$bulk_action_filtered) { ?>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unconfirmed" data-confirm="Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.">Purge All Unconfirmed Entries</a></li>
-					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unpaid" data-confirm="Are you sure? This will delete ALL unpaid entries from the database and cannot be undone.">Purge All Unpaid Entries</a></li>
+					<li class="small"><a class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unconfirmed" data-confirm="Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.">Purge All Unconfirmed Entries</a></li>
+					<li class="small"><a class="dropdown-item hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unpaid" data-confirm="Are you sure? This will delete ALL unpaid entries from the database and cannot be undone.">Purge All Unpaid Entries</a></li>
 					<?php } ?>
 					<?php if ((!$bulk_action_filtered) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
-					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=default">Regenerate Judging Numbers (Random)</a></li>
-					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database. PLEASE NOTE that judging numbers will be in the following format: XX-123 (where XX is the category number or name)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=legacy">Regenerate Judging Numbers (With Style Number Prefix)</a></li>
-					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Regenerate Judging Numbers (Same as Entry Numbers)</a></li>
+					<li class="small"><a class="dropdown-item hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=default">Regenerate Judging Numbers (Random)</a></li>
+					<li class="small"><a class="dropdown-item hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database. PLEASE NOTE that judging numbers will be in the following format: XX-123 (where XX is the category number or name)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=legacy">Regenerate Judging Numbers (With Style Number Prefix)</a></li>
+					<li class="small"><a class="dropdown-item hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Regenerate Judging Numbers (Same as Entry Numbers)</a></li>
 					<?php } ?>
-				</ul>
 				</ul>
 			</div>
 		</div><!-- ./button group -->
 		<?php } ?>
 		<div class="btn-group pull-right <?php echo $hidden_sm; ?>" role="group" aria-label="entryStatus">
 	        <div class="btn-group" role="group">
-	            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#entryStatusModal">
+	            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#entryStatusModal">
 	              <?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status
 	            </button>
 	        </div>
@@ -866,7 +848,7 @@ $(document).ready(function () {
 	<div class="col-md-12">
 	<!-- All Participant Email Addresses Modal -->
 	   <div class="btn-group hidden-xs hidden-sm" role="group" aria-label="All Participants with Entries Email Addresses">
-			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#allEmailModal">
+			<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#allEmailModal">
 				  All Participants with Entries Email Addresses
 				</button>
 		</div><!-- ./button group -->
@@ -875,8 +857,8 @@ $(document).ready(function () {
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="allEmailModalLabel">All Participants with Entries Email Addresses</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact all participants with entries.</p>
@@ -884,7 +866,7 @@ $(document).ready(function () {
 						?></textarea>
 					</div>
 					<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 				</div>
 				</div>
 			</div>
@@ -894,7 +876,7 @@ $(document).ready(function () {
 		if (!empty($paid_email_display)) { ?>
 		<!-- All Participants with Paid Entries Email Addresses Modal -->
 		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
-			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#paidEmailModal">
+			<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#paidEmailModal">
 				  All Participants with Paid Entries Email Addresses
 				</button>
 		</div><!-- ./button group -->
@@ -903,15 +885,15 @@ $(document).ready(function () {
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="paidEmailModalLabel">All Participants with Paid Entries Email Addresses</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact participants with <strong>PAID</strong> entries.</p>
 						<textarea class="form-control" rows="8"><?php echo h(ltrim($paid_email_display)); ?></textarea>
 					</div>
 					<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 				</div>
 				</div>
 			</div>
@@ -920,7 +902,7 @@ $(document).ready(function () {
 		$unpaid_email_display = implode(", ",array_unique($copy_paste_unpaid_emails));
 		if (!empty($unpaid_email_display)) { ?>
 		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
-			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#unpaidEmailModal">
+			<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#unpaidEmailModal">
 				  All Participants with Unpaid Entries Email Addresses
 				</button>
 		</div><!-- ./button group -->
@@ -929,15 +911,15 @@ $(document).ready(function () {
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header bcoem-admin-modal">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="unpaidEmailModalLabel">All Participants with Unpaid Entries Email Addresses</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact participants with <strong>UNPAID</strong> entries.</p>
 						<textarea class="form-control" rows="8"><?php echo h(ltrim($unpaid_email_display)); ?></textarea>
 					</div>
 					<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 				</div>
 				</div>
 			</div>
@@ -949,8 +931,8 @@ $(document).ready(function () {
       	<div class="modal-dialog" role="document">
         	<div class="modal-content">
           		<div class="modal-header bcoem-admin-modal">
-            		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             		<h4 class="modal-title" id="entryStatusModalLabel"><?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status</h4>
+            		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           		</div>
                 <div class="modal-body">
                     <div class="bcoem-sidebar-panel">
@@ -985,7 +967,7 @@ $(document).ready(function () {
                     <?php } ?>
                 </div>
                 <div class="modal-footer">
-            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            	<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         	</div>
       	</div>
@@ -997,30 +979,32 @@ $(document).ready(function () {
 <?php } // end if ($action != "print") ?>
 
 <?php if ($totalRows_log > 0) { ?>
-<table class="table table-responsive table-bordered" id="sortable">
+<div class="table-responsive">
+<table class="table table-bordered" id="sortable">
 <thead>
     <tr>
         <th nowrap>Entry</th>
-        <th nowrap>Judging <?php if (($action != "print") && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided. Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
-        <th class="<?php echo $hidden_md; ?>">Name</th>
+        <th nowrap>Judging <?php if (($action != "print") && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-container="body" title="Judging Numbers" data-bs-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided. Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use."><span class="hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th>Name</th>
         <th>Style</th>
-        <th class="<?php echo $hidden_sm; ?>"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>
+        <th><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>
         <?php if ($pro_edition == 0) { ?>
-        <th class="<?php echo $hidden_md; ?> hidden-print">Club</th>
+        <th class="hidden-print">Club</th>
         <?php } ?>
-        <th class="<?php echo $hidden_md; ?> hidden-print">Updated</th>
-        <th class="<?php echo $hidden_sm; ?>" width="3%">P<span class="hidden-md">aid?</span></th>
-        <th class="<?php echo $hidden_sm; ?>" width="3%">R<span class="hidden-md">ec'd?</span></th>
-        <th class="<?php echo $hidden_md; ?> ">Admin Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Admin Notes" data-content="Catch-all for any information Admins may need for individual entries such as &quot;received damaged,&quot; &quot;maybe mis-categorized,&quot; etc. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
-        <th class="<?php echo $hidden_md; ?> ">Staff Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Staff Notes" data-content="Catch-all for any information staff may need to know about individual entries such as &quot;single 750ml bottle,&quot; &quot;missing MBOS bottle,&quot; etc. Notes entered here are printed on pullsheets. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
-        <th class="<?php echo $hidden_sm; ?>">Loc<span class="hidden-md">/Box</span></th>
-        <?php if ($action != "print") { ?><th class="hidden-xs hidden-sm hidden-print">Actions</th><?php } ?>
+        <th class="hidden-print">Updated</th>
+        <th width="3%">Paid</th>
+        <th width="3%">Received</th>
+        <th>Admin Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-container="body" data-bs-html="true" title="Admin Notes" data-bs-content="Catch-all for any information Admins may need for individual entries such as &quot;received damaged,&quot; &quot;maybe mis-categorized,&quot; etc. 255 character limit."><span class="hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th>Staff Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-container="body" data-bs-html="true" title="Staff Notes" data-bs-content="Catch-all for any information staff may need to know about individual entries such as &quot;single 750ml bottle,&quot; &quot;missing MBOS bottle,&quot; etc. Notes entered here are printed on pullsheets. 255 character limit."><span class="hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th>Loc/Box</th>
+        <?php if ($action != "print") { ?><th class="hidden-print">Actions</th><?php } ?>
     </tr>
 </thead>
 <tbody>
 <?php echo $tbody_rows; ?>
 </tbody>
 </table>
+</div><!-- ./table-responsive -->
 <?php if ($action != "print") {
 	if (($dbTable == "default") && ($totalRows_entry_count >= $_SESSION['prefsRecordLimit']))	{
 	if (($filter == "default") && ($bid == "default")) $total_paginate = $totalRows_entry_count;

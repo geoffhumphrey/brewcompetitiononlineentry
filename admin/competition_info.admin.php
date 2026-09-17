@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // Redirect if directly accessed without authenticated session
 if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername'])) && (strpos($section, "step") === FALSE) && ($_SESSION['userLevel'] > 0))) {
@@ -90,68 +90,27 @@ if ($section == "admin") { ?>
 <p class="lead"><?php echo $_SESSION['contestName'].": Update Competition Information"; ?></p>
 <?php } ?>
 
-<?php 
-if (ENABLE_MARKDOWN) { 
+<?php
+if (ENABLE_MARKDOWN) {
 include (CLASSES.'markdownify/Converter.php');
 include (CLASSES.'markdownify/Parser.php');
 ?>
 <script>
 $(document).ready(function($){
-    $('#contestRules').markdownEditor({
-        fullscreen: false,
-        imageUpload: false,
-        preview: true,
-        onPreview: function (content, callback) {
-            callback(marked(content));
-        }
-    });
-    $('#competitionPackingShipping').markdownEditor({
-        fullscreen: false,
-        imageUpload: false,
-        preview: true,
-        onPreview: function (content, callback) {
-            callback(marked(content));
-        }
-    });
-    $('#contestBottles').markdownEditor({
-        fullscreen: false,
-        imageUpload: false,
-        preview: true,
-        onPreview: function (content, callback) {
-            callback(marked(content));
-        }
-    });
-    $('#contestVolunteers').markdownEditor({
-        fullscreen: false,
-        imageUpload: false,
-        preview: true,
-        onPreview: function (content, callback) {
-            callback(marked(content));
-        }
-    });
-    $('#contestAwards').markdownEditor({
-        fullscreen: false,
-        imageUpload: false,
-        preview: true,
-        onPreview: function (content, callback) {
-            callback(marked(content));
-        }
-    });
-    $('#contestBOSAward').markdownEditor({
-        fullscreen: false,
-        imageUpload: false,
-        preview: true,
-        onPreview: function (content, callback) {
-            callback(marked(content));
-        }
-    });
-    $('#contestCircuit').markdownEditor({
-        fullscreen: false,
-        imageUpload: false,
-        preview: true,
-        onPreview: function(content, callback) {
-            callback(marked(content));
-        }
+    ['contestRules', 'competitionPackingShipping', 'contestBottles', 'contestVolunteers',
+     'contestAwards', 'contestBOSAward', 'contestCircuit'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        new EasyMDE({
+            element: el,
+            forceSync: true,
+            spellChecker: false,
+            status: false,
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview"],
+            previewRender: function (plainText) {
+                return marked(plainText);
+            }
+        });
     });
 });
 </script>
@@ -163,12 +122,12 @@ $(document).ready(function(){
     var clubs = <?php echo json_encode($_SESSION['club_array']); ?>;
     var last_added;
     var additional_clubs = '<?php echo $additional_clubs; ?>';
-    
+
     $("#search-club-list-results-div").hide();
     $("#club-separated").hide();
     $("#restore-additional-clubs").hide();
     $("#clear-last-added").attr("disabled", true);
-    
+
     if ($("#contestClubs").val().length > 0) {
         $("#club-separated").show();
         $("#clear-additional-clubs").attr("disabled", false);
@@ -192,7 +151,7 @@ $(document).ready(function(){
         $("#restore-additional-clubs").hide();
         $("#restore-additional-clubs").attr("disabled", false);
         $("#clear-last-added").attr("disabled", false);
-    });   
+    });
 
     $("#update-comp-info-btn").click(function() {
         $("#contestClubs").attr("disabled", false);
@@ -201,7 +160,7 @@ $(document).ready(function(){
     $("#copy-to-club-list-btn").click(function() {
 
         $("#club-separated").show();
-        
+
         var current_value = $('#contestClubs').val();
         var new_value = $("#search-club-list-input").val();
         last_added = $("#search-club-list-input").val() + ";";
@@ -224,7 +183,7 @@ $(document).ready(function(){
     });
 
     $("#clear-search-btn").click(function() {
-        
+
         $("#search-club-list-results-div").hide("fast");
         $("#search-club-list-input").val("");
         $("#clear-search-btn").attr("disabled", true);
@@ -233,11 +192,11 @@ $(document).ready(function(){
     });
 
     $("#search-club-list-btn").click(function() {
-        
+
         $("#search-club-list-results-div").hide("fast");
         $("#copy-to-club-list-btn").attr("disabled", false);
         $("#clear-search-btn").attr("disabled", false);
-        
+
         var search_term = $("#search-club-list-input").val();
         var output = "";
 
@@ -271,7 +230,7 @@ $(document).ready(function(){
     });
 
      $("#clear-last-added").click(function() {
-        
+
         var current_value = $("#contestClubs").val();
         var new_value = current_value.replace(last_added,'');
         new_value = new_value.trim();
@@ -286,78 +245,62 @@ $(document).ready(function(){
 
 </script>
 
-<form data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step4") echo "setup"; else echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1" novalidate>
+<form class="form-horizontal hide-loader-form-submit needs-validation" role="form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step4") echo "setup"; else echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <?php if ($section == "step4") { ?>
 <h3>Competition Coordinator</h3>
-<div class="form-group">
-    <label for="contactFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-            <span class="input-group-addon" id="contactFirstName-addon1"><span class="fa fa-user"></span></span>
-            
-            <input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php echo $row_brewer['brewerFirstName']; ?>" placeholder="" autofocus required>
-            <span class="input-group-addon" id="contactFirstName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contactFirstName" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>First Name</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php echo $row_brewer['brewerFirstName']; ?>" placeholder="" autofocus required>
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contactLastName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Last Name</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-            <span class="input-group-addon" id="contactLastName-addon1"><span class="fa fa-user"></span></span>
-            <input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php echo $row_brewer['brewerLastName']; ?>" placeholder="" required>
-            <span class="input-group-addon" id="contactLastName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contactLastName" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Last Name</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php echo $row_brewer['brewerLastName']; ?>" placeholder="" required>
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contactEmail" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-            <span class="input-group-addon" id="contactEmail-addon1"><span class="fa fa-envelope"></span></span>
-            
-            <input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php echo h($row_brewer['brewerEmail']); ?>" placeholder="" aria-describedby="helpBlock" required>
-            <span class="input-group-addon" id="contactEmail-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
-        <span id="helpBlock" class="help-block">You will be able to enter more contact names after setup.</span>
+<div class="row mb-3">
+    <label for="contactEmail" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Email</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php echo h($row_brewer['brewerEmail']); ?>" placeholder="" aria-describedby="helpBlock" required>
+        <div class="help-block">You will be able to enter more contact names after setup.</div>
     </div>
 </div>
 <input type="hidden" name="contactPosition" value="Competition Coordinator" />
 <?php } // end if ($section == "step4")  ?>
 
 <h3>General</h3>
-<div class="form-group">
-    <label for="contestName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Name</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-            
-            <input class="form-control" id="contestName" name="contestName" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestName']; ?>" placeholder="" autofocus required>
-            <span class="input-group-addon" id="contestName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contestName" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Competition Name</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control" id="contestName" name="contestName" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestName']; ?>" placeholder="" autofocus required>
     </div>
 </div>
-<div class="form-group">
-    <label for="contestID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP Competition ID</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if (($section != "step4") && (time() < $later_date)) echo h($row_contest_info['contestID']); ?>" placeholder="Current competition iteration BJCP ID.">
-    	<span id="helpBlock" class="help-block">
+<div class="row mb-3">
+    <label for="contestID" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">BJCP Competition ID</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <!-- contestID is already HTML-entity-encoded at save time (process_comp_info.inc.php's
+             sterilize()) - h() here would double-encode it. -->
+        <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if (($section != "step4") && (time() < $later_date)) echo $row_contest_info['contestID']; ?>" placeholder="Current competition iteration BJCP ID.">
+    	<div id="helpBlock" class="help-block">
         <?php if (time() >= $later_date) { ?>
         <p>The field above is blank because it has been 60 days or more since the latest date in the system associated with an entry window, judging sessions, or awards.</p>
-        <p>The ID currently in the system is <strong><?php echo h($row_contest_info['contestID']); ?></strong>. If this is incorrect, enter the BJCP ID for the <strong>CURRENT</strong> competition iteration. If correct, re-enter the number. Please note that the BJCP will reject any XML report with a missing or incorrect ID number.</p>
+        <p>The ID currently in the system is <strong><?php echo $row_contest_info['contestID']; ?></strong>. If this is incorrect, enter the BJCP ID for the <strong>CURRENT</strong> competition iteration. If correct, re-enter the number. Please note that the BJCP will reject any XML report with a missing or incorrect ID number.</p>
         <?php } else { ?>
         <p>Be sure to enter the BJCP ID for the <strong>CURRENT</strong> competition iteration. Please note that the BJCP will reject any XML report with a missing or incorrect ID number.</p>
         <?php } ?>
         <div class="btn-group" role="group" aria-label="BJCPCompIDModal">
 			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#BJCPCompIDModal">
+				<button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#BJCPCompIDModal">
 				  BJCP Competition ID Info
 				</button>
 			</div>
 		</div>
-		</span>
+		</div>
     </div>
 </div>
 
@@ -366,7 +309,7 @@ $(document).ready(function(){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <h4 class="modal-title" id="BJCPCompIDModalLabel">BJCP Competition ID Info</h4>
             </div>
             <div class="modal-body">
@@ -374,240 +317,220 @@ $(document).ready(function(){
                 <p><strong>Be sure to enter the BJCP ID for the CURRENT competition iteration.</strong></p>
             </div>
             <div class="modal-footer">
-            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            	<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div><!-- ./modal -->
 
-<div class="form-group">
-    <label for="contestHost" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-            <input class="form-control" id="contestHost" name="contestHost" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHost']; ?>" placeholder="" required>
-            <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contestHost" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Host</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control" id="contestHost" name="contestHost" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHost']; ?>" placeholder="" required>
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestHostLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host Location</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestHostLocation" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Host Location</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control" id="contestHostLocation" name="contestHostLocation" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHostLocation']; ?>" placeholder="">
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestHostWebsite" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host Website Address</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestHostWebsite" name="contestHostWebsite" type="text" maxlength="255" value="<?php if ($section != "step4") echo h($row_contest_info['contestHostWebsite']); ?>" placeholder="http://www.yoursite.com">
+<div class="row mb-3">
+    <label for="contestHostWebsite" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Host Website Address</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <!-- contestHostWebsite is already HTML-entity-encoded at save time
+             (process_comp_info.inc.php's sterilize()) - h() here would double-encode it. -->
+        <input class="form-control" id="contestHostWebsite" name="contestHostWebsite" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHostWebsite']; ?>" placeholder="http://www.yoursite.com">
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestWinnerLink" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Link to Past Winners</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestWinnerLink" name="contestWinnerLink" type="text" maxlength="255" value="<?php if ($section != "step4") echo h($row_contest_info['contestWinnerLink']); ?>" placeholder="http://www.yoursite.com">
-    <span id="helpBlock" class="help-block">Website or URL of a previous winner list for this competition. <?php if (!HOSTED) echo " This will be listed in addition to any previous winners list from archived data associated with this installation."; ?></span>
+<div class="row mb-3">
+    <label for="contestWinnerLink" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Link to Past Winners</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <!-- contestWinnerLink is already HTML-entity-encoded at save time
+             (process_comp_info.inc.php's sterilize()) - h() here would double-encode it. -->
+        <input class="form-control" id="contestWinnerLink" name="contestWinnerLink" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestWinnerLink']; ?>" placeholder="http://www.yoursite.com">
+    <div class="help-block">Website or URL of a previous winner list for this competition. <?php if (!HOSTED) echo " This will be listed in addition to any previous winners list from archived data associated with this installation."; ?></div>
     </div>
 </div>
 
 <?php if ($section != "step4") { ?>
-<div class="form-group">
-    <label for="contestLogo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <select class="selectpicker" name="contestLogo" id="contestLogo"  data-live-search="true" data-size="10" data-width="auto">
+<div class="row mb-3">
+    <label for="contestLogo" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Logo File Name</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+    <select class="form-select bootstrap-select" name="contestLogo" id="contestLogo">
         <option value=""></option>
        <?php echo directory_contents_dropdown(USER_IMAGES,$row_contest_info['contestLogo']); ?>
     </select>
-    <span id="helpBlock" class="help-block">Choose the image file. If the file is not on the list, use the &ldquo;Upload Logo Image&rdquo; button below.</span>
+    <div class="help-block">Choose the image file. If the file is not on the list, use the &ldquo;Upload Logo Image&rdquo; button below.</div>
     <a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Logo Image</a>
     </div>
 </div>
 <?php } ?>
 <?php if ($section == "step4") { ?>
-<div class="form-group">
-    <label for="contestCheckInPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">QR Code Log On Password</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
+<div class="row mb-3">
+    <label for="contestCheckInPassword" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">QR Code Log On Password</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control" id="contestCheckInPassword" name="contestCheckInPassword" type="text" value="" placeholder="">
     </div>
 </div>
 <?php } else { ?>
-<div class="form-group">
-    <label for="contestCheckInPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">QR Code Log On Password</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <a  href="#" class="btn btn-info" data-toggle="modal" data-target="#QRModal">Add, Update, or Change QR Code Log On Password</a>
-        <span id="helpBlock" class="help-block">For use with the <a href="<?php echo $base_url; ?>qr.php">QR Code Entry Check-In</a> function.</span>
+<div class="row mb-3">
+    <label for="contestCheckInPassword" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">QR Code Log On Password</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <a  href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#QRModal">Add, Update, or Change QR Code Log On Password</a>
+        <div class="help-block">For use with the <a href="<?php echo $base_url; ?>qr.php">QR Code Entry Check-In</a> function.</div>
     </div>
 </div>
 <?php } ?>
 
-<div class="form-group">
-    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Additional Club Names</label>
-    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+<div class="row mb-3">
+    <label class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Additional Club Names</label>
+    <div class="col-xs-12 col-sm-6 col-lg-4">
         <input id="search-club-list-input" class="form-control" placeholder="Search the clubs database">
-        <span class="help-block">Search to check if a club is already in the database. <a role="button" id="clear-search-btn" class="btn btn-xs btn-default hide-loader" disabled>Clear the Search Field</a></span>
+        <div class="help-block">Search to check if a club is already in the database. <a role="button" id="clear-search-btn" class="btn btn-sm btn-secondary hide-loader" disabled>Clear the Search Field</a></div>
     </div>
-    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
-        <a role="button" id="search-club-list-btn" class="btn btn-primary btn-block hide-loader">Search</a>
+    <div class="col-xs-12 col-sm-2 col-lg-1">
+        <a role="button" id="search-club-list-btn" class="btn btn-primary w-100 hide-loader">Search</a>
     </div>
-    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
-        <a role="button" id="copy-to-club-list-btn" class="btn btn-default btn-block hide-loader" disabled>Add</a>
+    <div class="col-xs-12 col-sm-2 col-lg-1">
+        <a role="button" id="copy-to-club-list-btn" class="btn btn-secondary w-100 hide-loader" disabled>Add</a>
     </div>
 </div>
-<div style="margin-top: -15px; margin-bottom: 10px;" id="search-club-list-results-div" class="form-group">
-    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
-    <div class="col-lg-7 col-md-9 col-sm-8 col-xs-12 small" id="search-club-list-results"></div>
+<div style="margin-top: -15px; margin-bottom: 10px;" id="search-club-list-results-div" class="row mb-3">
+    <label class="col-xs-12 col-sm-4 col-lg-2 col-form-label"></label>
+    <div class="col-xs-12 col-sm-8 col-lg-7 small" id="search-club-list-results"></div>
 </div>
 
-<div class="form-group">
-    <label for="contestClubs" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+<div class="row mb-3">
+    <label for="contestClubs" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"></label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control" id="contestClubs" name="contestClubs" type="text" value="<?php if ($section != "step4") echo $additional_clubs; ?>" placeholder="" pattern="[^%\x22]+" disabled>
-        <span class="help-block"><p>Use the search/add function above to add any club names that cannot be found in the clubs database. <a class="btn btn-xs btn-default hide-loader" role="button" id="clear-additional-clubs">Clear Entire List</a><a class="btn btn-xs btn-default hide-loader" role="button" id="restore-additional-clubs">Restore List</a> <a class="btn btn-xs btn-default hide-loader" role="button" id="clear-last-added">Clear Last Added</a></p><p id="club-separated">Note: each club is separated by a semi-colon (;) for system use.</p></span>
+        <div class="help-block"><p>Use the search/add function above to add any club names that cannot be found in the clubs database. <a class="btn btn-sm btn-secondary hide-loader" role="button" id="clear-additional-clubs">Clear Entire List</a><a class="btn btn-sm btn-secondary hide-loader" role="button" id="restore-additional-clubs">Restore List</a> <a class="btn btn-sm btn-secondary hide-loader" role="button" id="clear-last-added">Clear Last Added</a></p><p id="club-separated">Note: each club is separated by a semi-colon (;) for system use.</p></div>
     </div>
 </div>
 <h3>Entry Window</h3>
 
-<div class="form-group">
-    <label for="contestEntryOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
-        <div class="input-group has-warning">
-        	<input class="form-control date-time-picker-system" id="contestEntryOpen" name="contestEntryOpen" type="text" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestEntryOpen-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contestEntryOpen" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Open Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <!-- date-time-picker-system fields always use/expect 24-hour time regardless of
+             prefsTimeFormat - see js_source/app.js's Tempus Dominus init comment. Pass "1"
+             (24-hour) here instead of $_SESSION['prefsTimeFormat'] so this initial value
+             always matches. -->
+        <input class="form-control date-time-picker-system" id="contestEntryOpen" name="contestEntryOpen" type="text" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestEntryDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        
-        <div class="input-group has-warning">
-        	<input class="form-control date-time-picker-system" id="contestEntryDeadline" name="contestEntryDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestEntryDeadline-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-
-        </div>
-        <span id="helpBlock" class="help-block">This date is only for restriction of adding <strong>new</strong> entries. Existing entries will be able to be edited beyond this date &ndash; until the drop-off/shipping deadlines &ndash; unless a specific entry editing close date is provided below.</span>
+<div class="row mb-3">
+    <label for="contestEntryDeadline" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Close Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control date-time-picker-system" id="contestEntryDeadline" name="contestEntryDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
+        <div class="help-block">This date is only for restriction of adding <strong>new</strong> entries. Existing entries will be able to be edited beyond this date &ndash; until the drop-off/shipping deadlines &ndash; unless a specific entry editing close date is provided below.</div>
     </div>
 </div>
 
 <h3>Entry Editing</h3>
-<div class="form-group">
-    <label for="contestEntryEditDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">   
-        <div class="input-group">
-            <input class="form-control date-time-picker-system" id="contestEntryEditDeadline" name="contestEntryEditDeadline" type="text" size="20" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestEntryEditDeadline'])) && (!empty($row_contest_dates['contestEntryEditDeadline']))) echo
-    getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryEditDeadline'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
-            <span id="helpBlock" class="help-block">If you wish to restrict editing of any exisiting entry's information by non-admin participants, provide a close date here. For example, this could allow competition staff to prepare for sorting prior to the entry drop-off/shipment closure dates.</span>
-        </div>
+<div class="row mb-3">
+    <label for="contestEntryEditDeadline" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Close Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control date-time-picker-system" id="contestEntryEditDeadline" name="contestEntryEditDeadline" type="text" size="20" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestEntryEditDeadline'])) && (!empty($row_contest_dates['contestEntryEditDeadline']))) echo
+    getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryEditDeadline'], $_SESSION['prefsDateFormat'], "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+        <div class="help-block">If you wish to restrict editing of any exisiting entry's information by non-admin participants, provide a close date here. For example, this could allow competition staff to prepare for sorting prior to the entry drop-off/shipment closure dates.</div>
     </div>
 </div>
 
 <h3>Drop-Off Window</h3>
-<div class="form-group">
-    <label for="contestDropoffOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestDropoffOpen" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Open Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         	<input class="form-control date-time-picker-system" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffOpen']))) echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestDropoffDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestDropoffDeadline" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Close Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         	<input class="form-control date-time-picker-system" id="contestDropoffDeadline" name="contestDropoffDeadline" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffDeadline']))) echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div>
 
 <h3>Shipping Location</h3>
-<div class="form-group">
-    <label for="contestShippingName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestShippingName" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Name</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control" id="contestShippingName" name="contestShippingName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingName']; ?>" placeholder="">
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestShippingAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Address</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestShippingAddress" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Address</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control" id="contestShippingAddress" name="contestShippingAddress" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingAddress']; ?>" placeholder="">
     </div>
 </div>
 
 <h3>Shipping Window</h3>
-<div class="form-group">
-    <label for="contestShippingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestShippingOpen" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Open Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control date-time-picker-system" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingOpen']))) echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestShippingDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestShippingDeadline" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Close Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control date-time-picker-system" id="contestShippingDeadline" name="contestShippingDeadline" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingDeadline']))) echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" >
-     <span id="helpBlock" class="help-block">This window only applies to the Shipping Location above.</span>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" >
+     <div class="help-block">This window only applies to the Shipping Location above.</div>
     </div>
 </div>
 
 <h3>Account Registration</h3>
-<div class="form-group">
-    <label for="contestRegistrationOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-        	<input class="form-control date-time-picker-system" id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contestRegistrationOpen" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Open Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control date-time-picker-system" id="contestRegistrationOpen" name="contestRegistrationOpen" type="text" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestRegistrationDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-        	<input class="form-control date-time-picker-system" id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contestRegistrationDeadline" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Close Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control date-time-picker-system" id="contestRegistrationDeadline" name="contestRegistrationDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
     </div>
 </div>
 
 <h3>Judge or Steward Account Registration</h3>
-<div class="form-group">
-    <label for="contestJudgeOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-        	<input class="form-control date-time-picker-system" id="contestJudgeOpen" name="contestJudgeOpen" type="text" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contestJudgeOpen" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Open Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control date-time-picker-system" id="contestJudgeOpen" name="contestJudgeOpen" type="text" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestJudgeDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group has-warning">
-        	<input class="form-control date-time-picker-system" id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        	<span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-        </div>
+<div class="row mb-3">
+    <label for="contestJudgeDeadline" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Close Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control date-time-picker-system" id="contestJudgeDeadline" name="contestJudgeDeadline" type="text" size="20" value="<?php if ($section != "step4") echo
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
     </div>
 </div>
 <h3>Rules and Other Information</h3>
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="competition_rules" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Rules</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="competition_rules" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Competition Rules</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <textarea id="contestRules" class="form-control" name="competition_rules" rows="15" aria-describedby="helpBlock"><?php
 
         if ($section == "step4") {
@@ -637,13 +560,13 @@ $(document).ready(function(){
         }
 
         ?></textarea>
-        <span id="helpBlock" class="help-block">Edit the provided general rules text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+        <div class="help-block">Edit the provided general rules text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></div>
      </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="contestBottles" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Acceptance Rules</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="contestBottles" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Entry Acceptance Rules</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <textarea id="contestBottles" class="form-control" name="contestBottles" rows="15" aria-describedby="helpBlock"><?php
 
         if ($section == "step4") {
@@ -670,14 +593,14 @@ $(document).ready(function(){
         }
         ?></textarea>
 
-        <span id="helpBlock" class="help-block">Indicate the number of bottles, size, color, etc. Edit default text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+        <div class="help-block">Indicate the number of bottles, size, color, etc. Edit default text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></div>
 
      </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="competitionPackingShipping" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Packaging and Shipping Rules</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="competitionPackingShipping" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Packaging and Shipping Rules</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <textarea id="competitionPackingShipping" class="form-control" name="competition_packing_shipping" rows="15" aria-describedby="helpBlock">
         <?php
 
@@ -708,15 +631,15 @@ $(document).ready(function(){
         }
 
         ?></textarea>
-        <span id="helpBlock" class="help-block">Edit the provided general rules text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+        <div class="help-block">Edit the provided general rules text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></div>
      </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="contestVolunteers" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Volunteer Information</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="contestVolunteers" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Volunteer Information</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <textarea id="contestVolunteers" class="form-control" name="contestVolunteers" rows="15"><?php
-        
+
         if ($section == "step4") {
             if (ENABLE_MARKDOWN) echo strip_tags($volunteer);
             else echo $volunteer;
@@ -738,38 +661,38 @@ $(document).ready(function(){
         }
 
         ?></textarea>
-        <span id="helpBlock"><?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+        <div id="helpBlock"><?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></div>
      </div>
 </div>
 
 <h3>Entry Information</h3>
 <p>Entry-related information has moved to <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=preferences&amp;action=entries">Entry Preferences</a>.</p>
 <h3>Awards Ceremony</h3>
-<div class="form-group">
-    <label for="contestAwardsLocDate" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control date-time-picker-system" id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" value="<?php if (($section != "step4") && (isset($row_contest_info['contestAwardsLocTime']))) echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
-        <span id="helpBlock" class="help-block">Provide even if the date of judging is the same.</span>
+<div class="row mb-3">
+    <label for="contestAwardsLocDate" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Date</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <input class="form-control date-time-picker-system" id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" value="<?php if (($section != "step4") && (isset($row_contest_info['contestAwardsLocTime']))) echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_info['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  "1", "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+        <div class="help-block">Provide even if the date of judging is the same.</div>
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestAwardsLocName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location Name</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestAwardsLocName" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Location Name</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control" id="contestAwardsLocName" name="contestAwardsLocName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestAwardsLocName']; ?>" placeholder="">
     </div>
 </div>
 
-<div class="form-group">
-    <label for="contestAwardsLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location Address</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3">
+    <label for="contestAwardsLocation" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Location Address</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <input class="form-control" id="contestAwardsLocation" name="contestAwardsLocation" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestAwardsLocation']; ?>" placeholder="">
     </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="contestAwards" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Awards Structure</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="contestAwards" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Awards Structure</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <textarea id="contestAwards" class="form-control" name="contestAwards" rows="15" aria-describedby="helpBlock"><?php
         if ($section == "step4") {
             if (ENABLE_MARKDOWN) echo strip_tags($awards);
@@ -791,13 +714,13 @@ $(document).ready(function(){
             else echo $row_contest_info['contestAwards'];
         }
         ?></textarea>
-        <span id="helpBlock" class="help-block">Indicate places for each category, BOS procedure, qualifying criteria, etc. Edit default text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+        <div class="help-block">Indicate places for each category, BOS procedure, qualifying criteria, etc. Edit default text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></div>
      </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="contestBOSAward" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best of Show</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="contestBOSAward" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Best of Show</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <textarea id="contestBOSAward" class="form-control" name="contestBOSAward" rows="15" aria-describedby="helpBlock"><?php
         if ($section != "step4") {
             if ((ENABLE_MARKDOWN) && (is_html($row_contest_info['contestBOSAward']))) {
@@ -811,13 +734,13 @@ $(document).ready(function(){
             else echo $row_contest_info['contestBOSAward'];
         }
         ?></textarea>
-        <span id="helpBlock" class="help-block">Indicate whether the Best of Show winner will receive a special award (e.g., a pro-am brew with a sponsoring brewery, etc.). <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+        <div class="help-block">Indicate whether the Best of Show winner will receive a special award (e.g., a pro-am brew with a sponsoring brewery, etc.). <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></div>
      </div>
 </div>
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="contestCircuit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Circuit Qualifying Events</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+<div class="row mb-3"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="contestCircuit" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Circuit Qualifying Events</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
         <textarea id="contestCircuit" class="form-control" name="contestCircuit" rows="15" aria-describedby="helpBlock"><?php
         if ($section != "step4") {
             if ((ENABLE_MARKDOWN) && (is_html($row_contest_info['contestCircuit']))) {
@@ -831,13 +754,13 @@ $(document).ready(function(){
             else echo $row_contest_info['contestCircuit'];
         }
         ?></textarea>
-        <span id="helpBlock" class="help-block">Indicate whether your competition is a qualifier for any national or regional competitions. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+        <div class="help-block">Indicate whether your competition is a qualifier for any national or regional competitions. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></div>
      </div>
 </div>
 
 <div class="bcoem-admin-element hidden-print">
-	<div class="form-group">
-		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+	<div class="row mb-3">
+		<div class="col-xs-12 col-sm-8 col-lg-6 offset-sm-4 offset-lg-2">
 			<input id="update-comp-info-btn" name="submit" type="submit" class="btn btn-primary" value="Update Competition Info">
 		</div>
 	</div>
@@ -849,23 +772,23 @@ $(document).ready(function(){
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         <h4 class="modal-title" id="QRModalLabel">Add, Update, or Change QR Code Log On Password</h4>
       </div>
       <div class="modal-body">
-        <form data-toggle="validator" role="form" class="hide-loader-form-submit" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;go=qr&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form2" novalidate>
+        <form class="needs-validation" role="form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;go=qr&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form2" novalidate>
         <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
-        <div class="form-group">
+        <div class="mb-3">
             <label for="contestCheckInPassword">QR Code Log On Password</label>
-            <input class="form-control" id="contestCheckInPassword" name="contestCheckInPassword" type="password" value="" placeholder="" data-error="Please provide a password for QR Code entry check-in" required>
-            <div class="help-block with-errors"></div>
+            <input class="form-control" id="contestCheckInPassword" name="contestCheckInPassword" type="password" value="" placeholder="" required>
+            <div class="help-block invalid-feedback text-danger">Please provide a password for QR Code entry check-in.</div>
         </div>
         <input name="submit" type="submit" class="btn btn-primary" value="Update Password">
         <input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin&amp;go=contest_info"; ?>">
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

@@ -713,9 +713,9 @@ echo $output_user_question_modals;
 ?>
 
 <?php if ($action == "print") { ?>
-<h1><?php echo h($_SESSION['contestName'])." ".$subtitle; ?></h1>
+<h1><?php echo $_SESSION['contestName']." ".$subtitle; ?></h1>
 <?php } else { ?>
-<p class="lead"><?php echo h($_SESSION['contestName'])." ".$subtitle; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName']." ".$subtitle; ?></p>
 <?php } ?>
 <?php if ($action !="print") { ?>
 <div class="bcoem-admin-element hidden-print">

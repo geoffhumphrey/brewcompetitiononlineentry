@@ -12,10 +12,6 @@
  *
  * Known deferred gaps in the Bootstrap 5 block below, intentionally not
  * solved here because no page needs them yet:
- *  - bootstrap-datetimepicker has no Bootstrap-5 equivalent loaded yet
- *    (Tempus Dominus v6, per the ledger's Phase 0 research) - add it
- *    when all_dates.admin.php / judging_locations.admin.php /
- *    non-judging_locations.admin.php are actually converted.
  *  - Jasny Bootstrap (the admin off-canvas mobile menu) is loaded in
  *    BOTH blocks unconditionally, not just the legacy one - sections/
  *    nav.sec.php (unconditionally included on every admin page,
@@ -25,7 +21,7 @@
  *    before then would break the off-canvas menu on every converted
  *    page in the interim.
  */
-$admin_bs5_pages = array("upload", "hero_images", "upload_scoresheets", "change_user_password", "contacts", "dropoff");
+require (INCLUDES.'admin_bs5_pages.inc.php');
 
 /**
  * setup.php's step6 (setup/drop-off.setup.php) includes admin/dropoff.admin.php
@@ -37,7 +33,7 @@ $admin_bs5_pages = array("upload", "hero_images", "upload_scoresheets", "change_
  * here only as their own admin/*.admin.php file actually gets converted, not
  * ahead of it - step1-5/7-8 all still resolve to unconverted BS3 pages today.
  */
-if ((in_array($go, $admin_bs5_pages)) || ($section == "step6")) { ?>
+if ((in_array($go, $admin_bs5_pages)) || ($section == "step6") || (($go == "preferences") && (in_array($action, $admin_bs5_preferences_actions)))) { ?>
 
     <!-- ================= Bootstrap 5 asset set (converted admin pages) ================= -->
     <!-- Matches includes/load_cdn_libraries_public.inc.php's composition exactly where a
@@ -87,6 +83,15 @@ if ((in_array($go, $admin_bs5_pages)) || ($section == "step6")) { ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
+    <!-- Load Tempus Dominus / https://getdatepicker.com/ -->
+    <!-- Replaces bootstrap-datetimepicker for date-time-picker-system fields - no pub/
+         equivalent exists to match against (pub/ never uses a datetimepicker at all), so
+         this is a fresh integration verified directly against the library's own source
+         (CDN-fetched and inspected) rather than an existing in-codebase pattern. CSS only
+         here - the JS needs Popper, so it loads at the end of <body> instead, alongside
+         Bootstrap 5's own JS bundle. See index.legacy.php. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css">
+
     <!-- Load Moment -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.6.3/moment-timezone-with-data.min.js"></script>
@@ -97,11 +102,18 @@ if ((in_array($go, $admin_bs5_pages)) || ($section == "step6")) { ?>
 <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
 
 <?php if (ENABLE_MARKDOWN) { ?>
-    <!-- Load Bootstrap Markdown Editor / https://github.com/inacho/bootstrap-markdown-editor -->
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/css/bootstrap-markdown-editor.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+    <!-- Load EasyMDE / https://github.com/Ionaru/easy-markdown-editor -->
+    <!-- Replaces bootstrap-markdown-editor (inacho, last released Dec 2016, unmaintained,
+         hardcodes Bootstrap 3 glyphicon-* classes for every toolbar icon with no
+         Bootstrap-5-compatible release ever made). EasyMDE is actively maintained and
+         genuinely framework-agnostic - its toolbar icons use plain "fa fa-*" (Font Awesome
+         v4-style) classes, already served correctly under both asset blocks via the
+         v4-shims stylesheet loaded above, so this can't repeat the same Bootstrap-version
+         coupling bug later. See the BCOE&M Enhancement Ledger, "Admin BS5 Migration"
+         Phase 4 card. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.21.0/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde@2.21.0/dist/easymde.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/js/bootstrap-markdown-editor.js"></script>
   <?php } else { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
     <!-- Still 4.9.11 here too - not Bootstrap-version-coupled, its own major-version
@@ -173,11 +185,18 @@ if ((in_array($go, $admin_bs5_pages)) || ($section == "step6")) { ?>
 <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
 
 <?php if (ENABLE_MARKDOWN) { ?>
-    <!-- Load Bootstrap Markdown Editor / https://github.com/inacho/bootstrap-markdown-editor -->
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/css/bootstrap-markdown-editor.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+    <!-- Load EasyMDE / https://github.com/Ionaru/easy-markdown-editor -->
+    <!-- Replaces bootstrap-markdown-editor (inacho, last released Dec 2016, unmaintained,
+         hardcodes Bootstrap 3 glyphicon-* classes for every toolbar icon with no
+         Bootstrap-5-compatible release ever made). EasyMDE is actively maintained and
+         genuinely framework-agnostic - its toolbar icons use plain "fa fa-*" (Font Awesome
+         v4-style) classes, already served correctly under both asset blocks via the
+         v4-shims stylesheet loaded above, so this can't repeat the same Bootstrap-version
+         coupling bug later. See the BCOE&M Enhancement Ledger, "Admin BS5 Migration"
+         Phase 4 card. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.21.0/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde@2.21.0/dist/easymde.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/js/bootstrap-markdown-editor.js"></script>
   <?php } else { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
     <!-- 4.9.11 is the final 4.x release - EOL, no further patches ever coming.

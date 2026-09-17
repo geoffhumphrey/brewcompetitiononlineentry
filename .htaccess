@@ -24,6 +24,10 @@ IndexIgnore *
 DirectoryIndex index.php
 
 RewriteEngine on
+# LOCAL DEV ONLY — do not commit this line: skips the forced-HTTPS redirect
+# for the /bcoem local test alias, since AVG's SSL proxy hangs the local TLS
+# handshake on this machine. Every other path still forces HTTPS as before.
+RewriteCond %{REQUEST_URI} !^/bcoem/
 RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 

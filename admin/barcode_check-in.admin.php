@@ -77,7 +77,7 @@ $(function() {
     });
 });
 </script>
-<p class="lead"><?php echo h($_SESSION['contestName']).": ".$barcode_text_000; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName'].": ".$barcode_text_000; ?></p>
 <?php if (!empty($entry_list)) {?>
 <div class="alert alert-info">
 <span class="fa fa-info-circle"></span> <?php echo sprintf("<strong>%s</strong>: %s", $barcode_text_001, $entry_list); ?>

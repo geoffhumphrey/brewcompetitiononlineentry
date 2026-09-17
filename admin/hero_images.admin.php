@@ -221,7 +221,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     </div>
     <?php endif; ?>
 
-    <p class="lead"><?php echo h($_SESSION['contestName']).": Set Preferences"; ?></p>
+    <p class="lead"><?php echo $_SESSION['contestName'].": Set Preferences"; ?></p>
     
     <div class="bcoem-admin-element hidden-print">
             <a class="btn btn-primary" style="margin: 5px 5px 5px 0" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> General Preferences</a>

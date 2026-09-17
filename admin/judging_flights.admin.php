@@ -86,7 +86,7 @@ if (($action == "edit") && ($id != "default") && ($filter == "default")) $title 
 elseif (($action == "add") && ($id != "default") && ($filter == "default")) $title = ": Define Flights for Table ".h($row_tables_edit['tableNumber'])." &ndash; ".h($row_tables_edit['tableName']);
 elseif (($action == "assign") && ($filter == "rounds"))  $title = ": Assign $assign_to to Rounds";
 else $title =  ": Define/Edit Flights"; ?>
-<p onload="updateButCount(event);" class="lead"><?php echo h($_SESSION['contestName']).$title;  ?></p>
+<p onload="updateButCount(event);" class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 <div class="bcoem-admin-element hidden-print">
    	<!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">

@@ -41,7 +41,7 @@ foreach ($style_sets as $style_set) {
 }
 
 ?>
-<p class="lead"><?php echo h($_SESSION['contestName'])." ".$label_admin_archives; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName']." ".$label_admin_archives; ?></p>
 <?php if (HOSTED) { ?>
 <p><?php echo $archive_text_000; ?></p>
 <p><?php echo $archive_text_001; ?></p>

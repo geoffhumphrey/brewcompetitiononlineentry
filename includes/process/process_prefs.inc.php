@@ -256,7 +256,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'prefsTimeZone' => sterilize($_POST['prefsTimeZone']),
 				'prefsTimeFormat' => sterilize($_POST['prefsTimeFormat']),
 				'prefsSponsors' => sterilize($_POST['prefsSponsors']),
-				'prefsSponsorLogos' => sterilize($_POST['prefsSponsorLogos'])
+				'prefsSponsorLogos' => sterilize($_POST['prefsSponsorLogos']),
+				'prefsRecordPaging' => blank_to_null(sterilize($_POST['prefsRecordPaging']))
 
 			);
 

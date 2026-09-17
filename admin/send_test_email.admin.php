@@ -115,7 +115,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] < 2) && ($csr
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-    <title><?php echo h($_SESSION['contestName']); ?> - Brew Competition Online Entry &amp; Management</title>
+    <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
 
     <!-- Load Bootstrap and jQuery -->
     <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->

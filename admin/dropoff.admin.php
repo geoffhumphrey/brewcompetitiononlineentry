@@ -12,7 +12,7 @@ $dropoff_loc_url_no = "";
 if (($section != "step6") && ($_SESSION['brewerCountry'] != "United States")) $us_phone = TRUE; else $us_phone = FALSE;
 if ($section != "step6") {
 ?>
-<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add a Drop-Off Location"; elseif ($action == "edit") echo ": Edit a Drop-Off Location"; else echo " Drop-Off Locations"; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Drop-Off Location"; elseif ($action == "edit") echo ": Edit a Drop-Off Location"; else echo " Drop-Off Locations"; ?></p>
 <?php  } if ($msg == "11") {
 	if ($section == "step6") $dropoff_loc_url_yes .= "setup.php?section=step6";
 	else $dropoff_loc_url_yes .= "index.php?section=admin&amp;go=judging";
@@ -36,7 +36,7 @@ if ($section != "step6") {
      name, not Bootstrap 5's native data-bs-toggle auto-scan. The option attributes
      BS5's Popover component itself reads (trigger/placement/container/content) DO
      need the -bs- prefix, unlike the toggle selector. -->
-<a class="btn btn-primary" type="button" role="button" data-toggle="popover" data-bs-trigger="hover" data-bs-placement="auto right" data-bs-container="body"  data-bs-content="Skip this step if your competition does not have any drop-off locations." href="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;go=skip">Skip This Step&nbsp;&nbsp;<span class="fa fa-lg fa-arrow-circle-right"></span></a>
+<a class="btn btn-primary" type="button" role="button" data-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-container="body"  data-bs-content="Skip this step if your competition does not have any drop-off locations." href="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;go=skip">Skip This Step&nbsp;&nbsp;<span class="fa fa-lg fa-arrow-circle-right"></span></a>
 <?php } ?>
 <div class="bcoem-admin-element hidden-print">
 <?php if ((($action == "add") || ($action == "edit")) && ($section != "step6")) { ?>

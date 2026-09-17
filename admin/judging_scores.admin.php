@@ -50,20 +50,20 @@ if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="noDupeModalLabel">Place Previously Selected</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       The place you specified has already been input for the table. Please choose another place or no place (blank).
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
 <?php } ?>
-<p class="lead"><?php echo h($_SESSION['contestName']);
+<p class="lead"><?php echo $_SESSION['contestName'];
 if (($action == "edit") && ($id != "default")) echo ": Edit Scores for Table ".h($row_tables_edit['tableNumber'])." - ".h($row_tables_edit['tableName']);
 elseif (($action == "add") && ($id != "default")) echo ": Add Scores for Table ".h($row_tables_edit['tableNumber'])." - ".h($row_tables_edit['tableName']);
 else echo " Scores";
@@ -78,37 +78,36 @@ $totalRows_entry_count = total_paid_received($go,0);
     <?php if  ($dbTable != "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
+        <a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
     </div><!-- ./button group -->
     <?php } ?>
     <?php if ($dbTable == "default") { ?>
     <?php if ($action != "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $dbTable; ?>"><span class="fa fa-arrow-circle-left"></span> All Scores</a>
+        <a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $dbTable; ?>"><span class="fa fa-arrow-circle-left"></span> All Scores</a>
     </div><!-- ./button group -->
     <?php } ?>
 
     <?php if ($dbTable == "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $dbTable; ?>"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
+        <a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $dbTable; ?>"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
     </div><!-- ./button group -->
     <?php } ?>
 
     <?php if ($dbTable == "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos"><span class="fa fa-eye"></span> View BOS Entries and Places</a>
+        <a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos"><span class="fa fa-eye"></span> View BOS Entries and Places</a>
     </div><!-- ./button group -->
     <?php } ?>
 
     <?php if (($action == "default") && ($totalRows_tables > 0)) { ?>
     <!-- Position 2: Enter/Edit Dropdown Button Group -->
     <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="fa fa-plus-circle"></span> Add or Update Scores For...
-        <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
             <?php
@@ -123,7 +122,7 @@ $totalRows_entry_count = total_paid_received($go,0);
             foreach ($rows_tables_edit_2 as $row_tables_edit_2) {
                     $table_count_total = $scores_count_by_table_js[$row_tables_edit_2['id']] ?? 0;
                 ?>
-                <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".h($row_tables_edit_2['tableNumber']).": ".h($row_tables_edit_2['tableName']); ?></a></li>
+                <li><a class="dropdown-item" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".h($row_tables_edit_2['tableNumber']).": ".h($row_tables_edit_2['tableName']); ?></a></li>
                 <?php  } ?>
         </ul>
     </div>
@@ -131,14 +130,13 @@ $totalRows_entry_count = total_paid_received($go,0);
     <?php if ($id == "default") { ?>
     <!-- Postion 4: Print Button Dropdown Group -->
     <div class="btn-group hidden-xs hidden-sm" role="group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="fa fa-print"></span> Print...
-        <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
             <?php foreach ($rows_style_type as $row_style_type) {
             if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader menuItem" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo h($row_style_type['styleTypeName']); ?> BOS Pullsheet">BOS Pullsheet for <?php echo h($row_style_type['styleTypeName']); ?></a></li>
+                <li><a class="dropdown-item modal-window-link hide-loader menuItem" data-fancybox data-type="iframe" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo h($row_style_type['styleTypeName']); ?> BOS Pullsheet">BOS Pullsheet for <?php echo h($row_style_type['styleTypeName']); ?></a></li>
         <?php }
             }
             ?>
@@ -150,7 +148,7 @@ $totalRows_entry_count = total_paid_received($go,0);
 <?php if ($action == "default") { ?>
 <?php if ($_SESSION['prefsEval'] == 1) {
     if ($dbTable == "default") {
-        echo "<div style=\"margin: 0 0 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
+        echo "<div style=\"margin: 0 0 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-secondary\" href=\"".$base_url."index.php?section=admin&amp;go=evaluation&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
         include (EVALS.'import_scores.eval.php');
     }
 }
@@ -297,8 +295,11 @@ $totalRows_entry_count = total_paid_received($go,0);
     if ($dbTable == "default") $entry_category = $style_display_number.": ".style_convert($table_score_data[8],1,$base_url,$filter).": ".$table_score_data[13];
     else 
     */
-    if (empty($style_display_number)) $entry_category = h($table_score_data[13]);
-    else $entry_category = $style_display_number.": ".h($table_score_data[13]);
+    // table_score_data[13] is brewStyle - purify()'d (HTMLPurifier) at save time,
+    // which doesn't blanket-encode incidental characters - safe as-is in this
+    // text-content position, h() here would double-encode it.
+    if (empty($style_display_number)) $entry_category = $table_score_data[13];
+    else $entry_category = $style_display_number.": ".$table_score_data[13];
 
     $scoresheet = FALSE;
     $scoresheet_eval = FALSE;
@@ -570,26 +571,26 @@ $(document).ready(function() {
         <td><?php echo $judging_number; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $style_display; ?></td>
         <td>
-            <div class="form-group" id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>-scoreMiniBOS-form-group">
+            <div id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>-scoreMiniBOS-form-group">
             <input type="checkbox" id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>" name="scoreMiniBOS<?php echo $eid; ?>" value="1" onclick="$(this).attr('value', this.checked ? 1 : 0);save_column('<?php echo $ajax_url; ?>','scoreMiniBOS','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-mini-bos-ajax-<?php echo $saving_random_num; ?>','value')" <?php if ((isset($score_entry_data[5])) && (($action == "edit") && ($score_entry_data[5] == "1"))) echo "CHECKED"; ?> />
             <span id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>-scoreMiniBOS-status"></span>
             <span id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>-scoreMiniBOS-status-msg"></span>
             </div>
         </td>
         <td>
-            <div class="form-group" id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-form-group">
+            <div id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-form-group">
             <input class="form-control" id="score-entry-ajax-<?php echo $saving_random_num; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" onblur="save_column('<?php echo $ajax_url; ?>','scoreEntry','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-entry-ajax-<?php echo $saving_random_num; ?>','value')" />
             </div>
             <span id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-status"></span>
             <span id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-status-msg"></span>
         </td>
         <td>
-        <span class="hidden"><?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "1"))) echo $score_entry_data[4]; ?></span>
-            <div class="form-group" id="score-place-ajax-<?php echo $saving_random_num; ?>-scorePlace-form-group">
+        <span class="d-none"><?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "1"))) echo $score_entry_data[4]; ?></span>
+            <div id="score-place-ajax-<?php echo $saving_random_num; ?>-scorePlace-form-group">
             <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
-            <select class="form-control nodupe" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $ajax_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>')">
+            <select class="form-select nodupe" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $ajax_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>')">
             <?php } else { ?>
-            <select class="form-control" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $ajax_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>','value')">    
+            <select class="form-select" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $ajax_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>','value')">
             <?php } ?>
                 <option value=""></option>
                   <option value="1" <?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "1"))) echo "SELECTED"; ?>>1st</option>

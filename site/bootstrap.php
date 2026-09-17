@@ -435,12 +435,28 @@ if ($setup_success) {
 	$js_user_url = $js_url."user.min.js";
 	$css_common_url = $css_url."common.min.css";
 
-	if ($section == "admin") {
+	/**
+	 * Admin Bootstrap 3->5 migration: a page whose markup has been converted to
+	 * Bootstrap 5 (includes/load_cdn_libraries_admin.inc.php's own allowlist,
+	 * shared from one file so both stay in sync) drops the per-competition admin
+	 * theme entirely and loads the exact same CSS pair every pub/ page already
+	 * does - the admin theme files (default.min.css/bruxellensis.min.css) were
+	 * never updated for several BS5-only classes converted pages now use
+	 * (dropdown-item, the renamed btn-secondary, etc.), while default-3.min.css/
+	 * common-3.min.css already work correctly for the exact same BS5 markup on
+	 * the pub/ side. Confirmed with the user (2026-09-16) as the intended
+	 * direction, not a one-off fix.
+	 */
+	require (INCLUDES.'admin_bs5_pages.inc.php');
+
+	$admin_bs5_active = (in_array($go, $admin_bs5_pages)) || (($go == "preferences") && (in_array($action, $admin_bs5_preferences_actions)));
+
+	if (($section == "admin") && (!$admin_bs5_active)) {
 		if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
 		else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
 		$css_common_url = $css_common_url;
 	}
-	
+
 	else {
 		$theme = $css_url."default-3.min.css";
 		$css_common_url = $css_url."common-3.min.css";

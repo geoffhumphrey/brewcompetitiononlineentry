@@ -436,17 +436,17 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 			if ($row_scores['count'] > 0) $a = "edit";
 			else $a = "add";
 
-        	$r .= "<li class=\"small\"><a href=\"index.php?section=admin&amp;&go=special_best_data&amp;action=".$a."&amp;id=".$row_sbi['id']."\">".$row_sbi['sbi_name']."</a></li>";
+        	$r .= "<li class=\"small\"><a class=\"dropdown-item\" href=\"index.php?section=admin&amp;&go=special_best_data&amp;action=".$a."&amp;id=".$row_sbi['id']."\">".$row_sbi['sbi_name']."</a></li>";
 
 		}
 
 	}
-	
+
 	else {
-		
-		$r = "<li class=\"disabled small\"><a href=\"#\">No custom categories have been defined</a></li>";
-		$r .= "<li role=\"separator\" class=\"divider\"></li>";
-		$r .= "<li class=\"small\"><a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Category</a></li>";
+
+		$r = "<li class=\"small\"><a class=\"dropdown-item disabled\" href=\"#\">No custom categories have been defined</a></li>";
+		$r .= "<li class=\"small\"><hr class=\"dropdown-divider\"></li>";
+		$r .= "<li class=\"small\"><a class=\"dropdown-item\" href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Category</a></li>";
 
 	}
 
@@ -484,14 +484,14 @@ function participant_choose($brewer_db_table,$pro_edition,$judge,$evaluation='0'
 	}
 
 	$output = "";
-	$output .= "<select class=\"selectpicker\" name=\"participants\" id=\"participants\"";
+	$output .= "<select class=\"form-select bootstrap-select\" name=\"participants\" id=\"participants\"";
 	if ($judge == 0) $output .= " onchange=\"jumpMenu('self',this,0)\"";
 	if ($judge == 1) $output .= " required";
-	$output .= " data-size=\"15\" data-width=\"auto\" data-live-search=\"true\">";
-	
-	if ($judge == 0) $output .= "<option value=\"\" selected disabled data-icon=\"fa fa-plus-circle\">Add an Entry For...</option>";
+	$output .= ">";
+
+	if ($judge == 0) $output .= "<option value=\"\" selected disabled>Add an Entry For...</option>";
 	else $output .= "<option value=\"\"></option>";
-	
+
 	if ($rows_brewers) {
 
 		foreach ($rows_brewers as $row_brewers) {
@@ -501,8 +501,8 @@ function participant_choose($brewer_db_table,$pro_edition,$judge,$evaluation='0'
 			}
 
 			else {
-				if ($pro_edition == 1) $output .= "<option value=\"index.php?section=admin&amp;go=entries&amp;action=add&amp;bid=".$row_brewers['uid']."\" data-content=\"<span class='small'>".$row_brewers['brewerBreweryName']."</span>\">".$row_brewers['brewerBreweryName']."</option>";
-				else $output .= "<option value=\"index.php?section=admin&amp;go=entries&amp;action=add&amp;bid=".$row_brewers['uid']."\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+				if ($pro_edition == 1) $output .= "<option value=\"index.php?section=admin&amp;go=entries&amp;action=add&amp;bid=".$row_brewers['uid']."\">".$row_brewers['brewerBreweryName']."</option>";
+				else $output .= "<option value=\"index.php?section=admin&amp;go=entries&amp;action=add&amp;bid=".$row_brewers['uid']."\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
 			}
 
 		}

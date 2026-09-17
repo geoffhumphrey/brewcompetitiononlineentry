@@ -397,14 +397,23 @@ if (strpos($section, 'step') === FALSE)  {
 }
 
 ?>
-<?php if (in_array($go, $admin_bs5_pages)) { ?>
+<?php if ((in_array($go, $admin_bs5_pages)) || ($section == "step6") || (($go == "preferences") && (in_array($action, $admin_bs5_preferences_actions)))) { ?>
 <!-- Bootstrap 5 JS bundle - must load at the end of body, not in <head> (where the CDN
      loader include runs), because Bootstrap 5's own jQuery-plugin shim reads
      document.body at script-execution time; document.body is still null that early,
      so a <head>-positioned load throws before the shim can register .modal()/.dropdown()
-     etc. as jQuery plugins. Matches index.pub.php's proven placement exactly. -->
+     etc. as jQuery plugins. Matches index.pub.php's proven placement exactly.
+     This check must stay in sync with load_cdn_libraries_admin.inc.php's own asset-
+     stack condition and site/bootstrap.php's $admin_bs5_active - missing this exact
+     spot for site_preferences.admin.php's per-tab ($go=="preferences") case left the
+     BS5 CSS/markup loading with NO Bootstrap 5 JS at all, breaking every jQuery
+     .modal()/.dropdown()/.tooltip()/.popover()/.collapse() call on the page (found live
+     via the user's own browser console during Phase 4 testing of that file's Entries tab). -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<!-- Tempus Dominus needs Popper (just above) already loaded - see the CDN loader's own
+     comment for why this whole bundle loads at the end of body, not in <head>. -->
+<script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js"></script>
 <?php } ?>
 <script src="<?php echo $js_app_url; ?>"></script>
 </body>

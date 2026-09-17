@@ -435,6 +435,208 @@ table.dataTable thead th.sorting:after {
 
 }
 
+/* DataTables 2.x's own bootstrap5 CSS right-aligns any column its type-detection
+   identifies as numeric or date by default - a new behavior since the Phase 0
+   library upgrade (was not present under the previous 1.10.12 build). Every other
+   list in this app displays numeric/date columns left-aligned, so this reads as a
+   visual inconsistency rather than an intentional style - restore left alignment
+   to match. */
+table.dataTable th.dt-type-numeric,
+table.dataTable th.dt-type-date,
+table.dataTable td.dt-type-numeric,
+table.dataTable td.dt-type-date {
+    text-align: left;
+}
+
+/** Bootstrap 3 Responsive/Print Visibility Utility Shim **/
+/* Ninja Bootstrap (the BS5 CSS build loaded on converted admin pages and on pub/)
+   never carried these BS3 classes forward - hidden-xs/sm/md/lg, visible-xs/sm/md/lg
+   (+ -block/-inline/-inline-block), and hidden-print/visible-print have had zero CSS
+   definition anywhere in the BS5 stack, confirmed by fetching and grepping the actual
+   served CSS files directly. Markup across this whole migration (and pub/'s own
+   pre-existing BS5 pages) has kept using these class names throughout, on the
+   (incorrect) assumption they still worked, matching a compatibility layer that
+   turned out not to exist - meaning content meant to hide on a given breakpoint or
+   in print has been silently showing everywhere instead. Restored here verbatim from
+   Bootstrap 3.4.1's own source rather than approximated, so existing markup using
+   these classes starts working exactly as originally intended with no markup
+   changes required anywhere. */
+.visible-xs,
+.visible-sm,
+.visible-md,
+.visible-lg {
+    display: none !important;
+}
+.visible-xs-block,
+.visible-xs-inline,
+.visible-xs-inline-block,
+.visible-sm-block,
+.visible-sm-inline,
+.visible-sm-inline-block,
+.visible-md-block,
+.visible-md-inline,
+.visible-md-inline-block,
+.visible-lg-block,
+.visible-lg-inline,
+.visible-lg-inline-block {
+    display: none !important;
+}
+@media (max-width: 767px) {
+    .visible-xs {
+        display: block !important;
+    }
+    table.visible-xs {
+        display: table !important;
+    }
+    tr.visible-xs {
+        display: table-row !important;
+    }
+    td.visible-xs,
+    th.visible-xs {
+        display: table-cell !important;
+    }
+    .visible-xs-block {
+        display: block !important;
+    }
+    .visible-xs-inline {
+        display: inline !important;
+    }
+    .visible-xs-inline-block {
+        display: inline-block !important;
+    }
+    .hidden-xs {
+        display: none !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+    .visible-sm {
+        display: block !important;
+    }
+    table.visible-sm {
+        display: table !important;
+    }
+    tr.visible-sm {
+        display: table-row !important;
+    }
+    td.visible-sm,
+    th.visible-sm {
+        display: table-cell !important;
+    }
+    .visible-sm-block {
+        display: block !important;
+    }
+    .visible-sm-inline {
+        display: inline !important;
+    }
+    .visible-sm-inline-block {
+        display: inline-block !important;
+    }
+    .hidden-sm {
+        display: none !important;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+    .visible-md {
+        display: block !important;
+    }
+    table.visible-md {
+        display: table !important;
+    }
+    tr.visible-md {
+        display: table-row !important;
+    }
+    td.visible-md,
+    th.visible-md {
+        display: table-cell !important;
+    }
+    .visible-md-block {
+        display: block !important;
+    }
+    .visible-md-inline {
+        display: inline !important;
+    }
+    .visible-md-inline-block {
+        display: inline-block !important;
+    }
+    .hidden-md {
+        display: none !important;
+    }
+}
+@media (min-width: 1200px) {
+    .visible-lg {
+        display: block !important;
+    }
+    table.visible-lg {
+        display: table !important;
+    }
+    tr.visible-lg {
+        display: table-row !important;
+    }
+    td.visible-lg,
+    th.visible-lg {
+        display: table-cell !important;
+    }
+    .visible-lg-block {
+        display: block !important;
+    }
+    .visible-lg-inline {
+        display: inline !important;
+    }
+    .visible-lg-inline-block {
+        display: inline-block !important;
+    }
+    .hidden-lg {
+        display: none !important;
+    }
+}
+.visible-print {
+    display: none !important;
+}
+@media print {
+    .visible-print {
+        display: block !important;
+    }
+    table.visible-print {
+        display: table !important;
+    }
+    tr.visible-print {
+        display: table-row !important;
+    }
+    td.visible-print,
+    th.visible-print {
+        display: table-cell !important;
+    }
+}
+.visible-print-block {
+    display: none !important;
+}
+@media print {
+    .visible-print-block {
+        display: block !important;
+    }
+}
+.visible-print-inline {
+    display: none !important;
+}
+@media print {
+    .visible-print-inline {
+        display: inline !important;
+    }
+}
+.visible-print-inline-block {
+    display: none !important;
+}
+@media print {
+    .visible-print-inline-block {
+        display: inline-block !important;
+    }
+}
+@media print {
+    .hidden-print {
+        display: none !important;
+    }
+}
+
 .dataTables_paginate,
 .dataTables_filter {
     font-size: 14px !important;

@@ -30,19 +30,19 @@ $(document).ready(function () {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="noDupeModalLabel">Place Previously Selected</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       The place you specified has already been input. Please choose another place or no place (blank).
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
-<p class="lead"><?php echo h($_SESSION['contestName']);
+<p class="lead"><?php echo $_SESSION['contestName'];
 if ($action == "enter") echo ": Add or Update BOS Places for ".$row_style_type['styleTypeName']; else echo ": Best of Show (BOS) Entries and Places";
 if ($dbTable != "default") echo " (Archive ".$suffix.")";
 ?></p>
@@ -53,39 +53,38 @@ if ($dbTable != "default") echo " (Archive ".$suffix.")";
 	<?php if  ($dbTable != "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
+        <a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
     </div><!-- ./button group -->
     <?php } ?>
     <?php if ($dbTable == "default") { ?>
-		
+
         <?php if ($action == "enter") { ?>
         <!-- Postion 1: View All Button -->
         <div class="btn-group" role="group" aria-label="...">
-            <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos"><span class="fa fa-arrow-circle-left"></span> All BOS Entries and Places</a>
+            <a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos"><span class="fa fa-arrow-circle-left"></span> All BOS Entries and Places</a>
         </div><!-- ./button group -->
         <?php } ?>
 
     	<!-- Postion 1: View All Button -->
         <div class="btn-group" role="group" aria-label="...">
-            <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores"><span class="fa fa-arrow-circle-left"></span> All Scores</a>
+            <a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores"><span class="fa fa-arrow-circle-left"></span> All Scores</a>
         </div><!-- ./button group -->
 
         <!-- Postion 1: View All Button -->
         <div class="btn-group" role="group" aria-label="...">
-            <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
+            <a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
         </div><!-- ./button group -->
 
         <?php if (($action == "default") && ($totalRows_style_type > 0)) { ?>
         <!-- Position 2: Enter/Edit Dropdown Button Group -->
         <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="fa fa-plus-circle"></span> Add or Update...
-                <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                 <?php foreach ($rows_style_type as $row_style_type) {
                     if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-                    <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_type['id'] ?>">BOS Places for <?php echo h($row_style_type['styleTypeName']); ?></a>
+                    <li><a class="dropdown-item" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_type['id'] ?>">BOS Places for <?php echo h($row_style_type['styleTypeName']); ?></a></li>
                 <?php
                     }
                 }
@@ -95,19 +94,18 @@ if ($dbTable != "default") echo " (Archive ".$suffix.")";
         <?php } ?>
     	<!-- Postion 4: Print Button Dropdown Group -->
         <div class="btn-group hidden-xs hidden-sm" role="group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="fa fa-print"></span> Print...
-            <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <?php foreach ($rows_style_type as $row_style_type) {
                 if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-                    <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader menuItem" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo h($row_style_type['styleTypeName']); ?> BOS Pullsheet">BOS Pullsheet for <?php echo h($row_style_type['styleTypeName']); ?></a></li>
+                    <li><a class="dropdown-item modal-window-link hide-loader menuItem" data-fancybox data-type="iframe" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo h($row_style_type['styleTypeName']); ?> BOS Pullsheet">BOS Pullsheet for <?php echo h($row_style_type['styleTypeName']); ?></a></li>
             <?php }
                 }
                 ?>
-                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat" title="Print BOS Cup Mats">BOS Cup Mats (Judging Numbers)</a></li>
-                <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;filter=entry" title="Print BOS Cup Mats">BOS Cup Mats (Entry Numbers)</a></li>
+                <li><a class="dropdown-item" data-fancybox data-type="iframe" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat" title="Print BOS Cup Mats">BOS Cup Mats (Judging Numbers)</a></li>
+                <li><a class="dropdown-item" data-fancybox data-type="iframe" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;filter=entry" title="Print BOS Cup Mats">BOS Cup Mats (Entry Numbers)</a></li>
             </ul>
     	</div>
     <?php } ?>
@@ -175,8 +173,11 @@ $(document).ready(function() {
     	$bos_entry_info = explode("^",$bos_entry_info);
         $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],$style_display_method);
         $judging_number = sprintf("%06s",$bos_entry_info[6]);
-        if (empty($style)) $style_name = h($bos_entry_info[0]);
-        else $style_name = $style.": ".h($bos_entry_info[0]);
+        // bos_entry_info()[0] is brewStyle - purify()'d (HTMLPurifier) at save time in
+        // process_styles.inc.php, which doesn't blanket-encode incidental characters -
+        // safe as-is in this text-content position, h() here would double-encode it.
+        if (empty($style)) $style_name = $bos_entry_info[0];
+        else $style_name = $style.": ".$bos_entry_info[0];
 	?>
 	<tr>
     	<td nowrap><?php echo sprintf("%06s",$row_bos['eid']); ?></td>
@@ -190,7 +191,10 @@ $(document).ready(function() {
         <?php } ?>
         <?php if ($dbTable != "default") { ?>
         <td><?php if ($pro_edition == 1) echo h($bos_entry_info[16]); else echo h($bos_entry_info[5]).", ".h($bos_entry_info[4]); ?></td>
-        <td><?php echo h($bos_entry_info[12]); ?></td>
+        <?php // bos_entry_info()[12] is brewName - sterilize()'d then purify()'d in
+              // process_brewing.inc.php, already fully entity-encoded - h() here would
+              // double-encode it. ?>
+        <td><?php echo $bos_entry_info[12]; ?></td>
         <?php } ?>
         <td><?php echo $bos_entry_info[11]; ?></td>
         <td><?php if ($bos_entry_info[10] == "5") echo "HM"; else echo $bos_entry_info[10]; ?></td>
@@ -251,8 +255,10 @@ $(document).ready(function(){
 		$judging_number = sprintf("%06s",$bos_entry_info[6]);
         $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],$style_display_method);
         $judging_number = sprintf("%06s",$bos_entry_info[6]);
-        if (!empty($style)) $style_name = h($bos_entry_info[0]);
-        else $style_name = $style.": ".h($bos_entry_info[0]);
+        // brewStyle is purify()'d only - safe as-is in text content, see the matching
+        // comment above.
+        if (!empty($style)) $style_name = $bos_entry_info[0];
+        else $style_name = $style.": ".$bos_entry_info[0];
 	?>
 	<tr>
 		<?php $eid = $row_enter_bos['eid']; ?>
@@ -268,18 +274,18 @@ $(document).ready(function(){
         <td><?php echo $judging_number ?></td>
         <td><?php echo $style_name; ?></td>
     	<td>
-            <div class="form-group" id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-form-group">
+            <div id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-form-group">
             <input class="form-control" id="score-entry-bos-ajax-<?php echo $eid; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php echo $bos_entry_info[11]; ?>" onblur="save_column('<?php echo $ajax_url; ?>','scoreEntry','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-entry-bos-ajax-<?php echo $eid; ?>','value')"  />
             </div>
             <span id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-status"></span>
             <span id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-status-msg"></span>
         </td>
         <td>
-            <div class="form-group" id="score-place-bos-ajax-<?php echo $eid; ?>-scorePlace-form-group">
+            <div id="score-place-bos-ajax-<?php echo $eid; ?>-scorePlace-form-group">
             <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
-            <select class="form-control" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $ajax_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>')">
+            <select class="form-select" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $ajax_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>')">
             <?php } else { ?>
-            <select class="form-control" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $ajax_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>','value')">    
+            <select class="form-select" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $ajax_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>','value')">    
             <?php } ?>
                 <option value=""></option>
                 <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>

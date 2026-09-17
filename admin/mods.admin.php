@@ -15,10 +15,10 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 function mod_info($info,$method) {
 
 	$output = "";
-	
+
 	if ($method == 1) {
 		switch($info) {
-			case "0": 
+			case "0":
 			case "": $output = "Informational (Static HTML)"; break;
 			case "1": $output = "Report"; break;
 			case "2": $output = "Export"; break;
@@ -63,16 +63,16 @@ function mod_info($info,$method) {
 }
 
  ?>
-<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add a Custom Module"; elseif ($action == "edit") echo ": Edit a Custom Module"; else echo " Custom Modules";  ?></p>
+<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Custom Module"; elseif ($action == "edit") echo ": Edit a Custom Module"; else echo " Custom Modules";  ?></p>
 
 <div class="bcoem-admin-element hidden-print">
 <?php if (($action == "add") || ($action == "edit")) { ?>
 <div class="btn-group" role="group" aria-label="...">
-	<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods"><span class="fa fa-arrow-circle-left"></span> All Custom Modules</a>
+	<a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods"><span class="fa fa-arrow-circle-left"></span> All Custom Modules</a>
 </div><!-- ./button group -->
 <?php } else { ?>
 <div class="btn-group" role="group" aria-label="...">
-	<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Custom Module</a>
+	<a class="btn btn-secondary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Custom Module</a>
 </div><!-- ./button group -->
 <?php } ?>
 </div>
@@ -158,44 +158,36 @@ function mod_info($info,$method) {
 }
 if (($action == "add") || ($action == "edit")) { ?>
 
-<form class="form-horizontal hide-loader-form-submit" method="post" data-toggle="validator"  action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" novalidate>
+<form class="form-horizontal hide-loader-form-submit needs-validation" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1" novalidate>
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="mod_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
-	<div class="col-lg-3 col-md-4 col-sm-8 col-xs-12">
-		<div class="input-group has-warning">
-			<!-- Input Here -->
-			<input class="form-control" id="mod_name" name="mod_name" type="text" value="<?php if ($action == "edit") echo h($row_mods['mod_name']); ?>" placeholder="" autofocus>
-			<span class="input-group-addon" id="mod_name-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-		</div>
+<div class="row mb-3"><!-- Form Group REQUIRED Text Input -->
+	<label for="mod_name" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>Name</label>
+	<div class="col-xs-12 col-sm-8 col-lg-3">
+		<input class="form-control" id="mod_name" name="mod_name" type="text" value="<?php if ($action == "edit") echo h($row_mods['mod_name']); ?>" placeholder="" autofocus required>
+		<div class="help-block invalid-feedback text-danger">The custom module's name is required.</div>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="mod_filename" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">File Name</label>
-	<div class="col-lg-3 col-md-4 col-sm-8 col-xs-12">
-		<div class="input-group has-warning">
-			<!-- Input Here -->
-			<input class="form-control" id="mod_filename" name="mod_filename" type="text" pattern="^[A-Za-z0-9_\-]+\.php$" data-error="File name must contain only letters, numbers, underscores, or hyphens, and end in .php" value="<?php if ($action == "edit") echo h($row_mods['mod_filename']); ?>" placeholder="your_file_name.php">
-			<span class="input-group-addon" id="mod_filename-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
-		</div>
+<div class="row mb-3"><!-- Form Group REQUIRED Text Input -->
+	<label for="mod_filename" class="col-xs-12 col-sm-4 col-lg-2 col-form-label"><i class="fa fa-star me-1"></i>File Name</label>
+	<div class="col-xs-12 col-sm-8 col-lg-3">
+		<input class="form-control" id="mod_filename" name="mod_filename" type="text" pattern="^[A-Za-z0-9_\-]+\.php$" value="<?php if ($action == "edit") echo h($row_mods['mod_filename']); ?>" placeholder="your_file_name.php" required>
+		<div class="help-block invalid-feedback text-danger">A file name is required, and must contain only letters, numbers, underscores, or hyphens, and end in .php.</div>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="mod_description" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
-    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-12">
-        <!-- Input Here -->
+<div class="row mb-3"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="mod_description" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Description</label>
+    <div class="col-xs-12 col-sm-8 col-lg-4">
         <textarea id="mod_description" class="form-control" name="mod_description" rows="8"><?php if ($action == "edit") echo h(trim($row_mods['mod_description'])); ?></textarea>
      </div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-	<label for="mod_type" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Type</label>
-	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
-	<!-- Input Here -->
-	<select class="selectpicker" name="mod_type" id="mod_type" data-width="auto">
+<div class="row mb-3"><!-- Form Group NOT REQUIRED Select -->
+	<label for="mod_type" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Type</label>
+	<div class="col-xs-12 col-sm-8 col-lg-3">
+	<select class="form-select bootstrap-select" name="mod_type" id="mod_type">
 		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_type'] == "0")) echo " SELECTED"; ?>>Informational (Static HTML)</option>
         <option value="1" <?php if (($action == "edit") && ($row_mods['mod_type'] == "1")) echo " SELECTED"; ?>>Report</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_type'] == "2")) echo " SELECTED"; ?>>Export</option>
@@ -204,39 +196,36 @@ if (($action == "add") || ($action == "edit")) { ?>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-	<label for="mod_permission" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Permission</label>
-	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
-	<!-- Input Here -->
-	<select class="selectpicker" name="mod_permission" id="mod_permission" data-width="auto">
+<div class="row mb-3"><!-- Form Group NOT REQUIRED Select -->
+	<label for="mod_permission" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Permission</label>
+	<div class="col-xs-12 col-sm-8 col-lg-3">
+	<select class="form-select bootstrap-select" name="mod_permission" id="mod_permission">
 		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_permission'] == "0")) echo " SELECTED"; ?>>Top Level Admins</option>
     	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_permission'] == "1")) echo " SELECTED"; ?>>Admins</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_permission'] == "2")) echo " SELECTED"; ?>>All Users</option>
 	</select>
-	<span id="helpBlock" class="help-block">Who has permission to view or access?</span>
+	<div class="help-block">Who has permission to view or access?</div>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-	<label for="mod_extend_function" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Extends Core Function</label>
-	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
-	<!-- Input Here -->
-	<select class="selectpicker" name="mod_extend_function" id="mod_extend_function" data-width="auto">
+<div class="row mb-3"><!-- Form Group NOT REQUIRED Select -->
+	<label for="mod_extend_function" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Extends Core Function</label>
+	<div class="col-xs-12 col-sm-8 col-lg-3">
+	<select class="form-select bootstrap-select" name="mod_extend_function" id="mod_extend_function">
 		<option rel="none" value="0" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "0")) echo " SELECTED"; ?>>All Public Pages</option>
 		<option rel="none" value="1" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "1")) echo " SELECTED"; ?>>Public Home Page Only</option>
 		<option rel="none" value="6" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "6")) echo " SELECTED"; ?>>Public Registration Page Only</option>
 		<option rel="none" value="8" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "8")) echo " SELECTED"; ?>>Public User's Account Page Only</option>
 		<option rel="admin" value="9" <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "9")) echo " SELECTED"; ?>>Administration</option>
 	</select>
-	<span id="helpBlock" class="help-block">Where should the module be placed?</span>
+	<div class="help-block">Where should the module be placed?</div>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group" id="extend_admin"><!-- Form Group NOT REQUIRED Select -->
-	<label for="mod_extend_function_admin" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Extends Admin Function</label>
-	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
-	<!-- Input Here -->
-	<select class="selectpicker" name="mod_extend_function_admin" id="mod_extend_function_admin" data-size="10" data-width="auto">
+<div class="row mb-3" id="extend_admin"><!-- Form Group NOT REQUIRED Select -->
+	<label for="mod_extend_function_admin" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Extends Admin Function</label>
+	<div class="col-xs-12 col-sm-8 col-lg-3">
+	<select class="form-select bootstrap-select" name="mod_extend_function_admin" id="mod_extend_function_admin">
 		<option value=""></option>
 		<option value="default" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "default")) echo " SELECTED"; ?>>Administration Dashboard</option>
         <option value="archives" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "archives")) echo " SELECTED"; ?>>Archives</option>
@@ -249,28 +238,26 @@ if (($action == "add") || ($action == "edit")) { ?>
     	<option value="judging_tables" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "judging_tables")) echo " SELECTED"; ?>>Table Administration</option>
     	<option value="participants" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "participants")) echo " SELECTED"; ?>>Users (Participants)</option>
 	</select>
-	<span id="helpBlock" class="help-block">What Admin function will the module extend?</span>
+	<div class="help-block">What Admin function will the module extend?</div>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-	<label for="mod_rank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Rank</label>
-	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
-	<!-- Input Here -->
-	<select class="selectpicker" name="mod_rank" id="mod_rank" data-size="10" data-width="auto">
+<div class="row mb-3"><!-- Form Group NOT REQUIRED Select -->
+	<label for="mod_rank" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Rank</label>
+	<div class="col-xs-12 col-sm-8 col-lg-3">
+	<select class="form-select bootstrap-select" name="mod_rank" id="mod_rank">
 		<?php for ($i=1; $i <= 25; $i++) { ?>
     	<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ($row_mods['mod_rank'] == $i)) echo " SELECTED"; ?>><?php echo $i; ?></option>
 		<?php } ?>
 	</select>
-	<span id="helpBlock" class="help-block">Determines custom module&rsquo;s rank in the display order. The lower the number, the higher priority.</span>
+	<div class="help-block">Determines custom module&rsquo;s rank in the display order. The lower the number, the higher priority.</div>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-	<label for="mod_display_rank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Order</label>
-	<div class="col-lg-3 col-md-3 col-sm-8 col-xs-12">
-	<!-- Input Here -->
-	<select class="selectpicker" name="mod_display_rank" id="mod_display_rank" data-width="auto">
+<div class="row mb-3"><!-- Form Group NOT REQUIRED Select -->
+	<label for="mod_display_rank" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Display Order</label>
+	<div class="col-xs-12 col-sm-8 col-lg-3">
+	<select class="form-select bootstrap-select" name="mod_display_rank" id="mod_display_rank">
 		<option value="0" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "0")) echo " SELECTED"; ?>>N/A (Stand Alone)</option>
     	<option value="1" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "1")) echo " SELECTED"; ?>>Before Core Content</option>
         <option value="2" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "2")) echo " SELECTED"; ?>>After Core Content</option>
@@ -279,29 +266,28 @@ if (($action == "add") || ($action == "edit")) { ?>
         <option value="4" <?php if (($action == "edit") && ($row_mods['mod_display_rank'] == "4")) echo " SELECTED"; ?>>After Public Sidebar Content</option>
         -->
 	</select>
-	<span id="helpBlock" class="help-block">If informational, where will the module's contents be displayed?</span>
+	<div class="help-block">If informational, where will the module's contents be displayed?</div>
 	</div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="mod_enable" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Enable?</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
-            <label class="radio-inline">
-                <input type="radio" name="mod_enable" value="1" id="mod_enable_0"  <?php if ((($action == "edit") && ($row_mods['mod_enable'] == 1)) || ($action == "add")) echo "CHECKED"; ?> /> Yes
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="mod_enable" value="0" id="mod_enable_1" <?php if (($action == "edit") && ($row_mods['mod_enable'] == 0)) echo "CHECKED"; ?>/> No
-            </label>
+<div class="row mb-3"><!-- Form Group Radio INLINE -->
+    <label for="mod_enable" class="col-xs-12 col-sm-4 col-lg-2 col-form-label">Enable?</label>
+    <div class="col-xs-12 col-sm-8 col-lg-6">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="mod_enable" value="1" id="mod_enable_0" <?php if ((($action == "edit") && ($row_mods['mod_enable'] == 1)) || ($action == "add")) echo "checked"; ?>>
+            <label class="form-check-label" for="mod_enable_0">Yes</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="mod_enable" value="0" id="mod_enable_1" <?php if (($action == "edit") && ($row_mods['mod_enable'] == 0)) echo "checked"; ?>>
+            <label class="form-check-label" for="mod_enable_1">No</label>
         </div>
     </div>
 </div><!-- ./Form Group -->
 
 <div class="bcoem-admin-element hidden-print">
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-9">
-			<input type="submit" name="Submit" id="form-submit-button" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Custom Module" />
+	<div class="row mb-3">
+		<div class="col-xs-12 col-sm-8 col-lg-6 offset-sm-4 offset-lg-2">
+			<input type="submit" name="Submit" id="form-submit-button" class="btn btn-primary" value="<?php if ($action == "edit") echo "Edit"; else echo "Add"; ?> Custom Module">
 		</div>
 	</div>
 </div>
@@ -319,7 +305,7 @@ if (($action == "add") || ($action == "edit")) { ?>
 $("#extend_admin").hide();
 
 $(document).ready(function () {
-	
+
 	var admin_function = <?php if (($action == "edit") && ($row_mods['mod_extend_function'] == "9")) echo "true"; else echo "false"; ?>;
 	var admin_function_choice = "<?php if (($action == "edit") && (empty($row_mods['mod_extend_function_admin']))) echo "0"; else echo "1" ?>";
 	if (admin_function) {
@@ -328,14 +314,20 @@ $(document).ready(function () {
 		if (admin_function_choice == "0") $("#form-submit-button").prop("disabled", true);
 	}
 
+	// Tom Select still dispatches a real native "change" event on the underlying
+	// <select> whenever its own selection changes, so these jQuery bindings keep
+	// working unmodified - the one exception is clearing the value below, which
+	// needs Tom Select's own setValue() so its own visible display refreshes too
+	// (a plain .val('') only updates the hidden native <select>, not what Tom
+	// Select is actually showing).
 	$("#mod_extend_function").change(function () {
 	    if ($("#mod_extend_function").val() == "9") {
 	        $("#extend_admin").show("fast");
 	        $("#mod_extend_function_admin").prop("required", true);
-	    } 
+	    }
 	    else {
 	    	$("#extend_admin").hide("fast");
-	    	$("#mod_extend_function_admin").val('').trigger('change');
+	    	$("#mod_extend_function_admin")[0].tomselect.setValue("");
 	    	$("#mod_extend_function_admin").prop("required", false);
 	    	$("#form-submit-button").prop("disabled", false);
 	    }
@@ -344,7 +336,7 @@ $(document).ready(function () {
 	$("#mod_extend_function_admin").change(function () {
 	    if ($("#mod_extend_function_admin").val() == "") {
 	        $("#form-submit-button").prop("disabled", true);
-	    } 
+	    }
 	    else {
 	    	$("#form-submit-button").prop("disabled", false);
 	    }

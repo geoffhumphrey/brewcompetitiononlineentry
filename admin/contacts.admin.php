@@ -9,7 +9,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 include (DB.'contacts.db.php'); 
 
 ?>
-<p class="lead"><?php echo h($_SESSION['contestName']); if ($action == "add") echo ": Add a Contact"; elseif ($action == "edit") echo ": Edit a Contact"; else echo " Contacts"; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Contact"; elseif ($action == "edit") echo ": Edit a Contact"; else echo " Contacts"; ?></p>
 
 <!-- Button Element Container -->
 <div class="bcoem-admin-element hidden-print">

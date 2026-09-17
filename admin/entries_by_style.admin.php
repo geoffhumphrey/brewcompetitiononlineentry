@@ -301,7 +301,7 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
 }
 ?>
 
-<p class="lead"><?php echo h($_SESSION['contestName']); ?> entry count by broken down by style.</p>
+<p class="lead"><?php echo $_SESSION['contestName']; ?> entry count by broken down by style.</p>
 
 <?php if ($action != "print") { ?>
 <div class="bcoem-admin-element hidden-print">

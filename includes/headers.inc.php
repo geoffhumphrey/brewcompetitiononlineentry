@@ -21,7 +21,7 @@ switch($section) {
 
 	case "default":
 	case "past-winners":
-		if (isset($_SESSION['contestName'])) $header_output = h($_SESSION['contestName']);
+		if (isset($_SESSION['contestName'])) $header_output = $_SESSION['contestName'];
 		else $header_output = "";
 
 		if (($filter != "default") && ($section == "past-winners")) $header_output .= ": ".$label_past_winners." &ndash; ".$filter;
@@ -97,7 +97,7 @@ switch($section) {
 	break;
 
 	case "register":
-		$header_output = h($_SESSION['contestName']);
+		$header_output = $_SESSION['contestName'];
 		if ($go == "judge") {
 			if ($judge_limit) $header_output = $label_reg;
 			else $header_output = $label_judge_reg;
@@ -129,10 +129,10 @@ switch($section) {
 	break;
 
 	case "login":
-		if ($action == "forgot") $header_output = h($_SESSION['contestName'])." - ".$label_reset_password;
-		elseif ($action == "logout") $header_output = h($_SESSION['contestName'])." - ".$label_logged_out;
+		if ($action == "forgot") $header_output = $_SESSION['contestName']." - ".$label_reset_password;
+		elseif ($action == "logout") $header_output = $_SESSION['contestName']." - ".$label_logged_out;
 		elseif ($action == "reset-password") $header_output = $label_reset_password." ".$label_with_token;
-		else $header_output = h($_SESSION['contestName'])." - ".$label_log_in;
+		else $header_output = $_SESSION['contestName']." - ".$label_log_in;
 		if ($msg == "0") $output = sprintf("<strong>%s</strong> ",$header_text_031);
 		elseif ($msg == "1") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; }
 	 	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
@@ -147,7 +147,7 @@ switch($section) {
 	break;
 
 	case "entry":
-		$header_output = h($_SESSION['contestName'])." ".$label_info;
+		$header_output = $_SESSION['contestName']." ".$label_info;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
@@ -155,7 +155,7 @@ switch($section) {
 	break;
 
 	case "sponsors":
-		$header_output = h($_SESSION['contestName'])." ".$label_sponsors;
+		$header_output = $_SESSION['contestName']." ".$label_sponsors;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
@@ -163,7 +163,7 @@ switch($section) {
 	break;
 
 	case "rules":
-	$header_output = h($_SESSION['contestName'])." ".$label_rules;
+	$header_output = $_SESSION['contestName']." ".$label_rules;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
@@ -175,11 +175,11 @@ switch($section) {
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 		else $output = "";
-		$header_output = h($_SESSION['contestName'])." ".$label_volunteer_info;
+		$header_output = $_SESSION['contestName']." ".$label_volunteer_info;
 	break;
 
 	case "past_winners":
-		$header_output = h($_SESSION['contestName'])." - ".$label_past_winners;
+		$header_output = $_SESSION['contestName']." - ".$label_past_winners;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
@@ -187,7 +187,7 @@ switch($section) {
 	break;
 
 	case "contact":
-		$header_output = h($_SESSION['contestName'])." - ".$label_contact;
+		$header_output = $_SESSION['contestName']." - ".$label_contact;
 		if ($msg == "1") {
 
 			$db_conn->where('id', $id);
@@ -458,7 +458,7 @@ switch($section) {
 
 	case "admin":
 		if ($action != "print") $header_output = $label_admin;
-		else $header_output = h($_SESSION['contestName']);
+		else $header_output = $_SESSION['contestName'];
 
 			switch($go) {
 

@@ -35,10 +35,16 @@
 <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
 <?php if (ENABLE_MARKDOWN) { ?>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/css/bootstrap-markdown-editor.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+    <!-- Load EasyMDE / https://github.com/Ionaru/easy-markdown-editor -->
+    <!-- Matches the swap made in load_cdn_libraries_admin.inc.php - see that file's
+         comment for why (inacho/bootstrap-markdown-editor is unmaintained and hardcodes
+         Bootstrap-3-only glyphicon-* toolbar icons with no BS5 release ever made).
+         This file (maintenance.php-only) never got its own BS3/BS5 split, but EasyMDE's
+         icons are Font Awesome-based, not Bootstrap-version-coupled, so the same swap is
+         safe here unconditionally. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.21.0/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde@2.21.0/dist/easymde.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/js/bootstrap-markdown-editor.js"></script>
   <?php } else { ?>
     <!-- 4.9.11 is the final 4.x release - EOL, no further patches ever coming.
          Deliberately not moved to 5+: that's a different UI/dialog architecture

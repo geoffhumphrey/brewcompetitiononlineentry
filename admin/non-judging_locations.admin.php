@@ -138,7 +138,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 //if (!empty($output_no_records)) echo $output_no_records;
 ?>
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
-<p class="lead"><?php echo h($_SESSION['contestName']).$subtitle; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p>
 <div class="bcoem-admin-element hidden-print">
 	<!-- Page Navigation Elements -->
 	<?php if (($action == "add") || ($action == "edit")) { ?>

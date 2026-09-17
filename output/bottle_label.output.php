@@ -171,7 +171,7 @@ if (isset($_SESSION['loginUsername'])) {
             
             $page_info1 .= "<div class=\"label-inner\">";
 
-            $page_info1 .= "<div style=\"margin: 0 0 10px 0;\" class=\"text-center label-title\"><strong>".h($_SESSION['contestName'])."</strong></div>";
+            $page_info1 .= "<div style=\"margin: 0 0 10px 0;\" class=\"text-center label-title\"><strong>".$_SESSION['contestName']."</strong></div>";
             if ($large_entry_num) $page_info1 .= "<div style=\"margin: 10px 0 10px 0; padding: 0;\" class=\"text-center label-entry-num\">".$barcode."</div>";
             elseif ($large_text) $page_info1 .= "<div style=\"margin: 10px 0 10px 0; padding: 0;\" class=\"text-center label-category-name\">".$barcode."</div>";
             else $page_info1 .= "<div class=\"text-center\" style=\"margin: 0 0 10px 0; padding: 5px 0 5px 0; font-size: 1.2em; border: 1px solid #dedede; border-radius: 5px;\"><strong>".$label_entry_number.":</strong> ".$barcode."</span></div>";
@@ -323,7 +323,7 @@ else {
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title><?php echo h($_SESSION['contestName']); ?> - Entry Bottle Labels</title>
+	<title><?php echo $_SESSION['contestName']; ?> - Entry Bottle Labels</title>
     <!-- Load Bootstrap and jQuery -->
     <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
