@@ -376,7 +376,9 @@ function orphan_styles() {
 	if ($totalRows_styles > 0) {
 		foreach ($rows_styles as $row_styles) {
 			if (!in_array($row_styles['brewStyleType'], $a)) {
-				if ($row_styles['brewStyleType'] > 3) $return .= "<p><a href='index.php?section=admin&amp;go=styles&amp;action=edit&amp;id=".$row_styles['id']."'><span class='icon'><img src='".$base_url."images/pencil.png' alt='Edit ".$row_styles['brewStyle']."' title='Edit ".$row_styles['brewStyle']."'></span></a>".$row_styles['brewStyle']."</p>";
+				// brewStyle is purify()-only (no sterilize()) - safe as the trailing text content
+				// but needs h() in the alt=/title= attributes below, or a literal " breaks the tag.
+				if ($row_styles['brewStyleType'] > 3) $return .= "<p><a href='index.php?section=admin&amp;go=styles&amp;action=edit&amp;id=".$row_styles['id']."'><span class='icon'><img src='".$base_url."images/pencil.png' alt='Edit ".h($row_styles['brewStyle'])."' title='Edit ".h($row_styles['brewStyle'])."'></span></a>".$row_styles['brewStyle']."</p>";
 			}
 		}
 	}
@@ -501,8 +503,11 @@ function participant_choose($brewer_db_table,$pro_edition,$judge,$evaluation='0'
 			}
 
 			else {
-				if ($pro_edition == 1) $output .= "<option value=\"index.php?section=admin&amp;go=entries&amp;action=add&amp;bid=".$row_brewers['uid']."\" data-content=\"<span class='small'>".$row_brewers['brewerBreweryName']."</span>\">".$row_brewers['brewerBreweryName']."</option>";
-				else $output .= "<option value=\"index.php?section=admin&amp;go=entries&amp;action=add&amp;bid=".$row_brewers['uid']."\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+				// brewerBreweryName/brewerLastName/brewerFirstName are purify()-only (no sterilize())
+				// - safe as the trailing <option> text content but need h() inside data-content=
+				// (an attribute, even though its own value is markup) or a literal " breaks the tag.
+				if ($pro_edition == 1) $output .= "<option value=\"index.php?section=admin&amp;go=entries&amp;action=add&amp;bid=".$row_brewers['uid']."\" data-content=\"<span class='small'>".h($row_brewers['brewerBreweryName'])."</span>\">".$row_brewers['brewerBreweryName']."</option>";
+				else $output .= "<option value=\"index.php?section=admin&amp;go=entries&amp;action=add&amp;bid=".$row_brewers['uid']."\" data-content=\"<span class='small'>".h($row_brewers['brewerLastName']).", ".h($row_brewers['brewerFirstName'])."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
 			}
 
 		}

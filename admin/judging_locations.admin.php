@@ -339,7 +339,7 @@ if ($section != "step5") {
 					}
 						
 					if ((isset($none_selected)) && ($none_selected == 0)) {
-						if ($filter != "staff") $output .= "<span class=\"fa fa-sm fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
+						if ($filter != "staff") $output .= "<span class=\"fa fa-sm fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".h($row_brewer['brewerFirstName'])." ".h($row_brewer['brewerLastName'])."&rsquo;s location preferences\">None specified</a>.";
 					}
 					
 					$output_location = $output;
@@ -371,7 +371,7 @@ if ($section != "step5") {
 				$output_datatables_body .= "</td>";
 				$output_datatables_body .= "<td>";
 				$output_datatables_body .= $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
-				if (($filter == "staff") && ($row_brewer['brewerStaff'] == "Y")) $output_datatables_body .= " <a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff&amp;view=yes\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"".$row_brewer['brewerFirstName']." has expressed interest in being a staff member. Click to see only interested users.\"><span class=\"fa fa-star text-danger\"></span></a>";
+				if (($filter == "staff") && ($row_brewer['brewerStaff'] == "Y")) $output_datatables_body .= " <a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff&amp;view=yes\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"".h($row_brewer['brewerFirstName'])." has expressed interest in being a staff member. Click to see only interested users.\"><span class=\"fa fa-star text-danger\"></span></a>";
 				$output_datatables_body .= "<div>";
 				$output_datatables_body .= "<span id=\"assigned-".$row_brewer['uid']."-".$staff_column."-status\"></span> ";
 				$output_datatables_body .= "<span id=\"assigned-".$row_brewer['uid']."-".$staff_column."-status-msg\"></span>";
@@ -735,10 +735,12 @@ echo $output_assignment_modals;
 <?php if (!empty($form_submit_url)) { ?>
 <div class="bcoem-admin-element hidden-print">
 	<?php if ($filter == "default") { ?>
-	<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" aria-describedby="helpBlock" value="<?php echo $form_submit_button; ?>" />
+	<!-- $form_submit_button can carry judgingLocName (purify()-only, no sterilize()) - needs
+	     h() here in value="...". -->
+	<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" aria-describedby="helpBlock" value="<?php echo h($form_submit_button); ?>" />
     <span id="helpBlock" class="help-block"><?php echo $form_submit_button_help; ?></span>
 	<?php } else { ?>
-	<input type="submit" name="Submit" id="staff-submit" class="btn btn-primary" value="<?php echo $form_submit_button; ?>" disabled />
+	<input type="submit" name="Submit" id="staff-submit" class="btn btn-primary" value="<?php echo h($form_submit_button); ?>" disabled />
 	<span id="staff-update-button-enabled" class="help-block">Select "<?php echo $form_submit_button; ?>" <em>before</em> paging through records.</span>
 	<span id="staff-update-button-disabled" class="help-block">The "<?php echo $form_submit_button; ?>" button has been disabled since data is being saved successfully as it is being entered.</span>
 	<?php } ?>
@@ -905,7 +907,8 @@ if (($output_add_edit) && ($msg != 9)) {
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" value="<?php echo $form_submit_button; ?>" />
+			<!-- $form_submit_button can carry judgingLocName (purify()-only) - needs h() here. -->
+			<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" value="<?php echo h($form_submit_button); ?>" />
 		</div>
 	</div>
 </div>

@@ -169,7 +169,8 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 				$message = "<html>" . "\r\n";
 				$message .= "<body>" . "\r\n";
 
-				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>" . "\r\n";
+				// contestLogo is purify()-only (no sterilize()) - needs h() in src='...'.
+				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".h($base_url."user_images/".$_SESSION['contestLogo'])."' height='150'></p>" . "\r\n";
 
 				$message .= sprintf("<p>%s,</p>",$first_name) . "\r\n";
 				$message .= sprintf("<p>%s %s %s</p>",$pwd_email_reset_text_003,$_SESSION['contestName'],$pwd_email_reset_text_004) . "\r\n";

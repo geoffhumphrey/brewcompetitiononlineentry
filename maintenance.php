@@ -22,7 +22,8 @@ if (!MAINT) {
 }
 
 $competition_logo = "";
-if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" class=\"bcoem-comp-logo img-responsive hidden-print center-block\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
+// contestLogo is purify()-only (no sterilize()) - needs h() in src="...".
+if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $competition_logo = "<img src=\"".h($base_url."user_images/".$_SESSION['contestLogo'])."\" class=\"bcoem-comp-logo img-responsive hidden-print center-block\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
 ?>
 
 <!DOCTYPE html>

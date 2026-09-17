@@ -3,7 +3,7 @@
 ?>
 	<tr>
       <td width="10%" class="dataLabel">BJCP Judge ID:</td>
-      <td colspan="2" class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" /></td>
+      <td colspan="2" class="data"><input name="brewerJudgeID" id="brewerJudgeID" type="text" size="10" value="<?php if ($action == "edit") echo h($row_brewer['brewerJudgeID']); ?>" /></td>
 	</tr>
 	<tr>
       <td width="10%" class="dataLabel">Mead Judge Endorsement:</td>

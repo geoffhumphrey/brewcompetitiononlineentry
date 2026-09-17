@@ -322,11 +322,14 @@ if ($totalRows_brewer > 0) {
 		$entries = $entries_by_uid_p[$uid] ?? array();
 		$parts = array();
 		foreach ($entries as $row_judge_entries) {
+			// brewStyle is sanitized with purify() only (no sterilize()), so it's safe as
+			// text content (the link's visible label below) but NOT pre-escaped for an
+			// attribute - a literal " in a style name terminates title="..." early.
 			if ($_SESSION['style_set_no_numbering']) {
-				$parts[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewStyle']."</a>";
+				$parts[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".h($row_judge_entries['brewStyle'])." Entries\">".$row_judge_entries['brewStyle']."</a>";
 			}
 			else {
-				$parts[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory']."</a>";
+				$parts[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".h($row_judge_entries['brewStyle'])." Entries\">".$row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory']."</a>";
 			}
 		}
 		return rtrim(implode(", ", $parts), ", ");
@@ -395,11 +398,11 @@ if ($totalRows_brewer > 0) {
 				if ($_SESSION['userLevel'] == 0) {
 
 					if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['uid'],$brewer_db_table,"Are you sure you want to delete the participant account for ".$brewer_tooltip_display_name."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.",0,"Delete ".$brewer_tooltip_display_name."'s account.");
-					else $output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Silly, you cannot delete yourself, ".$_SESSION['brewerFirstName']."!\"></span>";
+					else $output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Silly, you cannot delete yourself, ".h($_SESSION['brewerFirstName'])."!\"></span>";
 
 				
 					if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link = build_action_link("fa-lock",$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."'s User Level");
-					else $output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".$_SESSION['brewerFirstName'].".\"></span>";
+					else $output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".h($_SESSION['brewerFirstName']).".\"></span>";
 
 					$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"admin","user","username","admin",$row_brewer['user_id'],"default","default",0,"Change ".$brewer_tooltip_display_name."'s email address");
 
@@ -989,22 +992,22 @@ if (($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] =
 </tr>
 <tr>
       <td class="dataLabel" width="5%">First Name:</td>
-      <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" size="32" maxlength="20"></td>
+      <td class="data" width="20%"><input type="text" id="brewerFirstName" name="brewerFirstName" value="<?php if ($action == "edit") echo h($row_brewer['brewerFirstName']); ?>" size="32" maxlength="20"></td>
       <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>
       <td class="dataLabel">Last Name:</td>
-      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerLastName" value="<?php if ($action == "edit") echo h($row_brewer['brewerLastName']); ?>" size="32"></td>
       <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>
       <td class="dataLabel">Street Address:</td>
-      <td class="data"><input type="text" name="brewerAddress" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerAddress" value="<?php if ($action == "edit") echo h($row_brewer['brewerAddress']); ?>" size="32"></td>
       <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>
       <td class="dataLabel">City:</td>
-      <td class="data"><input type="text" name="brewerCity" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" size="32"></td>
+      <td class="data"><input type="text" name="brewerCity" value="<?php if ($action == "edit") echo h($row_brewer['brewerCity']); ?>" size="32"></td>
       <td class="data"><span class="required">Required</span></td>
 </tr>
 <tr>

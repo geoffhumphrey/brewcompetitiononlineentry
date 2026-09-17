@@ -171,10 +171,12 @@ else include (INCLUDES.'load_cdn_libraries_public.inc.php');
     
     <!-- Open Graph Implementation -->
 <?php if (!empty($_SESSION['contestName'])) { ?>
-    <meta property="og:title" content="<?php echo $_SESSION['contestName']?>" />
+    <!-- contestName is purify()-only (no sterilize()) - needs h() in content="...". -->
+    <meta property="og:title" content="<?php echo h($_SESSION['contestName'])?>" />
 <?php } ?>
 <?php if (!empty($_SESSION['contestLogo'])) { ?>
-    <meta property="og:image" content="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>" />
+    <!-- contestLogo is purify()-only (no sterilize()) - needs h() in content="...". -->
+    <meta property="og:image" content="<?php echo h($base_url."user_images/".$_SESSION['contestLogo']); ?>" />
 <?php } ?>
     <meta property="og:url" content="<?php echo "http".((!empty($_SERVER['HTTPS'])) ? "s://" : "://").$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']; ?>" />
 

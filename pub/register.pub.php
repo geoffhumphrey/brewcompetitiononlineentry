@@ -448,7 +448,7 @@ if ($go == "default") {  ?>
     <div class="mb-3 row">
         <label for="brewerBreweryName" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><i class="fa fa-star me-1"></i><strong><?php echo $label_organization." ".$label_name; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" data-error="<?php echo $brewer_text_032; ?>" required autofocus>
+            <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerBreweryName']); ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" data-error="<?php echo $brewer_text_032; ?>" required autofocus>
             <div class="help-block mb-1 invalid-feedback text-danger"></div>
             <div class="help-block"><?php echo $register_text_045; ?></div>
         </div>
@@ -456,7 +456,7 @@ if ($go == "default") {  ?>
 	<div class="mb-3 row">
 	    <label for="brewerBreweryTTB" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_organization." ".$label_ttb; ?></strong></label>
 	    <div class="col-xs-12 col-sm-9 col-lg-10">
-	        <input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if ($action == "edit") echo $brewerBreweryTTB; ?>" placeholder="">
+	        <input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if ($action == "edit") echo h($brewerBreweryTTB); ?>" placeholder="">
 	    </div>
 	</div>
     <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { ?>

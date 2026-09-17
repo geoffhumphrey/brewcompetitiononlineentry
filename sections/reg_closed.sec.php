@@ -77,7 +77,9 @@ else {
 				$location_tooltip = $entry_info_text_058;
 			}
 
-			if ($row_judging['judgingLocation'] != "") $page_info2 .= " <a href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
+			// judgingLocName/judgingLocation are purify()-only (no sterilize()) - $location_link/
+			// $location_tooltip need h() here.
+			if ($row_judging['judgingLocation'] != "") $page_info2 .= " <a href=\"".h($location_link)."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
 
 		}
 

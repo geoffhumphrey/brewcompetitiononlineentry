@@ -216,8 +216,11 @@ else {
 			$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
 			$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n";
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n",$_SESSION['prefsPaypalAccount']);
-			if ($_SESSION['prefsProEdition'] == 1) $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s - %s - %s\">\n",$_SESSION['brewerBreweryName'],remove_accents($_SESSION['contestName']),$paypal_response_text_009);
-			else $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s - %s\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],remove_accents($_SESSION['contestName']),$paypal_response_text_009);
+			// brewerBreweryName, brewerLastName, brewerFirstName, and contestName are all
+			// purify()-only (no sterilize()) - each needs h() here, or a literal " in any of
+			// them breaks this hidden field's value="...".
+			if ($_SESSION['prefsProEdition'] == 1) $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s - %s - %s\">\n",h($_SESSION['brewerBreweryName']),h(remove_accents($_SESSION['contestName'])),$paypal_response_text_009);
+			else $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s - %s\">\n",h($_SESSION['brewerLastName']),h($_SESSION['brewerFirstName']),h(remove_accents($_SESSION['contestName'])),$paypal_response_text_009);
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"amount\" value=\"%s\">\n",$payment_amount);
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"currency_code\" value=\"%s\">\n",$currency_code);
 			$page_info4 .= "<input type=\"hidden\" name=\"button_subtype\" value=\"services\">\n";

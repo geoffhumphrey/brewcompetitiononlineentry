@@ -257,7 +257,9 @@ else {
 				$location_tooltip = $entry_info_text_058;
 			}
 
-			if ($row_judging['judgingLocation'] != "") $page_info7 .= " <a href=\"".$location_link."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
+			// judgingLocName/judgingLocation are purify()-only (no sterilize()) - $location_link/
+			// $location_tooltip are built from them, so need h() here in href=/title=.
+			if ($row_judging['judgingLocation'] != "") $page_info7 .= " <a href=\"".h($location_link)."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
 
 		}
 
@@ -464,7 +466,9 @@ if ($show_entries) {
 		foreach ($rows_dropoff as $row_dropoff) {
 
 			$page_info11 .= "<p>";
-			if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
+			// dropLocationName/dropLocationWebsite are purify()-only (no sterilize()) - need h()
+			// in href=/title=; the trailing <strong>%s</strong> use is text content, no h() needed.
+			if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($row_dropoff['dropLocationName'])." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",h($row_dropoff['dropLocationWebsite']),$label_website,$row_dropoff['dropLocationName']);
 			else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 			$page_info11 .= "<br />";
 			
@@ -474,11 +478,18 @@ if ($show_entries) {
 				$address = str_replace(' ', '+', $address);
 				$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
 
-			$page_info11 .= sprintf("%s <a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],$location_link,$entry_info_text_044." ".$row_dropoff['dropLocationName']);
+			// dropLocation/dropLocationName are purify()-only (no sterilize()) - $location_link
+			// (built from dropLocation) and the title text need h(); the leading %s is text content.
+			$page_info11 .= sprintf("%s <a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],h($location_link),h($entry_info_text_044." ".$row_dropoff['dropLocationName']));
 			}
 
 			else {
-				$page_info11 .= sprintf("%s <a href=\"#\" data-toggle=\"modal\" data-target=\"#dropoff-loc".$row_dropoff['id']."\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],$row_dropoff['dropLocation'],$entry_info_text_044." ".$row_dropoff['dropLocationName']);
+				// Note: this sprintf format string only has 2 "%s" placeholders, so the 3rd arg
+				// (dropLocationName) is never actually used - the title attribute below is filled
+				// by the 2nd arg, $row_dropoff['dropLocation'] (a separate, pre-existing bug in
+				// which value is used - not fixed here, out of scope for the escaping audit; only
+				// h()-escaping the value that actually lands in the attribute).
+				$page_info11 .= sprintf("%s <a href=\"#\" data-toggle=\"modal\" data-target=\"#dropoff-loc".$row_dropoff['id']."\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],h($row_dropoff['dropLocation']),$entry_info_text_044." ".$row_dropoff['dropLocationName']);
 			}
 
 			$page_info11 .= "<br />";
@@ -507,7 +518,8 @@ if ($show_entries) {
 				$page_info11 .= "</div>";
 				$page_info11 .= "<div class=\"modal-footer\">";
 				$page_info11 .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">%s</button>",$label_cancel);
-				$page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" class=\"hide-loader btn btn-success\">%s</a>",$location_link,$label_understand);
+				// $location_link is built from dropLocation, purify()-only - needs h() in href=.
+				$page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" class=\"hide-loader btn btn-success\">%s</a>",h($location_link),$label_understand);
 				$page_info11 .= "</div>";
 				$page_info11 .= "</div>";
 				$page_info11 .= "</div>";
@@ -566,7 +578,8 @@ if (isset($_SESSION['contestAwardsLocName'])) {
 		$address = str_replace(' ', '+', $address);
 		$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
 
-		$page_info14 .= sprintf("<br />%s <a class=\"hide-loader\" href=\"".$location_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$_SESSION['contestAwardsLocName']." \" target=\"_blank\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$_SESSION['contestAwardsLocation']);
+		// contestAwardsLocName is purify()-only (no sterilize()) - needs h() in title="...".
+	$page_info14 .= sprintf("<br />%s <a class=\"hide-loader\" href=\"".$location_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".h($_SESSION['contestAwardsLocName'])." \" target=\"_blank\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$_SESSION['contestAwardsLocation']);
 
 	}
 

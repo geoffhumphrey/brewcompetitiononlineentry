@@ -1589,7 +1589,10 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="prefsBestBrewerTitle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Title</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">        
-            <input class="form-control" id="prefsBestBrewerTitle" name="prefsBestBrewerTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestBrewerTitle']; ?>" data-error="A Best Brewer title is required." placeholder="">
+            <!-- prefsBestBrewerTitle is sanitized with purify() only (no sterilize()), so it's
+                 safe as text content but NOT pre-escaped for an attribute - a literal " in a
+                 saved title terminates this value="..." early and blanks the field. -->
+            <input class="form-control" id="prefsBestBrewerTitle" name="prefsBestBrewerTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo h($row_prefs['prefsBestBrewerTitle']); ?>" data-error="A Best Brewer title is required." placeholder="">
         <div class="help-block with-errors"></div>
         <div class="help-block">Enter the title for the Best Brewer award (e.g., Heavy Medal, Ninkasi Award).</div>
     </div>
@@ -1609,7 +1612,10 @@ $(document).ready(function(){
     <div class="form-group">
         <label for="prefsBestClubTitle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Club Title</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">         
-            <input class="form-control" id="prefsBestClubTitle" name="prefsBestClubTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestClubTitle']; ?>" data-error="A Best Club title is required." placeholder="">
+            <!-- prefsBestClubTitle is sanitized with purify() only (no sterilize()), so it's
+                 safe as text content but NOT pre-escaped for an attribute - see the matching
+                 comment on prefsBestBrewerTitle above. -->
+            <input class="form-control" id="prefsBestClubTitle" name="prefsBestClubTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo h($row_prefs['prefsBestClubTitle']); ?>" data-error="A Best Club title is required." placeholder="">
             <div class="help-block with-errors"></div>
             <div class="help-block">Enter the title for the Best Club award.</div>
         </div>

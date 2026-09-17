@@ -1852,13 +1852,16 @@ function style_convert($number,$type,$base_url="",$archive="") {
 			</tr>
 			</table>";
 
+			// brewStyle is purify()-only (no sterilize()) - safe as text content ($modal_title
+			// below, and the link text in each $style_convert_1 entry) but needs h() in the
+			// title="..." attributes, or a literal " breaks the tag.
 			if ($archive == "v3-public") {
 				if (style_set_no_numbering($style_set)) {
-					$style_convert_1[] = "\n<span title=\"".$label_info.": ".$row_style['brewStyle']."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$row_style['brewStyle']."</a></span>";
+					$style_convert_1[] = "\n<span title=\"".$label_info.": ".h($row_style['brewStyle'])."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$row_style['brewStyle']."</a></span>";
 					$modal_title = $styleSet.": ".$row_style['brewStyle'];
 				}
 				else {
-					$style_convert_1[] = "\n<span title=\"".$row_style['brewStyle']."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$trimmed.$row_style['brewStyleNum']."</a></span>";
+					$style_convert_1[] = "\n<span title=\"".h($row_style['brewStyle'])."\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\"><a class=\"hide-loader\" data-bs-target=\"#s-".$value."\" data-bs-toggle=\"modal\" href=\"#\" >".$trimmed.$row_style['brewStyleNum']."</a></span>";
 					$modal_title = $styleSet." ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle'];
 				}
 				$style_modal[] = "
@@ -1880,7 +1883,8 @@ function style_convert($number,$type,$base_url="",$archive="") {
 			}
 
 			else {
-				$style_convert_1[] = "<a href=\"#\" data-target=\"#s-".$value."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$value."</a>";
+				// brewStyle is purify()-only (no sterilize()) - needs h() in this title= attribute.
+				$style_convert_1[] = "<a href=\"#\" data-target=\"#s-".$value."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".h($row_style['brewStyle'])."\">".$value."</a>";
 				$style_modal[] = "
 				<!-- Modal -->
 				<div class=\"modal fade\" id=\"s-".$value."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$value."Label\">
@@ -3687,13 +3691,15 @@ function judge_entries($uid,$method) {
 	if ($totalRows_judge_entries > 0) {
 		foreach ($rows_judge_entries as $row_judge_entries) {
 
+			// brewStyle is purify()-only (no sterilize()) - safe as the link's text content
+			// but needs h() in the title="..." attribute, or a literal " breaks the tag.
 			if ($_SESSION['style_set_no_numbering']) {
-				if ($method == 1) $entries[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewStyle']."</a>";
+				if ($method == 1) $entries[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".h($row_judge_entries['brewStyle'])." Entries\">".$row_judge_entries['brewStyle']."</a>";
 				else $entries[] = $row_judge_entries['brewStyle'];
 			}
 
 			else {
-				if ($method == 1) $entries[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".$row_judge_entries['brewStyle']." Entries\">".$row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory']."</a>";
+				if ($method == 1) $entries[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_judge_entries['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the ".h($row_judge_entries['brewStyle'])." Entries\">".$row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory']."</a>";
 				else $entries[] = $row_judge_entries['brewCategory'].$row_judge_entries['brewSubCategory'];
 			}
 

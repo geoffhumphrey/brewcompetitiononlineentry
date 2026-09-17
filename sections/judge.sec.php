@@ -22,15 +22,17 @@ include (DB.'styles.db.php');
 <input type="hidden" name="register" value="Y" />
 <input type="hidden" name="uid" value="<?php echo $row_brewer['uid']; ?>">
 <input type="hidden" name="brewerEmail" value="<?php echo h($_SESSION['loginUsername']); ?>" />
-<input type="hidden" name="brewerFirstName" value="<?php echo $row_brewer['brewerFirstName']; ?>">
-<input type="hidden" name="brewerLastName" value="<?php echo $row_brewer['brewerLastName']; ?>">
-<input type="hidden" name="brewerAddress" value="<?php echo $row_brewer['brewerAddress']; ?>">
-<input type="hidden" name="brewerCity" value="<?php echo $row_brewer['brewerCity']; ?>">
+<!-- brewerFirstName/brewerLastName/brewerAddress/brewerCity are purify()-only (no sterilize())
+     - need h() here, or a literal " breaks the hidden field's value="...". -->
+<input type="hidden" name="brewerFirstName" value="<?php echo h($row_brewer['brewerFirstName']); ?>">
+<input type="hidden" name="brewerLastName" value="<?php echo h($row_brewer['brewerLastName']); ?>">
+<input type="hidden" name="brewerAddress" value="<?php echo h($row_brewer['brewerAddress']); ?>">
+<input type="hidden" name="brewerCity" value="<?php echo h($row_brewer['brewerCity']); ?>">
 <input type="hidden" name="brewerState" value="<?php echo $row_brewer['brewerState']; ?>">
 <input type="hidden" name="brewerZip" value="<?php echo $row_brewer['brewerZip']; ?>">
 <input type="hidden" name="brewerPhone1" value="<?php echo $row_brewer['brewerPhone1']; ?>">
 <input type="hidden" name="brewerPhone2" value="<?php echo $row_brewer['brewerPhone2']; ?>"> 
-<input type="hidden" name="brewerClubs" value="<?php echo $row_brewer['brewerClubs']; ?>">
+<input type="hidden" name="brewerClubs" value="<?php echo h($row_brewer['brewerClubs']); ?>">
 <input type="hidden" name="brewerJudge"  value="<?php echo $row_brewer['brewerJudge']; ?>" />
 <input type="hidden" name="brewerSteward"  value="<?php echo $row_brewer['brewerSteward']; ?>" />
 <input type="hidden" name="brewerJudgeLocation"  value="<?php echo $row_brewer['brewerJudgeLocation']; ?>" />
@@ -38,7 +40,7 @@ include (DB.'styles.db.php');
 <input type="hidden" name="brewerAHA" value="<?php echo $row_brewer['brewerAHA']; ?>" />
 <input type="hidden" name="brewerMHP" value="<?php echo $row_brewer['brewerMHP']; ?>" />
 <?php if ($go != "judge") { ?>
-<input type="hidden" name="brewerJudgeID"  value="<?php echo $row_brewer['brewerJudgeID']; ?>" />
+<input type="hidden" name="brewerJudgeID"  value="<?php echo h($row_brewer['brewerJudgeID']); ?>" />
 <input type="hidden" name="brewerJudgeRank"  value="<?php echo $row_brewer['brewerJudgeRank']; ?>" />
 <?php } ?>
 <input type="hidden" name="brewerCountry"  value="<?php echo $row_brewer['brewerCountry']; ?>" />

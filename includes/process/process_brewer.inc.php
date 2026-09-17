@@ -831,7 +831,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$message = "<html>" . "\r\n";
 			$message .= "<body>" . "\r\n";
 
-			if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+			// contestLogo is purify()-only (no sterilize()) - needs h() in src='...'.
+			if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".h($base_url."user_images/".$_SESSION['contestLogo'])."' height='150'></p>";
 
 			$message .= sprintf("<p>%s</p>",$register_text_047);
 

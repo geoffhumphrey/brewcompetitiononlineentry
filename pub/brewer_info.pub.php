@@ -831,10 +831,10 @@ if (($judge_no_availability) || ($steward_no_availability)) {
       		<input type="hidden" name="brewerJudge" value="<?php echo $row_brewer['brewerJudge']; ?>">
       		<input type="hidden" name="brewerSteward" value="N">
       		<input type="hidden" name="brewerEmail" value="<?php echo $row_brewer['brewerEmail']; ?>">
-      		<input type="hidden" name="brewerFirstName" value="<?php echo $row_brewer['brewerFirstName']; ?>">
-      		<input type="hidden" name="brewerLastName" value="<?php echo $row_brewer['brewerLastName']; ?>">
-      		<input type="hidden" name="brewerAddress" value="<?php echo $row_brewer['brewerAddress']; ?>">
-      		<input type="hidden" name="brewerCity" value="<?php echo $row_brewer['brewerCity']; ?>">
+      		<input type="hidden" name="brewerFirstName" value="<?php echo h($row_brewer['brewerFirstName']); ?>">
+      		<input type="hidden" name="brewerLastName" value="<?php echo h($row_brewer['brewerLastName']); ?>">
+      		<input type="hidden" name="brewerAddress" value="<?php echo h($row_brewer['brewerAddress']); ?>">
+      		<input type="hidden" name="brewerCity" value="<?php echo h($row_brewer['brewerCity']); ?>">
       		<button type="submit" class="btn btn-block btn-dark me-2"><?php echo $label_button_no_steward; ?></button>
 	    </form>
       	<?php } ?>
@@ -846,10 +846,10 @@ if (($judge_no_availability) || ($steward_no_availability)) {
       		<input type="hidden" name="brewerJudge" value="N">
       		<input type="hidden" name="brewerSteward" value="<?php echo $row_brewer['brewerSteward']; ?>">
       		<input type="hidden" name="brewerEmail" value="<?php echo $row_brewer['brewerEmail']; ?>">
-      		<input type="hidden" name="brewerFirstName" value="<?php echo $row_brewer['brewerFirstName']; ?>">
-      		<input type="hidden" name="brewerLastName" value="<?php echo $row_brewer['brewerLastName']; ?>">
-      		<input type="hidden" name="brewerAddress" value="<?php echo $row_brewer['brewerAddress']; ?>">
-      		<input type="hidden" name="brewerCity" value="<?php echo $row_brewer['brewerCity']; ?>">
+      		<input type="hidden" name="brewerFirstName" value="<?php echo h($row_brewer['brewerFirstName']); ?>">
+      		<input type="hidden" name="brewerLastName" value="<?php echo h($row_brewer['brewerLastName']); ?>">
+      		<input type="hidden" name="brewerAddress" value="<?php echo h($row_brewer['brewerAddress']); ?>">
+      		<input type="hidden" name="brewerCity" value="<?php echo h($row_brewer['brewerCity']); ?>">
       		<button type="submit" class="btn btn-block btn-dark me-2"><?php echo $label_button_no_judge; ?></button>
 	    </form>
       	<?php } ?>

@@ -451,8 +451,8 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
 	<input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <?php if ($_SESSION['userLevel'] > 1) { ?>
 	<input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>">
-	<input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>">
-	<input type="hidden" name="brewBrewerLastName" value="<?php echo $_SESSION['brewerLastName']; ?>">
+	<input type="hidden" name="brewBrewerFirstName" value="<?php echo h($_SESSION['brewerFirstName']); ?>">
+	<input type="hidden" name="brewBrewerLastName" value="<?php echo h($_SESSION['brewerLastName']); ?>">
 <?php } ?>
 <?php if ($action == "edit") { ?>
 	<input type="hidden" name="brewEditStyle" value="<?php echo style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_system_separator'],999); ?>">
