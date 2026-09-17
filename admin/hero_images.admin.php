@@ -208,15 +208,19 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
 <div id="hero_images_admin" class="admin-section">
 
     <?php if (!empty($save_message)): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="alert alert-success alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
         <?php echo $save_message; ?>
     </div>
     <?php endif; ?>
 
     <?php if (!empty($save_error)): ?>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
         <?php echo $save_error; ?>
     </div>
     <?php endif; ?>
@@ -244,21 +248,21 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
         
     </div>
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h4 class="card-title mb-0"><?php echo isset($lang['hero_images_text_002']) ? $lang['hero_images_text_002'] : "Upload New Banner Image"; ?></h4>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title"><?php echo isset($lang['hero_images_text_002']) ? $lang['hero_images_text_002'] : "Upload New Banner Image"; ?></h4>
         </div>
-        <div class="card-body">
-            <form method="POST" action="<?php echo $request_uri; ?>" enctype="multipart/form-data" class="d-flex align-items-start flex-wrap gap-3">
+        <div class="panel-body">
+            <form method="POST" action="<?php echo $request_uri; ?>" enctype="multipart/form-data" class="form-inline">
                 <input type="hidden" name="section" value="hero_images">
                 <input type="hidden" name="action" value="upload">
                 <input type="hidden" name="user_session_token" value="<?php echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
 
-                <p class="w-100 mb-2">Step 1: choose a category.</p>
+                <p style="margin-bottom: 12px;">Step 1: choose a category.</p>
 
-                <div class="mb-2">
-                    <label for="hero_image_category" class="visually-hidden"><?php echo isset($lang['hero_images_text_007']) ? $lang['hero_images_text_007'] : "Category"; ?></label>
-                    <select class="form-select" id="hero_image_category" name="hero_image_category" required>
+                <div class="form-group" style="margin-right: 10px; margin-bottom: 10px;">
+                    <label for="hero_image_category" class="sr-only"><?php echo isset($lang['hero_images_text_007']) ? $lang['hero_images_text_007'] : "Category"; ?></label>
+                    <select class="form-control" id="hero_image_category" name="hero_image_category" required>
                         <option value=""><?php echo isset($lang['hero_images_text_008']) ? $lang['hero_images_text_008'] : "Select a category..."; ?></option>
                         <option value="0"><?php echo isset($lang['admin_hero_category_misc']) ? $lang['admin_hero_category_misc'] : "Miscellaneous"; ?></option>
                         <option value="1"><?php echo isset($lang['admin_hero_category_beer']) ? $lang['admin_hero_category_beer'] : "Beer"; ?></option>
@@ -267,12 +271,13 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                     </select>
                 </div>
 
-                <div id="hero_image_file_group" class="mb-2">
-                    <p class="w-100 mb-2">Step 2: choose the image file and upload it.</p>
-                    <input type="file" class="form-control" id="hero_image_file" name="hero_image_file" accept=".jpg,.jpeg,.png,.gif,.webp" required>
+                <div id="hero_image_file_group" class="fileinput fileinput-new" data-provides="fileinput">
+                    <p>Step 2: choose the image file and upload it.</p>
+                    <span class="btn btn-default btn-file"><span><?php echo isset($lang['hero_images_text_004']) ? $lang['hero_images_text_004'] : "Choose Image File"; ?></span><input type="file" id="hero_image_file" name="hero_image_file" accept=".jpg,.jpeg,.png,.gif,.webp" required /></span>
+                    <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
                 </div>
 
-                <button type="submit" id="hero_image_upload_button" class="btn btn-success mb-2" style="display:none;" disabled>
+                <button type="submit" id="hero_image_upload_button" class="btn btn-success" style="margin-bottom: 10px; display:none;" disabled>
                     <i class="fa fa-sm fa-fw fa-upload"></i> <?php echo isset($lang['hero_images_text_012']) ? $lang['hero_images_text_012'] : "Upload Image"; ?>
                 </button>
             </form>
@@ -314,15 +319,15 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
 
         foreach ($category_blocks as $category => $meta) {
         ?>
-        <div class="card mb-3">
-            <div class="card-header">
+        <div class="panel panel-default">
+            <div class="panel-heading">
                 <div class="hero-panel-heading-row">
                     <div>
-                        <h4 class="card-title mb-0"><?php echo $meta['title']; ?><em style="font-size: .75em; color: #666; margin-left: 15px;"><?php echo $meta['help']; ?></em></h4>
-
+                        <h4 class="panel-title"><?php echo $meta['title']; ?><em style="font-size: .75em; color: #666; margin-left: 15px;"><?php echo $meta['help']; ?></em></h4>   
+                                      
                     </div>
                     <?php if (!empty($all_images[$category])): ?>
-                    <button type="button" class="btn btn-dark btn-sm hero-toggle-all-button"
+                    <button type="button" class="btn btn-dark btn-xs hero-toggle-all-button"
                         data-hero-category="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>"
                         data-label-select="<?php echo htmlspecialchars(isset($lang['admin_hero_select_all']) ? $lang['admin_hero_select_all'] : "Select All", ENT_QUOTES, 'UTF-8'); ?>"
                         data-label-deselect="<?php echo htmlspecialchars(isset($lang['admin_hero_deselect_all']) ? $lang['admin_hero_deselect_all'] : "Deselect All", ENT_QUOTES, 'UTF-8'); ?>">
@@ -331,7 +336,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="panel-body">
                 <?php if (empty($all_images[$category])): ?>
                     <p class="text-muted"><?php echo isset($lang['admin_hero_no_images']) ? $lang['admin_hero_no_images'] : "No images found"; ?></p>
                 <?php else: ?>
@@ -342,9 +347,9 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                             $is_bundled = is_bundled_hero_image($image);
                         ?>
                         <div class="hero-image-item">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="<?php echo $checkbox_name; ?>" value="1" id="<?php echo $checkbox_name; ?>" <?php echo ($is_checked) ? 'checked' : ''; ?>>
-                                <label class="form-check-label" for="<?php echo $checkbox_name; ?>">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="<?php echo $checkbox_name; ?>" value="1" <?php echo ($is_checked) ? 'checked' : ''; ?>>
                                     <span class="image-name small"><?php echo htmlspecialchars($image); ?></span>
                                 </label>
                             </div>
@@ -352,7 +357,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                             <?php if ($is_bundled): ?>
                             <span class="text-muted hero-image-builtin-label"><span class="fa fa-sm fa-fw fa-lock"></span> Built-in</span>
                             <?php else: ?>
-                            <button type="button" class="btn btn-link btn-sm hero-image-delete-button" data-hero-image="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>">
+                            <button type="button" class="btn btn-link btn-xs hero-image-delete-button" data-hero-image="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>">
                                 <span class="fa fa-sm fa-fw fa-trash"></span> <?php echo isset($lang['delete']) ? $lang['delete'] : "Delete"; ?>
                             </button>
                             <?php endif; ?>
@@ -369,7 +374,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
                 <button type="submit" class="btn btn-primary">
                     <i class="fa fa-sm fa-fw fa-save"></i></i> <?php echo isset($lang['admin_hero_save_button']) ? $lang['admin_hero_save_button'] : "Save Changes"; ?>
                 </button>
-                <button type="button" class="btn btn-secondary" onclick="location.reload();">
+                <button type="button" class="btn btn-default" onclick="location.reload();">
                     <i class="fa fa-sm fa-fw fa-rotate-left"></i> <?php echo isset($lang['cancel']) ? $lang['cancel'] : "Cancel"; ?>
                 </button>
             </div>
@@ -389,7 +394,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
             <h4 id="hero_image_delete_modal_title">Delete image?</h4>
             <p id="hero_image_delete_modal_body">This action cannot be undone.</p>
             <div class="hero-delete-modal__actions">
-                <button type="button" class="btn btn-secondary btn-sm" id="hero_image_delete_cancel">Cancel</button>
+                <button type="button" class="btn btn-default btn-sm" id="hero_image_delete_cancel">Cancel</button>
                 <button type="button" class="btn btn-danger btn-sm" id="hero_image_delete_confirm">Delete</button>
             </div>
         </div>
@@ -412,7 +417,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     background: #f9f9f9;
 }
 
-#hero_images_admin .hero-image-item .form-check {
+#hero_images_admin .hero-image-item .checkbox {
     margin: 0 0 10px 0;
 }
 
@@ -487,7 +492,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     margin-top: 18px;
 }
 
-#hero_images_admin .card-header small {
+#hero_images_admin .panel-heading small {
     display: block;
     font-weight: normal;
     color: #999;
@@ -502,7 +507,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     flex-wrap: wrap;
 }
 
-#hero_images_admin .hero-panel-heading-row .card-title {
+#hero_images_admin .hero-panel-heading-row .panel-title {
     margin: 0;
 }
 

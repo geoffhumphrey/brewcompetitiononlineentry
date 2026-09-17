@@ -1090,6 +1090,10 @@ if ($totalRows_table_assignments > 0) {
 		$mini_bos_mismatch_alert .= "</div>";
 	}
 
+	// Build display datatable if judge has evaluated entries 
+	// at any judging table besides their assigned ones (on-the-fly)
+	// if (!$admin) include (EVALS.'judging_not_assigned.eval.php');
+
 	$top_alert = "";
 
 	$two_to_end_prefs = ($row_judging_prefs['jPrefsJudgingClosed'] - 172800);

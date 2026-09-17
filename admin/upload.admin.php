@@ -13,8 +13,9 @@ if ($action == "html") {
 <p class="bcoem-admin-element">Acceptable file types are .jpg, .jpeg, .png, .svg, .webp, or .gif. Maximum file size is <?php if (HOSTED) echo "4"; else echo "10"; ?> MB.</p>
 <form id="single-upload-image-form" method="post" action="<?php echo $base_url; ?>handle.php?action=html" ENCTYPE="multipart/form-data">
 <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
-<div class="mb-3">
-    <input type="file" class="form-control" name="file">
+<div class="fileinput fileinput-new" data-provides="fileinput">
+    <span class="btn btn-default btn-file"><span>Choose Image File</span><input type="file" name="file" /></span>
+    <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
 </div>
 	<p><input type="submit" class="btn btn-primary" value="Upload Logo Image"></p>
 </form>
@@ -67,6 +68,23 @@ $(document).ready(function() {
 			} );
 		} );
 
+		$("a.user_images").fancybox(
+			{
+			nextClick   : true,
+			nextEffect  : 'elastic',
+			prevEffect  : 'elastic',
+			padding     : 20,
+			helpers:  {
+					title : {
+						type : 'inside'
+					},
+					overlay : {
+						showEarly : false
+					}
+				}
+			}
+
+		);
 	</script>
 <?php
 $upload_dir = (USER_IMAGES);
