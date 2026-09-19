@@ -119,6 +119,11 @@ if ($totalRows_log > 0) {
 		$entry_confirmed = FALSE;
 		if ($row_log['brewConfirmed'] == 1) $entry_confirmed = TRUE;
 
+		// Data-completeness flag, not a judging-eligibility one - e.g. an entry submitted
+		// before BJCP2026 made mead Sweetness required. Shared with pub/brewer_entries.pub.php,
+		// eval/scoresheet.eval.php, and pub/eval_scoresheet.pub.php via one helper function.
+		$missing_mead_info = entry_missing_required_mead_info($row_log, $_SESSION['prefsStyleSet']);
+
 		$entry_allergens = FALSE;
 		if ((isset($row_log['brewPossAllergens'])) && (!empty($row_log['brewPossAllergens']))) $entry_allergens = TRUE;
 
@@ -300,7 +305,12 @@ if ($totalRows_log > 0) {
 
 			else $entry_style_display .= "<span class=\"text-danger\"><strong>Style NOT Specified</strong></span>";
 			if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) $entry_style_display .= "</a>";
-		
+
+		}
+
+		if (!empty($missing_mead_info)) {
+			$missing_mead_labels = mead_missing_label_list($missing_mead_info);
+			$entry_style_display .= " <span class=\"label label-danger\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Missing required ".h($missing_mead_labels)." - most likely submitted before this style required it.\">Missing ".h($missing_mead_labels)."</span>";
 		}
 
 		// Brewer Info

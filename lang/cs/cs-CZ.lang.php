@@ -2196,6 +2196,8 @@ $brewer_text_058 = "Administrátoři právě organizují přiřazení stolů. Pr
 $default_page_text_024 = "Degustační listy budou k dispozici k prohlížení nebo stažení počínaje";
 $default_page_text_025 = "Degustační listy jsou nyní k dispozici k prohlížení nebo stažení.";
 $label_scoresheets_available = "Degustační listy k dispozici ke stažení";
+$label_mead_info_missing = "Chybí %s - při odeslání nebylo povinné";
+$label_mead_info_not_recorded = "Nezaznamenáno přihlašovatelem";
 
 /**
  * ----------------------------------------------------------------------------------

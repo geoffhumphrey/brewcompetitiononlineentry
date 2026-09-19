@@ -352,9 +352,11 @@ if (($staged_report !== null) && (empty($staged_report['meta_errors']))) {
 <?php } ?>
 <?php if (!$staged_report_confirmable) { ?>
 <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#upload-style-set" aria-expanded="false" aria-controls="upload-style-set">Import a Style Set</button>
+<p class="alert alert-info" style="margin-top: 15px;"><i class="fa fa-lg fa-fw fa-info-circle"></i> When importing, acceptable file types are <code>.json</code> or <code>.csv</code>. Choosing a CSV (Comma Separated Value) file will reveal the additional fields that the file type requires. JSON (Javascript Object Notation) files are required to have this information within the file itself. Maximum file size is 5 MB.</p>
+<p class="well" style="margin-top: 15px;"><i class="fa fa-lg fa-fw fa-download"></i> Download <a class="hide-loader" href="https://info.brewingcompetitions.com/00_downloads/import-style-set-templates.zip" target="_blank">JSON/CSV starter templates</a> (zip archive) - be sure to read the information in the JSON_CSV_File_Preparation_Instructions.txt file prior to attempting an import.</p>
 <div style="margin-top:15px;" class="collapse" id="upload-style-set">
     <h3>Import a Style Set</h3>
-    <p class="bcoem-admin-element">Upload a self-contained style set (JSON or CSV) instead of having a developer hand-write a migration. Once imported, the set appears in the Style Set dropdown on Site Preferences like any built-in set.</p>
+    <p class="bcoem-admin-element">Upload a self-contained style set (JSON or CSV) instead of waiting for a developer to hand-write a migration for the app core. Once imported, the set appears in the Style Set dropdown on Site Preferences like any built-in set.</p>
     <form class="form-horizontal hide-loader-form-submit" data-toggle="validator" role="form"  method="post" action="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles_import" enctype="multipart/form-data" id="styles-import-form" novalidate>
     <input type="hidden" name="user_session_token" value="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
     <input type="hidden" name="styles_import_upload" value="1">
@@ -364,10 +366,6 @@ if (($staged_report !== null) && (empty($staged_report['meta_errors']))) {
             <div class="fileinput fileinput-new" data-provides="fileinput">
                 <span class="btn btn-default btn-file"><span>Choose JSON or CSV File</span><input type="file" name="styles_import_file" id="styles_import_file" accept=".json,.csv" required onchange="styles_import_toggle_csv_fields(this);" /></span>
                 <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
-            </div>
-            <div class="help-block">
-                <p>Acceptable file types are <code>.json</code> or <code>.csv</code>. Maximum file size is 5 MB. Choosing a .csv file will reveal the additional fields below that CSV imports require (JSON files should already carry this information within the file itself).</p>
-                <p>Download <a class="hide-loader" href="https://info.brewingcompetitions.com/00_downloads/import-style-set-templates.zip" target="_blank">JSON/CSV templates</a> (zip archive).</p>
             </div>
         </div>
     </div>
@@ -457,7 +455,7 @@ if (($staged_report !== null) && (empty($staged_report['meta_errors']))) {
     $invalid_count = 0;
     foreach ($staged_report['rows'] as $r) { if ($r['valid']) $valid_count++; else $invalid_count++; }
 ?>
-<p>Scroll through to view the imported styles. Select individual styles to import, then select the Confirm or Abort buttons at the bottom of the list.</p>
+<p class="alert alert-info" style="margin-bottom: 15px;"><i class="fa fa-lg fa-fw fa-info-circle"></i> Scroll through to view the imported styles. Select or deselect individual styles to import, then select the Confirm or Abort buttons at the bottom of the list.</p>
 <p><?php echo $valid_count; ?> row(s) valid, <?php echo $invalid_count; ?> row(s) with errors. Rows with errors will not be imported unless fixed and re-uploaded.</p>
 <?php if ($valid_count > 0) { ?>
 <form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=styles_import&amp;action=styles_import">

@@ -2261,6 +2261,8 @@ $brewer_text_058 = "Admins are currently sorting out table assignments. Please c
 $default_page_text_024 = "Scoresheets will be available for viewing or download on or after";
 $default_page_text_025 = "Scoresheets are now available to view or download.";
 $label_scoresheets_available = "Scoresheets Available for Download";
+$label_mead_info_missing = "Missing %s - submitted before required";
+$label_mead_info_not_recorded = "Not recorded by entrant";
 
 /**
  * ------------------------------------------

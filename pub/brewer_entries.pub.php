@@ -245,6 +245,11 @@ if ($totalRows_log > 0) {
 		if ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "") && ($action != "print")) $entry_tr_style = "warning";
 		if ((is_array($entries_unconfirmed)) && (in_array($row_log['id'],$entries_unconfirmed))) $entry_tr_style = "warning";
 
+		// Data-completeness flag, not a judging-eligibility one - e.g. an entry submitted
+		// before BJCP2026 made mead Sweetness required. Shared with admin/entries.admin.php,
+		// eval/scoresheet.eval.php, and pub/eval_scoresheet.pub.php via one helper function.
+		$missing_mead_info = entry_missing_required_mead_info($row_log, $_SESSION['prefsStyleSet']);
+
 		$entry_output .= "<tr class=\"bg-".$entry_tr_style."\">";
 		$entry_output .= "<td class=\"\">";
 		$entry_output .= $entry_number;
@@ -395,6 +400,12 @@ if ($totalRows_log > 0) {
 		if (!empty($allergen_info)) {
 			$entry_output .= "<div style=\"padding: .6em\" class=\"badge text-bg-danger fw-semibold lh-sm text-wrap\">";
 			$entry_output .= $allergen_info;
+	    	$entry_output .= "</div>";
+		}
+
+		if (!empty($missing_mead_info)) {
+			$entry_output .= "<div style=\"padding: .6em\" class=\"mt-1 badge text-bg-warning fw-semibold lh-sm text-wrap\">";
+			$entry_output .= sprintf($label_mead_info_missing, mead_missing_label_list($missing_mead_info));
 	    	$entry_output .= "</div>";
 		}
 
@@ -687,10 +698,23 @@ if ($totalRows_log > 0) {
 			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>", $label_paid, yes_no($row_log['brewPaid'],$base_url,4));
 			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>", $label_received, yes_no($row_log['brewReceived'],$base_url,4));
 			if (!empty($allergen_info)) {
-				$entry_output_cards .= "<div style=\"padding: .6em\" class=\"mt-2 badge text-bg-danger\">";
+				$entry_output_cards .= "<div style=\"padding: .6em\" class=\"mt-2 badge text-bg-danger text-wrap\">";
 				$entry_output_cards .= $allergen_info;
 		    	$entry_output_cards .= "</div>";
 			}
+		}
+
+		// Unlike the allergen notice above (pre-results only), a missing-required-mead-info
+		// gap is a data-completeness issue relevant to the brewer whether or not results have
+		// been released yet, so this renders unconditionally rather than nested in !$show_scores.
+		if (!empty($missing_mead_info)) {
+			// text-wrap added (missing from the allergen badge above, which this was modeled
+			// on) - a Bootstrap 5 .badge defaults to white-space:nowrap, and this message
+			// runs noticeably longer than the allergen badge's typical content, so without it
+			// the badge overflows the card instead of wrapping onto multiple lines.
+			$entry_output_cards .= "<div style=\"padding: .6em\" class=\"mt-2 badge text-bg-warning text-wrap\">";
+			$entry_output_cards .= sprintf($label_mead_info_missing, mead_missing_label_list($missing_mead_info));
+	    	$entry_output_cards .= "</div>";
 		}
 		
 		$entry_output_cards .= "</ul>";

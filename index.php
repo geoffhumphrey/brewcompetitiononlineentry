@@ -104,6 +104,14 @@ if ($section == "admin") {
             $_SESSION['double_encoding_checked'] = true;
         }
         $double_encoding_detected = $_SESSION['double_encoding_detected'];
+
+        // Cached for the session so this scan runs at most once per login, not on every
+        // admin/default.admin.php hit - same reasoning as double_encoding_detected above.
+        if (!isset($_SESSION['mead_info_missing_checked'])) {
+            $_SESSION['mead_info_missing_count'] = count_entries_missing_required_mead_info();
+            $_SESSION['mead_info_missing_checked'] = true;
+        }
+        $mead_info_missing_count = $_SESSION['mead_info_missing_count'];
     }
 }
 

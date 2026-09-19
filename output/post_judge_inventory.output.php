@@ -85,9 +85,13 @@ if ($_SESSION['style_set_no_numbering']) include (INCLUDES.'ba_constants.inc.php
             <td>
                 <?php
                 echo str_replace("^"," | ",$row_post_inventory['brewInfo'])." ";
+                $missing_mead_info_pji = entry_missing_required_mead_info($row_post_inventory, $_SESSION['prefsStyleSet']);
                 if (!empty($row_post_inventory['brewMead1'])) echo "*".$row_post_inventory['brewMead1']."* ";
+                elseif (in_array("carb",$missing_mead_info_pji)) echo "*".$label_mead_info_not_recorded."* ";
                 if (!empty($row_post_inventory['brewMead2'])) echo "*".$row_post_inventory['brewMead2']."* ";
+                elseif (in_array("sweet",$missing_mead_info_pji)) echo "*".$label_mead_info_not_recorded."* ";
                 if (!empty($row_post_inventory['brewMead3'])) echo "*".$row_post_inventory['brewMead3']."*";
+                elseif (in_array("strength",$missing_mead_info_pji)) echo "*".$label_mead_info_not_recorded."*";
                 ?>
 
             </td>

@@ -240,7 +240,7 @@ if ((isset($_POST['section'])) && ($_POST['section'] == "hero_images") && (isset
     <p><?php echo isset($lang['admin_hero_images_description']) ? $lang['admin_hero_images_description'] : "Select which banner images are displayed on the homepage. Images are randomly selected based on your competition's accepted style types."; ?></p>
 
     <div class="alert alert-info">
-        <p><strong><?php echo isset($lang['admin_hero_how_it_works_title']) ? $lang['admin_hero_how_it_works_title'] : "How it Works"; ?></strong></p>
+        <p><i class="fa fa-lg fa-fw fa-info-circle"></i> <strong><?php echo isset($lang['admin_hero_how_it_works_title']) ? $lang['admin_hero_how_it_works_title'] : "How it Works"; ?></strong></p>
         
         <?php echo isset($lang['admin_hero_how_it_works_body']) ? $lang['admin_hero_how_it_works_body'] : "<p>Banner images appear as a large background strip at the top of the competition homepage. One image is picked at random each time a visitor loads the page. Images are grouped by category &ndash; Miscellaneous images can appear at any time, while Beer, Cider, and Mead images only appear when your competition accepts entries in those categories.</p>
         <p>Use the checkboxes below to choose which images are in the rotation, then click <strong>Save Changes</strong>. Please note that if no images are selected here, the fallback is the app's default (random selection of the built-in images).</p>

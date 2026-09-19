@@ -393,8 +393,16 @@ if (($_SESSION['prefsEval'] == 1) && ($section == "admin") && ($go == "evaluatio
     <?php if (($action == "edit") && (!empty($row_log['brewPossAllergens']))) { ?>
     var possible_allergens = "<?php echo $row_log['brewPossAllergens']; ?>";
     <?php } else { ?>
-    possible_allergens = null;      
+    possible_allergens = null;
     <?php } ?>
+    // Admin-only grandfather flags: true when this entry's Carbonation/Sweetness/Strength
+    // was ALREADY empty before this edit (e.g. an entry submitted before BJCP2026 made mead
+    // Sweetness required) - lets entry.js skip forcing the field required for an admin's
+    // edit, without weakening the requirement on the brewer's own edit form (pub/brew.pub.php
+    // never defines these, so they stay false there by entry.js's own default).
+    var edit_missing_carb = <?php echo (($section == "admin") && ($action == "edit") && (empty($row_log['brewMead1']))) ? "true" : "false"; ?>;
+    var edit_missing_sweet = <?php echo (($section == "admin") && ($action == "edit") && (empty($row_log['brewMead2']))) ? "true" : "false"; ?>;
+    var edit_missing_strength = <?php echo (($section == "admin") && ($action == "edit") && (empty($row_log['brewMead3']))) ? "true" : "false"; ?>;
 </script>
 
 <?php } // end if ($section == "brew") 

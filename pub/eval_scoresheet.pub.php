@@ -444,24 +444,33 @@ if ($entry_found) {
     $entry_info_html .= "</div>";
   }
 
-  if (!empty($row_entry_info['brewMead1'])) {
+  // Missing = required by this entry's CURRENT style but never recorded by the entrant (e.g.
+  // an entry submitted before BJCP2026 made mead Sweetness required) - shown as an explicit
+  // "Not recorded by entrant" notice instead of silently omitting the row, so a judge can't
+  // mistake it for the entrant simply having left the row's own write-up incomplete.
+  $missing_mead_info = entry_missing_required_mead_info($row_entry_info, $_SESSION['prefsStyleSet']);
+
+  if ((!empty($row_entry_info['brewMead1'])) || (in_array("carb",$missing_mead_info))) {
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_carbonation."</strong></div>";
-    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead1']."</div>";
+    if (!empty($row_entry_info['brewMead1'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead1']."</div>";
+    else $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\"><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> ".$label_mead_info_not_recorded."</span></div>";
     $entry_info_html .= "</div>";
   }
 
-  if (!empty($row_entry_info['brewMead3'])) {
+  if ((!empty($row_entry_info['brewMead3'])) || (in_array("strength",$missing_mead_info))) {
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_strength."</strong></div>";
-    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead3']."</div>";
+    if (!empty($row_entry_info['brewMead3'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead3']."</div>";
+    else $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\"><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> ".$label_mead_info_not_recorded."</span></div>";
     $entry_info_html .= "</div>";
   }
 
-  if (!empty($row_entry_info['brewMead2'])) {
+  if ((!empty($row_entry_info['brewMead2'])) || (in_array("sweet",$missing_mead_info))) {
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_sweetness."</strong></div>";
-    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead2']."</div>";
+    if (!empty($row_entry_info['brewMead2'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead2']."</div>";
+    else $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\"><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> ".$label_mead_info_not_recorded."</span></div>";
     $entry_info_html .= "</div>";
   }
 

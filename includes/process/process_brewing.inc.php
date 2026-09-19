@@ -827,7 +827,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Before processing the edit, determine the style of the entry
 		// as stored in the DB
 		$db_conn->where("id", $id);
-		$row_current_style = $db_conn->getOne($prefix."brewing", "brewCategorySort, brewSubCategory");
+		$row_current_style = $db_conn->getOne($prefix."brewing", "brewCategorySort, brewSubCategory, brewMead1, brewMead2, brewMead3");
 
 		// Determine if the style chosen is a cider - if so, run a different query
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
@@ -1060,11 +1060,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		 }
 
-		 // Check if mead/cider entry has carbonation and sweetness, if so, override the $updateGoTo variable with another and redirect
+		 // Check if mead/cider entry has carbonation and sweetness, if so, override the $updateGoTo variable with another and redirect.
+		 // Admin-only grandfather: a field that was ALREADY empty before this edit (e.g. an
+		 // entry submitted before BJCP2026 made mead Sweetness required) doesn't newly block
+		 // an admin's save or flip brewConfirmed - only an admin actively clearing a
+		 // previously-filled value still trips this. A brewer editing their own entry always
+		 // gets the full check (client-side entry.js also keeps it required=true on that
+		 // form, so this path is effectively unreachable for a brewer anyway, but the server
+		 // enforces it independently rather than trusting the client).
 		 if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) {
 
-			if (empty($brewMead1)) {
-				
+			$brewMead1_grandfathered = (($section == "admin") && (empty($brewMead1)) && (empty($row_current_style['brewMead1'])));
+
+			if ((empty($brewMead1)) && (!$brewMead1_grandfathered)) {
+
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
@@ -1077,7 +1086,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if (empty($brewMead1)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if ((empty($brewMead1)) && (!$brewMead1_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 
@@ -1090,8 +1099,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		 if (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
 
-			if (empty($brewMead2)) {
-				
+			$brewMead2_grandfathered = (($section == "admin") && (empty($brewMead2)) && (empty($row_current_style['brewMead2'])));
+
+			if ((empty($brewMead2)) && (!$brewMead2_grandfathered)) {
+
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
@@ -1104,7 +1115,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if (empty($brewMead2)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if ((empty($brewMead2)) && (!$brewMead2_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 
@@ -1117,8 +1128,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		 if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
 
-			if (empty($brewMead3))  {
-				
+			$brewMead3_grandfathered = (($section == "admin") && (empty($brewMead3)) && (empty($row_current_style['brewMead3'])));
+
+			if ((empty($brewMead3)) && (!$brewMead3_grandfathered))  {
+
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
@@ -1131,7 +1144,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if ((empty($brewMead3)) && (!$brewMead3_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 

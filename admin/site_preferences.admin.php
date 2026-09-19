@@ -857,7 +857,7 @@ $(document).ready(function(){
       </div>
       <div class="modal-body">
         <p>There are currently entries logged into the database from participants using <?php echo $_SESSION['style_set_short_name']; ?> styles.</p>
-        <p><strong class="text-primary">Changing the style set here may result in incorrect style classifications or "unrecognized style" messages for participant entries, necessitating editing of individual entries to align the entered style with a style defined in the your chosen style set.</strong></p>
+        <p class="text-primary">Changing the style set here may result in incorrect style classifications or "unrecognized style" messages for participant entries, <strong>necessitating manual editing of individual entries to assign an analogous style in your chosen style set.</strong></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">I Understand</button>

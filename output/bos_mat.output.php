@@ -171,18 +171,25 @@ if (!empty($a)) {
 					if (!empty($row_scores['brewInfoOptional'])) $output .= '<p><em><small>'.str_replace("^"," | ",$row_scores['brewInfoOptional']).'</small></em></p>';
 					if (!empty($row_scores['brewComments'])) $output .= '<p><em><small>'.$row_scores['brewComments'].'</small></em></p>';
 					
+					if (($action == "default") && (($type == 2) || ($type == 3))) $missing_mead_info_bm = entry_missing_required_mead_info($row_scores, $_SESSION['prefsStyleSet']);
+
 					if (($action == "default") && ($type == 2)) {
 						$output .= '<p><em>';
 						if (!empty($row_scores['brewMead1'])) $output .= $row_scores['brewMead1'];
+						elseif (in_array("carb",$missing_mead_info_bm)) $output .= $label_mead_info_not_recorded;
 						if (!empty($row_scores['brewMead2'])) $output .= ', '.$row_scores['brewMead2'];
+						elseif (in_array("sweet",$missing_mead_info_bm)) $output .= ', '.$label_mead_info_not_recorded;
 						$output .= '</p>';
 					}
 
 					if (($action == "default") && ($type == 3)) {
 						$output .= '<p><em>';
 						if (!empty($row_scores['brewMead1'])) $output .= $row_scores['brewMead1'];
+						elseif (in_array("carb",$missing_mead_info_bm)) $output .= $label_mead_info_not_recorded;
 						if (!empty($row_scores['brewMead2'])) $output .= ', '.$row_scores['brewMead2'];
+						elseif (in_array("sweet",$missing_mead_info_bm)) $output .= ', '.$label_mead_info_not_recorded;
 						if (!empty($row_scores['brewMead3'])) $output .= ', '.$row_scores['brewMead3'];
+						elseif (in_array("strength",$missing_mead_info_bm)) $output .= ', '.$label_mead_info_not_recorded;
 						$output .= '</p>';
 					}
 

@@ -3196,6 +3196,85 @@ function entries_no_special($user_id) {
 	else return FALSE;
 }
 
+/**
+ * Given a brewing row (needs brewCategorySort, brewSubCategory, brewMead1/2/3),
+ * returns an array of the missing-but-required mead field KEYS for this entry's
+ * CURRENT style (e.g. array("sweet")), or an empty array if nothing's missing.
+ * Returns stable, language-independent keys ("carb"/"sweet"/"strength"), not
+ * display text - callers map these to $label_carbonation/$label_sweetness/
+ * $label_strength (already translated in every lang/*.lang.php file) themselves,
+ * since this function has no language context of its own.
+ * Shared by the Admin Dashboard alert, Admin Entries list, brewer's My Account page,
+ * and the judge scoresheet - one detection function, not duplicated per surface.
+ * Purely a data-completeness check - never used to exclude an entry from judging.
+ */
+function entry_missing_required_mead_info($row_brew, $style_set) {
+
+	require_once(LIB.'process.lib.php');
+
+	if ((empty($row_brew['brewCategorySort'])) || (empty($row_brew['brewSubCategory']))) return array();
+
+	$style = $row_brew['brewCategorySort']."-".$row_brew['brewSubCategory'];
+	$missing = array();
+
+	if ((check_carb($style,$style_set)) && (empty($row_brew['brewMead1']))) $missing[] = "carb";
+	if ((check_sweetness($style,$style_set)) && (empty($row_brew['brewMead2']))) $missing[] = "sweet";
+	if ((check_mead_strength($style,$style_set)) && (empty($row_brew['brewMead3']))) $missing[] = "strength";
+
+	return $missing;
+
+}
+
+/**
+ * Maps entry_missing_required_mead_info()'s stable keys ("carb"/"sweet"/"strength")
+ * to their translated display labels, using the already-translated $label_carbonation/
+ * $label_sweetness/$label_strength globals every lang/*.lang.php file defines. Returns
+ * a "/"-joined string ready to drop into a "Missing %s" message, in the same order
+ * entry_missing_required_mead_info() returns them.
+ */
+function mead_missing_label_list($missing_keys) {
+
+	global $label_carbonation, $label_sweetness, $label_strength;
+
+	$labels = array();
+
+	foreach ($missing_keys as $missing_key) {
+		if ($missing_key == "carb") $labels[] = $label_carbonation;
+		elseif ($missing_key == "sweet") $labels[] = $label_sweetness;
+		elseif ($missing_key == "strength") $labels[] = $label_strength;
+	}
+
+	return implode("/",$labels);
+
+}
+
+/**
+ * Aggregate count of DISTINCT entries with at least one missing-but-required mead
+ * field (e.g. an entry submitted before BJCP2026 made mead Sweetness required),
+ * for the Admin Dashboard alert. Same naive per-entry scan as entries_no_special()
+ * above - not optimized for very large entry counts, but consistent with this
+ * file's existing convention for this kind of check.
+ */
+function count_entries_missing_required_mead_info() {
+
+	require(CONFIG.'config.php');
+	$db_conn = new MysqliDb($connection);
+
+	$rows_entry_check = $db_conn->get($prefix."brewing", null, "brewCategorySort, brewSubCategory, brewMead1, brewMead2, brewMead3");
+	$totalRows_entry_check = $db_conn->count;
+
+	$count = 0;
+
+	if ($totalRows_entry_check > 0) {
+		foreach ($rows_entry_check as $row_entry_check) {
+			if (!empty(entry_missing_required_mead_info($row_entry_check, $_SESSION['prefsStyleSet']))) $count += 1;
+		}
+	}
+
+	return $count;
+
+}
+
 function data_integrity_check() {
 
 	require(CONFIG.'config.php');

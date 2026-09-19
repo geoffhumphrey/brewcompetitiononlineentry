@@ -470,6 +470,15 @@ if ($msg != "default") {
     </div>
 <?php } ?>
 
+<?php if ((!empty($mead_info_missing_count)) && ($section == "admin") && ($go == "default") && ($_SESSION['userLevel'] == 0) && (empty($_SESSION['dismissed_admin_alerts']['mead-info-missing']))) { ?>
+    <div id="alert-mead-info-missing" data-alert-key="mead-info-missing" class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p><span class="fa fa-lg fa-exclamation-triangle"></span> <strong>Entries Missing Required Mead Info</strong></p>
+        <p><?php echo $mead_info_missing_count; ?> entr<?php echo ($mead_info_missing_count == 1) ? "y" : "ies"; ?> currently selected under a style that requires Carbonation, Strength, and/or Sweetness information the entrant never provided - most likely because they were submitted before that information was required for the style. These entries are still fully valid for judging; review them on the Entries page to see which fields are missing.</p>
+        <p><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries" class="btn btn-dark btn-sm">Review Entries</a></p>
+    </div>
+<?php } ?>
+
 <?php if ((MAINT) && ($logged_in) && ($_SESSION['userLevel'] == 0) && (empty($_SESSION['dismissed_admin_alerts']['maintenance-mode']))) { ?>
   <div id="alert-maintenance-mode" data-alert-key="maintenance-mode" class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

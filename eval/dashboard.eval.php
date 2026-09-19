@@ -652,14 +652,24 @@ if ($totalRows_table_assignments > 0) {
 									$info_display .= ":</strong> ".$row_entries['brewInfo'];
 								}
 
+								$missing_mead_info_dash = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
+
 								if (!empty($row_entries['brewMead1'])) {
 									$additional_info++;
 									$carb_display .= "<strong>".$label_carbonation.":</strong> ".$row_entries['brewMead1'];
+								}
+								elseif (in_array("carb",$missing_mead_info_dash)) {
+									$additional_info++;
+									$carb_display .= "<strong>".$label_carbonation.":</strong> <em>".$label_mead_info_not_recorded."</em>";
 								}
 
 								if (!empty($row_entries['brewMead2'])) {
 									$additional_info++;
 									$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2'];
+								}
+								elseif (in_array("sweet",$missing_mead_info_dash)) {
+									$additional_info++;
+									$sweetness_display .= "<strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em>";
 								}
 
 								if (!empty($row_entries['brewSweetnessLevel'])) {
@@ -683,6 +693,10 @@ if ($totalRows_table_assignments > 0) {
 								if (!empty($row_entries['brewMead3'])) {
 									$additional_info++;
 									$strength_display .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+								}
+								elseif (in_array("strength",$missing_mead_info_dash)) {
+									$additional_info++;
+									$strength_display .= "<strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em>";
 								}
 
 								if (!empty($row_entries['brewPossAllergens'])) {

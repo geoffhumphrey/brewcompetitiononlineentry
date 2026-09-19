@@ -2275,6 +2275,8 @@ $brewer_text_058 = "Los administradores están organizando actualmente las asign
 $default_page_text_024 = "Las hojas de puntuación estarán disponibles para ver o descargar a partir del";
 $default_page_text_025 = "Las hojas de puntuación ya están disponibles para ver o descargar.";
 $label_scoresheets_available = "Hojas de Puntuación Disponibles para Descargar";
+$label_mead_info_missing = "Falta %s - no era obligatorio al momento de la inscripción";
+$label_mead_info_not_recorded = "No registrado por el participante";
 
 /**
  * ----------------------------------------------------------------------------------

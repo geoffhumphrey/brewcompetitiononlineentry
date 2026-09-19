@@ -178,15 +178,30 @@ $db_conn->where('brewStyleActive', 'Y');
 $rows_styles_active = $db_conn->get($styles_db_table);
 $totalRows_styles_active = $db_conn->count;
 
-// Deselect all BJCP2026 mead styles first, then re-activate only the ones
-// whose old counterpart was actually active. Old rows are deactivated but
-// never deleted (see convert_bjcp_2025.inc.php precedent) - archived
-// competitions that ran under BJCP2021/BJCP2015 still resolve their mead
-// style names correctly.
-$update_table = $prefix."styles";
-$data = array('brewStyleActive' => 'N');
-$db_conn->where ('brewStyleVersion', 'BJCP2026');
-$db_conn->update ($update_table, $data);
+// Deselect only the BJCP2026 mead styles that are an actual mapping TARGET
+// of an old BJCP2021/2015 code (i.e. a code bjcp_map_2021_2026() can route
+// an old row to), then re-activate the ones whose old counterpart was
+// actually active, below. A code with no incoming mapping at all - either
+// a brand-new 2026 slot (e.g. M4D/M4E) or a new style reusing an old code
+// that itself maps elsewhere (e.g. new M3B "Vegetable Mead", since old
+// M3B routes to new M3A instead) - is never touched here and stays active
+// exactly as update/styles_bjcp_2026_update.php seeded it. Blanket-
+// deactivating the whole BJCP2026 version first (the original approach)
+// silently orphaned those codes forever, since nothing ever maps TO them
+// to trigger reactivation. Old rows are deactivated but never deleted (see
+// convert_bjcp_2025.inc.php precedent) - archived competitions that ran
+// under BJCP2021/BJCP2015 still resolve their mead style names correctly.
+$mapped_target_ids = array();
+foreach (array_unique(array_values($mapped_style_ids)) as $mapped_target_code) {
+    if (array_key_exists($mapped_target_code, $styles_2026)) $mapped_target_ids[] = $styles_2026[$mapped_target_code];
+}
+
+if (!empty($mapped_target_ids)) {
+    $update_table = $prefix."styles";
+    $data = array('brewStyleActive' => 'N');
+    $db_conn->where ('id', $mapped_target_ids, 'IN');
+    $db_conn->update ($update_table, $data);
+}
 
 if ($totalRows_styles_active > 0) {
 

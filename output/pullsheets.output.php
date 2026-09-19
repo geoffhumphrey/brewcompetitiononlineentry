@@ -464,9 +464,13 @@ if ($go == "all_entry_info") {
 											$table_flight_tbody .= "<td>";
 											if ((!empty($row_entries['brewInfo'])) && ($special[4] == "1")) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
 											$table_flight_tbody .= "<p>";
+											$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 											if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
+											elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> <em>".$label_mead_info_not_recorded."</em><br>";
 											if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."<br>";
+											elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em><br>";
 											if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3']."<br>";
+											elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em><br>";
 											if ((!empty($row_entries['brewPouring'])) && ((!empty($row_entries['brewStyleType'])) && ($row_entries['brewStyleType'] == 1))) {
 												$pouring_arr = json_decode($row_entries['brewPouring'],true);
 												$table_flight_tbody .= "<strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."<br>";
@@ -701,9 +705,13 @@ if ($go == "all_entry_info") {
 								$table_flight_tbody .= "<td>";
 								if ((!empty($row_entries['brewInfo'])) && ((isset($special[4])) && ($special[4] == "1"))) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
 								$table_flight_tbody .= "<p>";
+								$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 								if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
+								elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> <em>".$label_mead_info_not_recorded."</em><br>";
 								if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."<br>";
+								elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em><br>";
 								if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+								elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em>";
 								$table_flight_tbody .= "</p>";
 								$table_flight_tbody .= "</td>";
 
@@ -894,10 +902,14 @@ if ($go == "mini_bos") {
 			if ($row_entries_mini['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.":</strong> ".$row_entries_mini['brewComments']."</p>";
 
 			$table_flight_tbody .= "<ul class=\"list-unstyled\">";
-			
+
+			$missing_mead_info_ps = entry_missing_required_mead_info($row_entries_mini, $_SESSION['prefsStyleSet']);
 			if (!empty($row_entries_mini['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.":</strong> ".$row_entries_mini['brewMead1']."</li>";
+			elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_carbonation.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 			if (!empty($row_entries_mini['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries_mini['brewMead2']."</li>";
+			elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 			if (!empty($row_entries_mini['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_entries_mini['brewMead3']."</li>";
+			elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 
 			if (!empty($row_entries_mini['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_entries_mini['brewPossAllergens']."</li>";
 
@@ -1090,10 +1102,14 @@ if ($go == "judging_scores_bos") {
 
 						$table_flight_tbody .= "<ul class=\"list-unstyled\">";
 
-						if ((!empty($row_bos['brewMead1'])) || (!empty($row_bos['brewMead2'])) || (!empty($row_bos['brewMead3']))) {
+						$missing_mead_info_ps = entry_missing_required_mead_info($row_bos, $_SESSION['prefsStyleSet']);
+						if ((!empty($row_bos['brewMead1'])) || (!empty($row_bos['brewMead2'])) || (!empty($row_bos['brewMead3'])) || (!empty($missing_mead_info_ps))) {
 							if (!empty($row_bos['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.":</strong> ".$row_bos['brewMead1']."</li>";
+							elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_carbonation.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 							if (!empty($row_bos['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_bos['brewMead2']."</li>";
+							elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 							if (!empty($row_bos['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_bos['brewMead3']."</li>";
+							elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 						}
 						
 						if (!empty($row_bos['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_bos['brewPossAllergens']."</li>";
@@ -1333,10 +1349,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
 
 									$table_flight_tbody .= "<ul class=\"list-unstyled\">";
+									$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."</li>";
+									elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> <em>".$label_mead_info_not_recorded."</em></li>";
 									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."</li>";
+									elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_entries['brewMead3']."</li>";
-									
+									elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
+
 									if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</li>";
 
 									if (!empty($row_entries['brewABV'])) $table_flight_tbody .= "<li><strong>".$label_abv.":</strong> ".$row_entries['brewABV']."</li>";	
@@ -1566,9 +1586,13 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
 
 									$table_flight_tbody .= "<ul class=\"list-unstyled\">";
+									$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."</li>";
+									elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> <em>".$label_mead_info_not_recorded."</em></li>";
 									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."</li>";
+									elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_entries['brewMead3']."</li>";
+									elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 
 									if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</li>";
 
@@ -1803,10 +1827,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 											if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
 
 											$table_flight_tbody .= "<ul class=\"list-unstyled\">";
+											$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 											if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."</li>";
+											elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> <em>".$label_mead_info_not_recorded."</em></li>";
 											if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."</li>";
+											elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 											if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_entries['brewMead3']."</li>";
-											
+											elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
+
 
 											if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</li>";
 
@@ -2052,12 +2080,16 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
 
 									$table_flight_tbody .= "<ul class=\"list-unstyled\">";
-									
+
+									$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."</li>";
+									elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> <em>".$label_mead_info_not_recorded."</em></li>";
 
 									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."</li>";
+									elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 
 									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+									elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em>";
 									$table_flight_tbody .= "</li>";
 
 									if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</li>";
@@ -2360,8 +2392,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								$table_flight_tbody .= "<ul class=\"list-unstyled\">";
 
+								$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 								if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."</li>";
-								if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."</li>";				
+								elseif (in_array("carb",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_carbonation.": </strong> <em>".$label_mead_info_not_recorded."</em></li>";
+								if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."</li>";
+								elseif (in_array("sweet",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_sweetness.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 
 								if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewSweetnessLevel']))) $table_flight_tbody .= "<strong>".$label_final_gravity.":</strong> ".$row_entries['brewSweetnessLevel'];
 
@@ -2381,6 +2416,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 								}
 
 								if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> ".$row_entries['brewMead3']."</li>";
+								elseif (in_array("strength",$missing_mead_info_ps)) $table_flight_tbody .= "<li><strong>".$label_strength.":</strong> <em>".$label_mead_info_not_recorded."</em></li>";
 
 								if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<li><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</li>";
 
