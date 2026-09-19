@@ -139,7 +139,8 @@ if ($show_judge_section_pb) {
     <div id="bjcp-id" class="mb-3 row">
         <label for="brewerJudgeID" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_bjcp_id; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" pattern="(TEMP|temp)\d{4}|(?=.*[A-Za-z]).{5}" title="<?php echo $brewer_text_057; ?>" <?php if ($psort == "judge") echo "autofocus"; ?>>
+            <!-- brewerJudgeID is purify()-only (no sterilize()) - needs h() in value="...". -->
+            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerJudgeID']); ?>" placeholder="" pattern="(TEMP|temp)\d{4}|(?=.*[A-Za-z]).{5}" title="<?php echo $brewer_text_057; ?>" <?php if ($psort == "judge") echo "autofocus"; ?>>
             <div class="invalid-feedback"><?php echo $brewer_text_057; ?></div>
         </div>
     </div>
@@ -385,10 +386,11 @@ else {
 <input type="hidden" name="brewerJudge" value="<?php echo h($row_brewer['brewerJudge']); ?>">
 <input type="hidden" name="brewerJudgeMead" value="<?php echo h($row_brewer['brewerJudgeMead']); ?>">
 <input type="hidden" name="brewerJudgeCider" value="<?php echo h($row_brewer['brewerJudgeCider']); ?>">
-<!-- brewerJudgeID is HTML-entity-encoded at save time (process_brewer_info.inc.php's
-     purify()) - h() here would double-encode it, unlike the interactive field above
-     (line 142) which correctly prints it raw. -->
-<input type="hidden" name="brewerJudgeID" value="<?php echo $row_brewer['brewerJudgeID']; ?>">
+<!-- CORRECTION: brewerJudgeID is sanitized with purify() only - verified empirically that
+     purify() does NOT encode quote characters (only markup-significant ones like &), so
+     it is NOT pre-encoded for attribute use. h() is required here (this was previously,
+     incorrectly, left unescaped - see the interactive field above, also since fixed). -->
+<input type="hidden" name="brewerJudgeID" value="<?php echo h($row_brewer['brewerJudgeID']); ?>">
 <input type="hidden" name="brewerJudgeExp" value="<?php echo h($row_brewer['brewerJudgeExp']); ?>">
 <?php foreach ($preserve_judge_locations_pb as $preserve_judge_location_pb) { ?>
 <input type="hidden" name="brewerJudgeLocation[]" value="<?php echo h($preserve_judge_location_pb); ?>">
@@ -479,7 +481,8 @@ foreach ($preserve_steward_locations_pb as $preserve_steward_location_pb) { ?>
     <div class="mb-3 row">
         <label for="brewerJudgeNotes" class="col-xs-12 col-sm-3 col-lg-2 col-form-label"><strong><?php echo $label_org_notes; ?></strong></label>
         <div class="col-xs-12 col-sm-9 col-lg-10">
-            <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeNotes']; ?>" placeholder="">
+            <!-- brewerJudgeNotes is purify()-only (no sterilize()) - needs h() in value="...". -->
+            <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerJudgeNotes']); ?>" placeholder="">
             <div class="help-block mt-1"><?php echo $brewer_text_004; ?></div>
         </div>
     </div>
@@ -492,8 +495,9 @@ foreach ($preserve_steward_locations_pb as $preserve_steward_location_pb) { ?>
  * ever legitimately hold. brewerJudgeNotes has no such safe default, though.
  */
 else { ?>
-<!-- brewerJudgeNotes is HTML-entity-encoded at save time (process_brewer_info.inc.php's
-     purify()) - h() here would double-encode it, unlike the interactive field above
-     (line 479) which correctly prints it raw. -->
-<input type="hidden" name="brewerJudgeNotes" value="<?php echo $row_brewer['brewerJudgeNotes']; ?>">
+<!-- CORRECTION: brewerJudgeNotes is sanitized with purify() only - verified empirically
+     that purify() does NOT encode quote characters, so it is NOT pre-encoded for
+     attribute use. h() is required here (this was previously, incorrectly, left
+     unescaped - see the interactive field above, also since fixed). -->
+<input type="hidden" name="brewerJudgeNotes" value="<?php echo h($row_brewer['brewerJudgeNotes']); ?>">
 <?php } ?>

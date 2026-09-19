@@ -214,7 +214,8 @@ if (($row_prefs) && ($row_prefs['prefsPaypalIPN'] == "1")) {
 
 			$message_top .= "<body>";
 			$message_top .= "<html>";
-			if ((isset($row_logo['contestLogo'])) && (file_exists(USER_IMAGES.$row_logo['contestLogo']))) $message_body .= "<p><img src='".$base_url."/user_images/".$row_logo['contestLogo']."' height='150'></p>";
+			// contestLogo is purify()-only (no sterilize()) - needs h() in src='...'.
+			if ((isset($row_logo['contestLogo'])) && (file_exists(USER_IMAGES.$row_logo['contestLogo']))) $message_body .= "<p><img src='".h($base_url."/user_images/".$row_logo['contestLogo'])."' height='150'></p>";
 			
 			$message_body .= "<p>".mb_convert_encoding($row_user_info['brewerFirstName'], "UTF-8").",</p>";
 			$message_body .= sprintf("<p>%s</p>",mb_convert_encoding($paypal_response_text_000, "UTF-8"));

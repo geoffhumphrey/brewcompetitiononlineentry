@@ -1418,7 +1418,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					<h1 style="margin:0;padding:0" class="tight"><?php echo $label_awards; ?></h1>
 					<?php if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
 						<div class="logo-image">
-							<img src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
+							<img src="<?php echo h($base_url."user_images/".$_SESSION['contestLogo']); ?>">
 						</div>
 					<?php } ?>
 				</section>
@@ -1512,7 +1512,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					<?php } ?>
 					<?php if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
 						<div class="logo-image">
-							<img style="max-height: 225px;" src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
+							<img style="max-height: 225px;" src="<?php echo h($base_url."user_images/".$_SESSION['contestLogo']); ?>">
 						</div>
 					<?php } ?>
 				</section>
@@ -1528,7 +1528,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					<h3 style="margin:0;padding:0"><?php echo $label_congrats_winners; ?></h3>
 					<?php if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
 						<div class="logo-image">
-							<img height="200" src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
+							<img height="200" src="<?php echo h($base_url."user_images/".$_SESSION['contestLogo']); ?>">
 						</div>
 					<?php } ?>
 				</section>

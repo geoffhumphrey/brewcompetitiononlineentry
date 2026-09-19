@@ -242,7 +242,9 @@ else {
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {
-	$('#sortable<?php echo $key; ?>').dataTable({
+	// $key is judgingLocName (purify()-only, no sterilize()), used as an id below - h()
+	// applied consistently here and at the matching id="..." so the selector still matches.
+	$('#sortable<?php echo h($key); ?>').dataTable({
 		"bPaginate" : false,
 		"sDom": 'rt',
 		"bStateSave" : false,
@@ -267,7 +269,7 @@ $(document).ready(function() {
     </div>
     <p><?php echo $output_text_008; ?></p>
     <p><?php echo $output_text_009; ?></p>
-    <table class="table table-striped table-bordered" id="sortable<?php echo $key; ?>">
+    <table class="table table-striped table-bordered" id="sortable<?php echo h($key); ?>">
     <thead>
     <tr>
     	<th width="30%"><?php echo $label_name; ?></th>

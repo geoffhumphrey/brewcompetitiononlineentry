@@ -123,7 +123,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (isset($_SESSION['loginUsername'])) && 
 
 					$message = "<html>" . "\r\n";
 					$message .= "<body>" . "\r\n";
-					if (isset($_SESSION['contestLogo'])) $message .= "<p align='center'><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+					// contestLogo is purify()-only (no sterilize()) - needs h() in src='...'.
+					if (isset($_SESSION['contestLogo'])) $message .= "<p align='center'><img src='".h($base_url."user_images/".$_SESSION['contestLogo'])."' height='150'></p>";
 					$message .= "<p>".$first_name.",</p>";
 					$message .= "<p>Thank you for volunteering to be a ";
 					if ($row_brewer['staff_judge'] == 1) $message .= "judge ";

@@ -126,7 +126,7 @@ if (!$entrant_type_brewery) {
         <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             
-            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
+            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerJudgeID']); ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
         </div>
     </div>
     <div id="brewerJudgeFields">
@@ -423,7 +423,7 @@ if (!$entrant_type_brewery) {
     <div class="form-group">
         <label for="brewerJudgeNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_org_notes; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeNotes']; ?>" placeholder="">
+            <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerJudgeNotes']); ?>" placeholder="">
             <span class="help-block"><?php echo $brewer_text_004; ?></span>
         </div>
     </div>

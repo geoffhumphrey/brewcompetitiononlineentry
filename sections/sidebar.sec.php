@@ -21,7 +21,8 @@ include (DB.'dropoff.db.php');
 
 if ($section != "admin") {
 
-	$competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" class=\"bcoem-comp-logo img-responsive hidden-print center-block\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
+	// contestLogo is purify()-only (no sterilize()) - needs h() in src="...".
+	$competition_logo = "<img src=\"".h($base_url."user_images/".$_SESSION['contestLogo'])."\" class=\"bcoem-comp-logo img-responsive hidden-print center-block\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
 	$page_info = "";
 	$header1_100 = "";
 	$page_info100 = "";
@@ -348,7 +349,9 @@ if ($section != "admin") {
 					$location_link = "#";
 					$location_tooltip = $entry_info_text_058;
 				}
-				if ($row_judging['judgingLocation'] != "") $non_judging_display .= " <a class=\"hide-loader\" href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
+				// judgingLocName/judgingLocation are purify()-only (no sterilize()) - $location_link/
+				// $location_tooltip need h() here.
+				if ($row_judging['judgingLocation'] != "") $non_judging_display .= " <a class=\"hide-loader\" href=\"".h($location_link)."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
 
 				if ($row_judging['judgingDate'] != "") $non_judging_display .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 
@@ -370,7 +373,9 @@ if ($section != "admin") {
 						$location_link = "#";
 						$location_tooltip = $entry_info_text_058;
 					}
-					if ($row_judging['judgingLocation'] != "") $page_info400 .= " <a class=\"hide-loader\" href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
+					// judgingLocName/judgingLocation are purify()-only (no sterilize()) - $location_link/
+					// $location_tooltip need h() here.
+					if ($row_judging['judgingLocation'] != "") $page_info400 .= " <a class=\"hide-loader\" href=\"".h($location_link)."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
 				}
 				
 				if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");

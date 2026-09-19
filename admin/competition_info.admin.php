@@ -296,7 +296,7 @@ $(document).ready(function(){
         <div class="input-group has-warning">
             <span class="input-group-addon" id="contactFirstName-addon1"><span class="fa fa-user"></span></span>
             
-            <input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php echo $row_brewer['brewerFirstName']; ?>" placeholder="" autofocus required>
+            <input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php echo h($row_brewer['brewerFirstName']); ?>" placeholder="" autofocus required>
             <span class="input-group-addon" id="contactFirstName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -307,7 +307,7 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group has-warning">
             <span class="input-group-addon" id="contactLastName-addon1"><span class="fa fa-user"></span></span>
-            <input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php echo $row_brewer['brewerLastName']; ?>" placeholder="" required>
+            <input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php echo h($row_brewer['brewerLastName']); ?>" placeholder="" required>
             <span class="input-group-addon" id="contactLastName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -334,7 +334,9 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group has-warning">
             
-            <input class="form-control" id="contestName" name="contestName" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestName']; ?>" placeholder="" autofocus required>
+            <!-- contestName is purify()-only (no sterilize()) - needs h() in value="...", or a
+                 literal " in the saved name blanks/corrupts this field. -->
+            <input class="form-control" id="contestName" name="contestName" type="text" maxlength="255" value="<?php if ($section != "step4") echo h($row_contest_info['contestName']); ?>" placeholder="" autofocus required>
             <span class="input-group-addon" id="contestName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -384,7 +386,8 @@ $(document).ready(function(){
     <label for="contestHost" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group has-warning">
-            <input class="form-control" id="contestHost" name="contestHost" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHost']; ?>" placeholder="" required>
+            <!-- contestHost is purify()-only (no sterilize()) - needs h() in value="...". -->
+            <input class="form-control" id="contestHost" name="contestHost" type="text" maxlength="255" value="<?php if ($section != "step4") echo h($row_contest_info['contestHost']); ?>" placeholder="" required>
             <span class="input-group-addon" id="contestHost-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -393,7 +396,8 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestHostLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host Location</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestHostLocation" name="contestHostLocation" type="text" maxlength="255" value="<?php if ($section != "step4") echo $row_contest_info['contestHostLocation']; ?>" placeholder="">
+        <!-- contestHostLocation is purify()-only (no sterilize()) - needs h() in value="...". -->
+        <input class="form-control" id="contestHostLocation" name="contestHostLocation" type="text" maxlength="255" value="<?php if ($section != "step4") echo h($row_contest_info['contestHostLocation']); ?>" placeholder="">
     </div>
 </div>
 
@@ -465,7 +469,9 @@ $(document).ready(function(){
     <label for="contestClubs" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <input class="form-control" id="contestClubs" name="contestClubs" type="text" value="<?php if ($section != "step4") echo $additional_clubs; ?>" placeholder="" pattern="[^%\x22]+" disabled>
+        <!-- contestClubs is purify()-only (no sterilize()) - $additional_clubs is built from it,
+             so needs h() in value="...". -->
+        <input class="form-control" id="contestClubs" name="contestClubs" type="text" value="<?php if ($section != "step4") echo h($additional_clubs); ?>" placeholder="" pattern="[^%\x22]+" disabled>
         <span class="help-block"><p>Use the search/add function above to add any club names that cannot be found in the clubs database. <a class="btn btn-xs btn-default hide-loader" role="button" id="clear-additional-clubs">Clear Entire List</a><a class="btn btn-xs btn-default hide-loader" role="button" id="restore-additional-clubs">Restore List</a> <a class="btn btn-xs btn-default hide-loader" role="button" id="clear-last-added">Clear Last Added</a></p><p id="club-separated">Note: each club is separated by a semi-colon (;) for system use.</p></span>
     </div>
 </div>
@@ -530,14 +536,16 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestShippingName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestShippingName" name="contestShippingName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingName']; ?>" placeholder="">
+        <!-- contestShippingName is purify()-only (no sterilize()) - needs h() in value="...". -->
+        <input class="form-control" id="contestShippingName" name="contestShippingName" type="text" value="<?php if ($section != "step4") echo h($row_contest_info['contestShippingName']); ?>" placeholder="">
     </div>
 </div>
 
 <div class="form-group">
     <label for="contestShippingAddress" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Address</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestShippingAddress" name="contestShippingAddress" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestShippingAddress']; ?>" placeholder="">
+        <!-- contestShippingAddress is purify()-only (no sterilize()) - needs h() in value="...". -->
+        <input class="form-control" id="contestShippingAddress" name="contestShippingAddress" type="text" value="<?php if ($section != "step4") echo h($row_contest_info['contestShippingAddress']); ?>" placeholder="">
     </div>
 </div>
 
@@ -756,14 +764,16 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="contestAwardsLocName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestAwardsLocName" name="contestAwardsLocName" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestAwardsLocName']; ?>" placeholder="">
+        <!-- contestAwardsLocName is purify()-only (no sterilize()) - needs h() in value="...". -->
+        <input class="form-control" id="contestAwardsLocName" name="contestAwardsLocName" type="text" value="<?php if ($section != "step4") echo h($row_contest_info['contestAwardsLocName']); ?>" placeholder="">
     </div>
 </div>
 
 <div class="form-group">
     <label for="contestAwardsLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Location Address</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <input class="form-control" id="contestAwardsLocation" name="contestAwardsLocation" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestAwardsLocation']; ?>" placeholder="">
+        <!-- contestAwardsLocation is purify()-only (no sterilize()) - needs h() in value="...". -->
+        <input class="form-control" id="contestAwardsLocation" name="contestAwardsLocation" type="text" value="<?php if ($section != "step4") echo h($row_contest_info['contestAwardsLocation']); ?>" placeholder="">
     </div>
 </div>
 

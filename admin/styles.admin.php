@@ -260,7 +260,8 @@ $(document).ready(function () {
 	<span id="styles-update-button-enabled" class="help-block">Select "Update Accepted Styles" <em>before</em> paging through records.</span>
 	<span id="styles-update-button-disabled" class="help-block">The "Update Accepted Styles" button has been disabled since data is being saved automatically as it is entered. It will re-enable itself if a save fails, so you can retry from here.</span>
 	<?php } else { ?>
-	<input type="submit" name="Submit" id="helpUpdateStyles" class="btn btn-primary" aria-describedby="helpBlock" value="Update <?php echo $row_judging['judgingLocName']; ?>" />
+	<!-- judgingLocName is purify()-only (no sterilize()) - needs h() in value="...". -->
+	<input type="submit" name="Submit" id="helpUpdateStyles" class="btn btn-primary" aria-describedby="helpBlock" value="Update <?php echo h($row_judging['judgingLocName']); ?>" />
 	<span id="helpBlock" class="help-block">Select "Update <?php echo $row_judging['judgingLocName']; ?>" <em>before</em> paging through records.</span>
 	<?php } ?>
 </div>
@@ -343,7 +344,10 @@ function checkStyleIdentifier() {
 	<label for="brewStyle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
-				<input class="form-control" id="brewStyle" name="brewStyle" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyle']; ?>" placeholder="" data-error="The custom style's name is required." autofocus required>
+				<!-- brewStyle is sanitized with purify() only (no sterilize()), so it's safe as
+				     text content but NOT pre-escaped for an attribute - a literal " in a saved
+				     style name terminates this value="..." early and blanks the field. -->
+				<input class="form-control" id="brewStyle" name="brewStyle" type="text" value="<?php if ($action == "edit") echo h($row_styles['brewStyle']); ?>" placeholder="" data-error="The custom style's name is required." autofocus required>
 			<span class="input-group-addon" id="brewStyle-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
@@ -533,7 +537,9 @@ function checkStyleIdentifier() {
 	</div>
 </div>
 
-<input type="hidden" name="brewStyleOld" value="<?php if ($action == "edit") echo $row_styles['brewStyle'];?>">
+<!-- brewStyle is purify()-only (no sterilize()) - see the matching comment on the Name
+     input above. -->
+<input type="hidden" name="brewStyleOld" value="<?php if ($action == "edit") echo h($row_styles['brewStyle']);?>">
 <input type="hidden" name="brewStyleActive" value="<?php if ($action == "edit") echo $row_styles['brewStyleActive']; else echo "Y"; ?>">
 <input type="hidden" name="brewStyleOwn" value="<?php if ($action == "edit") echo $row_styles['brewStyleOwn']; else echo "custom"; ?>">
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>

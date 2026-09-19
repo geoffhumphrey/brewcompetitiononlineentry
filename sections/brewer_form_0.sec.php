@@ -7,7 +7,7 @@ if (((!$entrant_type_brewery) && ($table_assignment) && ($go != "admin")) && (($
 <!-- Already assigned to a table, can't change preferences -->
 <input name="brewerJudge" type="hidden" value="<?php echo $row_brewer['brewerJudge']; ?>" />
 <input name="brewerJudgeLocation" type="hidden" value="<?php echo $row_brewer['brewerJudgeLocation']; ?>" />
-<input name="brewerJudgeID" type="hidden" value="<?php echo $row_brewer['brewerJudgeID']; ?>" />
+<input name="brewerJudgeID" type="hidden" value="<?php echo h($row_brewer['brewerJudgeID']); ?>" />
 <input name="brewerJudgeMead" type="hidden" value="<?php echo $row_brewer['brewerJudgeMead']; ?>" />
 <input name="brewerJudgeRank" type="hidden" value="<?php echo $row_brewer['brewerJudgeRank']; ?>" />
 <input name="brewerJudgeLikes" type="hidden" value="<?php echo $row_brewer['brewerJudgeLikes']; ?>" />
@@ -41,7 +41,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerBreweryName-addon1"><span class="fa fa-beer"></span></span>
-                <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" data-error="<?php echo $brewer_text_032; ?>" required autofocus>
+                <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerBreweryName']); ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" data-error="<?php echo $brewer_text_032; ?>" required autofocus>
             </div>
             <div class="help-block"><?php echo $register_text_045; ?></div>
             <div class="help-block with-errors"></div>
@@ -50,7 +50,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
     <div class="form-group">
         <label for="brewerBreweryTTB" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_ttb; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if ($action == "edit") echo $brewerBreweryTTB; ?>" placeholder="">
+            <input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if ($action == "edit") echo h($brewerBreweryTTB); ?>" placeholder="">
         </div>
     </div>
     <?php if ($_SESSION['prefsStyleSet'] == "NWCiderCup") { ?>
@@ -127,7 +127,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerFirstName-addon1"><span class="fa fa-user"></span></span>
                 
-                <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" <?php if (($_SESSION['prefsProEdition'] == 0) && ($psort == "default")) echo "autofocus"; ?> data-error="<?php echo $brewer_text_024; ?>" required>
+                <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerFirstName']); ?>" placeholder="" <?php if (($_SESSION['prefsProEdition'] == 0) && ($psort == "default")) echo "autofocus"; ?> data-error="<?php echo $brewer_text_024; ?>" required>
             </div>
             <div class="help-block with-errors"></div>
         </div>
@@ -137,7 +137,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerLastName-addon1"><span class="fa fa-user"></span></span>
-                <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="" data-error="<?php echo $brewer_text_025; ?>" required>
+                <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerLastName']); ?>" placeholder="" data-error="<?php echo $brewer_text_025; ?>" required>
             </div>
             <div class="help-block"><?php if ($_SESSION['prefsProEdition'] == 0) echo $brewer_text_000; ?></div>
             <div class="help-block with-errors"></div>
@@ -221,7 +221,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerAddress-addon1"><span class="fa fa-home"></span></span>
-                <input class="form-control" id="brewerAddress" name="brewerAddress" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" placeholder="" data-error="<?php echo $brewer_text_027; ?>" required>
+                <input class="form-control" id="brewerAddress" name="brewerAddress" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerAddress']); ?>" placeholder="" data-error="<?php echo $brewer_text_027; ?>" required>
             </div>
             <div class="help-block with-errors"></div>
         </div>
@@ -232,7 +232,7 @@ if (($pro_entrant) && (!$show_judge_steward_fields)) {
         <label for="brewerCity" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_city; ?></label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
-                <input class="form-control" id="brewerCity" name="brewerCity" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" placeholder="" data-error="<?php echo $brewer_text_028; ?>" required>
+                <input class="form-control" id="brewerCity" name="brewerCity" type="text" value="<?php if ($action == "edit") echo h($row_brewer['brewerCity']); ?>" placeholder="" data-error="<?php echo $brewer_text_028; ?>" required>
             </div>
             <div class="help-block with-errors"></div>
         </div>

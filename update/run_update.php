@@ -5515,6 +5515,52 @@ if (!check_setup($prefix."payments", $database)) {
 
 }
 
+/**
+ * Corrects a data bug in the official BA style catalog: "New Zealand-Style India Pale Ale" was seeded
+ * with brewStyleNum='182', identical to "New Zealand-Style Pale Ale" - the two should never have shared
+ * a code (the style was originally seeded at brewStyleNum='183' by styles_ba_2022_update.php, and
+ * lib/convert.lib.php's ba_map_2026() still expects '183' for this style; '182' is a later corruption
+ * that also made it into the shipped baseline seed data). Wherever both rows exist under the same
+ * group/num, any style lookup keyed on group+num+version (there is no other unique identifier on the
+ * brewing table for an entry's style) can't tell them apart and getOne()'s lack of an ORDER BY makes it
+ * silently resolve to whichever row sorts first - in practice, consistently the lower id ("Pale Ale")
+ * - even for entries actually saved as "India Pale Ale". See includes/process/process_brewing.inc.php's
+ * style-name resolution (~line 357-360) for where this silently writes the wrong style name onto an
+ * entry's own brewStyle column at save time, not just at display/print time.
+ */
+
+// Loop over every matching row rather than assuming exactly one - a dev/test install
+// that re-ran style-update scripts multiple times was found with three duplicate
+// "New Zealand-Style India Pale Ale" rows all miscoded to 182, not just the expected two.
+$db_conn->where('brewStyleVersion', 'BA');
+$db_conn->where('brewStyleOwn', 'bcoe');
+$db_conn->where('brewStyleGroup', '06');
+$db_conn->where('brewStyleNum', '182');
+$db_conn->where('brewStyle', 'New Zealand-Style India Pale Ale');
+$rows_nz_ipa_miscoded = $db_conn->get($styles_db_table, null, "id");
+
+if (!empty($rows_nz_ipa_miscoded)) {
+
+	$fixed_count = 0;
+
+	foreach ($rows_nz_ipa_miscoded as $row_nz_ipa_miscoded) {
+
+		$update_table = $styles_db_table;
+		$data = array('brewStyleNum' => '183');
+		$db_conn->where ('id', $row_nz_ipa_miscoded['id']);
+		$result = $db_conn->update ($update_table, $data);
+		if ($db_conn->getLastErrno() === 0) $fixed_count++;
+		else {
+			$v3100_update .= "<li class=\"text-danger\">Could not correct the \"New Zealand-Style India Pale Ale\" style code (id ".$row_nz_ipa_miscoded['id']."). <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+			$error_count++;
+		}
+
+	}
+
+	if ($fixed_count > 0) $v3100_update .= "<li>Corrected the \"New Zealand-Style India Pale Ale\" style, which was sharing a category code with a different style (\"New Zealand-Style Pale Ale\") and could cause an entry saved as one to display or print as the other.</li>";
+
+}
+
 if (!$setup_running) $v3100_update .= "</ul>";
 
 $this_update_version_block = $versions['3.1.0.0'];
@@ -5611,7 +5657,6 @@ if (!$setup_running) $v3200_update .= "</ul>";
 
 $this_update_version_block = $versions['3.2.0.0'];
 if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3200)) $output_run_update .= $v3200_update;
-
 
 /**
  * ---------------------------------------------------------------------------------------------------

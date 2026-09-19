@@ -307,7 +307,8 @@
         $hero_inner = "";
 
         if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) {
-            $competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" style=\"min-width: 150px; max-width: 225px;\" class=\"float-end me-5 d-none d-sm-none d-md-none d-lg-inline-block animate__animated animate__fadeInRight\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
+            // contestLogo is purify()-only (no sterilize()) - needs h() in src="...".
+            $competition_logo = "<img src=\"".h($base_url."user_images/".$_SESSION['contestLogo'])."\" style=\"min-width: 150px; max-width: 225px;\" class=\"float-end me-5 d-none d-sm-none d-md-none d-lg-inline-block animate__animated animate__fadeInRight\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
 
             $hero_inner .= "<div class=\"row align-items-center p-3 g-3\">";
             $hero_inner .= "<div class=\"col-12 col-lg-9\">";

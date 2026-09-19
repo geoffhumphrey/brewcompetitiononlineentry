@@ -492,7 +492,9 @@ if (!empty($date_arr)) {
 			$address = rtrim($_SESSION['contestAwardsLocation'],"&amp;KeepThis=true");
 			$address = str_replace(' ', '+', $address);
 			$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
-			$body_content .= sprintf("<li><strong>%s</strong> &ndash; %s<a class=\"hide-loader\" href=\"%s\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Map to %s\" target=\"_blank\"><i class=\"fa fa-lg fa-map-marker ms-1\"></i></a></li>",$label_location,$_SESSION['contestAwardsLocName'],$location_link,$_SESSION['contestAwardsLocName']);
+			// contestAwardsLocName is purify()-only (no sterilize()) - safe as the <li> text
+		// content above, but needs h() in the title="..." attribute below.
+		$body_content .= sprintf("<li><strong>%s</strong> &ndash; %s<a class=\"hide-loader\" href=\"%s\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"Map to %s\" target=\"_blank\"><i class=\"fa fa-lg fa-map-marker ms-1\"></i></a></li>",$label_location,$_SESSION['contestAwardsLocName'],$location_link,h($_SESSION['contestAwardsLocName']));
 		}
 		if (!empty($_SESSION['contestAwardsLocTime'])) {
 			$body_content .= sprintf("<li><strong>%s</strong> &ndash; %s",$label_date,getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
