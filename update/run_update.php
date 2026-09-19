@@ -5587,7 +5587,7 @@ if (!table_exists($prefix."style_sets_imported")) {
 
 }
 
-if ((table_exists($prefix."style_sets_imported")) && (!check_update("style_set_overall_categories", $prefix."style_sets_imported"))) {
+if ((table_exists($prefix."style_sets_imported", true)) && (!check_update("style_set_overall_categories", $prefix."style_sets_imported"))) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `style_set_overall_categories` mediumtext COLLATE utf8mb4_unicode_ci;", $prefix."style_sets_imported");
 	$result = $db_conn->rawQuery($sql);
@@ -5598,6 +5598,14 @@ if ((table_exists($prefix."style_sets_imported")) && (!check_update("style_set_o
 	}
 
 }
+
+// Add BJCP 2026 Mead Style Updates - mead-only, mirroring the BJCP2025
+// cider-only rollout's shape. "M2","E","Other Fruit Mead" is a
+// collision-free sentinel: that exact group+num+name never existed under
+// any older mead version (old M2E was named "Melomel"), unlike 8 of the
+// 17 new mead style names which are unchanged from BJCP2021's rows and so
+// can't safely be used as a check_new_style() sentinel here.
+if (($section == "setup") || (!check_new_style("M2","E","Other Fruit Mead"))) include (UPDATE.'styles_bjcp_2026_update.php');
 
 if (!$setup_running) $v3200_update .= "</ul>";
 

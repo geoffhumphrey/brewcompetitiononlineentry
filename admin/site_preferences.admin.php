@@ -74,6 +74,7 @@ if (($action == "default") || ($action == "entries")) {
         $cols = array("id","brewStyleGroup","brewStyleNum","brewStyle","brewStyleVersion","brewStyleOwn");
         $db_conn->returnType = 'array';
         if ($style_set['style_set_name'] == "BJCP2025") $db_conn->where ("((brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?)) AND (brewStyleOwn != ?)", array("BJCP2025","2","BJCP2021","2","custom"));
+        elseif ($style_set['style_set_name'] == "BJCP2026") $db_conn->where ("((brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType NOT IN (?,?))) AND (brewStyleOwn != ?)", array("BJCP2026","3","BJCP2025","2","BJCP2021","2","3","custom"));
         elseif ($style_set['style_set_name'] == "AABC2025") $db_conn->where ("((brewStyleVersion = ? AND brewStyleType= ?) OR (brewStyleVersion= ? AND brewStyleType != ?)) AND (brewStyleOwn != ?)", array("AABC2025","2","AABC2022","2","custom"));
         else $db_conn->where ("brewStyleVersion = ? AND brewStyleOwn != ?", array($style_set['style_set_name'],"custom"));
         $row_styles_all = $db_conn->get($styles_db_table, null, $cols);
@@ -708,6 +709,7 @@ $(document).ready(function(){
         if (entries_present > 0) {
            if ((current_style_set == "BJCP2015") && ($("#prefsStyleSet").val() == "BJCP2021")) $('#style-set-change-bjcp-2021').modal('show');
            else if ((current_style_set == "BJCP2021") && ($("#prefsStyleSet").val() == "BJCP2025")) $('#style-set-change-bjcp-2025').modal('show');
+           else if (((current_style_set == "BJCP2021") || (current_style_set == "BJCP2025")) && ($("#prefsStyleSet").val() == "BJCP2026")) $('#style-set-change-bjcp-2026').modal('show');
            else {
                 if (current_style_set != $("#prefsStyleSet").val()) $('#style-set-change').modal('show');
            } 
@@ -895,6 +897,26 @@ $(document).ready(function(){
         <p>There are currently entries logged into the database from participants using previous BJCP cider styles.</p>
         <p><strong>Cider entries</strong> that are currently in the database will be converted from the 2015 update to the 2025 update.</p>
         <p>Additionally, preferred and non-preferred cider styles will be updated to 2025 for all judges. All defined tables incorporating cider styles will be updated as well.</p>
+        <p><strong class="text-primary">This cannot be undone.</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">I Understand</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="style-set-change-bjcp-2026" tabindex="-1" role="dialog" aria-labelledby="style-set-change-bjcp-2026-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="style-set-change-bjcp-2026-label">Caution! Entries Present</h4>
+      </div>
+      <div class="modal-body">
+        <p>Choosing this option incorporates the 2026 update of mead styles only. Beer and cider remain the same as defined in the 2021 and 2025 updates, respectively.</p>
+        <p>There are currently entries logged into the database from participants using previous BJCP mead styles.</p>
+        <p><strong>Mead entries</strong> that are currently in the database will be converted to the 2026 update.</p>
+        <p>Additionally, preferred and non-preferred mead styles will be updated to 2026 for all judges. All defined tables incorporating mead styles will be updated as well.</p>
         <p><strong class="text-primary">This cannot be undone.</strong></p>
       </div>
       <div class="modal-footer">

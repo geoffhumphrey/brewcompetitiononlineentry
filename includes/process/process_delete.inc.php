@@ -317,6 +317,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
 			$style_version = ($first_character == "C") ? 'BJCP2025' : 'BJCP2021';
 		}
+		elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+			$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
+			$style_version = ($first_character == "M") ? 'BJCP2026' : (($first_character == "C") ? 'BJCP2025' : 'BJCP2021');
+		}
 		else $style_version = $_SESSION['prefsStyleSet'];
 
 		$query_style_name = "SELECT id FROM ".$prefix."styles WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
@@ -540,6 +544,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 				$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
 				$style_version = ($first_character == "C") ? 'BJCP2025' : 'BJCP2021';
+			}
+			elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+				$first_character = mb_substr($row_brews['brewCategorySort'], 0, 1);
+				$style_version = ($first_character == "M") ? 'BJCP2026' : (($first_character == "C") ? 'BJCP2025' : 'BJCP2021');
 			}
 			else $style_version = $_SESSION['prefsStyleSet'];
 

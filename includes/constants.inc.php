@@ -598,7 +598,10 @@ elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "N
     $optional_info_styles = array("C4-A","C4-B","C5-A","C8-A","C8-B","C8-C","C9-A","C9-B","C9-C");
 }
 else {
-    $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-A","C1-B","C1-C");
+    // M3-C, M4-D, M4-E, M4-F are new-in-BJCP2026 mead codes with no pre-2026
+    // equivalent - added here since every other mead code already gets
+    // Optional Info unconditionally, regardless of active style set.
+    $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M3-C","M4-B","M4-C","M4-D","M4-E","M4-F","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-A","C1-B","C1-C");
     if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) $optional_info_styles[] = "25-B";
     if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
         $optional_info_styles[] = "C1-D"; 
@@ -628,7 +631,7 @@ if (isset($_SESSION['prefsStyleSet'])) {
     if (isset($_SESSION['style_set_mead'])) $mead_array = $_SESSION['style_set_mead'];
     if (isset($_SESSION['style_set_cider'])) $cider_array = $_SESSION['style_set_cider'];
     if (isset($_SESSION['style_set_category_end'])) $category_end = $_SESSION['style_set_category_end'];
-    if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
+    if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) {
         $specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6","21-B7");
         $historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
     }
@@ -679,6 +682,10 @@ if ((strpos($section, 'step') === FALSE) && (check_setup($prefix."bcoem_sys",$da
 
             if ($prefsStyleSet == "BJCP2025") {
                 $query_styles_default = "SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM ".$prefix."styles WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2')";
+                $rows_styles_default = $db_conn->rawQuery($query_styles_default);
+            }
+            elseif ($prefsStyleSet == "BJCP2026") {
+                $query_styles_default = "SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion, brewStyleType FROM ".$prefix."styles WHERE (brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3'))";
                 $rows_styles_default = $db_conn->rawQuery($query_styles_default);
             }
             elseif ($prefsStyleSet == "AABC2025") {

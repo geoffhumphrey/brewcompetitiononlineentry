@@ -317,6 +317,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			else $style_version = "BJCP2021";
 		}
 
+		// BJCP2026 is mead-only: mead resolves to BJCP2026's own rows, cider
+		// still resolves to BJCP2025 (2026 didn't touch cider), beer still
+		// resolves to BJCP2021 (2026 didn't touch beer either).
+		elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+			$first_character = mb_substr($styleFix, 0, 1);
+			if ($first_character == "M") $style_version = "BJCP2026";
+			elseif ($first_character == "C") $style_version = "BJCP2025";
+			else $style_version = "BJCP2021";
+		}
+
 		else $style_version = $_SESSION['prefsStyleSet'];
 
 		// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
@@ -354,6 +364,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 				$first_character = mb_substr($style[0], 0, 1);
 				if ($first_character == "C") $chosen_style_set = "BJCP2025";
+				else $chosen_style_set = "BJCP2021";
+			}
+
+			elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+				$first_character = mb_substr($style[0], 0, 1);
+				if ($first_character == "M") $chosen_style_set = "BJCP2026";
+				elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
 				else $chosen_style_set = "BJCP2021";
 			}
 
@@ -421,8 +438,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewInfoOptional = $purifier->purify(sterilize($_POST['brewInfoOptional']));		
 		}
 
-		// For BJCP 2025/2021, process addtional info
-		if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
+		// For BJCP 2025/2021/2026, process addtional info - beer codes/indices
+		// are unchanged across all three (BJCP2026 didn't touch beer), so
+		// this beer-specific field handling still applies under BJCP2026.
+		if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) {
 
 			// If BJCP 2021/5 and 2A, add optional regional variation if present
 			if (($index == "02-A") && (!empty($_POST['regionalVar']))) {
@@ -814,6 +833,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 			$first_character = mb_substr($row_current_style['brewCategorySort'], 0, 1);
 			if ($first_character == "C") $style_version = "BJCP2025";
+			else $style_version = "BJCP2021";
+		}
+
+		elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+			$first_character = mb_substr($row_current_style['brewCategorySort'], 0, 1);
+			if ($first_character == "M") $style_version = "BJCP2026";
+			elseif ($first_character == "C") $style_version = "BJCP2025";
 			else $style_version = "BJCP2021";
 		}
 

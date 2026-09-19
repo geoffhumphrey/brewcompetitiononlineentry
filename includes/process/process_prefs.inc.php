@@ -691,6 +691,40 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			}
 
 			/**
+			 * If the style set has changed to BJCP 2026, map old (BJCP2021,
+			 * and any orphaned BJCP2015) mead styles to their updated 2026
+			 * equivalents in the brewing DB. Mead is currently resolved under
+			 * BJCP2021 regardless of whether the outgoing set was BJCP2021 or
+			 * BJCP2025 (BJCP2025 only ever added cider - see
+			 * convert_bjcp_2026.inc.php's own header comment), so either
+			 * prior set triggers this conversion.
+			 *
+			 * As a safeguard to make sure the brewing table data is updated,
+			 * perform a query for any old mead styles whose names have
+			 * changed and/or whose category has changed. "Fruit and Spice
+			 * Mead" and "Experimental Mead" are checked against their old
+			 * group/sub-category combo specifically, since both names are
+			 * reused at a different sub-category slot in BJCP2026.
+			 */
+
+			if ($prefsStyleSet == "BJCP2026") {
+
+				include (LIB.'convert.lib.php');
+
+				if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
+					include (INCLUDES.'convert/convert_bjcp_2026.inc.php');
+				}
+
+				$db_conn->where("brewStyle='Melomel' OR brewStyle='Spice, Herb, or Vegetable Mead' OR brewStyle='Historical Mead' OR (brewCategorySort='M3' AND brewSubCategory='A' AND brewStyle='Fruit and Spice Mead') OR (brewCategorySort='M4' AND brewSubCategory='C' AND brewStyle='Experimental Mead')");
+				$row_check_entry_styles = $db_conn->getOne($prefix."brewing", "COUNT(*) as 'count'");
+
+				if ($row_check_entry_styles['count'] > 0) {
+					include (INCLUDES.'convert/convert_bjcp_2026.inc.php');
+				}
+
+			}
+
+			/**
 			 * If the style set has changed from AABC 2022 to AABC 2025, map
 			 * 2022 styles to updated 2025 styles in brewing DB.
 			 *
@@ -833,6 +867,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					if ($prefsStyleSet == "BJCP2025") {
 						$first_character = mb_substr($key, 0, 1);
 						if ($first_character == "C") $chosen_style_set = "BJCP2025";
+						else $chosen_style_set = "BJCP2021";
+					}
+
+					elseif ($prefsStyleSet == "BJCP2026") {
+						$first_character = mb_substr($key, 0, 1);
+						if ($first_character == "M") $chosen_style_set = "BJCP2026";
+						elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
 						else $chosen_style_set = "BJCP2021";
 					}
 

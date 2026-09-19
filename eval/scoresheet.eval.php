@@ -185,6 +185,13 @@ if ($action == "add") {
         else $chosen_style_set = "BJCP2021";
     }
 
+    elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+        $first_character = mb_substr($row_entry_info['brewCategorySort'], 0, 1);
+        if ($first_character == "M") $chosen_style_set = "BJCP2026";
+        elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
+        else $chosen_style_set = "BJCP2021";
+    }
+
     else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
     // A custom style is tagged with the literal active style set at creation time

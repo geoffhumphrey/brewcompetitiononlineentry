@@ -45,6 +45,10 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 		$query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC";
 		$rows_styles = $db_conn->rawQuery($query_styles);
 	}
+	elseif ($styleSet == "BJCP2026") {
+		$query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3')) OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC";
+		$rows_styles = $db_conn->rawQuery($query_styles);
+	}
 	elseif ($styleSet == "AABC2025") {
 		$query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC";
 		$rows_styles = $db_conn->rawQuery($query_styles);
@@ -120,6 +124,10 @@ elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 
 	if ($styleSet == "BJCP2025") {
 		$query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC";
+		$rows_styles = $db_conn->rawQuery($query_styles);
+	}
+	elseif ($styleSet == "BJCP2026") {
+		$query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3')) OR brewStyleOwn='custom' ORDER BY brewStyleGroup ASC";
 		$rows_styles = $db_conn->rawQuery($query_styles);
 	}
 	elseif ($styleSet == "AABC2025") {

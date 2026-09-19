@@ -451,6 +451,7 @@ function purge_entries($type, $interval) {
 
 		$params_check = array();
 		if ($_SESSION['prefsStyleSet'] == "BJCP2025") $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND (b.brewStyleVersion = 'BJCP2021' OR b.brewStyleVersion = 'BJCP2025')";
+		elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND (b.brewStyleVersion = 'BJCP2021' OR b.brewStyleVersion = 'BJCP2025' OR b.brewStyleVersion = 'BJCP2026')";
 		elseif ($_SESSION['prefsStyleSet'] == "AABC2025") $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND (b.brewStyleVersion = 'AABC2022' OR b.brewStyleVersion = 'AABC2025')";
 		else { $query_check = "SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM ".$prefix."brewing"." as a, ".$styles_db_table." as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = ?"; $params_check[] = $_SESSION['prefsStyleSet']; }
 		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
@@ -1582,6 +1583,14 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		else $db_conn->where('brewStyleVersion', 'BJCP2021');
 		$row_style = $db_conn->getOne($styles_db_table, "brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn");
 	}
+	elseif ($style_set == "BJCP2026") {
+		$first_character = mb_substr($number, 0, 1);
+		$db_conn->where('brewStyleGroup', $number);
+		if ($first_character == "M") $db_conn->where('brewStyleVersion', 'BJCP2026');
+		elseif ($first_character == "C") $db_conn->where('brewStyleVersion', 'BJCP2025');
+		else $db_conn->where('brewStyleVersion', 'BJCP2021');
+		$row_style = $db_conn->getOne($styles_db_table, "brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn");
+	}
 	elseif ($style_set == "AABC2025") {
 		$query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM ".$styles_db_table." WHERE brewStyleGroup=? AND ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 		$row_style = $db_conn->rawQueryOne($query_style, array($number));
@@ -1992,6 +2001,13 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		if ($number[2] == "BJCP2025") {
 			$first_character = mb_substr($number[0], 0, 1);
 			if ($first_character == "C") $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom')";
+			else $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom')";
+			$row_style = $db_conn->rawQueryOne($query_style, array($number[0], $number[1]));
+		}
+		elseif ($number[2] == "BJCP2026") {
+			$first_character = mb_substr($number[0], 0, 1);
+			if ($first_character == "M") $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2026' OR brewStyleOwn='custom')";
+			elseif ($first_character == "C") $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2025' OR brewStyleOwn='custom')";
 			else $query_style = "SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM ".$styles_db_table." WHERE brewStyleGroup=? AND brewStyleNum=? AND (brewStyleVersion='BJCP2021' OR brewStyleOwn='custom')";
 			$row_style = $db_conn->rawQueryOne($query_style, array($number[0], $number[1]));
 		}
@@ -3002,6 +3018,13 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 				    else $chosen_style_set = "BJCP2021";
 				}
 
+				elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+				    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
+				    if ($first_character == "M") $chosen_style_set = "BJCP2026";
+				    elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
+				    else $chosen_style_set = "BJCP2021";
+				}
+
 				else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 				$query_style = "SELECT brewStyle FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
@@ -3110,6 +3133,12 @@ function check_special_ingredients($style,$style_version) {
 		$first_character = mb_substr($style, 0, 1);
 		if ($first_character == "C") $chosen_style_version = "BJCP2025";
 		else $chosen_style_version = $style_version;
+	}
+	elseif ($style_version == "BJCP2026") {
+		$first_character = mb_substr($style, 0, 1);
+		if ($first_character == "M") $chosen_style_version = "BJCP2026";
+		elseif ($first_character == "C") $chosen_style_version = "BJCP2025";
+		else $chosen_style_version = "BJCP2021";
 	}
 	else $chosen_style_version = $style_version;
 
@@ -3400,17 +3429,21 @@ function winner_method($type,$output_type) {
 }
 
 
-function table_exists($table_name) {
+function table_exists($table_name, $bypass_cache = false) {
 	// Cached per request/table name - this function is called very heavily (once per
 	// style per judging table on the results/winners pages, among others) and table
 	// existence never changes within a request except immediately before a DROP TABLE,
-	// which always checks-then-drops rather than re-checking afterward.
+	// which always checks-then-drops rather than re-checking afterward - or right after
+	// a CREATE TABLE run earlier in the same request (e.g. run_update.php creating
+	// {prefix}style_sets_imported and then re-checking it later in the same pass to
+	// decide whether to ALTER it) - pass $bypass_cache=true there so the stale
+	// "didn't exist yet" result isn't reused after the table's just been created.
 	static $cache = array();
 
 	require(CONFIG.'config.php');
 
 	$cache_key = $database.'|'.$table_name;
-	if (isset($cache[$cache_key])) return $cache[$cache_key];
+	if ((!$bypass_cache) && (isset($cache[$cache_key]))) return $cache[$cache_key];
 
 	$db_conn = new MysqliDb($connection);
 	// Queries information_schema rather than SHOW TABLES - some MySQL/MariaDB
@@ -3990,6 +4023,13 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	    else $chosen_style_set = "BJCP2021";
 	}
 
+	elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+	    $first_character = mb_substr($style_break[0], 0, 1);
+	    if ($first_character == "M") $chosen_style_set = "BJCP2026";
+	    elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    else $chosen_style_set = "BJCP2021";
+	}
+
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
@@ -4150,6 +4190,10 @@ function styles_active($method,$archive="") {
 			$query_styles = "SELECT DISTINCT brewStyleGroup FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 			$bind_params = array();
 		}
+		elseif ($style_set == "BJCP2026") {
+			$query_styles = "SELECT DISTINCT brewStyleGroup FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3')) OR brewStyleOwn='custom')";
+			$bind_params = array();
+		}
 		elseif ($style_set == "AABC2025") {
 			$query_styles = "SELECT DISTINCT brewStyleGroup FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')";
 			$bind_params = array();
@@ -4193,6 +4237,10 @@ function styles_active($method,$archive="") {
 		*/
 		if ($style_set == "BJCP2025") {
 			$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')";
+			$bind_params = array();
+		}
+		elseif ($style_set == "BJCP2026") {
+			$query_styles = "SELECT brewStyleGroup,brewStyleNum,brewStyle FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3')) OR brewStyleOwn='custom')";
 			$bind_params = array();
 		}
 		elseif ($style_set == "AABC2025") {
@@ -4537,7 +4585,7 @@ function style_number_const($style_category_number,$style_sub,$style_set_display
 		case 0:
 			if (isset($_SESSION['prefsStyleSet'])) {
 				if ($_SESSION['style_set_no_numbering']) return "";
-				elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
+				elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
 				else return $style_category_number.$style_set_display_separator.$style_sub;
 			}
 			else return "";

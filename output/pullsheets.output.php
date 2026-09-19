@@ -45,6 +45,14 @@ foreach ($rows_all_styles_full_ps as $row_style_full_ps) {
 		$match_1_ps = ($row_style_full_ps['brewStyleVersion'] == $want_version_ps);
 		$match_9_ps = ($match_1_ps) || ($row_style_full_ps['brewStyleOwn'] == "custom");
 	}
+	elseif ($style_set_ps == "BJCP2026") {
+		$first_char_ps = mb_substr($grp_ps, 0, 1);
+		if ($first_char_ps == "M") $want_version_ps = "BJCP2026";
+		elseif ($first_char_ps == "C") $want_version_ps = "BJCP2025";
+		else $want_version_ps = "BJCP2021";
+		$match_1_ps = ($row_style_full_ps['brewStyleVersion'] == $want_version_ps);
+		$match_9_ps = ($match_1_ps) || ($row_style_full_ps['brewStyleOwn'] == "custom");
+	}
 	elseif ($style_set_ps == "AABC2025") {
 		$match_1_ps = ((($row_style_full_ps['brewStyleVersion'] == "AABC2025") && ($row_style_full_ps['brewStyleType'] == "2")) || (($row_style_full_ps['brewStyleVersion'] == "AABC2022") && ($row_style_full_ps['brewStyleType'] != "2")) || ($row_style_full_ps['brewStyleOwn'] == "custom"));
 		$match_9_ps = $match_1_ps;
@@ -874,7 +882,7 @@ if ($go == "mini_bos") {
 
 			$table_flight_tbody .= "<td>";
 
-			if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries_mini['brewInfo'] != "")) {
+			if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && ($row_entries_mini['brewInfo'] != "")) {
 				$table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries_mini['brewInfo'])."</p>";
 			} 
 
@@ -1069,7 +1077,7 @@ if ($go == "judging_scores_bos") {
 						$special = $style_convert_9_ps($style_special);
 						$special = explode("^",$special);
 
-						if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_bos['brewInfo'] != "")) {
+						if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && ($row_bos['brewInfo'] != "")) {
 							$table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_bos['brewInfo'])."</p>";
 						} 
 
@@ -1318,7 +1326,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$special = explode("^",$special);
 
 									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
-										if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+										if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 										else $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 									}
 									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
@@ -1546,7 +1554,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$special = $style_convert_9_ps($style_special);
 									$special = explode("^",$special);
 
-									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
+									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
 										$table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 									}
 
@@ -1783,7 +1791,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 										$special = $style_convert_9_ps($style_special);
 										$special = explode("^",$special);
 
-											if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
+											if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
 												$table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 											} 
 
@@ -2031,7 +2039,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$special = $style_convert_9_ps($style_special);
 									$special = explode("^",$special);
 
-									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
+									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
 										$table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 									} 
 
@@ -2338,7 +2346,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 								$special = $style_convert_9_ps($style_special);
 								$special = explode("^",$special);
 
-								if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
+								if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
 									$table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 								} 
 

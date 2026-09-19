@@ -647,7 +647,7 @@ if ($totalRows_table_assignments > 0) {
 								
 								if (!empty($row_entries['brewInfo'])) {
 									$additional_info++;
-									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= "<strong>".$label_regional_variation; 
+									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= "<strong>".$label_regional_variation;
 									else $info_display .= "<strong>".$label_required_info;
 									$info_display .= ":</strong> ".$row_entries['brewInfo'];
 								}

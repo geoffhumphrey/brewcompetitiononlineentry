@@ -36,6 +36,10 @@ function style_set_export_predicate($style_set_name) {
         return array("((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType!='2')) AND brewStyleOwn != 'custom'", array());
     }
 
+    if ($style_set_name == "BJCP2026") {
+        return array("((brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3'))) AND brewStyleOwn != 'custom'", array());
+    }
+
     if ($style_set_name == "AABC2025") {
         return array("((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType!='2')) AND brewStyleOwn != 'custom'", array());
     }

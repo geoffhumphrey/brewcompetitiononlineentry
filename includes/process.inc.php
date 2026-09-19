@@ -314,7 +314,16 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			$result = $db_conn->update($prefix."preferences", array('prefsStyleSet' => 'BJCP2025'));
 
 		}
-		
+
+		if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+
+			include (INCLUDES.'convert/convert_bjcp_2026.inc.php');
+
+			$db_conn->where('id', '1');
+			$result = $db_conn->update($prefix."preferences", array('prefsStyleSet' => 'BJCP2026'));
+
+		}
+
 		if (session_status() === PHP_SESSION_NONE) {
 			session_name($prefix_session);
 			session_start();
@@ -406,7 +415,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	elseif (($action == "dates") && ($dbTable == "default")) include (PROCESS.'process_dates.inc.php');
 
 	// Admin-uploaded ("imported") style sets - confirm+insert, whole-set delete, and metadata edit
-	elseif (($action == "styles_import") || ($action == "styles_import_delete") || ($action == "styles_import_edit")) include (PROCESS.'process_styles_import.inc.php');
+	elseif (($action == "styles_import") || ($action == "styles_import_abort") || ($action == "styles_import_delete") || ($action == "styles_import_edit")) include (PROCESS.'process_styles_import.inc.php');
 
 	// Update to various DB Tables as called out in process URL
 	else {

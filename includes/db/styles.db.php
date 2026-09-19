@@ -53,6 +53,7 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 }
 
 if ($styleSet == "BJCP2025") { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles = array(); }
+elseif ($styleSet == "BJCP2026") { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3')) OR brewStyleOwn='custom')"; $params_styles = array(); }
 elseif ($styleSet == "AABC2025") { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles = array(); }
 else { $query_styles = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')"; $params_styles = array($styleSet); }
 
@@ -114,6 +115,7 @@ if ($section != "list") {
 	else
 	*/
 	if ($styleSet == "BJCP2025") { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles2 = array(); }
+	elseif ($styleSet == "BJCP2026") { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3')) OR brewStyleOwn='custom')"; $params_styles2 = array(); }
 	elseif ($styleSet == "AABC2025") { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE ((brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom')"; $params_styles2 = array(); }
 	else { $query_styles2 = "SELECT * FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom')"; $params_styles2 = array($styleSet); }
 	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";

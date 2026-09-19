@@ -887,6 +887,10 @@ function received_entries() {
 		$query_styles = "SELECT brewStyle FROM ".$prefix."styles"." WHERE (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType !='2') OR brewStyleOwn='custom'";
 		$rows_styles = $db_conn->rawQuery($query_styles);
 	}
+	elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+		$query_styles = "SELECT brewStyle FROM ".$prefix."styles"." WHERE (brewStyleVersion='BJCP2026' AND brewStyleType='3') OR (brewStyleVersion='BJCP2025' AND brewStyleType='2') OR (brewStyleVersion='BJCP2021' AND brewStyleType NOT IN ('2','3')) OR brewStyleOwn='custom'";
+		$rows_styles = $db_conn->rawQuery($query_styles);
+	}
 	elseif ($_SESSION['prefsStyleSet'] == "AABC2025") {
 		$query_styles = "SELECT brewStyle FROM ".$prefix."styles"." WHERE (brewStyleVersion='AABC2025' AND brewStyleType='2') OR (brewStyleVersion='AABC2022' AND brewStyleType !='2') OR brewStyleOwn='custom'";
 		$rows_styles = $db_conn->rawQuery($query_styles);

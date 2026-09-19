@@ -606,6 +606,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					    else $chosen_style_set = "BJCP2021";
 					}
 
+					elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+					    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
+					    if ($first_character == "M") $chosen_style_set = "BJCP2026";
+					    elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
+					    else $chosen_style_set = "BJCP2021";
+					}
+
 					else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 					$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";

@@ -181,7 +181,7 @@ if ($totalRows_log > 0) {
 		// Required Info
 		$brewInfo = "";
 		if (!empty($row_log['brewInfo'])) {
-			if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $brewInfo .= "<li><strong>".$label_regional_variation.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
+			if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $brewInfo .= "<li><strong>".$label_regional_variation.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
 			else $brewInfo .= "<li><strong>".$label_required_info.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
 		}
 
@@ -328,7 +328,7 @@ if ($totalRows_log > 0) {
 
 			if ($co_brewer) {
 				$entry_brewer_display .= "<br>Co-Brewer: ";
-				$entry_brewer_display .= $row_log['brewCoBrewer'];
+				$entry_brewer_display .= "<span style=\"white-space: normal; word-break: break-word;\">".$row_log['brewCoBrewer']."</span>";
 			}
 
 			$entry_brewer_display .= "</small>";
@@ -570,7 +570,7 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= $entry_style_display;
 	    $tbody_rows .= $entry_unconfirmed_display;
 		$tbody_rows .= $entry_allergens_display;
-
+		
 	    $tbody_rows .= "<section class=\"visible-sm visible-xs hidden-print\">";
 		$tbody_rows .= "<div style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-default btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseAdminMenu".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseAdminMenu".$row_log['id']."\">Admin Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
 

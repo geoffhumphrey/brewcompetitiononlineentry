@@ -202,6 +202,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (isset($_SESSION['loginUsername'])) && 
 
 	} // end if ($action == "styles_import")
 
+	if ($action == "styles_import_abort") {
+
+		// Discards the staged upload without ever touching {prefix}styles or
+		// {prefix}style_sets_imported - lets the admin back out of bad or
+		// incomplete data before it's committed, rather than confirming the
+		// import just to turn around and delete it (see styles_import_delete
+		// below, which is for removing an *already-committed* imported set).
+		unset($_SESSION['styles_import_staged']);
+		unset($_SESSION['styles_import_staged_at']);
+		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=styles_import&msg=46");
+
+	} // end if ($action == "styles_import_abort")
+
 	if ($action == "styles_import_delete") {
 
 		$db_conn->where('id', $id);

@@ -768,6 +768,120 @@ function bjcp_map_2021_2025($style, $method, $prefix, $id) {
 
 }
 
+/**
+ * Maps the 13 old (BJCP2021/BJCP2015-content) mead style codes to their
+ * BJCP2026 equivalents. Mirrors bjcp_map_2021_2025()'s shape exactly -
+ * mead-only here since the 2026 update is mead-only, same as 2025's was
+ * cider-only. Beer codes have no case and fall through untouched, same as
+ * mead/cider fell through untouched in bjcp_map_2021_2025().
+ *
+ * Mapping decisions (confirmed with the admin, since the 2026 guidelines
+ * reorganize/rename several categories rather than a 1:1 refresh):
+ * - M1A/B/C, M2A/B/C/D, M4A: unchanged group/num, same or refreshed name.
+ * - M2E "Melomel" -> M2E "Other Fruit Mead" (renamed, same slot).
+ * - M3A "Fruit and Spice Mead" -> M3C "Fruit and Spice Mead" (moved slot).
+ * - M3B "Spice, Herb, or Vegetable Mead" -> M3A "Metheglin" (the old
+ *   combined category splits into 2026's Metheglin/Vegetable Mead pair;
+ *   Metheglin is the default target as the more common historical case).
+ * - M4B "Historical Mead" and M4C "Experimental Mead" -> M4F "Experimental
+ *   Mead" (neither has a direct 2026 analog; both retire to the new
+ *   catch-all).
+ */
+function bjcp_map_2021_2026($style, $method, $prefix, $id) {
+
+	// September 2026 update was mead only.
+
+	$id = (int) $id;
+
+    $return = "";
+
+    switch($style) {
+
+        case "M1A":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M1","M1","A","Dry Mead",$id);
+            if ($method == 1) $return = "M1A";
+            if ($method == 2) $return = "M1-A";
+        break;
+
+        case "M1B":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M1","M1","B","Semi-Sweet Mead",$id);
+            if ($method == 1) $return = "M1B";
+            if ($method == 2) $return = "M1-B";
+        break;
+
+        case "M1C":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M1","M1","C","Sweet Mead",$id);
+            if ($method == 1) $return = "M1C";
+            if ($method == 2) $return = "M1-C";
+        break;
+
+        case "M2A":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M2","M2","A","Cyser",$id);
+            if ($method == 1) $return = "M2A";
+            if ($method == 2) $return = "M2-A";
+        break;
+
+        case "M2B":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M2","M2","B","Pyment",$id);
+            if ($method == 1) $return = "M2B";
+            if ($method == 2) $return = "M2-B";
+        break;
+
+        case "M2C":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M2","M2","C","Berry Mead",$id);
+            if ($method == 1) $return = "M2C";
+            if ($method == 2) $return = "M2-C";
+        break;
+
+        case "M2D":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M2","M2","D","Stone Fruit Mead",$id);
+            if ($method == 1) $return = "M2D";
+            if ($method == 2) $return = "M2-D";
+        break;
+
+        case "M2E":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M2","M2","E","Other Fruit Mead",$id);
+            if ($method == 1) $return = "M2E";
+            if ($method == 2) $return = "M2-E";
+        break;
+
+        case "M3A":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M3","M3","C","Fruit and Spice Mead",$id);
+            if ($method == 1) $return = "M3C";
+            if ($method == 2) $return = "M3-C";
+        break;
+
+        case "M3B":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M3","M3","A","Metheglin",$id);
+            if ($method == 1) $return = "M3A";
+            if ($method == 2) $return = "M3-A";
+        break;
+
+        case "M4A":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M4","M4","A","Braggot",$id);
+            if ($method == 1) $return = "M4A";
+            if ($method == 2) $return = "M4-A";
+        break;
+
+        case "M4B":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M4","M4","F","Experimental Mead",$id);
+            if ($method == 1) $return = "M4F";
+            if ($method == 2) $return = "M4-F";
+        break;
+
+        case "M4C":
+            if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","M4","M4","F","Experimental Mead",$id);
+            if ($method == 1) $return = "M4F";
+            if ($method == 2) $return = "M4-F";
+        break;
+
+    }
+
+    if (($method == 1) && (empty($return))) $return = $style;
+    return ($return);
+
+}
+
 function aabc_map_2022_2025($style, $method, $prefix, $id) {
 
 	// July 31, 2025 update was cider only.

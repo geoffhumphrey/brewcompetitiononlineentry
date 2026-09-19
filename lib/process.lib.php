@@ -280,6 +280,13 @@ function check_sweetness($style,$styleSet) {
 	    else $chosen_style_set = "BJCP2021";
 	}
 
+	elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+	    $first_character = mb_substr($style_explodies[0], 0, 1);
+	    if ($first_character == "M") $chosen_style_set = "BJCP2026";
+	    elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    else $chosen_style_set = "BJCP2021";
+	}
+
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
@@ -326,6 +333,13 @@ function check_carb($style,$styleSet) {
 	    else $chosen_style_set = "BJCP2021";
 	}
 
+	elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+	    $first_character = mb_substr($style_explodies[0], 0, 1);
+	    if ($first_character == "M") $chosen_style_set = "BJCP2026";
+	    elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    else $chosen_style_set = "BJCP2021";
+	}
+
 	else $chosen_style_set = $_SESSION['prefsStyleSet'];
 
 	// AABC2025 ships only its 16 cider styles; beer/mead styles for that set remain under
@@ -363,6 +377,13 @@ function check_mead_strength($style,$styleSet) {
 	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
 	    $first_character = mb_substr($style_explodies[0], 0, 1);
 	    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+	    else $chosen_style_set = "BJCP2021";
+	}
+
+	elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+	    $first_character = mb_substr($style_explodies[0], 0, 1);
+	    if ($first_character == "M") $chosen_style_set = "BJCP2026";
+	    elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
 	    else $chosen_style_set = "BJCP2021";
 	}
 
