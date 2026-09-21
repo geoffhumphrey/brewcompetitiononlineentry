@@ -1417,6 +1417,65 @@ if (!empty($on_the_fly_display)) $left_side .= $on_the_fly_display;
   </div>
 </div>
 
+<?php if (($admin) && ($_SESSION['userLevel'] == 0)) {
+
+	// Picked once per page, not per row - prefsDisplaySpecial is a competition-wide
+	// setting, not a per-evaluation value. GitHub #1756, abridged version's modal.
+	$label_reassign_number = ($_SESSION['prefsDisplaySpecial'] == "J") ? $label_judging_number : $label_entry_number;
+	$reassign_context_template = "Reassigning {judge}&rsquo;s evaluation of ".$label_reassign_number." #{number}.";
+
+?>
+<!-- Modal: Reassign Evaluation to a Different Entry -->
+<div class="modal fade" id="eval-reassign-modal" tabindex="-1" role="dialog" aria-labelledby="eval-reassign-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="get" action="<?php echo $base_url; ?>includes/process.inc.php">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="eval-reassign-modal-label">Reassign Evaluation</h4>
+        </div>
+        <div class="modal-body">
+          <p id="eval-reassign-context" data-template="<?php echo $reassign_context_template; ?>"></p>
+          <p class="text-muted small">This is only available before this entry's consensus score has been recorded/imported to the judging_scores table.</p>
+          <input type="hidden" name="section" value="evaluation">
+          <input type="hidden" name="go" value="default">
+          <input type="hidden" name="action" value="evaluation_reassign">
+          <input type="hidden" name="filter" value="<?php echo h($filter); ?>">
+          <input type="hidden" id="eval-reassign-id" name="id" value="">
+          <div class="form-group">
+            <label for="eval-reassign-target">Correct <?php echo $label_reassign_number; ?></label>
+            <input type="text" id="eval-reassign-target" name="target_entry_number" class="form-control" pattern=".{6,6}" maxlength="6" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_cancel; ?></button>
+          <button type="submit" class="btn btn-success">Reassign</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+	$('#eval-reassign-modal').on('show.bs.modal', function (event) {
+		var trigger = $(event.relatedTarget);
+		$('#eval-reassign-id').val(trigger.data('eval-id'));
+		$('#eval-reassign-target').val('');
+		var context = $('#eval-reassign-context');
+		context.text(
+			context.data('template')
+				.replace('{judge}', trigger.data('judge-name'))
+				.replace('{number}', trigger.data('entry-number'))
+		);
+	});
+	$('#eval-reassign-modal').on('shown.bs.modal', function () {
+		$('#eval-reassign-target').focus();
+	});
+});
+</script>
+<?php } ?>
+
 <!-- Modal: Next Session Open -->
 <div class="modal fade" id="next-session-open-modal" tabindex="-1" role="dialog" aria-labelledby="next-session-open-modal-label">
   <div class="modal-dialog" role="document">

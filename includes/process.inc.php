@@ -417,6 +417,9 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	// Admin-uploaded ("imported") style sets - confirm+insert, whole-set delete, and metadata edit
 	elseif (($action == "styles_import") || ($action == "styles_import_abort") || ($action == "styles_import_delete") || ($action == "styles_import_edit")) include (PROCESS.'process_styles_import.inc.php');
 
+	// Reassign a single judge's evaluation to a different entry (GitHub #1756, abridged/pre-import-only version)
+	elseif ($action == "evaluation_reassign") include (PROCESS.'process_evaluation_reassign.inc.php');
+
 	// Update to various DB Tables as called out in process URL
 	else {
 

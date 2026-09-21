@@ -70,7 +70,41 @@ foreach (($eval_scores_by_eid[$row_entries['id']] ?? array()) as $key => $value)
 		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" title=\"View the generated scoresheet from the evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><span class=\"fa-stack\"><i class=\"fa fa-fw fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></a> ";
 		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" title=\"Print the generated scoresheet from the evaluation  completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-fw fa-lg fa-file-text\"></i></a> ";
 		$actions .= "<a href=\"".$edit_link."\" data-toggle=\"tooltip\" data-toggle=\"tooltip\" title=\"Edit this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\"><i class=\"fa fa-fw fa-lg fa-pencil\"></i></a> ";
+
+		// Reassign to a different entry - top-level admin only, and only useful before
+		// this entry's scores have been recorded/imported (enforced server-side in
+		// process_evaluation_reassign.inc.php). GitHub #1756, abridged version.
+		// Opens the single shared #eval-reassign-modal defined once in
+		// dashboard.eval.php - this file renders once per entry, so the modal
+		// itself can't live here without producing duplicate ids.
+		if ($_SESSION['userLevel'] == 0) {
+
+			// $score_entry_data_by_eid_eval is the same batched, admin-only judging_scores
+			// lookup dashboard.eval.php already builds (keyed by eid) - reusing it here is
+			// free (no extra query) and mirrors the exact gate process_evaluation_reassign.inc.php
+			// enforces server-side, so the icon's disabled state never lies about what
+			// submitting would actually do.
+			$eval_already_scored = isset($score_entry_data_by_eid_eval[$row_entries['id']]);
+
+			if ($eval_already_scored) {
+				// Plain <span>, not <a> - no href/data-toggle at all, so there's nothing to
+				// click. data-tooltip="true" (not data-toggle="tooltip") per app.js:55-57's
+				// second tooltip initializer, same reasoning as the active icon below.
+				$actions .= "<span class=\"text-muted\" style=\"cursor:not-allowed;\" data-tooltip=\"true\" title=\"This entry's consensus score has already been recorded/imported - reassignment is no longer available.\"><i class=\"fa fa-fw fa-lg fa-exchange\"></i></span> ";
+			}
+
+			else {
+				// data-tooltip="true" (not data-toggle="tooltip") - data-toggle is already
+				// claimed by the modal trigger here. app.js:55-57 already has a second BS
+				// tooltip initializer keyed off data-tooltip="true" for exactly this case
+				// (see e.g. admin/judging_tables.admin.php's required-field tooltips).
+				$actions .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#eval-reassign-modal\" data-eval-id=\"".$value['id']."\" data-judge-name=\"".h($eval_judge[0]." ".$eval_judge[1])."\" data-entry-number=\"".h($number)."\" data-tooltip=\"true\" title=\"Reassign this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1]." to a different entry.\"><i class=\"fa fa-fw fa-lg fa-exchange\"></i></a> ";
+			}
+
+		}
+
 		$actions .= "<a class=\"hide-loader\" href=\"".$delete_link."\" data-toggle=\"tooltip\" title=\"Delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\" data-confirm=\"Are you sure you want to delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1]."? This cannot be undone.\"><i class=\"fa fa-fw fa-lg fa-trash-o\"></i></a> ";
+
 		$actions .= "</div>";
 		$actions .= "</div>";
 		
