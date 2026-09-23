@@ -995,24 +995,6 @@ $(document).ready(function(){
     </div>
 </div>
 <div class="form-group">
-    <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Results Display Date/Time</label>
-    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-            <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
-        <div class="help-block">Date and time when the system will display winners if Results Display is enabled.</div>
-        <div class="help-block with-errors"></div>
-    </div>
-</div>
-<?php if (strpos($section, "step") === FALSE) { ?>
-<div class="form-group">
-    <label for="prefsScoresheetDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Early-Release Date/Time</label>
-    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-            <input class="form-control date-time-picker-system" id="prefsScoresheetDelay" name="prefsScoresheetDelay" type="text" value="<?php if (!empty($row_prefs['prefsScoresheetDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsScoresheetDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
-        <div class="help-block">Date and time when entrants can begin viewing their own scoresheets, independent of (and typically before) the Results Display date above. If left blank, scoresheets remain gated by the Results Display date only.</div>
-        <div class="help-block with-errors"></div>
-    </div>
-</div>
-<?php } ?>
-<div class="form-group">
     <label for="prefsWinnerMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Place Distribution Method</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">            
@@ -1025,6 +1007,39 @@ $(document).ready(function(){
         <div class="help-block">How the competition will award places for winning entries.</div>
     </div>
 </div>
+<div class="form-group">
+    <label for="prefsDisplayTableAwards" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Individual Table/Category Awards Display</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <label class="radio-inline">
+                <input type="radio" name="prefsDisplayTableAwards" value="1" id="prefsDisplayTableAwards_0"  <?php if ($row_prefs['prefsDisplayTableAwards'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsDisplayTableAwards" value="0" id="prefsDisplayTableAwards_1" <?php if ($row_prefs['prefsDisplayTableAwards'] == "0") echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <div class="help-block">Indicate whether individual placing entries  will be displayed with Best of Show once results are published. Disabling this hides individual placements everywhere they would normally show (results, user accounts, etc.), while Best of Show results remain fully visible. Useful for "Winner Takes All" competitions.</div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Results Display Date/Time</label>
+    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
+            <input class="form-control date-time-picker-system" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") { $date = new DateTime(); $date->modify('+2 months'); echo $date->format('Y-m-d H'); } elseif (!empty($row_prefs['prefsWinnerDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
+        <div class="help-block">Date and time when the system will display winners if Results Display is enabled.</div>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+<?php if (strpos($section, "step") === FALSE) { ?>
+<div class="form-group">
+    <label for="prefsScoresheetDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Early-Release Date/Time</label>
+    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
+            <input class="form-control date-time-picker-system" id="prefsScoresheetDelay" name="prefsScoresheetDelay" type="text" value="<?php if (!empty($row_prefs['prefsScoresheetDelay'])) echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsScoresheetDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
+        <div class="help-block">Date and time when entrants can begin viewing their own scoresheets, independent of (and typically before) the Results Display date/time. If left blank, scoresheets release with results on the Results Display date/time specified above.</div>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+<?php } ?>
+
 <!-- Modal -->
 <div class="modal fade" id="scoresheetModal" tabindex="-1" role="dialog" aria-labelledby="scoresheetModalLabel">
     <div class="modal-dialog" role="document">

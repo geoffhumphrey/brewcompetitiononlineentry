@@ -172,6 +172,12 @@ $label_six_char_judging = "6-Character Judging Number";
 $label_six_digit_entry = "6-Digit Entry Number";
 $label_not_archived = "Not Archived";
 
+/*
+ * --------------------- v 3.2.0 -----------------------
+ */
+$label_admin_table_awards_display = "Table/Category Awards Display";
+$archive_text_024 = "When disabled, only Best of Show results are shown for this archive; individual table/category placements are hidden (\"Winner Take All\").";
+
 // -------------------- Barcode Check-In --------------------
 
 

@@ -115,6 +115,12 @@ $label_six_char_judging = "Numéro de Jugement à 6 Caractères";
 $label_six_digit_entry = "Numéro d'Entrée à 6 Chiffres";
 $label_not_archived = "Non Archivé";
 
+/*
+ * --------------------- v 3.2.0 -----------------------
+ */
+$label_admin_table_awards_display = "Affichage des Récompenses par Table/Catégorie";
+$archive_text_024 = "Lorsque désactivé, seuls les résultats du Best of Show sont affichés pour cette archive ; les places individuelles par table/catégorie sont masquées (« Le Gagnant Rafle Tout »).";
+
 // -------------------- Barcode Check-In --------------------
 
 // -------------------- Hero Images --------------------

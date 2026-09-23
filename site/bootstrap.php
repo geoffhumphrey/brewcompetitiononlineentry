@@ -222,6 +222,7 @@ if ($setup_success) {
 				'prefsSelectedStyles' => NULL,
 				'prefsCompLogoSize' => '300',
 				'prefsDisplayWinners' => 'Y',
+				'prefsDisplayTableAwards' => 1,
 				'prefsWinnerDelay' => '1616974200',
 				'prefsDisplayScoresheets' => 'N',
 				'prefsScoresheetDelay' => NULL,

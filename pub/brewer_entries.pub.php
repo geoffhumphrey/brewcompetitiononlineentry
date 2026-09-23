@@ -491,32 +491,45 @@ if ($totalRows_log > 0) {
 
 			$score = score_check($row_log['id'],$judging_scores_db_table);
 
-			$medal_winner = winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$_SESSION['prefsWinnerMethod']);
-			
-			$winner_place = strpos($medal_winner, ':');
-			$winner_place = substr($medal_winner, 0, $winner_place);
-			if (preg_match("~[0-9]+~", $medal_winner)) {
-				$winner_place = preg_replace("/[^0-9\s.-]/", "", $winner_place);
+			if ($_SESSION['prefsDisplayTableAwards'] == 1) {
+
+				$medal_winner = winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$_SESSION['prefsWinnerMethod']);
+
+				$winner_place = strpos($medal_winner, ':');
+				$winner_place = substr($medal_winner, 0, $winner_place);
+				if (preg_match("~[0-9]+~", $medal_winner)) {
+					$winner_place = preg_replace("/[^0-9\s.-]/", "", $winner_place);
+				}
+
+				$entry_mini_bos = FALSE;
+				if (minibos_check($row_log['id'],$judging_scores_db_table)) $entry_mini_bos = TRUE;
+
 			}
-			
-	 		$entry_mini_bos = FALSE;
-	 		if (minibos_check($row_log['id'],$judging_scores_db_table)) $entry_mini_bos = TRUE;
+			else {
+				$medal_winner = "";
+				$winner_place = "";
+				$entry_mini_bos = FALSE;
+			}
 
 			$entry_output .= "<td>";
 			$entry_output .= $score;
 			$entry_output .= "</td>";
 
-			$entry_output .= "<td>";
-			if ($entry_mini_bos) {
-				if ($action != "print") $entry_output .= "<span class =\"fa fa-lg fa-check text-success\"></span>";
-				else $entry_output .= $label_yes;
-			}
-			else $entry_output .= "&nbsp;";
-			$entry_output .= "</td>";
+			if ($_SESSION['prefsDisplayTableAwards'] == 1) {
 
-			$entry_output .= "<td>";
-			$entry_output .= $medal_winner;
-			$entry_output .= "</td>";
+				$entry_output .= "<td>";
+				if ($entry_mini_bos) {
+					if ($action != "print") $entry_output .= "<span class =\"fa fa-lg fa-check text-success\"></span>";
+					else $entry_output .= $label_yes;
+				}
+				else $entry_output .= "&nbsp;";
+				$entry_output .= "</td>";
+
+				$entry_output .= "<td>";
+				$entry_output .= $medal_winner;
+				$entry_output .= "</td>";
+
+			}
 
 		}
 
@@ -843,8 +856,10 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				    <?php } ?>
 				  	<?php if ($show_scores) { ?>
 				  	<th width="5%"><?php echo $label_score; ?></th>
+				    <?php if ($_SESSION['prefsDisplayTableAwards'] == 1) { ?>
 				    <th width="5%" nowrap><?php echo $label_mini_bos; ?></th>
 				  	<th width="5%"><?php echo $label_winner; ?></th>
+				  	<?php } ?>
 				  	<?php } ?>
 				  	<?php if ((!$show_scores) && ($print_bottle_labels)) { ?>
 				  	<?php if ((!$judging_started) && ($registration_open < 2)) { ?>

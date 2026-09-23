@@ -5653,6 +5653,67 @@ if ((table_exists($prefix."style_sets_imported", true)) && (!check_update("style
 // can't safely be used as a check_new_style() sentinel here.
 if (($section == "setup") || (!check_new_style("M2","E","Other Fruit Mead"))) include (UPDATE.'styles_bjcp_2026_update.php');
 
+if (!check_update("prefsDisplayTableAwards", $prefix."preferences")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `prefsDisplayTableAwards` tinyint(1) NOT NULL DEFAULT 1;",$prefix."preferences");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3200_update .= "<li>Added the ability to suppress individual table/category placement displays while keeping Best of Show results visible (\"Winner Take All\").</li>";
+	else {
+		$v3200_update .= "<li class=\"text-danger\">The \"Winner Take All\" preference could NOT be added. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
+if (!check_update("archiveDisplayTableAwards", $prefix."archive")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `archiveDisplayTableAwards` tinyint(1) NULL DEFAULT NULL;",$prefix."archive");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) {
+
+		$v3200_update .= "<li>Added the ability to suppress individual table/category placement displays on archived (past winners) pages.</li>";
+
+		// Every archive that exists today only ever displayed individual placements
+		// (this setting didn't exist yet), so backfill every existing row to "enabled"
+		// rather than leave it NULL/unconfigured - matches archiveWinnerMethod's own
+		// unconditional post-add backfill.
+		$update_table = $prefix."archive";
+		$data = array('archiveDisplayTableAwards' => 1);
+		if (!$db_conn->update($update_table, $data)) {
+			$v3200_update .= "<li class=\"text-danger\">Existing archives' Winner Take All setting could NOT be backfilled. Please contact support.</li>";
+			$error_count++;
+		}
+
+	}
+	else {
+		$v3200_update .= "<li class=\"text-danger\">The archived \"Winner Take All\" column could NOT be added. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
+// Remediation: archiveProEdition and archiveWinnerMethod have always been captured via
+// blank_to_null(), which treats the string "0" as blank (PHP's empty("0") === true) and
+// silently nulls it out - corrupting every archive created while the competition was
+// Amateur Edition (0) or using the "by table" winner method (0), the two most common
+// values for each. Re-runs harmlessly once every affected row is already corrected
+// (WHERE ... IS NULL then matches nothing, so $db_conn->count is 0 and nothing is logged).
+$update_table = $prefix."archive";
+
+$db_conn->where('archiveProEdition', NULL, 'IS');
+if (!$db_conn->update($update_table, array('archiveProEdition' => 0))) {
+	$v3200_update .= "<li class=\"text-danger\">Archive Edition Type correction could NOT be applied. Please contact support.</li>";
+	$error_count++;
+}
+elseif ($db_conn->count > 0) $v3200_update .= sprintf("<li>Corrected %s archive record(s) with a missing Edition Type (defaulted to Amateur).</li>",$db_conn->count);
+
+$db_conn->where('archiveWinnerMethod', NULL, 'IS');
+if (!$db_conn->update($update_table, array('archiveWinnerMethod' => 0))) {
+	$v3200_update .= "<li class=\"text-danger\">Archive Winner Place Distribution Method correction could NOT be applied. Please contact support.</li>";
+	$error_count++;
+}
+elseif ($db_conn->count > 0) $v3200_update .= sprintf("<li>Corrected %s archive record(s) with a missing Winner Place Distribution Method (defaulted to By Table).</li>",$db_conn->count);
+
 if (!$setup_running) $v3200_update .= "</ul>";
 
 $this_update_version_block = $versions['3.2.0.0'];

@@ -115,6 +115,12 @@ $label_six_char_judging = "6-znakové Rozhodčí číslo";
 $label_six_digit_entry = "6-místné číslo vstupu";
 $label_not_archived = "Není Archivováno";
 
+/*
+ * --------------------- v 3.2.0 -----------------------
+ */
+$label_admin_table_awards_display = "Zobrazení Cen za Stůl/Kategorii";
+$archive_text_024 = "Pokud je zakázáno, pro tento archiv se zobrazují pouze výsledky Best of Show; jednotlivá umístění podle stolu/kategorie jsou skryta (\"Vítěz bere vše\").";
+
 // -------------------- Barcode Check-In --------------------
 
 // -------------------- Hero Images --------------------

@@ -125,13 +125,15 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 				include (PUB.'bestbrewer.pub.php');
 			}
 
-			echo "<div class=\"mt-4 reveal-element\">";
-			echo $header1_20;
-			if ($winner_method == "1") include (PUB.'winners_category.pub.php');
-			elseif ($winner_method == "2") include (PUB.'winners_subcategory.pub.php');
-			else include (PUB.'winners.pub.php');
-			echo "</div>";
-		
+			if ($_SESSION['prefsDisplayTableAwards'] == 1) {
+				echo "<div class=\"mt-4 reveal-element\">";
+				echo $header1_20;
+				if ($winner_method == "1") include (PUB.'winners_category.pub.php');
+				elseif ($winner_method == "2") include (PUB.'winners_subcategory.pub.php');
+				else include (PUB.'winners.pub.php');
+				echo "</div>";
+			}
+
 		}
 
 		else {
@@ -139,7 +141,7 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 
 			if ($_SESSION['prefsDisplayScoresheets'] == "Y") {
 				if (judging_winner_display($_SESSION['prefsScoresheetDelay'])) {
-					echo "<p>".$default_page_text_025."</p>";
+					echo "<p class=\"text-success\"><strong>".$default_page_text_025."</strong></p>";
 				}
 				else {
 					echo sprintf("<p>%s %s.</p>",$default_page_text_024,getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsScoresheetDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));

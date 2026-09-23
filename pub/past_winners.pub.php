@@ -60,10 +60,12 @@ $archive_tables_exist = (table_exists($judging_scores_db_table)) && (table_exist
 		echo "<h2>".$default_page_text_009."</h2>";
 		include (PUB.'bos.pub.php');
 
-		echo "<h2>".$default_page_text_010."</h2>";
-		if ($winner_method == 0) include (PUB.'winners.pub.php');
-		elseif ($winner_method == 1) include (PUB.'winners_category.pub.php');
-		else include (PUB.'winners_subcategory.pub.php');
+		if ($row_archive_prefs['archiveDisplayTableAwards'] == 1) {
+			echo "<h2>".$default_page_text_010."</h2>";
+			if ($winner_method == 0) include (PUB.'winners.pub.php');
+			elseif ($winner_method == 1) include (PUB.'winners_category.pub.php');
+			else include (PUB.'winners_subcategory.pub.php');
+		}
 	}
 
 ?>

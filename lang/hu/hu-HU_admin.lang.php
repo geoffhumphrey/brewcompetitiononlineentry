@@ -115,6 +115,12 @@ $label_six_char_judging = "6 karakteres bírálati szám";
 $label_six_digit_entry = "6 számjegyű nevezési szám";
 $label_not_archived = "Nincs archiválva";
 
+/*
+ * --------------------- v 3.2.0 -----------------------
+ */
+$label_admin_table_awards_display = "Asztal/kategória díjak megjelenítése";
+$archive_text_024 = "Ha le van tiltva, ehhez az archívumhoz csak a Best of Show eredmények jelennek meg; az egyéni asztal/kategória helyezések rejtve maradnak (\"a győztes mindent visz\").";
+
 // -------------------- Barcode Check-In --------------------
 
 // -------------------- Hero Images --------------------

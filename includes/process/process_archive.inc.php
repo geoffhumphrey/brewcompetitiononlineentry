@@ -351,11 +351,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$update_table = $prefix."archive";
 		$data = array(
 			'archiveSuffix' => $suffix,
-			'archiveProEdition' => blank_to_null($_SESSION['prefsProEdition']),
+			// Not blank_to_null() for these three: that helper treats "0" as blank
+			// (PHP's empty("0") === true), which would silently null out a legitimate
+			// 0 value - amateur edition, "by table" winner method, and a disabled
+			// table-awards display are all real, meaningful 0 values, not absent data.
+			'archiveProEdition' => $_SESSION['prefsProEdition'],
 			'archiveStyleSet' => blank_to_null($styleSet),
 			'archiveScoresheet' => blank_to_null($_SESSION['prefsDisplaySpecial']),
-			'archiveWinnerMethod' => blank_to_null($_SESSION['prefsWinnerMethod']),
-			'archiveDisplayWinners' => blank_to_null($_SESSION['prefsDisplayWinners'])
+			'archiveWinnerMethod' => $_SESSION['prefsWinnerMethod'],
+			'archiveDisplayWinners' => blank_to_null($_SESSION['prefsDisplayWinners']),
+			'archiveDisplayTableAwards' => $_SESSION['prefsDisplayTableAwards']
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -619,11 +624,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'archiveProEdition' => sterilize($_POST['archiveProEdition']),
 			'archiveStyleSet' => sterilize($_POST['archiveStyleSet']),
 			'archiveScoresheet' => sterilize($_POST['archiveScoresheet']),
-			// Both are radio buttons that get DISABLED (and so never submitted)
+			// All three are radio buttons that get DISABLED (and so never submitted)
 			// on the edit-archive form when there's no results data for this
 			// archive to choose a winner method/display setting for.
 			'archiveWinnerMethod' => isset($_POST['archiveWinnerMethod']) ? sterilize($_POST['archiveWinnerMethod']) : null,
-			'archiveDisplayWinners' => isset($_POST['archiveDisplayWinners']) ? sterilize($_POST['archiveDisplayWinners']) : null
+			'archiveDisplayWinners' => isset($_POST['archiveDisplayWinners']) ? sterilize($_POST['archiveDisplayWinners']) : null,
+			'archiveDisplayTableAwards' => isset($_POST['archiveDisplayTableAwards']) ? sterilize($_POST['archiveDisplayTableAwards']) : null
 			);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);

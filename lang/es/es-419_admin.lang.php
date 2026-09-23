@@ -115,6 +115,12 @@ $label_six_char_judging = "Número de Evaluación de 6 Caracteres";
 $label_six_digit_entry = "Número de Entrada de 6 Dígitos";
 $label_not_archived = "No Archivado";
 
+/*
+ * --------------------- v 3.2.0 -----------------------
+ */
+$label_admin_table_awards_display = "Visualización de Premios por Mesa/Categoría";
+$archive_text_024 = "Cuando está deshabilitado, solo se muestran los resultados de Best of Show para este archivo; los lugares individuales por mesa/categoría quedan ocultos (\"El Ganador se Lleva Todo\").";
+
 // -------------------- Barcode Check-In --------------------
 
 // -------------------- Hero Images --------------------

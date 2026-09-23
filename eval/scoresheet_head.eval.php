@@ -153,7 +153,7 @@ $mhp_qr_data = json_encode($mhp_qr_data, JSON_NUMERIC_CHECK);
             <p class="text-center" style="font-size: 1.8em; padding: 5px; margin: 0; font-weight: bold;">
                 <?php if (!empty($row_eval['evalFinalScore'])) echo "<span style=\"font-size: .7em;\">".$label_assigned_score.":</span> ".$row_eval['evalFinalScore']; ?>
                 <?php 
-                if ((!empty($row_eval['evalPlace'])) && ($_SESSION['prefsDisplayWinners'] == "Y") && ((judging_winner_display($_SESSION['prefsWinnerDelay'])) || ($_SESSION['userLevel'] < 2))) echo "<span style=\"margin-left: 10px; font-size: .7em;\">".$label_place.":</span> ".display_place($row_eval['evalPlace'],1); ?>
+                if ((!empty($row_eval['evalPlace'])) && ($_SESSION['prefsDisplayWinners'] == "Y") && ($_SESSION['prefsDisplayTableAwards'] == 1) && ((judging_winner_display($_SESSION['prefsWinnerDelay'])) || ($_SESSION['userLevel'] < 2))) echo "<span style=\"margin-left: 10px; font-size: .7em;\">".$label_place.":</span> ".display_place($row_eval['evalPlace'],1); ?>
             </p>
         </div>
     </div>

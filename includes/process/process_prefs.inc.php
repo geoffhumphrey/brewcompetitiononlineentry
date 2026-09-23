@@ -237,6 +237,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'prefsSessionTimeout' => $prefsSessionTimeout,
 				'prefsMHPDisplay' => $prefsMHPDisplay,
 				'prefsDisplayWinners' => sterilize($_POST['prefsDisplayWinners']),
+				'prefsDisplayTableAwards' => sterilize($_POST['prefsDisplayTableAwards']),
 				'prefsWinnerDelay' => $prefsWinnerDelay,
 				'prefsDisplayScoresheets' => blank_to_null($prefsDisplayScoresheets),
 				'prefsScoresheetDelay' => blank_to_null($prefsScoresheetDelay),

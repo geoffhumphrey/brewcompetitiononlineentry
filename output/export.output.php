@@ -77,6 +77,7 @@ if ($filter == "default") {
     $winner_method = $_SESSION['prefsWinnerMethod'];
     $style_set = $_SESSION['prefsStyleSet'];
     $pro_edition = $_SESSION['prefsProEdition'];
+    $display_table_awards = $_SESSION['prefsDisplayTableAwards'];
 }
 
 // Or, for archived data
@@ -93,6 +94,7 @@ else {
         $winner_method = $row_archive_prefs['archiveWinnerMethod'];
         $style_set = $row_archive_prefs['archiveStyleSet'];
         $pro_edition = $row_archive_prefs['archiveProEdition'];
+        $display_table_awards = $row_archive_prefs['archiveDisplayTableAwards'];
         $judging_scores_db_table = $prefix."judging_scores_".$filter_clean;
         $brewing_db_table = $prefix."brewing_".$filter_clean;
         $brewer_db_table = $prefix."brewer_".$filter_clean;
@@ -1560,7 +1562,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 
                     $string = sprintf("%s - %s",$label_winners,html_entity_decode($_SESSION['contestName']));
-                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));                  
+                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
                     $title_table = new easyTable($pdf,1);
                     $title_table->easyCell($string, 'font-size:22; font-style:B; font-color:#000000;');
                     $title_table->printRow();
@@ -1570,7 +1572,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                      * Winners by table/medal category
                      */
 
-                    if ($winner_method == 0) {
+                    if (($winner_method == 0) && ($display_table_awards == 1)) {
 
                         /**
                          * Batch what used to be a get_table_info() call plus a scores.db.php
@@ -1715,7 +1717,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                      * Winners by style category
                      */
 
-                    if ($winner_method == 1) {
+                    if (($winner_method == 1) && ($display_table_awards == 1)) {
 
                         /**
                          * Batch what used to be 2-3 queries per active category
@@ -1887,7 +1889,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                      * Winners by style sub-category
                      */
 
-                    if ($winner_method == 2) {
+                    if (($winner_method == 2) && ($display_table_awards == 1)) {
 
                         /**
                          * Batch what used to be 2-3 queries per active subcategory
@@ -2255,7 +2257,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                      * Winners by table/medal group
                      */
 
-                    if ($winner_method == 0) {
+                    if (($winner_method == 0) && ($display_table_awards == 1)) {
 
                         /**
                          * Batch what used to be a get_table_info() call plus a scores.db.php
@@ -2384,7 +2386,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                      * Winners by style category
                      */
 
-                    if ($winner_method == 1) {
+                    if (($winner_method == 1) && ($display_table_awards == 1)) {
 
                         /**
                          * Batch what used to be 2-3 queries per active category
@@ -2530,7 +2532,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                      * Winners by style sub-category
                      */
 
-                    if ($winner_method == 2) {
+                    if (($winner_method == 2) && ($display_table_awards == 1)) {
 
                         /**
                          * Batch what used to be 2-3 queries per active subcategory
@@ -4096,13 +4098,17 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
             }
 
             // Results data
+            // Place also waits for the winner-display delay to pass (or an admin
+            // bypass) - same rule as the "place" line on a judge's own scoresheet
+            // view (eval/scoresheet_head.eval.php). prefsScoresheetDelay only
+            // governs early access to the score itself, never the official placement.
             $results[] = array(
-                $category, 
+                $category,
                 convert_to_entities($row_brewer['brewStyle']),
-                $req_info, 
-                $entry_consensus_score, 
-                $highest_entry_score, 
-                $row_brewer['scorePlace']
+                $req_info,
+                $entry_consensus_score,
+                $highest_entry_score,
+                (($display_table_awards == 1) && ((judging_winner_display($_SESSION['prefsWinnerDelay'])) || ($admin_role))) ? $row_brewer['scorePlace'] : ""
             );
 
             if ($results_count == $totalRows_brewer) {

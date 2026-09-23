@@ -174,10 +174,12 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 
 			if (($row_scored_entries['count'] > 0) && (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0))) include (SECTIONS.'bestbrewer.sec.php');
 
-			echo $header1_20;
-			if ($winner_method == "1") include (SECTIONS.'winners_category.sec.php');
-			elseif ($winner_method == "2") include (SECTIONS.'winners_subcategory.sec.php');
-			else include (SECTIONS.'winners.sec.php');
+			if ($_SESSION['prefsDisplayTableAwards'] == 1) {
+				echo $header1_20;
+				if ($winner_method == "1") include (SECTIONS.'winners_category.sec.php');
+				elseif ($winner_method == "2") include (SECTIONS.'winners_subcategory.sec.php');
+				else include (SECTIONS.'winners.sec.php');
+			}
 		}
 
 		else {
@@ -228,10 +230,12 @@ if ($section == "past-winners") {
 		echo $page_info10;
 		include (SECTIONS.'bos.sec.php');
 
-		echo $header1_20;
-		if ($winner_method == "1") include (SECTIONS.'winners_category.sec.php');
-		elseif ($winner_method == "2") include (SECTIONS.'winners_subcategory.sec.php');
-		else include (SECTIONS.'winners.sec.php');
+		if ($row_archive_prefs['archiveDisplayTableAwards'] == 1) {
+			echo $header1_20;
+			if ($winner_method == "1") include (SECTIONS.'winners_category.sec.php');
+			elseif ($winner_method == "2") include (SECTIONS.'winners_subcategory.sec.php');
+			else include (SECTIONS.'winners.sec.php');
+		}
 	}
 
 }

@@ -181,6 +181,22 @@ foreach ($style_sets as $style_set) {
     </div>
 </div><!-- ./Form Group -->
 
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="archiveDisplayTableAwards" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_admin_table_awards_display; ?></label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="archiveDisplayTableAwards" value="1" id="archiveDisplayTableAwards_0"  <?php if (($row_archive['archiveDisplayTableAwards'] == "1") || (empty($row_archive['archiveDisplayTableAwards']))) echo "CHECKED"; if (!$results_data) echo " DISABLED"; ?> /> <?php echo $label_admin_enable; ?>
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="archiveDisplayTableAwards" value="0" id="archiveDisplayTableAwards_1" <?php if ($row_archive['archiveDisplayTableAwards'] == "0") echo "CHECKED"; if (!$results_data) echo " DISABLED"; ?>/> <?php echo $label_admin_disable; ?>
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block"><?php if ($results_data) echo $archive_text_024; else echo $archive_text_022; ?></span>
+    </div>
+</div><!-- ./Form Group -->
+
 <div class="form-group"><!-- Form Group Radio STACKED -->
     <label for="archiveWinnerMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_admin_winner_dist; ?></label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -355,6 +371,7 @@ foreach ($style_sets as $style_set) {
     <td class="hidden-xs hidden-sm">
         <?php 
         echo yes_no($row_archive['archiveDisplayWinners'],$base_url,1);
+        if ($row_archive['archiveDisplayTableAwards'] == 0) echo " <small>(BOS Only)</small>";
         if (($row_archive['archiveDisplayWinners'] == "Y") && ($_SESSION['prefsProEdition'] == 0)) {
         ?>
         &nbsp;<a target="_blank" data-toggle="tooltip" data-placement="top" title="Download a CSV of this archive's winner data." href="<?php echo $base_url; ?>includes/output.inc.php?section=export-entries&amp;go=csv&amp;filter=<?php echo h($row_archive['archiveSuffix']); ?>&amp;tb=circuit&amp;sort=<?php echo h($row_archive['archiveSuffix']); ?>" target="_blank"><span class="fa fa-lg fa-file-excel"></span></a>

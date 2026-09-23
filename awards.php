@@ -104,7 +104,7 @@ if (($display_to_admin) || ($display_to_public)) {
 	$slides_best_brewer = "";
 	$slides_best_club = "";
 
-	if ($row_scored_entries['count'] > 0) {
+	if (($row_scored_entries['count'] > 0) && ($_SESSION['prefsDisplayTableAwards'] == 1)) {
 
 		// Build slides by Table
 		if ($_SESSION['prefsWinnerMethod'] == "0") {
@@ -638,7 +638,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 		} // end if ($_SESSION['prefsWinnerMethod'] == "2")
 
-	} // end if ($row_scored_entries['count'] > 0)
+	} // end if (($row_scored_entries['count'] > 0) && ($_SESSION['prefsDisplayTableAwards'] == 1))
 
 	/**
 	 * Best of Show

@@ -361,8 +361,10 @@ $(document).ready(function() {
 		<?php } ?>
 		<?php if ($show_scores) { ?>
 		null,
+		<?php if ($_SESSION['prefsDisplayTableAwards'] == 1) { ?>
 		{ "asSorting": [  ] },
 		null,
+		<?php } ?>
 		<?php } ?>
 		<?php if ($action != "print") { ?>
 		{ "asSorting": [  ] }
