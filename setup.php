@@ -2,9 +2,13 @@
 ob_start();
 require_once ('paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
+// common.lib.php must load before styles.inc.php - the latter's imported-
+// style-sets merge block calls table_exists() (defined in common.lib.php)
+// unconditionally. Same fix already applied to includes/process.inc.php;
+// see includes/styles.inc.php's own doc comment on this block.
+require_once (LIB.'common.lib.php');
 require_once (INCLUDES.'styles.inc.php');
 if (SINGLE) require_once(SSO.'sso.inc.php');
-require_once (LIB.'common.lib.php');
 require_once (LIB.'update.lib.php');
 require_once (DB.'setup.db.php');
 require_once (INCLUDES.'db_tables.inc.php');

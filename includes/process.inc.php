@@ -203,9 +203,6 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	// Delete
 	elseif ($action == "delete") include (PROCESS.'process_delete.inc.php');
 
-	// Create a practice judging session
-	//elseif ($action == "practice_session") include (PROCESS.'process_judging_practice_session.inc.php');
-	
 	// Barcode check in
 	elseif ($action == "barcode_check_in") include (PROCESS.'process_barcode_check_in.inc.php');
 
@@ -419,6 +416,9 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	// Reassign a single judge's evaluation to a different entry (GitHub #1756, abridged/pre-import-only version)
 	elseif ($action == "evaluation_reassign") include (PROCESS.'process_evaluation_reassign.inc.php');
+
+	// Admin-triggered practice judging session (Manage Tables) - create/delete
+	elseif (($action == "practice_session_enable") || ($action == "practice_session_delete")) include (PROCESS.'process_practice_session.inc.php');
 
 	// Update to various DB Tables as called out in process URL
 	else {

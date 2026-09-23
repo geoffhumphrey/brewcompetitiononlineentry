@@ -9,6 +9,9 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 include (DB.'styles.db.php');
 include (DB.'admin_judging_tables.db.php');
 
+require_once (LIB.'practice_session.lib.php');
+$practice_table_id = practice_session_exists($db_conn, $prefix);
+
 $limits_by_style = FALSE;
 $limits_by_table = FALSE;
 $style_limits_json = json_decode($_SESSION['prefsStyleLimits'],true);
@@ -861,6 +864,13 @@ $(document).ready(function(){
         enable_competition_mode(ajax_url,admin_function);
     });
 
+    $("#practice-session-enable-form").on("submit", function(e){
+        if ($(this).find("input[name='selected_style_types[]']:checked").length === 0) {
+            e.preventDefault();
+            $("#practice-session-enable-error").show();
+        }
+    });
+
 });
 
 </script>
@@ -881,6 +891,9 @@ $(document).ready(function(){
                     <li>If there are no entries marked as received for a particular sub-style, the <strong>sub-style will be removed</strong> from the table's styles list.</li>
                     <li>If there are no entries marked as received for <strong>all</strong> sub-styles defined for a table, <strong>that table will be deleted</strong>.</li>
                     <li>Judges and stewards that have entries at a table where they are assigned will be un-assigned from that table as a failsafe.</li>
+                    <?php if ($practice_table_id) { ?>
+                    <li>The active <strong>Practice Judging Session</strong> &mdash; its table, synthetic entries, and any practice evaluations judges have submitted &mdash; will be <strong>permanently deleted</strong>.</li>
+                    <?php } ?>
                 </ul>
             </div>
             <div class="modal-footer">
@@ -891,6 +904,53 @@ $(document).ready(function(){
     </div>
 </div>
 
+<!-- Enable Practice Judging Session Modal -->
+<div class="modal fade" id="practice-session-enable-modal" tabindex="-1" role="dialog" aria-labelledby="practice-session-enable-modal-label">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="practice-session-enable-modal-label">Enable Practice Judging Session</h4>
+        </div>
+        <form id="practice-session-enable-form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=judging_tables&amp;action=practice_session_enable" class="hide-loader-form-submit">
+        <input type="hidden" name="user_session_token" value="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
+        <div class="modal-body">
+            <p>Creates a scratch judging table with one synthetic practice entry per style checked below, assigned to every registered judge, so they can rehearse the electronic scoresheet before real judging begins. The practice table, its entries, and any practice evaluations are removed automatically when you switch back to Tables Competition Mode, or at any time via the Delete Practice Session button.</p>
+            <div class="checkbox"><label><input type="checkbox" name="selected_style_types[]" value="1"> Beer</label></div>
+            <div class="checkbox"><label><input type="checkbox" name="selected_style_types[]" value="2"> Cider</label></div>
+            <div class="checkbox"><label><input type="checkbox" name="selected_style_types[]" value="3"> Mead</label></div>
+            <div id="practice-session-enable-error" class="text-danger small" style="display:none;">Select at least one style.</div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success">Proceed</button>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>
+
+<!-- Delete Practice Judging Session Modal -->
+<div class="modal fade" id="practice-session-delete-modal" tabindex="-1" role="dialog" aria-labelledby="practice-session-delete-modal-label">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="practice-session-delete-modal-label">Please Confirm</h4>
+        </div>
+        <form method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=judging_tables&amp;action=practice_session_delete" class="hide-loader-form-submit">
+        <input type="hidden" name="user_session_token" value="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
+        <div class="modal-body">
+            <p>Are you sure you want to delete the Practice Judging Session? The practice table, its synthetic entries, and any practice evaluations judges have submitted will be permanently removed. This cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success">Yes</button>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>
 
 <!-- Delete assignments modals -->
 <div class="modal fade" id="delete-all-judges" tabindex="-1" role="dialog" aria-labelledby="delete-all-judgesLabel">
@@ -953,7 +1013,28 @@ $(document).ready(function(){
 <?php } ?>
 </p>
 <?php if ($dbTable == "default") { ?>
-
+<?php if (!empty($_SESSION['practice_session_success'])) { ?>
+<div class="alert alert-success alert-dismissible hidden-print" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <span class="fa fa-lg fa-check-circle"></span>
+    <?php if ($_SESSION['practice_session_success'] == "create") { ?>
+        Practice Judging Session created. All registered judges have been assigned to the practice table.
+    <?php } else { ?>
+        Practice Judging Session deleted successfully.
+    <?php } ?>
+</div>
+<?php unset($_SESSION['practice_session_success']); } ?>
+<?php if (!empty($_SESSION['practice_session_errors'])) { ?>
+<div class="alert alert-danger alert-dismissible hidden-print" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <span class="fa fa-lg fa-exclamation-circle"></span> <strong>Practice Judging Session error:</strong>
+    <ul style="margin-bottom:0;">
+    <?php foreach ($_SESSION['practice_session_errors'] as $practice_error) { ?>
+        <li><?php echo h($practice_error); ?></li>
+    <?php } ?>
+    </ul>
+</div>
+<?php unset($_SESSION['practice_session_errors']); } ?>
 <div id="mode-alert" class="alert <?php echo $mode_alert_color; ?> hidden-print"><?php echo $sub_lead_text; ?></div>
 <?php if ($action == "default") { ?>
 <!-- Planning Mode Button -->
@@ -962,6 +1043,18 @@ $(document).ready(function(){
 </div>
 <div id="tables-competition-mode" class="bcoem-admin-element hidden-print">
     <button id="tables-competition-button" class="btn btn-primary"><span class="fa fa-exchange"></span> Switch to Tables <strong>Competition</strong> Mode</button> <a href="#" data-toggle="popover" title="Tables Competition Mode" data-content="<p>When the Tables Competition Mode function is enabled by an admin, it indicates to the system that the planning stage is over  and <strong>all applicable entries have been marked as <u>received</u></strong>.</p><p>Table configurations and assignments can still be changed as necessary while in Competition Mode. Pullsheets will be available.</p>" data-trigger="hover click" data-placement="right" data-html="true" data-container="body"><i class="fa fa-lg fa-question-circle"></i></a> <span id="competition-mode-status"><i id="competition-mode-status-icon" class=""></i> <span id="competition-mode-status-text" class="small"></span></span>
+</div>
+<!-- Practice Judging Session Button -->
+<div id="practice-session-button-wrap" class="bcoem-admin-element hidden-print" style="margin-top:5px;">
+<?php 
+$practice_session_help = "<a href=\"#\" data-toggle=\"popover\" title=\"Practice Judging Session\" data-content=\"<p>Enable a practice session for those judges who may not be familiar with Electronic Scoresheets.</p><p><strong>The practice table and associated judging session are only available while in Tables Planning Mode </strong> and will be deleted when the application is switched back into Tables Competition Mode.</p>\" data-trigger=\"hover click\" data-placement=\"right\" data-html=\"true\" data-container=\"body\"><i class=\"fa fa-lg fa-question-circle\"></i></a>";
+if ($_SESSION['jPrefsTablePlanning'] != 1) { ?>
+    <button id="practice-session-button" class="btn btn-default" disabled="disabled"><span class="fa fa-graduation-cap"></span> Enable Practice Judging Session</button> <?php echo $practice_session_help; ?>
+<?php } elseif (!$practice_table_id) { ?>
+    <button id="practice-session-button" class="btn btn-success" data-toggle="modal" data-target="#practice-session-enable-modal"><span class="fa fa-graduation-cap"></span> Enable Practice Judging Session</button> <?php echo $practice_session_help; ?>
+<?php } else { ?>
+    <button id="practice-session-button" class="btn btn-warning" data-toggle="modal" data-target="#practice-session-delete-modal"><span class="fa fa-graduation-cap"></span> Delete Practice Session</button>
+<?php } ?>
 </div>
 <?php } ?>
 <?php if (($_SESSION['prefsEval'] == 1) && ($dbTable == "default")) include (EVALS.'import_scores.eval.php'); ?>

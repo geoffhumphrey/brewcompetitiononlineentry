@@ -33,7 +33,6 @@ cleanup_double_encoding.php
 *.code-workspace
 vendor/
 tools/*
-ajax/practice_session.ajax.php
 user_docs/*
 !user_docs/.gitkeep
 user_temp/*

@@ -219,6 +219,14 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2) && ($referrer_ok)) {
 
 		require(LIB."admin.lib.php");
 
+		// Practice sessions only ever exist during Table Planning Mode - clean up
+		// before the received/not-received bookkeeping below runs, since a practice
+		// entry is created with brewReceived=1 and would otherwise be treated as a
+		// real received entry by that logic instead of being removed.
+		require(LIB."practice_session.lib.php");
+		$practice_delete_result = delete_practice_session($db_conn, $prefix);
+		if (!$practice_delete_result['success']) $error_count += count($practice_delete_result['errors']);
+
 		$received_entries_arr = array();
 		$flight_entries_arr = array();
 

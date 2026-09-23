@@ -16,6 +16,8 @@
  */
 
 include(LIB.'output.lib.php');
+require_once (LIB.'practice_session.lib.php');
+$practice_table_id = practice_session_exists($db_conn, $prefix);
 
 $judging_open = FALSE;
 $queued = FALSE;
@@ -463,8 +465,11 @@ if ($totalRows_table_assignments > 0) {
 			$table_assignment_data = "";
 			$table_assignment_post = "";
 
-			if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 0)) || (!isset($_SESSION['jPrefsTablePlanning']))) {
-				
+			// The practice table is a deliberate exception to the Planning-Mode gate below -
+			// it only ever exists during Table Planning Mode, so hiding its entries/evaluations
+			// until Competition Mode (which deletes it) would mean they're never visible at all.
+			if (((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 0)) || (!isset($_SESSION['jPrefsTablePlanning'])) || (($practice_table_id) && ($tbl_id == $practice_table_id))) {
+
 				$table_assignment_pre .= "<table id=\"table-".$random."\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 				$table_assignment_pre .= "<thead>";
 				$table_assignment_pre .= "<tr>";
@@ -895,7 +900,7 @@ if ($totalRows_table_assignments > 0) {
 
 				if ($table_entries_count == $table_scored_entries_count) {
 					$table_assignment_stats .= "<div class=\"alert alert-success\">";
-					if ((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) {
+					if ((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1) && (!(($practice_table_id) && ($tbl_id == $practice_table_id)))) {
 						$table_assignment_stats .= "<i class=\"fa fa-lg fa-info-circle\"></i> <strong>Tables Planning Mode enabled.</strong> Tables Competition Mode must be enabled view or entry evaluations at this table.";
 					}
 					else $table_assignment_stats .= sprintf("<i class=\"fa fa-lg fa-check-circle\"></i> <strong>%s</strong>",$evaluation_info_037);

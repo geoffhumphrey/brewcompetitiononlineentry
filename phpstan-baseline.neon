@@ -58,7 +58,7 @@ parameters:
 			message: '#^Instantiated class PasswordHash not found\.$#'
 			identifier: class.notFound
 			count: 2
-			path: ajax/practice_session.ajax.php
+			path: includes/process/process_practice_session.inc.php
 
 		-
 			message: '#^Call to static method createDefault\(\) on an unknown class HTMLPurifier_Config\.$#'
