@@ -98,6 +98,7 @@ if ($totalRows_log > 0) {
 		$entry_paid_display = "";
 		$entry_received_display = "";
 		$entry_box_num_display = "";
+		$entry_dropoff_display = "";
 		$entry_actions = "";
 		$entry_unconfirmed_row = "";
 		$entry_allergen_row = "";
@@ -434,6 +435,11 @@ if ($totalRows_log > 0) {
 		}
 		else $entry_box_num_display = $row_log['brewBoxNum'];
 
+		// Drop-off location - see issue #907. brewerDropOff is nullable and 0 is a real,
+		// meaningful value ("shipping"), so this can't use empty()/isset() alone - only
+		// call dropoff_location() when a value was actually recorded.
+		if (($row_log['brewerDropOff'] !== null) && ($row_log['brewerDropOff'] !== "")) $entry_dropoff_display = dropoff_location($row_log['brewerDropOff']);
+
 		// Notes to Staff
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_staff_notes_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewStaffNotes']."</span>";
@@ -590,6 +596,7 @@ if ($totalRows_log > 0) {
 	    $tbody_rows .= "<p><strong>".$label_received.":</strong> ".yes_no($row_log['brewReceived'],$base_url)."</p>";
 	    if (!empty($row_log['brewAdminNotes'])) $tbody_rows .= "<p><strong>".$label_admin." ".$label_notes.":</strong> ".$row_log['brewAdminNotes']."</p>";
 	    if (!empty($row_log['brewStaffNotes'])) $tbody_rows .= "<p><strong>".$label_staff." ".$label_notes.":</strong> ".$row_log['brewStaffNotes']."</p>";
+	    if (!empty($entry_dropoff_display)) $tbody_rows .= "<p><strong>".$label_drop_off.":</strong> ".$entry_dropoff_display."</p>";
 	    if (!empty($row_log['brewBoxNum'])) $tbody_rows .= "<p><strong>".$label_box."/".$label_location.":</strong> ".$row_log['brewBoxNum']."</p>";
 	    $tbody_rows .= "<p><strong>Actions:</strong> ".$entry_actions."</p>";
 	    $tbody_rows .= "</div>";
@@ -600,6 +607,7 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= "\n\t<td nowrap=\"nowrap\" class=\"".$hidden_sm."\">".$entry_brewer_display."</td>";
 		if ($pro_edition == 0) $tbody_rows .= "<td class=\"".$hidden_md." hidden-print\">".h($row_log['brewerClubs'])."</td>";
 		$tbody_rows .= "\n\t<td class=\"".$hidden_md." hidden-print\">".$entry_updated_display."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_dropoff_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_paid_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_received_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"".$hidden_md." \">".$entry_admin_notes_display."</td>";
@@ -694,6 +702,7 @@ if ($action != "print") { ?>
 				null,
 				<?php if ($pro_edition == 0) { ?>null,<?php } ?>
 				null,
+				null,
 				{ "orderDataType": "dom-checkbox" },
 				{ "orderDataType": "dom-checkbox" },
 				null,
@@ -721,6 +730,7 @@ if ($action != "print") { ?>
 			<?php if ($psort == "brewer_name") { ?>"aaSorting": [[4,'asc']],<?php } ?>
 
 			"aoColumns": [
+				null,
 				null,
 				null,
 				null,
@@ -1019,6 +1029,7 @@ $(document).ready(function () {
         <th class="<?php echo $hidden_md; ?> hidden-print">Club</th>
         <?php } ?>
         <th class="<?php echo $hidden_md; ?> hidden-print">Updated</th>
+		<th class="<?php echo $hidden_sm; ?>"><?php echo $label_drop_off; ?></th>
         <th class="<?php echo $hidden_sm; ?>" width="3%">P<span class="hidden-md">aid?</span></th>
         <th class="<?php echo $hidden_sm; ?>" width="3%">R<span class="hidden-md">ec'd?</span></th>
         <th class="<?php echo $hidden_md; ?> ">Admin Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Admin Notes" data-content="Catch-all for any information Admins may need for individual entries such as &quot;received damaged,&quot; &quot;maybe mis-categorized,&quot; etc. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>

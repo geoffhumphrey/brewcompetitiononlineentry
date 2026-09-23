@@ -1018,10 +1018,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $label_avail,
                 $label_judge_preferred,
                 $label_judge_non_preferred,
-                $label_entries
+                $label_entries,
+                $label_judge_comps,
+                $label_waiver,
+                $label_org_notes
             );
 
-            elseif (($filter == "stewards") || ($filter == "avail_stewards")) $a [] = array($label_first_name,$label_last_name,$label_email,$label_avail,$label_entries);
+            elseif (($filter == "stewards") || ($filter == "avail_stewards")) $a [] = array($label_first_name,$label_last_name,$label_email,$label_avail,$label_entries,$label_waiver,$label_org_notes);
 
             elseif ($filter == "staff") $a [] = array($label_first_name,$label_last_name,$label_email,$label_avail,$label_assignment,$label_entries);
 
@@ -1060,14 +1063,20 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     }
 
                     if (($filter == "judges") || ($filter == "avail_judges")) {
-                        
+
                         $judge_entries = "";
                         if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
                         if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2,$prefix);
                         if ((!empty($row_sql['brewerJudgeMead'])) && ($row_sql['brewerJudgeMead'] == "Y")) $brewerJudgeMead = $label_bjcp_mead;
                         if ((!empty($row_sql['brewerJudgeCider'])) && ($row_sql['brewerJudgeCider'] == "Y")) $brewerJudgeCider =
                             $label_bjcp_cider;
-                        
+
+                        $judge_waiver = $label_no;
+                        if ((!empty($row_sql['brewerJudgeWaiver'])) && ($row_sql['brewerJudgeWaiver'] == "Y")) $judge_waiver = $label_yes;
+
+                        $judge_notes = "";
+                        if (!empty($row_sql['brewerJudgeNotes'])) $judge_notes = convert_to_entities($row_sql['brewerJudgeNotes']);
+
                         $a [] = array(
                             $brewerFirstName,
                             $brewerLastName,
@@ -1079,7 +1088,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $judge_avail,
                             style_convert($row_sql['brewerJudgeLikes'],'6',$base_url),
                             style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url),
-                            $judge_entries
+                            $judge_entries,
+                            $row_sql['brewerJudgeExp'],
+                            $judge_waiver,
+                            $judge_notes
                         );
 
                     }
@@ -1087,13 +1099,26 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     elseif (($filter == "stewards") || ($filter == "avail_stewards")) {
                         $judge_entries = "";
                         if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
-                        if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2,$prefix);
+                        // Stewards record availability in a separate column/location-type from judges
+                        // (brewerStewardLocation, judgingLocType 2) - see issue #1565. This previously
+                        // read brewerJudgeLocation with method 2 (the judge's own column/type), which
+                        // meant this export's "Available" column never reflected steward availability.
+                        if (isset($row_sql['brewerStewardLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerStewardLocation'],3,$prefix);
+
+                        $judge_waiver = $label_no;
+                        if ((!empty($row_sql['brewerJudgeWaiver'])) && ($row_sql['brewerJudgeWaiver'] == "Y")) $judge_waiver = $label_yes;
+
+                        $judge_notes = "";
+                        if (!empty($row_sql['brewerJudgeNotes'])) $judge_notes = convert_to_entities($row_sql['brewerJudgeNotes']);
+
                         $a [] = array(
                             $brewerFirstName,
                             $brewerLastName,
                             $brewerEmail,
                             $judge_avail,
-                            $judge_entries
+                            $judge_entries,
+                            $judge_waiver,
+                            $judge_notes
                         );
                     }
 
@@ -1102,7 +1127,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
                         $assignment = $label_no;
                         if ($row_sql['staff_staff'] == 1) $assignment = $label_yes;
-                        if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],3,$prefix);
+                        // Staff share the steward location pool (judgingLocType 2) - see issue #1565.
+                        if (isset($row_sql['brewerStewardLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerStewardLocation'],3,$prefix);
                         $a [] = array(
                             $brewerFirstName,
                             $brewerLastName,
@@ -1211,9 +1237,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             if ($section == "export-loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
             else $loc = "";
 
-            if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_yearly_volume,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
-            
-            else $a[] = array($label_first_name,$label_last_name,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
+            if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_yearly_volume,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred,$label_judge_comps,$label_waiver,$label_org_notes);
+
+            else $a[] = array($label_first_name,$label_last_name,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred,$label_judge_comps,$label_waiver,$label_org_notes);
 
             //echo $query_sql;
 
@@ -1246,8 +1272,14 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 $assignment = implode(", ", $assign);
 
-                if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); 
+                if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']);
                 else $phone = $row_sql['brewerPhone1'];
+
+                $judge_waiver = $label_no;
+                if ((!empty($row_sql['brewerJudgeWaiver'])) && ($row_sql['brewerJudgeWaiver'] == "Y")) $judge_waiver = $label_yes;
+
+                $judge_notes = "";
+                if (!empty($row_sql['brewerJudgeNotes'])) $judge_notes = convert_to_entities($row_sql['brewerJudgeNotes']);
 
                 if ($_SESSION['prefsProEdition'] == 1) {
 
@@ -1279,7 +1311,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         $row_sql['brewerJudgeID'],
                         str_replace(",",", ",$row_sql['brewerJudgeRank']),
                         style_convert($row_sql['brewerJudgeLikes'],'6',$base_url),
-                        style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url)
+                        style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url),
+                        $row_sql['brewerJudgeExp'],
+                        $judge_waiver,
+                        $judge_notes
                     );
 
                 }
@@ -1302,7 +1337,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $brewerJudgeMead,
                     $brewerJudgeCider,
                     style_convert($row_sql['brewerJudgeLikes'],'6',$base_url),
-                    style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url)
+                    style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url),
+                    $row_sql['brewerJudgeExp'],
+                    $judge_waiver,
+                    $judge_notes
                 );
 
             }
