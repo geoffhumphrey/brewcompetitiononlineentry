@@ -30,6 +30,8 @@ $goto_nav = "";
 $judge_loc_url_yes = "";
 $judge_loc_url_no = "";
 $assignment_modal_body = "";
+$bos_co_brewers = array();
+$bos_co_brewer_entries = array();
 
 if ($filter == "bos") {
 	$filter_readable .= "Best of Show Judges";
@@ -92,6 +94,22 @@ if ($filter == "bos") {
 	$secondary_page_info .= "<li>3-14 BOS meads and/or ciders (only) = 3 BOS Judges</li>";
 	$secondary_page_info .= "<li>15 or more BOS entries of any type or combination = 5 BOS Judges&quot;</li>";
 	$secondary_page_info .= "</ul>";
+
+	// Co-brewer names + the specific placing entry each is tied to, collected
+	// once here rather than per-judge below - same source data (Amateur
+	// edition only, no co-brewer concept on Pro/commercial entries) used both
+	// for the always-visible summary list and each candidate's own fuzzy
+	// last-name match, so a flagged row can name the actual entry/entries.
+	if ($_SESSION['prefsProEdition'] == 0) {
+		$sql = "SELECT b.id, b.brewJudgingNumber, b.brewCoBrewer, b.brewName, a.scorePlace, a.scoreTable FROM ".$prefix."judging_scores"." a, ".$prefix."brewing"." b WHERE a.scorePlace IS NOT NULL AND a.eid = b.id AND b.brewCoBrewer IS NOT NULL AND b.brewCoBrewer != '' ORDER BY a.scorePlace ASC";
+		$rows_bos_co_brewers = $db_conn->rawQuery($sql);
+		if ($db_conn->count > 0) {
+			foreach ($rows_bos_co_brewers as $row_bos_co_brewers) {
+				$bos_co_brewer_entries[] = $row_bos_co_brewers;
+				$bos_co_brewers[] = $row_bos_co_brewers['brewCoBrewer'];
+			}
+		}
+	}
 }
 
 
@@ -282,6 +300,23 @@ if ($section != "step5") {
 						}
 						$judge_places = rtrim($judge_places,", ");
 					}
+
+					// Best-effort co-brewer conflict check - see issue #1583: brewCoBrewer is a
+					// free-text name typed by the entrant, with no link back to a brewer.uid, so this
+					// can only ever be a fuzzy last-name match (same limitation as the existing
+					// per-table Co-Brewer check in admin/judging_assign.admin.php) - never treated
+					// as a hard conflict like the brewBrewerID match above. Named per-entry (not just
+					// flagged) so the admin doesn't have to cross-reference a separate list.
+					$bos_co_brewer_flag = FALSE;
+					$bos_co_brewer_matches = array();
+					if ((!empty($bos_co_brewer_entries)) && (!empty($row_brewer['brewerLastName']))) {
+						foreach ($bos_co_brewer_entries as $bos_co_brewer_entry) {
+							if (strpos($bos_co_brewer_entry['brewCoBrewer'], $row_brewer['brewerLastName']) !== false) {
+								$bos_co_brewer_flag = TRUE;
+								$bos_co_brewer_matches[] = display_place($bos_co_brewer_entry['scorePlace'],1).": ".$bos_co_brewer_entry['brewName']." (Table ".$bos_co_brewer_entry['scoreTable'].", Entry #".sprintf("%06s",$bos_co_brewer_entry['id']).", Judging #".sprintf("%06s",$bos_co_brewer_entry['brewJudgingNumber']).") &ndash; co-brewer listed as &quot;".$bos_co_brewer_entry['brewCoBrewer']."&quot;";
+							}
+						}
+					}
 				}
 
 				if (($filter == "judges") || ($filter == "stewards") || ($filter == "staff")) {
@@ -347,6 +382,7 @@ if ($section != "step5") {
 				}
 
 				if (($filter == "bos") && (!empty($bos_judge_eligible))) $output_datatables_body .= "<tr class=\"bg-danger text-danger\">";
+				elseif (($filter == "bos") && (empty($bos_judge_eligible)) && ($bos_co_brewer_flag)) $output_datatables_body .= "<tr class=\"bg-warning text-warning\">";
 				elseif (($filter == "bos") && (empty($bos_judge_eligible))) {
 					if (strpos($brewer_assignment,'BOS') !== false) $output_datatables_body .= "<tr class=\"bg-info text-info\">";
 					else $output_datatables_body .= "<tr class=\"bg-success text-success\">";
@@ -382,6 +418,7 @@ if ($section != "step5") {
 				if ($filter == "bos") {
 					$output_datatables_body .= "<td>";
 					if (!empty($bos_judge_eligible)) $output_datatables_body .= $judge_places;
+					elseif ($bos_co_brewer_flag) $output_datatables_body .= "<span class=\"text-warning\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict.</strong> <small>Name match only &ndash; verify manually.</small><br>".implode("<br>", $bos_co_brewer_matches);
 					else $output_datatables_body .= "&nbsp;";
 					$output_datatables_body .= "</td>";
 				}
@@ -683,6 +720,13 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	<?php } ?>
 	<?php } // end if (($section == "admin") && (($action == "update") || ($action == "assign"))) ?>
 </div><!-- ./bcoem-admin-element hidden-print -->
+
+<?php if (($filter == "bos") && (!empty($bos_co_brewers))) { ?>
+<div class="alert alert-warning">
+	<strong>Co-Brewer Names Associated with BOS-Placing Entries:</strong> <?php echo implode(", ", $bos_co_brewers); ?>
+	<div class="small">Rows shaded yellow below are a candidate whose last name matches one of these names &ndash; verify manually before assigning, since this is a name match only, not a confirmed identity.</div>
+</div>
+<?php } ?>
 
 <?php if ($filter == "staff") { ?>
 <div class="bcoem-admin-element hidden-print">
