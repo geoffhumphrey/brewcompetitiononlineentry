@@ -138,7 +138,7 @@ if ($action == "add") {
 		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<!-- Input Here -->
-				<input class="form-control" id="sbd_place<?php echo $i; ?>" name="sbd_place<?php echo $i; ?>" type="text" value="">
+				<input class="form-control" id="sbd_place<?php echo $i; ?>" name="sbd_place<?php echo $i; ?>" type="number" value="">
 				<span class="input-group-addon" id="sbd_place<?php echo $i; ?>-2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 			</div>
 		</div>

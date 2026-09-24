@@ -832,9 +832,13 @@ if ($totalRows_table_assignments > 0) {
 				
 				foreach ($table_places as $key => $value) {
 					foreach ($value as $k => $v) {
-						$places_table_flag_arr[] = $v;
-						$table_places_display_ul .= "<li id=\"place-display-".$k."\">".$k." - <span id=\"place-display-num-".$k."\">".display_place($v,1)."</span></li>";	
-					}	
+						// Honorable Mention (value "5") is excluded from the duplicate-place
+						// check below - see issue #1537. Unlike numbered places 1-4, more than
+						// one HM per table is expected, not a scoring mistake. Still shown in
+						// the places-awarded list either way.
+						if ($v != "5") $places_table_flag_arr[] = $v;
+						$table_places_display_ul .= "<li id=\"place-display-".$k."\">".$k." - <span id=\"place-display-num-".$k."\">".display_place($v,1)."</span></li>";
+					}
 				}
 
 				if (($_SESSION['prefsWinnerMethod'] == "0") && (count(array_unique($places_table_flag_arr)) < count($places_table_flag_arr))) {
