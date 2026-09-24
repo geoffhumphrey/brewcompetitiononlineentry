@@ -676,6 +676,7 @@ CREATE TABLE `baseline_sponsors` (
   `sponsorName` varchar(255) DEFAULT NULL,
   `sponsorURL` varchar(255) DEFAULT NULL,
   `sponsorImage` varchar(255) DEFAULT NULL,
+  `sponsorImageURL` varchar(255) DEFAULT NULL,
   `sponsorText` mediumtext DEFAULT NULL,
   `sponsorLocation` mediumtext DEFAULT NULL,
   `sponsorLevel` tinyint(1) DEFAULT NULL,

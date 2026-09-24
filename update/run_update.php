@@ -5692,6 +5692,18 @@ if (!check_update("archiveDisplayTableAwards", $prefix."archive")) {
 
 }
 
+if (!check_update("sponsorImageURL", $prefix."sponsors")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `sponsorImageURL` varchar(255) COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."sponsors");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3200_update .= "<li>Added the ability to hotlink a sponsor's logo from an external URL instead of only uploading a file.</li>";
+	else {
+		$v3200_update .= "<li class=\"text-danger\">The sponsor logo hotlink column could NOT be added. Please contact support.</li>";
+		$error_count++;
+	}
+
+}
+
 // Remediation: archiveProEdition and archiveWinnerMethod have always been captured via
 // blank_to_null(), which treats the string "0" as blank (PHP's empty("0") === true) and
 // silently nulls it out - corrupting every archive created while the competition was

@@ -48,10 +48,22 @@ foreach ($rows_sponsors as $row_sponsors) {
 
 		if ($_SESSION['prefsSponsorLogos'] == "Y") {
 		// Sponsor Image
-			$page_info1 .= "<img class=\"responsive-image img-thumbnail\" src=\"";
-			if (($row_sponsors['sponsorImage'] != "") && (file_exists(USER_IMAGES.$row_sponsors['sponsorImage']))) $page_info1 .= $base_url."user_images/".$row_sponsors['sponsorImage'];
-			else $page_info1 .= $images_url."no_image.png";
-			$page_info1 .= sprintf("\" border=\"0\" alt=\"".$row_sponsors['sponsorName']."\" title=\"".$row_sponsors['sponsorName']."\" />");
+			// Hotlinked logos (issue #371) get an onerror fallback to the same
+			// no_image.png placeholder used when a local upload is missing - a
+			// dead/unreachable external URL can only be detected client-side.
+			$no_image_src = $images_url."no_image.png";
+			$sponsor_logo_onerror = "";
+
+			if (!empty($row_sponsors['sponsorImageURL'])) {
+				// sponsorImageURL is sterilize()+purify()'d at save time - safe in text
+				// context, but still needs h() inside an attribute like src=.
+				$sponsor_logo_src = h($row_sponsors['sponsorImageURL']);
+				$sponsor_logo_onerror = " onerror=\"this.onerror=null;this.src='".$no_image_src."';\"";
+			}
+			elseif (($row_sponsors['sponsorImage'] != "") && (file_exists(USER_IMAGES.$row_sponsors['sponsorImage']))) $sponsor_logo_src = $base_url."user_images/".$row_sponsors['sponsorImage'];
+			else $sponsor_logo_src = $no_image_src;
+
+			$page_info1 .= "<img class=\"responsive-image img-thumbnail\" src=\"".$sponsor_logo_src."\"".$sponsor_logo_onerror." border=\"0\" alt=\"".h($row_sponsors['sponsorName'])."\" title=\"".h($row_sponsors['sponsorName'])."\" />";
 		}
 
 		// Sponsor Info

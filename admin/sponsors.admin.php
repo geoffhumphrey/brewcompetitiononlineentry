@@ -131,11 +131,25 @@ $(document).ready(function () {
   <?php } ?>
   </td>
   <?php if ($dbTable == "default") { ?>
-  <td>  
-    <?php if (!$empty) { ?>
+  <td>
+    <?php if (!empty($row_sponsors['sponsorImageURL'])) { ?>
+    <!-- This sponsor's logo is a hotlinked URL (issue #371), not an uploaded file - show
+         the URL as an inline-editable text field (same auto-save mechanism as Description/
+         Text below), not the file dropdown. Showing both controls at once is what let a
+         sponsorImage selection and a lingering sponsorImageURL both get saved to the same
+         record even though the two are mutually exclusive. -->
+    <div class="form-group" id="sponsor-image-url-ajax-<?php echo $row_sponsors['id']; ?>-sponsorImageURL-form-group">
+      <p>Logo image URL:</p>
+      <input type="text" size="40" class="form-control" id="sponsor-image-url-ajax-<?php echo $row_sponsors['id']; ?>" name="sponsorImageURL<?php echo $row_sponsors['id']; ?>" value="<?php echo h($row_sponsors['sponsorImageURL']); ?>" onblur="save_column('<?php echo $ajax_url; ?>','sponsorImageURL','sponsors','<?php echo $row_sponsors['id']; ?>','default','default','default','default','sponsor-image-url-ajax-<?php echo $row_sponsors['id']; ?>','value')">
+      <div>
+        <span id="sponsor-image-url-ajax-<?php echo $row_sponsors['id']; ?>-sponsorImageURL-status"></span>
+        <span id="sponsor-image-url-ajax-<?php echo $row_sponsors['id']; ?>-sponsorImageURL-status-msg"></span>
+      </div>
+    </div>
+    <?php } elseif (!$empty) { ?>
     <div class="form-group" id="sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>-sponsorImage-form-group">
       <select class="selectpicker" name="sponsorImage<?php echo $row_sponsors['id']; ?>" id="sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>" data-live-search="true" data-size="10" data-width="auto" onchange="save_column('<?php echo $ajax_url; ?>','sponsorImage','sponsors','<?php echo $row_sponsors['id']; ?>','default','default','default','default','sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>','value')">
-       <?php 
+       <?php
         $sponsor_images_options = "<option></option>";
           foreach ($sponsor_images as $filename) {
             $selected = "";
@@ -158,7 +172,7 @@ $(document).ready(function () {
   <td>
     <?php if ($dbTable == "default") { ?>
     <div class="form-group" id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>-sponsorText-form-group">
-    <textarea class="form-control" id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>" name="sponsorText<?php echo $row_sponsors['id']; ?>" rows="2" class="mceNoEditor" onblur="save_column('<?php echo $ajax_url; ?>','sponsorText','sponsors','<?php echo $row_sponsors['id']; ?>','default','text-col','default','default','sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>','html')"><?php if (!empty($row_sponsors['sponsorText'])) echo $row_sponsors['sponsorText']; ?></textarea>
+    <textarea cols="40" class="form-control" id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>" name="sponsorText<?php echo $row_sponsors['id']; ?>" rows="2" class="mceNoEditor" onblur="save_column('<?php echo $ajax_url; ?>','sponsorText','sponsors','<?php echo $row_sponsors['id']; ?>','default','text-col','default','default','sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>','html')"><?php if (!empty($row_sponsors['sponsorText'])) echo $row_sponsors['sponsorText']; ?></textarea>
       <div>
         <span id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>-sponsorText-status"></span>
         <span id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>-sponsorText-status-msg"></span>
@@ -249,13 +263,28 @@ if ($action == "default") { ?>
     </div>
 </div><!-- ./Form Group -->
 
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="contestLogo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="sponsorLogoSource" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo Source</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <label class="radio-inline">
+                <input type="radio" name="sponsorLogoSource" value="file" id="sponsorLogoSource_0" <?php if (($action != "edit") || (empty($row_sponsors['sponsorImageURL']))) echo "CHECKED"; ?> /> Upload
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="sponsorLogoSource" value="url" id="sponsorLogoSource_1" <?php if (($action == "edit") && (!empty($row_sponsors['sponsorImageURL']))) echo "CHECKED"; ?> /> Hotlink URL
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Select an already-uploaded logo file, or link directly to an image hosted elsewhere (e.g., on the sponsor's own website) instead of downloading and re-uploading it.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group" id="sponsorLogoFileGroup"><!-- Form Group NOT REQUIRED Select -->
+    <label for="sponsorImage" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     <!-- Input Here -->
     <?php if (!$empty) { ?>
     <select class="selectpicker" name="sponsorImage" id="sponsorImage" data-live-search="true" data-size="10" data-width="auto">
-       <?php 
+       <?php
         $sponsor_images_options = "<option></option>";
           foreach ($sponsor_images as $filename) {
             $selected = "";
@@ -272,6 +301,38 @@ if ($action == "default") { ?>
     <a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Logo Images</a>
     </div>
 </div><!-- ./Form Group -->
+
+<div class="form-group" id="sponsorLogoURLGroup"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="sponsorImageURL" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo Image URL</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <input class="form-control" id="sponsorImageURL" name="sponsorImageURL" type="text" value="<?php if (($action == "edit") && (!empty($row_sponsors['sponsorImageURL']))) echo h($row_sponsors['sponsorImageURL']); ?>" placeholder="https://...">
+        <span id="helpBlock" class="help-block">If the linked image can't be loaded, the standard "no logo" placeholder will be shown in its place.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+    <?php if (($action == "edit") && (!empty($row_sponsors['sponsorImageURL']))) { ?>
+    $('#sponsorLogoFileGroup').hide();
+    <?php } else { ?>
+    $('#sponsorLogoURLGroup').hide();
+    <?php } ?>
+
+    $("input[name$='sponsorLogoSource']").click(function() {
+        if ($(this).val() == "url") {
+            $('#sponsorLogoFileGroup').hide("fast");
+            $('#sponsorLogoURLGroup').show("fast");
+        }
+        else {
+            $('#sponsorLogoURLGroup').hide("fast");
+            $('#sponsorLogoFileGroup').show("fast");
+        }
+    });
+
+});
+</script>
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="sponsorText" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>

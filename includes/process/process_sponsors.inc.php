@@ -22,6 +22,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'sponsorImage' => $image,
 				'sponsorText' => $sponsor_info
 			);
+			// This mass-edit table has no hotlink URL control (issue #371) - only the full
+			// Add/Edit form does. Picking a file here is an unambiguous switch back to local-
+			// upload mode, so clear any hotlink URL that row still has, or it would silently
+			// keep winning over the file just selected (see the source-precedence in the
+			// public display templates).
+			if ($image != "") $data['sponsorImageURL'] = null;
 			$db_conn->where('id', $id);
 			$result = $db_conn->update($sponsors_db_table, $data);
 		}
@@ -38,11 +44,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$sponsorName = capitalize($purifier->purify(sterilize($_POST['sponsorName'])));
 		$sponsorText = $purifier->purify(sterilize($_POST['sponsorText']));
 
+		// Logo is either an uploaded file OR a hotlinked URL (issue #371), never both -
+		// clear whichever field the admin didn't choose so stale data from a prior save
+		// (or from switching the radio before submitting) can't linger in the other column.
+		if (sterilize($_POST['sponsorLogoSource']) == "url") {
+			$sponsorImage = null;
+			$sponsorImageURL = check_http($purifier->purify(sterilize($_POST['sponsorImageURL'])));
+		} else {
+			$sponsorImage = sterilize($_POST['sponsorImage']);
+			$sponsorImageURL = null;
+		}
+
 		$update_table = $prefix."sponsors";
 		$data = array(
 			'sponsorName' => blank_to_null($sponsorName),
 			'sponsorURL' => blank_to_null($sponsorURL),
-			'sponsorImage' => blank_to_null(sterilize($_POST['sponsorImage'])),
+			'sponsorImage' => blank_to_null($sponsorImage),
+			'sponsorImageURL' => blank_to_null($sponsorImageURL),
 			'sponsorText' => blank_to_null($sponsorText),
 			'sponsorLocation' => blank_to_null(sterilize($_POST['sponsorLocation'])),
 			'sponsorLevel' => blank_to_null(sterilize($_POST['sponsorLevel'])),
@@ -69,6 +87,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "edit") {
 
+		$errors = FALSE;
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {

@@ -881,6 +881,7 @@ if ($setup_free_access == TRUE) {
 			`sponsorName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`sponsorURL` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`sponsorImage` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`sponsorImageURL` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`sponsorText` mediumtext COLLATE utf8mb4_unicode_ci,
 			`sponsorLocation` mediumtext COLLATE utf8mb4_unicode_ci,
 			`sponsorLevel` mediumtext COLLATE utf8mb4_unicode_ci,

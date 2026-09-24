@@ -346,6 +346,14 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1) && ($referrer_ok)) {
 			$input = sterilize($_POST['sponsorImage']);
 		}
 
+		if ($go == "sponsorImageURL") {
+			// check_http() lives in process.lib.php, not loaded by this file's bootstrap chain
+			// by default (only common.lib.php is) - require it explicitly, same as other
+			// call sites that need a function from it outside the usual request path.
+			require_once(LIB.'process.lib.php');
+			$input = check_http(sterilize($_POST['sponsorImageURL']));
+		}
+
 		$update_table = $prefix."sponsors";
 
 		if (empty($input)) {
@@ -354,14 +362,21 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1) && ($referrer_ok)) {
 		}
 
 		else {
-			if ($input == "0") $data = array($go => NULL); 
+			if ($input == "0") $data = array($go => NULL);
 			else $data = array($go => $input);
 		}
+
+		// A sponsor's logo is either an uploaded file OR a hotlinked URL (issue #371), never
+		// both - the list view shows only the one control matching the row's current mode
+		// (see admin/sponsors.admin.php), but clear the sibling column here too as a second
+		// line of defense, since this endpoint is the actual write path for both controls.
+		if (($go == "sponsorImage") && (!empty($input))) $data['sponsorImageURL'] = NULL;
+		if (($go == "sponsorImageURL") && (!empty($input))) $data['sponsorImage'] = NULL;
 
 		$db_conn->where ('id', $id);
 		if ($db_conn->update ($update_table, $data)) $status = 1;
 		else $error_type = 3; // SQL error
-		
+
 	} // END if ($action == "sponsors")
 
 	if ($action == "judging_staff") {
