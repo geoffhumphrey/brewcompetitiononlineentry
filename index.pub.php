@@ -410,7 +410,7 @@ if (ENABLE_MARKDOWN) {
         <?php include (PUB.'default.pub.php'); ?>
     </section>
 
-    <?php if ($judging_past > 0) { ?>
+    <?php if ((!$judging_started) || ($judging_past > 0)) { ?>
     <section id="rules" class="landing-page-section pb-3 reveal-element">
         <header class="landing-page-section-header py-2">
             <h1><?php echo $label_rules; ?></h1>

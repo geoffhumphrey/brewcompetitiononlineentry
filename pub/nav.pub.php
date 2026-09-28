@@ -104,11 +104,13 @@ if ($logged_in) {
 
 	            <?php } else { ?>
 
-	            	<?php if (!$judging_started) { ?>
+	                <?php if ((!$judging_started) || ($judging_past > 0)) { ?>
 	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#rules"><?php echo $label_rules; ?></a>
+	                <?php } ?>
+	                <?php if (!$judging_started) { ?>
 	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#volunteers"><?php echo $label_volunteers; ?></a>
 	                <?php } ?>
-	                <?php if ($judging_past > 0) { ?>
+	                <?php if ((!$judging_started) || ($judging_past > 0)) { ?>
 	                <a class="nav-item nav-link" <?php echo $link_bs_target_toggle; ?> href="<?php echo $link_prefix; ?>#entry-info"><?php echo $label_entry_info; ?></a>
 	                <?php } ?>
 	            	<?php if (file_exists(PUB.'custom_competition_info.pub.php')) { ?>
