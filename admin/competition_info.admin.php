@@ -686,8 +686,7 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
     <label for="competitionPackingShipping" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Packaging and Shipping Rules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <textarea id="competitionPackingShipping" class="form-control" name="competition_packing_shipping" rows="15" aria-describedby="helpBlock">
-        <?php
+        <textarea id="competitionPackingShipping" class="form-control" name="competition_packing_shipping" rows="15" aria-describedby="helpBlock"><?php
 
         if ($section == "step4") {
             if (ENABLE_MARKDOWN) {

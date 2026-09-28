@@ -351,9 +351,9 @@ if (($staged_report !== null) && (empty($staged_report['meta_errors']))) {
 </table>
 <?php } ?>
 <?php if (!$staged_report_confirmable) { ?>
-<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#upload-style-set" aria-expanded="false" aria-controls="upload-style-set">Import a Style Set</button>
 <p class="alert alert-info" style="margin-top: 15px;"><i class="fa fa-lg fa-fw fa-info-circle"></i> When importing, acceptable file types are <code>.json</code> or <code>.csv</code>. Choosing a CSV (Comma Separated Value) file will reveal the additional fields that the file type requires. JSON (Javascript Object Notation) files are required to have this information within the file itself. Maximum file size is 5 MB.</p>
 <p class="well" style="margin-top: 15px;"><i class="fa fa-lg fa-fw fa-download"></i> Download <a class="hide-loader" href="https://info.brewingcompetitions.com/00_downloads/import-style-set-templates.zip" target="_blank">JSON/CSV starter templates</a> (zip archive) - be sure to read the information in the JSON_CSV_File_Preparation_Instructions.txt file prior to attempting an import.</p>
+<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#upload-style-set" aria-expanded="false" aria-controls="upload-style-set">Import a Style Set</button>
 <div style="margin-top:15px;" class="collapse" id="upload-style-set">
     <h3>Import a Style Set</h3>
     <p class="bcoem-admin-element">Upload a self-contained style set (JSON or CSV) instead of waiting for a developer to hand-write a migration for the app core. Once imported, the set appears in the Style Set dropdown on Site Preferences like any built-in set.</p>

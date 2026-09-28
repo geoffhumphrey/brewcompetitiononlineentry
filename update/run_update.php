@@ -5726,6 +5726,72 @@ if (!$db_conn->update($update_table, array('archiveWinnerMethod' => 0))) {
 }
 elseif ($db_conn->count > 0) $v3200_update .= sprintf("<li>Corrected %s archive record(s) with a missing Winner Place Distribution Method (defaulted to By Table).</li>",$db_conn->count);
 
+// Remediation: every Markdown/TinyMCE-eligible free-text field on the Competition Info
+// admin screen (the two contestRules JSON keys, plus contestAwards/contestBottles/
+// contestBOSAward/contestCircuit/contestVolunteers) could carry stray leading/trailing
+// whitespace saved before trim() was added to their save path - most visibly, Markdown
+// mode (ENABLE_MARKDOWN) misreads 4+ leading spaces on a line as an indented code block,
+// rendering the paragraph wrapped in <pre><code> instead of normally. One specific source
+// (the Packaging and Shipping Rules textarea's opening-tag/PHP-block whitespace leak) is
+// already fixed at the markup level; this pass, and the trim() fix itself, cover both that
+// and any other source (e.g. pasted content) uniformly, for every field in the group.
+// Re-runs harmlessly - an already-trimmed value never differs from its own trim()'d self,
+// so nothing gets logged as corrected the second time through.
+$contest_info_table = $prefix."contest_info";
+$contest_info_trim_flat_columns = array('contestAwards','contestBottles','contestBOSAward','contestCircuit','contestVolunteers');
+$rows_contest_info_trim = $db_conn->get($contest_info_table, null, "id,contestRules,".implode(",",$contest_info_trim_flat_columns));
+$totalRows_contest_info_trim = $db_conn->count;
+$contest_info_trim_fields_corrected = 0;
+$contest_info_trim_rows_corrected = 0;
+
+if ($totalRows_contest_info_trim > 0) {
+
+	foreach ($rows_contest_info_trim as $row_contest_info_trim) {
+
+		$contest_info_trim_row_changed = FALSE;
+		$contest_info_trim_data = array();
+
+		$contest_rules_decoded = json_decode($row_contest_info_trim['contestRules'], true);
+
+		if (is_array($contest_rules_decoded)) {
+
+			foreach (array('competition_rules','competition_packing_shipping') as $contest_rules_json_key) {
+				if ((isset($contest_rules_decoded[$contest_rules_json_key])) && ($contest_rules_decoded[$contest_rules_json_key] != trim($contest_rules_decoded[$contest_rules_json_key]))) {
+					$contest_rules_decoded[$contest_rules_json_key] = trim($contest_rules_decoded[$contest_rules_json_key]);
+					$contest_info_trim_row_changed = TRUE;
+					$contest_info_trim_fields_corrected++;
+				}
+			}
+
+			if ($contest_info_trim_row_changed) $contest_info_trim_data['contestRules'] = json_encode($contest_rules_decoded);
+
+		}
+
+		foreach ($contest_info_trim_flat_columns as $contest_info_trim_column) {
+			if ((isset($row_contest_info_trim[$contest_info_trim_column])) && ($row_contest_info_trim[$contest_info_trim_column] != trim($row_contest_info_trim[$contest_info_trim_column]))) {
+				$contest_info_trim_data[$contest_info_trim_column] = trim($row_contest_info_trim[$contest_info_trim_column]);
+				$contest_info_trim_row_changed = TRUE;
+				$contest_info_trim_fields_corrected++;
+			}
+		}
+
+		if ($contest_info_trim_row_changed) {
+
+			$db_conn->where('id', $row_contest_info_trim['id']);
+			if ($db_conn->update($contest_info_table, $contest_info_trim_data)) $contest_info_trim_rows_corrected++;
+			else {
+				$v3200_update .= "<li class=\"text-danger\">Stray-whitespace correction could NOT be applied to one or more competition text fields. Please contact support.</li>";
+				$error_count++;
+			}
+
+		}
+
+	}
+
+}
+
+if ($contest_info_trim_fields_corrected > 0) $v3200_update .= sprintf("<li>Trimmed stray leading/trailing whitespace from %s Markdown-eligible text field(s) across %s competition record(s) (Rules, Packaging and Shipping Rules, Awards, Bottles, Best of Show Award, Circuit, and/or Volunteers text).</li>",$contest_info_trim_fields_corrected,$contest_info_trim_rows_corrected);
+
 if (!$setup_running) $v3200_update .= "</ul>";
 
 $this_update_version_block = $versions['3.2.0.0'];

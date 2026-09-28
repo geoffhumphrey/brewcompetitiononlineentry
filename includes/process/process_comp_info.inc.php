@@ -72,9 +72,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (isset($_POST['contestEntryEditDeadline'])) $contestEntryEditDeadline = to_utc_epoch(sterilize($_POST['contestEntryEditDeadline']), $timezone_raw);
 		if (isset($_POST['contestJudgeOpen'])) $contestJudgeOpen = to_utc_epoch(sterilize($_POST['contestJudgeOpen']), $timezone_raw);
 		if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = to_utc_epoch(sterilize($_POST['contestJudgeDeadline']), $timezone_raw);
-		if (isset($_POST['competition_rules'])) $competition_rules = $purifier->purify($_POST['competition_rules']);
-		if (isset($_POST['competition_packing_shipping'])) $competition_packing_shipping = $purifier->purify($_POST['competition_packing_shipping']);
-		if (isset($_POST['contestAwards'])) $contestAwards = $purifier->purify($_POST['contestAwards']);
+		// trim() on this and the other Markdown/TinyMCE-eligible fields below guards
+		// against leading/trailing whitespace getting misread by Markdown as an indented
+		// code block (4+ leading spaces on a line = <pre><code> per the CommonMark/
+		// Markdown spec) - e.g. from pasted content, or previously from the Packaging
+		// and Shipping Rules textarea's own opening-tag whitespace leak (fixed at the
+		// source; this and update/run_update.php's matching remediation pass are the
+		// generalized version of that same fix). Safe for TinyMCE/HTML-mode content too -
+		// both modes submit through this same field/line, and outer leading/trailing
+		// whitespace on an HTML blob is never visually meaningful outside a <pre>, which
+		// none of these fields are ever rendered inside.
+		if (isset($_POST['competition_rules'])) $competition_rules = trim($purifier->purify($_POST['competition_rules']));
+		if (isset($_POST['competition_packing_shipping'])) $competition_packing_shipping = trim($purifier->purify($_POST['competition_packing_shipping']));
+		if (isset($_POST['contestAwards'])) $contestAwards = trim($purifier->purify($_POST['contestAwards']));
 		if (isset($_POST['contestAwardsLocation'])) $contestAwardsLocation = $purifier->purify($_POST['contestAwardsLocation']);
 		if (isset($_POST['contestAwardsLocName'])) $contestAwardsLocName = $purifier->purify($_POST['contestAwardsLocName']);
 		if (isset($_POST['contestAwardsLocDate'])) $contestAwardsLocDate = to_utc_epoch(sterilize($_POST['contestAwardsLocDate']), $timezone_raw);
@@ -84,10 +94,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (isset($_POST['contestShippingAddress'])) $contestShippingAddress = $purifier->purify($_POST['contestShippingAddress']);
 		if (isset($_POST['contestDropoffOpen'])) $contestDropoffOpen = to_utc_epoch(sterilize($_POST['contestDropoffOpen']), $timezone_raw);
 		if (isset($_POST['contestDropoffDeadline'])) $contestDropoffDeadline = to_utc_epoch(sterilize($_POST['contestDropoffDeadline']), $timezone_raw);
-		if (isset($_POST['contestBottles'])) $contestBottles = $purifier->purify($_POST['contestBottles']);
-		if (isset($_POST['contestBOSAward'])) $contestBOSAward = $purifier->purify($_POST['contestBOSAward']);
-		if (isset($_POST['contestCircuit'])) $contestCircuit = $purifier->purify($_POST['contestCircuit']);
-		if (isset($_POST['contestVolunteers'])) $contestVolunteers = $purifier->purify($_POST['contestVolunteers']);
+		if (isset($_POST['contestBottles'])) $contestBottles = trim($purifier->purify($_POST['contestBottles']));
+		if (isset($_POST['contestBOSAward'])) $contestBOSAward = trim($purifier->purify($_POST['contestBOSAward']));
+		if (isset($_POST['contestCircuit'])) $contestCircuit = trim($purifier->purify($_POST['contestCircuit']));
+		if (isset($_POST['contestVolunteers'])) $contestVolunteers = trim($purifier->purify($_POST['contestVolunteers']));
 		if (isset($_POST['contestLogo'])) $contestLogo = $purifier->purify($_POST['contestLogo']);
 		if (isset($_POST['contestCheckInPassword'])) $contestCheckInPassword = sterilize($_POST['contestCheckInPassword']);
 		if (isset($_POST['contestID'])) $contestID = sterilize($_POST['contestID']);
