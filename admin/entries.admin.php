@@ -200,8 +200,8 @@ if ($totalRows_log > 0) {
 
 		// Required Info for Cider / Mead (Strength, Carb, Sweetness)
 		$cider_mead_req_info = "";
-		if (!empty($row_log['brewMead1'])) $cider_mead_req_info .= "<li><strong>".$label_carbonation.":</strong> ".h($row_log['brewMead1'])."</li>";
-		if (!empty($row_log['brewMead2'])) $cider_mead_req_info .= "<li><strong>".$label_sweetness.":</strong> ".h($row_log['brewMead2'])."</li>";
+		if (!empty($row_log['brewMead1'])) $cider_mead_req_info .= "<li><strong>".$label_carbonation.":</strong> ".h(translate_mead_req_value($row_log['brewMead1']))."</li>";
+		if (!empty($row_log['brewMead2'])) $cider_mead_req_info .= "<li><strong>".$label_sweetness.":</strong> ".h(translate_mead_req_value($row_log['brewMead2']))."</li>";
 
 		if (!empty($row_log['brewSweetnessLevel'])) {
 
@@ -220,7 +220,7 @@ if ($totalRows_log > 0) {
 
 		}
 
-		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".h($row_log['brewMead3'])."</li>";
+		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".h(translate_mead_strength_value($row_log['brewMead3']))."</li>";
 
 		if (!empty($cider_mead_req_info)) $required_info .= $cider_mead_req_info;
 
@@ -256,9 +256,9 @@ if ($totalRows_log > 0) {
 
 		if ((!empty($row_log['brewPouring'])) && ((!empty($row_log['brewStyleType'])) && ($row_log['brewStyleType'] == 1))) {
 			$pouring_arr = json_decode($row_log['brewPouring'],true);
-			$required_info .= "<li><strong>".$label_pouring.":</strong> ".h($pouring_arr['pouring'])."</li>";
+			$required_info .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 			if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $required_info .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-			if ((isset($pouring_arr['pouring_rouse'])) && (!empty($pouring_arr['pouring_rouse']))) $required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".h($pouring_arr['pouring_rouse'])."</li>";
+			if ((isset($pouring_arr['pouring_rouse'])) && (!empty($pouring_arr['pouring_rouse']))) $required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 		}
 
 		// Allergens
@@ -426,7 +426,10 @@ if ($totalRows_log > 0) {
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_box_num_display .= "<div class=\"form-group\" id=\"box-num-ajax-".$saving_random_num."-brewBoxNum-form-group\">";
 			$entry_box_num_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewBoxNum']."</span>";
-			$entry_box_num_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Box: </span><input class=\"form-control input-sm hidden-print\" id=\"box-num-ajax-".$saving_random_num."\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" onblur=\"save_column('".$ajax_url."','brewBoxNum','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','box-num-ajax-".$saving_random_num."','html')\"/>";
+			// brewBoxNum is sterilize()+purify()'d at save time - safe in the plain-text
+			// <span> above with no further escaping, but needs h() here since it's landing
+			// inside a value="..." attribute, which purify() alone doesn't guarantee is safe.
+			$entry_box_num_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Box: </span><input class=\"form-control input-sm hidden-print\" id=\"box-num-ajax-".$saving_random_num."\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".h($row_log['brewBoxNum'])."\" onblur=\"save_column('".$ajax_url."','brewBoxNum','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','box-num-ajax-".$saving_random_num."','html')\"/>";
 			$entry_box_num_display .= "</div>";
 			$entry_box_num_display .= "<div>";
 			$entry_box_num_display .= "<span id=\"box-num-ajax-".$saving_random_num."-brewBoxNum-status\"></span>";

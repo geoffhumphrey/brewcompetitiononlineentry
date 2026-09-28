@@ -107,6 +107,7 @@ if ($setup_free_access == TRUE) {
 			`archiveStyleSet` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`archiveScoresheet` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`archiveSuffix` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`archiveDisplayTableAwards` tinyint(1) NULL DEFAULT NULL,
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COLLATE utf8mb4_unicode_ci;
 			", $archive_db_table);

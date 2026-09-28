@@ -224,11 +224,11 @@ if (isset($_SESSION['loginUsername'])) {
               $missing_mead_info_bl = entry_missing_required_mead_info($row_log, $_SESSION['prefsStyleSet']);
 
               if ((!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3'])) || (!empty($missing_mead_info_bl))) {
-                if (!empty($row_log['brewMead1'])) $brewMeadCider .= h($row_log['brewMead1'])."&nbsp;&nbsp;";
+                if (!empty($row_log['brewMead1'])) $brewMeadCider .= h(translate_mead_req_value($row_log['brewMead1']))."&nbsp;&nbsp;";
                 elseif (in_array("carb",$missing_mead_info_bl)) $brewMeadCider .= h($label_mead_info_not_recorded)."&nbsp;&nbsp;";
-                if (!empty($row_log['brewMead2'])) $brewMeadCider .= h($row_log['brewMead2'])."&nbsp;&nbsp;";
+                if (!empty($row_log['brewMead2'])) $brewMeadCider .= h(translate_mead_req_value($row_log['brewMead2']))."&nbsp;&nbsp;";
                 elseif (in_array("sweet",$missing_mead_info_bl)) $brewMeadCider .= h($label_mead_info_not_recorded)."&nbsp;&nbsp;";
-                if (!empty($row_log['brewMead3'])) $brewMeadCider .= h($row_log['brewMead3']);
+                if (!empty($row_log['brewMead3'])) $brewMeadCider .= h(translate_mead_strength_value($row_log['brewMead3']));
                 elseif (in_array("strength",$missing_mead_info_bl)) $brewMeadCider .= h($label_mead_info_not_recorded);
               }
 

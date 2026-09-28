@@ -19,6 +19,57 @@ if (DEBUG) include (DEBUGGING.'query_count_begin.debug.php');
 
 csrf_token_generate(false);
 
+/**
+ * Stored-value → display-label maps for mead/cider required-info fields.
+ * brewMead1 (carbonation) and brewMead2 (sweetness/strength) store the
+ * English literal chosen at entry time; display pages need the matching
+ * $label_* decode. Follows the $style_types_translations pattern.
+ */
+
+$mead_carb_translations = array(
+    "Still"     => $label_still,
+    "Petillant" => $label_petillant,
+    "Sparkling" => $label_sparkling,
+);
+
+$mead_sweetness_translations = array(
+    "Dry"          => $label_dry,
+    "Medium Dry"   => $label_med_dry,
+    "Medium"       => $label_med,
+    "Medium Sweet" => $label_med_sweet,
+    "Sweet"        => $label_sweet,
+    // Cider sweetness values (brewMead2-cider radios)
+    "Semi-Dry"     => $label_semi_dry,
+    "Semi-Sweet"   => $label_semi_sweet,
+);
+
+/**
+ * Mead strength map (brewMead3): Hydromel/Standard/Sack.
+ */
+$mead_strength_translations = array(
+    "Hydromel" => $label_hydromel,
+    "Standard" => $label_standard,
+    "Sack"     => $label_sack,
+);
+
+/**
+ * Stored-value → display-label maps for pouring instructions
+ * (brewPouring). Entry-form radios submit locale-neutral keys;
+ * legacy rows may still hold an old translated-label literal, which
+ * passes through translate_pouring_value()/translate_pouring_rouse_value()
+ * unchanged since it won't match these keys.
+ */
+$pouring_translations = array(
+    "fast"   => $label_fast,
+    "normal" => $label_normal,
+    "slow"   => $label_slow,
+);
+
+$pouring_rouse_translations = array(
+    "yes" => $label_yes,
+    "no"  => $label_no,
+);
+
 // Bootstrap layout containers
 if (($section == "admin") || ($view == "admin")) {
     $container_main = "container-fluid";

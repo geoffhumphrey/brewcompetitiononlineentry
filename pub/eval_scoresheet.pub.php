@@ -453,7 +453,7 @@ if ($entry_found) {
   if ((!empty($row_entry_info['brewMead1'])) || (in_array("carb",$missing_mead_info))) {
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_carbonation."</strong></div>";
-    if (!empty($row_entry_info['brewMead1'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead1']."</div>";
+    if (!empty($row_entry_info['brewMead1'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".h(translate_mead_req_value($row_entry_info['brewMead1']))."</div>";
     else $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\"><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> ".$label_mead_info_not_recorded."</span></div>";
     $entry_info_html .= "</div>";
   }
@@ -461,7 +461,7 @@ if ($entry_found) {
   if ((!empty($row_entry_info['brewMead3'])) || (in_array("strength",$missing_mead_info))) {
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_strength."</strong></div>";
-    if (!empty($row_entry_info['brewMead3'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead3']."</div>";
+    if (!empty($row_entry_info['brewMead3'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".h(translate_mead_strength_value($row_entry_info['brewMead3']))."</div>";
     else $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\"><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> ".$label_mead_info_not_recorded."</span></div>";
     $entry_info_html .= "</div>";
   }
@@ -469,7 +469,7 @@ if ($entry_found) {
   if ((!empty($row_entry_info['brewMead2'])) || (in_array("sweet",$missing_mead_info))) {
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_sweetness."</strong></div>";
-    if (!empty($row_entry_info['brewMead2'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$row_entry_info['brewMead2']."</div>";
+    if (!empty($row_entry_info['brewMead2'])) $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".h(translate_mead_req_value($row_entry_info['brewMead2']))."</div>";
     else $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\"><span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> ".$label_mead_info_not_recorded."</span></div>";
     $entry_info_html .= "</div>";
   }
@@ -535,7 +535,7 @@ if ($entry_found) {
 
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_pouring."</strong></div>";
-    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$pouring_arr['pouring']."</div>";
+    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".h(translate_pouring_value($pouring_arr['pouring']))."</div>";
     $entry_info_html .= "</div>";
 
     if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes'])))  {
@@ -547,7 +547,7 @@ if ($entry_found) {
 
     $entry_info_html .= "<div class=\"row mb-3\">";
     $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_rouse_yeast."</strong></div>";
-    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".$pouring_arr['pouring_rouse']."</div>";
+    $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</div>";
     $entry_info_html .= "</div>";
 
   }

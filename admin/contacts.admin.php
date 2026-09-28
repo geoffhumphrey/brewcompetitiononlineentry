@@ -59,15 +59,17 @@ include (DB.'contacts.db.php');
 <tbody>
  <?php foreach ($rows_contact as $row_contact) { ?>
  <tr>
-  <!-- contactFirstName/contactLastName/contactPosition are already HTML-entity-encoded
-       at save time (process_contacts.inc.php's sterilize()) - h() here would
-       double-encode them. contactEmail below isn't pre-encoded the same way, so it
-       still needs h(). -->
+  <!-- contactFirstName/contactLastName/contactPosition are sterilize()+purify()'d at save
+       time (process_contacts.inc.php) - safe as-is in this plain-text table-cell context,
+       but purify() only guarantees body-context safety, not attribute safety, so they
+       still need h() wherever they land inside an HTML attribute (title=/data-confirm=/
+       value=) below. contactEmail is purify()-only - same rule applies, and was never
+       changed here. -->
   <td><?php echo $row_contact['contactLastName'].", ".$row_contact['contactFirstName'] ; ?></td>
   <td><?php echo $row_contact['contactPosition']; ?></td>
   <td><?php echo h($row_contact['contactEmail']); ?></td>
   <td>
-  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>&rsquo;s contact information"><span class="fa fa-lg fa-pencil"></span></a> <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $contacts_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_contact['id']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']; ?> as a contact? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
+  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName']) ; ?>&rsquo;s contact information"><span class="fa fa-lg fa-pencil"></span></a> <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $contacts_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_contact['id']; ?>" data-confirm="Are you sure you want to delete <?php echo h($row_contact['contactFirstName'])." ".h($row_contact['contactLastName']); ?> as a contact? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
 
   <!--<img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>" title="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>"></a></span>
   --></td>
@@ -90,9 +92,7 @@ if ($action == "edit") $form_url .= "&amp;id=".$id;
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<!-- contactFirstName is already HTML-entity-encoded at save time
-			     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
-			<input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php if ($action == "edit") echo $row_contact['contactFirstName']; ?>" placeholder="" data-error="The contact's first name is required" autofocus required>
+			<input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php if ($action == "edit") echo h($row_contact['contactFirstName']); ?>" placeholder="" data-error="The contact's first name is required" autofocus required>
 			<span class="input-group-addon" id="contactFirstName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
@@ -103,9 +103,7 @@ if ($action == "edit") $form_url .= "&amp;id=".$id;
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<!-- contactLastName is already HTML-entity-encoded at save time
-			     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
-			<input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php if ($action == "edit") echo $row_contact['contactLastName']; ?>" placeholder="" data-error="The contact's last name is required" required>
+			<input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php if ($action == "edit") echo h($row_contact['contactLastName']); ?>" placeholder="" data-error="The contact's last name is required" required>
 			<span class="input-group-addon" id="contactLastName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
@@ -116,9 +114,7 @@ if ($action == "edit") $form_url .= "&amp;id=".$id;
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<!-- contactPosition is already HTML-entity-encoded at save time
-			     (process_contacts.inc.php's sterilize()) - h() here would double-encode it. -->
-			<input class="form-control" id="contactPosition" name="contactPosition" type="text" value="<?php if ($action == "edit") echo $row_contact['contactPosition']; ?>" placeholder="" data-error="The contact's position is required" required>
+			<input class="form-control" id="contactPosition" name="contactPosition" type="text" value="<?php if ($action == "edit") echo h($row_contact['contactPosition']); ?>" placeholder="" data-error="The contact's position is required" required>
 			<span class="input-group-addon" id="contactPosition-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>

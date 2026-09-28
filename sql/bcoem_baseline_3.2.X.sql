@@ -705,6 +705,35 @@ CREATE TABLE `baseline_staff` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `baseline_style_sets_imported`
+--
+
+DROP TABLE IF EXISTS `baseline_style_sets_imported`;
+CREATE TABLE `baseline_style_sets_imported` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `style_set_name` varchar(20) NOT NULL,
+  `style_set_long_name` varchar(255) DEFAULT NULL,
+  `style_set_short_name` varchar(100) DEFAULT NULL,
+  `style_set_description` mediumtext DEFAULT NULL,
+  `style_set_display_separator` varchar(5) DEFAULT '',
+  `style_set_system_separator` varchar(5) DEFAULT '-',
+  `style_set_sub_style_method` char(1) DEFAULT '0',
+  `style_set_categories` mediumtext DEFAULT NULL,
+  `style_set_beer_end` varchar(3) DEFAULT '00',
+  `style_set_mead` mediumtext DEFAULT NULL,
+  `style_set_cider` mediumtext DEFAULT NULL,
+  `style_set_category_end` varchar(3) DEFAULT '49',
+  `style_set_no_numbering` tinyint(1) NOT NULL DEFAULT 0,
+  `style_set_overall_categories` mediumtext DEFAULT NULL,
+  `createdBy` varchar(255) DEFAULT NULL,
+  `createdOn` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `style_set_name` (`style_set_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `baseline_styles`
 --
 

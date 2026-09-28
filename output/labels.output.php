@@ -613,11 +613,11 @@ if (isset($_SESSION['loginUsername'])) {
 							// used here instead of the longer notice shown on pullsheets/scoresheets.
 							$missing_mead_info_lbl = entry_missing_required_mead_info($row_log, $_SESSION['prefsStyleSet']);
 
-							if (!empty($row_log['brewMead1'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead1']);
+							if (!empty($row_log['brewMead1'])) $entry_str_sweet_carb .= sprintf("*%s* ",h(translate_mead_req_value($row_log['brewMead1'])));
 							elseif (in_array("carb",$missing_mead_info_lbl)) $entry_str_sweet_carb .= "*N/A* ";
-							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead2']);
+							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*%s* ",h(translate_mead_req_value($row_log['brewMead2'])));
 							elseif (in_array("sweet",$missing_mead_info_lbl)) $entry_str_sweet_carb .= "*N/A* ";
-							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead3']);
+							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*%s* ",h(translate_mead_strength_value($row_log['brewMead3'])));
 							elseif (in_array("strength",$missing_mead_info_lbl)) $entry_str_sweet_carb .= "*N/A* ";
 
 							$entry_str_sweet_carb = str_replace("Medium Sweet", "Med Sweet", $entry_str_sweet_carb);

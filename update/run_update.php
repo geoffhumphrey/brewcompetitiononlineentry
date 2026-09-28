@@ -5792,6 +5792,91 @@ if ($totalRows_contest_info_trim > 0) {
 
 if ($contest_info_trim_fields_corrected > 0) $v3200_update .= sprintf("<li>Trimmed stray leading/trailing whitespace from %s Markdown-eligible text field(s) across %s competition record(s) (Rules, Packaging and Shipping Rules, Awards, Bottles, Best of Show Award, Circuit, and/or Volunteers text).</li>",$contest_info_trim_fields_corrected,$contest_info_trim_rows_corrected);
 
+// Remediation: the entry form's pouring-instruction radios used to submit the active
+// UI language's translated label text as the value, so brewPouring's 'pouring'/
+// 'pouring_rouse' keys can hold locale-dependent text (e.g. French "Rapide") instead of
+// a stable key - fixed at the source as of this version, which now submits/stores
+// locale-neutral keys ("fast"/"normal"/"slow", "yes"/"no") and translates only at
+// display time. This pass converts any already-stored legacy translated value back to
+// its canonical key wherever it exactly matches one of the app's supported languages'
+// label text, so existing entries display correctly for every viewer regardless of
+// their own locale, same as newly-submitted entries. Scoped to the live brewing table
+// only - archived competitions carry the same column, but nothing displays pouring
+// instructions for an archived entry, so there's no reader for that data to correct.
+// Re-runs harmlessly - a value already converted to (or submitted as) a canonical key
+// matches neither map and is left alone.
+$pouring_remediation_legacy_pouring = array(
+	// English (en-US / en-GB share identical values for these labels)
+	"Fast" => "fast", "Normal" => "normal", "Slow" => "slow",
+	// Czech
+	"Rychle" => "fast", "Normálně" => "normal", "Pomalu" => "slow",
+	// Spanish (es-419) / Portuguese (pt-BR) share identical text for these three
+	"Rápido" => "fast", "Lento" => "slow",
+	// French
+	"Rapide" => "fast", "Lent" => "slow",
+	// Hungarian
+	"Gyors" => "fast", "Normál" => "normal", "Lassú" => "slow",
+);
+$pouring_remediation_legacy_rouse = array(
+	// English
+	"Yes" => "yes", "No" => "no",
+	// Czech
+	"Ano" => "yes", "Ne" => "no",
+	// Spanish
+	"Si" => "yes",
+	// French
+	"Oui" => "yes", "Non" => "no",
+	// Hungarian
+	"Igen" => "yes", "Nem" => "no",
+	// Portuguese
+	"Sim" => "yes", "Não" => "no",
+);
+
+$pouring_remediation_table = $prefix."brewing";
+$db_conn->where('brewPouring', NULL, 'IS NOT');
+$rows_pouring_remediation = $db_conn->get($pouring_remediation_table, null, "id,brewPouring");
+$totalRows_pouring_remediation = $db_conn->count;
+$pouring_remediation_fields_corrected = 0;
+$pouring_remediation_rows_corrected = 0;
+
+if ($totalRows_pouring_remediation > 0) {
+
+	foreach ($rows_pouring_remediation as $row_pouring_remediation) {
+
+		$pouring_remediation_decoded = json_decode($row_pouring_remediation['brewPouring'], true);
+		if (!is_array($pouring_remediation_decoded)) continue;
+
+		$pouring_remediation_row_changed = FALSE;
+
+		if ((isset($pouring_remediation_decoded['pouring'])) && (isset($pouring_remediation_legacy_pouring[$pouring_remediation_decoded['pouring']]))) {
+			$pouring_remediation_decoded['pouring'] = $pouring_remediation_legacy_pouring[$pouring_remediation_decoded['pouring']];
+			$pouring_remediation_row_changed = TRUE;
+			$pouring_remediation_fields_corrected++;
+		}
+
+		if ((isset($pouring_remediation_decoded['pouring_rouse'])) && (isset($pouring_remediation_legacy_rouse[$pouring_remediation_decoded['pouring_rouse']]))) {
+			$pouring_remediation_decoded['pouring_rouse'] = $pouring_remediation_legacy_rouse[$pouring_remediation_decoded['pouring_rouse']];
+			$pouring_remediation_row_changed = TRUE;
+			$pouring_remediation_fields_corrected++;
+		}
+
+		if ($pouring_remediation_row_changed) {
+
+			$db_conn->where('id', $row_pouring_remediation['id']);
+			if ($db_conn->update($pouring_remediation_table, array('brewPouring' => json_encode($pouring_remediation_decoded)))) $pouring_remediation_rows_corrected++;
+			else {
+				$v3200_update .= "<li class=\"text-danger\">Pouring instruction language correction could NOT be applied to one or more entries. Please contact support.</li>";
+				$error_count++;
+			}
+
+		}
+
+	}
+
+}
+
+if ($pouring_remediation_fields_corrected > 0) $v3200_update .= sprintf("<li>Converted %s translated pouring-instruction value(s) back to their locale-neutral form across %s entry record(s), so they display correctly regardless of viewer language.</li>",$pouring_remediation_fields_corrected,$pouring_remediation_rows_corrected);
+
 if (!$setup_running) $v3200_update .= "</ul>";
 
 $this_update_version_block = $versions['3.2.0.0'];

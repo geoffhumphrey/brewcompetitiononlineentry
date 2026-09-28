@@ -248,6 +248,32 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$pouring_instructions['pouring_notes'] = $brewPouringNotes;
 		}
 
+		// On edit, if the pouring radios were absent from the POST (the stored
+		// value was saved under a different locale, so none of the current
+		// locale's radio values matched and nothing was pre-selected/submitted),
+		// preserve the existing stored values instead of overwriting with empty.
+		if (($action == "edit") && ((!isset($_POST['brewPouringInst'])) || (!isset($_POST['brewPouringRouse'])))) {
+
+			$db_conn->where("id", $id);
+			$row_existing_pouring = $db_conn->getOne($prefix."brewing", "brewPouring");
+
+			if (!empty($row_existing_pouring['brewPouring'])) {
+
+				$existing_pouring_arr = json_decode($row_existing_pouring['brewPouring'], true);
+
+				if ((!isset($pouring_instructions['pouring'])) && (isset($existing_pouring_arr['pouring'])))
+					$pouring_instructions['pouring'] = $existing_pouring_arr['pouring'];
+
+				if ((!isset($pouring_instructions['pouring_rouse'])) && (isset($existing_pouring_arr['pouring_rouse'])))
+					$pouring_instructions['pouring_rouse'] = $existing_pouring_arr['pouring_rouse'];
+
+				if ((!isset($pouring_instructions['pouring_notes'])) && (isset($existing_pouring_arr['pouring_notes'])))
+					$pouring_instructions['pouring_notes'] = $existing_pouring_arr['pouring_notes'];
+
+			}
+
+		}
+
 		$brewPouring = json_encode($pouring_instructions);
 
 		if (isset($_POST['brewPackaging'])) $brewPackaging = sterilize($_POST['brewPackaging']);

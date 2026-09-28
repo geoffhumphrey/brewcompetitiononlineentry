@@ -355,7 +355,7 @@ if ($totalRows_table_assignments > 0) {
 
 							if (!empty($row_entries['brewMead1'])) {
 								$additional_info++;
-								$carb_display .= "<strong>".$label_carbonation.":</strong> ".$row_entries['brewMead1'];
+								$carb_display .= "<strong>".$label_carbonation.":</strong> ".h(translate_mead_req_value($row_entries['brewMead1']));
 							}
 							elseif (in_array("carb",$missing_mead_info_dash)) {
 								$additional_info++;
@@ -364,7 +364,7 @@ if ($totalRows_table_assignments > 0) {
 
 							if (!empty($row_entries['brewMead2'])) {
 								$additional_info++;
-								$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2'];
+								$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".h(translate_mead_req_value($row_entries['brewMead2']));
 							}
 							elseif (in_array("sweet",$missing_mead_info_dash)) {
 								$additional_info++;
@@ -391,7 +391,7 @@ if ($totalRows_table_assignments > 0) {
 
 							if (!empty($row_entries['brewMead3'])) {
 								$additional_info++;
-								$strength_display .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+								$strength_display .= "<strong>".$label_strength.":</strong> ".h(translate_mead_strength_value($row_entries['brewMead3']));
 							}
 							elseif (in_array("strength",$missing_mead_info_dash)) {
 								$additional_info++;
@@ -410,9 +410,9 @@ if ($totalRows_table_assignments > 0) {
 
 							if (!empty($row_entries['brewPouring'])) {
 								$pouring_arr = json_decode($row_entries['brewPouring'],true);
-								$pouring_display .= "<li><strong>".$label_pouring.":</strong> ".$pouring_arr['pouring']."</li>";
+								$pouring_display .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 								if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $pouring_display .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
-								$pouring_display .= "<li><strong>".$label_rouse_yeast.":</strong> ".$pouring_arr['pouring_rouse']."</li>";
+								$pouring_display .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 								unset($pouring_arr);
 							}
 

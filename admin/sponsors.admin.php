@@ -105,7 +105,9 @@ $(document).ready(function () {
  <tr>
   <td>
     <?php if ($dbTable != "default") {
-    if (($row_sponsors['sponsorURL'] != "") && (preg_match('#^https?://#i', $row_sponsors['sponsorURL']))) echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\">".$row_sponsors['sponsorName']."</a>"; else echo $row_sponsors['sponsorName'];
+    // sponsorName is sterilize()+purify()'d at save time - safe as link text below with no
+    // further escaping, but needs h() specifically inside the title="..." attribute.
+    if (($row_sponsors['sponsorURL'] != "") && (preg_match('#^https?://#i', $row_sponsors['sponsorURL']))) echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".h($row_sponsors['sponsorName'])." website\">".$row_sponsors['sponsorName']."</a>"; else echo $row_sponsors['sponsorName'];
     }
   else echo $row_sponsors['sponsorName'];
   ?>
@@ -191,9 +193,9 @@ $(document).ready(function () {
     </div>
   </td>
   <td nowrap="nowrap">
-  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-lg fa-pencil"></span></a>
-  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
-  <?php if (($row_sponsors['sponsorURL'] != "") && (preg_match('#^https?://#i', $row_sponsors['sponsorURL']))) echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?>
+  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo h($row_sponsors['sponsorName']); ?>"><span class="fa fa-lg fa-pencil"></span></a>
+  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo h($row_sponsors['sponsorName']); ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo h($row_sponsors['sponsorName']); ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
+  <?php if (($row_sponsors['sponsorURL'] != "") && (preg_match('#^https?://#i', $row_sponsors['sponsorURL']))) echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".h($row_sponsors['sponsorName'])." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?>
   </td>
   <?php } ?>
  </tr>
@@ -224,7 +226,7 @@ if ($action == "default") { ?>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group has-warning">
             <!-- Input Here -->
-            <input class="form-control" id="sponsorName" name="sponsorName" type="text" maxlength="255" value="<?php if ($action == "edit") echo $row_sponsors['sponsorName']; ?>" placeholder="" data-error="The sponsor's name is required" autofocus required>
+            <input class="form-control" id="sponsorName" name="sponsorName" type="text" maxlength="255" value="<?php if ($action == "edit") echo h($row_sponsors['sponsorName']); ?>" placeholder="" data-error="The sponsor's name is required" autofocus required>
             <span class="input-group-addon" id="sponsorName-addon2" data-tooltip="true" title="<?php echo $form_required_fields_02; ?>"><span class="fa fa-star"></span></span>
         </div>
         <div class="help-block with-errors"></div>
