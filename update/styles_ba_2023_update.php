@@ -71,7 +71,7 @@ else {
 	$error_count += 1;
 }
 
-if (!check_new_style("03","184","West Coast-Style India Pale Ale")) {
+if (!check_new_style("03","184","West Coast-Style India Pale Ale","BA")) {
 
 	$data = array(
 		'brewStyleGroup' => '03',
@@ -110,7 +110,7 @@ if (!check_new_style("03","184","West Coast-Style India Pale Ale")) {
 
 }
 
-if (!check_new_style("11","185","Dessert Stout or Pastry Stout")) {
+if (!check_new_style("11","185","Dessert Stout or Pastry Stout","BA")) {
 
 	$data = array(
 		'brewStyleGroup' => '11',

@@ -190,7 +190,7 @@ $(document).ready(function () {
   const $enableBoxes     = $('.enable-style');
   const $limitBoxes      = $('.limit-style');
 
-  <?php if ($bid == "default") { ?>
+  <?php if (($bid == "default") && ($section != "step7")) { ?>
   disable_update_button('styles');
   <?php } ?>
 
@@ -255,7 +255,21 @@ $(document).ready(function () {
  </tbody>
  </table>
  <div class="bcoem-admin-element hidden-print">
-	<?php if ($bid == "default") { ?>
+	<?php if ($section == "step7") { ?>
+	<!-- Styles here save individually via AJAX as each checkbox is clicked (see save_column()
+	     above), so there's nothing left to bulk-submit - this button only needs to advance
+	     setup to step 8. It posts to the same setup-aware endpoint the old bulk-submit button
+	     used (includes/process/process_styles.inc.php's $section=="setup" branch), which
+	     still records setup_last_step and redirects; any id[]/brewStyleActive{id} fields in
+	     the request are just a harmless, already-redundant re-save of the current state.
+	     Deliberately NOT id="styles-submit" - save_success()/save_failure() in
+	     admin_ajax.min.js call disable_update_button('styles')/enable_update_button('styles')
+	     after every individual checkbox save, which targets "#styles-submit" by hardcoded
+	     convention (action name + "-submit"), and would otherwise re-disable this button
+	     the moment any checkbox saved. -->
+	<input type="submit" name="Submit" id="styles-continue-step8" class="btn btn-primary" aria-describedby="helpBlock" value="Continue to Step 8" />
+	<span id="helpBlock" class="help-block">Styles are saved automatically as you select them above. Select "Continue to Step 8" when you're ready to move on.</span>
+	<?php } elseif ($bid == "default") { ?>
 	<input type="submit" name="Submit" id="styles-submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Accepted Styles" disabled />
 	<span id="styles-update-button-enabled" class="help-block">Select "Update Accepted Styles" <em>before</em> paging through records.</span>
 	<span id="styles-update-button-disabled" class="help-block">The "Update Accepted Styles" button has been disabled since data is being saved automatically as it is entered. It will re-enable itself if a save fails, so you can retry from here.</span>

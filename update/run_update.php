@@ -390,7 +390,7 @@ if (!$style_id_auto_increment) {
 }
 
 // Add new specialty IPA and historical styles to styles table if not present
-if (!check_new_style("27","A1","Gose")) {
+if (!check_new_style("27","A1","Gose","BJCP2015")) {
 	
 	$data = array('brewStyleGroup' => '27',	'brewStyleNum' => 'A1',	'brewStyle' => 'Gose', 'brewStyleCategory' => 'Historical Beer', 'brewStyleVersion' => 'BJCP2015', 'brewStyleOG' => '1.036', 'brewStyleOGMax' => '1.056', 'brewStyleFG' => '1.006', 'brewStyleFGMax' => '1.010', 'brewStyleABV' => '4.2', 'brewStyleABVMax' => '4.8', 'brewStyleIBU' => '5', 'brewStyleIBUMax' => '12', 'brewStyleSRM' => '3', 'brewStyleSRMMax' => '4', 'brewStyleType' => '1', 'brewStyleInfo' => 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/', 'brewStyleActive' => 'Y', 'brewStyleOwn' => 'bcoe', 'brewStyleReqSpec' => '0', 'brewStyleStrength' => '0', 'brewStyleCarb' => '0', 'brewStyleSweet' => '0', 'brewStyleTags' => 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice','brewStyleComEx' => 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', 'brewStyleEntry' => NULL
 	);
@@ -403,7 +403,7 @@ if (!check_new_style("27","A1","Gose")) {
 
 }
 
-if (!check_new_style("27","A2","Piwo Grodziskie")) {
+if (!check_new_style("27","A2","Piwo Grodziskie","BJCP2015")) {
 
 	$data =  array('brewStyleGroup' => '27','brewStyleNum' => 'A2','brewStyle' => 'Piwo Grodziskie','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.028','brewStyleOGMax' => '1.032','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '25','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A low-gravity, highly-carbonated, light bodied ale combining an oak-smoked flavor with a clean hop bitterness. Highly sessionable.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented,lagered, north-america, historical-style, pilsner-family, bitter, hoppy','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
 	$result = $db_conn->insert ($update_table, $data);
@@ -415,7 +415,7 @@ if (!check_new_style("27","A2","Piwo Grodziskie")) {
 
 }
 
-if (!check_new_style("27","A3","Lichtenhainer")) {
+if (!check_new_style("27","A3","Lichtenhainer","BJCP2015")) {
 
 	$data = array('id' => '229','brewStyleGroup' => '27','brewStyleNum' => 'A3','brewStyle' => 'Lichtenhainer','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.032','brewStyleOGMax' => '1.040','brewStyleFG' => '1.004','brewStyleFGMax' => '1.008','brewStyleABV' => '3.5','brewStyleABVMax' => '4.7','brewStyleIBU' => '5','brewStyleIBUMax' => '12','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A sour, smoked, lower-gravity historical German wheat beer. Complex yet refreshing character due to high attenuation and carbonation, along with low bitterness and moderate sourness. ','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, smoke','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
 	$result = $db_conn->insert ($update_table, $data);
@@ -427,7 +427,7 @@ if (!check_new_style("27","A3","Lichtenhainer")) {
 
 }
 
-if (!check_new_style("27","A4","Roggenbier")) {
+if (!check_new_style("27","A4","Roggenbier","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A4','brewStyle' => 'Roggenbier','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.046','brewStyleOGMax' => '1.056','brewStyleFG' => '1.010','brewStyleFGMax' => '1.014','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '10','brewStyleIBUMax' => '20','brewStyleSRM' => '14','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'A dunkelweizen made with rye rather than wheat, but with a greater body and light finishing hops.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, amber-color, top-fermenting, central-europe, historical-style, wheat-beer-family','brewStyleComEx' => 'Thurn und Taxis Roggen','brewStyleEntry' => NULL);
 	$result = $db_conn->insert ($update_table, $data);
@@ -439,7 +439,7 @@ if (!check_new_style("27","A4","Roggenbier")) {
 
 }
 
-if (!check_new_style("27","A5","Sahti")) {
+if (!check_new_style("27","A5","Sahti","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A5','brewStyle' => 'Sahti','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.076','brewStyleOGMax' => '1.120','brewStyleFG' => '1.016','brewStyleFGMax' => '1.020','brewStyleABV' => '7.0','brewStyleABVMax' => '11.0','brewStyleIBU' => '7','brewStyleIBUMax' => '15','brewStyleSRM' => '4','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A sweet, heavy, strong traditional Finnish beer with a rye, juniper, and juniper berry flavor and a strong banana-clove yeast character.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, centraleurope, historical-style, spice','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
 	$result = $db_conn->insert ($update_table, $data);
@@ -451,7 +451,7 @@ if (!check_new_style("27","A5","Sahti")) {
 
 }
 
-if (!check_new_style("27","A6","Kentucky Common")) {
+if (!check_new_style("27","A6","Kentucky Common","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A6','brewStyle' => 'Kentucky Common','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.055','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '4.0','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '30','brewStyleSRM' => '11','brewStyleSRMMax' => '20','brewStyleType' => '1','brewStyleInfo' => 'A darker-colored, light-flavored, malt-accented beer with a dry finish and interesting character malt flavors. Refreshing due to its high carbonation and mild flavors, and highly  sessionable due to being served very fresh and with restrained alcohol levels.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, amber-color, top-fermented, north america,historical-style, balanced','brewStyleComEx' => 'Apocalypse Brew Works Ortel\'s 1912','brewStyleEntry' => NULL);
 	$result = $db_conn->insert ($update_table, $data);
@@ -463,7 +463,7 @@ if (!check_new_style("27","A6","Kentucky Common")) {
 
 }
 
-if (!check_new_style("27","A7","Pre-Prohibition Lager")) {
+if (!check_new_style("27","A7","Pre-Prohibition Lager","BJCP2015")) {
 
 	$data =  array('brewStyleGroup' => '27','brewStyleNum' => 'A7','brewStyle' => 'Pre-Prohibition Lager','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.060','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '25','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A clean, refreshing, but bitter pale lager, often showcasing a grainy-sweet corn flavor. All malt or rice-based versions have a crisper, more neutral character. The higher bitterness level is the largest differentiator between this style and most modern mass-market pale lagers, but the more robust flavor profile also sets it apart.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented, lagered, north-america, historical-style, pilsner-family, bitter, hoppy','brewStyleComEx' => 'Anchor California Lager, Coors Batch 19, Little Harpeth Chicken Scratch','brewStyleEntry' => NULL);
 	$result = $db_conn->insert ($update_table, $data);
@@ -475,7 +475,7 @@ if (!check_new_style("27","A7","Pre-Prohibition Lager")) {
 
 }
 
-if (!check_new_style("27","A8","Pre-Prohibition Porter")) {
+if (!check_new_style("27","A8","Pre-Prohibition Porter","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A8','brewStyle' => 'Pre-Prohibition Porter','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.046','brewStyleOGMax' => '1.060','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '20','brewStyleIBUMax' => '30','brewStyleSRM' => '18','brewStyleSRMMax' => '30','brewStyleType' => '1','brewStyleInfo' => 'An American adaptation of English Porter using American ingredients, including adjuncts.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, dark-color, any-fermentation, northamerica, historical-style, porter-family, malty','brewStyleComEx' => 'Stegmaier Porter, Yuengling Porter','brewStyleEntry' => NULL);
 	$result = $db_conn->insert ($update_table, $data);
@@ -487,7 +487,7 @@ if (!check_new_style("27","A8","Pre-Prohibition Porter")) {
 
 }
 
-if (!check_new_style("27","A9","London Brown Ale")) {
+if (!check_new_style("27","A9","London Brown Ale","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A9','brewStyle' => 'London Brown Ale','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.033','brewStyleOGMax' => '1.038','brewStyleFG' => '1.012','brewStyleFGMax' => '1.015','brewStyleABV' => '2.8','brewStyleABVMax' => '3.6','brewStyleIBU' => '15','brewStyleIBUMax' => '20','brewStyleSRM' => '22','brewStyleSRMMax' => '35','brewStyleType' => '1','brewStyleInfo' => 'A luscious, sweet, malt-oriented dark brown ale, with caramel and toffee malt complexity and a sweet finish.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, dark-color, top-fermented, britishisles, historical-style, brown-ale-family, malty, sweet','brewStyleComEx' => 'Harveys Bloomsbury Brown Ale, Mann\'s Brown Ale','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db_conn->insert ($update_table, $data);
@@ -499,7 +499,7 @@ if (!check_new_style("27","A9","London Brown Ale")) {
 
 }
 
-if (!check_new_style("21","B1","Belgian IPA")) {
+if (!check_new_style("21","B1","Belgian IPA","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B1','brewStyle' => 'Belgian IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.058','brewStyleOGMax' => '1.080','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '6.2','brewStyleABVMax' => '9.5','brewStyleIBU' => '50','brewStyleIBUMax' => '100','brewStyleSRM' => '5','brewStyleSRMMax' => '15','brewStyleType' => '1','brewStyleInfo' => 'An IPA with the fruitiness and spiciness derived from the use of Belgian yeast. The examples from Belgium tend to be lighter in color and more attenuated, similar to a tripel that has been brewed with more hops. This beer has a more complex flavor profile and may be higher in alcohol than a typical IPA.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Brewery Vivant Triomphe, Houblon Chouffe, Epic Brainless IPA, Green Flash Le Freak, Stone Cali-Belgique, Urthel Hop It','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db_conn->insert ($update_table, $data);
@@ -511,7 +511,7 @@ if (!check_new_style("21","B1","Belgian IPA")) {
 
 }
 
-if (!check_new_style("21","B2","Black IPA")) {
+if (!check_new_style("21","B2","Black IPA","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B2','brewStyle' => 'Black IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.050','brewStyleOGMax' => '1.085','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '5.5','brewStyleABVMax' => '9.0','brewStyleIBU' => '50','brewStyleIBUMax' => '90','brewStyleSRM' => '25','brewStyleSRMMax' => '40','brewStyleType' => '1','brewStyleInfo' => 'A beer with the dryness, hop-forward balance, and flavor characteristics of an American IPA, only darker in color – but without strongly roasted or burnt flavors. The flavor of darker malts is gentle and supportive, not a major flavor component. Drinkability is a key characteristic.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => '21st Amendment Back in Black (standard), Deschutes Hop in the Dark CDA (standard), Rogue Dad’s Little Helper (standard), Southern Tier Iniquity (double), Widmer Pitch Black IPA (standard)','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db_conn->insert ($update_table, $data);
@@ -523,7 +523,7 @@ if (!check_new_style("21","B2","Black IPA")) {
 
 }
 
-if (!check_new_style("21","B3","Brown IPA")) {
+if (!check_new_style("21","B3","Brown IPA","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B3','brewStyle' => 'Brown IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.070','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '11','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, chocolate, toffee, and/or dark fruit malt character as in an American Brown Ale. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Brown IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Dogfish Head Indian Brown Ale, Grand Teton Bitch Creek, Harpoon Brown IPA, Russian River Janet’s Brown Ale','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db_conn->insert ($update_table, $data);
@@ -535,7 +535,7 @@ if (!check_new_style("21","B3","Brown IPA")) {
 
 }
 
-if (!check_new_style("21","B4","Red IPA")) {
+if (!check_new_style("21","B4","Red IPA","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B4','brewStyle' => 'Red IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.070','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '11','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, toffee, and/or dark fruit malt character. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Red IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Green Flash Hop Head Red Double Red IPA (double), Midnight Sun Sockeye Red, Sierra Nevada Flipside Red IPA, Summit Horizon Red IPA, Odell Runoff Red IPA','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db_conn->insert ($update_table, $data);
@@ -547,7 +547,7 @@ if (!check_new_style("21","B4","Red IPA")) {
 
 }
 
-if (!check_new_style("21","B5","Rye IPA")) {
+if (!check_new_style("21","B5","Rye IPA","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B5','brewStyle' => 'Rye IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.075','brewStyleFG' => '1.008','brewStyleFGMax' => '1.014','brewStyleABV' => '5.5','brewStyleABVMax' => '8.0','brewStyleIBU' => '50','brewStyleIBUMax' => '75','brewStyleSRM' => '6','brewStyleSRMMax' => '14','brewStyleType' => '1','brewStyleInfo' => 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties and rye malt. The balance is hop-forward, with a clean fermentation profile, dry finish, and clean, supporting malt allowing a creative range of hop character to shine through.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Arcadia Sky High Rye, Bear Republic Hop Rod Rye, Founders Reds Rye, Great Lakes Rye of the Tiger, Sierra Nevada Ruthless Rye','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db_conn->insert ($update_table, $data);
@@ -559,7 +559,7 @@ if (!check_new_style("21","B5","Rye IPA")) {
 
 }
 
-if (!check_new_style("21","B6","White IPA")) {
+if (!check_new_style("21","B6","White IPA","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B6','brewStyle' => 'White IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.065','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.0','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '5','brewStyleSRMMax' => '8','brewStyleType' => '1','brewStyleInfo' => 'A fruity, spicy, refreshing version of an American IPA, but with a lighter color, less body, and featuring either the distinctive yeast and/or spice additions typical of a Belgian witbier.','brewStyleLink' => 'https://www.bjcp.org/bjcp-style-guidelines/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy, spice','brewStyleComEx' => 'Blue Point White IPA, Deschutes Chainbreaker IPA, Harpoon The Long Thaw, New Belgium Accumulation','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db_conn->insert ($update_table, $data);
@@ -1389,7 +1389,7 @@ elseif ($update_running) {
 // Begin version unordered list
 if (!$setup_running) $v21130_update .= "<ul>";
 
-if (!check_new_style("08","077","American-Style Pilsener")) include (UPDATE.'styles_ba_update.php');
+if (!check_new_style("08","077","American-Style Pilsener","BA")) include (UPDATE.'styles_ba_update.php');
 
 /**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
@@ -1527,7 +1527,7 @@ else {
 
 $update_table = $styles_db_table;
 
-if (!check_new_style("17","A1","Burton Ale")) {
+if (!check_new_style("17","A1","Burton Ale","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '17','brewStyleNum' => 'A1','brewStyle' => 'Burton Ale','brewStyleCategory' => 'British Strong Ale','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.055','brewStyleOGMax' => '1.075','brewStyleFG' => '1.018','brewStyleFGMax' => '1.024','brewStyleABV' => '5.0','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '50','brewStyleSRM' => '14','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A rich, malty, sweet, and bitter dark ale of moderately strong alcohol. Full bodied and chewy with a balanced hoppy finish and complex malty and hoppy aroma. Fruity notes accentuate the malt richness, while the hops help balance the sweeter finish. Has some similarity in malt flavor to Wee Heavy, but with substantially more bitterness. Less strong than an English Barleywine.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, traditional-style, balanced, strong-ale-family, british-isles, brown-color, top-fermented','brewStyleComEx' => 'The Laboratory Brewery Gone for a Burton','brewStyleEntry' => NULL);
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Burton Ale style added.</li>";
@@ -1538,7 +1538,7 @@ if (!check_new_style("17","A1","Burton Ale")) {
 
 }
 
-if (!check_new_style("21","B7","New England IPA")) {
+if (!check_new_style("21","B7","New England IPA","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B7','brewStyle' => 'New England IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.060','brewStyleOGMax' => '1.085','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '6.0','brewStyleABVMax' => '9.0','brewStyleIBU' => '25','brewStyleIBUMax' => '60','brewStyleSRM' => '3','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'An American IPA with intense fruit flavors and aromas, a soft body, and smooth mouthfeel, and often opaque with substantial haze. Less perceived bitterness than traditional IPAs but always massively hop forward. This emphasis on late hopping, especially dry hopping, with hops with tropical fruit qualities lends the specific \'juicy\' character for which this style is known. The style is still evolving, but this style is essentially a smoother, hazier, juicier American IPA. In this context, ‘juicy’ refers to a mental impression of fruit juice or eating fresh, fully ripe fruit. Heavy examples suggestive of milkshakes, creamsicles, or fruit smoothies are beyond this range; IPAs should always be drinkable. Haziness comes from the dry hopping regime, not suspended yeast, starch haze, set pectins, or other techniques; a hazy shine is desirable, not a cloudy, murky mess.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/21b-specialty-ipa-new-england-ipa/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'bitter, craft-style, pale-color, high-strength, hoppy, ipa-family, north-america, specialty-family, top-fermented','brewStyleComEx' => 'Hill Farmstead Susan, Other Half Green Diamonds Double IPA, Tired Hands Alien Church, Tree House Julius, Trillium Congress Street, WeldWerks Juicy Bits','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>New England IPA style added.</li>";
@@ -1549,7 +1549,7 @@ if (!check_new_style("21","B7","New England IPA")) {
 
 }
 
-if (!check_new_style("PR","X1","Dorada Pampeana")) {
+if (!check_new_style("PR","X1","Dorada Pampeana","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X1','brewStyle' => 'Dorada Pampeana','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.042','brewStyleOGMax' => '1.054','brewStyleFG' => '1.009','brewStyleFGMax' => '1.013','brewStyleABV' => '4.3','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '22','brewStyleSRM' => '3','brewStyleSRMMax' => '5','brewStyleType' => '1','brewStyleInfo' => 'At the beginning argentine homebrewers were very limited: there wasn\'t extract - they could use only pils malt, Cascade hops and dry yeast, commonly Nottingham, Windsor or Safale. With these ingredients, Argentine brewers developed a specific version of Blond Ale, named Dorada Pampeana. Ingredients: usually only pale or pils malt, although may include low rates of caramelized malt. Commonly Cascade hops. Clean American yeast, slightly fruity British or Kölsch, usually packaged in cold.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x1-dorada-pampeana/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Dorada Pampeana style added.</li>";
@@ -1560,7 +1560,7 @@ if (!check_new_style("PR","X1","Dorada Pampeana")) {
 
 }
 
-if (!check_new_style("PR","X2","IPA Argenta")) {
+if (!check_new_style("PR","X2","IPA Argenta","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X2','brewStyle' => 'IPA Argenta','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.055','brewStyleOGMax' => '1.065','brewStyleFG' => '1.008','brewStyleFGMax' => '1.015','brewStyleABV' => '5.0','brewStyleABVMax' => '6.5','brewStyleIBU' => '35','brewStyleIBUMax' => '60','brewStyleSRM' => '6','brewStyleSRMMax' => '15','brewStyleType' => '1','brewStyleInfo' => 'A decidedly hoppy and bitter, refreshing, and moderately strong Argentine pale ale. The clue is drinkability without harshness and best balance. An Argentine version of the historical English style, developed in 2013 from Somos Cerveceros Association meetings, when its distinctive characteristics were defined. Different from an American IPA in that it is brewed with wheat and using Argentine hops (Cascade, Mapuche and Nugget are typical, although Spalt, Victoria or Bullion may be used to add complexity), with its unique flavor and aroma characteristics. Based on a citrus (from Argetine hops) and wheat pairing idea, like in a Witbier. Low amounts of wheat are similar to a Kölsch grist, as is some fruitiness from fermentation.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x2-ipa-argenta/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Antares Ipa Argenta, Kerze Ipa Argenta.','brewStyleEntry' => NULL);
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>IPA Argenta style added.</li>";
@@ -1571,7 +1571,7 @@ if (!check_new_style("PR","X2","IPA Argenta")) {
 
 }
 
-if (!check_new_style("PR","X3","Italian Grape Ale")) {
+if (!check_new_style("PR","X3","Italian Grape Ale","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X3','brewStyle' => 'Italian Grape Ale','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.043','brewStyleOGMax' => '1.090','brewStyleFG' => '1.007','brewStyleFGMax' => '1.015','brewStyleABV' => '4.8','brewStyleABVMax' => '10','brewStyleIBU' => '10','brewStyleIBUMax' => '30','brewStyleSRM' => '5','brewStyleSRMMax' => '30','brewStyleType' => '1','brewStyleInfo' => 'A sometimes refreshing, sometimes more complex Italian ale characterized by different varieties of grapes.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x3-italian-grape-ale/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Montegioco Tibir, Montegioco Open Mind, Birranova Moscata, LoverBeer BeerBera, Loverbeer D\'uvaBeer, Birra del Borgo Equilibrista, Barley BB10, Barley BBevò, Cudera, Pasturana Filare!, Gedeone PerBacco! Toccalmatto Jadis, Rocca dei Conti Tarì Giacchè','brewStyleEntry' => NULL);
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Italian Grape Ale style added.</li>";
@@ -1582,7 +1582,7 @@ if (!check_new_style("PR","X3","Italian Grape Ale")) {
 
 }
 
-if (!check_new_style("PR","X4","Catharina Sour")) {
+if (!check_new_style("PR","X4","Catharina Sour","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X4','brewStyle' => 'Catharina Sour','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.039','brewStyleOGMax' => '1.048','brewStyleFG' => '1.002','brewStyleFGMax' => '1.008','brewStyleABV' => '4.0','brewStyleABVMax' => '5.5','brewStyleIBU' => '2','brewStyleIBUMax' => '68','brewStyleSRM' => '2','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'A light and refreshing wheat ale with a clean lactic sourness that is balanced by a fresh fruit addition. The low bitterness, light body, moderate alcohol content, and moderately high carbonation allow the flavor and aroma of the fruit to be the primary focus of the beer. The fruit is often, but not always, tropical in nature. This beer is stronger than a Berliner Weiss and typically features fresh fruit. The kettle souring method allows for fast production of the beer, so this is typically a present-use style. It may be bottled or canned, but it should be consumed while fresh.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x4-catharina-sour/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'craft-style, fruit, sour, specialty-beer','brewStyleComEx' => 'Itajahy Catharina Araca Sour, Blumenau Catharina Sour Sun of a Peach, Lohn Bier Catharina Sour Jaboticaba, Liffey Coroa Real, UNIKA Tangerina, Armada Daenerys.','brewStyleEntry' => 'Entrant must specify the types of fresh fruit(s) used.');
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>Catharina Sour style added.</li>";
@@ -1593,7 +1593,7 @@ if (!check_new_style("PR","X4","Catharina Sour")) {
 
 }
 
-if (!check_new_style("PR","X5","New Zealand Pilsner")) {
+if (!check_new_style("PR","X5","New Zealand Pilsner","BJCP2015")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X5','brewStyle' => 'New Zealand Pilsner','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.046','brewStyleFG' => '1.009','brewStyleFGMax' => '1.014','brewStyleABV' => '4.5','brewStyleABVMax' => '5.8','brewStyleIBU' => '25','brewStyleIBUMax' => '45','brewStyleSRM' => '2','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'A pale, dry, golden-colored, cleanly-fermented beer showcasing the characteristic tropical, citrusy, fruity, grassy New Zealand-type hops. Medium body, soft mouthfeel, and smooth palate and finish, with a neutral to bready malt base provide the support for this very drinkable, refreshing, hop-forward beer.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x5-new-zealand-pilsner/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'bitter, pale-color, standard-strength, bottom-fermented, hoppy, pilsner-family, lagered, craft-style, pacific','brewStyleComEx' => 'Croucher New Zealand Pilsner, Emerson’s Pilsner, Liberty Halo Pilsner, Panhead Port Road Pilsner, Sawmill Pilsner, Tuatara Mot Eureka','brewStyleEntry' => NULL); 
 	if ($db_conn->insert ($update_table, $data)) $v21130_update .= "<li>New Zealand Pilsner style added.</li>";
@@ -1811,7 +1811,7 @@ else {
  */
 
 $aabc_styles_present = FALSE;
-if (!check_new_style("01","01","Light Australian Lager [AABC]")) include (UPDATE.'styles_aabc_update.php');
+if (!check_new_style("01","01","Light Australian Lager [AABC]","AABC")) include (UPDATE.'styles_aabc_update.php');
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
@@ -1819,7 +1819,7 @@ if (!check_new_style("01","01","Light Australian Lager [AABC]")) include (UPDATE
  * -----------------------------------------------------------------------------------------------------
  */
 
-if (!check_new_style("11","174","Experimental India Pale Ale")) include (UPDATE.'styles_ba_2020_update.php');
+if (!check_new_style("11","174","Experimental India Pale Ale","BA")) include (UPDATE.'styles_ba_2020_update.php');
 
 /**
  * Update all custom style brewStyleGroup columns to 35 or above 
@@ -2643,7 +2643,7 @@ if (HOSTED) {
 	}
 }
 
-if (($section == "setup") || (!check_new_style("28","D","Straight Sour Beer"))) include (UPDATE.'styles_bjcp_2021_update.php');
+if (($section == "setup") || (!check_new_style("28","D","Straight Sour Beer","BJCP2021"))) include (UPDATE.'styles_bjcp_2021_update.php');
 
 $sql = sprintf("ALTER TABLE `%s` MODIFY COLUMN `brewStyleGroup` VARCHAR(3) AFTER `id`;",$styles_db_table);
 $result = $db_conn->rawQuery($sql);
@@ -2833,7 +2833,7 @@ if (!check_update("update_date", $prefix."bcoem_sys")) {
  * ---------------------------------------------------------------------------------------------------
  */
 
-if (!check_new_style("11","181","Kentucky Common")) include (UPDATE.'styles_ba_2022_update.php');
+if (!check_new_style("11","181","Kentucky Common","BA")) include (UPDATE.'styles_ba_2022_update.php');
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
@@ -2841,7 +2841,7 @@ if (!check_new_style("11","181","Kentucky Common")) include (UPDATE.'styles_ba_2
  * ---------------------------------------------------------------------------------------------------
  */
 
-if (!check_new_style("01","04","American Light Lager [BJCP 1A]")) include (UPDATE.'styles_aabc_2022_update.php');
+if (!check_new_style("01","04","American Light Lager [BJCP 1A]","AABC2022")) include (UPDATE.'styles_aabc_2022_update.php');
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
@@ -3268,7 +3268,7 @@ if (!check_update("contestClubs", $prefix."contest_info")) {
  * ---------------------------------------------------------------------------------------------------
  */
 
-if (!check_new_style("C1","A","Low-Tannin Ciders Dry")) include (UPDATE.'styles_nw_cider_cup_2023.php');
+if (!check_new_style("C1","A","Low-Tannin Ciders Dry","NWCiderCup")) include (UPDATE.'styles_nw_cider_cup_2023.php');
 
 /**
  * ----------------------------------------------- 2.6.0 ---------------------------------------------
@@ -3276,7 +3276,7 @@ if (!check_new_style("C1","A","Low-Tannin Ciders Dry")) include (UPDATE.'styles_
  * ---------------------------------------------------------------------------------------------------
  */
 
-if (!check_new_style("03","184","West Coast-Style India Pale Ale")) include (UPDATE.'styles_ba_2023_update.php');
+if (!check_new_style("03","184","West Coast-Style India Pale Ale","BA")) include (UPDATE.'styles_ba_2023_update.php');
 
 /**
  * ----------------------------------------------- 2.6.0 ---------------------------------------------
@@ -4639,10 +4639,10 @@ if (!check_update("judgingLocNotes", $prefix."judging_locations")) {
 }
 
 // Add BJCP 2025 Cider Updates
-if (($section == "setup") || (!check_new_style("C1","E","Spanish Cider"))) include (UPDATE.'styles_bjcp_2025_update.php');
+if (($section == "setup") || (!check_new_style("C1","E","Spanish Cider","BJCP2025"))) include (UPDATE.'styles_bjcp_2025_update.php');
 
 // Add AABC 2025 Cider Updates
-if (($section == "setup") || (!check_new_style("20","05","Spanish Cider [BJCP C1E]"))) include (UPDATE.'styles_aabc_2025_update.php');
+if (($section == "setup") || (!check_new_style("20","05","Spanish Cider [BJCP C1E]","AABC2025"))) include (UPDATE.'styles_aabc_2025_update.php');
 
 // Update NW Cider Cup Styles
 include (UPDATE.'styles_nw_cider_cup_2025.php');
@@ -5200,7 +5200,7 @@ $result = $db_conn->rawQuery($sql);
 if (($db_conn->getLastErrno() === 0) && ($db_conn->count > 0)) $v3100_update .= "<li>Fixed ".$db_conn->count." BA 2026 style(s) that were listed under the wrong category.</li>";
 
 // Add BA 2026 Style Updates
-if (($section == "setup") || (!check_new_style("01","01","Ordinary Bitter"))) include (UPDATE.'styles_ba_2026_update.php');
+if (($section == "setup") || (!check_new_style("01","01","Ordinary Bitter","BA2026"))) include (UPDATE.'styles_ba_2026_update.php');
 
 /**
  * Backfill brewStyle/brewStyleType for AABC 2025 beer/mead entries saved blank by a
@@ -5651,7 +5651,7 @@ if ((table_exists($prefix."style_sets_imported", true)) && (!check_update("style
 // any older mead version (old M2E was named "Melomel"), unlike 8 of the
 // 17 new mead style names which are unchanged from BJCP2021's rows and so
 // can't safely be used as a check_new_style() sentinel here.
-if (($section == "setup") || (!check_new_style("M2","E","Other Fruit Mead"))) include (UPDATE.'styles_bjcp_2026_update.php');
+if (($section == "setup") || (!check_new_style("M2","E","Other Fruit Mead","BJCP2026"))) include (UPDATE.'styles_bjcp_2026_update.php');
 
 if (!check_update("prefsDisplayTableAwards", $prefix."preferences")) {
 

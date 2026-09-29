@@ -32,7 +32,7 @@ function check_update($column_name, $table_name) {
 
 }
 
-function check_new_style($style1, $style2, $style3, $mode="none") {
+function check_new_style($style1, $style2, $style3, $version, $mode="none") {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -50,9 +50,15 @@ function check_new_style($style1, $style2, $style3, $mode="none") {
 	}
 	*/
 
+	// brewStyleVersion must be part of this match - group/num/name codes are
+	// routinely reused across versions (e.g. BJCP2021 kept most BJCP2015
+	// codes), so checking only group+num+name treats a newer version's own
+	// row as "already present" the moment an older version's row with the
+	// same code exists, silently skipping the insert. See issue #1759.
 	$db_conn->where('brewStyleGroup', $style1);
 	if ($mode != "ignore_style_num") $db_conn->where('brewStyleNum', $style2);
 	$db_conn->where('brewStyle', $style3);
+	$db_conn->where('brewStyleVersion', $version);
 	$row_new_style = $db_conn->getOne($styles_db_table, "COUNT(*) as 'count'");
 
 	if ($row_new_style['count'] > 0) return TRUE;

@@ -192,7 +192,7 @@ $inserted = 0;
 $skipped = 0;
 $insert_errors = FALSE;
 foreach ($data as $row) {
-  if (check_new_style($row['brewStyleGroup'], $row['brewStyleNum'], $row['brewStyle'])) {
+  if (check_new_style($row['brewStyleGroup'], $row['brewStyleNum'], $row['brewStyle'], $row['brewStyleVersion'])) {
     $skipped++;
     continue;
   }
