@@ -12,6 +12,11 @@
  *              switching out of Table Planning Mode), admin/judging_tables.admin.php
  *              (button state), and eval/dashboard.eval.php (Planning-Mode
  *              evaluation-visibility exception for the practice table).
+ *              assign_judge_to_practice_session() late-joins a single judge
+ *              designated after the session's own creation-time snapshot -
+ *              called from includes/process/process_users_register.inc.php
+ *              (registration), and process_brewer.inc.php (self-edit and
+ *              admin-edit, both "add" and "edit" actions).
  */
 
 define('PRACTICE_SESSION_TABLE_NUMBER', 999);
@@ -27,6 +32,114 @@ function practice_session_exists($db_conn, $prefix) {
 
 	if (!empty($row_table)) return $row_table['id'];
 	return FALSE;
+
+}
+
+/**
+ * Returns TRUE if this uid currently has a judging_assignments row on the
+ * practice session's table, FALSE otherwise (including when no practice
+ * session exists at all). A practice session's own judging_locations row is
+ * always created open immediately (see process_practice_session.inc.php),
+ * so a judge assigned to it should be able to reach the Judging Dashboard
+ * right away - independent of jPrefsJudgingOpen, the real competition's own
+ * (possibly still-future) judging start date/time.
+ */
+function judge_has_practice_assignment($db_conn, $prefix, $uid) {
+
+	$practice_table_id = practice_session_exists($db_conn, $prefix);
+	if (!$practice_table_id) return FALSE;
+
+	$db_conn->where('bid', $uid);
+	$db_conn->where('assignTable', $practice_table_id);
+	$db_conn->where('assignment', 'J');
+	$row = $db_conn->getOne($prefix."judging_assignments", "id");
+
+	return !empty($row);
+
+}
+
+/**
+ * Adds one judge (by brewer.uid) to the current practice session, if one
+ * exists - a no-op, reported as success, if there's no practice session
+ * right now. Mirrors the batch assignment includes/process/
+ * process_practice_session.inc.php does at creation time (availability
+ * marker + judging_assignments row), but for a single judge who was
+ * designated *after* that snapshot - registering as a judge, self-editing
+ * their account to say Yes, or having an admin do so on their behalf. Safe
+ * to call unconditionally whenever a brewer row's brewerJudge is saved as
+ * "Y" - idempotent, so re-saving Y on someone already in the practice
+ * session changes nothing.
+ */
+function assign_judge_to_practice_session($db_conn, $prefix, $uid) {
+
+	$errors = FALSE;
+	$error_output = array();
+
+	$db_conn->where('tableNumber', PRACTICE_SESSION_TABLE_NUMBER);
+	$row_table = $db_conn->getOne($prefix."judging_tables", "id,tableLocation");
+
+	// No practice session right now - nothing to do.
+	if (empty($row_table)) return array('success' => TRUE, 'errors' => array());
+
+	$practice_table_id = $row_table['id'];
+	$practice_location_id = $row_table['tableLocation'];
+
+	// Re-read the judge's own current availability fresh, rather than trusting
+	// a value the caller might have on hand from before its own save - matches
+	// process_practice_session.inc.php's own per-judge (not shared/reused)
+	// availability handling.
+	$db_conn->where('uid', $uid);
+	$row_brewer = $db_conn->getOne($prefix."brewer", "id,brewerJudgeLocation");
+
+	if (empty($row_brewer)) {
+		return array('success' => FALSE, 'errors' => array("No brewer record found for uid ".$uid."."));
+	}
+
+	$location_marker = "Y-".$practice_location_id;
+	$existing_locations = (!empty($row_brewer['brewerJudgeLocation'])) ? explode(",", $row_brewer['brewerJudgeLocation']) : array();
+
+	if (!in_array($location_marker, $existing_locations)) {
+
+		// Drop any stale "N-" marker for this same location before appending -
+		// same precedent as delete_practice_session()'s location cleanup.
+		$existing_locations = array_filter($existing_locations, function($v) use ($practice_location_id) {
+			return $v !== "N-".$practice_location_id;
+		});
+		$existing_locations[] = $location_marker;
+		$new_availability = ltrim(implode(",", array_filter($existing_locations, function($v) { return $v !== ""; })), ",");
+
+		$db_conn->where('uid', $uid);
+		$result = $db_conn->update($prefix."brewer", array('brewerJudgeLocation' => $new_availability));
+		if (!$result) { $error_output[] = $db_conn->getLastError(); $errors = TRUE; }
+
+	}
+
+	// Idempotency: don't double-assign if this judge is somehow already on the
+	// practice table (e.g. brewerJudge saved as "Y" twice in a row).
+	$db_conn->where('bid', $uid);
+	$db_conn->where('assignTable', $practice_table_id);
+	$db_conn->where('assignment', 'J');
+	$row_existing_assign = $db_conn->getOne($prefix."judging_assignments", "id");
+
+	if (empty($row_existing_assign)) {
+
+		$data = array(
+			'bid' => $uid,
+			'assignment' => "J",
+			'assignTable' => $practice_table_id,
+			'assignFlight' => 1,
+			'assignRound' => 1,
+			'assignLocation' => $practice_location_id,
+			'assignPlanning' => NULL,
+			'assignRoles' => NULL
+		);
+
+		$result = $db_conn->insert($prefix."judging_assignments", $data);
+		if (!$result) { $error_output[] = $db_conn->getLastError(); $errors = TRUE; }
+
+	}
+
+	return array('success' => !$errors, 'errors' => $error_output);
 
 }
 

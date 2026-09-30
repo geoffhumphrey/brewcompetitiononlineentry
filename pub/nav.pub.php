@@ -26,7 +26,10 @@ if ($_SESSION['prefsProEdition'] == 1) {
 		// must stay visible to an anonymous visitor who hasn't registered as a brewery yet (the
 		// exact audience that needs to know where to ship). Only suppress it for a logged-in,
 		// non-brewery account (e.g. a judge), matching the pre-3.0.0 behavior.
-		if ($logged_in) $show_entries = FALSE;
+		// Not suppressed for an admin (userLevel <= 1) - an admin also has no
+		// brewery profile, but needs to see this page exactly as an entrant
+		// would (e.g. to verify entry-limit configuration), not as a judge.
+		if (($logged_in) && ((!isset($_SESSION['userLevel'])) || ($_SESSION['userLevel'] > 1))) $show_entries = FALSE;
 		$disable_pay = TRUE;
 		$add_entry_link_show = FALSE;
 		$at_a_glance_entry_info = FALSE;

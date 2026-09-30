@@ -106,7 +106,10 @@ if ($logged_in)  {
 			$show_entries = TRUE;
 		}
 
-		else {
+		// Not suppressed for an admin (userLevel <= 1) - an admin also has no
+		// brewery profile, but needs to see this page exactly as an entrant
+		// would (e.g. to verify entry-limit configuration), not as a judge.
+		elseif ((!isset($_SESSION['userLevel'])) || ($_SESSION['userLevel'] > 1)) {
 			$show_entries = FALSE;
 		}
 

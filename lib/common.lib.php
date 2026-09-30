@@ -297,6 +297,55 @@ function designations($judge_array,$display) {
 	return $return;
 }
 
+/**
+ * Adds one participant (by brewer.uid) to the judge pool - {prefix}staff.
+ * staff_judge=1, the flag admin/judging_locations.admin.php's Assign Judges
+ * screen (action=assign&go=judging&filter=judges) reads to decide who's
+ * available to assign to real judging tables. Creates the staff row if none
+ * exists yet (mirroring the insert/update-if-stray-row-exists pattern
+ * includes/process/process_users_register.inc.php already uses at
+ * registration time), or flips just that one column if a row already exists,
+ * leaving any existing staff_steward/staff_staff/staff_organizer/
+ * staff_judge_bos value alone. Registration already grants pool membership
+ * natively; this is for the two paths that didn't - self-edit and admin-edit
+ * (includes/process/process_brewer.inc.php) - so saying Yes to judging there
+ * doesn't require a separate manual admin step to reach the pool.
+ */
+function assign_judge_to_pool($db_conn, $prefix, $uid) {
+
+	$errors = FALSE;
+	$error_output = array();
+
+	$db_conn->where('uid', $uid);
+	$row_staff = $db_conn->getOne($prefix."staff", "id,staff_judge");
+
+	if (empty($row_staff)) {
+
+		$data = array(
+			'uid' => $uid,
+			'staff_judge' => 1,
+			'staff_judge_bos' => 0,
+			'staff_steward' => 0,
+			'staff_organizer' => 0,
+			'staff_staff' => 0
+		);
+		$result = $db_conn->insert($prefix."staff", $data);
+		if (!$result) { $error_output[] = $db_conn->getLastError(); $errors = TRUE; }
+
+	}
+
+	elseif ($row_staff['staff_judge'] != 1) {
+
+		$db_conn->where('uid', $uid);
+		$result = $db_conn->update($prefix."staff", array('staff_judge' => 1));
+		if (!$result) { $error_output[] = $db_conn->getLastError(); $errors = TRUE; }
+
+	}
+
+	return array('success' => !$errors, 'errors' => $error_output);
+
+}
+
 function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title,$method=0,$tooltip_text="default") {
 
 	$alt_title = h($alt_title);
@@ -2601,13 +2650,15 @@ function bjcp_rank($rank,$method) {
 			case "Certified": 
 			case "Certified Cider Guide":
 			case "Mead Judge":
-			case "Cider Judge": 
+			case "Cider Judge":
+			case "Distinguished Certified":
 			$return = "Level 3:"; 
 			break;
 			
 			case "National":
 			case "Certified Cicerone":
 			case "Certified Pommelier":
+			case "Distinguished National":
 			$return = "Level 4:"; 
 			break;
 			

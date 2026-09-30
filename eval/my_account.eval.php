@@ -1,9 +1,14 @@
-<?php 
+<?php
 /**
  * Add judging dashboard text and button to My Account
  */
 
-if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (time() >= $row_judging_prefs['jPrefsJudgingOpen'])) {
+require_once (LIB.'practice_session.lib.php');
+
+// A judge assigned only to the practice session (not yet the real competition)
+// should still reach the dashboard - its own judging_locations row is always
+// open immediately, independent of jPrefsJudgingOpen.
+if ((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ((time() >= $row_judging_prefs['jPrefsJudgingOpen']) || (judge_has_practice_assignment($db_conn, $prefix, $_SESSION['user_id'])))) {
 	if ((time() > $row_judging_prefs['jPrefsJudgingOpen']) && (time() < $row_judging_prefs['jPrefsJudgingClosed'])) {
 		$primary_page_info .= "<div class=\"alert alert-info\">";
 		$primary_page_info .= "<p>";

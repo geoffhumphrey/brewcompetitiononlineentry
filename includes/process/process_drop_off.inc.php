@@ -15,17 +15,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-	$dropLocationName = sterilize($_POST['dropLocationName']);
+	// The "skip" action on setup step 6 submits none of these fields, so each
+	// read needs an isset() guard - unguarded, "Skip" on a fresh setup throws
+	// an Undefined array key warning for all five.
+	$dropLocationName = isset($_POST['dropLocationName']) ? sterilize($_POST['dropLocationName']) : "";
 	$dropLocationName = $purifier->purify($dropLocationName);
 	$dropLocationName = capitalize($dropLocationName);
-	$dropLocation = sterilize($_POST['dropLocation']);
+	$dropLocation = isset($_POST['dropLocation']) ? sterilize($_POST['dropLocation']) : "";
 	$dropLocation = $purifier->purify($dropLocation);
-	$dropLocationPhone = sterilize($_POST['dropLocationPhone']);
+	$dropLocationPhone = isset($_POST['dropLocationPhone']) ? sterilize($_POST['dropLocationPhone']) : "";
 	$dropLocationPhone = $purifier->purify($dropLocationPhone);
-	$dropLocationWebsite = check_http(sterilize($_POST['dropLocationWebsite']));
+	$dropLocationWebsite = isset($_POST['dropLocationWebsite']) ? check_http(sterilize($_POST['dropLocationWebsite'])) : "";
 	$dropLocationWebsite = $purifier->purify($dropLocationWebsite);
 	$dropLocationWebsite = strtolower($dropLocationWebsite);
-	$dropLocationNotes = sterilize($_POST['dropLocationNotes']);
+	$dropLocationNotes = isset($_POST['dropLocationNotes']) ? sterilize($_POST['dropLocationNotes']) : "";
 	$dropLocationNotes = $purifier->purify($dropLocationNotes);
 
 	if ($action == "add") {

@@ -7,6 +7,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
+require_once(LIB.'practice_session.lib.php');
 
 if (isset($_SERVER['HTTP_REFERER'])) {
 
@@ -222,6 +223,17 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
+				}
+
+				// A judge registering while a practice session is already running
+				// (Table Planning Mode) should join it immediately, not wait for an
+				// admin to notice and add them by hand.
+				if ($brewerJudge == "Y") {
+					$practice_result = assign_judge_to_practice_session($db_conn, $prefix, $row_user['id']);
+					if (!$practice_result['success']) {
+						$error_output = array_merge($error_output, $practice_result['errors']);
+						$errors = TRUE;
+					}
 				}
 
 				/*

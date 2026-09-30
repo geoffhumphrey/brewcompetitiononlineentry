@@ -6,6 +6,8 @@
  *
  */
 
+require_once (LIB.'practice_session.lib.php');
+
 function pay_to_print($prefs_pay,$entry_paid) {
 	if (($prefs_pay == "Y") && ($entry_paid == "1")) return TRUE;
 	elseif (($prefs_pay == "Y") && ($entry_paid == "0")) return FALSE;
@@ -80,7 +82,10 @@ if (($show_entries) && (!$show_scores)) $user_edit_links .= sprintf("<a class=\"
 $user_edit_links .= sprintf("<a class=\"btn btn-dark\" href=\"%s\"><i class=\"fa fa-user me-2\"></i>%s</a>",$edit_user_info_link,$label_edit_account);
 $user_edit_links .= sprintf("<a class=\"btn btn-dark\" href=\"".$edit_user_email_link."\"><i class=\"fa fa-envelope me-2\"></i>%s</a>",$label_change_email);
 $user_edit_links .= sprintf("<a class=\"btn btn-dark\" href=\"%s\"><i class=\"fa fa-key me-2\"></i>%s</a>",$edit_user_password_link,$label_change_password);
-if ((isset($assignment_array) && ((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (time() >= $row_judging_prefs['jPrefsJudgingOpen']))) {
+// A judge assigned only to the practice session (not yet the real competition)
+// should still reach the dashboard - its own judging_locations row is always
+// open immediately, independent of jPrefsJudgingOpen.
+if ((isset($assignment_array)) && (in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ((time() >= $row_judging_prefs['jPrefsJudgingOpen']) || (judge_has_practice_assignment($db_conn, $prefix, $_SESSION['user_id'])))) {
 	$user_edit_links .= sprintf("<a class=\"btn btn-primary\" href=\"%s\"><i class=\"fa fa-gavel me-2\"></i>%s</a>",build_public_url("evaluation","default","default","default",$sef,$base_url,"default"),$label_judging_dashboard);
 }
 //  $user_edit_links .= sprintf("<a class=\"btn btn-dark\"><i class=\"fa fa-chevron-circle-down me-2\"></i>%s</a>","Expand/Collapse Status");

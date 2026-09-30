@@ -7,6 +7,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
+require_once(LIB.'practice_session.lib.php');
 
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($setup_free_access))) {
 
@@ -495,6 +496,30 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$errors = TRUE;
 			}
 
+			// An admin designating this brand-new account as a judge should land
+			// them in the judge pool the same way registration already does,
+			// and join any already-running practice session immediately rather
+			// than waiting on a separate manual step. Setup can never have a
+			// practice session running yet, so that lookup is skipped there,
+			// but the judge pool itself applies regardless of section.
+			if ($brewerJudge == "Y") {
+
+				$pool_result = assign_judge_to_pool($db_conn, $prefix, $uid);
+				if (!$pool_result['success']) {
+					$error_output = array_merge($error_output, $pool_result['errors']);
+					$errors = TRUE;
+				}
+
+				if ($section != "setup") {
+					$practice_result = assign_judge_to_practice_session($db_conn, $prefix, $uid);
+					if (!$practice_result['success']) {
+						$error_output = array_merge($error_output, $practice_result['errors']);
+						$errors = TRUE;
+					}
+				}
+
+			}
+
 			if ($section == "setup") {
 
 				// Check to see if processed correctly.
@@ -541,6 +566,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		// of sync with the matching users.user_name value used for login.
 		$brewerEmail = normalize_email_username($_POST['brewerEmail']);
 		$uid = sterilize($_POST['uid']);
+
+		// Captured before this save so the judge-pool/practice-session hooks below can
+		// tell a genuine Yes transition apart from an unrelated field edit on an account
+		// that was already a judge - an admin may have deliberately unassigned someone
+		// from the judge pool (staff_judge) or a practice table while brewerJudge stayed
+		// "Y" on their profile, and re-saving any other field on their account shouldn't
+		// silently undo that.
+		$db_conn->where("uid", $uid);
+		$row_brewer_before_edit = $db_conn->getOne($prefix."brewer", "brewerJudge");
+		$brewerJudge_was_yes = ((!empty($row_brewer_before_edit)) && ($row_brewer_before_edit['brewerJudge'] == "Y"));
 
 		// Check for and clear assignments in staff DB table and judge assignments table if entrant
 		// indicates they do not want to judge, steward, or staff
@@ -704,6 +739,32 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
+		}
+
+		// Whoever's editing this account (the entrant themselves or an admin) just
+		// said Yes to judging for the first time - matches the existing
+		// $brewerJudge == "N" cleanup above, just for the opposite direction.
+		// Gated on the transition (wasn't already "Y") rather than the new value
+		// alone, so re-saving an unrelated field doesn't silently re-add someone
+		// an admin had deliberately pulled from the judge pool or a practice
+		// table while leaving their profile's Judge flag set to Yes.
+		if (($brewerJudge == "Y") && (!$brewerJudge_was_yes)) {
+
+			// Judge pool (admin/judging_locations.admin.php's Assign Judges
+			// screen) - previously only granted automatically at registration;
+			// self-edit and admin-edit left it to a manual admin step.
+			$pool_result = assign_judge_to_pool($db_conn, $prefix, $uid);
+			if (!$pool_result['success']) {
+				$error_output = array_merge($error_output, $pool_result['errors']);
+				$errors = TRUE;
+			}
+
+			$practice_result = assign_judge_to_practice_session($db_conn, $prefix, $uid);
+			if (!$practice_result['success']) {
+				$error_output = array_merge($error_output, $practice_result['errors']);
+				$errors = TRUE;
+			}
+
 		}
 
 		if ((isset($_POST['userQuestion'])) && ($_POST['changeSecurity'] == "Y")) {
