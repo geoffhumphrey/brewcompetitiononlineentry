@@ -1035,4 +1035,11 @@ if ($logged_in) {
 
 <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (PUB.'eval_warnings.pub.php'); ?>
 
+<?php
+// Dropoff location info modals are echoed here, outside the .reveal-element
+// sections whose CSS transform would trap position:fixed modals behind the
+// backdrop (making them unclickable / invisible).
+if (!empty($dropoff_modals)) echo $dropoff_modals;
+?>
+
 </body>
