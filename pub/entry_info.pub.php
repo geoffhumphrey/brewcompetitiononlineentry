@@ -55,6 +55,7 @@ $page_info16 = "";
 $header1_17 = "";
 $page_info17 = "";
 $style_info_modals = "";
+$dropoff_modals = "";
 
 $ba_accepted_styles = array();
 $anchor_links_nav = "";
@@ -701,23 +702,29 @@ if ($show_entries) {
 				$address = str_replace(' ', '+', $address);
 				$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
 
-				$page_info11 .= "<div class=\"modal modal-lg fade\" id=\"dropoff-loc".$row_dropoff['id']."\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">";
-				$page_info11 .= "<div class=\"modal-dialog\">";
-				$page_info11 .= "<div class=\"modal-content\">";
-				$page_info11 .= "<div class=\"modal-header\">";
-				$page_info11 .= sprintf("<h4 class=\"modal-title\">%s &ndash; %s %s</h4>",$label_please_note,$row_dropoff['dropLocationName'],$label_drop_off);
-				$page_info11 .= "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>";
-				$page_info11 .= "</div>";
-				$page_info11 .= sprintf("<div class=\"modal-body\"><p>%s</p>",$row_dropoff['dropLocationNotes']);
-				$page_info11 .= "</div>";
-				$page_info11 .= "<div class=\"modal-footer\">";
-				$page_info11 .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">%s</button>",$label_cancel);
+				$page_info11 .= "<!-- Dropoff location info modal (echoed from index.pub.php) -->";
+
+				// The modal is collected separately from $page_info11 and echoed
+				// from index.pub.php, outside the .reveal-element sections whose
+				// CSS transform would otherwise trap this position:fixed modal
+				// behind the backdrop (making it unclickable / invisible).
+				$dropoff_modals .= "<div class=\"modal modal-lg fade\" id=\"dropoff-loc".$row_dropoff['id']."\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">";
+				$dropoff_modals .= "<div class=\"modal-dialog\">";
+				$dropoff_modals .= "<div class=\"modal-content\">";
+				$dropoff_modals .= "<div class=\"modal-header\">";
+				$dropoff_modals .= sprintf("<h4 class=\"modal-title\">%s &ndash; %s %s</h4>",$label_please_note,$row_dropoff['dropLocationName'],$label_drop_off);
+				$dropoff_modals .= "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>";
+				$dropoff_modals .= "</div>";
+				$dropoff_modals .= sprintf("<div class=\"modal-body\"><p>%s</p>",$row_dropoff['dropLocationNotes']);
+				$dropoff_modals .= "</div>";
+				$dropoff_modals .= "<div class=\"modal-footer\">";
+				$dropoff_modals .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-bs-dismiss=\"modal\">%s</button>",$label_cancel);
 				// $location_link is built from dropLocation, purify()-only - needs h() in href=.
-				$page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" class=\"hide-loader btn btn-success\">%s</a>",h($location_link),$label_understand);
-				$page_info11 .= "</div>";
-				$page_info11 .= "</div>";
-				$page_info11 .= "</div>";
-				$page_info11 .= "</div>";
+				$dropoff_modals .= sprintf("<a href=\"%s\" target=\"_blank\" class=\"hide-loader btn btn-success\">%s</a>",h($location_link),$label_understand);
+				$dropoff_modals .= "</div>";
+				$dropoff_modals .= "</div>";
+				$dropoff_modals .= "</div>";
+				$dropoff_modals .= "</div>";
 			}
 
 		}
