@@ -462,7 +462,7 @@ function rmove($src, $dest) {
     // Open the source directory to read in files
     $i = new DirectoryIterator($src);
     foreach($i as $f) {
-        if ($f->isFile()) {
+        if ($f->isFile() && $f->getFilename() !== '.gitkeep') {
             rename($f->getRealPath(), "$dest/".$f->getFilename());
         }
     }

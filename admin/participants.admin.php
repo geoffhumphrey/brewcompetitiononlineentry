@@ -528,14 +528,22 @@ if ($totalRows_brewer > 0) {
 					if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {
 
 						if (strpos($brewer_assignment,"Judge") !== false) {
-							if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s):<br>".h($table_assign_judge)."</p>";
+							// $table_assign_judge is pre-built HTML (table_assignments_batched_p()
+							// above returns real <a> links, tableName itself is strip_tags()'d at
+							// save time so safe as-is) - h() here would escape the links into
+							// visible raw markup instead of rendering them.
+							if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s):<br>".$table_assign_judge."</p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.</p>";
 						}
 						if (strpos($brewer_assignment,"Steward") !== false) {
-							if (!empty($table_assign_steward))  $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s):<br>".h($table_assign_steward)."</p>";
+							// Same as $table_assign_judge above - already-built HTML, not plain text.
+							if (!empty($table_assign_steward))  $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s):<br>".$table_assign_steward."</p>";
 							else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.</p>";
 						}
-						if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in: ".h($judge_entries)."</p>";
+						// $judge_entries (judge_entries_batched_p() above) is also pre-built HTML -
+						// same reasoning, and its own brewStyle attribute is already h()'d where
+						// it actually needs it (inside title=).
+						if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in: ".$judge_entries."</p>";
 						$output_assignment_modals .= "<div class=\"modal fade\" id=\"assignment-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_brewer['uid']."\">\n";
 						$output_assignment_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
 						$output_assignment_modals .= "\t\t<div class=\"modal-content\">\n";

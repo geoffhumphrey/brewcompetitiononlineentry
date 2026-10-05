@@ -348,7 +348,7 @@ if ($totalRows_log > 0) {
 			 * how old they are.
 			 */
 
-			$tempfiles = is_dir(USER_TEMP) ? array_diff(scandir(USER_TEMP), array('..', '.')) : array();
+			$tempfiles = is_dir(USER_TEMP) ? array_diff(scandir(USER_TEMP), array('..', '.', '.gitkeep')) : array();
 			
 			foreach ($tempfiles as $file) {
 				

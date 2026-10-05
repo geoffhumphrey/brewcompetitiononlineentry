@@ -54,7 +54,6 @@ $header1_16 = "";
 $page_info16 = "";
 $header1_17 = "";
 $page_info17 = "";
-$style_info_modals = "";
 $dropoff_modals = "";
 
 $ba_accepted_styles = array();
@@ -943,6 +942,4 @@ echo "<div class=\"reveal-element\">";
 echo $header1_15;
 echo $page_info15;
 echo "</div>";
-
-// echo $style_info_modals;
 ?>
