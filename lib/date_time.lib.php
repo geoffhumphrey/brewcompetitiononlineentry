@@ -130,6 +130,13 @@ function to_utc_epoch($datetime_string, $timezone_offset) {
 
 function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_format, $display_format, $return_format) {
 
+	// A null/empty/unset date (e.g. a contest date field the organizer hasn't
+	// filled in yet) must not reach "new DateTime('@'.$timestamp)" below -
+	// with $timestamp empty that string is literally "@", which throws
+	// DateMalformedStringException instead of just producing an empty
+	// result, same shape as to_utc_epoch()'s guard above.
+	if (empty($timestamp)) return "";
+
 	$tz = get_timezone($timezone_offset); // convert offset number to PHP timezone
 
 	// Render via an explicit DateTime/DateTimeZone rather than

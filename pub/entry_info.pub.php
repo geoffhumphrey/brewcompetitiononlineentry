@@ -365,7 +365,7 @@ else {
 
 				// judgingLocName/judgingLocation are purify()-only (no sterilize()) - $location_link/
 				// $location_tooltip need h() here.
-				if (!empty($row_judging['judgingLocation'])) $page_info7 .= "<a href=\"".h($location_link)."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
+				if ((!empty($row_judging['judgingLocation'])) && ($logged_in)) $page_info7 .= "<a href=\"".h($location_link)."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
 
 			}
 
@@ -405,7 +405,7 @@ else {
 
 			// judgingLocName/judgingLocation are purify()-only (no sterilize()) - $location_link/
 			// $location_tooltip need h() here.
-			if (!empty($row_judging['judgingLocation'])) $page_info16 .= "<a href=\"".h($location_link)."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
+			if ((!empty($row_judging['judgingLocation'])) && ($logged_in)) $page_info16 .= "<a href=\"".h($location_link)."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
 
 			if (!empty($row_judging['judgingDate'])) $page_info16 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 
