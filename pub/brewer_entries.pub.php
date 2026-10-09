@@ -28,7 +28,7 @@ if ((time() < $entry_edit_deadline)) $entry_editing = TRUE;
  * be 1) prior to the dropoff window close or shipping window close - AND 2) 
  * fall within the entry window or 3) prior to the entry editing deadline].
  */
-if ((($dropoff_window_open < 2) || ($shipping_window_open < 2)) && (($entry_window_open == 1) || ($entry_editing))) $print_bottle_labels = TRUE;
+if ((($dropoff_window_open < 2) || ($shipping_window_open < 2)) && (!$judging_started)) $print_bottle_labels = TRUE;
 
 $pay_button .= sprintf("<a class=\"btn btn-primary hide-loader %s\" href=\"#pay-fees\"><i class=\"fa fa-lg fa-money-bill me-2\"></i>%s</a>", $pay_button_disable, $label_pay);
 
