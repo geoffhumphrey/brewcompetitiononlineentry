@@ -2780,7 +2780,14 @@ if ($total_not_encrypted > 0) $v2500_update .= "<li>".$total_not_encrypted." pla
  */
 
 $v2500_update .= "<li>Recipe-related data collection is now deprecated. Removed entry recipe fields from UI.</li>";
-$deprecated_entry_forms = array("B","N","M","U","3","4");
+// "3"/"4" were dropped from this list - they meant deprecated recipe forms only in this
+// 2.5.0-era numbering, but the 3.0.3 bottle-label expansion later reused those exact
+// numeric codes for legitimate, currently-supported options ("Anonymous - Larger Printed
+// Random Number [with Barcode/QR Code]"). Since this block has no version gate and runs
+// unconditionally on every update, leaving them in would silently overwrite a modern
+// install's deliberately-chosen preference every time a same-version hotfix forces this
+// file to re-run. Only the letter codes below were never reused for anything else.
+$deprecated_entry_forms = array("B","N","M","U");
 
 if ((isset($row_current_prefs['prefsEntryForm'])) && (in_array($row_current_prefs['prefsEntryForm'],$deprecated_entry_forms))) {
 
@@ -4318,13 +4325,18 @@ else {
 	$error_count++;
 }
 
-$entry_forms_allowed = array("5","6","7","8");
+// This block predates the 3.0.3 bottle-label expansion, which densely reused the whole
+// 0-11 numeric range for new, legitimate options - so "0", "1", and "2" (checked below)
+// no longer uniquely identify an old/deprecated form the way they did when this was
+// written. With no version gate, this runs unconditionally on every update, so treating
+// any numeric value as something to remap would silently overwrite a modern install's
+// deliberately-chosen preference (e.g. "3" = Anonymous - Larger Printed Random Number
+// with Barcode/QR Code) every time a same-version hotfix forces this file to re-run.
+// Only the non-numeric legacy letter codes ("C","E") are unambiguous leftovers here.
+if ((isset($row_current_prefs['prefsEntryForm'])) && (!is_numeric($row_current_prefs['prefsEntryForm'])) && ($row_current_prefs['prefsEntryForm'] !== "")) {
 
-if (!in_array($row_current_prefs['prefsEntryForm'],$entry_forms_allowed)) {
-
-	if ($row_current_prefs['prefsEntryForm'] == "0") $data = array('prefsEntryForm' => "8");
-	elseif (($row_current_prefs['prefsEntryForm'] == "2") || ($row_current_prefs['prefsEntryForm'] == "C")) $data = array('prefsEntryForm' => "5");
-	elseif (($row_current_prefs['prefsEntryForm'] == "1") || ($row_current_prefs['prefsEntryForm'] == "E")) $data = array('prefsEntryForm' => "7");
+	if ($row_current_prefs['prefsEntryForm'] == "C") $data = array('prefsEntryForm' => "5");
+	elseif ($row_current_prefs['prefsEntryForm'] == "E") $data = array('prefsEntryForm' => "7");
 	else $data = array('prefsEntryForm' => "5");
 
 	$update_table = $prefix."preferences";

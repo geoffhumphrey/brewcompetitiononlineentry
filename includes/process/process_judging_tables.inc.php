@@ -175,23 +175,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		foreach (array_unique($a) as $value) {
 
-			if (!$_SESSION['style_set_no_numbering']) {
-				$db_conn->where('id', $value);
-				$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
-			}
+			// tableStyles always stores a styles-table id, regardless of the active
+			// style set's style_set_no_numbering flag - that flag only suppresses the
+			// "#" display column in admin/judging_tables.admin.php; the checkbox value
+			// itself is always $row_styles['id']. Treating $value as a bare
+			// brewSubCategory for no-numbering sets (as this used to) matched entries
+			// by coincidental numeric overlap between a styles.id and an unrelated
+			// style's brewSubCategory - e.g. under "BA", style id 145 ("Juicy or Hazy
+			// Pale Ale") silently stole every entry whose real style's brewSubCategory
+			// happened to also be "145" (here, id 288's "American-Style India Pale
+			// Ale"), leaving id 288's own table with zero matched entries.
+			$db_conn->where('id', $value);
+			$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
 
 			if ($_SESSION['jPrefsTablePlanning'] == 1) {
-
-				if ($_SESSION['style_set_no_numbering']) { $db_conn->where('brewSubCategory', $value); }
-				else { $db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']); $db_conn->where('brewSubCategory', $row_styles['brewStyleNum']); }
-
+				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
+				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
 			}
 
 			else {
-
-				if ($_SESSION['style_set_no_numbering']) { $db_conn->where('brewSubCategory', $value); $db_conn->where('brewReceived', '1'); }
-				else { $db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']); $db_conn->where('brewSubCategory', $row_styles['brewStyleNum']); $db_conn->where('brewReceived', '1'); }
-
+				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
+				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
+				$db_conn->where('brewReceived', '1');
 			}
 
 			$rows_entries = $db_conn->get($brewing_db_table, null, "id");
@@ -317,24 +322,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// here, so clear their score/flight assignment to it outright.
 			foreach ($removed_styles as $value) {
 
-				// $value is a bare brewSubCategory for no-numbering style sets (tableStyles
-				// stores brewSubCategory directly), or a styles-table id otherwise (looked
-				// up below for its group/num) - same split as the "add" action above.
-				if ($_SESSION['style_set_no_numbering']) {
+				// $value is always a styles-table id - see the matching comment in the
+				// "add" action above for why the old no-numbering special case was wrong.
+				$db_conn->where('id', $value);
+				$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
 
-					$db_conn->where('brewSubCategory', $value);
-
-				}
-
-				else {
-
-					$db_conn->where('id', $value);
-					$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
-
-					$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
-					$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
-
-				}
+				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
+				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
 
 				if ($_SESSION['jPrefsTablePlanning'] != 1) $db_conn->where('brewReceived', '1');
 				$rows_entries = $db_conn->get($brewing_db_table, null, "id");
@@ -392,24 +386,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			// their existing flight/score assignments stay exactly as-is.
 			foreach ($added_styles as $value) {
 
-				// $value is a bare brewSubCategory for no-numbering style sets (tableStyles
-				// stores brewSubCategory directly), or a styles-table id otherwise (looked
-				// up below for its group/num) - same split as the "add" action above.
-				if ($_SESSION['style_set_no_numbering']) {
+				// $value is always a styles-table id - see the matching comment in the
+				// "add" action above for why the old no-numbering special case was wrong.
+				$db_conn->where('id', $value);
+				$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
 
-					$db_conn->where('brewSubCategory', $value);
-
-				}
-
-				else {
-
-					$db_conn->where('id', $value);
-					$row_styles = $db_conn->getOne($styles_db_table, "brewStyleGroup,brewStyleNum");
-
-					$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
-					$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
-
-				}
+				$db_conn->where('brewCategorySort', $row_styles['brewStyleGroup']);
+				$db_conn->where('brewSubCategory', $row_styles['brewStyleNum']);
 
 				if ($_SESSION['jPrefsTablePlanning'] != 1) $db_conn->where('brewReceived', '1');
 				$rows_entries = $db_conn->get($brewing_db_table, null, "id");
@@ -598,31 +581,32 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$db_conn->where('id', $id);
 				$row_entry = $db_conn->getOne($brewing_db_table, "brewCategorySort,brewSubCategory");
 
-				if (!$_SESSION['style_set_no_numbering']) {
-
-					if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
-					    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
-					    if ($first_character == "C") $chosen_style_set = "BJCP2025";
-					    else $chosen_style_set = "BJCP2021";
-					}
-
-					elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
-					    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
-					    if ($first_character == "M") $chosen_style_set = "BJCP2026";
-					    elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
-					    else $chosen_style_set = "BJCP2021";
-					}
-
-					else $chosen_style_set = $_SESSION['prefsStyleSet'];
-
-					$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
-					$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $row_entry['brewCategorySort'], $row_entry['brewSubCategory']));
-
-					$style_id = $row_style['id'];
-
+				// tableStyles always stores styles-table ids (see the matching comment
+				// earlier in this file), so $style_id must always be resolved the same
+				// way here too - using the entry's bare brewSubCategory for a
+				// no-numbering style set (as this used to) checked it against
+				// tableStyles via in_array() below, which matched by sheer numeric
+				// coincidence against an unrelated style's id rather than this entry's
+				// actual style.
+				if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+				    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
+				    if ($first_character == "C") $chosen_style_set = "BJCP2025";
+				    else $chosen_style_set = "BJCP2021";
 				}
 
-				else $style_id = $row_entry['brewSubCategory'];
+				elseif ($_SESSION['prefsStyleSet'] == "BJCP2026") {
+				    $first_character = mb_substr($row_entry['brewCategorySort'], 0, 1);
+				    if ($first_character == "M") $chosen_style_set = "BJCP2026";
+				    elseif ($first_character == "C") $chosen_style_set = "BJCP2025";
+				    else $chosen_style_set = "BJCP2021";
+				}
+
+				else $chosen_style_set = $_SESSION['prefsStyleSet'];
+
+				$query_style = "SELECT id FROM ".$styles_db_table." WHERE (brewStyleVersion=? OR brewStyleOwn='custom') AND brewStyleGroup=? AND brewStyleNum=?";
+				$row_style = $db_conn->rawQueryOne($query_style, array($chosen_style_set, $row_entry['brewCategorySort'], $row_entry['brewSubCategory']));
+
+				$style_id = $row_style['id'];
 
 				$rows_table_styles = $db_conn->get($judging_tables_db_table, null, "id,tableStyles");
 
