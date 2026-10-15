@@ -647,4 +647,342 @@ function get_flight_info($id) {
 	return $return;
 }
 
+// --------------------------------------------------------
+// The following apply to output/bottle_label.output.php and
+// output/bottle_label_batch.output.php
+// --------------------------------------------------------
+
+/**
+ * 0 = Anon, smaller printed number, with barcode [judging number] --New 3.1--
+ * 1 = Anon, larger printed number, with barcode/qr [entry number] --New 3.1--
+ * 2 = Anon, larger printed number [entry number] --New 3.1--
+ * 3 = Anon, larger printed number, with barcode [judging number] --New 3.1--
+ * 4 = Anon, larger printed number [judging number] --New 3.1--
+ * 5 = Standard with barcode/qr [entry number] --Legacy--
+ * 6 = Anon with barcode/qr [entry number] --Legacy--
+ * 7 = Standard [entry number] --Legacy--
+ * 8 = Anon [entry number] --Legacy--
+ * 9 = Anon, smaller printed number [judging number] --New 3.1--
+ * 10 = Standard, large number and style [entry number]
+ * 11 = Standard, large number and style with barcode/qr [entry number]
+ *
+ * The one place prefsEntryForm gets classified for bottle label rendering -
+ * shared by the single-brewer and admin batch-reprint flows so a second,
+ * drifted copy of this logic can never become the way an anonymous-mode
+ * label leaks participant identity.
+ */
+function get_bottle_label_prefs() {
+
+	$anon_label_arr = array(1,2,3,4,6,8,9,0);
+	$standard_label_arr = array(5,7,10,11);
+	$barcode_qr_arr = array(1,3,5,6,0,11);
+	$large_label_arr = array(1,2,3,4);
+	$large_text_arr = array(10,11);
+	$judging_number_label_arr = array(3,4,9,0);
+	$entry_number_label_arr = array(1,2,5,6,7,8,10,11);
+
+	$anon = FALSE;
+	$standard = FALSE;
+	$barcode_qr = FALSE;
+	$large_entry_num = FALSE;
+	$large_text = FALSE;
+	$entry_number_disp = FALSE;
+	$judging_number_disp = FALSE;
+
+	if (in_array($_SESSION['prefsEntryForm'],$anon_label_arr)) { $anon = TRUE; $standard = FALSE; }
+	if (in_array($_SESSION['prefsEntryForm'],$standard_label_arr)) { $standard = TRUE; $anon = FALSE; }
+	if (in_array($_SESSION['prefsEntryForm'],$barcode_qr_arr)) $barcode_qr = TRUE;
+	if (in_array($_SESSION['prefsEntryForm'],$large_label_arr)) $large_entry_num = TRUE;
+	if (in_array($_SESSION['prefsEntryForm'],$large_text_arr)) $large_text = TRUE;
+	if (in_array($_SESSION['prefsEntryForm'],$judging_number_label_arr)) { $judging_number_disp = TRUE; $entry_number_disp = FALSE; }
+	if (in_array($_SESSION['prefsEntryForm'],$entry_number_label_arr)) { $judging_number_disp = FALSE; $entry_number_disp = TRUE; }
+
+	if (isset($_SESSION['jPrefsBottleNum'])) $bottle_label_count = $_SESSION['jPrefsBottleNum'];
+	else $bottle_label_count = 3; // number of bottles required
+	$bottle_label_columns = 3; // number of columns
+	$bottle_label_columns_bs = 12/$bottle_label_columns; // how many Bootstrap columns to show based upon 12 column grid
+
+	if ($barcode_qr) {
+		$bottle_label_colCountLimit = 9;
+		$bottle_label_height = 290;
+	}
+	else {
+		$bottle_label_colCountLimit = 12;
+		$bottle_label_height = 200;
+	}
+
+	return array(
+		'anon' => $anon,
+		'standard' => $standard,
+		'barcode_qr' => $barcode_qr,
+		'large_entry_num' => $large_entry_num,
+		'large_text' => $large_text,
+		'entry_number_disp' => $entry_number_disp,
+		'judging_number_disp' => $judging_number_disp,
+		'bottle_label_count' => $bottle_label_count,
+		'bottle_label_columns' => $bottle_label_columns,
+		'bottle_label_columns_bs' => $bottle_label_columns_bs,
+		'bottle_label_colCountLimit' => $bottle_label_colCountLimit,
+		'bottle_label_height' => $bottle_label_height
+	);
+
+}
+
+/**
+ * Renders one brewer's full block of bottle labels (every bottle copy of
+ * every matching entry) as an HTML string.
+ *
+ * $entry_arr: array of entry ids to restrict to, or null to render every
+ * entry this brewer has (used only by the admin batch-reprint flow).
+ *
+ * $batch_header_text: when non-empty AND the active prefsEntryForm is an
+ * anonymous variant, prepends one identifying line for the brewer BEFORE this
+ * block's opening <div class="row"> - in normal page flow, never inside a
+ * .label-border box, so on a physically cut sheet it lands on the
+ * surrounding margin, never on a label itself. Skipped entirely in standard
+ * (non-anonymous) mode, since the label itself already shows the
+ * participant's name there - an extra identifying line would be redundant.
+ * Only output/bottle_label_batch.output.php ever passes a non-empty value;
+ * every other caller's rendered labels are unaffected by this parameter's
+ * existence.
+ *
+ * Returns '' if this brewer has zero matching entries, so a stale/removed
+ * selection in a batch print doesn't waste a page break on nothing.
+ */
+function render_brewer_bottle_labels($bid, $entry_arr, array $label_prefs, $batch_header_text = '') {
+
+	global $label_entry_number, $label_entry_name, $label_category, $label_regional_variation, $label_required_info, $label_mead_info_not_recorded, $label_contact, $base_url;
+
+	require(CONFIG.'config.php');
+	$db_conn = new MysqliDb($connection);
+	$brewer_db_table = $prefix."brewer";
+	$brewing_db_table = $prefix."brewing";
+
+	$anon = $label_prefs['anon'];
+	$standard = $label_prefs['standard'];
+	$barcode_qr = $label_prefs['barcode_qr'];
+	$large_entry_num = $label_prefs['large_entry_num'];
+	$large_text = $label_prefs['large_text'];
+	$entry_number_disp = $label_prefs['entry_number_disp'];
+	$judging_number_disp = $label_prefs['judging_number_disp'];
+	$bottle_label_count = $label_prefs['bottle_label_count'];
+	$bottle_label_columns = $label_prefs['bottle_label_columns'];
+	$bottle_label_columns_bs = $label_prefs['bottle_label_columns_bs'];
+	$bottle_label_colCountLimit = $label_prefs['bottle_label_colCountLimit'];
+
+	$db_conn->where('uid', $bid);
+	$row_brewer = $db_conn->getOne($brewer_db_table);
+
+	$db_conn->where('brewBrewerID', $bid);
+	$db_conn->orderBy('brewCategorySort', 'ASC');
+	$db_conn->orderBy('brewSubCategory', 'ASC');
+	$rows_log = $db_conn->get($brewing_db_table);
+	$totalRows_log = $db_conn->count;
+
+	if ($totalRows_log == 0) return '';
+
+	$brewerFirstName = $row_brewer['brewerFirstName'];
+	$brewerLastName = $row_brewer['brewerLastName'];
+	$brewerPhone1 = $row_brewer['brewerPhone1'];
+	$brewerCountry = $row_brewer['brewerCountry'];
+	$brewerEmail = $row_brewer['brewerEmail'];
+
+	if ($brewerCountry == "United States") $phone = format_phone_us($brewerPhone1);
+	else $phone = $brewerPhone1;
+
+	$bottle_label_endRow = 0;
+	$bottle_label_hloopRow1 = 0;
+	$bottle_label_colCount = 0;
+	$bottle_label_colCountTotal = $totalRows_log * $bottle_label_count;
+
+	$output = "";
+
+	if (($batch_header_text !== '') && ($anon)) {
+		$output .= "<div class=\"text-center\" style=\"color:#333; font-size: 1.2em; margin: 20px 0 20px 0; padding-bottom: 10px; border-bottom: 1px dashed #333;\">".h($batch_header_text)."</div>";
+	}
+
+	// Define Bootstrap Row
+	$output .= "<div class=\"row\">";
+
+	foreach ($rows_log as $row_log) {
+
+		if ((is_null($entry_arr)) || (in_array($row_log['id'], $entry_arr))) {
+
+			for ($i=1; $i<=$bottle_label_count; $i++) {
+
+				if ($judging_number_disp) $barcode = sprintf("%06s",$row_log['brewJudgingNumber']);
+				if ($entry_number_disp) $barcode = sprintf("%06s",$row_log['id']);
+
+				if ($barcode_qr) {
+
+					// Generate Barcode
+					$barcode_link = "https://admin.brewingcompetitions.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=20&code=BCGcode39";
+
+					// Generate QR Code
+					require_once (CLASSES.'qr_code/qrClass.php');
+					$qr = new qRClas();
+
+					$qrcode_url = $base_url."qr.php?id=".$row_log['id'];
+					$qrcode_url = urlencode($qrcode_url);
+
+					$qr->qRCreate($qrcode_url,"75x75","UTF-8");
+					$qrcode_link = $qr->url;
+
+				}
+
+				$entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+				$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
+				if (($bottle_label_endRow == 0) && ($bottle_label_hloopRow1++ != 0)) $output .= "<div class=\"row\">";
+
+				// Layout Column div
+				$output .= "<div class=\"col-xs-".$bottle_label_columns_bs." label-border\">";
+
+				$output .= "<div class=\"label-inner\">";
+
+				$output .= "<div style=\"margin: 0 0 10px 0;\" class=\"text-center label-title\"><strong>".h($_SESSION['contestName'])."</strong></div>";
+				if ($large_entry_num) $output .= "<div style=\"margin: 10px 0 10px 0; padding: 0;\" class=\"text-center label-entry-num\">".$barcode."</div>";
+				elseif ($large_text) $output .= "<div style=\"margin: 10px 0 10px 0; padding: 0;\" class=\"text-center label-category-name\">".$barcode."</div>";
+				else $output .= "<div class=\"text-center\" style=\"margin: 0 0 10px 0; padding: 5px 0 5px 0; font-size: 1.2em; border: 1px solid #dedede; border-radius: 5px;\"><strong>".$label_entry_number.":</strong> ".$barcode."</span></div>";
+
+				if ($large_text) {
+
+					// truncate($string, $your_desired_width, $append="", $max_word_length=20)
+
+					$style_name_large = truncate(h($row_log['brewStyle']),25,"...",20);
+
+					$output .= "<div class=\"text-center label-category-name\" style=\"margin: 0 0 20px 0; padding: 0 5px 0 5px;\" >";
+
+					if ($_SESSION['style_set_no_numbering']) {
+						$output .= "<div>".$style_name_large."</div>";
+					}
+
+					elseif ($_SESSION['prefsStyleSet'] == "AABC") {
+						$output .= "<div>".$label_category.": ".ltrim(h($row_log['brewCategory']),"0").".".ltrim(h($row_log['brewSubCategory']),"0")."</div>";
+						$output .= "<div style=\"font-size: .7em;\">".$style_name_large."</div>";
+					}
+
+					else {
+						$output .= "<div>".h($row_log['brewCategory']).h($row_log['brewSubCategory'])."</div>";
+						$output .= "<div style=\"font-size: .7em;\">".$style_name_large."</div>";
+					}
+
+					$output .= "</div>";
+
+				}
+
+				if (!$anon) $output .= "<div style=\"margin: 0 0 5px 0;\"><strong>".$label_entry_name.":</strong> ".truncate($entry_name,30,"&hellip;")."</div>";
+
+				if (!$large_text) {
+
+					$output .= "<div style=\"margin: 0 0 5px 0;\">";
+
+					if ($_SESSION['style_set_no_numbering']) $output .= "<strong>Cat:</strong> ".h($row_log['brewStyle']);
+					elseif ($_SESSION['prefsStyleSet'] == "AABC")  $output .= "<strong>".$label_category.":</strong> ".ltrim(h($row_log['brewCategory']),"0").".".ltrim(h($row_log['brewSubCategory']),"0")." ".h($row_log['brewStyle'])."</span>";
+					else $output .= "<strong>".$label_category.":</strong> ".h($row_log['brewCategory']).h($row_log['brewSubCategory'])." ".h($row_log['brewStyle'])."</span>";
+
+					$output .= "</div>";
+
+				}
+
+				if ($anon) {
+
+					$brewInfo = "";
+					$brewMeadCider = "";
+
+					$missing_mead_info_bl = entry_missing_required_mead_info($row_log, $_SESSION['prefsStyleSet']);
+
+					if ((!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3'])) || (!empty($missing_mead_info_bl))) {
+						if (!empty($row_log['brewMead1'])) $brewMeadCider .= h(translate_mead_req_value($row_log['brewMead1']))."&nbsp;&nbsp;";
+						elseif (in_array("carb",$missing_mead_info_bl)) $brewMeadCider .= h($label_mead_info_not_recorded)."&nbsp;&nbsp;";
+						if (!empty($row_log['brewMead2'])) $brewMeadCider .= h(translate_mead_req_value($row_log['brewMead2']))."&nbsp;&nbsp;";
+						elseif (in_array("sweet",$missing_mead_info_bl)) $brewMeadCider .= h($label_mead_info_not_recorded)."&nbsp;&nbsp;";
+						if (!empty($row_log['brewMead3'])) $brewMeadCider .= h(translate_mead_strength_value($row_log['brewMead3']));
+						elseif (in_array("strength",$missing_mead_info_bl)) $brewMeadCider .= h($label_mead_info_not_recorded);
+					}
+
+					if (!empty($row_log['brewInfo'])) {
+						// brewInfo is HTML-entity-encoded at save time (purify()) - h() here would
+						// double-encode it, unlike output/export.output.php's brewInfo handling
+						// (~line 740), which correctly prints it raw.
+						$brewInfo = $row_log['brewInfo'];
+						if (strpos($row_log['brewInfo'],"^") !== FALSE) $brewInfo = str_replace("^", "&nbsp;", $brewInfo);
+						if (empty($brewMeadCider)) $brewInfo = truncate($brewInfo,200,"&hellip;");
+						else $brewInfo = truncate($brewInfo,150,"&hellip;");
+					}
+
+					if (!empty($brewInfo)) {
+						$output .= "<div style=\"margin: 0 0 5px 0;\">";
+						if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $output .= "<strong>".$label_regional_variation.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
+						else $output .= "<strong>".$label_required_info.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
+						$output .= "</div>";
+					}
+
+					if (!empty($brewMeadCider)) {
+						$output .= "<div style=\"margin: 0 0 5px 0;\">".$brewMeadCider."</div>";
+					}
+
+				}
+
+				if ($standard) {
+
+					$output .= "<div>";
+
+					if ($_SESSION['prefsProEdition'] == 1) {
+						$output .= $row_brewer['brewerBreweryName']."<br>";
+						$output .= $label_contact.": ".$brewerFirstName." ".$brewerLastName."<br>";
+					}
+
+					else $output .= $brewerFirstName." ".$brewerLastName."<br>";
+					$output .= h($brewerEmail)."<br>";
+					$output .= h($phone);
+					$output .= "</div>";
+
+				}
+
+				if ($barcode_qr) {
+					$output .= "<div align=\"center\" style=\"margin: 15px 0 15px 0;\">";
+					$output .= "<img src=\"".$barcode_link."\"> ";
+					$output .= "&nbsp;&nbsp;<img src=\"".$qrcode_link."\">";
+					$output .= "</div>";
+				}
+
+				$output .= "</div>";
+				$output .= "</div>";
+
+				$bottle_label_colCount++;
+
+				if (($bottle_label_colCount >= $bottle_label_colCountLimit) && ($bottle_label_colCountTotal > $bottle_label_colCountLimit)) {
+					$output .= "<div style=\"page-break-before: always\"></div>";
+					$bottle_label_colCount = 0;
+				}
+
+				$bottle_label_endRow++;
+
+				if ($bottle_label_endRow >= $bottle_label_columns) {
+					$output .= "</div> <!-- end row -->";
+					$bottle_label_endRow = 0;
+				}
+
+			}
+
+		} // end if (is_null($entry_arr) || in_array($row_log['id'], $entry_arr))
+
+	}
+
+	// Insert Empty Column if No Content Available
+	if ($bottle_label_endRow != 0) {
+		while ($bottle_label_endRow < $bottle_label_columns) {
+			$output .= "<div class=\"col-lg-3 col-md-3 col-sm-3\">&nbsp;</div>";
+			$bottle_label_endRow++;
+		}
+	}
+
+	// End Bootstrap Row
+	$output .= "</div><!-- end row-->";
+
+	return $output;
+
+}
+
 ?>

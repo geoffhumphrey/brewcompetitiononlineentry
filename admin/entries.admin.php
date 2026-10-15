@@ -834,6 +834,13 @@ $(document).ready(function () {
 			</div>
 			<?php } ?>
 		</div><!-- ./button group -->
+		<?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+		<div class="btn-group <?php echo $hidden_sm; ?>" role="group" aria-label="batchReprintLabels">
+			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#batchLabelReprintModal">
+			<span class="fa fa-print"></span> Print Participant Bottle Labels
+			</button>
+		</div><!-- ./button group -->
+		<?php } ?>
 		<?php } ?>
 		<?php if ($totalRows_log > 0) {
 
@@ -1062,3 +1069,55 @@ $(document).ready(function () {
 </form>
 <?php } ?>
 <?php } else echo "<div class=\"container-fluid\"><div class=\"row\"><div class=\"col-md-12\"><p>No entries have been added to the database yet.</p></div></div></div>"; ?>
+<?php if (($totalRows_log > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
+<!-- Modal - deliberately placed outside <form name="form1"> above: a <form> cannot be
+     nested inside another <form>, and this modal needs its own form to POST bid[] to a
+     different action/target than form1's bulk-update submit. -->
+<div class="modal fade" id="batchLabelReprintModal" tabindex="-1" role="dialog" aria-labelledby="batchLabelReprintModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form name="batchReprintForm" id="batchReprintForm" method="post" action="<?php echo $base_url; ?>includes/output.inc.php?section=entry-form-batch" target="_blank" class="hide-loader-form-submit">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="batchLabelReprintModalLabel">Reprint Bottle Labels for Participants</h4>
+        </div>
+        <div class="modal-body">
+          <p>Select one or more participants from the dropdown below. All bottle labels for the selected particpants' entries will be housed in a single print job.</p>
+          <?php echo participant_choose_batch_reprint($brewer_db_table,$brewing_db_table,$pro_edition); ?>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" id="batchReprintPrintBtn" class="btn btn-primary" disabled>Print</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div><!-- ./modal -->
+<script type="text/javascript">
+$(document).ready(function() {
+
+	function batchReprintUpdatePrintButton() {
+		var selected = $('#batchReprintBid').val();
+		$('#batchReprintPrintBtn').prop('disabled', !selected || selected.length === 0);
+	}
+
+	$('#batchReprintBid').on('change', batchReprintUpdatePrintButton);
+
+	// Clear the selection (and re-disable Print) whenever the modal closes,
+	// whether by Cancel/X/backdrop/Esc or because the Print button just
+	// submitted - so it always reopens in a clean, empty state.
+	$('#batchLabelReprintModal').on('hidden.bs.modal', function () {
+		$('#batchReprintBid').selectpicker('val', []);
+		batchReprintUpdatePrintButton();
+	});
+
+	// Dismiss the modal once the print job's new tab has been requested -
+	// target="_blank" means this page never navigates away, so it's safe to
+	// hide immediately in the same submit handler.
+	$('#batchReprintForm').on('submit', function () {
+		$('#batchLabelReprintModal').modal('hide');
+	});
+
+});
+</script>
+<?php } ?>

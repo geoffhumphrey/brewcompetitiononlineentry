@@ -26,7 +26,7 @@ require (INCLUDES.'url_variables.inc.php');
  * language.lang.php re-applies it below this swap point.
  * Scoresheets and other output keep the user's chosen language.
  */
-if (($section == "entry-form") || ($section == "entry-form-multi")) {
+if (($section == "entry-form") || ($section == "entry-form-multi") || ($section == "entry-form-batch")) {
     include (DB.'default_language.db.php');
     $default_lang_info = get_default_language();
     $saved_prefsLanguage = isset($_SESSION['prefsLanguage']) ? $_SESSION['prefsLanguage'] : "";
@@ -43,7 +43,7 @@ require (LANG.'language.lang.php');
 require (INCLUDES.'constants_post_lang.inc.php');
 
 // Restore the user's own language choice after the label output completes
-if ((($section == "entry-form") || ($section == "entry-form-multi")) && (isset($saved_prefsLanguage))) {
+if ((($section == "entry-form") || ($section == "entry-form-multi") || ($section == "entry-form-batch")) && (isset($saved_prefsLanguage))) {
     if ($saved_prefsLanguage !== "") $_SESSION['prefsLanguage'] = $saved_prefsLanguage; else unset($_SESSION['prefsLanguage']);
     if ($saved_prefsLanguageFolder !== "") $_SESSION['prefsLanguageFolder'] = $saved_prefsLanguageFolder; else unset($_SESSION['prefsLanguageFolder']);
 }
@@ -59,7 +59,7 @@ function convert_to_entities($input) {
 $print_sections = array("admin", "assignments", "bos-mat", "dropoff", "summary", "particpant-entries", "inventory", "pullsheets", "results", "sorting", "staff", "table-cards", "notes", "styles", "shipping-label", "evaluation", "contact");
 $export_sections = array("export-entries", "export-loc", "export-emails", "export-participants", "export-promo", "export-results", "export-staff", "export-personal-results", "export-styles");
 $label_sections = array("labels-admin","labels-participant","labels-judge");
-$entry_sections = array("entry-form","entry-form-multi");
+$entry_sections = array("entry-form","entry-form-multi","entry-form-batch");
 $scoresheet_sections = array("scoresheet");
 
 if (in_array($section,$print_sections)) {
@@ -89,6 +89,7 @@ if (in_array($section,$entry_sections)) {
 	require (LIB.'output.lib.php');
 	include (DB.'output_entry.db.php');
 	if (($section == "entry-form") || ($section == "entry-form-multi")) include (OUTPUT.'bottle_label.output.php');
+	if ($section == "entry-form-batch") include (OUTPUT.'bottle_label_batch.output.php');
 }
 
 if (in_array($section,$scoresheet_sections)) {

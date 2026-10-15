@@ -519,6 +519,47 @@ function participant_choose($brewer_db_table,$pro_edition,$judge,$evaluation='0'
 	return $output;
 }
 
+/**
+ * Searchable multi-select of every brewer with at least one entry in this
+ * competition - for the Admin > Entries "Reprint Bottle Labels" batch modal.
+ * Deliberately no brewReceived/paid filter, matching bottle_label.output.php's
+ * own unfiltered brewBrewerID query - this list's job is "can this brewer's
+ * labels be generated," not "is this brewer fully processed."
+ */
+function participant_choose_batch_reprint($brewer_db_table,$brewing_db_table,$pro_edition) {
+
+	require(CONFIG.'config.php');
+	$db_conn = new MysqliDb($connection);
+
+	if ($pro_edition == 1) {
+		$query = "SELECT DISTINCT a.uid, a.brewerBreweryName FROM ".$brewer_db_table." a, ".$brewing_db_table." b WHERE a.uid = b.brewBrewerID ORDER BY a.brewerBreweryName ASC";
+	}
+	else {
+		$query = "SELECT DISTINCT a.uid, a.brewerFirstName, a.brewerLastName FROM ".$brewer_db_table." a, ".$brewing_db_table." b WHERE a.uid = b.brewBrewerID ORDER BY a.brewerLastName ASC, a.brewerFirstName ASC";
+	}
+
+	$rows_brewers = $db_conn->rawQuery($query);
+
+	$output = "<select class=\"selectpicker\" multiple name=\"bid[]\" id=\"batchReprintBid\" data-live-search=\"true\" data-size=\"15\" data-width=\"auto\" data-show-tick=\"true\" title=\"Select Participants\">";
+
+	if ($rows_brewers) {
+
+		foreach ($rows_brewers as $row_brewers) {
+
+			// brewerBreweryName/brewerLastName/brewerFirstName are purify()-only
+			// (no sterilize()) - safe as plain option text, same as participant_choose() above.
+			if ($pro_edition == 1) $output .= "<option value=\"".$row_brewers['uid']."\">".$row_brewers['brewerBreweryName']."</option>";
+			else $output .= "<option value=\"".$row_brewers['uid']."\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+
+		}
+
+	}
+
+	$output .= "</select>";
+
+	return $output;
+}
+
 function admin_help($go,$header_output,$action,$filter) {
 	include (CONFIG.'config.php');
 	switch($go) {
