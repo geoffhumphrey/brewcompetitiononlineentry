@@ -951,17 +951,34 @@ function render_brewer_bottle_labels($bid, $entry_arr, array $label_prefs, $batc
 				$output .= "</div>";
 
 				$bottle_label_colCount++;
-
-				if (($bottle_label_colCount >= $bottle_label_colCountLimit) && ($bottle_label_colCountTotal > $bottle_label_colCountLimit)) {
-					$output .= "<div style=\"page-break-before: always\"></div>";
-					$bottle_label_colCount = 0;
-				}
-
 				$bottle_label_endRow++;
 
-				if ($bottle_label_endRow >= $bottle_label_columns) {
+				// Whenever this iteration also crosses the per-page column limit, close
+				// the row first regardless of whether it also happens to be a normal
+				// end-of-row boundary - a page break must never land inside a still-open
+				// <div class="row">, and relying on the two thresholds coincidentally
+				// aligning (true today only because colCountLimit is a multiple of
+				// bottle_label_columns) would silently break if either ever changes.
+				$bottle_label_page_break_now = (($bottle_label_colCount >= $bottle_label_colCountLimit) && ($bottle_label_colCountTotal > $bottle_label_colCountLimit));
+
+				if (($bottle_label_endRow >= $bottle_label_columns) || ($bottle_label_page_break_now)) {
 					$output .= "</div> <!-- end row -->";
 					$bottle_label_endRow = 0;
+				}
+
+				if ($bottle_label_page_break_now) {
+
+					$output .= "<div style=\"page-break-before: always\"></div>";
+					$bottle_label_colCount = 0;
+
+					// Repeat the identifying header on every new physical page this
+					// brewer's labels span, not just the first - so a page that gets
+					// separated or shuffled from the rest of the stack still shows whose
+					// labels it holds.
+					if (($batch_header_text !== '') && ($anon)) {
+						$output .= "<div class=\"text-center\" style=\"color:#333; font-size: 1.2em; margin: 20px 0 20px 0; padding-bottom: 10px; border-bottom: 1px dashed #333;\">".h($batch_header_text)."</div>";
+					}
+
 				}
 
 			}

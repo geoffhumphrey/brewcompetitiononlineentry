@@ -1079,7 +1079,7 @@ $(document).ready(function () {
       <form name="batchReprintForm" id="batchReprintForm" method="post" action="<?php echo $base_url; ?>includes/output.inc.php?section=entry-form-batch" target="_blank" class="hide-loader-form-submit">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="batchLabelReprintModalLabel">Reprint Bottle Labels for Participants</h4>
+          <h4 class="modal-title" id="batchLabelReprintModalLabel">Print Bottle Labels for Participants</h4>
         </div>
         <div class="modal-body">
           <p>Select one or more participants from the dropdown below. All bottle labels for the selected particpants' entries will be housed in a single print job.</p>
