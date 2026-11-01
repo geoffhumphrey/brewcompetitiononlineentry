@@ -3264,8 +3264,9 @@ function check_special_ingredients($style,$style_version) {
 
 	if ((!empty($row_brews)) && ($row_brews['brewStyleReqSpec'] == 1)) {
 		
-		// Execptions for some selected 2025 cider styles
-		if (($style_version == "BJCP2025") && (($style == "C2-C") || ($style == "C2-D") || ($style == "C4-C"))) return FALSE;
+		// Execptions for some selected 2025 cider styles - BJCP2026 reuses these
+		// same cider styles unchanged, so it needs this exception too.
+		if ((($style_version == "BJCP2025") || ($style_version == "BJCP2026")) && (($style == "C2-C") || ($style == "C2-D") || ($style == "C4-C"))) return FALSE;
 		else return TRUE;
 	
 	}

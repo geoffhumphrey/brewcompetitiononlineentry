@@ -233,7 +233,7 @@ $mhp_qr_data = json_encode($mhp_qr_data, JSON_NUMERIC_CHECK);
         <?php if (!empty($evalSpecialIngredients)) { ?>
          <div class="row">
             <div class="col col-lg-5 col-md-4 col-sm-3 col-xs-3">
-            <strong><?php if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) && ($row_style['brewStyleGroup'] == "2") && ($row_style['brewStyleNum'] == "A")) echo $label_regional_variation; else echo $label_required_info; ?></span>:</strong>
+            <strong><?php if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($row_style['brewStyleGroup'] == "2") && ($row_style['brewStyleNum'] == "A")) echo $label_regional_variation; else echo $label_required_info; ?></span>:</strong>
             </div>
             <div class="col col-lg-7 col-md-8 col-sm-9 col-xs-9">
             <?php echo $evalSpecialIngredients; ?>

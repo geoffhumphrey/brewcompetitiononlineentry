@@ -601,12 +601,32 @@ else {
     // M3-C, M4-D, M4-E, M4-F are new-in-BJCP2026 mead codes with no pre-2026
     // equivalent - added here since every other mead code already gets
     // Optional Info unconditionally, regardless of active style set.
-    $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M3-C","M4-B","M4-C","M4-D","M4-E","M4-F","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-A","C1-B","C1-C");
-    if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) $optional_info_styles[] = "25-B";
-    if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
-        $optional_info_styles[] = "C1-D"; 
-        $optional_info_styles[] = "C1-E"; 
-        $optional_info_styles[] = "C3-A"; 
+    //
+    // 29-D and LS-X3 genuinely invite "MAY provide additional information" in
+    // their entry text, same as every other code in this list - confirmed
+    // against update/styles_bjcp_2021_update.php's brewStyleEntry. 30-B/33-A/
+    // 33-B removed: their entry text has no actual "may" language, only
+    // softer non-mandatory phrasing that doesn't warrant this field. C1-A/B/C
+    // removed from here too - see the version-specific block below, since
+    // (unlike every other code in this array) those three codes mean a
+    // completely different, unrelated style under BJCP2021 vs. BJCP2025/2026.
+    $optional_info_styles = array("21-B","28-A","34-B","29-D","LS-X3","M2-C","M2-D","M2-E","M3-A","M3-B","M3-C","M4-B","M4-C","M4-D","M4-E","M4-F","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A");
+    // 25B's "may identify character grains" is a property of the style itself,
+    // unchanged across all three BJCP versions (BJCP2026 didn't touch beer) - not
+    // just BJCP2021.
+    if ((isset($_SESSION['prefsStyleSet'])) && (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026"))) $optional_info_styles[] = "25-B";
+    // C1-A/B/C, C1-D/E, C3-A/B/C, and C4-D are BJCP2025's (and, unchanged,
+    // BJCP2026's) actual cider styles, with real "may" language in their entry
+    // text - confirmed against update/styles_bjcp_2025_update.php. BJCP2021's
+    // own C1-A/B/C are an entirely different, mostly-unused legacy cider
+    // numbering with blank entry text, so they're deliberately excluded here.
+    if ((isset($_SESSION['prefsStyleSet'])) && (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026"))) {
+        $optional_info_styles[] = "C1-A";
+        $optional_info_styles[] = "C1-B";
+        $optional_info_styles[] = "C1-C";
+        $optional_info_styles[] = "C1-D";
+        $optional_info_styles[] = "C1-E";
+        $optional_info_styles[] = "C3-A";
         $optional_info_styles[] = "C3-B";
         $optional_info_styles[] = "C3-C";
         $optional_info_styles[] = "C4-D";

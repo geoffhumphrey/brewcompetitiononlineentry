@@ -383,7 +383,7 @@ if ($entry_found) {
 
   }
 
-  elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
+  elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) {
 
     $first_character = mb_substr($row_style['brewStyleGroup'], 0, 1);
 
@@ -393,8 +393,9 @@ if ($entry_found) {
     // 2021 update was beer only; find numbered styles
     elseif (is_numeric(ltrim($row_style['brewStyleGroup'],"0"))) $style_link = "//bjcp.org/style/2021/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
-    // 2025 update was cider only; find styles that begin with C
-    elseif (($_SESSION['prefsStyleSet'] == "BJCP2025") && ($first_character == "C")) $style_link = "//bjcp.org/style/2025/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+    // 2025 update was cider only; find styles that begin with C - BJCP2026
+    // reuses these same cider styles unchanged, so it needs this link too.
+    elseif ((($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($first_character == "C")) $style_link = "//bjcp.org/style/2025/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
     // If mead, use 2015 link
     else $style_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
@@ -404,7 +405,7 @@ if ($entry_found) {
   if (empty($style_link)) {
 
     $entry_info_html .= $style_num." ".$row_style['brewStyle'];
-    if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
     if (($_SESSION['prefsStyleSet'] == "AABC") || ($_SESSION['prefsStyleSet'] == "AABC2022") || ($_SESSION['prefsStyleSet'] == "AABC2025")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://aabc.asn.au/docs/AABC2025StyleGuidelines.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
     if ($_SESSION['style_set_no_numbering']) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
 
@@ -424,7 +425,7 @@ if ($entry_found) {
 
   if (!empty($row_entry_info['brewInfo'])) {
     $entry_info_html .= "<div class=\"row mb-3\">";
-    if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) && ($style_num == "2A")) $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_regional_variation."</strong></div>";
+    if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style_num == "2A")) $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_regional_variation."</strong></div>";
     else $entry_info_html .= "<div class=\"col-12 col-lg-3 col-md-4 col-sm-4\"><strong>".$label_required_info."</strong></div>";
     $entry_info_html .= "<div class=\"col-12 col-lg-9 col-md-8 col-sm-8\">".str_replace("^", " - ", $row_entry_info['brewInfo'])."</div>";
     $entry_info_html .= "</div>";

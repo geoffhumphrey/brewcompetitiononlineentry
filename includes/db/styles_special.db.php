@@ -30,8 +30,8 @@ $replacement5 = array('<strong><u>MUST</u></strong> specify','<strong><u>MAY</u>
 
 if ($_SESSION['prefsLanguage'] == "en-US") {
 
-	if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
-		
+	if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) {
+
 		$styles_entry_text = array(
 		    "7-C" => str_replace($replacement4,$replacement5,$styles_entry_text_07C),
 		    "9-A" => str_replace($replacement4,$replacement5,$styles_entry_text_09A),
@@ -103,7 +103,7 @@ if ($_SESSION['prefsLanguage'] == "en-US") {
 
 	}
 
-	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+	if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) {
 
 		$styles_entry_text_cider = array(
 			"C1-A" => str_replace($replacement4,$replacement5,$styles_entry_text_C1A_2025),
@@ -133,7 +133,7 @@ if ($_SESSION['prefsLanguage'] == "en-US") {
 
 elseif ($_SESSION['prefsLanguage'] != "en-US") {
 
-	if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025")) {
+	if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) {
 
 		$styles_entry_text = array(
 		    "7-C" => $styles_entry_text_07C,
@@ -206,7 +206,7 @@ elseif ($_SESSION['prefsLanguage'] != "en-US") {
 
 	}
 
-	if ($_SESSION['prefsStyleSet'] == "BJCP2025") {
+	if (($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) {
 
 		$styles_entry_text_cider = array(
 			"C1-A" => $styles_entry_text_C1A_2025,

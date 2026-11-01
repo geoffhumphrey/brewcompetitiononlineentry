@@ -648,7 +648,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if (empty($brewInfo)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if (empty($brewInfo)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else {
 					// The style-requirement checks below this one can each
 					// overwrite $insertGoTo again on their own success branch,
@@ -688,7 +688,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if ((empty($brewMead1)) || (empty($brewMead2))) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if ((empty($brewMead1)) || (empty($brewMead2))) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else {
 					// The style-requirement checks below this one can each
 					// overwrite $insertGoTo again on their own success branch,
@@ -728,7 +728,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if (empty($brewMead2)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if (empty($brewMead2)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else {
 					// The style-requirement checks below this one can each
 					// overwrite $insertGoTo again on their own success branch,
@@ -768,7 +768,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if (empty($brewMead3)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if (empty($brewMead3)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else {
 					// The style-requirement checks below this one can each
 					// overwrite $insertGoTo again on their own success branch,
@@ -806,7 +806,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if ((empty($brewMead1)) || (empty($brewMead2)) || (empty($brewMead3)))  $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if ((empty($brewMead1)) || (empty($brewMead2)) || (empty($brewMead3)))  $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else {
 					// The style-requirement checks below this one can each
 					// overwrite $insertGoTo again on their own success branch,
@@ -1039,7 +1039,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		// Build updade url
-		if ((check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) && ($_POST['brewInfo'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=4";
+		if ((check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) && ($_POST['brewInfo'] == "")) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&msg=4";
 		elseif ($section == "admin") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 		else $updateGoTo = $base_url."index.php?section=list&msg=2";
 
@@ -1054,7 +1054,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$errors = TRUE;
 			}
 
-			$updateGoTo = $base_url."index.php?section=brew&action=edit&id=".$id."&filter=".$filter."&view=0-A&msg=4";
+			$updateGoTo = $base_url."index.php?section=brew&action=edit&id=".$id."&filter=".$brewBrewerID."&view=0-A&msg=4";
 
 		}
 
@@ -1075,7 +1075,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if (empty($brewInfo)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if (empty($brewInfo)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 
@@ -1112,7 +1112,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if ((empty($brewMead1)) && (!$brewMead1_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if ((empty($brewMead1)) && (!$brewMead1_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 
@@ -1141,7 +1141,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if ((empty($brewMead2)) && (!$brewMead2_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if ((empty($brewMead2)) && (!$brewMead2_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 
@@ -1170,7 +1170,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			if ($section == "admin") {
-				if ((empty($brewMead3)) && (!$brewMead3_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
+				if ((empty($brewMead3)) && (!$brewMead3_grandfathered)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$brewBrewerID&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 
