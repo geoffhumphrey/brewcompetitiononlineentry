@@ -302,6 +302,15 @@ if (isset($_SESSION['last_action'])) {
     if ($seconds_inactive >= $session_expire_after_seconds) {
         session_unset();
         session_destroy();
+        // Close the now-empty session and drop the browser's cookie for it
+        // immediately (matches qr.php's identical timeout check) - otherwise
+        // the request keeps running on a destroyed session, and whatever
+        // $_SESSION writes happen afterward on this same request (e.g.
+        // last_action below) silently resurrect a session file containing
+        // only those writes under the SAME session id, which the browser
+        // keeps presenting on every later request until it's restarted.
+        session_write_close();
+        setcookie(session_name($prefix_session),'',0,'/');
     }
 }
 
