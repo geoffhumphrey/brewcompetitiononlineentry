@@ -22,8 +22,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	$eval_arr = array();
 	$evalPlace = array();
 
-	$styles_db_table = $prefix."styles";
-
 	// First, query DB to see if any evaluations have been recorded
 
 	$row_eval = $db_conn->get($prefix."evaluation");
@@ -92,20 +90,14 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 
 				$evalMiniBOS = array();
 				$evalPlace = array();
-				$evalStyleType = array();
 
 				// If there is a record, update the record in the scores DB
-				// Loop through and compare each final score. 
+				// Loop through and compare each final score.
 				foreach ($row_evals as $row_evals) {
 
-					$db_conn->where ('id', $row_evals['evalStyle']);
-					$row_style_type = $db_conn->getOne ($styles_db_table, null, "brewStyleType");
-
-					if ($row_style_type) $evalStyleType[] = $row_style_type['brewStyleType'];
-					else $evalStyleType[] = "";
 					$evalPlace[] = $row_evals['evalPlace'];
 					$evalMiniBOS[] = $row_evals['evalMiniBOS'];
-				
+
 				}
 
 				if ((is_array($evalMiniBOS)) && (!empty($evalMiniBOS))) $evalMiniBOS = max($evalMiniBOS);
@@ -116,8 +108,17 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				if ((is_numeric($evalPlace)) && ($evalPlace > 0)) $evalPlace = $evalPlace;
 				else $evalPlace = "";
 
-				if ((is_array($evalStyleType)) && (!empty($evalStyleType))) $evalStyleType = max($evalStyleType);
-				else $evalStyleType = "";
+				// An entry's beverage type (beer/mead/cider) is a fixed property of the
+				// entry, not something that can vary per judge - look it up directly from
+				// the entry's own brewing row (already resolved once, reliably, at
+				// entry-submission time by process_brewing.inc.php) instead of re-deriving
+				// it per judge via evaluation.evalStyle -> styles.brewStyleType, which can
+				// point at a stale styles row if the style set changed after a judge's
+				// scoresheet was originally submitted, and was being trusted with no check
+				// that the looked-up value was even non-empty (GitHub issue #1770).
+				$db_conn->where ('id', $value);
+				$row_brewing_type = $db_conn->getOne ($brewing_db_table, "brewStyleType");
+				$evalStyleType = (!empty($row_brewing_type['brewStyleType'])) ? $row_brewing_type['brewStyleType'] : "";
 
 				// If the entry has been scored and a place has been recorded
 				// Grab the place and build discrepency array
@@ -151,36 +152,23 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				if (($update_place) || ($update_miniBOS)) {
 
 					$update_table = $prefix."judging_scores";
+					$data = array();
 
-					if (($update_place) && ($update_miniBOS)) {
-						$score_count++;
-						$data = array(
-							'scorePlace' => $evalPlace,
-							'scoreType' => $evalStyleType,
-							'scoreMiniBOS' => $evalMiniBOS
-						);	
+					if ($update_place) {
+						$data['scorePlace'] = $evalPlace;
+						// Don't overwrite a previously-good scoreType with a blank lookup
+						// result - leave the existing value in place rather than clobber it.
+						if (!empty($evalStyleType)) $data['scoreType'] = $evalStyleType;
 					}
+					if ($update_miniBOS) $data['scoreMiniBOS'] = $evalMiniBOS;
 
-					if (($update_place) && (!$update_miniBOS)) {
-						$score_count++;
-						$data = array(
-							'scorePlace' => $evalPlace,
-							'scoreType' => $evalStyleType
-						);	
-					}
+					$score_count++;
 
-					if ((!$update_place) && ($update_miniBOS)) {
-						$score_count++;
-						$data = array(
-							'scoreMiniBOS' => $evalMiniBOS
-						);	
-					}
-														
 					$db_conn->where ('eid', $value);
 					$result = $db_conn->update ($update_table, $data);
-					if (!$result) $status = 2;	
+					if (!$result) $status = 2;
 
-				}							
+				}
 
 			}
 		
@@ -193,7 +181,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				$evalTable = array();
 				$evalMiniBOS = array();
 				$evalPlace = array();
-				$evalStyleType = array();
 
 				// echo $query_evals."<br>";
 
@@ -202,14 +189,11 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					$singles[] = $row_evals[0]['eid'];
 					$not_imported_count ++;
 				}
-				
+
 				if ($totalRows_evals > 1) {
 
-					// Loop through and compare each final score. 
+					// Loop through and compare each final score.
 					foreach ($row_evals as $row_evals)  {
-
-						$db_conn->where ('id', $row_evals['evalStyle']);
-						$row_style_type = $db_conn->getOne ($styles_db_table, null, "brewStyleType");
 
 						$eval_scores[] = $row_evals['evalFinalScore'];
 						$eid[] = $row_evals['eid'];
@@ -217,8 +201,6 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 						$evalTable[] = $row_evals['evalTable'];
 						$evalMiniBOS[] = $row_evals['evalMiniBOS'];
 						$evalPlace[] = $row_evals['evalPlace'];
-						if ($row_style_type) $evalStyleType[] = $row_style_type['brewStyleType'];
-						else $evalStyleType[] = "";
 
 					}
 
@@ -231,11 +213,21 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					$evalTable = max($evalTable);
 					$evalMiniBOS = max($evalMiniBOS);
 					$final_score = max($eval_scores);
-					$evalStyleType = max($evalStyleType);
 
 					if ((is_array($evalPlace)) && (!empty($evalPlace))) $evalPlace = max($evalPlace);
 					if ((is_numeric($evalPlace)) && ($evalPlace > 0)) $evalPlace = $evalPlace;
 					else $evalPlace = "";
+
+					// See matching comment on the "already scored" branch above - an
+					// entry's beverage type doesn't vary per judge, so look it up directly
+					// from its own brewing row rather than per-judge via evaluation.evalStyle
+					// -> styles.brewStyleType (GitHub issue #1770). NULL (rather than a
+					// guessed value) when the entry's own brewStyleType is itself blank, so
+					// a genuinely bad source value stays visibly NULL instead of silently
+					// becoming "0".
+					$db_conn->where ('id', $value);
+					$row_brewing_type = $db_conn->getOne ($brewing_db_table, "brewStyleType");
+					$evalStyleType = (!empty($row_brewing_type['brewStyleType'])) ? $row_brewing_type['brewStyleType'] : null;
 
 					$db_conn->where ('eid', $value);
 					$db_conn->where ('evalFinalScore', $final_score);
