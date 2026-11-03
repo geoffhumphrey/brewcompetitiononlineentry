@@ -2212,7 +2212,7 @@ $login_text_029 = "Ha nem emlékszik a felhasználónevére, forduljon az oldal 
 $login_text_030 = "A megadott e-mail cím érvénytelen. Kérjük, ellenőrizze, és próbálja újra.";
 
 $entry_info_text_056 = "Korlát elérve. Nem fogadunk el több nevezést.";
-$entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Jelzi, hogy a stílus nevezési korlátja elérésre került, és az adott stílusban nem fogadunk el több nevezést.";
+$entry_info_text_057 = "<i class=\"fa fa-fw fa-times-circle text-danger-emphasis me-1\"></i>Jelzi, hogy a stílus nevezési korlátja elérésre került, és az adott stílusban nem fogadunk el több nevezést.";
 
 $output_text_034 = "Nem került sor BOS bírálói pontok kiosztására, mivel az összesített bírált nevezések száma kevesebb volt, mint a BJCP által meghatározott 30-as minimum küszöb.";
 
@@ -2259,6 +2259,15 @@ $default_page_text_025 = "A pontozólapok mostantól megtekinthetők vagy letöl
 $label_scoresheets_available = "Pontozólapok letöltésre elérhetők";
 $label_mead_info_missing = "Hiányzó %s - a nevezéskor még nem volt kötelező";
 $label_mead_info_not_recorded = "A nevező nem adta meg";
+
+/**
+ * ------------------------------------------
+ * Version 3.2.1 Additions
+ * ------------------------------------------
+ */
+
+$entry_info_text_059 = "<i class=\"fa fa-fw fa-asterisk me-1\"></i>Jelzi, hogy a stílushoz további információ szükséges a nevezéskor &ndash; vigye az egeret a csillag fölé a részletekért.";
+
 
 /**
  * ------------------------------------------

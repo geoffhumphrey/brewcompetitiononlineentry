@@ -2219,7 +2219,7 @@ $login_text_029 = "Se você não consegue lembrar do seu nome de usuário, entre
 $login_text_030 = "E-mail fornecido não é válido. Por favor verifique e tente novamente.";
 
 $entry_info_text_056 = "Limite atingido. Não serão aceitas mais inscrições.";
-$entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indica que o limite de inscrições do estilo foi atingido e não serão aceitas mais inscrições deste estilo.";
+$entry_info_text_057 = "<i class=\"fa fa-fw fa-times-circle text-danger-emphasis me-1\"></i>Indica que o limite de inscrições do estilo foi atingido e não serão aceitas mais inscrições deste estilo.";
 
 $output_text_034 = "Não foram atribuídos pontos BOS Judge, uma vez que o número total de inscrições avaliadas foi inferior ao limite mínimo de 30 estabelecido pelo BJCP.";
 
@@ -2265,6 +2265,15 @@ $default_page_text_025 = "As folhas de pontuação já estão disponíveis para 
 $label_scoresheets_available = "Folhas de Pontuação Disponíveis para Download";
 $label_mead_info_missing = "Faltando %s - não era obrigatório no momento do envio";
 $label_mead_info_not_recorded = "Não informado pelo participante";
+
+/**
+ * ------------------------------------------
+ * Version 3.2.1 Additions
+ * ------------------------------------------
+ */
+
+$entry_info_text_059 = "<i class=\"fa fa-fw fa-asterisk me-1\"></i>Indica que o estilo requer informações adicionais na inscrição &ndash; passe o mouse sobre o asterisco para mais detalhes.";
+
 
 /**
  * ----------------------------------------------------------------------------------

@@ -68,7 +68,7 @@ if ((!empty($_SESSION['prefsStyleLimits'])) && (strlen($_SESSION['prefsStyleLimi
 			foreach (json_decode($_SESSION['prefsStyleLimits'],true) as $key => $value) {
 				foreach ($style_set['style_set_categories'] as $k => $v) {
 					if ($k == $key) {
-						if ($style_limit_entry_count_display[$key] >= $value) $entry_limits_by_style .= sprintf("<tr><td>%s: %s</td><td>%s</td><td><span class=\"text-muted\">%s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i></td></tr>",$key,$v,$value,$style_limit_entry_count_display[$key],$entry_info_text_056);
+						if ($style_limit_entry_count_display[$key] >= $value) $entry_limits_by_style .= sprintf("<tr><td>%s: %s</td><td>%s</td><td><span class=\"text-muted\">%s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i></td></tr>",$key,$v,$value,$style_limit_entry_count_display[$key],$entry_info_text_056);
 						else $entry_limits_by_style .= sprintf("<tr><td>%s: %s</td><td>%s</td><td>".$style_limit_entry_count_display[$key]."</td></tr>",$key,$v,$value);
 					} 
 				}
@@ -130,7 +130,7 @@ if (!$logged_in) {
 	elseif (($registration_open == 2) && ($judge_window_open == 1)) $page_info2 .= sprintf("%s <strong class=\"text-success\">%s</strong> %s %s.", $entry_info_text_006,$entry_info_text_007,$entry_info_text_008, $judge_closed);
 	else $page_info2 .= sprintf("<p>%s</p>",$entry_info_text_009);
 }
-else $page_info2 .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></small></p>",$entry_info_text_010,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$entry_info_text_011,$entry_info_text_012);
+else $page_info2 .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></small></p>",$entry_info_text_010,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$entry_info_text_011,$entry_info_text_012);
 
 if ($show_entries) {
 	// Entry Window
@@ -182,7 +182,7 @@ if ($show_entries) {
 
 				foreach ($style_type_entry_count_display as $key => $value) {
 					if (!empty($value[1])) {
-						if ($value[0] >= $value[1]) $page_info5 .= sprintf("<tr><td>%s</td><td class=\"text-muted\">%s</td><td>%s<i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i></td>", $key, $value[1], $value[0], $entry_info_text_056);
+						if ($value[0] >= $value[1]) $page_info5 .= sprintf("<tr><td>%s</td><td class=\"text-muted\">%s</td><td>%s<i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i></td>", $key, $value[1], $value[0], $entry_info_text_056);
 						else $page_info5 .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td>", $key, $value[1], $value[0]);
 					}
 				}
@@ -365,7 +365,7 @@ else {
 
 				// judgingLocName/judgingLocation are purify()-only (no sterilize()) - $location_link/
 				// $location_tooltip need h() here.
-				if ((!empty($row_judging['judgingLocation'])) && ($logged_in)) $page_info7 .= "<a href=\"".h($location_link)."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
+				if ((!empty($row_judging['judgingLocation'])) && ($logged_in)) $page_info7 .= "<a href=\"".h($location_link)."\" target=\"_blank\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
 
 			}
 
@@ -405,7 +405,7 @@ else {
 
 			// judgingLocName/judgingLocation are purify()-only (no sterilize()) - $location_link/
 			// $location_tooltip need h() here.
-			if ((!empty($row_judging['judgingLocation'])) && ($logged_in)) $page_info16 .= "<a href=\"".h($location_link)."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
+			if ((!empty($row_judging['judgingLocation'])) && ($logged_in)) $page_info16 .= "<a href=\"".h($location_link)."\" target=\"_blank\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($location_tooltip)."\"><span class=\"fa fa-map-marker ms-2\"></span></a>";
 
 			if (!empty($row_judging['judgingDate'])) $page_info16 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 
@@ -439,6 +439,7 @@ if ($row_styles) {
 
 	if ($_SESSION['style_set_no_numbering']) $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
 	else $page_info8 .= sprintf("<p>%s</p>", $entry_info_text_057);
+	$page_info8 .= sprintf("<p>%s</p>", $entry_info_text_059);
 
 	$style_set = $_SESSION['style_set_short_name'];
 
@@ -482,16 +483,16 @@ if ($row_styles) {
 
 					$style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
 
-					if ($row_styles['brewStyleAtLimit'] == 1) $page_info8 .= sprintf("<span class=\"text-muted\">%s %s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i>",$style_number,$row_styles['brewStyle'],$entry_info_text_056);
+					if ($row_styles['brewStyleAtLimit'] == 1) $page_info8 .= sprintf("<span class=\"text-muted\">%s %s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i>",$style_number,$row_styles['brewStyle'],$entry_info_text_056);
 
 					else {
 
 						$page_info8 .= $style_number." ".$row_styles['brewStyle'];
 						if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
-						if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-orange ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
-						if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-purple ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
-						if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-teal ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
-						if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-warning-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
+						if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= "<span class=\"fa fa-sm fa-asterisk text-orange ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
+						if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= "<span class=\"fa fa-sm fa-asterisk text-purple ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
+						if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= "<span class=\"fa fa-sm fa-asterisk text-teal ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
+						if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= "<span class=\"fa fa-sm fa-asterisk text-warning-emphasis ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
 
 					}
 
@@ -551,16 +552,16 @@ if ($row_styles) {
 
 				$style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
 
-				if ($row_styles['brewStyleAtLimit'] == 1) $page_info8 .= sprintf("<span class=\"text-muted\">%s %s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i>",$style_number,$row_styles['brewStyle'],$entry_info_text_056);
+				if ($row_styles['brewStyleAtLimit'] == 1) $page_info8 .= sprintf("<span class=\"text-muted\">%s %s</span><i class=\"fa fa-times-circle text-danger-emphasis ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"></i>",$style_number,$row_styles['brewStyle'],$entry_info_text_056);
 
 				else {
 
 					$page_info8 .= $style_number." ".$row_styles['brewStyle'];
 					if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
-					if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-orange ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
-					if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-purple ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
-					if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-teal ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
-					if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= "<span class=\"fa fa-check-circle text-warning-emphasis ms-1 d-print-none\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
+					if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= "<span class=\"fa fa-sm fa-asterisk text-orange ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
+					if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= "<span class=\"fa fa-sm fa-asterisk text-purple ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
+					if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= "<span class=\"fa fa-sm fa-asterisk text-teal ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
+					if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= "<span class=\"fa fa-sm fa-asterisk text-warning-emphasis ms-1 d-print-none\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
 
 				}
 
@@ -665,7 +666,7 @@ if ($show_entries) {
 			$page_info11 .= "<p>";
 			// dropLocationName/dropLocationWebsite are purify()-only (no sterilize()) - need h()
 			// in href=/title=.
-			if (!empty($row_dropoff['dropLocationWebsite'])) $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($row_dropoff['dropLocationName'])." %s\"><strong>%s</strong></a><span class=\"fa fa-sm fa-external-link ms-2\"></span>",h($row_dropoff['dropLocationWebsite']),$label_website,$row_dropoff['dropLocationName']);
+			if (!empty($row_dropoff['dropLocationWebsite'])) $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"".h($row_dropoff['dropLocationName'])." %s\"><strong>%s</strong></a><span class=\"fa fa-sm fa-external-link ms-2\"></span>",h($row_dropoff['dropLocationWebsite']),$label_website,$row_dropoff['dropLocationName']);
 			else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 			$page_info11 .= "<br />";
 			
@@ -677,7 +678,7 @@ if ($show_entries) {
 
 			// dropLocation/dropLocationName are purify()-only (no sterilize()) - $location_link
 			// (built from dropLocation) and the title text need h(); the leading %s is text content.
-			$page_info11 .= sprintf("%s<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"><span class=\"fa fa-map-marker ms-2\"></span></a>",$row_dropoff['dropLocation'],h($location_link),h($entry_info_text_044." ".$row_dropoff['dropLocationName']));
+			$page_info11 .= sprintf("%s<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"><span class=\"fa fa-map-marker ms-2\"></span></a>",$row_dropoff['dropLocation'],h($location_link),h($entry_info_text_044." ".$row_dropoff['dropLocationName']));
 			}
 
 			else {
@@ -776,7 +777,7 @@ if (isset($_SESSION['contestAwardsLocName'])) {
 		$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
 
 		// contestAwardsLocName is purify()-only (no sterilize()) - needs h() in title="...".
-		$page_info14 .= sprintf("<br />%s<a class=\"hide-loader\" href=\"".$location_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".h($_SESSION['contestAwardsLocName'])." \" target=\"_blank\"><span class=\"fa fa-map-marker ms-2\"></span></a>",$_SESSION['contestAwardsLocation']);
+		$page_info14 .= sprintf("<br />%s<a class=\"hide-loader\" href=\"".$location_link."\" data-bs-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".h($_SESSION['contestAwardsLocName'])." \" target=\"_blank\"><span class=\"fa fa-map-marker ms-2\"></span></a>",$_SESSION['contestAwardsLocation']);
 
 	}
 

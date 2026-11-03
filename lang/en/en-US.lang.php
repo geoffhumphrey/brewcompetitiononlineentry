@@ -2216,7 +2216,7 @@ $login_text_029 = "If you cannot remember your user name, contact an administrat
 $login_text_030 = "Email provided is not valid. Please check it and try again.";
 
 $entry_info_text_056 = "Limit reached. No more entries accepted.";
-$entry_info_text_057 = "<i class=\"fa fa-times-circle text-danger-emphasis me-1\"></i>Indicates that the style's entry limit has been reached and no more entries of that style will be accepted.";
+$entry_info_text_057 = "<i class=\"fa fa-fw fa-times-circle text-danger-emphasis me-1\"></i>Indicates that the style's entry limit has been reached and no more entries of that style will be accepted.";
 
 $output_text_034 = "No BOS Judge points were be awarded since the total number of entries judged was less than the minimum threshold of 30 set by the BJCP.";
 
@@ -2263,6 +2263,15 @@ $default_page_text_025 = "Scoresheets are now available to view or download.";
 $label_scoresheets_available = "Scoresheets Available for Download";
 $label_mead_info_missing = "Missing %s - submitted before required";
 $label_mead_info_not_recorded = "Not recorded by entrant";
+
+/**
+ * ------------------------------------------
+ * Version 3.2.1 Additions
+ * ------------------------------------------
+ */
+
+$entry_info_text_059 = "<i class=\"fa fa-fw fa-asterisk me-1\"></i>Indicates that the style requires additional information at entry &ndash; hover over the asterisk for details.";
+
 
 /**
  * ------------------------------------------

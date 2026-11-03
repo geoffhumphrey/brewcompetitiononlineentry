@@ -749,7 +749,7 @@ if ($totalRows_table_assignments > 0) {
 	// Build mini-bos mismatch alert
 	if (!empty($mini_bos_mismatch)) {
 		$mini_bos_mismatch_alert .= "<div class=\"alert alert-info alert-dismissible\">";
-		$mini_bos_mismatch_alert .= sprintf("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><p><strong><i class=\"fa fa-info-circle\"></i> %s</strong></p><p>%s</p>",$label_please_note,$evaluation_info_105);
+		$mini_bos_mismatch_alert .= sprintf("<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button><p><strong><i class=\"fa fa-info-circle\"></i> %s</strong></p><p>%s</p>",$label_please_note,$evaluation_info_105);
 		$mini_bos_mismatch_alert .= "<ul>";
 		asort($mini_bos_mismatch);
 		foreach ($mini_bos_mismatch as $key => $value) {
@@ -860,11 +860,11 @@ if ((!empty($latest_submitted_accordion)) || (!empty($latest_updated_accordion))
 	echo "<div class=\"bcoem-admin-element\">";
 
 	if (!empty($latest_submitted_accordion)) {
-		echo "<a style=\"margin:0 10px 15px 0;\" class=\"btn btn-secondary\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-submitted\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i class=\"fa fa-clock me-2\"></i>20 Latest Submitted</a>";
+		echo "<a style=\"margin:0 10px 15px 0;\" class=\"btn btn-secondary\" role=\"button\" data-bs-toggle=\"collapse\" href=\"#latest-submitted\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i class=\"fa fa-clock me-2\"></i>20 Latest Submitted</a>";
 	}
 
 	if (!empty($latest_updated_accordion)) {
-		echo "<a style=\"margin:0 10px 15px 0;\" class=\"btn btn-secondary\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-updated\" aria-expanded=\"false\" aria-controls=\"latest-updated\"><i class=\"fa fa-clock me-2\"></i>20 Latest Updated</a>";
+		echo "<a style=\"margin:0 10px 15px 0;\" class=\"btn btn-secondary\" role=\"button\" data-bs-toggle=\"collapse\" href=\"#latest-updated\" aria-expanded=\"false\" aria-controls=\"latest-updated\"><i class=\"fa fa-clock me-2\"></i>20 Latest Updated</a>";
 	}
 
 }
