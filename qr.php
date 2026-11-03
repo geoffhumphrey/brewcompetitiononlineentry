@@ -7,6 +7,7 @@ if (strpos($view, "^") !== FALSE) $checked_in_numbers = explode("^",$view);
 elseif (strpos($view, "%5E") !== FALSE) $checked_in_numbers = explode("%5E",$view);
 require_once (CONFIG.'bootstrap.php');
 require_once (LIB.'common.lib.php');
+require_once (LIB.'output.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');
 
 if (SINGLE) $db_conn->where("id", $_POST['comp_id']);
@@ -42,8 +43,7 @@ $logged_in = FALSE;
 if (!isset($_SESSION['qrPasswordOK'])) $logged_in = TRUE;
 
 $header_output = $row_contest_info['contestName'];
-$theme = $css_url.$row_prefs['prefsTheme'].".min.css";
-$process_allowed = FALSE;
+$theme = $css_url.$row_prefs['prefsTheme']."-3.min.css";
 
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
@@ -114,14 +114,9 @@ if ($action == "password-check") {
 
 }
 
-if (isset($_SERVER['HTTP_REFERER'])) {
-	$referrer = parse_url($_SERVER['HTTP_REFERER']);
-	if (($referrer['host'] == $_SERVER['SERVER_NAME']) && (isset($_SESSION['qrPasswordOK']))) $process_allowed = TRUE;
-}
-
 $paid_checked = "";
 
-if (($go == "default") && ($id != "default") && ($process_allowed)) {
+if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']))) {
 
 	$checkin_redirect = $base_url."qr.php?action=default&go=success";
 	
@@ -247,34 +242,34 @@ $message = "";
 $alert_type = "alert-danger";
 
 if ($msg == "1") {
-	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s",$alert_text_080,$header_text_008);
+	$message .= sprintf("<i class=\"fa fa-lg fa-exclamation-circle me-2\"></i><strong>%s</strong> %s",$alert_text_080,$header_text_008);
 }
 
 if ($msg == "2") {
-	$message .= sprintf("<span class=\"fa fa-check-circle\"></span> <strong>%s</strong>",$alert_text_081);
+	$message .= sprintf("<i class=\"fa fa-lg fa-check-circle me-2\"></i><strong>%s</strong>",$alert_text_081);
 	$alert_type = "alert-success";
 }
 
 if ($msg == "3") {
-	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p><p>%s<p></strong>",$qr_text_002, $qr_text_003);
+	$message .= sprintf("<i class=\"fa fa-lg fa-check-circle me-2\"></i><strong>%s</strong><br>%s</strong>",$qr_text_002, $qr_text_003);
 	$alert_type = "alert-success";
 }
 
 if ($msg == "4") {
-	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong>",$qr_text_005);
+	$message .= sprintf("<i class=\"fa fa-lg fa-exclamation-circle me-2\"></i><strong>%s</strong>",$qr_text_005);
 }
 
 if ($msg == "5") {
-	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong>",$qr_text_006);
+	$message .= sprintf("<i class=\"fa fa-lg fa-exclamation-circle me-2\"></i><strong>%s</strong>",$qr_text_006);
 }
 
 if ($msg == "6") {
-	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p>",$qr_text_004);
+	$message .= sprintf("<i class=\"fa fa-lg fa-check-circle me-2\"></i><strong>%s</strong>",$qr_text_004);
 	$alert_type = "alert-success";
 }
 
 if ($msg == "7") {
-	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong>",$header_text_014);
+	$message .= sprintf("<i class=\"fa fa-lg fa-exclamation-circle me-2\"></i><strong>%s</strong>",$header_text_014);
 }
 
 if (isset($_SESSION['last_action'])) {
@@ -301,24 +296,22 @@ $_SESSION['last_action'] = time();
     <title><?php echo $row_contest_info['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
 
 	<!-- Load jQuery / http://jquery.com/ -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <!-- Load Bootstrap / http://www.getbootsrap.com -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
+    <!-- Load Bootstrap 5.X / https://getbootstrap.com/ -->
+    <!-- Load Ninja Bootstrap (REPLACES and EXTENDS Bootstrap's CSS) / https://bootstrap.ninja/ninjabootstrap/ -->
+    <link href="https://cdn.jsdelivr.net/gh/livecanvas-team/ninjabootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <script type="text/javascript">
+        window.FontAwesomeConfig = { autoReplaceSvg: false }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/v4-shims.min.css" />
 
+    <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
+    <link rel="stylesheet" type="text/css" href="<?php echo $css_common_url; ?>" />
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 
@@ -329,7 +322,6 @@ $_SESSION['last_action'] = time();
 	}
 
 	.container-signin {
-	  max-width: 400px;
 	  padding: 15px;
 	  margin: 0 auto;
 	}
@@ -363,71 +355,108 @@ $_SESSION['last_action'] = time();
 </style>
 </head>
 <body>
+<!-- LOADER -->
+<div id="loader-submit" class="d-print-none">
+    <div class="center">
+        <i class="fa fa-spinner fa-spin-pulse fa-spin-reverse fa-5x fa-fw mb-4"></i>
+        <p><strong><?php echo $label_working; ?>.<br><?php echo $output_text_030." ".$output_text_031; ?></strong></p>
+    </div>
+</div>
 <div class="container">
    	<?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');	?>
     <div class="container-signin">
     <?php if ($msg != "default") { ?>
     <!-- Alerts -->
-    <div class="alert <?php echo $alert_type; ?> alert-dismissible hidden-print fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <div class="alert <?php echo $alert_type; ?> alert-dismissible fade show" role="alert">
         <?php echo $message; ?>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <?php } ?>
     <div class="page-header clearfix">
     	<?php if (isset($_SESSION['qrPasswordOK'])) { ?>
-        <h3><?php echo $header_output.": ".$qr_text_007; ?></h3>
+        <h1 class="display-4 fw-semibold"><?php echo $header_output."<br><span class=\"text-secondary display-6\">".$qr_text_007; ?></span></h1>
         <?php } else { ?>
-        <h1><?php echo $header_output.": ".$qr_text_007; ?></h1>
+        <h1 class="display-4 fw-semibold"><?php echo $header_output."<br><span class=\"text-secondary display-6\">".$qr_text_007; ?></span></h1>
         <?php } ?>
     </div>
     <?php if (!isset($_SESSION['qrPasswordOK'])) { ?>
-	<div align="center" class="text-primary"><span class="fa fa-qrcode fa-5x"></span></div>
-	<p class="lead"><small><strong class=text-danger><?php echo $qr_text_017; ?></strong></small></p>
+	<p class="mt-3 fs-5"><strong class="text-primary"><?php echo $qr_text_017; ?></strong></p>
 	<p><?php echo $qr_text_018; ?></p>
-	<p style="margin-bottom: 15px;" class="container-signin-heading"><?php echo $qr_text_008; ?></p>
+	<p style="mb-3" class="container-signin-heading"><?php echo $qr_text_008; ?></p>
     <!-- Password Form if Not Signed In -->
-	<form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
-        <div class="form-group">
-            <label for="inputPassword" class="sr-only"><?php echo $label_password; ?></label>
+	<form class="needs-validation" novalidate name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
+        <div class="mt-3 mb-3">
+            <label for="inputPassword" class="visually-hidden"><strong><?php echo $label_password; ?><strong></label>
             <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="<?php echo $label_password; ?>" autofocus required>
-            <div class="help-block with-errors"></div>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_log_in; ?></button>
+        <button class="btn btn-lg btn-primary w-100 mt-3 mb-3" type="submit"><?php echo $label_log_in; ?></button>
    	</form>
-    <p style="margin-top: 15px;" class="well"><small><?php echo $qr_text_016; ?></small></p>
+    <p class="mt-3 fw-normal"><small><?php echo $qr_text_016; ?></small></p>
 	<?php } ?>
-    <?php if (isset($_SESSION['qrPasswordOK'])) { ?>
+    
+	<?php if (isset($_SESSION['qrPasswordOK'])) { ?>
 	<?php if (($id == "default") && ($action == "default")) { ?>
-    <p class="lead text-primary"><span class="fa fa-spinner fa-spin"></span> <strong><?php echo $qr_text_014; ?></strong></p>
-    <p class="alert alert-info"><span class="fa fa-info-circle"></span> <?php echo $qr_text_015; ?></p>
-    <p style="margin-top: 15px;" class="well"><small><?php echo $qr_text_016; ?></small></p>
+	<p class="mt-5 mb-5"><span class="spinner-border text-primary me-2" role="status" style="width: 1.5rem; height: 1.5rem;"></span><strong class="mt-5 mb-5 fs-4 text-primary"><?php echo $qr_text_014; ?></strong></p>
+    <p class="alert alert-info"><i class="fa fa-lg fa-info-circle me-2"></i><?php echo $qr_text_015; ?></p>
+    <p class="mt-5"><small><?php echo $qr_text_016; ?></small></p>
     <?php } ?>
+
     <?php if (($id != "default") && ($action == "default") && ($go != "success")) { ?>
-    <p class="lead text-primary"><strong><?php echo $qr_text_009; ?> <span class="badge"><?php echo sprintf("%06d",$id); ?></span></strong></p>
-    <p class="lead text-danger"><small><strong><?php echo $qr_text_010; ?></strong></small></p>
-    <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
+    <?php $table_info = get_flight_info($id); ?>
+    <p class="fs-4 mt-4 mb-4"><strong><?php echo $qr_text_009; ?> <span class="text-primary fs-3"><?php echo sprintf("%06d",$id); ?></span>.</strong></p>
+    <?php if ($table_info['response'] == "Assigned") { ?>
+    <div class="fs-4">
+		<div class="badge rounded-pill bg-warning text-dark p-3 fs-4 w-100">
+			<div class="mb-2"><i class="fa fa-lg fa-rectangle-list me-2"></i><?php echo h($label_assigned_to_table)." ".h($table_info['tableNumber']); ?></div>
+			<div class="fs-5 ms-2 fw-normal"><?php echo h($table_info['tableName']); ?></div>
+		</div>
+	</div>
+    <?php } ?>
+    <p class="fs-5 text-danger mt-4 mb-4"><strong><?php echo $qr_text_010; ?></strong></p>
+    <form name="form1" class="needs-validation" novalidate action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
     <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
-    	<div class="form-group">
-            <label for="inputJudgingNumber"><?php echo $label_judging_number; ?></label>
-            <input type="tel" pattern="[^^]+"  maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="<?php echo $qr_text_011; ?>" data-error="<?php echo $qr_text_013; ?>" autofocus>
-            <div class="help-block with-errors"></div>
-            <div class="help-block small"><?php echo $qr_text_012; ?></div>
+    	<div class="mb-3">
+            <label for="inputJudgingNumber"><strong><?php echo $label_judging_number; ?></strong></label>
+            <input type="tel" pattern="[^^]+" maxlength="6" minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control form-control-sm" placeholder="<?php echo $qr_text_011; ?>" autofocus>
+            <div class="form-text small"><?php echo $qr_text_012; ?></div>
         </div>
-        <div class="form-group">
-            <label for="inputBoxNumber"><?php echo $label_box_number; ?></label>
-            <input type="text" name="brewBoxNum" id="brewBoxNum" class="form-control" placeholder="">
-            <div class="help-block with-errors"></div>
+        <div class="mb-3">
+            <label for="inputBoxNumber"><strong><?php echo $label_box_number; ?></strong></label>
+            <input type="text" name="brewBoxNum" id="brewBoxNum" class="form-control form-control-sm" placeholder="">
         </div>
-        <div class="form-group">
-            <label for="inputPaid"><input type="checkbox" name="brewPaid" id="brewPaid" value="1" <?php echo $paid_checked; ?>> <?php echo $label_paid; ?></label>
+        <div class="mb-3">
+            <label for="inputPaid"><input class="form-check-input" type="checkbox" name="brewPaid" id="brewPaid" value="1" <?php echo $paid_checked; ?>> <strong><?php echo $label_paid; ?></strong></label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_check_in; ?></button>
+        <button class="btn btn-lg btn-primary w-100" type="submit"><i class="fa fa-lg fa-clipboard-check me-3"></i><?php echo $label_check_in; ?></button>
    	</form>
     <?php } ?>
     <?php } ?>
+	
     </div><!-- /container-signin -->
 </div> <!-- /container -->
+
+<!-- Required Info Missing Modal -->
+<div class="modal modal-lg fade" id="form-submit-button-disabled-msg-required" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="form-submit-button-disabled-msg-required-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="form-submit-button-disabled-msg-required-label"><?php echo $label_required_info; ?></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <?php echo sprintf("<p><strong>%s</strong></p><p>%s</p>",$form_required_fields_00,$form_required_fields_01); ?>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><?php echo $label_understand; ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 <!-- Load BCOE&M Custom JS -->
-<script src="<?php echo $js_app_url; ?>"></script>
+<script src="<?php echo $js_app_pub_url; ?>"></script>
+<script src="<?php echo $js_invoke_url; ?>"></script>
 </body>
 </html>

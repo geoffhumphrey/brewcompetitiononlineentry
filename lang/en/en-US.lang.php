@@ -967,15 +967,15 @@ $qr_text_000 = $alert_text_080;
 $qr_text_001 = $alert_text_081;
 
 // Begin translations here
-if ($carat_url_var) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+if ($carat_url_var) $qr_text_002 = sprintf("Entry number <span class=\"text-danger-emphasis\">%s</span> is checked in with <span class=\"text-danger-emphasis\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 $qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
 if ($carat_url_var) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
 if ($carat_url_var) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019); else $qr_text_005 = "";
 if ($carat_url_var) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
 $qr_text_007 = "QR Code Entry Check-In";
 $qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
-$qr_text_009 = "Assign a judging number and/or box number to entry";
-$qr_text_010 = "ONLY input a judging number if your competition is using judging number labels at sorting.";
+$qr_text_009 = "Check-in and optionally assign a judging number and/or box number to entry";
+$qr_text_010 = "ONLY input a judging number if your competition is using judging number labels at sorting. Otherwise, leave blank.";
 $qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
 $qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
 $qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
@@ -1871,7 +1871,7 @@ $brewer_entries_text_026 = "Judges scoresheets for this entry are in multiple fo
 
 // Update QR text
 $qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the browser or QR Code scanning app open.";
-$qr_text_015 = "Scan the next QR Code. Close this browser tab if you wish.<br><br>For newer operating systems, access your mobile device's camera app. For older operating systems, launch/go back to your the scanning app.";
+$qr_text_015 = "<strong>Scan the next QR Code. Close this browser tab if you wish.</strong> For newer operating systems, access your mobile device's camera app. For older operating systems, launch/go back to your the scanning app.";
 $qr_text_017 = "QR Code scanning is available natively on most modern mobile operating systems. Simply point your camera to the QR Code on a bottle label and follow the prompts. For older mobile operating systems, a QR Code scanning app is required to utilize this feature.";
 $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
 
