@@ -59,6 +59,13 @@ if ($totalRows_judging > 0) {
 
     foreach ($rows_judging as $row_judging) {
 
+        // $rows_judging (includes/db/judging_locations.db.php, $go=="default" branch) is
+        // unfiltered by judgingLocType - it includes type-2 "non-judging" locations. Every
+        // dropdown/link built in this loop (judges, stewards, table cards, pullsheets, judge
+        // inventory) is scoped to real judging sessions only, so skip type-2 rows here, the
+        // same way admin/judging_tables.admin.php's own loops over $rows_judging already do.
+        if (($row_judging['judgingLocType'] ?? 0) >= 2) continue;
+
         $judge_assign_links[$row_judging['judgingLocName']] = $base_url."includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
         $steward_assign_links[$row_judging['judgingLocName']] = $base_url."includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];                                     
         for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {

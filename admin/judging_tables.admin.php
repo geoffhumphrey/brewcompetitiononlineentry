@@ -1092,8 +1092,8 @@ if ($_SESSION['jPrefsTablePlanning'] != 1) { ?>
             <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table&amp;tb=view" title="View Assignments by Table">Judge Assignments By Table</a></li>
             <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name&amp;tb=view" title="View Assignments by Name">Steward Assignments By Last Name</a></li>
             <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table&amp;tb=view" title="View Assignments by Table">Steward Assignments By Table</a></li>
-            <li class="small"><a href="#" data-toggle="modal" data-target="#availJudgeModal">Judges Not Assigned to a Table</a></li>
-            <li class="small"><a href="#" data-toggle="modal" data-target="#availStewardModal">Stewards Not Assigned to a Table</a></li>
+            <li class="small"><a href="#" data-toggle="modal" data-target="#availJudgeModal">Judges Not Assigned by Session</a></li>
+            <li class="small"><a href="#" data-toggle="modal" data-target="#availStewardModal">Stewards Not Assigned by Session</a></li>
         </ul>
     </div>
 	<?php if ($action == "default") { ?>
@@ -1128,43 +1128,86 @@ if ($_SESSION['jPrefsTablePlanning'] != 1) { ?>
 <!-- Manage Tables -->
 <script>
  $(document).ready(function() {
-	$('#sortableJ').dataTable( {
-		"bPaginate" : false,
-		"sDom": 'rt',
-		"bStateSave" : false,
-		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']],
-		"bProcessing" : false,
-		"aoColumns": [
-			null,
-			null				]
-		} );
+	$('.sortable-J').each(function() {
+		$(this).dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				null,
+				null				]
+			} );
+	} );
 	} );
 $(document).ready(function() {
-	$('#sortableS').dataTable( {
-		"bPaginate" : false,
-		"sDom": 'rt',
-		"bStateSave" : false,
-		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']],
-		"bProcessing" : false,
-		"aoColumns": [
-			null,
-			null				]
-		} );
+	$('.sortable-S').each(function() {
+		$(this).dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				null,
+				null				]
+			} );
+	} );
 	} );
 </script>
+<?php
+// GitHub issue #1773 follow-up: break the Bull Pen down by judging session/location
+// (one collapsible panel per session) instead of a single competition-wide list, so
+// an admin can see in one click who still needs a table, and at which session.
+// $rows_judging is already the full judging_locations row set (fetched unconditionally
+// in includes/db/judging_locations.db.php), so no separate per-location lookup is needed -
+// judgingLocType < 2 excludes "non-judging" locations, matching this page's other loops.
+$avail_judge_modal_body = "";
+$avail_steward_modal_body = "";
+$avail_modal_location_count = 0;
+
+foreach ($rows_judging as $row_judging_avail_jt) {
+
+	if ((!$row_judging_avail_jt) || ($row_judging_avail_jt['judgingLocType'] >= 2)) continue;
+
+	$avail_modal_location_count++;
+	$avail_location_label = h($row_judging_avail_jt['judgingLocName']).", ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_avail_jt['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt");
+	$avail_panel_id = "availLoc".$row_judging_avail_jt['id'];
+
+	
+	$avail_judge_modal_body .= "<h4 class=\"panel-title\"><a data-toggle=\"collapse\" data-parent=\"#availJudgeAccordion\" href=\"#".$avail_panel_id."J\">".$avail_location_label."</a></h4>";
+	$avail_judge_modal_body .= "<div id=\"".$avail_panel_id."J\" class=\"collapse in\">";
+	$avail_judge_modal_body .= not_assigned("J", $row_judging_avail_jt['id']);
+	$avail_judge_modal_body .= "</div>";
+
+	$avail_steward_modal_body .= "<h4 class=\"panel-title\"><a data-toggle=\"collapse\" data-parent=\"#availStewardAccordion\" href=\"#".$avail_panel_id."S\">".$avail_location_label."</a></h4>";
+	$avail_steward_modal_body .= "<div id=\"".$avail_panel_id."S\" class=\"collapse in\">";
+	$avail_steward_modal_body .= not_assigned("S", $row_judging_avail_jt['id']);
+	$avail_steward_modal_body .= "</div>";
+
+}
+
+// Shouldn't happen inside a $judging_session-gated block, but fall back to the original
+// competition-wide list rather than an empty modal if no judging-type location exists.
+if ($avail_modal_location_count == 0) {
+	$avail_judge_modal_body = not_assigned("J");
+	$avail_steward_modal_body = not_assigned("S");
+}
+?>
 <!-- Available Judges Modal -->
 <!-- Modal -->
 <div class="modal fade" id="availJudgeModal" tabindex="-1" role="dialog" aria-labelledby="availJudgeModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="availJudgeModalLabel">Judges Not Assigned to a Table</h4>
+                <h4 class="modal-title" id="availJudgeModalLabel">Judges Not Assigned by Session</h4>
             </div>
             <div class="modal-body">
-                <?php echo not_assigned("J"); ?>
+                <div class="panel-group" id="availJudgeAccordion"><?php echo $avail_judge_modal_body; ?></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -1175,14 +1218,14 @@ $(document).ready(function() {
 <!-- Available Stewards Modal -->
 <!-- Modal -->
 <div class="modal fade" id="availStewardModal" tabindex="-1" role="dialog" aria-labelledby="availStewardModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="availStewardModalLabel">Stewards Not Assigned to a Table</h4>
+                <h4 class="modal-title" id="availStewardModalLabel">Stewards Not Assigned by Session</h4>
             </div>
             <div class="modal-body">
-                <?php echo not_assigned("S"); ?>
+                <div class="panel-group" id="availStewardAccordion"><?php echo $avail_steward_modal_body; ?></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -1460,12 +1503,12 @@ if (($manage_tables_default) && ($judging_session)) { ?>
             </div>
         <div class="btn-group" role="group" aria-label="availJudgeModal">
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#availJudgeModal">
-               Judges Not Assigned to Tables
+               Judges Not Assigned by Session
             </button>
         </div>
         <div class="btn-group" role="group" aria-label="availStewardModal">
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#availStewardModal">
-               Stewards Not Assigned to Tables
+               Stewards Not Assigned by Session
             </button>
         </div>
     </div>

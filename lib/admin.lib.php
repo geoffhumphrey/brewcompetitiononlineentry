@@ -1640,7 +1640,7 @@ function flight_entry_count($table_id,$flight) {
 
 }
 
-function not_assigned($method) {
+function not_assigned($method, $location = "default") {
 
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -1671,17 +1671,31 @@ function not_assigned($method) {
 
 			if ($method == "J") {
 
+				// GitHub issue #1773: when scoped to a specific session, the Bull Pen
+				// must only list judges who actually signed up as available for that
+				// session (brewerJudgeLocation, same "Y-<locationID>" format used by
+				// available_at_location()) - otherwise every judge in the system shows
+				// up as "available" for every session, including ones they never signed
+				// up for at all.
+				if ($location != "default") {
+					$info = judge_info($bid);
+					$assignment_info = explode("^",$info);
+					$judge_locations = isset($assignment_info[8]) ? explode(",",$assignment_info[8]) : array();
+					if (!in_array("Y-".$location,$judge_locations)) continue;
+				}
+
 				$db_conn->where('bid', $bid);
 				$db_conn->where('assignment', 'J');
+				if ($location != "default") $db_conn->where('assignLocation', $location);
 				$row_assignments = $db_conn->getOne($prefix."judging_assignments", "COUNT(*) as 'count'");
 
 				// If no assignment, get info and build output
 				if ($row_assignments['count'] == 0) {
-					
-					$info = judge_info($bid);
+
+					if (!isset($info)) $info = judge_info($bid);
 					$assignment_info = explode("^",$info);
 					$judge_rank = "";
-					
+
 					if (isset($assignment_info[5])) {
 						$judge_rank = $assignment_info[5];
 						$judge_rank_explode = explode(",",$assignment_info[5]);
@@ -1691,30 +1705,44 @@ function not_assigned($method) {
 					if (empty($judge_rank)) $judge_rank_display = "Non-BJCP";
 					if (!empty($assignment_info[1])) $assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
 				}
+
+				unset($info);
 
 			}
 
 			if ($method == "S") {
 
+				// GitHub issue #1773: same session-scoped availability check as above,
+				// using brewerStewardLocation for stewards.
+				if ($location != "default") {
+					$info = judge_info($bid);
+					$assignment_info = explode("^",$info);
+					$steward_locations = isset($assignment_info[7]) ? explode(",",$assignment_info[7]) : array();
+					if (!in_array("Y-".$location,$steward_locations)) continue;
+				}
+
 				$db_conn->where('bid', $bid);
 				$db_conn->where('assignment', 'S');
+				if ($location != "default") $db_conn->where('assignLocation', $location);
 				$row_assignments = $db_conn->getOne($prefix."judging_assignments", "COUNT(*) as 'count'");
 
 				// If no assignment, get info and build output
 				if ($row_assignments['count'] == 0) {
-					
-					$info = judge_info($bid);
+
+					if (!isset($info)) $info = judge_info($bid);
 					$assignment_info = explode("^",$info);
-					
+
 					if (isset($assignment_info[5])) {
 						$judge_rank = $assignment_info[5];
 						$judge_rank_explode = explode(",",$assignment_info[5]);
 						$judge_rank_display = $judge_rank_explode[0];
 					}
-					
+
 					if (empty($judge_rank)) $judge_rank_display = "Non-BJCP";
 					if (!empty($assignment_info[1])) $assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
 				}
+
+				unset($info);
 
 			}
 
@@ -1722,9 +1750,14 @@ function not_assigned($method) {
 
 		// Return the modal body text
 		if (!empty($assignment)) {
-			
-			$return .= "<p>These ".$human_readable."s have not been assigned to any table.</p>";
-			$return .= "<table class=\"table table-responsive table-striped table-bordered table-condensed\" id=\"sortable".$method."\">";
+
+			if ($location != "default") $return .= "<p>These ".$human_readable."s have not been assigned to a table for this session.</p>";
+			else $return .= "<p>These ".$human_readable."s have not been assigned to any table.</p>";
+			// Table id is location-suffixed (and carries a location-agnostic "sortable-J"/
+			// "sortable-S" class) since the admin Bull Pen now renders one of these tables
+			// per judging session on the same page - a bare "sortableJ"/"sortableS" id would
+			// collide across sessions and break the page's by-id DataTable init.
+			$return .= "<table class=\"table table-responsive table-striped table-bordered table-condensed sortable-".$method."\" id=\"sortable".$method.(($location != "default") ? "-".$location : "")."\">";
 			$return .= "<thead>";
 			$return .= "<tr>";
 			$return .= "<th>Name</th>";
@@ -1735,10 +1768,13 @@ function not_assigned($method) {
 			$return .= $assignment;
 			$return .= "</tbody>";
 			$return .= "</table>";
-			
+
 		}
 
-		else $return .= "<p>All available ".$human_readable."s have been assigned to tables.</p>";
+		else {
+			if ($location != "default") $return .= "<p>All available ".$human_readable."s for this session have been assigned to tables.</p>";
+			else $return .= "<p>All available ".$human_readable."s have been assigned to tables.</p>";
+		}
 
 	}
 

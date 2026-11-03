@@ -84,16 +84,11 @@ http://brewingcompetitions.com/upgrade-instructions
 Competition Organization with BCOE&M:
 http://brewingcompetitions.com/comp-org
 
-Load Libraries Locally (No CDNs):
-http://brewingcompetitions.com/local-load
-
 Starting with version 2.0.0, online documentation/help is available within the
 application. Select the question mark icon on the top navigation bar when available.
 In-app help will be augmented and expanded in future releases.
 
 Other info can be found on the GitHub repository page.
-
-Pre-2.0.0 help is available at http://help.brewingcompetitions.com.
 
 ***********************************************************************************
 About BCOE&M

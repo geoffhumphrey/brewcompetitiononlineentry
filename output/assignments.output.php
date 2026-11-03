@@ -189,8 +189,26 @@ if ($filter == "staff") {
     </table>
     <div style="page-break-after: always;"></div>
     <h1>Bull Pen</h1>
-    <?php echo not_assigned($filter); ?>
-    <?php } else { 
+    <?php echo not_assigned($filter, $location); ?>
+    <script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('.sortable-J, .sortable-S').each(function() {
+			$(this).dataTable({
+				"bPaginate" : false,
+				"sDom": 'rt',
+				"bStateSave" : false,
+				"bLengthChange" : false,
+				"aaSorting": [[0,'asc']],
+				"bProcessing" : false,
+				"aoColumns": [
+					{ "asSorting": [  ] },
+					{ "asSorting": [  ] }
+					]
+				});
+		});
+	 });
+    </script>
+    <?php } else {
     	echo sprintf("<p class=\"lead\">%s</p>",$output_text_011); 
     	}
     } // end else ?>
