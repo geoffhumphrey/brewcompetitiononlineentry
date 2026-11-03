@@ -5347,7 +5347,21 @@ if (!$row_flight_entry_unique) {
 	}
 	elseif ($db_conn->count > 0) $v3100_update .= "<li>Resolved ".$db_conn->count." duplicate judging table assignment record(s) that could have caused an entry to show an incorrect table on some reports.</li>";
 
-	$sql = sprintf("ALTER TABLE `%s` ADD UNIQUE KEY `flightEntryID` (`flightEntryID`);",$prefix."judging_flights");
+	/**
+	 * GitHub issue #1765: flightEntryID is a mediumtext column (it only ever holds one
+	 * sterilized numeric entry id - see process_judging_flights.inc.php - but was never
+	 * typed as an int), and MySQL/MariaDB has always required an explicit key length when
+	 * indexing a BLOB/TEXT column. This ALTER has been missing one since it was introduced,
+	 * so it has never actually succeeded on any install - on PHP < 8.1 it just failed
+	 * quietly (mysqli's old default report mode swallows the error into getLastErrno(),
+	 * which is what the "could not be strengthened" message below was for), so the
+	 * duplicate-prevention constraint this block exists to add has silently never been
+	 * in place anywhere. PHP 8.1 changed mysqli's default report mode to throw on any
+	 * SQL error instead, turning that same always-failing query into an uncaught
+	 * mysqli_sql_exception that crashes every page load. 20 characters comfortably covers
+	 * any real entry id with room to spare, well under any MySQL/MariaDB key-length limit.
+	 */
+	$sql = sprintf("ALTER TABLE `%s` ADD UNIQUE KEY `flightEntryID` (`flightEntryID`(20));",$prefix."judging_flights");
 	$result = $db_conn->rawQuery($sql);
 	if ($db_conn->getLastErrno() === 0) $v3100_update .= "<li>Strengthened judging table assignments to prevent an entry from ever being recorded on two tables at once.</li>";
 	else {

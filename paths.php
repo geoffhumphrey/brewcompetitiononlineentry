@@ -264,6 +264,21 @@ if (session_status() == PHP_SESSION_NONE) {
  * Load DB connection and configuration files.
  */
 
+/**
+ * GitHub issue #1765: PHP 8.1 changed mysqli's default report mode from
+ * MYSQLI_REPORT_OFF to MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT, so a query
+ * error now throws an uncaught mysqli_sql_exception instead of just returning
+ * false. This codebase (MysqliDb.php and every caller) was written entirely
+ * against the old behavior - every query error is checked afterward via
+ * $db_conn->getLastErrno()/getLastError(), never caught as an exception - so
+ * under PHP 8.1+ any SQL error that used to degrade gracefully (and get
+ * reported through that mechanism) now crashes the entire request instead.
+ * Restore the pre-8.1 default globally, before the connection below is even
+ * opened, rather than hunting down every call site one at a time as each is
+ * discovered.
+ */
+mysqli_report(MYSQLI_REPORT_OFF);
+
 require_once (CONFIG.'config.php');
 
 /**
