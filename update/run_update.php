@@ -80,7 +80,8 @@ $versions = array(
 	"3.0.3.0" => 34,
 	"3.0.4.0" => 35,
 	"3.1.0.0" => 36,
-	"3.2.0.0" => 37
+	"3.2.0.0" => 37,
+	"3.2.1.0" => 38
 );
 
 $pre_update_version_index = $versions[$row_pv['version']];
@@ -5907,6 +5908,44 @@ if (!$setup_running) $v3200_update .= "</ul>";
 
 $this_update_version_block = $versions['3.2.0.0'];
 if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3200)) $output_run_update .= $v3200_update;
+
+/**
+ * ----------------------------------------------- 3.2.1 ----------------------------------------------
+ * Bug-fix release. No new schema in this version - every item below is an application-code fix or a
+ * small UI enhancement; nothing here needs a migration.
+ */
+
+$error_count_before_v3210 = $error_count;
+$v3210_update = "";
+
+if ((!$setup_running) && (!$update_running)) {
+	$v3210_update .= "<p>";
+	$v3210_update .= "<strong>Version 3.2.1.0 Updates</strong>";
+	$v3210_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$v3210_update .= "<h4>Version 3.2.1</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $v3210_update .= "<ul>";
+
+$v3210_update .= "<li>Fixed the drop-off location info icon on the public Entry Info page being trapped behind its own modal backdrop, which left the page frozen until it was refreshed.</li>";
+$v3210_update .= "<li>Fixed the Admin &gt; Participants assignment modal showing raw, unclickable HTML instead of working links.</li>";
+$v3210_update .= "<li>Fixed the Entry Info page's drop-off map-marker link showing for signed-out visitors even though it led nowhere.</li>";
+$v3210_update .= "<li>Fixed judges being unable to be assigned to a table under the BA/BA2026 style sets, which could silently route entries to the wrong table.</li>";
+$v3210_update .= "<li>Fixed the printed bottle/can label format silently reverting to \"Standard\" after certain update deployments.</li>";
+$v3210_update .= "<li>Added the ability for an admin to batch-reprint bottle labels for one or more selected participants at once, from Admin &gt; Entries.</li>";
+$v3210_update .= "<li>Fixed a Best of Show management issue that could hide a table's 1st-place entry from Manage BoS when that table was scored entirely through electronic scoresheets.</li>";
+$v3210_update .= "<li>Fixed required entry information being silently reverted to a previous value when editing certain BJCP 2021/2025/2026 and AABC 2022/2025 styles, plus a related issue where an admin editing another entrant's entry could have that entry reassigned to the admin's own account.</li>";
+$v3210_update .= "<li>Added a judging-table indicator to the QR check-in scan screen, so sorters no longer mistake a style/category code for a table number.</li>";
+$v3210_update .= "<li>Replaced the checkmark icon on the Entry Info page's accepted styles list (used to flag styles needing additional entry information) with an asterisk, and added a plainly visible explanation above the list instead of relying solely on a hover tooltip, which could easily be missed.</li>";
+
+if (!$setup_running) $v3210_update .= "</ul>";
+
+$this_update_version_block = $versions['3.2.1.0'];
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3210)) $output_run_update .= $v3210_update;
 
 /**
  * ---------------------------------------------------------------------------------------------------
