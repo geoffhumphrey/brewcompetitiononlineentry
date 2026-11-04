@@ -5941,6 +5941,8 @@ $v3210_update .= "<li>Fixed a Best of Show management issue that could hide a ta
 $v3210_update .= "<li>Fixed required entry information being silently reverted to a previous value when editing certain BJCP 2021/2025/2026 and AABC 2022/2025 styles, plus a related issue where an admin editing another entrant's entry could have that entry reassigned to the admin's own account.</li>";
 $v3210_update .= "<li>Added a judging-table indicator to the QR check-in scan screen, so sorters no longer mistake a style/category code for a table number.</li>";
 $v3210_update .= "<li>Replaced the checkmark icon on the Entry Info page's accepted styles list (used to flag styles needing additional entry information) with an asterisk, and added a plainly visible explanation above the list instead of relying solely on a hover tooltip, which could easily be missed.</li>";
+$v3210_update .= "<li>Fixed the Bull Pen report incorrectly showing every judge/steward as available for every judging session regardless of what they signed up for, and redesigned the Admin &gt; Judging Tables Bull Pen to break unassigned judges/stewards down by session instead of one competition-wide list.</li>";
+$v3210_update .= "<li>Fixed Administration Dashboard dropdowns for judges, stewards, table cards, sign-in sheets, and pullsheets listing non-judging locations alongside real judging sessions.</li>";
 
 if (!$setup_running) $v3210_update .= "</ul>";
 
