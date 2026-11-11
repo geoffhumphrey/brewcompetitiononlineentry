@@ -362,7 +362,7 @@ $(document).ready(function() {
 		null,
 		null,
 		null,
-		<?php if ((!empty($print_bottle_labels)) && (!$judging_started) && ($registration_open < 2)) { ?>{ "asSorting": [  ] },<?php } ?>
+		<?php if ((!empty($print_bottle_labels)) && (!$judging_started)) { ?>{ "asSorting": [  ] },<?php } ?>
 		<?php } ?>
 		<?php if ($show_scores) { ?>
 		null,
