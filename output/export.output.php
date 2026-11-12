@@ -3397,7 +3397,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $output .= "<OrgReport>\n";
                     $output .= "\t<CompData>\n";
                     $output .= "\t\t<CompID>".$_SESSION['contestID']."</CompID>\n";
-                    $output .= "\t\t<CompName>".h(convert_to_entities($_SESSION['contestName']))."</CompName>\n";
+                    $output .= "\t\t<CompName>".x(convert_to_entities($_SESSION['contestName']))."</CompName>\n";
                     $output .= "\t\t<CompDate>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], max($dates), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
                     $output .= "\t\t<CompEntries>".$total_entries_received."</CompEntries>\n";
                     $output .= "\t\t<CompDays>".$total_days."</CompDays>\n";
@@ -3429,7 +3429,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         if ((!empty($row_org['brewerFirstName'])) && (!empty($row_org['brewerLastName'])) && (!empty($organ_bjcp_id))) {
                                 
                             $output .= "\t\t<JudgeData>\n";
-                            $output .= "\t\t\t<JudgeName>".h(convert_to_entities($row_org['brewerFirstName']))." ".h(convert_to_entities($row_org['brewerLastName']))."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeName>".x(convert_to_entities($row_org['brewerFirstName']))." ".x(convert_to_entities($row_org['brewerLastName']))."</JudgeName>\n";
                             $output .= "\t\t\t<JudgeID>".$organ_bjcp_id."</JudgeID>\n";
                             $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
                             $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
@@ -3464,7 +3464,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     
                                     if (($judge_info['0'] != "") && ($judge_info['1'] != "")) {
                                         
-                                        $judge_name = h(convert_to_entities($judge_info['0']))." ".h(convert_to_entities($judge_info['1']));
+                                        $judge_name = x(convert_to_entities($judge_info['0']))." ".x(convert_to_entities($judge_info['1']));
                                         $output .= "\t\t<JudgeData>\n";
                                         $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                         $output .= "\t\t\t<JudgeID>".$judge_bjcp_id."</JudgeID>\n";
@@ -3505,7 +3505,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                         if (!$judge_organizer) {
 
-                                            $judge_name = h(convert_to_entities($judge_info['0']))." ".h(convert_to_entities($judge_info['1']));
+                                            $judge_name = x(convert_to_entities($judge_info['0']))." ".x(convert_to_entities($judge_info['1']));
                                             $output .= "\t\t<JudgeData>\n";
                                             $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                             $output .= "\t\t\t<JudgeID>".$judge_bjcp_id."</JudgeID>\n";
@@ -3548,7 +3548,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                         if (!$steward_organizer) {
 
-                                            $steward_name = h(convert_to_entities($steward_info['0']))." ".h(convert_to_entities($steward_info['1']));
+                                            $steward_name = x(convert_to_entities($steward_info['0']))." ".x(convert_to_entities($steward_info['1']));
                                             $output .= "\t\t<JudgeData>\n";
                                             $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
                                             $output .= "\t\t\t<JudgeID>".$steward_bjcp_id."</JudgeID>\n";
@@ -3583,7 +3583,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                 
                                 $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
                                     
-                                $staff_name = h(convert_to_entities($staff_info['0']))." ".h(convert_to_entities($staff_info['1']));
+                                $staff_name = x(convert_to_entities($staff_info['0']))." ".x(convert_to_entities($staff_info['1']));
                                 $st_running_total += $staff_points;
                                 
                                 if ((!in_array($uid,$j)) && (!in_array($uid,$s))) {
@@ -3654,7 +3654,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     if (($totalRows_organizer > 0) && ((!empty($row_org['brewerFirstName'])) && (!empty($row_org['brewerLastName'])) && (empty($organ_bjcp_id)))) {
                                 
                         $output .= "\t\t<JudgeData>\n";
-                        $output .= "\t\t\t<JudgeName>".h(convert_to_entities($row_org['brewerFirstName']))." ".h(convert_to_entities($row_org['brewerLastName']))."</JudgeName>\n";
+                        $output .= "\t\t\t<JudgeName>".x(convert_to_entities($row_org['brewerFirstName']))." ".x(convert_to_entities($row_org['brewerLastName']))."</JudgeName>\n";
                         $output .= "\t\t\t<JudgeID></JudgeID>\n";
                         $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
                         $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
@@ -3686,7 +3686,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     
                                     if (($judge_info['0'] != "") && ($judge_info['1'] != "")) {
                                         
-                                        $judge_name = h(convert_to_entities($judge_info['0']))." ".h(convert_to_entities($judge_info['1']));
+                                        $judge_name = x(convert_to_entities($judge_info['0']))." ".x(convert_to_entities($judge_info['1']));
                                         $output .= "\t\t<JudgeData>\n";
                                         $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                         $output .= "\t\t\t<JudgeID></JudgeID>\n";
@@ -3724,7 +3724,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                         if (!$judge_organizer) {
 
-                                            $judge_name = h(convert_to_entities($judge_info['0']))." ".h(convert_to_entities($judge_info['1']));
+                                            $judge_name = x(convert_to_entities($judge_info['0']))." ".x(convert_to_entities($judge_info['1']));
                                             $output .= "\t\t<JudgeData>\n";
                                             $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                             $output .= "\t\t\t<JudgeID></JudgeID>\n";
@@ -3765,7 +3765,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                         if (!$steward_organizer) {
 
-                                            $steward_name = h(convert_to_entities($steward_info['0']))." ".h(convert_to_entities($steward_info['1']));
+                                            $steward_name = x(convert_to_entities($steward_info['0']))." ".x(convert_to_entities($steward_info['1']));
                                             $output .= "\t\t<JudgeData>\n";
                                             $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
                                             $output .= "\t\t\t<JudgeID></JudgeID>\n";
@@ -3798,7 +3798,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             
                             if ((($staff_info['0'] != "") && ($staff_info['1'] != "")) && (!$staff_organizer)) {
                                     
-                                $staff_name = h(convert_to_entities($staff_info['0']))." ".h(convert_to_entities($staff_info['1']));
+                                $staff_name = x(convert_to_entities($staff_info['0']))." ".x(convert_to_entities($staff_info['1']));
                                 $st_running_total += $staff_points;
                                 
                                 if ((!in_array($uid,$j)) && (!in_array($uid,$s))) {
@@ -3865,11 +3865,11 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     // BOS Reporting
                     $output .= "\t<Comments>\n";
-                    $output .= "\t\tGenerated by BCOEM version ".$current_version_display."\n";
-                    $output .= "\t\tInstallation URL: ".$base_url."\n";
-                    $output .= "\t\tSubmitter Name: ".$_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName']."\n";
-                    $output .= "\t\tSubmitter Email: ".$_SESSION['user_name']."\n";
-                    if (!empty($bos_alert)) $output .= "\t\tNote: ".$bos_alert."\n";
+                    $output .= "\t\tGenerated by BCOEM version ".x($current_version_display)."\n";
+                    $output .= "\t\tInstallation URL: ".x($base_url)."\n";
+                    $output .= "\t\tSubmitter Name: ".x(convert_to_entities($_SESSION['brewerFirstName']))." ".x(convert_to_entities($_SESSION['brewerLastName']))."\n";
+                    $output .= "\t\tSubmitter Email: ".x($_SESSION['user_name'])."\n";
+                    if (!empty($bos_alert)) $output .= "\t\tNote: ".x($bos_alert)."\n";
                     $output .= "\t</Comments>\n";
                     $output .= "\t<SubmissionDate>".date('l j F Y h:i A')."</SubmissionDate>\n";
                     $output .= "</OrgReport>";

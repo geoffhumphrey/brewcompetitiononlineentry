@@ -98,12 +98,12 @@ if ((!isset($_SESSION['club_array'])) || (!empty($_SESSION['club_array']))) {
     // If either fail, fetch js list of clubs
     if ((!file_exists($cache_file) || (time() - filemtime($cache_file)) > $cache_ttl)) {
 
-        // Primary Clubs List Source: jsDelivr
-        $json = fetch_clubs_js('https://cdn.jsdelivr.net/gh/geoffhumphrey/homebrew-clubs-list@main/clubs.js');
+        // Primary Clubs List Source: GitHub Pages
+        $json = fetch_clubs_js(CLUBS_LIST_URL_PRIMARY);
 
-        // Secondary Clubs List Source: GitHub Pages
+        // Secondary Clubs List Source: jsDelivr
         if ($json === false) {
-            $json = fetch_clubs_js('https://geoffhumphrey.github.io/homebrew-clubs-list/clubs.js');
+            $json = fetch_clubs_js(CLUBS_LIST_URL_SECONDARY);
         }
 
         // Tertiary Clubs List Source: local file

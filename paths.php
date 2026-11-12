@@ -86,6 +86,18 @@ define('LOGIN_LOCKOUT_WINDOW_SECONDS', 600); // 10 minutes
 define('BCOEM_HOSTED_BASE_URL', 'https://brewingcompetitions.com/');
 
 /**
+ * Homebrew clubs list sources, fetched by fetch_clubs_js() (includes/constants.inc.php).
+ * Centralized here for the same reason as BCOEM_HOSTED_BASE_URL above - a hardcoded
+ * external URL used in an outbound fetch is the pattern that got site/bootstrap.php
+ * false-flagged, so each literal exists in exactly one place rather than being
+ * repeated inline at each call site.
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1609
+ */
+
+define('CLUBS_LIST_URL_PRIMARY', 'https://geoffhumphrey.github.io/homebrew-clubs-list/clubs.js');
+define('CLUBS_LIST_URL_SECONDARY', 'https://cdn.jsdelivr.net/gh/geoffhumphrey/homebrew-clubs-list@main/clubs.js');
+
+/**
  * Enable to following to put your installation into
  * "mainenance mode" - bypasses the default index.php script
  * and displays the maintenance.php file to alert visitors.

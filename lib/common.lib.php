@@ -33,6 +33,18 @@ function h($value) {
 }
 
 /**
+ * Escape a value for safe output in an XML text node (output/export.output.php's
+ * BJCP XML export - the only XML this codebase generates). Unlike h(), this
+ * deliberately leaves ' and " untouched: this document has no attributes to
+ * protect, and ENT_QUOTES-style encoding (e.g. turning ' into &#039;) is what
+ * previously left visible literal entities in names like "Ed O&#039;Neill"
+ * instead of "Ed O'Neill" for consumers that don't decode them back.
+ */
+function x($value) {
+	return htmlspecialchars((string) $value, ENT_XML1, 'UTF-8');
+}
+
+/**
  * Canonical normalization for an email address used as a login username.
  * Must produce byte-identical output everywhere a username is captured,
  * stored, or looked up (registration, login, password reset, archive/reset,

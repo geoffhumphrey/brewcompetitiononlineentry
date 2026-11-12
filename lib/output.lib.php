@@ -321,15 +321,9 @@ function total_points($total_entries,$method) {
 			if (($total_entries >= 300) && ($total_entries <= 399)) $points = 6.0;
 			if (($total_entries >= 400) && ($total_entries <= 499)) $points = 7.0;
 			if (($total_entries >= 500) && ($total_entries <= 599)) $points = 8.0;
-			if ($total_entries > 599) {
-				$total = round_down_to_hundred($total_entries)/100;
-				//$points = $total;
-				if ($total >= 2) {
-					for($i=1; $i<$total+1; $i++) {
-						$points = $i+3;
-					}
-				}
-			}
+			// "+1 staff point for each additional 100 entries" beyond the 500-599
+			// bracket's 8, continuing Table 1's cadence (e.g. 600-699 => 9, 700-799 => 10).
+			if ($total_entries > 599) $points = (round_down_to_hundred($total_entries) / 100) + 3;
 		break;
 
 		case "Judge":
@@ -451,8 +445,13 @@ function judge_points($user_id,$judge_max_points) {
 	if ($points > $judge_max_points) $points = $judge_max_points;
 	else $points = $points;
 
-	// If points are below the 1.0 minimum, award minimum
-	if ($points < 1) $points = 1;
+	// If points are below the 1.0 minimum, award minimum - but only to a judge who
+	// actually judged at least one session. Without the $days_judged guard, a judge
+	// with zero table assignments (empty $days_judged, $points left at 0) was floored
+	// up to 1.0 here, which is what let every "available" judge appear in the BJCP
+	// Points report regardless of whether they ever judged.
+	// @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1776
+	if (($points < 1) && (!empty($days_judged))) $points = 1;
 	else $points = $points;
 
 	return number_format($points,1);

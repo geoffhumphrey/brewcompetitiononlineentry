@@ -238,7 +238,7 @@ if ($msg != "default") {
 
   <?php if ($section == "admin") { ?>
 
-    <?php if (($go == "default") && ($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']) && (time() < ($_SESSION['prefsWinnerDelay'] + 604800))) && (empty($_SESSION['dismissed_admin_alerts']['results-published']))) { ?>
+    <?php if (($go == "default") && ($judging_past == 0) && ($_SESSION['userLevel'] == 0) && ($_SESSION['prefsDisplayWinners'] == "Y") && ((isset($_SESSION['prefsWinnerDelay'])) && (time() >= $_SESSION['prefsWinnerDelay']) && (time() < ($_SESSION['prefsWinnerDelay'] + 604800))) && (empty($_SESSION['dismissed_admin_alerts']['results-published']))) { ?>
 
       <div id="alert-results-published" data-alert-key="results-published" class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
