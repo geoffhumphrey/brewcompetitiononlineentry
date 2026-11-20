@@ -246,6 +246,26 @@ a.anchor-offset {
 
 /* ---------- Expanded Color Classes ---------- */
 
+/* Team Blue */
+.text-team-blue {
+    color: #0D47A1;
+}
+
+/* Team Crimson */
+.text-team-crimson {
+    color: #B71C1C;
+}
+
+/* Team Teal */
+.text-team-teal {
+    color: #00796B;
+}
+
+/* Team Magenta */
+.text-team-magenta {
+    color: #D6336C;
+}
+
 /* Forest Green */
 .bg-forest-green {
     background-color: #a6d0a6;

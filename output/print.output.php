@@ -47,6 +47,16 @@ else {
 
 }
 
+// This template loads Bootstrap 3 (below), not the admin's Bootstrap 5 build -
+// $css_common_url (set in site/bootstrap.php) may resolve to the BS5-targeted
+// common-3.min.css depending on $section, so build the BS3-matching
+// common.min.css URL directly here instead of reusing it.
+$css_common_url_print = $css_url."common.min.css";
+if ((DEBUG) || (TESTING)) {
+	$css_common_url_print = str_replace(".min", "", $css_common_url_print);
+	$css_common_url_print .= "?t=".time();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,6 +70,7 @@ else {
     <!-- Homepage URLs: http://www.getbootsrap.com and https://jquery.com -->
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>print.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $css_common_url_print; ?>">
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>

@@ -228,7 +228,7 @@ if ($totalRows_brewer > 0) {
 		$db_conn->where('bid', $participant_user_ids_p, 'in');
 		$db_conn->where('assignment', array('J','S'), 'in');
 		$db_conn->orderBy('assignTable', 'ASC');
-		$rows_assignments_p = $db_conn->get($prefix."judging_assignments", null, "bid,assignment,assignTable,assignRoles,assignFlight,assignRound");
+		$rows_assignments_p = $db_conn->get($prefix."judging_assignments", null, "bid,assignment,assignTable,assignRoles,assignFlight,assignRound,assignTeam");
 		foreach ($rows_assignments_p as $row_assignment_p) {
 			$judging_assignments_by_user_p[$row_assignment_p['bid'].'|'.$row_assignment_p['assignment']][] = $row_assignment_p;
 		}
@@ -304,7 +304,10 @@ if ($totalRows_brewer > 0) {
 			}
 			if ((!empty($location)) && (isset($location[2]))) {
 				if ((isset($table_info[0])) && (isset($table_info[1])) && (isset($table_info[3]))) {
-					if ($method == "J") $output .= $table_info[0]." - <a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[1]."</a>,&nbsp;";
+					if ($method == "J") {
+						$team_suffix_p = (!empty($row_table_assignments['assignTeam'])) ? " (Team ".h($row_table_assignments['assignTeam']).")" : "";
+						$output .= $table_info[0]." - <a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[1]."</a>".$team_suffix_p.",&nbsp;";
+					}
 					if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
 				}
 			}

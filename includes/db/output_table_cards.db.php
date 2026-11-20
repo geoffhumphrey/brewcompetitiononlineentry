@@ -4,6 +4,9 @@ else $id_table = $id;
 $db_conn->where('assignTable', $id_table);
 if ($round2 != "default") $db_conn->where('assignRound', $round2);
 $db_conn->orderBy('assignRound', 'ASC');
+// Group teammates together within a round, same-team judges print adjacent
+// rather than relying solely on the client-side DataTables name sort.
+$db_conn->orderBy('CAST(assignTeam AS UNSIGNED)', 'ASC');
 $db_conn->orderBy('assignFlight', 'ASC');
 $rows_assignments = $db_conn->get($prefix."judging_assignments");
 $row_assignments = ($rows_assignments && count($rows_assignments) > 0) ? $rows_assignments[0] : null;

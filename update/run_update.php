@@ -81,7 +81,8 @@ $versions = array(
 	"3.0.4.0" => 35,
 	"3.1.0.0" => 36,
 	"3.2.0.0" => 37,
-	"3.2.1.0" => 38
+	"3.2.1.0" => 38,
+	"3.3.0.0" => 39
 );
 
 $pre_update_version_index = $versions[$row_pv['version']];
@@ -5948,6 +5949,45 @@ if (!$setup_running) $v3210_update .= "</ul>";
 
 $this_update_version_block = $versions['3.2.1.0'];
 if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3210)) $output_run_update .= $v3210_update;
+
+/**
+ * ----------------------------------------------- 3.3.0 ----------------------------------------------
+ * Judging Teams: lets an admin group the judges assigned to a table into teams (A-F) so judges can
+ * see who their teammate(s) are, and so Table Cards/the Judge Assignments Report can show the grouping.
+ */
+
+$error_count_before_v3300 = $error_count;
+$v3300_update = "";
+
+if ((!$setup_running) && (!$update_running)) {
+	$v3300_update .= "<p>";
+	$v3300_update .= "<strong>Version 3.3.0.0 Updates</strong>";
+	$v3300_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$v3300_update .= "<h4>Version 3.3.0</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $v3300_update .= "<ul>";
+
+if (!check_update("assignTeam", $prefix."judging_assignments")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `assignTeam` CHAR(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."judging_assignments");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3300_update .= "<li>Added the ability for an admin to group judges assigned to the same table into teams (Admin &gt; Judging Tables), surfaced to judges on their own dashboard, assignment email, Table Cards, and the Judge Assignments Report.</li>";
+	else {
+		$v3300_update .= "<li class=\"text-danger\">Judging Teams column NOT added to the judging_assignments table.</li>";
+		$error_count++;
+	}
+
+}
+
+if (!$setup_running) $v3300_update .= "</ul>";
+
+$this_update_version_block = $versions['3.3.0.0'];
+if (($pre_update_version_index < $this_update_version_block) || ($error_count > $error_count_before_v3300)) $output_run_update .= $v3300_update;
 
 /**
  * ---------------------------------------------------------------------------------------------------

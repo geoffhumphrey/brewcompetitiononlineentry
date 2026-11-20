@@ -61,6 +61,13 @@ if ($section == "admin") {
 
 	if ((($action == "edit") || ($action == "add")) && ($go == "entries")) $styles_query_add = "";
 	elseif ((($action == "edit") || ($action == "add")) && ($go == "judging_tables"))  $styles_query_add = "";
+	// The main Judging Tables listing (no action - $action stays "default" per
+	// includes/url_variables.inc.php) needs every style too, to work out which
+	// ones with entries aren't assigned to any table ("Styles Not Assigned to
+	// Tables" modal) - without this, the catch-all "else" below scoped $rows_styles
+	// down to " AND id=?" with $id still "default", matching zero rows, which
+	// made that modal always report "All styles ... have been assigned".
+	elseif (($action == "default") && ($go == "judging_tables")) $styles_query_add = "";
 	elseif ((($action == "default") || ($action == "add"))&& ($go == "styles")) $styles_query_add = "";
 	elseif ((($action == "entries")) && ($go == "preferences")) $styles_query_add = "";
 	elseif (($go == "count_by_style") || ($go == "count_by_substyle")) $styles_query_add = "";

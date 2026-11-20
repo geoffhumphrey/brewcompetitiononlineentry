@@ -200,6 +200,54 @@ if (($action == "default") && ($filter == "default")) {
 
 	}
 
+	// Mirrors eval/dashboard.eval.php's judge_names_by_table_eval pattern - a name
+	// list, not just a count, so the Team breakdown below can name who's on each
+	// team rather than showing a bare "Team A: 2". Also picks up assignRoles here
+	// (not filtered to assignTeam IS NOT NULL, since a Head Judge isn't
+	// necessarily on a team) so the Head Judge can be named above the breakdown
+	// and each team's Team Lead flagged with "[TL]", without a second query.
+	$judge_team_names_by_table_jt = array();
+	$head_judge_name_by_table_jt = array();
+	if ((table_exists($judging_assignments_db_table)) && (table_exists($prefix."brewer"))) {
+		$query_judge_team_names_jt = "SELECT b.assignTable, b.assignTeam, b.assignRoles, a.brewerFirstName, a.brewerLastName FROM ".$prefix."brewer"." a, ".$judging_assignments_db_table." b WHERE a.uid = b.bid AND b.assignment='J' ORDER BY b.assignTable, CAST(b.assignTeam AS UNSIGNED), a.brewerLastName ASC, a.brewerFirstName ASC";
+		$rows_judge_team_names_jt = $db_conn->rawQuery($query_judge_team_names_jt);
+		foreach ($rows_judge_team_names_jt as $row_judge_team_name_jt) {
+
+			$judge_name_jt = $row_judge_team_name_jt['brewerFirstName']." ".$row_judge_team_name_jt['brewerLastName'];
+
+			// Head Judge is table-wide, not round-scoped, so whichever row we hit
+			// first for this table is as good as any other - just take the first.
+			if ((!empty($row_judge_team_name_jt['assignRoles'])) && (strpos($row_judge_team_name_jt['assignRoles'],"HJ") !== FALSE) && (!isset($head_judge_name_by_table_jt[$row_judge_team_name_jt['assignTable']]))) {
+				$head_judge_name_by_table_jt[$row_judge_team_name_jt['assignTable']] = $judge_name_jt;
+			}
+
+			if (!empty($row_judge_team_name_jt['assignTeam'])) {
+				// Both flags can apply to the same judge - list them together
+				// (TL first, then MBOS) in one bracket rather than two, e.g.
+				// "John Doe [TL, MBOS]", so an admin gets the full picture at a glance.
+				$role_flags_jt = array();
+				if ((!empty($row_judge_team_name_jt['assignRoles'])) && (strpos($row_judge_team_name_jt['assignRoles'],"TL") !== FALSE)) $role_flags_jt[] = "TL";
+				if ((!empty($row_judge_team_name_jt['assignRoles'])) && (strpos($row_judge_team_name_jt['assignRoles'],"MBOS") !== FALSE)) $role_flags_jt[] = "MBOS";
+				if (!empty($role_flags_jt)) $judge_name_jt .= " [".implode(", ", $role_flags_jt)."]";
+				$judge_team_names_by_table_jt[$row_judge_team_name_jt['assignTable']][$row_judge_team_name_jt['assignTeam']][] = $judge_name_jt;
+			}
+
+		}
+	}
+
+	// Stewards aren't assigned to teams, Head Judge, or Team Lead - just a
+	// simple per-table name list. DISTINCT because a steward can hold more
+	// than one round's assignment row at the same table, and this list
+	// shouldn't repeat their name once per round.
+	$steward_names_by_table_jt = array();
+	if ((table_exists($judging_assignments_db_table)) && (table_exists($prefix."brewer"))) {
+		$query_steward_names_jt = "SELECT DISTINCT b.assignTable, a.brewerFirstName, a.brewerLastName FROM ".$prefix."brewer"." a, ".$judging_assignments_db_table." b WHERE a.uid = b.bid AND b.assignment='S' ORDER BY b.assignTable, a.brewerLastName ASC, a.brewerFirstName ASC";
+		$rows_steward_names_jt = $db_conn->rawQuery($query_steward_names_jt);
+		foreach ($rows_steward_names_jt as $row_steward_name_jt) {
+			$steward_names_by_table_jt[$row_steward_name_jt['assignTable']][] = $row_steward_name_jt['brewerFirstName']." ".$row_steward_name_jt['brewerLastName'];
+		}
+	}
+
 	// Mirrors get_table_info()'s "score_total" method, score_count(), and
 	// table_count_total() - all three compute the exact same COUNT(*) FROM
 	// judging_scores WHERE scoreTable=X query, batched across every table at once.
@@ -480,8 +528,7 @@ if (($action == "default") && ($filter == "default")) {
 
                 else $scored = "<i class=\"text-danger fa fas fa-lg fa-ban\"></i> <small><em>Planning Mode</em></small>";
 
-            }
-                
+            }               
 
             // Pulled from the batched assignment-count maps above instead of
             // assigned_judges()/assigned_stewards() queries per table - mirrors
@@ -492,6 +539,44 @@ if (($action == "default") && ($filter == "default")) {
             if ($dbTable == "default") $assigned_judges = '<span id="delete-judges-'.$row_tables['id'].'-count">'.$judge_count_jt.'</span> <a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$row_tables['id'].'" data-toggle="tooltip" data-placement="top" title="'.$judge_title_jt.'"><span id="delete-judges-'.$row_tables['id'].'-icon" class="fa fa-lg '.$judge_icon_jt.'"></span></a>';
             else $assigned_judges = $judge_count_jt;
                 if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$ajax_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."','delete-judges-".$table_location_class."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
+
+            // Head Judge, by name - pulled from the batched $head_judge_name_by_table_jt
+            // map above, shown ahead of the Team breakdown (whether or not that table
+            // even has teams defined) rather than folded into it. Once the table has
+            // judges assigned at all, a missing Head Judge is called out rather than
+            // silently omitted, so it doesn't get missed while scanning this page.
+            $head_judge_display_jt = "";
+            if (!empty($head_judge_name_by_table_jt[$row_tables['id']])) {
+                $head_judge_display_jt = "<div class=\"text-muted small\"><strong>Table Head Judge:</strong> ".h($head_judge_name_by_table_jt[$row_tables['id']])."</div>";
+            } elseif ($judge_count_jt > 0) {
+                $head_judge_display_jt = "<div class=\"text-muted small\"><strong>Table Head Judge:</strong> <span class=\"text-danger\"><i class=\"fa fa-fw fa-exclamation-triangle\"></i> Unassigned</span></div>";
+            }
+
+            // Team breakdown, by name (not just a count) - pulled from the batched
+            // $judge_team_names_by_table_jt map above. Rendered separately (not
+            // appended to $assigned_judges) so it can be placed below the
+            // "[N available]" line rather than above it. Non-queued mode derives
+            // Team from Flight (see admin/judging_assign.admin.php), so the label
+            // calls that out there; queued mode's Team is its own, independent
+            // dropdown, so it's labeled plainly.
+            $team_label_jt = ($_SESSION['jPrefsQueued'] == "N") ? "Flight/Team" : "Team";
+            $team_breakdown_display_jt = "";
+            if (!empty($judge_team_names_by_table_jt[$row_tables['id']])) {
+                $team_breakdown_parts_jt = array();
+                foreach ($judge_team_names_by_table_jt[$row_tables['id']] as $team_letter_jt => $team_names_jt) {
+                    $team_breakdown_parts_jt[] = "<strong>".$team_label_jt." ".h($team_letter_jt).":</strong> ".h(implode(", ", $team_names_jt));
+                }
+                $team_breakdown_display_jt = "<div class=\"text-muted small\">".implode("<br>", $team_breakdown_parts_jt)."</div>";
+            }
+
+            $team_breakdown_display_jt = $head_judge_display_jt.$team_breakdown_display_jt;
+
+            // Simple name list, pulled from the batched $steward_names_by_table_jt
+            // map above - no teams/roles to call out, unlike the judges breakdown.
+            $steward_breakdown_display_jt = "";
+            if (!empty($steward_names_by_table_jt[$row_tables['id']])) {
+                $steward_breakdown_display_jt = "<div class=\"text-muted small\">".h(implode(", ", $steward_names_by_table_jt[$row_tables['id']]))."</div>";
+            }
 
             $steward_count_jt = $steward_assign_counts_by_table_jt[$row_tables['id']] ?? 0;
             if ($steward_count_jt == 0) { $steward_icon_jt = "fa-plus-circle"; $steward_title_jt = "Add stewards to this table."; }
@@ -516,11 +601,21 @@ if (($action == "default") && ($filter == "default")) {
             if ($limits_by_table) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$row_tables['tableEntryLimit']."</td>";
             $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$scored."</td>";
             $manage_tables_default_tbody .= "\n\n<td class=\"hidden-xs hidden-sm\">".$assigned_judges;
-            if ($dbTable == "default") $manage_tables_default .= "<div class=\"text-muted small\">[<span id=\"delete-judges-".$row_tables['id']."-all-count\" class=\"delete-judges-".$table_location_class."\">".$judge_avail."</span> available]</div>";
+            if ($dbTable == "default") $manage_tables_default_tbody .= "<div style=\"margin-top: 5px; margin-bottom: 5px;\" class=\"text-muted small\">[<span id=\"delete-judges-".$row_tables['id']."-all-count\" class=\"delete-judges-".$table_location_class."\">".$judge_avail."</span> available]</div>";
+            // Wrapped in a stable id so purge_data()'s "Delete all judge
+            // assignments" button (js_source/admin_ajax.js) can clear this
+            // roster and flip the Head Judge line to "Unassigned" once every
+            // judge is removed, instead of leaving stale names/teams on screen.
+            $manage_tables_default_tbody .= "<div id=\"judges-roster-".$row_tables['id']."\">".$team_breakdown_display_jt."</div>";
             $manage_tables_default_tbody .= "</td>";
             $manage_tables_default_tbody .= "\n\n<td class=\"hidden-xs hidden-sm\">".$assigned_stewards;
-            if ($dbTable == "default") $manage_tables_default_tbody .= "<div class=\"text-muted small\">[<span id=\"delete-stewards-".$row_tables['id']."-all-count\" class=\"delete-stewards-".$table_location_class."\">".$steward_avail."</span> available]";
-            $manage_tables_default_tbody .= "</div></td>";
+            if ($dbTable == "default") $manage_tables_default_tbody .= "<div style=\"margin-top: 5px; margin-bottom: 5px;\" class=\"text-muted small\">[<span id=\"delete-stewards-".$row_tables['id']."-all-count\" class=\"delete-stewards-".$table_location_class."\">".$steward_avail."</span> available]</div>";
+            // Wrapped in a stable id so purge_data()'s "Delete all steward
+            // assignments" button (js_source/admin_ajax.js) can clear this
+            // list once every steward is removed, instead of leaving stale
+            // names on screen.
+            $manage_tables_default_tbody .= "<div id=\"stewards-roster-".$row_tables['id']."\">".$steward_breakdown_display_jt."</div>";
+            $manage_tables_default_tbody .= "</td>";
             if (($totalRows_judging > 1) && ($dbTable == "default") && (!$view_valid)) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$table_location."</td>";
             
 

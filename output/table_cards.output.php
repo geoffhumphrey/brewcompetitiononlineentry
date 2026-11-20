@@ -194,13 +194,19 @@ if (($table_card_output) && ($psort == "sorting-tables")) {
 if (($table_card_output) && ($psort == "default")) {
 if ($round != "default") $round2 = $round; else $round2 = "default";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
-$role_replace1 = array("HJ","LJ","MBOS",", ");
-$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
+$role_replace1 = array("HJ","TL","MBOS",", ");
+$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Team Lead","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
 
 if ($id == "default") { ?>
 
 <?php foreach ($rows_tables as $row_tables) {
     include (DB.'output_table_cards.db.php');
+    // Only sort by team when the table actually has teams defined - otherwise
+    // this falls back to the default name-only sort.
+    $table_has_teams = false;
+    foreach ($rows_assignments as $row_assignments_check) {
+        if (!empty($row_assignments_check['assignTeam'])) { $table_has_teams = true; break; }
+    }
 ?>
 <div class="table_card">
     <h1><?php echo sprintf("%s %s",$label_table, $row_tables['tableNumber']); ?></h1>
@@ -214,9 +220,10 @@ if ($id == "default") { ?>
                         "sDom": 'rt',
                         "bStateSave" : false,
                         "bLengthChange" : false,
-                        "aaSorting": [[0,'asc']],
+                        "aaSorting": [<?php echo $table_has_teams ? "[3,'asc'],[0,'asc']" : "[0,'asc']"; ?>],
                         "bProcessing" : false,
                         "aoColumns": [
+                                { "asSorting": [  ] },
                                 { "asSorting": [  ] },
                                 { "asSorting": [  ] },
                                 { "asSorting": [  ] }<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
@@ -236,15 +243,18 @@ if ($id == "default") { ?>
                         if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
                         if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
+                        if (!empty($row_assignments['assignTeam'])) $team = "Team ".h($row_assignments['assignTeam']); else $team = "";
+                        $team_class = team_color_class($row_assignments['assignTeam']);
                         $rank = str_replace(",",", ",$judge_info['3']);
                         $rank = str_replace("Novice", "Non-BJCP", $rank);
                         if ($judge_info[16] != "&nbsp;") $rank .= ", ".$judge_info[16];
                         $role = str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
                 ?>
-        <tr>
+        <tr<?php if (!empty($team_class)) echo " class=\"".$team_class."\""; ?>>
                 <td><?php echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; if ((!empty($rank)) && ($assignment == "Judge")) echo " (".rtrim($rank,", ").") "; if (!empty($role)) echo "<br><em>".$role."</em>"; ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $round; ?></td>
+                <td width="5%" nowrap="nowrap" data-order="<?php echo (int)$row_assignments['assignTeam']; ?>"><?php echo $team; ?></td>
                 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
                 <td width="5%" nowrap="nowrap"><?php echo $flight; ?></td>
                 <?php } ?>
@@ -260,6 +270,12 @@ if ($id == "default") { ?>
 }
 if ($id != "default") {
     include (DB.'output_table_cards.db.php');
+    // Only sort by team when the table actually has teams defined - otherwise
+    // this falls back to the default name-only sort.
+    $table_has_teams = false;
+    foreach ($rows_assignments as $row_assignments_check) {
+        if (!empty($row_assignments_check['assignTeam'])) { $table_has_teams = true; break; }
+    }
 ?>
 <div class="table_card">
     <h1><?php echo sprintf("%s %s",$label_table, $row_tables_edit['tableNumber']); ?></h1>
@@ -273,9 +289,10 @@ if ($id != "default") {
                         "sDom": 'rt',
                         "bStateSave" : false,
                         "bLengthChange" : false,
-                        "aaSorting": [[0,'asc']],
+                        "aaSorting": [<?php echo $table_has_teams ? "[3,'asc'],[0,'asc']" : "[0,'asc']"; ?>],
                         "bProcessing" : false,
                         "aoColumns": [
+                                { "asSorting": [  ] },
                                 { "asSorting": [  ] },
                                 { "asSorting": [  ] },
                                 { "asSorting": [  ] }<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
@@ -295,14 +312,17 @@ if ($id != "default") {
                         if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
                         if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
+                        if (!empty($row_assignments['assignTeam'])) $team = "Team ".h($row_assignments['assignTeam']); else $team = "";
+                        $team_class = team_color_class($row_assignments['assignTeam']);
                         $rank = str_replace(",",", ",$judge_info['3']);
 
                         $role = str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
                 ?>
-        <tr>
+        <tr<?php if (!empty($team_class)) echo " class=\"".$team_class."\""; ?>>
                 <td><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.") "; echo $role; ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $round; ?></td>
+                <td width="5%" nowrap="nowrap" data-order="<?php echo (int)$row_assignments['assignTeam']; ?>"><?php echo $team; ?></td>
                 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
                 <td width="5%" nowrap="nowrap"><?php echo $flight; ?></td>
                 <?php } ?>

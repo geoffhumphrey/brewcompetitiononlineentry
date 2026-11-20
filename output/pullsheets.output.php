@@ -253,6 +253,125 @@ if ($_SESSION['jPrefsQueued'] == "N") {
 		if (!isset($judging_assignment_by_bid_ps[$row_judging_assignment_ps['bid']])) $judging_assignment_by_bid_ps[$row_judging_assignment_ps['bid']] = $row_judging_assignment_ps;
 	}
 }
+
+// Judge/Steward roster added to this report (Table Head Judge, Mini-BOS Judges,
+// Judging Team N, Stewards) - batched once here keyed by table+round+team, mirroring
+// admin/judging_tables.admin.php's $judge_team_names_by_table_jt/$steward_names_by_table_jt
+// pattern but also keyed by assignRound, so a pullsheet run for one specific $round can
+// show only that round's roster instead of every round's judges/teams merged together.
+$head_judge_by_table_round_ps = array();
+$minibos_by_table_round_ps = array();
+$team_by_table_round_ps = array();
+if ((table_exists($judging_assignments_db_table)) && (table_exists($prefix."brewer"))) {
+	$query_judge_roster_ps = "SELECT b.assignTable, b.assignRound, b.assignTeam, b.assignRoles, a.brewerFirstName, a.brewerLastName FROM ".$prefix."brewer"." a, ".$judging_assignments_db_table." b WHERE a.uid = b.bid AND b.assignment='J' ORDER BY b.assignTable, b.assignRound, CAST(b.assignTeam AS UNSIGNED), a.brewerLastName ASC, a.brewerFirstName ASC";
+	$rows_judge_roster_ps = $db_conn->rawQuery($query_judge_roster_ps);
+	foreach ($rows_judge_roster_ps as $row_judge_roster_ps) {
+
+		$jr_table = $row_judge_roster_ps['assignTable'];
+		$jr_round = $row_judge_roster_ps['assignRound'];
+		$jr_name = h($row_judge_roster_ps['brewerFirstName']." ".$row_judge_roster_ps['brewerLastName']);
+
+		// Head Judge is written onto more than one round's row for the same bid
+		// (merged across every round in non-queued mode - see
+		// process_judging_assignments.inc.php) - take the first one found per
+		// round, same "just take the first" precedent as the admin breakdown.
+		if ((!empty($row_judge_roster_ps['assignRoles'])) && (strpos($row_judge_roster_ps['assignRoles'],"HJ") !== FALSE) && (!isset($head_judge_by_table_round_ps[$jr_table][$jr_round]))) {
+			$head_judge_by_table_round_ps[$jr_table][$jr_round] = $jr_name;
+		}
+
+		if ((!empty($row_judge_roster_ps['assignRoles'])) && (strpos($row_judge_roster_ps['assignRoles'],"MBOS") !== FALSE)) {
+			if ((!isset($minibos_by_table_round_ps[$jr_table][$jr_round])) || (!in_array($jr_name, $minibos_by_table_round_ps[$jr_table][$jr_round]))) {
+				$minibos_by_table_round_ps[$jr_table][$jr_round][] = $jr_name;
+			}
+		}
+
+		if (!empty($row_judge_roster_ps['assignTeam'])) {
+			$jr_display_name = $jr_name;
+			if ((!empty($row_judge_roster_ps['assignRoles'])) && (strpos($row_judge_roster_ps['assignRoles'],"TL") !== FALSE)) $jr_display_name .= " [Team Lead]";
+			if ((!isset($team_by_table_round_ps[$jr_table][$jr_round][$row_judge_roster_ps['assignTeam']])) || (!in_array($jr_display_name, $team_by_table_round_ps[$jr_table][$jr_round][$row_judge_roster_ps['assignTeam']]))) {
+				$team_by_table_round_ps[$jr_table][$jr_round][$row_judge_roster_ps['assignTeam']][] = $jr_display_name;
+			}
+		}
+
+	}
+}
+
+// Stewards aren't assigned to teams, Head Judge, or Team Lead - just a simple
+// per-table-round name list, matching admin/judging_tables.admin.php's own
+// $steward_names_by_table_jt precedent.
+$steward_by_table_round_ps = array();
+if ((table_exists($judging_assignments_db_table)) && (table_exists($prefix."brewer"))) {
+	$query_steward_roster_ps = "SELECT DISTINCT b.assignTable, b.assignRound, a.brewerFirstName, a.brewerLastName FROM ".$prefix."brewer"." a, ".$judging_assignments_db_table." b WHERE a.uid = b.bid AND b.assignment='S' ORDER BY b.assignTable, a.brewerLastName ASC, a.brewerFirstName ASC";
+	$rows_steward_roster_ps = $db_conn->rawQuery($query_steward_roster_ps);
+	foreach ($rows_steward_roster_ps as $row_steward_roster_ps) {
+		$sr_table = $row_steward_roster_ps['assignTable'];
+		$sr_round = $row_steward_roster_ps['assignRound'];
+		$sr_name = h($row_steward_roster_ps['brewerFirstName']." ".$row_steward_roster_ps['brewerLastName']);
+		if ((!isset($steward_by_table_round_ps[$sr_table][$sr_round])) || (!in_array($sr_name, $steward_by_table_round_ps[$sr_table][$sr_round]))) {
+			$steward_by_table_round_ps[$sr_table][$sr_round][] = $sr_name;
+		}
+	}
+}
+
+// Builds the "Table Head Judge / Mini-BOS Judges / Judging Team N / Stewards" roster
+// added to this report, from the batched maps above. $round == "default" merges every
+// round found for the table UNLESS more than one round is actually in play, in which
+// case each round's roster is kept separate under its own "Round N" line instead of
+// silently combining them - Team/Flight numbers restart at 1 each round in non-queued
+// mode, so merging across rounds could otherwise combine two unrelated teams under one
+// label. The per-flight call sites below always pass that flight's own concrete round
+// (never "default"), so this grouping never triggers for them.
+$build_roster_html_ps = function($table_id, $round, $include_hj_mbos, $include_teams, $include_stewards) use ($head_judge_by_table_round_ps, $minibos_by_table_round_ps, $team_by_table_round_ps, $steward_by_table_round_ps) {
+
+	$rounds_in_play = array();
+	if ($round != "default") $rounds_in_play[] = $round;
+	else {
+		$seen_rounds = array();
+		foreach (array($head_judge_by_table_round_ps, $minibos_by_table_round_ps, $team_by_table_round_ps, $steward_by_table_round_ps) as $map) {
+			if (!empty($map[$table_id])) foreach (array_keys($map[$table_id]) as $r) $seen_rounds[$r] = TRUE;
+		}
+		$rounds_in_play = array_keys($seen_rounds);
+	}
+
+	if (empty($rounds_in_play)) return "";
+
+	$multi_round = (count($rounds_in_play) > 1);
+	$roster_html = "";
+
+	foreach ($rounds_in_play as $r) {
+
+		$lines = array();
+
+		if ($include_hj_mbos) {
+			$hj_name = $head_judge_by_table_round_ps[$table_id][$r] ?? "";
+			if (!empty($hj_name)) $lines[] = "<strong>Table Head Judge:</strong> ".$hj_name;
+			$mbos_names = $minibos_by_table_round_ps[$table_id][$r] ?? array();
+			if (!empty($mbos_names)) $lines[] = "<strong>Mini-BOS Judges:</strong> ".implode(", ", $mbos_names);
+		}
+
+		if ($include_teams) {
+			$teams = $team_by_table_round_ps[$table_id][$r] ?? array();
+			ksort($teams, SORT_NUMERIC);
+			foreach ($teams as $team_num => $team_names) {
+				$lines[] = "<strong>Judging Team ".h($team_num).":</strong> ".implode(", ", $team_names);
+			}
+		}
+
+		if ($include_stewards) {
+			$steward_names = $steward_by_table_round_ps[$table_id][$r] ?? array();
+			if (!empty($steward_names)) $lines[] = "<strong>Steward(s):</strong> ".implode(", ", $steward_names);
+		}
+
+		if (!empty($lines)) {
+			if ($multi_round) $roster_html .= "<p>Round ".h($r).":<br>".implode("<br>", $lines)."</p>";
+			else $roster_html .= "<p>".implode("<br>", $lines)."</p>";
+		}
+
+	}
+
+	return $roster_html;
+
+};
 $judge_info_ps = function($uid) use ($brewer_by_uid_ps, $judging_assignment_by_bid_ps) {
 	$r = "";
 	$row_brewer_info = $brewer_by_uid_ps[$uid] ?? null;
@@ -462,7 +581,8 @@ if ($go == "all_entry_info") {
 											$special = explode("^",$special);
 
 											$table_flight_tbody .= "<td>";
-											if ((!empty($row_entries['brewInfo'])) && ($special[4] == "1")) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
+											if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && (!empty($row_entries['brewInfo']))) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+											elseif ((!empty($row_entries['brewInfo'])) && ($special[4] == "1")) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
 											$table_flight_tbody .= "<p>";
 											$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 											if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
@@ -536,6 +656,7 @@ if ($go == "all_entry_info") {
 						$table_info_header .= "<em>";
 						if (strpos($row_assignments['assignRoles'],"HJ") !== FALSE) $table_info_header .= "<span style=\"margin-left:1.5em;\">Head Judge</span>";
 						if (strpos($row_assignments['assignRoles'],"MBOS") !== FALSE) $table_info_header .= "<span style=\"margin-left:1em;\">Mini-BOS</span>";
+						if (strpos($row_assignments['assignRoles'],"TL") !== FALSE) $table_info_header .= "<span style=\"margin-left:1em;\">Team Lead</span>";
 						$table_info_header .= "</em>";
 						$table_info_header .= "</small>";
 					}
@@ -703,7 +824,8 @@ if ($go == "all_entry_info") {
 								$special = $style_convert_9_ps($style_special);
 								$special = explode("^",$special);
 								$table_flight_tbody .= "<td>";
-								if ((!empty($row_entries['brewInfo'])) && ((isset($special[4])) && ($special[4] == "1"))) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
+								if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && (!empty($row_entries['brewInfo']))) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+								elseif ((!empty($row_entries['brewInfo'])) && ((isset($special[4])) && ($special[4] == "1"))) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
 								$table_flight_tbody .= "<p>";
 								$missing_mead_info_ps = entry_missing_required_mead_info($row_entries, $_SESSION['prefsStyleSet']);
 								if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
@@ -1239,13 +1361,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						$table_info_location .= "<p class=\"lead\">";
 						$table_info_location .= sprintf("%s: %s",$label_entries,$entry_count);
 						$table_info_location .= "</p>";
-						$table_info_location .= "<p>";
+						$table_info_location .= "<p class='hidden-print'>";
 						$table_info_location .= sprintf("%s: %s",$label_please_note,$output_text_019);
 						$table_info_location .= "</p>";
 
 					}
 
 					$pullsheet_output .= $table_info_header.$table_info_location;
+					$pullsheet_output .= $build_roster_html_ps($row_tables['id'], $round, TRUE, TRUE, TRUE);
 
 					if ($entry_count > 0) {
 
@@ -1341,9 +1464,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$special = $style_convert_9_ps($style_special);
 									$special = explode("^",$special);
 
-									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
-										if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-										else $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									if ((($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2025") || ($_SESSION['prefsStyleSet'] == "BJCP2026")) && ($style == "02A") && ($row_entries['brewInfo'] != "")) {
+										$table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									}
+									elseif (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
+										$table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 									}
 									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
@@ -1478,13 +1603,14 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					$table_info_location .= "<p class=\"lead\">";
 					$table_info_location .= sprintf("%s: %s",$label_entries,$entry_count);
 					$table_info_location .= "</p>";
-					$table_info_location .= "<p>";
+					$table_info_location .= "<p class='hidden-print'>";
 					$table_info_location .= sprintf("%s: %s",$label_please_note,$output_text_019);
 					$table_info_location .= "</p>";
 
 				}
 
 				$pullsheet_output .= $table_info_header.$table_info_location;
+				$pullsheet_output .= $build_roster_html_ps($row_tables['id'], $round, TRUE, TRUE, TRUE);
 
 				if ($entry_count > 0) {
 
@@ -1732,6 +1858,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					*/
 
 					$pullsheet_output .= $table_info_header.$table_info_location;
+					$pullsheet_output .= $build_roster_html_ps($row_tables['id'], $round, TRUE, TRUE, TRUE);
 
 					$table_flight = "";
 					$table_flight_datatables = "";
@@ -1975,6 +2102,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					}
 
 					$pullsheet_output .= $table_info_header.$table_info_location;
+					$pullsheet_output .= $build_roster_html_ps($row_tables['id'], $round, TRUE, FALSE, TRUE);
 
 					for($i=1; $i<$flights+1; $i++) {
 
@@ -1995,6 +2123,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						if (!check_flight_round($row_round_check['flightRound'], $round)) continue;
 
 						$table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
+						$table_flight .= $build_roster_html_ps($row_tables['id'], $row_round_check['flightRound'], FALSE, TRUE, FALSE);
 
 						$table_flight_datatables .= "<script>";
 						$table_flight_datatables .= "$(document).ready(function() {";
@@ -2230,6 +2359,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 			// If MBOS, add datatables and table, and table header
 			if ($filter == "mini_bos") {
+				$pullsheet_output .= $build_roster_html_ps($row_tables['id'], $round, TRUE, TRUE, TRUE);
 				$pullsheet_output .= "<script>";
 				$pullsheet_output .= "$(document).ready(function() {";
 				$pullsheet_output .= "$('#sortable".$row_tables['tableNumber']."').dataTable( {";
@@ -2260,7 +2390,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 			}
 
-			else $pullsheet_output .= $table_info_location;
+			else {
+				$pullsheet_output .= $table_info_location;
+				$pullsheet_output .= $build_roster_html_ps($row_tables['id'], $round, TRUE, FALSE, TRUE);
+			}
 
 			// Loop through flights. Gather entry information
 
@@ -2286,6 +2419,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					if (!check_flight_round($row_round_check['flightRound'], $round)) continue;
 
 					$table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
+					$table_flight .= $build_roster_html_ps($row_tables['id'], $row_round_check['flightRound'], FALSE, TRUE, FALSE);
 
 					$table_flight_datatables .= "<script>";
 					$table_flight_datatables .= "$(document).ready(function() {";
@@ -2504,6 +2638,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 				$pullsheet_output .= $table_flight;
 
+				// Mirrors the $tables_all branch above - each flight gets its
+				// own page break here too, otherwise multiple flights at this
+				// one table all print on the same page.
+				if (($flights > 0) && ($filter != "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
+
 			} // end for($i=1; $i<$flights+1; $i++)
 
 			if ($filter == "mini_bos") {
@@ -2511,7 +2650,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 				$pullsheet_output .= "</table>";
 			}
 
-			$pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
+			if (($flights == 0) || ($filter == "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
 
 			} // end else (round has a matching flight for this table)
 

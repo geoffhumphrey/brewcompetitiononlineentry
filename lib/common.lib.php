@@ -3668,8 +3668,70 @@ function judge_assignment($uid, $loc_id) {
 	return $row_judge_assignment;
 }
 
+/**
+ * Returns the other judges sharing $uid's team (judging_assignments.assignTeam)
+ * at a given table/round, excluding $uid. Empty array if $uid has no team set
+ * there, or no one else shares it. Shared by eval/dashboard.eval.php (the
+ * judge-facing "your teammate(s)" display) and table_assignments() below (the
+ * table-assignment notification email) so the teammate lookup isn't duplicated.
+ */
+function get_teammates($uid, $assignTable, $round) {
+
+	require(CONFIG.'config.php');
+	$db_conn = new MysqliDb($connection);
+
+	$teammates = array();
+
+	$db_conn->where('bid', $uid);
+	$db_conn->where('assignTable', $assignTable);
+	$db_conn->where('assignRound', $round);
+	$db_conn->where('assignment', 'J');
+	$row_self = $db_conn->getOne($prefix."judging_assignments", "assignTeam");
+
+	if ((!$row_self) || (empty($row_self['assignTeam']))) return $teammates;
+
+	$query_teammates = "SELECT b.brewerFirstName, b.brewerLastName FROM ".$prefix."brewer"." b, ".$prefix."judging_assignments"." a WHERE a.assignTable = ? AND a.assignRound = ? AND a.assignTeam = ? AND a.assignment = 'J' AND a.bid != ? AND b.uid = a.bid ORDER BY b.brewerLastName ASC, b.brewerFirstName ASC";
+	$teammates = $db_conn->rawQuery($query_teammates, array($assignTable, $round, $row_self['assignTeam'], $uid));
+
+	return $teammates;
+
+}
+
+/**
+ * Returns the print-legible, color/greyscale-distinguishable text-color class
+ * (defined in css/common.css) for a given judging_assignments.assignTeam value,
+ * or "" if $team doesn't map to one. Shared by output/table_cards.output.php
+ * and output/assignments.output.php so the Team 1-10 -> color mapping lives in
+ * one place.
+ */
+function team_color_class($team) {
+
+	$colors = array(
+		"1" => "text-grey",
+		"2" => "text-purple",
+		"3" => "text-team-blue",
+		"4" => "text-team-crimson",
+		"5" => "text-team-teal",
+		"6" => "text-forest-green",
+		"7" => "text-team-magenta",
+		"8" => "text-orange",
+		"9" => "text-amber",
+		"10" => "text-yellow"
+	);
+
+	return $colors[$team] ?? "";
+
+}
+
 function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2,$label_table="Table") {
-	
+
+	// $uid is clobbered to "default" below - require(LANG.'language.lang.php')
+	// pulls in includes/url_variables.inc.php, which unconditionally sets
+	// $uid = "default" (a URL-GET-derived default, not a real brewer id), and
+	// require() inside a function shares that function's scope. Capture the
+	// real parameter now so get_teammates() below gets the actual caller.
+	$uid_param = $uid;
+
 	// Gather and output the judging or stewarding assignments for a user
 	require(CONFIG.'config.php');
 	$db_conn = new MysqliDb($connection);
@@ -3680,7 +3742,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	$db_conn->where('bid', $uid);
 	$db_conn->where('assignment', $method);
 	$db_conn->orderBy('assignTable', 'ASC');
-	$rows_table_assignments = $db_conn->get($prefix."judging_assignments", null, "assignTable,assignRoles,assignFlight,assignRound");
+	$rows_table_assignments = $db_conn->get($prefix."judging_assignments", null, "assignTable,assignRoles,assignFlight,assignRound,assignTeam");
 	$row_table_assignments = ($rows_table_assignments && count($rows_table_assignments) > 0) ? $rows_table_assignments[0] : null;
 	$totalRows_table_assignments = $db_conn->count;
 
@@ -3699,10 +3761,10 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 
 				if (!empty($row_table_assignments['assignRoles'])) {
 					$hj = "<span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
-					$lj = "<span class=\"text-purple\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
+					$tl = "<span class=\"text-purple\"><i class=\"fa fa-star\"></i> Team Lead</span>";
 					$mbos = "<span class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
-					$role_replace1 = array("HJ","LJ","MBOS",", ");
-					$role_replace2 = array($hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;");
+					$role_replace1 = array("HJ","TL","MBOS",", ");
+					$role_replace2 = array($hj,$tl,$mbos,"&nbsp;&nbsp;&nbsp;");
 					$role = str_replace($role_replace1,$role_replace2,$row_table_assignments['assignRoles']);
 				}
 
@@ -3721,6 +3783,16 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 						$output .= "<br>".$label_round." ".$row_table_assignments['assignFlight'].", ".$label_flight." ".$row_table_assignments['assignFlight'];
 					}
 					if (!empty($row_table_assignments['assignRoles'])) $output .= "<br>".$role;
+					if (($method == "J") && (!empty($row_table_assignments['assignTeam']))) {
+						$teammates = get_teammates($uid_param, $row_table_assignments['assignTable'], $row_table_assignments['assignRound']);
+						if (!empty($teammates)) {
+							$teammate_names = array();
+							foreach ($teammates as $row_teammate) {
+								$teammate_names[] = $row_teammate['brewerFirstName']." ".$row_teammate['brewerLastName'];
+							}
+							$output .= "<br>Teammate(s): ".implode(", ", $teammate_names);
+						}
+					}
 					$output .= "</td>\n";
 					// $output .= "\t\t\t<td></td>\n";
 					$output .= "\t\t</tr>\n";

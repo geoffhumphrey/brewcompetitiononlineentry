@@ -46,6 +46,20 @@ $head_judge_name = "";
 $entry_conflict_count = 0;
 $entry_conflict = FALSE;
 
+// Queued mode's Head Judge checkboxes are mutually exclusive (enforced via JS
+// below once one is checked), but that only covers checkboxes rendered on this
+// same page load - whichever judge already holds "HJ" needs to render with
+// every OTHER row's checkbox already disabled, not just after a change event.
+// Head Judge isn't round-scoped (see the comment above $row_judge_roles below),
+// so one table-wide lookup here covers every row in the loop.
+$existing_head_judge_bid = "";
+if ($_SESSION['jPrefsQueued'] == "Y") {
+  $db_conn->where('assignTable', $row_tables_edit['id']);
+  $db_conn->where('assignRoles', '%HJ%', 'like');
+  $row_existing_head_judge = $db_conn->getOne($prefix."judging_assignments", null, "bid");
+  if ($row_existing_head_judge) $existing_head_judge_bid = $row_existing_head_judge['bid'];
+}
+
 // Build DataTables Header
 $output_datatables_head .= "<tr>";
 $output_datatables_head .= "<th width=\"15%\">Name</th>";
@@ -53,11 +67,10 @@ if ($filter == "judges") {
 	$output_datatables_head .= "<th width=\"15%\">BJCP Rank</th>";
 	$output_datatables_head .= "<th width=\"10%\" class=\"hidden-xs hidden-sm hidden-md\">BJCP #</th>";
 	// $output_datatables_head .= "<th width=\"10%\">Comps Judged</th>";
-    // Activate for Roles
 	if ($_SESSION['jPrefsQueued'] == "Y") {
         $output_datatables_head .= "<th width=\"10%\">";
         $output_datatables_head .= "Judge Role(s) at Table";
-        $output_datatables_head .= " <a href=\"#\" role=\"button\" data-html=\"true\" data-toggle=\"popover\" data-container=\"body\" data-trigger=\"focus\" data-placement=\"top\" title=\"Designate Judge Role(s) at the Table\" data-content=\"<p>Choose roles for certain judges at this table. <p><strong>Head Judge</strong> - <a class='hide-loader' href='https://www.bjcp.org/competitions/competition-handbook/' target='_blank'>According to the BJCP</a>, the head judge is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p><p><strong>Mini-BOS Judge</strong> - the Mini-BOS Judge is one of the judges at the table designated to participate in the <a class='hide-loader' href='http://dev.bjcp.org/wp-content/uploads/2011/11/MiniBOS.pdf' target='_blank'>Mini-BOS</a> to determine placing entries.</p>\"> <span class=\"fa fa-lg fa-question-circle\"></span></a>";
+        $output_datatables_head .= " <a href=\"#\" role=\"button\" data-html=\"true\" data-toggle=\"popover\" data-container=\"body\" data-trigger=\"focus\" data-placement=\"top\" title=\"Designate Judge Role(s) at the Table\" data-content=\"<p>Choose roles for certain judges at this table. <p><strong>Table Head Judge</strong> - <a class='hide-loader' href='https://www.bjcp.org/competitions/competition-handbook/' target='_blank'>According to the BJCP</a>, the head judge is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p><p><strong>Mini-BOS Judge</strong> - the Mini-BOS Judge is one of the judges at the table designated to participate in the <a class='hide-loader' href='http://dev.bjcp.org/wp-content/uploads/2011/11/MiniBOS.pdf' target='_blank'>Mini-BOS</a> to determine placing entries.</p><p><strong>Team Lead Judge</strong> - the designated lead among the judges grouped into the same Judging Team at this table. Generally, this is the ranking judge on the team.</p>\"> <span class=\"fa fa-lg fa-question-circle\"></span></a>";
         $output_datatables_head .= "</th>";
     }
 }
@@ -189,7 +202,7 @@ if ($totalRows_brewer > 0) {
     $assigned_at_this_table = FALSE;
 
     $checked_head_judge = "";
-    $checked_lead_judge = "";
+    $checked_team_lead = "";
     $checked_minibos_judge = "";
     $roles_previously_defined = 0;
 
@@ -266,7 +279,10 @@ if ($totalRows_brewer > 0) {
           if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
             $judge_roles_display .= "<div id=\"mbos-display-".$row_brewer['uid']."\" class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</div>";
           }
-        
+          if (strpos($row_judge_roles['assignRoles'],"TL") !== FALSE) {
+            $judge_roles_display .= "<div id=\"tl-display-".$row_brewer['uid']."\" class=\"text-purple\"><i class=\"fa fa-star\"></i> Team Lead</div>";
+          }
+
         }
 
       for($i=1; $i<$row_flights['flightRound']+1; $i++) {
@@ -296,9 +312,56 @@ if ($totalRows_brewer > 0) {
           }
 
           
-          $unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);       
+          $unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);
           $flights_display .= $assign_flag;
           $flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random_dropdown,$ind_aff_flag);
+
+          // Mini-BOS Judge/Team Lead roles are a judge-only concept scoped per
+          // table/round (same granularity as the judging_assignments row
+          // itself) - not blanketed across rounds the way the Head Judge
+          // choice (table-wide select, below) is.
+          //
+          // Team itself has no input here - in non-queued mode, judges who
+          // share a Flight for this round are, by definition, judging the
+          // same entries together, which is exactly what "Team" represents.
+          // process_judging_assignments.inc.php derives assignTeam from
+          // assignFlight automatically, so $existing_team (still read from
+          // the DB here) reflects whatever Flight was last saved, and is used
+          // below to gate both role checkboxes - neither role makes sense for
+          // a judge not actually assigned to a flight this round, so both
+          // stay disabled until one is picked (and reset client-side if the
+          // Flight choice is cleared back to "Do Not Assign").
+          if ($filter == "judges") {
+            $db_conn->where('bid', $row_brewer['uid']);
+            $db_conn->where('assignTable', $row_tables_edit['id']);
+            $db_conn->where('assignRound', $i);
+            $row_judge_team = $db_conn->getOne($prefix."judging_assignments", null, "assignTeam, assignRoles");
+            $existing_team = ($row_judge_team) ? $row_judge_team['assignTeam'] : "";
+            $existing_round_roles = ($row_judge_team) ? $row_judge_team['assignRoles'] : "";
+            $roles_prev_defined_round = (!empty($existing_round_roles)) ? 1 : 0;
+            $checked_minibos_round = ((!empty($existing_round_roles)) && (strpos($existing_round_roles,"MBOS") !== FALSE)) ? "CHECKED" : "";
+            $checked_team_lead_round = ((!empty($existing_round_roles)) && (strpos($existing_round_roles,"TL") !== FALSE)) ? "CHECKED" : "";
+
+            $flights_display .= "<input type=\"hidden\" name=\"rolesPrevDefined".$random_dropdown."\" value=\"".$roles_prev_defined_round."\">";
+            // The Flight select is disabled by default whenever this judge already
+            // has a conflicting assignment (see $needs_unassign in
+            // lib/admin.lib.php's assign_to_table()), re-enabled only once its
+            // "Unassign from their current assignment..." checkbox is checked - and
+            // a disabled <select> isn't submitted at all. Without this, toggling
+            // just the role checkboxes on an already-assigned judge (the common
+            // case of adding a role after the fact, with no reason to touch the
+            // Flight) would post no assignFlight value, and
+            // process_judging_assignments.inc.php's "does this round actually have
+            // a flight" check for Mini-BOS/Team Lead would read that as "no", silently
+            // dropping the role. This hidden field survives the select being
+            // disabled so that check can fall back to it.
+            $flights_display .= "<input type=\"hidden\" name=\"flightPrevDefined".$random_dropdown."\" value=\"".(empty($existing_team) ? "0" : "1")."\">";
+            $flights_display .= "<section style='margin-top:5px;'>Judge Role(s)<br>";
+            $flights_display .= "<div class=\"checkbox\"><label><input name=\"minibos_judge".$random_dropdown."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_round." class=\"minibos-judge-checkbox\" data-team-suffix=\"".$random_dropdown."\" ".(empty($existing_team) ? "disabled" : "")." /> Mini-BOS Judge</label></div>";
+            $flights_display .= "<div class=\"checkbox\" style=\"padding-left:5px;\"><label><input name=\"team_lead".$random_dropdown."\" type=\"checkbox\" value=\"TL\" ".$checked_team_lead_round." class=\"team-lead-checkbox\" data-team-suffix=\"".$random_dropdown."\" ".(empty($existing_team) ? "disabled" : "")." /> Flight/Team Lead Judge</label> <small class=\"text-muted\">(requires a Flight assignment)</small></div>";
+            $flights_display .= "</section>";
+          }
+
           $flights_display .= "</td>";
 
         }
@@ -319,8 +382,8 @@ if ($totalRows_brewer > 0) {
             $checked_head_judge = "CHECKED";
           }
 
-          if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
-            $checked_lead_judge = "CHECKED";
+          if (strpos($row_judge_roles['assignRoles'],"TL") !== FALSE) {
+            $checked_team_lead = "CHECKED";
           }
 
           if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
@@ -453,29 +516,43 @@ if ($totalRows_brewer > 0) {
               else {
                   $(\"#toggleRoles".$random."\").hide();
                   $(\"input[name='head_judge".$random."']\").prop(\"checked\", false);
-                  $(\"input[name='lead_judge".$random."']\").prop(\"checked\", false);
                   $(\"input[name='minibos_judge".$random."']\").prop(\"checked\", false);
+                  $(\"input[name='team_lead".$random."']\").prop(\"checked\", false).prop(\"disabled\", true);
+                  $(\"select[name='assignTeam".$random."']\").val(\"\");
               }
           });\n
           ";
+
+          // Team, scoped to this judge/table/round (same granularity as the
+          // judging_assignments row itself) - not blanketed across rounds the
+          // way $row_judge_roles (HJ/MBOS/TL pre-check state) is above. Looked
+          // up before the role checkboxes below so the Team Lead checkbox's
+          // initial disabled state (it requires a Team) can use it.
+          $db_conn->where('bid', $row_brewer['uid']);
+          $db_conn->where('assignTable', $row_tables_edit['id']);
+          $db_conn->where('assignRound', $row_flights['flightRound']);
+          $row_judge_team = $db_conn->getOne($prefix."judging_assignments", null, "assignTeam");
+          $existing_team = ($row_judge_team) ? $row_judge_team['assignTeam'] : "";
+          $team_previously_defined = (!empty($existing_team)) ? 1 : 0;
 
           $output_datatables_body .= "<td>";
           $output_datatables_body .= "<div id=\"toggleRoles".$random."\">";
           $output_datatables_body .= "<input type=\"hidden\" name=\"rolesPrevDefined".$random."\" value=\"".$roles_previously_defined."\">";
           $output_datatables_body .= "<div class=\"checkbox\">";
-          $output_datatables_body .= "<label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." /> Head Judge</label>";
+          $output_datatables_body .= "<label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." class=\"head-judge-checkbox\" ".(((!empty($existing_head_judge_bid)) && ($existing_head_judge_bid != $row_brewer['uid'])) ? "disabled" : "")." /> Table Head Judge</label>";
           $output_datatables_body .= "</div><br>";
-          /*
-          $output_datatables_body .= "<div class=\"checkbox\">";
-          $output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
-          $output_datatables_body .= "</div><br>";
-          */
           $output_datatables_body .= "<div class=\"checkbox\">";
           $output_datatables_body .= "<label><input name=\"minibos_judge".$random."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_judge." /> Mini-BOS Judge</label>";
           $output_datatables_body .= "</div>";
+          $output_datatables_body .= "<div class=\"checkbox\">";
+          $output_datatables_body .= "<label><input name=\"team_lead".$random."\" type=\"checkbox\" value=\"TL\" ".$checked_team_lead." class=\"team-lead-checkbox\" data-team-suffix=\"".$random."\" ".(empty($existing_team) ? "disabled" : "")." /> Team Lead Judge</label> </div>";
+
+          $output_datatables_body .= "<input type=\"hidden\" name=\"teamPrevDefined".$random."\" value=\"".$team_previously_defined."\">";
+          $output_datatables_body .= "<section style='margin-top:5px;'>Assign to Judging Team<br>".assign_team_dropdown($existing_team, $random)."</section>";
+
           $output_datatables_body .= "</div>";
           $output_datatables_body .= "</td>";
-        
+
         } // end if ($_SESSION['jPrefsQueued'] == "Y")
 
   		} // end if ($filter == "judges")
@@ -491,6 +568,17 @@ if ($totalRows_brewer > 0) {
   			$output_at_table_modal_body .= "<tr>\n";
   			$output_at_table_modal_body .= "<td class=\"small\">".$judge_info[1].", ".$judge_info[0]."</td>";
   			$output_at_table_modal_body .= "<td class=\"small\">".$modal_rank."</td>";
+  			if ($filter == "judges") $output_at_table_modal_body .= "<td class=\"small\">".(!empty($existing_team) ? "Team ".h($existing_team) : "")."</td>";
+  			if ($filter == "judges") {
+  				$existing_roles_modal = ($_SESSION['jPrefsQueued'] == "Y") ? $row_judge_roles['assignRoles'] : $existing_round_roles;
+  				$modal_role_labels = array();
+  				if (!empty($existing_roles_modal)) {
+  					if (strpos($existing_roles_modal,"HJ") !== FALSE) $modal_role_labels[] = $label_head_judge;
+  					if (strpos($existing_roles_modal,"MBOS") !== FALSE) $modal_role_labels[] = $label_mini_bos_judge;
+  					if (strpos($existing_roles_modal,"TL") !== FALSE) $modal_role_labels[] = "Team Lead";
+  				}
+  				$output_at_table_modal_body .= "<td class=\"small\">".h(implode(", ", $modal_role_labels))."</td>";
+  			}
   			if ($_SESSION['jPrefsQueued'] == "N") $output_at_table_modal_body .= "<td class=\"small\">".$judge_info[14]."</td>";
   			if ($_SESSION['jPrefsQueued'] == "N") $output_at_table_modal_body .= "<td class=\"small\">".$judge_info[15]."</td>";
   			$output_at_table_modal_body .= "</tr>\n";
@@ -525,10 +613,112 @@ $(document).ready(function() {
   <?php if ($entry_conflict_count > 0) { ?>
   $('#unassigned-modal').modal('show');
   <?php } ?>
+  // Team Lead requires a Team - keep its checkbox in sync with this row's
+  // Team dropdown regardless of mode (queued: one per brewer; non-queued:
+  // one per round), matched by the shared "data-team-suffix" value.
+  $(document).on("change", "select[name^='assignTeam']", function() {
+      var suffix = $(this).data("team-suffix");
+      var $lead = $(".team-lead-checkbox[data-team-suffix='" + suffix + "']");
+      if ($(this).val() === "") { $lead.prop("checked", false).prop("disabled", true); }
+      else { $lead.prop("disabled", false); }
+      enforceTeamLeadScope();
+  });
+  // Non-queued mode has no Team dropdown - Team is derived from Flight
+  // (process_judging_assignments.inc.php), so Team Lead's "requires a Team"
+  // rule (and Mini-BOS Judge, which likewise only makes sense for a judge
+  // actually assigned to a flight this round) is enforced here against the
+  // Flight select instead. "0" is the Flight select's "Do Not Assign"
+  // option, equivalent to "no team".
+  $(document).on("change", "select[name^='assignFlight']", function() {
+      var suffix = $(this).data("team-suffix");
+      var $roleCheckboxes = $(".team-lead-checkbox[data-team-suffix='" + suffix + "'], .minibos-judge-checkbox[data-team-suffix='" + suffix + "']");
+      if ($(this).val() === "0") { $roleCheckboxes.prop("checked", false).prop("disabled", true); }
+      else { $roleCheckboxes.prop("disabled", false); }
+      enforceTeamLeadScope();
+  });
+  // Team Lead is only meant to designate one judge per Team (queued)/Flight
+  // (non-queued), unlike Head Judge above which is table-wide - Team 1 and
+  // Team 2 can each have their own Team Lead, so this groups by whatever
+  // value the row's Team/Flight select currently resolves to (matched by
+  // the shared "data-team-suffix") rather than disabling every other
+  // checkbox on the page. Also scoped by Round: non-queued mode shows every
+  // round for this table on one page, and Flight numbers restart at 1 each
+  // round, so "Flight 1" in Round 1 and "Flight 1" in Round 2 are unrelated
+  // and must not be treated as the same group (queued mode's whole page is
+  // already one round, so this is a no-op there - every suffix resolves to
+  // the same round value). Recomputed from scratch on every call so a
+  // checkbox this rule disabled is freed again as soon as its Team/Flight
+  // no longer collides with a checked Team Lead - the "requires a
+  // Team/Flight" base rule above still wins (it runs first and leaves a
+  // real signal behind: an empty/"0" select value) since this only ever
+  // disables an *unchecked* box, never forces one enabled.
+  function teamLeadGroupKey(suffix) {
+      var round = $("input[name='assignRound" + suffix + "']").val();
+      var groupValue = $("select[data-team-suffix='" + suffix + "']").val();
+      if ((!groupValue) || (groupValue === "0")) return null;
+      return round + "|" + groupValue;
+  }
+  function enforceTeamLeadScope() {
+      var checkedGroups = {};
+      $(".team-lead-checkbox:checked").each(function() {
+          var key = teamLeadGroupKey($(this).data("team-suffix"));
+          if (key) checkedGroups[key] = true;
+      });
+      $(".team-lead-checkbox").not(":checked").each(function() {
+          var $cb = $(this);
+          var key = teamLeadGroupKey($cb.data("team-suffix"));
+          $cb.prop("disabled", (!key) || !!checkedGroups[key]);
+      });
+  }
+  $(document).on("change", ".team-lead-checkbox", enforceTeamLeadScope);
+  enforceTeamLeadScope();
+  // Head Judge (queued mode) is a single-judge-per-table designation, but is
+  // offered as one checkbox per judge rather than a dropdown - enforce
+  // exclusivity by disabling every other checkbox once one is checked, and
+  // releasing them again if it's unchecked.
+  function enforceSingleHeadJudge($keep) {
+      $(".head-judge-checkbox").not($keep).prop("checked", false).prop("disabled", true);
+  }
+  $(document).on("change", ".head-judge-checkbox", function() {
+      if ($(this).is(":checked")) {
+          enforceSingleHeadJudge($(this));
+      } else {
+          $(".head-judge-checkbox").prop("disabled", false);
+      }
+  });
+  // Before this exclusivity existed, admins could check more than one Head
+  // Judge - clean that up on load rather than just leaving the extras checked
+  // AND disabled (which would hide the conflict instead of resolving it).
+  // Prefer whichever one the server already disabled the others around (the
+  // saved Head Judge of record); if none is enabled for some reason, fall
+  // back to the first checked box found.
+  var $savedHeadJudge = $(".head-judge-checkbox:checked").not(":disabled").first();
+  if ($savedHeadJudge.length === 0) $savedHeadJudge = $(".head-judge-checkbox:checked").first();
+  if ($savedHeadJudge.length > 0) enforceSingleHeadJudge($savedHeadJudge);
   <?php if ($_SESSION['jPrefsQueued'] == "Y") { echo $output_jquery_toggle; ?>
   <?php } else { ?>
   $(".assign-flight").change(function() {
       $(this).closest("section").find('.unassign-checkbox').prop('checked', true);
+  });
+  // A Flight select that starts disabled (judge already assigned here or
+  // at another table this round - see $needs_unassign in
+  // lib/admin.lib.php's assign_to_table()) only re-enables once its
+  // "Unassign from their current assignment..." checkbox is checked,
+  // forcing the explicit two-step move instead of a silent double-booking.
+  $(document).on("change", ".unassign-checkbox", function() {
+      var $select = $(this).closest("section").find(".assign-flight");
+      if ($select.length === 0) return;
+      // This checkbox only ever renders when the select needs it (see
+      // $needs_unassign in lib/admin.lib.php's assign_to_table()), so its
+      // checked state alone decides the select's enabled state - checked
+      // enables it, unchecked (including re-unchecking it later) disables
+      // it again.
+      $select.prop("disabled", !$(this).is(":checked"));
+      // bootstrap-select (.selectpicker) renders its own button over the
+      // real <select> - toggling .prop("disabled") on the hidden original
+      // doesn't by itself update that button, so it has to be told to
+      // re-sync or it stays visually/functionally stuck in its old state.
+      $select.selectpicker("refresh");
   });
   <?php } ?>
 });
@@ -749,7 +939,9 @@ $(document).ready(function() {
 		"bProcessing" : false,
 		"aoColumns": [
 			null,
-			null<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
+			null<?php if ($filter == "judges") { ?>,
+			null,
+			null<?php } ?><?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
 			null,
 			null
 			<?php } ?>
@@ -775,6 +967,7 @@ $(document).ready(function() {
                 <thead>
                     <th>Name</th>
                     <th>Rank</th>
+                    <?php if ($filter == "judges") { ?><th>Team</th><th>Role</th><?php } ?>
                     <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
                     <th>Flight</th>
                     <th>Round</th>

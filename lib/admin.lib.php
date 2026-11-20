@@ -1298,7 +1298,40 @@ function unassign($bid,$location,$round,$tid) {
 
 	return $r;
 }
-         
+
+/**
+ * Finds a judge's assignment row at a DIFFERENT table than $tid, for this
+ * same round/location - the "Assigned to another table in this round" purple
+ * row judge_alert() surfaces via unavailable(), but with enough detail
+ * (that other row's id and table number) to let an admin resolve it: free
+ * the judge from that other table before assigning them here, via the
+ * "Unassign from their current assignment at Table N and..." checkbox
+ * assign_to_table() builds below. Returns an empty array when there's no
+ * such conflict.
+ */
+function unassign_other_table($bid, $location, $round, $tid) {
+
+	require(CONFIG.'config.php');
+	$db_conn = new MysqliDb($connection);
+
+	$db_conn->where('bid', $bid);
+	$db_conn->where('assignRound', $round);
+	$db_conn->where('assignLocation', $location);
+	$db_conn->where('assignTable', $tid, '!=');
+	$row_assignments = $db_conn->getOne($prefix."judging_assignments", "id, assignTable");
+
+	if (empty($row_assignments)) return array();
+
+	$db_conn->where('id', $row_assignments['assignTable']);
+	$row_other_table = $db_conn->getOne($prefix."judging_tables", "tableNumber");
+
+	return array(
+		'id' => $row_assignments['id'],
+		'tableNumber' => (!empty($row_other_table)) ? $row_other_table['tableNumber'] : $row_assignments['assignTable']
+	);
+
+}
+
 function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$table_styles,$queued,$random,$ind_aff_flag) {
 
 	/**
@@ -1314,6 +1347,11 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 	// Define variables
 	$unassign = unassign($bid,$location,$round,$tid);
 	$unavailable = unavailable($bid,$location,$round,$tid);
+	// $unavailable is TRUE for a conflict at this table too, but $unassign
+	// already covers that case (it's how the SAME-table reassignment
+	// checkbox below works) - only look up the OTHER table's row when the
+	// conflict isn't the current table.
+	$other_assignment = (($unavailable) && ($unassign == 0)) ? unassign_other_table($bid,$location,$round,$tid) : array();
 
 	$r = "";
 	$disabled = "";
@@ -1362,6 +1400,25 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 		
 	else $r .= '<input type="hidden" name="unassign'.$random.'" value="'.$unassign.'"/>';
 
+	// Non-queued mode only (the Flight dropdown below): a judge already
+	// assigned to a DIFFERENT table this round/location would otherwise be
+	// assignable here too with no warning beyond the purple "Assigned to
+	// another table" row color - surface the same "unassign and..." pattern
+	// as above, targeting that other table's row instead. Reuses the
+	// "unassign-checkbox" class so the existing assign-flight change handler
+	// (admin/judging_assign.admin.php) auto-checks this too.
+	if (($queued == "N") && (!empty($other_assignment))) {
+
+		$r .= '<div class="form-inline">';
+		$r .= '<div class="checkbox" style="padding-bottom: 10px;">';
+		$r .= '<label for="unassignOther'.$random.'">';
+		$r .= '<input class="unassign-checkbox" type="checkbox" id="unassignOther'.$random.'" name="unassignOther'.$random.'" value="'.$other_assignment['id'].'" '.$disabled.'>';
+		$r .= ' Unassign from their current assignment at Table '.h($other_assignment['tableNumber']).' and...</label>';
+		$r .= '</div>';
+		$r .= '</div>';
+
+	}
+
 	if ($queued == "Y") {
 		
 		$r .= '<div class="form-inline">';
@@ -1383,7 +1440,22 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 	if ($queued == "N") {
 
 		// Build the flights DropDown
-		$r .= '<select class="selectpicker assign-flight" id="assignFlight'.$random.'" name="assignFlight'.$random.'" '.$disabled.' onchange="hj_enable(\''.$bid.'\',\'assignFlight'.$random.'\')">';
+		// data-team-suffix: non-queued mode derives a judge's Team from their
+		// Flight choice (two judges on the same flight are, by definition,
+		// judging the same entries together) - this lets the shared
+		// Team Lead toggle handler in admin/judging_assign.admin.php find the
+		// matching Team Lead checkbox the same way it already does for
+		// queued mode's Team dropdown.
+		// The select starts disabled whenever this judge already has a
+		// conflicting assignment (this table or another one, same
+		// round/location) - $needs_unassign marks that case so the
+		// "Unassign from their current assignment..." checkbox above is the
+		// only way to re-enable it (see the .unassign-checkbox change
+		// handler in admin/judging_assign.admin.php), forcing the two-step
+		// process rather than allowing a silent double-booking.
+		$needs_unassign = (($unassign > 0) || (!empty($other_assignment)));
+		$flight_disabled = ((!empty($disabled)) || $needs_unassign) ? "disabled" : "";
+		$r .= '<select class="selectpicker assign-flight" id="assignFlight'.$random.'" name="assignFlight'.$random.'" data-team-suffix="'.$random.'" '.$flight_disabled.' onchange="hj_enable(\''.$bid.'\',\'assignFlight'.$random.'\')">';
 
 		$r .= '<option value="0" />Do Not Assign</option>';
 			
@@ -1414,6 +1486,29 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 	if ($queued == "Y") $r .= '<input type="hidden" name="assignFlight'.$random.'" value="1">';
 
 	$r .= "</section>";
+
+	return $r;
+
+}
+
+/**
+ * Builds a <select> letting an admin group this judge, for this
+ * table/round, into a team with other judges who share the same letter - a
+ * display/pairing label independent of assignRoles (Head Judge/Mini-BOS).
+ * $random matches whatever suffix assign_to_table() used for this same row's
+ * hidden fields, so process_judging_assignments.inc.php reads it as one row.
+ * $existing_team is the row's current assignTeam value, or empty for none.
+ */
+function assign_team_dropdown($existing_team, $random) {
+
+	$teams = array("" => "No Team", "1" => "Team 1", "2" => "Team 2", "3" => "Team 3", "4" => "Team 4", "5" => "Team 5", "6" => "Team 6", "7" => "Team 7", "8" => "Team 8", "9" => "Team 9", "10" => "Team 10");
+
+	$r = '<select class="form-control" name="assignTeam'.$random.'" data-team-suffix="'.$random.'">';
+	foreach ($teams as $team_value => $team_label) {
+		$selected = ($existing_team == $team_value) ? ' selected' : '';
+		$r .= '<option value="'.$team_value.'"'.$selected.'>'.$team_label.'</option>';
+	}
+	$r .= '</select>';
 
 	return $r;
 

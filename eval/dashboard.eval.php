@@ -185,7 +185,7 @@ if ((!empty($all_table_ids_eval)) && (table_exists($judging_assignments_db_table
 $judge_names_by_table_eval = array();
 if ((!empty($all_table_ids_eval)) && (table_exists($judging_assignments_db_table)) && (table_exists($prefix."brewer"))) {
 	$placeholders_eval = implode(',', array_fill(0, count($all_table_ids_eval), '?'));
-	$query_judge_names_eval = "SELECT b.assignTable, a.brewerFirstName,a.brewerLastName FROM ".$prefix."brewer"." a, ".$judging_assignments_db_table." b WHERE b.assignTable IN (".$placeholders_eval.") AND a.uid = b.bid AND b.assignment='J' ORDER BY b.assignTable, a.brewerLastName, a.brewerFirstName ASC";
+	$query_judge_names_eval = "SELECT b.assignTable, b.bid, b.assignRound, b.assignTeam, a.brewerFirstName,a.brewerLastName FROM ".$prefix."brewer"." a, ".$judging_assignments_db_table." b WHERE b.assignTable IN (".$placeholders_eval.") AND a.uid = b.bid AND b.assignment='J' ORDER BY b.assignTable, a.brewerLastName, a.brewerFirstName ASC";
 	$rows_judge_names_eval = $db_conn->rawQuery($query_judge_names_eval, $all_table_ids_eval);
 	foreach ($rows_judge_names_eval as $row_judge_name_eval) {
 		$judge_names_by_table_eval[$row_judge_name_eval['assignTable']][] = $row_judge_name_eval;
@@ -858,6 +858,49 @@ if ($totalRows_table_assignments > 0) {
 
 			}
 
+			/**
+			 * -------------------------------------------
+			 * Your Teammate(s)
+			 * Unlike the stats block below, this is visible to the judge
+			 * themselves, not just $admin - it's how a regular judge learns
+			 * who they're paired with at this table.
+			 * -------------------------------------------
+			 */
+
+			$table_teammate_display = "";
+
+			if (!empty($judge_names_by_table_eval[$tbl_id])) {
+
+				$my_team_eval = "";
+				$my_round_eval = "";
+
+				foreach ($judge_names_by_table_eval[$tbl_id] as $row_judge_name_eval) {
+					if (($row_judge_name_eval['bid'] == $_SESSION['user_id']) && (!empty($row_judge_name_eval['assignTeam']))) {
+						$my_team_eval = $row_judge_name_eval['assignTeam'];
+						$my_round_eval = $row_judge_name_eval['assignRound'];
+						break;
+					}
+				}
+
+				if (!empty($my_team_eval)) {
+
+					$teammate_names_eval = array();
+					foreach ($judge_names_by_table_eval[$tbl_id] as $row_judge_name_eval) {
+						if (($row_judge_name_eval['bid'] != $_SESSION['user_id']) && ($row_judge_name_eval['assignTeam'] == $my_team_eval) && ($row_judge_name_eval['assignRound'] == $my_round_eval)) {
+							$teammate_names_eval[] = $row_judge_name_eval['brewerFirstName']." ".$row_judge_name_eval['brewerLastName'];
+						}
+					}
+
+					if (!empty($teammate_names_eval)) {
+						$table_teammate_display .= "<div class=\"alert alert-info small\">";
+						$table_teammate_display .= "<i class=\"fa fa-users\"></i> <strong>Your teammate(s) at this table:</strong> ".implode(", ", $teammate_names_eval);
+						$table_teammate_display .= "</div>";
+					}
+
+				}
+
+			}
+
 			if ($admin) {
 
 				/**
@@ -929,7 +972,7 @@ if ($totalRows_table_assignments > 0) {
 
 				}
 
-				$table_assignment_stats .= "<section class=\"row\">";
+				$table_assignment_stats .= "<section style=\"margin-bottom: 8px;\" class=\"row\">";
 				$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
 				$table_assignment_stats .= "<strong>".$evaluation_info_025."</strong>";
 				$table_assignment_stats .= "</div>";
@@ -938,6 +981,35 @@ if ($totalRows_table_assignments > 0) {
 				if (!empty($assigned_judge_names_display)) $table_assignment_stats .= " &ndash; ".$assigned_judge_names_display;
 				$table_assignment_stats .= "</div>";
 				$table_assignment_stats .= "</section>";
+
+				// Same scope as "Judges assigned to this table:" above - grouped by
+				// assignTeam across the whole table, not per round - matching the
+				// Admin Judging Tables page's team breakdown.
+				$judge_team_names_display_eval = array();
+				foreach ($row_assigned_judge_names_list as $row_assigned_judge_names) {
+					if (!empty($row_assigned_judge_names['assignTeam'])) {
+						$judge_team_names_display_eval[$row_assigned_judge_names['assignTeam']][] = $row_assigned_judge_names['brewerFirstName']." ".$row_assigned_judge_names['brewerLastName'];
+					}
+				}
+
+				if (!empty($judge_team_names_display_eval)) {
+
+					ksort($judge_team_names_display_eval, SORT_NUMERIC);
+					$judge_team_breakdown_parts_eval = array();
+					foreach ($judge_team_names_display_eval as $team_num_eval => $team_names_eval) {
+						$judge_team_breakdown_parts_eval[] = "Team ".h($team_num_eval)." &ndash; ".h(implode(", ", $team_names_eval));
+					}
+
+					$table_assignment_stats .= "<section style=\"margin-bottom: 8px;\" class=\"row\">";
+					$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
+					$table_assignment_stats .= "<strong>Judge teams:</strong>";
+					$table_assignment_stats .= "</div>";
+					$table_assignment_stats .= "<div class=\"col col-lg-8 col-md-7 col-sm-7 col-xs-6\">";
+					$table_assignment_stats .= implode("<br>", $judge_team_breakdown_parts_eval);
+					$table_assignment_stats .= "</div>";
+					$table_assignment_stats .= "</section>";
+
+				}
 
 				if ($table_scored_entries_count > 0) {
 
@@ -951,7 +1023,7 @@ if ($totalRows_table_assignments > 0) {
 					}
 					$judge_names = rtrim($judge_names, ", ");
 
-					$table_assignment_stats .= "<section class=\"row\">";
+					$table_assignment_stats .= "<section style=\"margin-bottom: 8px;\" class=\"row\">";
 					$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
 					$table_assignment_stats .= "<strong>".$evaluation_info_043."</strong>";
 					$table_assignment_stats .= "</div>";
@@ -961,7 +1033,7 @@ if ($totalRows_table_assignments > 0) {
 					$table_assignment_stats .= "</section>";
 				}
 
-				$table_assignment_stats .= "<section class=\"row\">";
+				$table_assignment_stats .= "<section style=\"margin-bottom: 8px;\" class=\"row\">";
 				$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
 				$table_assignment_stats .= "<strong>".$evaluation_info_039."</strong>";
 				$table_assignment_stats .= "</div>";
@@ -970,7 +1042,7 @@ if ($totalRows_table_assignments > 0) {
 				$table_assignment_stats .= "</div>";
 				$table_assignment_stats .= "</section>";
 
-				$table_assignment_stats .= "<section class=\"row\">";
+				$table_assignment_stats .= "<section style=\"margin-bottom: 8px;\" class=\"row\">";
 				$table_assignment_stats .= "<div class=\"col col-lg-4 col-md-5 col-sm-5 col-xs-6\">";
 				$table_assignment_stats .= "<strong>".$evaluation_info_040."</strong>";
 				$table_assignment_stats .= "</div>";
@@ -990,7 +1062,7 @@ if ($totalRows_table_assignments > 0) {
 
 			}
 
-			$table_assignment_entries .= $table_places_display.$table_assignment_stats.$table_assignment_pre.$table_assignment_data.$table_assignment_post;
+			$table_assignment_entries .= $table_places_display.$table_teammate_display.$table_assignment_stats.$table_assignment_pre.$table_assignment_data.$table_assignment_post;
 			
 		} // end if (time() > $table_location[0])
 

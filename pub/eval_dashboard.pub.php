@@ -573,6 +573,9 @@ if ($totalRows_table_assignments > 0) {
 			if (strpos($row_table_assignments['assignRoles'], "MBOS") !== false) {
 				$table_assignment_stats .= "<div class=\"text-end text-teal \"><i class=\"fa fa-trophy me-1\"></i>".$label_mini_bos_judge."</div>";
 			}
+			if (strpos($row_table_assignments['assignRoles'], "TL") !== false) {
+				$table_assignment_stats .= "<div class=\"text-end text-teal \"><i class=\"fa fa-star me-1\"></i>Team Lead</div>";
+			}
 			$table_assignment_stats .= "</div>";
 			$table_assignment_stats .= "</div>";
 
