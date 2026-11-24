@@ -73,6 +73,11 @@ if (isset($_SESSION['loginUsername'])) {
 
 	}
 
+	// Style 02A (Regional Variations) always requires entrants to specify their
+	// variation, independent of the brewStyleReqSpec flag - same exception
+	// output/pullsheets.output.php already applies for these style sets.
+	if ((in_array($_SESSION['prefsStyleSet'], array("BJCP2021","BJCP2025","BJCP2026"))) && (!in_array("02A", $special_ingredients))) $special_ingredients[] = "02A";
+
 	if ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) {
 
 		/**
@@ -502,6 +507,7 @@ if (isset($_SESSION['loginUsername'])) {
 				$filename = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $filename)));
 				
 				// Print labels
+				$labels_printed = 0;
 				foreach ($rows_log as $row_log) {
 
 					$character_length = 0;
@@ -677,10 +683,25 @@ if (isset($_SESSION['loginUsername'])) {
 						else $text = $entry_info.$special.$entry_str_sweet_carb.$allergens.$optional;
 						$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
 						
-						if (!empty($text)) $pdf->Add_Label($text);
+						if (!empty($text)) { $pdf->Add_Label($text); $labels_printed++; }
 
 					}
 
+				}
+
+				// $view=="special" scopes labels down to only entries whose style
+				// requires info (or, for a table-scoped job, to entries actually
+				// flighted to that table) - either filter can legitimately leave
+				// zero entries. Say so instead of handing back a label sheet with
+				// nothing printed on it.
+				if ($labels_printed == 0) {
+					$message = "No entries";
+					if ($location != "default") $message .= " at this table";
+					if ($filter != "default") $message .= " in this category";
+					$message .= " have any required information.";
+					$pdf->SetXY(10, 10);
+					$pdf->SetFont('Arial','',12);
+					$pdf->MultiCell(0, 8, $message, 0, 'L');
 				}
 
 				if (ob_get_length()) ob_clean();

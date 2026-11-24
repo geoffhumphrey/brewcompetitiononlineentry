@@ -18,7 +18,8 @@ if ($go == "entries") {
 			$params_log[] = $filter;
 			if ($tb == "received") $query_log .= " AND brewReceived='1'";
 		}
-		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
+		if ($labelsort == "entry") $query_log .= " ORDER BY id ASC";
+		else $query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 
 	}
 
@@ -33,6 +34,11 @@ if ($go == "entries") {
 			$params_log[] = $filter;
 			if ($tb == "received") $query_log .= " AND brewReceived='1'";
 		}
+		// Issue #1778's entry-number sort option is deliberately NOT applied
+		// here - this report prints the (anonymized) judging number on each
+		// label, so reordering by the underlying entry id would desync the
+		// printed numbers from the order they come off the printer, which is
+		// more confusing than the style-order default, not less.
 		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 
 	}
@@ -40,6 +46,7 @@ if ($go == "entries") {
 	if (($action == "bottle-judging-round") && ($view == "default")) {
 		$query_log = "SELECT * FROM ".$prefix."brewing";
 		//if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
+		// Not toggled by $labelsort - see the bottle-judging note above.
 		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 
 	}
@@ -48,12 +55,15 @@ if ($go == "entries") {
 
 		$query_log = "SELECT * FROM ".$prefix."brewing";
 		//if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
-		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
+		if ($labelsort == "entry") $query_log .= " ORDER BY id ASC";
+		else $query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 
 	}
 
 	if (($action == "bottle-category-round") && ($view == "default")) {
 
+		// No per-entry "id" is selected here (one label per style, not per
+		// entry), so the entry-number sort option (issue #1778) doesn't apply.
 		$query_log = "SELECT brewCategorySort,brewSubCategory FROM ".$prefix."brewing"." ORDER BY brewCategorySort,brewSubCategory ASC";
 		if ($filter != "default") { $query_log .= " WHERE brewCategorySort=?"; $params_log[] = $filter; }
 
@@ -63,7 +73,8 @@ if ($go == "entries") {
 
 		$query_log = "SELECT * FROM ".$prefix."brewing";
 		if ($filter != "default") { $query_log .= " WHERE brewCategorySort=?"; $params_log[] = $filter; }
-		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
+		if ($labelsort == "entry") $query_log .= " ORDER BY id ASC";
+		else $query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 
 	}
 

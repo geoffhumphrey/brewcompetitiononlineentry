@@ -943,6 +943,19 @@ if ($recently_updated) {
                                     <strong>Print Bottle Labels (PDF)</strong>
                                 </div>
                             </div>
+                            <div id="bottleLabelsSection">
+                            <div class="row" style="padding-bottom:10px;">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Sort Order</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <select class="selectpicker" title="Category/Style Order" id="bottle-labels-sort" data-with="fit" data-size="10">
+                                        <option value="default" selected>Category/Style Order</option>
+                                        <option value="entry">Entry Number Order</option>
+                                    </select>
+                                    <div style="margin-top: 10px"><i class="fa fa-fw fa-sm fa-star text-primary"></i> <span class="text-muted">Sort order only applies to the starred Entry Number labels below - Judging Number and Style/Sub-Style Only labels keep their style order.</span></div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <a class="hide-loader" href="https://www.avery.com/products/labels/5167" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5167"><strong>Letter <span class="fa fa-sm fa-external-link"></span></strong></a>
@@ -959,12 +972,12 @@ if ($recently_updated) {
                                     <a class="hide-loader" href="https://www.avery.com/products/labels/5160" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160"><strong>Letter <span class="fa fa-sm fa-external-link"></span></strong></a>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                    <ul class="list-inline">
-                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
+                                    <ul class="list-unstyled">
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160"><i class="fa fa-fw fa-sm fa-star text-primary"></i> Entry Numbers</a></li>
                                         <li><a target="_blank" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
                                     </ul>
                                     <ul class="list-unstyled">
-                                        <li>With Required Info - All Styles (Entry Numbers)
+                                        <li><i class="fa fa-fw fa-sm fa-star text-primary"></i> With Required Info - All Styles (Entry Numbers)
                                             <div class="dropdown bcoem-admin-dashboard-select">
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
@@ -975,7 +988,7 @@ if ($recently_updated) {
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li>With Required Info - Only Styles Where Required (Entry Numbers)
+                                        <li><i class="fa fa-fw fa-sm fa-star text-primary"></i> With Required Info - Only Styles Where Required (Entry Numbers)
                                             <div class="dropdown bcoem-admin-dashboard-select">
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
@@ -1019,11 +1032,11 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422">Entry Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422"><i class="fa fa-fw fa-sm fa-star text-primary"></i> Entry Numbers</a></li>
                                         <li><a target="_blank" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>includes/output.inc.php?section=labels-admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
                                     </ul>
                                     <ul class="list-unstyled">
-                                        <li>With Required Info - All Styles (Entry Numbers)
+                                        <li><i class="fa fa-fw fa-sm fa-star text-primary"></i> With Required Info - All Styles (Entry Numbers)
                                             <div class="dropdown bcoem-admin-dashboard-select">
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
@@ -1034,7 +1047,7 @@ if ($recently_updated) {
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li>With Required Info - Only Styles Where Required (Entry Numbers)
+                                        <li><i class="fa fa-fw fa-sm fa-star text-primary"></i> With Required Info - Only Styles Where Required (Entry Numbers)
                                             <div class="dropdown bcoem-admin-dashboard-select">
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
@@ -1078,7 +1091,7 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li>Entry Numbers
+                                        <li><i class="fa fa-fw fa-sm fa-star text-primary"></i> Entry Numbers
                                             <div class="dropdown bcoem-admin-dashboard-select">
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
@@ -1111,7 +1124,7 @@ if ($recently_updated) {
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li>Entries Added By Admins
+                                        <li><i class="fa fa-fw fa-sm fa-star text-primary"></i> Entries Added By Admins
                                             <div class="dropdown bcoem-admin-dashboard-select">
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu8" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
@@ -1131,7 +1144,7 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li>Entry Numbers
+                                        <li><i class="fa fa-fw fa-sm fa-star text-primary"></i> Entry Numbers
                                             <div class="dropdown bcoem-admin-dashboard-select">
                                                 <button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                                 </button>
@@ -1178,6 +1191,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div>
+                            </div><!-- #bottleLabelsSection -->
                             <div class="row" style="padding: 25px 0px 15px 0px;">
                                 <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <strong>Print Box Labels (PDF)</strong>
@@ -1730,6 +1744,12 @@ if ($recently_updated) {
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
+                                                        <select class="selectpicker" title="Order (Entry Numbers only)" id="labelsort-letter" name="labelsort" data-with="fit" data-size="10">
+                                                            <option value="default" selected>Category/Style Order</option>
+                                                            <option value="entry">Entry Number Order</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <button name="submit" type="submit" class="btn btn-sm btn-primary">Generate</button>
                                                         <div style="padding-top:10px" id="label-letter-msg" class="text-danger"></div>
                                                     </div>
@@ -1755,6 +1775,12 @@ if ($recently_updated) {
                                                         <select class="selectpicker" title="Entry or Judging Numbers" id="action-a4" name="action" data-with="fit" data-size="10">
                                                             <option value="bottle-entry">Entry Numbers</option>
                                                             <option value="bottle-judging">Judging Numbers</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="selectpicker" title="Order (Entry Numbers only)" id="labelsort-a4" name="labelsort" data-with="fit" data-size="10">
+                                                            <option value="default" selected>Category/Style Order</option>
+                                                            <option value="entry">Entry Number Order</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
@@ -3123,4 +3149,65 @@ foreach ($bcoem_dashboard_help_array as $content)  {
             $("#label-a4-msg").show(400).delay(8000).hide(400);
         }
     });
+
+    // Issue #1778: let the admin choose entry-number order instead of the
+    // default style/category order for the Entry Number bottle-cap sticker
+    // links above (action=bottle-entry[-round]). Judging Number links
+    // (action=bottle-judging[-round]) print an anonymized judging number,
+    // not an entry number, so they're deliberately left out here - toggling
+    // this would desync the printed numbers from the order they come off
+    // the printer, which is more confusing than useful. These are plain GET
+    // links (not a form), so the toggle just rewrites each matching link's
+    // href in place rather than changing navigation.
+    function bcoem_set_url_param(url, key, value) {
+        var re = new RegExp("([?&])" + key + "=[^&]*");
+        if (re.test(url)) return url.replace(re, "$1" + key + "=" + value);
+        return url + (url.indexOf("?") === -1 ? "?" : "&") + key + "=" + value;
+    }
+
+    function bcoem_remove_url_param(url, key) {
+        return url.replace(new RegExp("[?&]" + key + "=[^&]*"), "");
+    }
+
+    $("#bottle-labels-sort").on("change", function() {
+        var mode = $(this).val();
+        $("#bottleLabelsSection a[href*='action=bottle-entry']").each(function() {
+            var href = $(this).attr("href");
+            if (mode == "entry") href = bcoem_set_url_param(href, "labelsort", "entry");
+            else href = bcoem_remove_url_param(href, "labelsort");
+            $(this).attr("href", href);
+        });
+    });
+
+    // Issue #1778, "By Table" forms: Entry Number Order only means anything
+    // when the Entry Numbers action is also chosen - disable it (and fall
+    // back to Category/Style Order if it was already selected) whenever
+    // Judging Numbers is picked instead, same reasoning as the link-wall
+    // toggle above. This fires as a side effect of the existing submit
+    // handlers' post-submit reset (#action-letter/#action-a4 get
+    // .val("").trigger("change") right before window.location.replace), so
+    // it's wrapped in try/catch - a cosmetic sync helper must never be able
+    // to throw and abort that reset sequence before the redirect runs.
+    function bcoem_sync_labelsort_option(actionVal, labelsortId) {
+        try {
+            var disable = (actionVal == "bottle-judging");
+            var $labelsort = $("#" + labelsortId);
+            $labelsort.find("option[value='entry']").prop("disabled", disable);
+            if (disable && ($labelsort.val() == "entry")) $labelsort.val("default");
+            $labelsort.selectpicker("refresh");
+        } catch (e) {
+            console.warn("bcoem_sync_labelsort_option failed for #" + labelsortId, e);
+        }
+    }
+
+    $("#action-letter").on("change", function() {
+        bcoem_sync_labelsort_option($(this).val(), "labelsort-letter");
+    });
+
+    $("#action-a4").on("change", function() {
+        bcoem_sync_labelsort_option($(this).val(), "labelsort-a4");
+    });
+
+    bcoem_sync_labelsort_option($("#action-letter").val(), "labelsort-letter");
+    bcoem_sync_labelsort_option($("#action-a4").val(), "labelsort-a4");
 </script>
