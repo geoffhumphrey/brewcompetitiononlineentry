@@ -6,8 +6,9 @@
  *              narrow (GitHub #1756): only allowed before "Import Score
  *              Data" has run for the evaluation's current entry, so there's
  *              no possibility of an already-imported judging_scores row
- *              sitting on incorrect grounds. The full-scope version (moving
- *              evalTable/evalSpecialIngredients/uid too, resetting
+ *              sitting on incorrect grounds. evalTable is synced to the
+ *              target entry's actual table (see below); the full-scope
+ *              version (also moving evalSpecialIngredients/uid, resetting
  *              evalPlace/evalMiniBOS/evalPosition, warning on stale official
  *              scores) is filed in the BCOE&M Enhancement Ledger for later.
  */
@@ -106,12 +107,26 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						$row_target_style = $db_conn->rawQueryOne($query_style, $params_style);
 						$target_eval_style = (!empty($row_target_style)) ? $row_target_style['id'] : "";
 
-						$db_conn->where('id', $id);
-						$result = $db_conn->update($prefix."evaluation", array(
+						// Also sync evalTable to the target entry's actual table assignment -
+						// same judging_flights-by-flightEntryID lookup lib/admin.lib.php's
+						// flight_entry_info() and process_brewing.inc.php's own table-moved
+						// sync (line ~999) both use. Without this, Import Score Data (ajax/
+						// import_scores.ajax.php, which takes MAX(evalTable) across an entry's
+						// judges) can inherit this judge's stale, pre-reassignment table and
+						// file the entry's official score/place under the wrong table.
+						$db_conn->where('flightEntryID', $row_target_entry['id']);
+						$row_target_flight = $db_conn->getOne($prefix."judging_flights", "flightTable");
+
+						$eval_update_data = array(
 							'eid' => $row_target_entry['id'],
 							'evalStyle' => $target_eval_style,
 							'evalUpdatedDate' => time()
-						));
+						);
+
+						if (!empty($row_target_flight)) $eval_update_data['evalTable'] = $row_target_flight['flightTable'];
+
+						$db_conn->where('id', $id);
+						$result = $db_conn->update($prefix."evaluation", $eval_update_data);
 
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
