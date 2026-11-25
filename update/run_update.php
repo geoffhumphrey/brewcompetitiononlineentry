@@ -4009,6 +4009,16 @@ foreach ($archive_suffixes as $suffix) {
 		$db_conn->rawQuery($sql);
 	}
 
+	if (!check_update("brewBottlesPromised", $prefix."brewing_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `brewBottlesPromised` TINYINT(3) UNSIGNED NULL DEFAULT NULL COMMENT 'Number of bottles the brewer states they are sending for this entry.';", $prefix."brewing_".$suffix);
+		$db_conn->rawQuery($sql);
+	}
+
+	if (!check_update("brewBottlesCounted", $prefix."brewing_".$suffix)) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `brewBottlesCounted` TINYINT(3) UNSIGNED NULL DEFAULT NULL COMMENT 'Number of bottles actually counted for this entry at check-in.';", $prefix."brewing_".$suffix);
+		$db_conn->rawQuery($sql);
+	}
+
 	if (!check_update("styleTypeEntryLimit", $prefix."style_types_".$suffix)) {
 		$sql = sprintf("ALTER TABLE `%s` ADD `styleTypeEntryLimit` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;", $prefix."style_types_".$suffix);
 		$db_conn->rawQuery($sql);
@@ -5979,6 +5989,30 @@ if (!check_update("assignTeam", $prefix."judging_assignments")) {
 	if ($db_conn->getLastErrno() === 0) $v3300_update .= "<li>Added the ability for an admin to group judges assigned to the same table into teams (Admin &gt; Judging Tables), surfaced to judges on their own dashboard, assignment email, Table Cards, and the Judge Assignments Report.</li>";
 	else {
 		$v3300_update .= "<li class=\"text-danger\">Judging Teams column NOT added to the judging_assignments table.</li>";
+		$error_count++;
+	}
+
+}
+
+if (!check_update("brewBottlesPromised", $prefix."brewing")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `brewBottlesPromised` TINYINT(3) UNSIGNED NULL DEFAULT NULL COMMENT 'Number of bottles the brewer states they are sending for this entry.';", $prefix."brewing");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3300_update .= "<li>Added the ability for brewers to specify how many bottles they are sending for each entry.</li>";
+	else {
+		$v3300_update .= "<li class=\"text-danger\">Bottles Promised column NOT added to the brewing table.</li>";
+		$error_count++;
+	}
+
+}
+
+if (!check_update("brewBottlesCounted", $prefix."brewing")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `brewBottlesCounted` TINYINT(3) UNSIGNED NULL DEFAULT NULL COMMENT 'Number of bottles actually counted for this entry at check-in.';", $prefix."brewing");
+	$result = $db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() === 0) $v3300_update .= "<li>Added the ability for stewards to record the actual bottle count at check-in, flagging entries where it doesn't match what the brewer promised or what's required (Admin &gt; Entries).</li>";
+	else {
+		$v3300_update .= "<li class=\"text-danger\">Bottles Counted column NOT added to the brewing table.</li>";
 		$error_count++;
 	}
 

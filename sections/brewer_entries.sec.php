@@ -134,6 +134,7 @@ if ($totalRows_log > 0) {
 		$print_forms_link = "";
 		$edit_link = "";
 		$required_info = "";
+		$bottles_cans_li = "";
 		$collapse_info = "";
 		$entry_update_date = "";
 		$allergen_info = "";
@@ -212,6 +213,8 @@ if ($totalRows_log > 0) {
 			if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $required_info .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
 			$required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 		}
+
+		if (!empty($row_log['brewBottlesPromised'])) $bottles_cans_li = sprintf("<li><strong>%s:</strong> %s</li>", $label_bottles_cans, $row_log['brewBottlesPromised']);
 
 		if (!empty($row_log['brewPossAllergens'])) {
 			$allergen_info .= $label_possible_allergens.": ".$row_log['brewPossAllergens'];
@@ -357,14 +360,14 @@ if ($totalRows_log > 0) {
 		$entry_output .= "<div style=\"margin-bottom: 8px;\">";
 		$entry_output .= $entry_name;
 
-		if (!empty($required_info)) $entry_output .= " <a class=\"hide-loader\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-info-circle\"></span></a> ";
+		if ((!empty($required_info)) || (!empty($bottles_cans_li))) $entry_output .= " <a class=\"hide-loader\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-info-circle\"></span></a> ";
 
 		if (!empty($row_log['brewCoBrewer'])) $entry_output .= sprintf("<br><em class=\"small\">%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
 
-		if (!empty($required_info)) {
+		if ((!empty($required_info)) || (!empty($bottles_cans_li))) {
 			$entry_output .= "<div style=\"margin-top: 8px;\" class=\"collapse small alert alert-info\" id=\"collapseEntryInfo".$row_log['id']."\">";
 			$entry_output .= "<ul class='list-unstyled'>";
-	    	$entry_output .= $required_info;
+	    	$entry_output .= $required_info . $bottles_cans_li;
 	    	$entry_output .= "</ul>";
 	    	$entry_output .= "</div>";
 		}
@@ -397,6 +400,7 @@ if ($totalRows_log > 0) {
 			else $entry_output .= "<br><span class=\"text-success\">".$label_paid." <i class=\"fa fa-sm fa-fw fa-check\"></i></span>";
 			if ($row_log['brewReceived'] == 0) $entry_output .= "<br><span class=\"text-danger\">".$label_received." <i class=\"fa fa-sm fa-fw fa-times\"></i></span>";
 			else $entry_output .= "<br><span class=\"text-success\">".$label_received." <i class=\"fa fa-sm fa-fw fa-check\"></i></span>";
+			if (!empty($row_log['brewBottlesPromised'])) $entry_output .= "<br>".$label_bottles_cans.": ".$row_log['brewBottlesPromised'];
 		}
 		
 		if (!empty($row_log['brewUpdated'])) $entry_output .= "<br>".$label_updated." ".$entry_update_date;

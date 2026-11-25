@@ -122,7 +122,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 	
 	// Check to see if the entry is in the DB
 	$db_conn->where("id", $id);
-	$row_entry = $db_conn->getOne($prefix."brewing", "id,brewName,brewStyle,brewCategory,brewSubCategory,brewPaid,brewJudgingNumber");
+	$row_entry = $db_conn->getOne($prefix."brewing", "id,brewName,brewStyle,brewCategory,brewSubCategory,brewPaid,brewJudgingNumber,brewReceived,brewBoxNum,brewBottlesCounted");
 	$totalRows_entry = $db_conn->count;
 	
 	if ($totalRows_entry == 1) {
@@ -170,6 +170,12 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 			if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum']))) $brewBoxNum = sterilize($_POST['brewBoxNum']);
 			if ((!$paid) && ((isset($_POST['brewPaid'])) && (!empty($_POST['brewPaid'])))) $brewPaid = 1;
 
+			// Not empty()/blank_to_null() - 0 bottles counted is a real, meaningful
+			// result (nothing arrived), and empty("0") is true in PHP, which would
+			// otherwise treat "0" the same as never having counted at all.
+			$brewBottlesCounted = null;
+			if ((isset($_POST['brewBottlesCounted'])) && ($_POST['brewBottlesCounted'] !== "")) $brewBottlesCounted = sterilize($_POST['brewBottlesCounted']);
+
 			// Check if judging number has been input
 			// If so, add to update query and perform redirect
 			if ((isset($_POST['brewJudgingNumber'])) && ($_POST['brewJudgingNumber'] != "")) {
@@ -195,6 +201,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 					'brewReceived' => 1,
 					'brewJudgingNumber' => $brewJudgingNumber,
 					'brewBoxNum' => $brewBoxNum,
+					'brewBottlesCounted' => $brewBottlesCounted,
 					'brewPaid' => $brewPaid
 				);
 
@@ -207,6 +214,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 				$data = array(
 					'brewReceived' => 1,
 					'brewBoxNum' => $brewBoxNum,
+					'brewBottlesCounted' => $brewBottlesCounted,
 					'brewPaid' => $brewPaid
 				);
 
@@ -412,6 +420,14 @@ $_SESSION['last_action'] = time();
 		</div>
 	</div>
     <?php } ?>
+    <?php if ($row_entry['brewReceived'] == 1) { ?>
+    <div class="alert alert-warning mt-3">
+        <i class="fa fa-lg fa-exclamation-triangle me-2"></i><strong><?php echo $qr_text_021; ?></strong>
+        <?php if (($row_entry['brewBottlesCounted'] !== null) && ($row_entry['brewBottlesCounted'] !== "")) { ?>
+        <div class="mt-1"><?php echo sprintf($qr_text_022, h($row_entry['brewBottlesCounted'])); ?></div>
+        <?php } ?>
+    </div>
+    <?php } ?>
     <p class="fs-5 text-danger mt-4 mb-4"><strong><?php echo $qr_text_010; ?></strong></p>
     <form name="form1" class="needs-validation" novalidate action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
     <input type="hidden" name="user_session_token" value ="<?php if (isset($_SESSION['user_session_token'])) echo htmlspecialchars($_SESSION['user_session_token'], ENT_QUOTES, 'UTF-8'); ?>">
@@ -422,7 +438,11 @@ $_SESSION['last_action'] = time();
         </div>
         <div class="mb-3">
             <label for="inputBoxNumber"><strong><?php echo $label_box_number; ?></strong></label>
-            <input type="text" name="brewBoxNum" id="brewBoxNum" class="form-control form-control-sm" placeholder="">
+            <input type="text" name="brewBoxNum" id="brewBoxNum" class="form-control form-control-sm" placeholder="" value="<?php if ($row_entry['brewReceived'] == 1) echo h($row_entry['brewBoxNum']); ?>">
+        </div>
+        <div class="mb-3">
+            <label for="inputBottlesCounted"><strong><?php echo $label_bottles_counted; ?></strong></label>
+            <input type="number" min="0" name="brewBottlesCounted" id="brewBottlesCounted" class="form-control form-control-sm" placeholder="" value="<?php if (($row_entry['brewReceived'] == 1) && ($row_entry['brewBottlesCounted'] !== null) && ($row_entry['brewBottlesCounted'] !== "")) echo h($row_entry['brewBottlesCounted']); ?>">
         </div>
         <div class="mb-3">
             <label for="inputPaid"><input class="form-check-input" type="checkbox" name="brewPaid" id="brewPaid" value="1" <?php echo $paid_checked; ?>> <strong><?php echo $label_paid; ?></strong></label>

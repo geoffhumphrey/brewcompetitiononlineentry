@@ -157,7 +157,11 @@ $(function() {
     <?php if ($filter == "box-paid") { ?>
     <div class="form-group">
     	<label for="">Box Number</label>
-    	<input type="text" class="form-control" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>" onkeyup="moveOnMax(this,'brewPaid<?php echo ($i); ?>')" />
+    	<input type="text" class="form-control" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>" onkeyup="moveOnMax(this,'bottlesCounted<?php echo ($i); ?>')" />
+  	</div>
+    <div class="form-group">
+    	<label for="">Bottles/Cans Received</label>
+    	<input type="number" min="0" class="form-control" maxlength="3" id="bottlesCounted<?php echo $i; ?>" name="bottlesCounted<?php echo $i; ?>" onkeyup="moveOnMax(this,'brewPaid<?php echo ($i); ?>')" />
   	</div>
 	<?php if ($_SESSION['prefsPayToPrint'] == "N") { ?>
     <div class="form-group">

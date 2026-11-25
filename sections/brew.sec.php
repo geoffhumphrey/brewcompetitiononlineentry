@@ -989,6 +989,32 @@ echo $add_edit_entry_modals;
 		</div>
 	</div>
 
+	<?php $bottle_num_required = max(1, (int)($_SESSION['jPrefsBottleNum'] ?? 0)); ?>
+	<div class="form-group">
+	    <label for="" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-star"></i> <?php echo $label_submitting_all_bottles; ?></label>
+	    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+	        <div class="input-group">
+	            <label class="radio-inline">
+	                <input type="radio" name="submitting-all-bottles" value="1" id="submitAllBottles_0" <?php if (($action != "edit") || (empty($row_log['brewBottlesPromised'])) || ((int)$row_log['brewBottlesPromised'] >= $bottle_num_required)) echo "CHECKED"; ?> /><?php echo $label_yes; ?>
+	            </label>
+	            <label class="radio-inline">
+	                <input type="radio" name="submitting-all-bottles" value="0" id="submitAllBottles_1" <?php if (($action == "edit") && (!empty($row_log['brewBottlesPromised'])) && ((int)$row_log['brewBottlesPromised'] < $bottle_num_required)) echo "CHECKED"; ?> /><?php echo $label_no; ?>
+	    		</label>
+	        </div>
+	        <span class="help-block"><?php echo sprintf($label_bottles_required_help, $bottle_num_required); ?></span>
+	    </div>
+	</div>
+	<div class="form-group" id="bottles-promised-group">
+		<label for="brewBottlesPromised" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_bottles_promised_count; ?></label>
+		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+			<select class="form-control" name="brewBottlesPromised" id="brewBottlesPromised">
+				<?php for ($i = 1; $i <= $bottle_num_required; $i++) { ?>
+				<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ((int)$row_log['brewBottlesPromised'] == $i)) echo "SELECTED"; ?>><?php echo $i; ?></option>
+				<?php } ?>
+			</select>
+		</div>
+	</div>
+
 <?php if ((($filter == "admin") || ($filter == "default")) && ($bid != "default") && ($_SESSION['userLevel'] < 2)) { ?>
 
 	<div class="form-group">

@@ -1023,6 +1023,34 @@ if ($_SESSION['prefsStyleSet'] == "NWCiderCup") {
 		</div>
 	</div>
 
+	<!-- Bottles Promised -->
+	<?php $bottle_num_required = max(1, (int)($_SESSION['jPrefsBottleNum'] ?? 0)); ?>
+	<div class="mb-3 row">
+		<label for="" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i><?php echo $label_submitting_all_bottles; ?></strong></label>
+		<div class="col-xs-12 col-sm-9 col-lg-10">
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="submitting-all-bottles" id="submitAllBottles_0" value="1" <?php if (($action != "edit") || (empty($row_log['brewBottlesPromised'])) || ((int)$row_log['brewBottlesPromised'] >= $bottle_num_required)) echo "CHECKED"; ?> />
+				<label class="form-check-label" for="submitAllBottles_0"><?php echo $label_yes; ?></label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="submitting-all-bottles" id="submitAllBottles_1" value="0" <?php if (($action == "edit") && (!empty($row_log['brewBottlesPromised'])) && ((int)$row_log['brewBottlesPromised'] < $bottle_num_required)) echo "CHECKED"; ?> />
+				<label class="form-check-label" for="submitAllBottles_1"><?php echo $label_no; ?></label>
+			</div>
+			<div class="help-block"><?php echo sprintf($label_bottles_required_help, $bottle_num_required); ?></div>
+		</div>
+	</div>
+
+	<div class="mb-3 row" id="bottles-promised-group">
+		<label for="brewBottlesPromised" class="col-xs-12 col-sm-3 col-lg-2 col-form-label text-teal"><strong><i class="fa fa-star me-1"></i><?php echo $label_bottles_promised_count; ?></strong></label>
+		<div class="col-xs-12 col-sm-9 col-lg-10">
+			<select class="form-control" name="brewBottlesPromised" id="brewBottlesPromised">
+				<?php for ($i = 1; $i <= ($bottle_num_required-1); $i++) { ?>
+				<option value="<?php echo $i; ?>" <?php if (($action == "edit") && ((int)$row_log['brewBottlesPromised'] == $i)) echo "SELECTED"; ?>><?php echo $i; ?></option>
+				<?php } ?>
+			</select>
+		</div>
+	</div>
+
 <?php
 // $remaining_entries is set to a hardcoded 1 (constants.inc.php) when this
 // competition has no per-user entry limit configured at all - not a real

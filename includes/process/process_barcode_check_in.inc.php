@@ -58,6 +58,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$judging_number = "";
 		$entry_number = "";
 		$box_number = "";
+		$bottles_counted = null;
 		$paid = 0;
 
 		if ($_POST['eid'.$id] != "") {
@@ -117,13 +118,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				if (isset($_POST['box'.$id])) $box_number = sterilize($_POST['box'.$id]);
 
+				// Not blank_to_null() - 0 bottles counted is a real, meaningful result
+				// (nothing arrived), and blank_to_null()'s empty() check would otherwise
+				// treat "0" the same as never having counted at all. Same class of bug
+				// already fixed once in this codebase for brewerDropOff (see #907).
+				if ((isset($_POST['bottlesCounted'.$id])) && ($_POST['bottlesCounted'.$id] !== "")) $bottles_counted = sterilize($_POST['bottlesCounted'.$id]);
+
 				$update_table = $prefix."brewing";
 				$data = array(
 					'brewReceived' => '1',
 					'brewJudgingNumber' => blank_to_null($judging_number),
 					'brewBoxNum' => blank_to_null($box_number),
+					'brewBottlesCounted' => $bottles_counted,
 					'brewPaid' => blank_to_null($paid)
-				);			
+				);
 				$db_conn->where ('id', $eid);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {

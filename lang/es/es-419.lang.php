@@ -2286,6 +2286,20 @@ $label_mead_info_not_recorded = "No registrado por el participante";
 
 $entry_info_text_059 = "<i class=\"fa fa-fw fa-asterisk me-1\"></i>Indica que el estilo requiere información adicional al inscribirse &ndash; coloca el cursor sobre el asterisco para ver más detalles.";
 
+/**
+ * ------------------------------------------
+ * Version 3.3.0 Additions
+ * ------------------------------------------
+ */
+
+$label_submitting_all_bottles = "¿Está enviando todas las botellas/latas?";
+$label_bottles_required_help = "Esta competencia requiere %d botellas por entrada.";
+$label_bottles_promised_count = "¿Cuántas botellas/latas enviará para esta entrada?";
+$label_bottles_cans = "Botellas/Latas";
+$label_bottles_counted = "Botellas/Latas Recibidas";
+$qr_text_021 = "Esta entrada ya ha sido recibida.";
+$qr_text_022 = "Registrado anteriormente: %s botella(s)/lata(s).";
+
 
 /**
  * ----------------------------------------------------------------------------------

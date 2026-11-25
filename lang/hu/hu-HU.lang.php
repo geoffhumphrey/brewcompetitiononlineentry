@@ -2268,6 +2268,20 @@ $label_mead_info_not_recorded = "A nevező nem adta meg";
 
 $entry_info_text_059 = "<i class=\"fa fa-fw fa-asterisk me-1\"></i>Jelzi, hogy a stílushoz további információ szükséges a nevezéskor &ndash; vigye az egeret a csillag fölé a részletekért.";
 
+/**
+ * ------------------------------------------
+ * Version 3.3.0 Additions
+ * ------------------------------------------
+ */
+
+$label_submitting_all_bottles = "Beküldi az összes palackot/dobozt?";
+$label_bottles_required_help = "Ez a verseny nevezésenként %d palackot igényel.";
+$label_bottles_promised_count = "Hány palackot/dobozt küld be ehhez a nevezéshez?";
+$label_bottles_cans = "Palack/Doboz";
+$label_bottles_counted = "Beérkezett Palack/Doboz";
+$qr_text_021 = "Ez a nevezés már beérkezett.";
+$qr_text_022 = "Korábban rögzített mennyiség: %s palack/doboz.";
+
 
 /**
  * ------------------------------------------

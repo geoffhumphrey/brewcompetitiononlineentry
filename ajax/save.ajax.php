@@ -89,6 +89,10 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1) && ($referrer_ok)) {
 			$input = sterilize($_POST['brewBoxNum']);
 		}
 
+		if ($go == "brewBottlesCounted") {
+			$input = sterilize($_POST['brewBottlesCounted']);
+		}
+
 		if ($go == "brewJudgingNumber") {
 			$post = str_replace("^","-",$_POST['brewJudgingNumber']);
 			$input = sterilize($post);
@@ -105,7 +109,15 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1) && ($referrer_ok)) {
 
 		$update_table = $prefix."brewing";
 
-		if (empty($input)) {
+		// brewBottlesCounted: 0 is a real, meaningful counted value (nothing
+		// arrived) - the generic empty()/"0" handling below would otherwise treat
+		// it the same as never having counted at all (empty("0") is true in PHP).
+		// Same class of issue as #907 (brewerDropOff).
+		if (($go == "brewBottlesCounted") && ($_POST['brewBottlesCounted'] !== "")) {
+			$data = array($go => $input, 'brewUpdated' => date('Y-m-d H:i:s', time()));
+		}
+
+		elseif (empty($input)) {
 
 			if ($rid2 == "text-col") {
 				$data = array($go => '', 'brewUpdated' => date('Y-m-d H:i:s', time()));

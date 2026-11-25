@@ -121,6 +121,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewPaid = 0;
 		$brewReceived = 0;
 		$brewABV = "";
+		$brewBottlesPromised = "";
 		$brewSweetnessLevel = "";
 		$brewJuiceSource = "";
 		$brewPouring = "";
@@ -185,6 +186,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// ABV
 		if ((isset($_POST['brewABV'])) && (!empty($_POST['brewABV']))) {
 			$brewABV = $purifier->purify(sterilize($_POST['brewABV']));
+		}
+
+		// Bottles Promised - the entry form's "Are you submitting all bottles?"
+		// Yes/No question always posts a value (Yes forces it to the competition's
+		// required jPrefsBottleNum, No reveals a select up to that same limit), so
+		// there's no "missing" case to reject here - just capture whatever posted.
+		if ((isset($_POST['brewBottlesPromised'])) && (!empty($_POST['brewBottlesPromised']))) {
+			$brewBottlesPromised = $purifier->purify(sterilize($_POST['brewBottlesPromised']));
+		}
+
+		// Server-side backstop for "Yes" - the select is only supposed to carry the
+		// required count when Yes is chosen (enforced client-side), but don't trust
+		// that alone (stale value from back/forward nav, JS disabled, etc.) - force it.
+		if ((isset($_POST['submitting-all-bottles'])) && ($_POST['submitting-all-bottles'] == "1")) {
+			$brewBottlesPromised = max(1, (int)($_SESSION['jPrefsBottleNum'] ?? 0));
 		}
 
 		if ((isset($_POST['brewOriginalGravity'])) && (!empty($_POST['brewOriginalGravity']))) {
@@ -583,6 +599,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewConfirmed' => blank_to_null(sterilize($_POST['brewConfirmed'])),
 			'brewBoxNum' => blank_to_null($brewBoxNum),
 			'brewABV' => blank_to_null($brewABV),
+			'brewBottlesPromised' => blank_to_null($brewBottlesPromised),
 			'brewJuiceSource' => blank_to_null($brewJuiceSource),
 			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
 			'brewPouring' => blank_to_null($brewPouring),
@@ -927,6 +944,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewConfirmed' => sterilize($_POST['brewConfirmed']),
 			'brewBoxNum' => $brewBoxNum,
 			'brewABV' => blank_to_null($brewABV),
+			'brewBottlesPromised' => blank_to_null($brewBottlesPromised),
 			'brewJuiceSource' => blank_to_null($brewJuiceSource),
 			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
 			'brewPouring' => blank_to_null($brewPouring),

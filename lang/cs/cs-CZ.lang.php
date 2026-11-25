@@ -2207,6 +2207,20 @@ $label_mead_info_not_recorded = "Nezaznamenáno přihlašovatelem";
 
 $entry_info_text_059 = "<i class=\"fa fa-fw fa-asterisk me-1\"></i>Označuje, že styl vyžaduje při přihlášení doplňující informace &ndash; podrobnosti zobrazíte přejetím myší nad hvězdičkou.";
 
+/**
+ * ------------------------------------------
+ * Version 3.3.0 Additions
+ * ------------------------------------------
+ */
+
+$label_submitting_all_bottles = "Odesíláte všechny lahve/plechovky?";
+$label_bottles_required_help = "Tato soutěž vyžaduje %d lahví na přihlášku.";
+$label_bottles_promised_count = "Kolik lahví/plechovek odešlete pro tuto přihlášku?";
+$label_bottles_cans = "Lahve/Plechovky";
+$label_bottles_counted = "Přijaté Lahve/Plechovky";
+$qr_text_021 = "Tato přihláška již byla přijata.";
+$qr_text_022 = "Dříve zaznamenáno: %s lahví/plechovek.";
+
 
 /**
  * ----------------------------------------------------------------------------------

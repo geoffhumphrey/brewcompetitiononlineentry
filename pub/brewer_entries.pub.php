@@ -146,6 +146,7 @@ if ($totalRows_log > 0) {
 		$print_forms_link = "";
 		$edit_link = "";
 		$required_info = "";
+		$bottles_cans_li = "";
 		$collapse_info = "";
 		$entry_update_date = "";
 		$allergen_info = "";
@@ -225,6 +226,11 @@ if ($totalRows_log > 0) {
 			$required_info .= "<li><strong>".$label_pouring.":</strong> ".h(translate_pouring_value($pouring_arr['pouring']))."</li>";
 			if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes']))) $required_info .= "<li><strong>".$label_pouring_notes.":</strong> ".$pouring_arr['pouring_notes']."</li>";
 			$required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
+		}
+
+		if (!empty($row_log['brewBottlesPromised'])) {
+			if ($row_log['brewBottlesPromised'] == $_SESSION['jPrefsBottleNum']) $bottles_cans_li = sprintf("<li><strong>%s:</strong> %s</li>", $label_bottles_cans, $row_log['brewBottlesPromised']);
+			else  $bottles_cans_li = sprintf("<li><strong>%s:</strong> %s<i class=\"fa fa-fw fa-exclamation-circle text-danger ms-1\"></i></li>", $label_bottles_cans, $row_log['brewBottlesPromised']);
 		}
 
 		if (!empty($row_log['brewPossAllergens'])) {
@@ -382,12 +388,12 @@ if ($totalRows_log > 0) {
 		$entry_output .= $entry_name;
 		
 
-		if (!empty($required_info)) {
+		if ((!empty($required_info)) || (!empty($bottles_cans_li))) {
 			$entry_output .= " <a class=\"hide-loader d-print-none\" role=\"button\" data-bs-toggle=\"collapse\" href=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-info-circle\"></span></a> ";
 			$entry_output .= "<div class=\"mt-2 mb-0 collapse d-print-none\" id=\"collapseEntryInfo".$row_log['id']."\">";
 			$entry_output .= "<div class=\"small border-info bg-info-subtle text-info-emphasis card card-body pb-0 mb-0\">";
 			$entry_output .= "<ul class='list-unstyled'>";
-	    	$entry_output .= $required_info;
+	    	$entry_output .= $required_info . $bottles_cans_li;
 	    	$entry_output .= "</ul>";
 	    	$entry_output .= "</div>";
 	    	$entry_output .= "</div>";
@@ -710,6 +716,7 @@ if ($totalRows_log > 0) {
 			else $entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>", $label_confirmed, yes_no($row_log['brewConfirmed'],$base_url,4));
 			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>", $label_paid, yes_no($row_log['brewPaid'],$base_url,4));
 			$entry_output_cards .= sprintf("<li><strong>%s:</strong> %s</li>", $label_received, yes_no($row_log['brewReceived'],$base_url,4));
+			$entry_output_cards .= $bottles_cans_li;
 			if (!empty($allergen_info)) {
 				$entry_output_cards .= "<div style=\"padding: .6em\" class=\"mt-2 badge text-bg-danger text-wrap\">";
 				$entry_output_cards .= $allergen_info;

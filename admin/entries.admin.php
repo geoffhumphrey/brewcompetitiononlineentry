@@ -98,6 +98,7 @@ if ($totalRows_log > 0) {
 		$entry_paid_display = "";
 		$entry_received_display = "";
 		$entry_box_num_display = "";
+		$entry_bottles_counted_display = "";
 		$entry_dropoff_display = "";
 		$entry_actions = "";
 		$entry_unconfirmed_row = "";
@@ -438,6 +439,39 @@ if ($totalRows_log > 0) {
 		}
 		else $entry_box_num_display = $row_log['brewBoxNum'];
 
+		// Bottles Received - the actual count taken at check-in (barcode scanner/QR),
+		// reconciled against brewBottlesPromised (what the brewer said they'd send)
+		// and $_SESSION['jPrefsBottleNum'] (what the competition requires). Not
+		// empty()/isset() alone for the mismatch check below - 0 is a real, meaningful
+		// counted value (nothing arrived), same class of issue as #907 (brewerDropOff).
+		if (($action != "print") && ($dbTable == "default")) {
+			$entry_bottles_counted_display .= "<div class=\"form-group\" id=\"bottles-counted-ajax-".$saving_random_num."-brewBottlesCounted-form-group\">";
+			$entry_bottles_counted_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewBottlesCounted']."</span>";
+			$entry_bottles_counted_display .= "<input class=\"form-control input-sm hidden-print\" id=\"bottles-counted-ajax-".$saving_random_num."\" name=\"brewBottlesCounted".$row_log['id']."\" type=\"text\" pattern=\"[0-9]*\" size=\"5\" maxlength=\"3\" value=\"".h($row_log['brewBottlesCounted'])."\" onblur=\"save_column('".$ajax_url."','brewBottlesCounted','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','bottles-counted-ajax-".$saving_random_num."','html')\"/>";
+
+			// Flags on either reason: the brewer's own promise never matched what the
+			// competition requires (stays flagged even after check-in, not just before),
+			// OR what actually got counted doesn't match what the brewer promised.
+			if ((!empty($row_log['brewBottlesPromised'])) && (
+					((int)$row_log['brewBottlesPromised'] != (int)$_SESSION['jPrefsBottleNum'])
+					|| ((($row_log['brewBottlesCounted'] !== null) && ($row_log['brewBottlesCounted'] !== "")) && ((int)$row_log['brewBottlesCounted'] != (int)$row_log['brewBottlesPromised']))
+				)) {
+				$entry_bottles_counted_display .= "<div class=\"text-warning\" style=\"margin-top: 5px\"><small><i class=\"fa fa-lg fa-exclamation-triangle\" title=\"Brewer specified ".h($row_log['brewBottlesPromised'])."\"></i> Specified: ".h($row_log['brewBottlesPromised'])."</small></div>";
+			}
+
+			if ((($row_log['brewBottlesCounted'] !== null) && ($row_log['brewBottlesCounted'] !== "")) && ((int)$row_log['brewBottlesCounted'] < (int)$_SESSION['jPrefsBottleNum'])) {
+				$entry_bottles_counted_display .= "<div class=\"text-orange\" style=\"margin-top: 5px\"><small><i class=\"fa fa-lg fa-exclamation-triangle\" title=\"Competition requires ".h($_SESSION['jPrefsBottleNum'])."\"></i> Required: ".h($_SESSION['jPrefsBottleNum'])."</small></div>";
+			}
+
+			$entry_bottles_counted_display .= "</div>";
+			$entry_bottles_counted_display .= "<div>";
+			$entry_bottles_counted_display .= "<span id=\"bottles-counted-ajax-".$saving_random_num."-brewBottlesCounted-status\"></span>";
+			$entry_bottles_counted_display .= "<span id=\"bottles-counted-ajax-".$saving_random_num."-brewBottlesCounted-status-msg\"></span>";
+			$entry_bottles_counted_display .= "</div>";
+			//if (($row_log['brewBottlesCounted'] !== null) && ($row_log['brewBottlesCounted'] !== "")) $entry_bottles_counted_display .= "<p><strong>Bottles Specified:</strong> ".$row_log['brewBottlesPromised']."</p>";
+		}
+		else $entry_bottles_counted_display = $row_log['brewBottlesCounted'];
+
 		// Drop-off location - see issue #907. brewerDropOff is nullable and 0 is a real,
 		// meaningful value ("shipping"), so this can't use empty()/isset() alone - only
 		// call dropoff_location() when a value was actually recorded.
@@ -447,7 +481,7 @@ if ($totalRows_log > 0) {
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_staff_notes_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewStaffNotes']."</span>";
 			$entry_staff_notes_display .= "<div class=\"form-group\" id=\"staff-notes-ajax-".$saving_random_num."-brewStaffNotes-form-group\">";
-			$entry_staff_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Staff Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"staff-notes-ajax-".$saving_random_num."\" name=\"brewStaffNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$ajax_url."','brewStaffNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','staff-notes-ajax-".$saving_random_num."','html')\"  />".$row_log['brewStaffNotes']."</textarea>";
+			$entry_staff_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Staff Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"staff-notes-ajax-".$saving_random_num."\" name=\"brewStaffNotes".$row_log['id']."\" rows=\"2\" cols=\"15\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$ajax_url."','brewStaffNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','staff-notes-ajax-".$saving_random_num."','html')\"  />".$row_log['brewStaffNotes']."</textarea>";
 			$entry_staff_notes_display .= "</div>";
 			$entry_staff_notes_display .= "<div>";
 			$entry_staff_notes_display .= "<span id=\"staff-notes-ajax-".$saving_random_num."-brewStaffNotes-status\"></span>";
@@ -463,7 +497,7 @@ if ($totalRows_log > 0) {
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_admin_notes_display.= "<span class=\"hidden visible-print-inline\">".$row_log['brewAdminNotes']."</span>";
 			$entry_admin_notes_display .= "<div class=\"form-group\" id=\"admin-notes-ajax-".$saving_random_num."-brewAdminNotes-form-group\">";
-			$entry_admin_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Admin Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"admin-notes-ajax-".$saving_random_num."\" name=\"brewAdminNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$ajax_url."','brewAdminNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','admin-notes-ajax-".$saving_random_num."','html')\" />".$row_log['brewAdminNotes']."</textarea>";
+			$entry_admin_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Admin Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"admin-notes-ajax-".$saving_random_num."\" name=\"brewAdminNotes".$row_log['id']."\" rows=\"2\" cols=\"15\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$ajax_url."','brewAdminNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','admin-notes-ajax-".$saving_random_num."','html')\" />".$row_log['brewAdminNotes']."</textarea>";
 			$entry_admin_notes_display .= "</div>";
 			$entry_admin_notes_display .= "<div>";
 			$entry_admin_notes_display .= "<span id=\"admin-notes-ajax-".$saving_random_num."-brewAdminNotes-status\"></span>";
@@ -601,13 +635,14 @@ if ($totalRows_log > 0) {
 	    if (!empty($row_log['brewStaffNotes'])) $tbody_rows .= "<p><strong>".$label_staff." ".$label_notes.":</strong> ".$row_log['brewStaffNotes']."</p>";
 	    if (!empty($entry_dropoff_display)) $tbody_rows .= "<p><strong>".$label_drop_off.":</strong> ".$entry_dropoff_display."</p>";
 	    if (!empty($row_log['brewBoxNum'])) $tbody_rows .= "<p><strong>".$label_box."/".$label_location.":</strong> ".$row_log['brewBoxNum']."</p>";
+	    if (($row_log['brewBottlesCounted'] !== null) && ($row_log['brewBottlesCounted'] !== "")) $tbody_rows .= "<p><strong>Bottles Rec'd:</strong> ".$row_log['brewBottlesCounted']."</p>";
 	    $tbody_rows .= "<p><strong>Actions:</strong> ".$entry_actions."</p>";
 	    $tbody_rows .= "</div>";
 	    $tbody_rows .= "</section>";
 
 		if ($row_log['brewerProAm'] >= 1) $tbody_rows .= "<p><span class=\"label label-info hidden-print ".$hidden_sm."\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
 		$tbody_rows .= "</td>";
-		$tbody_rows .= "\n\t<td nowrap=\"nowrap\" class=\"".$hidden_sm."\">".$entry_brewer_display."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_brewer_display."</td>";
 		if ($pro_edition == 0) $tbody_rows .= "<td class=\"".$hidden_md." hidden-print\">".h($row_log['brewerClubs'])."</td>";
 		$tbody_rows .= "\n\t<td class=\"".$hidden_md." hidden-print\">".$entry_updated_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_dropoff_display."</td>";
@@ -616,6 +651,7 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= "\n\t<td class=\"".$hidden_md." \">".$entry_admin_notes_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"".$hidden_md." \">".$entry_staff_notes_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_box_num_display."</td>";
+		$tbody_rows .= "\n\t<td class=\"".$hidden_sm."\">".$entry_bottles_counted_display."</td>";
 		if ($action != "print") $tbody_rows .= "<td class=\"".$hidden_sm."\" nowrap>".$entry_actions."</td>";
 		$tbody_rows .= "\n</tr>";
 
@@ -697,6 +733,7 @@ if ($action != "print") { ?>
 			<?php } ?>
 			"aaSorting": [[3,'asc']],
 			"bProcessing" : true,
+			"bAutoWidth" : false,
 			"aoColumns": [
 				null,
 				{ "orderDataType": "dom-text-numeric" },
@@ -710,7 +747,8 @@ if ($action != "print") { ?>
 				{ "orderDataType": "dom-checkbox" },
 				null,
 				null,
-				{ "orderDataType": "dom-text", type: 'string' },
+				{ "orderDataType": "dom-text", type: 'string', "sWidth": "6%" },
+				{ "orderDataType": "dom-text-numeric", "sWidth": "6%" },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -733,6 +771,7 @@ if ($action != "print") { ?>
 			<?php if ($psort == "brewer_name") { ?>"aaSorting": [[4,'asc']],<?php } ?>
 
 			"aoColumns": [
+				null,
 				null,
 				null,
 				null,
@@ -1027,6 +1066,22 @@ $(document).ready(function () {
 <?php } // end if ($action != "print") ?>
 
 <?php if ($totalRows_log > 0) { ?>
+<?php
+	// DataTables (1.10.12 on this page) ignores aoColumns' sWidth for these two
+	// columns regardless of bAutoWidth - force it with CSS instead, which wins
+	// over whatever inline width DataTables itself sets on the th/td.
+	$loc_box_col = ($pro_edition == 0) ? 13 : 12;
+	$bottles_col = ($pro_edition == 0) ? 14 : 13;
+?>
+<style>
+#sortable th:nth-child(<?php echo $loc_box_col; ?>),
+#sortable td:nth-child(<?php echo $loc_box_col; ?>),
+#sortable th:nth-child(<?php echo $bottles_col; ?>),
+#sortable td:nth-child(<?php echo $bottles_col; ?>) {
+	width: 90px !important;
+	max-width: 90px !important;
+}
+</style>
 <table class="table table-responsive table-bordered" id="sortable">
 <thead>
     <tr>
@@ -1034,7 +1089,7 @@ $(document).ready(function () {
         <th nowrap>Judging <?php if (($action != "print") && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided. Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="<?php echo $hidden_md; ?>">Name</th>
         <th>Style</th>
-        <th class="<?php echo $hidden_sm; ?>"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>
+        <th class="<?php echo $hidden_sm; ?>" width="12%"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>
         <?php if ($pro_edition == 0) { ?>
         <th class="<?php echo $hidden_md; ?> hidden-print">Club</th>
         <?php } ?>
@@ -1042,9 +1097,10 @@ $(document).ready(function () {
 		<th class="<?php echo $hidden_sm; ?>"><?php echo $label_drop_off; ?></th>
         <th class="<?php echo $hidden_sm; ?>" width="3%">P<span class="hidden-md">aid?</span></th>
         <th class="<?php echo $hidden_sm; ?>" width="3%">R<span class="hidden-md">ec'd?</span></th>
-        <th class="<?php echo $hidden_md; ?> ">Admin Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Admin Notes" data-content="Catch-all for any information Admins may need for individual entries such as &quot;received damaged,&quot; &quot;maybe mis-categorized,&quot; etc. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
-        <th class="<?php echo $hidden_md; ?> ">Staff Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Staff Notes" data-content="Catch-all for any information staff may need to know about individual entries such as &quot;single 750ml bottle,&quot; &quot;missing MBOS bottle,&quot; etc. Notes entered here are printed on pullsheets. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th class="<?php echo $hidden_md; ?> " width="10%">Admin Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Admin Notes" data-content="Catch-all for any information Admins may need for individual entries such as &quot;received damaged,&quot; &quot;maybe mis-categorized,&quot; etc. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th class="<?php echo $hidden_md; ?> " width="10%">Staff Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Staff Notes" data-content="Catch-all for any information staff may need to know about individual entries such as &quot;single 750ml bottle,&quot; &quot;missing MBOS bottle,&quot; etc. Notes entered here are printed on pullsheets. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="<?php echo $hidden_sm; ?>">Loc<span class="hidden-md">/Box</span></th>
+        <th class="<?php echo $hidden_sm; ?>">Bottles<span class="hidden-md"> Rec'd</span> <a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Bottles Received" data-content="Actual bottle count taken at check-in. A warning icon appears if it doesn't match what the brewer promised or what this competition requires."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a></th>
         <?php if ($action != "print") { ?><th class="hidden-xs hidden-sm hidden-print">Actions</th><?php } ?>
     </tr>
 </thead>
