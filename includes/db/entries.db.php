@@ -229,6 +229,25 @@ elseif ($section == "notes") {
 
 	}
 
+	if ($go == "bottles") {
+
+		// Entries where the brewer's promised bottle/can count doesn't match
+		// the competition's requirement - mirrors the "allergens" report above.
+		$query_log = "SELECT * FROM ".$brewing_db_table." WHERE brewBottlesPromised IS NOT NULL AND brewBottlesPromised <> ?";
+		$params_log = array($_SESSION['jPrefsBottleNum']);
+		$query_log_paid = "SELECT * FROM ".$brewing_db_table." WHERE brewBottlesPromised IS NOT NULL AND brewBottlesPromised <> ? AND brewPaid='1'";
+		$params_log_paid = array($_SESSION['jPrefsBottleNum']);
+		$query_log_confirmed = "SELECT * FROM ".$brewing_db_table." WHERE brewBottlesPromised IS NOT NULL AND brewBottlesPromised <> ? AND brewConfirmed='1'";
+		$params_log_confirmed = array($_SESSION['jPrefsBottleNum']);
+
+		if (SINGLE) {
+			$query_log .= " AND comp_id=?"; $params_log[] = $_SESSION['comp_id'];
+			$query_log_paid .= " AND comp_id=?"; $params_log_paid[] = $_SESSION['comp_id'];
+			$query_log_confirmed .= " AND comp_id=?"; $params_log_confirmed[] = $_SESSION['comp_id'];
+		}
+
+	}
+
 
 
 }

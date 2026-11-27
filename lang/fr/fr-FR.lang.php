@@ -2300,6 +2300,11 @@ $label_bottles_cans = "Bouteilles/Canettes";
 $label_bottles_counted = "Bouteilles/Canettes Reçues";
 $qr_text_021 = "Cette participation a déjà été reçue.";
 $qr_text_022 = "Précédemment enregistré : %s bouteille(s)/canette(s).";
+$label_bottles_cans_mismatch = "Bouteilles/Canettes Ne Correspondant Pas à l'Exigence";
+$label_bottles_cans_specified = "Bouteilles/Canettes Spécifiées";
+$label_specified = "Spécifié";
+$output_text_035 = "Les participations suivantes ont spécifié un nombre de bouteilles/canettes qui ne correspond pas à l'exigence de cette compétition.";
+$output_text_036 = "Aucune participation n'a spécifié un nombre de bouteilles/canettes différent de l'exigence de cette compétition.";
 
 
 /**

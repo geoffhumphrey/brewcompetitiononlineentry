@@ -9,7 +9,7 @@ if ((!isset($_SESSION['loginUsername'])) || ((isset($_SESSION['loginUsername']))
 }
 
 if ($go == "org_notes") include (DB.'brewer.db.php');
-if (($go == "allergens") || ($go == "admin")) include (DB.'entries.db.php');
+if (($go == "allergens") || ($go == "admin") || ($go == "bottles")) include (DB.'entries.db.php');
 include (LIB.'admin.lib.php');
 include (LIB.'output.lib.php');
 
@@ -132,7 +132,89 @@ foreach ($rows_brewer as $row_brewer) {
 <?php } else { ?>
 <p class="lead"><?php echo $output_text_029; ?></p>
 <?php }
-} 
+}
+?>
+
+<?php if ($go == "bottles") { ?>
+<div class="page-header">
+	<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$label_bottles_cans_mismatch); ?></h1>
+</div>
+<?php if ($totalRows_log > 0) { ?>
+<p class="lead"><?php echo $output_text_035; ?></p>
+<script type="text/javascript" language="javascript">
+ $(document).ready(function() {
+	$('#bottlescans').dataTable( {
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [[2,'asc'],[0,'asc']],
+		"bProcessing" : false,
+		"aoColumns": [
+			{ "asSorting": [  ] },
+			{ "asSorting": [  ] },
+			null,
+			null,
+			null,
+			null
+			]
+		} );
+	} );
+</script>
+<table class="table table-bordered table-striped" id="bottlescans">
+<thead>
+<tr>
+	<th width="10%" nowrap="nowrap"><?php echo $label_entry_number; ?></th>
+	<th width="10%" nowrap="nowrap"><?php echo $label_judging_number; ?></th>
+	<th width="25%"><?php echo $label_style; ?></th>
+	<th width="25%"><?php echo $label_table; ?></th>
+	<th width="15%"><?php echo $label_specified; ?></th>
+	<th width="15%"><?php echo $label_received; ?></th>
+</tr>
+</thead>
+<tbody>
+<?php foreach ($rows_log as $row_log) {
+
+	$entry_number = sprintf("%06s",$row_log['id']);
+	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
+
+	$brew_style = "";
+	if (!str_contains($_SESSION['prefsStyleSet'], "BA")) {
+		if (!empty($row_log['brewCategorySort'])) $brew_style .= $row_log['brewCategorySort'];
+		if (!empty($row_log['brewSubCategory'])) $brew_style .= $row_log['brewSubCategory'];
+		if ((!empty($row_log['brewCategorySort'])) || (!empty($row_log['brewSubCategory']))) $brew_style .= ": ";
+	}
+	$brew_style .= $row_log['brewStyle'];
+
+	$table_info = get_flight_info($row_log['id']);
+	$table_info_all = "";
+	if ($table_info['response'] == "Assigned") {
+		$table_info_all .= $table_info['tableNumber'].": ";
+		$table_info_all .= $table_info['tableName'];
+		if ($_SESSION['jPrefsQueued'] == "N") {
+			$table_info_all .= "<br>".$label_round." ".$table_info['flightRound'];
+			$table_info_all .= "<br>".$label_flight." ".$table_info['flightNumber'];
+		}
+	}
+	else $table_info_all = "<i class='fa fa-lg fa-fw fa-ban'></i>";
+
+?>
+<tr>
+	<td><?php echo $entry_number; ?></td>
+	<td><?php echo $judging_number; ?></td>
+	<td><?php echo $brew_style; ?></td>
+	<td nowrap="nowrap"><?php echo $table_info_all; ?></td>
+	<td><?php echo h($row_log['brewBottlesPromised']); ?></td>
+	<td><?php if (($row_log['brewBottlesCounted'] !== null) && ($row_log['brewBottlesCounted'] !== "")) echo h($row_log['brewBottlesCounted']); ?></td>
+</tr>
+<?php
+} ?>
+</tbody>
+</table>
+<?php } else { ?>
+<p class="lead"><?php echo $output_text_036; ?></p>
+<?php }
+}
 ?>
 
 <?php if ($go == "admin") { ?>

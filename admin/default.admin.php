@@ -1478,6 +1478,16 @@ if ($recently_updated) {
                             <?php } ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Bottles/Cans</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=bottles" data-toggle="tooltip" data-placement="top" title="A list of entries where the specified bottle/can count doesn't match the competition's requirement (<?php echo $_SESSION['jPrefsBottleNum']; ?>).">Specified Bottle/Can Count Not Matching Requirement</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Drop-Off and Shipping</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">

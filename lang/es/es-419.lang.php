@@ -2299,6 +2299,11 @@ $label_bottles_cans = "Botellas/Latas";
 $label_bottles_counted = "Botellas/Latas Recibidas";
 $qr_text_021 = "Esta entrada ya ha sido recibida.";
 $qr_text_022 = "Registrado anteriormente: %s botella(s)/lata(s).";
+$label_bottles_cans_mismatch = "Botellas/Latas Que No Coinciden Con el Requisito";
+$label_bottles_cans_specified = "Botellas/Latas Especificadas";
+$label_specified = "Especificado";
+$output_text_035 = "Las siguientes entradas especificaron una cantidad de botellas/latas que no coincide con el requisito de esta competencia.";
+$output_text_036 = "Ninguna entrada especificó una cantidad de botellas/latas diferente al requisito de esta competencia.";
 
 
 /**

@@ -77,7 +77,7 @@ if ($logged_in) {
 	$admin_sidebar_body .= "<span class=\"pull-right\"><small><i class=\"fa fa-xs fa-circle text-success entry-update-indicator\"></i></small> <a href=\"".$base_url."index.php?section=admin&amp;go=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all entries\"><span id=\"admin-dashboard-entries-count\">".$totalRows_log_confirmed."</span></a>";
 	if (!empty($row_limits['prefsEntryLimit'])) {
 		$admin_sidebar_body .= " / ";
-		if ($_SESSION['userLevel'] == 0) $admin_sidebar_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of total entries\">".$row_limits['prefsEntryLimit']."</a>";
+		if ($_SESSION['userLevel'] == 0) $admin_sidebar_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences&amp;action=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of total entries\">".$row_limits['prefsEntryLimit']."</a>";
 		else $admin_sidebar_body .= $row_limits['prefsEntryLimit'];
 	}
 	$admin_sidebar_body .= "</span>";
@@ -93,7 +93,7 @@ if ($logged_in) {
 	$admin_sidebar_body .= "<span class=\"pull-right\"><small><i class=\"fa fa-xs fa-circle text-success entry-update-indicator\"></i></small> <span id=\"admin-dashboard-entries-paid-count\">".get_entry_count("paid")."</span>";
 	if (!empty($row_limits['prefsEntryLimitPaid'])) {
 		$admin_sidebar_body .= " / ";
-		if ($_SESSION['userLevel'] == 0) $admin_sidebar_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of paid entries\">".$row_limits['prefsEntryLimitPaid']."</a>";
+		if ($_SESSION['userLevel'] == 0) $admin_sidebar_body .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences&amp;action=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of paid entries\">".$row_limits['prefsEntryLimitPaid']."</a>";
 		else $admin_sidebar_body .= $row_limits['prefsEntryLimitPaid'];
 	}
 	$admin_sidebar_body .= "</span>";

@@ -2220,6 +2220,11 @@ $label_bottles_cans = "Lahve/Plechovky";
 $label_bottles_counted = "Přijaté Lahve/Plechovky";
 $qr_text_021 = "Tato přihláška již byla přijata.";
 $qr_text_022 = "Dříve zaznamenáno: %s lahví/plechovek.";
+$label_bottles_cans_mismatch = "Lahve/Plechovky Neodpovídající Požadavku";
+$label_bottles_cans_specified = "Uvedené Lahve/Plechovky";
+$label_specified = "Uvedeno";
+$output_text_035 = "Následující přihlášky uvedly počet lahví/plechovek, který neodpovídá požadavku této soutěže.";
+$output_text_036 = "Žádná přihláška neuvedla počet lahví/plechovek odlišný od požadavku této soutěže.";
 
 
 /**

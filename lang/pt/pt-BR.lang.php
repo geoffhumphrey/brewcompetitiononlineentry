@@ -2287,6 +2287,11 @@ $label_bottles_cans = "Garrafas/Latas";
 $label_bottles_counted = "Garrafas/Latas Recebidas";
 $qr_text_021 = "Esta inscrição já foi recebida.";
 $qr_text_022 = "Registrado anteriormente: %s garrafa(s)/lata(s).";
+$label_bottles_cans_mismatch = "Garrafas/Latas Que Não Correspondem ao Requisito";
+$label_bottles_cans_specified = "Garrafas/Latas Especificadas";
+$label_specified = "Especificado";
+$output_text_035 = "As seguintes inscrições especificaram uma quantidade de garrafas/latas que não corresponde ao requisito desta competição.";
+$output_text_036 = "Nenhuma inscrição especificou uma quantidade de garrafas/latas diferente do requisito desta competição.";
 
 
 /**

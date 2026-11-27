@@ -2284,6 +2284,11 @@ $label_bottles_cans = "Bottles/Cans";
 $label_bottles_counted = "Bottles/Cans Received";
 $qr_text_021 = "This entry has already been received.";
 $qr_text_022 = "Previously recorded: %s bottle(s)/can(s).";
+$label_bottles_cans_mismatch = "Bottles/Cans Not Matching Requirement";
+$label_bottles_cans_specified = "Bottles/Cans Specified";
+$label_specified = "Specified";
+$output_text_035 = "The following entries specified a bottle/can count that doesn't match this competition's requirement.";
+$output_text_036 = "No entries specified a bottle/can count that differs from this competition's requirement.";
 
 
 /**

@@ -228,9 +228,11 @@ if ($totalRows_log > 0) {
 			$required_info .= "<li><strong>".$label_rouse_yeast.":</strong> ".h(translate_pouring_rouse_value($pouring_arr['pouring_rouse']))."</li>";
 		}
 
+		$bottle_num_required = max(1, (int)($_SESSION['jPrefsBottleNum'] ?? 0));
+
 		if (!empty($row_log['brewBottlesPromised'])) {
-			if ($row_log['brewBottlesPromised'] == $_SESSION['jPrefsBottleNum']) $bottles_cans_li = sprintf("<li><strong>%s:</strong> %s</li>", $label_bottles_cans, $row_log['brewBottlesPromised']);
-			else  $bottles_cans_li = sprintf("<li><strong>%s:</strong> %s<i class=\"fa fa-fw fa-exclamation-circle text-danger ms-1\"></i></li>", $label_bottles_cans, $row_log['brewBottlesPromised']);
+			if ($row_log['brewBottlesPromised'] == $_SESSION['jPrefsBottleNum']) $bottles_cans_li = sprintf("<li><strong>%s:</strong> %s<i class=\"fa fa-fw fa-lg fa-check text-success ms-1\"></i></li>", $label_bottles_cans, $row_log['brewBottlesPromised']);
+			else  $bottles_cans_li = sprintf("<li><strong>%s:</strong> %s<a class=\"hide-loader\" href=\"#entries\" data-bs-toggle=\"tooltip\" data-bs-title=\"".sprintf($label_bottles_required_help, $bottle_num_required)."\"><i class=\"fa fa-fw fa-exclamation-circle text-danger ms-1\"></i></a></li>", $label_bottles_cans, $row_log['brewBottlesPromised']);
 		}
 
 		if (!empty($row_log['brewPossAllergens'])) {

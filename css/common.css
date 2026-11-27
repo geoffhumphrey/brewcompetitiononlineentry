@@ -419,7 +419,7 @@ a.bg-grey:focus, a.bg-grey:hover {
     color: #212121;  /* 900 Shade */
 }
 
-a.text-grey:focus, a.text-amber:grey {
+a.text-grey:focus, a.text-grey:hover {
     color: #BDBDBD;  /* 400 Shade */
 }
 

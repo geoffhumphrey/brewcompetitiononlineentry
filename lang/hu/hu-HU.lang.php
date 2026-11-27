@@ -2281,6 +2281,11 @@ $label_bottles_cans = "Palack/Doboz";
 $label_bottles_counted = "Beérkezett Palack/Doboz";
 $qr_text_021 = "Ez a nevezés már beérkezett.";
 $qr_text_022 = "Korábban rögzített mennyiség: %s palack/doboz.";
+$label_bottles_cans_mismatch = "A Követelménynek Nem Megfelelő Palack/Doboz";
+$label_bottles_cans_specified = "Megadott Palack/Doboz";
+$label_specified = "Megadott";
+$output_text_035 = "Az alábbi nevezések olyan palack/doboz mennyiséget adtak meg, amely nem egyezik a verseny követelményével.";
+$output_text_036 = "Nincs olyan nevezés, amely a verseny követelményétől eltérő palack/doboz mennyiséget adott volna meg.";
 
 
 /**
